@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.12'
+      - run: uv sync --frozen --dev
+        working-directory: server
+      - run: uv run ruff check .
+        working-directory: server
+      - run: uv run pyright
+        working-directory: server
+      - run: uv run pytest
+        working-directory: server
+
+  device:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: device/package-lock.json
+      - run: npm ci
+        working-directory: device
+      - run: npm run typecheck
+        working-directory: device

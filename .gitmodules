@@ -1,0 +1,3 @@
+[submodule "vendor/stack-chan"]
+	path = vendor/stack-chan
+	url = https://github.com/stack-chan/stack-chan.git

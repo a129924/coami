@@ -1,0 +1,17 @@
+{
+  "name": "coami-device",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit --project tsconfig.json"
+  },
+  "devDependencies": {
+    "@moddable/typings": "9.5.0",
+    "typescript": "7.0.2",
+    "xs-dev": "1.12.1"
+  }
+}
