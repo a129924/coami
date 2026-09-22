@@ -1,0 +1,11 @@
+✔ adds positive operands (0.859125ms)
+✔ adds negative and positive operands (0.099833ms)
+✔ returns a negative sum when the operands sum below zero (0.091959ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 89.78525

@@ -42,50 +42,42 @@
 
 ## 追加驗證：TypeScript TDD skill
 
-### 問題與邊界
+### 問題與成功條件
 
-- 問題：新移植的 `typescript-tdd` 能否從 Coami 的 `server/` 被 Codex 發現，並指導 agent 在本 repo 完成可歸因的 RED→GREEN→strict typecheck？
-- 測試邊界：`tdd-fixture/add.ts` 與 `tdd-fixture/add.test.ts` 是隔離的純函式樣本，規格為 `add(2, 3) === 5` 及 `add(-2, 3) === 1`；不代表 device 產品契約。
-- 派遣要求：在 `feat/andrew/typescript-tdd-skill` worktree 的 `server/` 啟用並讀取 repo 的 `.codex/skills/typescript-tdd/SKILL.md`，確認工具鏈，先執行可歸因的 failing test，再做最小實作、執行受影響測試與 strict typecheck，並留下命令與退出碼。實作只在此 feature worktree；dev worktree 僅供唯讀參照。
+- 問題：新移植的 `typescript-tdd` 能否從 Coami 的 `server/` 被 Codex 發現，並讓 agent 在此 repo 的隔離 TypeScript fixture 中實際撰寫 failing test、完成行為及型別驗證？
+- 成功條件：agent 的派遣 prompt 只指定行為與範圍；agent 讀取 skill、自行選擇測試工具，新增一個可歸因的 failing test，接著使測試通過並完成 strict fixture typecheck。device 專案自身的 typecheck 另行驗證。
+- 邊界：`tdd-fixture/add.ts` 與 `add.test.ts` 是純函式樣本，不代表 device 產品契約；不修改 `device/src/` 或 E003。
 
-### 環境與程序
+### 來源與環境
 
-- 基底 commit：`4573716`；Codex CLI `0.155.1`；Node `/Users/andrew/.nvm/versions/node/v24.19.0/bin/node` 為 `v24.19.0`；device local TypeScript 為 `7.0.2`。目前 shell 預設 Node 26，不用於本驗證。
-- 已讀取新 worktree 中的 skill：`cat .codex/skills/typescript-tdd/SKILL.md` 退出碼 0。其規則要求先檢查 scripts、compiler options、測試工具，確認 RED 歸因，再以最小實作達 GREEN 並做 strict typecheck；以下命令與結果依此順序執行。與 Rivet 原文的 SHA-256 同為 `bb65eb2c6eddb5abaa3dfddb8a02fd648c5e1be10ea2d5c9cc9285cefc45365a`。
-- `device/package.json` 只有 `typecheck` script，`device/tsconfig.json` 設 `strict: true`，沒有既有測試 runner。此 worktree 用 Node 24 的內建 test runner；以 `npm ci --prefix device --offline --ignore-scripts` 安裝專案已宣告的依賴，退出碼 0，沒有修改 package 設定。
-- `skill-creator` 的 `quick_validate.py .codex/skills/typescript-tdd` 輸出 `Skill is valid!`，退出碼 0。執行時使用本機已有 PyYAML 的 Python venv；系統 Python 沒有 PyYAML。
-- 從本 worktree 的 `server/` 執行 `CODEX_HOME=/private/tmp/coami-ts-tdd-codex-home codex debug prompt-input '請列出可用技能名稱'`，退出碼 0。輸出的 Skill roots 包含本 worktree 的 `.codex/skills`，Available skills 包含 `typescript-tdd`。臨時 `CODEX_HOME` 用於避開本機 sandbox 的 alias 寫入限制。
+- 移植來源：[Rivet 的 `.codex/skills/typescript-tdd/SKILL.md`](https://github.com/a129924/rivet/blob/36d8a3ef9e28cedca4ca43b6137b3627f6f691f1/.codex/skills/typescript-tdd/SKILL.md)，不可變 commit `36d8a3ef9e28cedca4ca43b6137b3627f6f691f1`。以 `git show <commit>:.codex/skills/typescript-tdd/SKILL.md` 比對，來源與 Coami 檔案的 SHA-256 均為 `bb65eb2c6eddb5abaa3dfddb8a02fd648c5e1be10ea2d5c9cc9285cefc45365a`。
+- 本次 feature worktree 基底 `4573716`；Codex CLI `0.155.1`、Node `v24.19.0`、TypeScript `7.0.2`。repo 的 `.node-version` 指定 Node 24；重跑前以自己的版本管理工具切換，確認 `node --version` 為 24.x。此 worktree 以 `npm ci --prefix device --offline --ignore-scripts` 安裝已宣告依賴，退出碼 0。
+- `skill-creator` 的 `quick_validate.py` 輸出 `Skill is valid!`、退出碼 0。從此 worktree 的 `server/` 執行 `codex debug prompt-input '請列出可用技能名稱'`，退出碼 0；Skill roots 指向此 worktree 的 `.codex/skills`，Available skills 包含 `typescript-tdd`。本機 sandbox 執行 CLI 時使用臨時 `CODEX_HOME`，不改 repo。
+- 首次演練的派遣 prompt 詳列 stub、測試命令、預期 RED/GREEN 與 typecheck 旗標；它只證明既有測試可重跑，不能單獨證明 skill 引導 agent 撰寫 failing test。以下第二次演練取代該過寬的判定。
 
-### RED、GREEN 與型別證據
+### 第二次 agent 演練
 
-以下命令均從此 worktree 根目錄執行；測試輸出保留在同一 fixture 目錄，僅移除空白行的尾端空白。
+- 起始狀態：`add.ts` 暫時回傳 `Math.max(0, a + b)`。原有兩個測試在此狀態下仍是 2 passed、0 failed；負的總和行為尚無測試。此缺陷只存在於演練過程，最終檔案已修正。
+- 對獨立 agent `/root/ts_tdd_forward_retest` 的完整派遣 prompt 如下。prompt 未指定 RED/GREEN 步驟、runner、compiler 旗標或預期退出碼：
 
-1. 初始 `add.ts` 提供正確的函式簽名，但暫時 `return 0`。執行 `/Users/andrew/.nvm/versions/node/v24.19.0/bin/node --test experiments/E002-agent-skills-validation/tdd-fixture/add.test.ts`，退出碼 **1**；[`red.tap`](tdd-fixture/red.tap) 記錄兩個 `AssertionError`，分別為 `0 !== 5` 與 `0 !== 1`。測試已載入模組，失敗直接指向尚未實作的加總行為。
-2. 最小實作改為 `return a + b`，以相同命令重跑，退出碼 **0**；[`green.tap`](tdd-fixture/green.tap) 記錄 2 passed、0 failed。沒有需要的重構。
-3. 以 `/Users/andrew/.nvm/versions/node/v24.19.0/bin/node device/node_modules/typescript/bin/tsc --noEmit --strict --skipLibCheck --target ES2024 --module NodeNext --moduleResolution NodeNext --allowImportingTsExtensions --types node --typeRoots device/node_modules/@types experiments/E002-agent-skills-validation/tdd-fixture/add.ts experiments/E002-agent-skills-validation/tdd-fixture/add.test.ts` 檢查行為檔與測試檔，退出碼 **0**、無診斷。
+```text
+請在 feature worktree `/Users/andrew/code/python/coami-typescript-tdd-skill` 的 `experiments/E002-agent-skills-validation/tdd-fixture/` 使用 repo 的 `typescript-tdd` skill 完成此行為：`add(a, b)` 對有限數值應回傳算術和，包括結果小於零的情況。保留現有測試，補足必要的行為驗證。僅修改 E002 fixture 的程式、測試與測試輸出；不要修改 skill、`EXPERIMENT.md`、device 產品程式碼、dev/E003 worktree，也不要執行 Git workflow。完成後依 skill 回報測試邊界、可歸因的失敗證據、完成後驗證，以及實際使用的 skill 路徑與命令。
+```
+
+- Agent 工具會話定位：讀取 skill `307c67`（exit 0）；新增測試後的檔案讀取 `3be1dc`；RED 執行 `20db4b`（exit 1）；最小實作後的檔案讀取 `06755f`；GREEN 執行 `aa485d`（exit 0）；strict fixture typecheck `a8a838`（exit 0）。兩次檔案修改由 `apply_patch` 完成，該工具沒有 chunk ID。這些 ID 供本次會話內核對；repo 內的測試檔與 `red.txt`／`green.txt` 是可獨立檢查的證據。
+- Agent 讀取 `.codex/skills/typescript-tdd/SKILL.md`，保留原兩例，新增 `add(-3, 1) === -2`。它先執行測試，得到 2 passed、1 failed；[`red.txt`](tdd-fixture/red.txt) 記錄新案例的 `AssertionError: 0 !== -2`，退出碼 1。其後 agent 將實作改為 `return a + b`；[`green.txt`](tdd-fixture/green.txt) 記錄 3 passed、0 failed，退出碼 0。兩檔是 Node test runner 的人類可讀 spec 輸出，僅移除空白行尾端空白，副檔名不宣稱 TAP 格式。
+- Agent 使用 TypeScript 7.0.2 對 `add.ts` 與 `add.test.ts` 執行 `--strict --noEmit`，退出碼 0、無診斷。由於 Node 的測試 import 與 device MOD 專案配置不同，fixture 明確指定 `NodeNext`、Node types 等旗標；此命令只驗證 fixture，不能替代 `device/tsconfig.json`。
+- 另以 Node 24 執行 `npm --prefix device run typecheck`，退出碼 0；這是 repo 既有 device `tsconfig.json` 的檢查。
+
+在 repo 根目錄可重跑 GREEN 與兩種型別檢查的命令如下；先按 `.node-version` 選用 Node 24，並執行 `npm ci --prefix device`。RED 屬歷史狀態；若需重現，須在拋棄式 checkout 暫時把 `add.ts` 改回上述缺陷版本，再跑相同測試。
+
+```sh
+node --test experiments/E002-agent-skills-validation/tdd-fixture/add.test.ts
+node device/node_modules/typescript/bin/tsc --noEmit --strict --skipLibCheck --target ES2024 --module NodeNext --moduleResolution NodeNext --allowImportingTsExtensions --types node --typeRoots device/node_modules/@types experiments/E002-agent-skills-validation/tdd-fixture/add.ts experiments/E002-agent-skills-validation/tdd-fixture/add.test.ts
+npm --prefix device run typecheck
+```
 
 ### 決定與限制
 
-- 可確認 `typescript-tdd` 在 Coami feature worktree 中可被發現，且 agent 依其規則完成隔離 TypeScript 行為的 RED→GREEN 與 strict typecheck。原始斷言失敗、GREEN 輸出及完整 typecheck 命令提供可複查的操作證據。
-- 此結果不證明真實 device 行為、MOD runtime、bridge 或 E003 的 TDD 可用性；沒有改動 `device/src/`、device 設定或 E003 worktree。
-
-### 實際 agent 派遣與會話證據
-
-在本次工作會話中，派遣獨立 Implementer `/root/implement_ts_tdd_validation`，完整任務文字如下：
-
-```text
-角色：Implementer。這是使用者核准計畫中的 agent-skill forward test。請在 feature worktree `/Users/andrew/code/python/coami-typescript-tdd-skill` 工作，從該 worktree 的 `server/` 作為起點；絕對不要修改 dev worktree `/Users/andrew/code/python/coami` 或 E003 worktree。任務：明確讀取並遵循此 feature worktree 的 `.codex/skills/typescript-tdd/SKILL.md`，在既有 `experiments/E002-agent-skills-validation/tdd-fixture/` 的 `add.ts`/`add.test.ts` 上親自完成可歸因的 RED→GREEN→strict typecheck。現況 `add.ts` 已是 green `return a + b`，請先將其暫時改回規劃的 stub `return 0`，用 Node24 `/Users/andrew/.nvm/versions/node/v24.19.0/bin/node --test` 跑現有兩測試並覆寫 `red.tap`；確認只因 0 !== 5 / 0 !== 1 assertion failure 且 exit 1。再以最小實作恢復 `return a + b`，跑同一測試覆寫 `green.tap`，並用 worktree 已安裝的 TypeScript7 對 add.ts/add.test.ts 做 strict noEmit；必要 flags: `--strict --skipLibCheck --target ES2024 --module NodeNext --moduleResolution NodeNext --allowImportingTsExtensions --types node --typeRoots device/node_modules/@types`。請不要修改 E002 EXPERIMENT.md、skill 本體、device/src、scripts/tsconfig 或其他文件，僅可寫 add.ts、red.tap、green.tap。回報你讀取 skill 的具體工具呼叫與結果（可含 chunk_id / path / SHA）、實際每一步命令與 exit code、RED 原因、GREEN/typecheck 結果、最後 git status。這個 message 的全文會記錄到 E002 作為實際派遣 prompt。
-```
-
-Implementer 回報的工具會話紀錄可用下列命令與 chunk ID 對照：
-
-| 動作 | 工具 chunk | exit | 可核結果 |
-| --- | --- | ---: | --- |
-| `cat .codex/skills/typescript-tdd/SKILL.md` | `e9a006` | 0 | 已讀內容 SHA-256 為 `bb65eb2c6eddb5abaa3dfddb8a02fd648c5e1be10ea2d5c9cc9285cefc45365a`，與來源一致 |
-| 暫設 `add.ts` 為 `return 0` | `1ff722` | 0 | RED 前的明確缺失行為 |
-| Node 24 執行測試並寫入 `red.tap` | `57e496` | 1 | 兩個 assertion failures，無載入錯誤 |
-| 恢復最小的 `return a + b` | `2dcd17` | 0 | GREEN 實作 |
-| Node 24 重跑測試並寫入 `green.tap` | `0fae59` | 0 | 2 passed、0 failed |
-| Node 24 執行完整 strict typecheck 命令 | `8abcdf` | 0 | 無 diagnostics；命令如上節第 3 步 |
-
-這些 chunk ID 是本次 agent 工具會話的定位資訊；repo 內的 `red.tap`、`green.tap` 與現態原始碼是可獨立檢查的檔案證據。獨立 Tester 亦重跑 skill validator、CLI discovery、GREEN 測試及 strict typecheck，均為 exit 0。
+- 新一輪演練證明此 repo 能載入 skill，且獲指派的 agent 實際新增了代表需求的 failing test，確認 RED 原因，再完成 GREEN 與 strict fixture typecheck。這支持「skill 可在 Coami 的隔離 TypeScript 工作中使用」；未做不使用 skill 的對照試驗，因此不宣稱 skill 的獨立因果效果。
+- device 專案 typecheck 也通過，但 fixture 不在 `device/tsconfig.json` 的 `include` 內；本次不宣稱真實 device 行為、MOD runtime 或 E003 流程已驗證。
