@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coami E001 · Visible Greet</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">COAMI · EXPERIMENT E001</div>
+        <h1>一個看得見的招呼</h1>
+        <p>Server 收到指令後，Stack-chan simulator 會笑、點頭，並回報結果。</p>
+      </header>
+      <section class="workspace">
+        <div class="simulator">
+          <canvas id="viewport" aria-label="Stack-chan 3D simulator"></canvas>
+          <canvas id="screen" width="320" height="240" hidden></canvas>
+        </div>
+        <aside>
+          <h2>實驗控制台</h2>
+          <dl>
+            <dt>Device ID</dt><dd id="device-id">coami-sim-001</dd>
+            <dt>Simulator</dt><dd id="simulator-status">載入中</dd>
+            <dt>Server</dt><dd id="server-status">等待 simulator</dd>
+            <dt>最新指令</dt><dd id="command-status">尚未發送</dd>
+          </dl>
+          <div class="actions">
+            <button id="greet" disabled>讓 Coami 打招呼</button>
+            <button id="stop" class="secondary" disabled>停止動作</button>
+          </div>
+          <p class="hint">也可以從終端機呼叫 POST /v1/devices/coami-sim-001/actions/greet。</p>
+          <h3>事件紀錄</h3>
+          <ol id="events" aria-live="polite"></ol>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -36,3 +36,37 @@ jobs:
         working-directory: device
       - run: npm run typecheck
         working-directory: device
+
+  e001-server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.12'
+      - run: uv sync --frozen --dev
+        working-directory: experiments/E001-visible-greet/server
+      - run: uv run ruff check .
+        working-directory: experiments/E001-visible-greet/server
+      - run: uv run pyright
+        working-directory: experiments/E001-visible-greet/server
+      - run: uv run pytest -q
+        working-directory: experiments/E001-visible-greet/server
+
+  e001-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: experiments/E001-visible-greet/web/package-lock.json
+      - run: npm ci
+        working-directory: experiments/E001-visible-greet/web
+      - run: npm run mod
+        working-directory: experiments/E001-visible-greet/web
+      - run: npm run build
+        working-directory: experiments/E001-visible-greet/web
