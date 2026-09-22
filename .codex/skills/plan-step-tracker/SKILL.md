@@ -50,7 +50,7 @@ Do not use this skill when:
 1. Resolve `plan/<topic>/<topic>.step.md` and keep the interaction read-only.
 2. Prefer the Python CLI:
    ```bash
-   python skills/plan-step-tracker/scripts/step_tracker.py <operation> <topic>
+   python .codex/skills/plan-step-tracker/scripts/step_tracker.py <operation> <topic>
    ```
 3. Interpret checkbox markers exactly as the CLI does:
    - `[X]` = done
@@ -68,7 +68,7 @@ Do not use this skill when:
 
 **Positive: Use the blocking command before a gated handoff**
 ```bash
-$ python skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded my-feature
+$ python .codex/skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded my-feature
 ❌ BLOCKED: 2 steps pending (exit code 1)
 [ ] implementation-review
 [x] code-review
@@ -77,7 +77,7 @@ The caller stops and reports the pending steps.
 
 **Negative: Treat lowercase `[x]` as complete or ignore exit code 1**
 ```bash
-$ python skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded my-feature
+$ python .codex/skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded my-feature
 Warning: Found lowercase [x] at line 18; treating as pending
 ❌ BLOCKED: 1 steps pending (exit code 1)
 [x] code-review
@@ -97,7 +97,7 @@ Wrong follow-up: continuing anyway or rewriting the file inside this skill.
 
 ## Required Checks
  - run only one of the five supported operations
-- keep the command path as `python skills/plan-step-tracker/scripts/step_tracker.py <operation> <topic>`
+- keep the command path as `python .codex/skills/plan-step-tracker/scripts/step_tracker.py <operation> <topic>`
 - treat exit code `1` from `check_all_succeeded` or missing files as blocking
 - treat exit code `1` from `check_impl_steps_succeeded` as an implementation-only blocking signal
 - treat lowercase `[x]` as pending, not done

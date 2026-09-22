@@ -71,7 +71,7 @@ created: YYYY-MM-DD
 
 - Selected profile: python-implementation-plan
 - Source plan: plan/<topic>/<topic>.plan.md
-- Shared lifecycle shell: skills/step-creator/templates/shared-lifecycle-shell.md
+- Shared lifecycle shell: .codex/skills/step-creator/templates/shared-lifecycle-shell.md
 - Managed worktree intent: topic=<topic>; branch=<selector>; managed-path-intent=<intent>; primary-worktree=false
 - Progression truth inputs: <exact paths>
 - Completion evidence inputs: <exact paths/identifiers>
@@ -85,7 +85,7 @@ created: YYYY-MM-DD
 The frozen profile wire owns the `### Main Agent — Fixed Head` heading; the
 shared shell supplies its two rows only. After the canonical 13-section
 eligibility preflight succeeds, render the literal `[X] plan-authoring` stage
-exactly as wired by `skills/python-plan-authoring/templates/step-template.md`.
+exactly as wired by `.codex/skills/python-plan-authoring/templates/step-template.md`.
 It is a fixed template marker, not execution-completion evidence. Render actual
 `[X]` or `[ ]` from exact evidence in place of every remaining
 `<resolved-checkbox>` placeholder; no other marker is literal output. An

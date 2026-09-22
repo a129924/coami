@@ -35,7 +35,7 @@ contracts live in the selected profile reference.
   action. `[ ]` means planned, pending, or unproved. The only exception is the
   Python profile wire: after an eligible source passes the canonical 13-section
   preflight, it renders the fixed `[X] plan-authoring` stage prescribed by
-  `skills/python-plan-authoring/templates/step-template.md`. That marker is a
+  `.codex/skills/python-plan-authoring/templates/step-template.md`. That marker is a
   template wire, not execution-completion evidence; the other five Python
   stages still require exact evidence. Generated artifacts may output only
   those two checkbox markers; textual placeholders in templates are never

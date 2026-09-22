@@ -56,7 +56,7 @@ created: YYYY-MM-DD
 
 - Selected profile: base-plan
 - Source plan: plan/<topic>/<topic>.plan.md
-- Shared lifecycle shell: skills/step-creator/templates/shared-lifecycle-shell.md
+- Shared lifecycle shell: .codex/skills/step-creator/templates/shared-lifecycle-shell.md
 - Managed worktree intent: topic=<topic>; branch=<selector>; managed-path-intent=<intent>; primary-worktree=false
 - Progression truth inputs: <exact paths>
 - Completion evidence inputs: <exact paths/identifiers>

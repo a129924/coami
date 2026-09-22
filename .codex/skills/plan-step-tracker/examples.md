@@ -40,7 +40,7 @@ Returns both done and pending steps.
 ### Python CLI
 
 ```bash
-$ python skills/plan-step-tracker/scripts/step_tracker.py read_all my-feature
+$ python .codex/skills/plan-step-tracker/scripts/step_tracker.py read_all my-feature
 [X] plan-authoring
 [X] plan-review
 [ ] implementation
@@ -84,7 +84,7 @@ Returns only steps with `[ ]` or `[x]` (pending markers).
 ### Python CLI
 
 ```bash
-$ python skills/plan-step-tracker/scripts/step_tracker.py read_not_run my-feature
+$ python .codex/skills/plan-step-tracker/scripts/step_tracker.py read_not_run my-feature
 [ ] implementation
 [ ] implementation-review
 [ ] code-review
@@ -128,7 +128,7 @@ Returns only steps with `[X]` (done marker).
 ### Python CLI
 
 ```bash
-$ python skills/plan-step-tracker/scripts/step_tracker.py read_success my-feature
+$ python .codex/skills/plan-step-tracker/scripts/step_tracker.py read_success my-feature
 [X] plan-authoring
 [X] plan-review
 [X] 1. Setup environment
@@ -157,7 +157,7 @@ Returns SUCCESS if all done; BLOCKED if any pending.
 ### Scenario A: All Steps Done
 
 ```bash
-$ python skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded my-feature-complete
+$ python .codex/skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded my-feature-complete
 ✅ SUCCESS: All 3 steps complete
 ```
 
@@ -166,7 +166,7 @@ $ python skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded my
 ### Scenario B: Pending Steps Exist (BLOCKING)
 
 ```bash
-$ python skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded my-feature
+$ python .codex/skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded my-feature
 ❌ BLOCKED: 7 steps pending (exit code 1)
 [ ] implementation
 [ ] implementation-review
@@ -204,13 +204,13 @@ created: 2025-01-15
 ### Behavior
 
 ```bash
-$ python skills/plan-step-tracker/scripts/step_tracker.py read_all empty-topic
+$ python .codex/skills/plan-step-tracker/scripts/step_tracker.py read_all empty-topic
 # (empty output)
 
-$ python skills/plan-step-tracker/scripts/step_tracker.py read_not_run empty-topic
+$ python .codex/skills/plan-step-tracker/scripts/step_tracker.py read_not_run empty-topic
 # (empty output)
 
-$ python skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded empty-topic
+$ python .codex/skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded empty-topic
 ❌ BLOCKED: No valid steps found
 ```
 
@@ -223,7 +223,7 @@ $ python skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded em
 Topic directory exists but `.step.md` is missing.
 
 ```bash
-$ python skills/plan-step-tracker/scripts/step_tracker.py read_all nonexistent-topic
+$ python .codex/skills/plan-step-tracker/scripts/step_tracker.py read_all nonexistent-topic
 Error: File not found: plan/nonexistent-topic/nonexistent-topic.step.md
 ```
 
@@ -254,10 +254,10 @@ Follow these steps manually:
 ### Behavior
 
 ```bash
-$ python skills/plan-step-tracker/scripts/step_tracker.py read_all no-checkboxes
+$ python .codex/skills/plan-step-tracker/scripts/step_tracker.py read_all no-checkboxes
 # (empty output)
 
-$ python skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded no-checkboxes
+$ python .codex/skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded no-checkboxes
 ❌ BLOCKED: No valid steps found
 ```
 
@@ -276,7 +276,7 @@ TOPIC="my-feature-release"
 echo "Checking step completion before release..."
 
 # Fetch pending steps
-PENDING=$(python skills/plan-step-tracker/scripts/step_tracker.py read_not_run "$TOPIC")
+PENDING=$(python .codex/skills/plan-step-tracker/scripts/step_tracker.py read_not_run "$TOPIC")
 
 if [ $? -ne 0 ]; then
   echo "FAIL: Unable to check steps"
@@ -284,7 +284,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Use check_all_succeeded for blocking gate
-python skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded "$TOPIC"
+python .codex/skills/plan-step-tracker/scripts/step_tracker.py check_all_succeeded "$TOPIC"
 CHECK_EXIT=$?
 
 if [ $CHECK_EXIT -ne 0 ]; then

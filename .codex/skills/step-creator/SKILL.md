@@ -89,7 +89,7 @@ Do not use this skill when:
    is `[ ]`. The sole profile-wire exception is an eligible canonical Python
    source: after its 13-section preflight succeeds, render the fixed
    `[X] plan-authoring` stage from
-   `skills/python-plan-authoring/templates/step-template.md`. That stage is not
+   `.codex/skills/python-plan-authoring/templates/step-template.md`. That stage is not
    execution-completion evidence; all other Python stages remain evidence-only.
    Never emit a template placeholder as a marker. The tracker parses the
    one-character checkbox form matched by `^- \[(.)\](.*)`; lowercase `[x]`
