@@ -40,15 +40,19 @@ def test_event_command_result_and_duplicate() -> None:
         assert command["action"] == "greet"
         command_id = command["command_id"]
         assert socket.receive_json() == {
-            "type": "robot.event_ack", "event_id": event_id,
-            "disposition": "accepted", "command_id": command_id,
+            "type": "robot.event_ack",
+            "event_id": event_id,
+            "disposition": "accepted",
+            "command_id": command_id,
         }
         assert client.get(f"/v1/commands/{command_id}").json()["status"] == "pending"
-        socket.send_json({
-            "type": "robot.command_result",
-            "command_id": command_id,
-            "status": "completed",
-        })
+        socket.send_json(
+            {
+                "type": "robot.command_result",
+                "command_id": command_id,
+                "status": "completed",
+            }
+        )
         deadline = time.monotonic() + 1
         while client.get(f"/v1/commands/{command_id}").json()["status"] == "pending":
             assert time.monotonic() < deadline
@@ -56,8 +60,10 @@ def test_event_command_result_and_duplicate() -> None:
         assert (view["event_id"], view["status"]) == (event_id, "completed")
         socket.send_json(event(event_id))
         assert socket.receive_json() == {
-            "type": "robot.event_ack", "event_id": event_id,
-            "disposition": "duplicate", "command_id": command_id,
+            "type": "robot.event_ack",
+            "event_id": event_id,
+            "disposition": "duplicate",
+            "command_id": command_id,
         }
         assert len(app.state.e003.commands) == 1
 
@@ -73,16 +79,24 @@ def test_busy_event_can_retry_and_disconnect_keeps_mapping() -> None:
             assert socket.receive_json()["disposition"] == "accepted"
             socket.send_json(event(second_id))
             assert socket.receive_json() == {
-                "type": "robot.event_ack", "event_id": second_id,
-                "disposition": "busy", "command_id": first_command,
+                "type": "robot.event_ack",
+                "event_id": second_id,
+                "disposition": "busy",
+                "command_id": first_command,
             }
             assert second_id not in app.state.e003.event_commands
-            socket.send_json({
-                "type": "robot.command_result",
-                "command_id": first_command, "status": "completed",
-            })
+            socket.send_json(
+                {
+                    "type": "robot.command_result",
+                    "command_id": first_command,
+                    "status": "completed",
+                }
+            )
             deadline = time.monotonic() + 1
-            while client.get(f"/v1/commands/{first_command}").json()["status"] == "pending":
+            while (
+                client.get(f"/v1/commands/{first_command}").json()["status"]
+                == "pending"
+            ):
                 assert time.monotonic() < deadline
             socket.send_json(event(second_id))
             second_command = socket.receive_json()["command_id"]
@@ -93,8 +107,10 @@ def test_busy_event_can_retry_and_disconnect_keeps_mapping() -> None:
             connect(socket)
             socket.send_json(event(second_id))
             assert socket.receive_json() == {
-                "type": "robot.event_ack", "event_id": second_id,
-                "disposition": "duplicate", "command_id": second_command,
+                "type": "robot.event_ack",
+                "event_id": second_id,
+                "disposition": "duplicate",
+                "command_id": second_command,
             }
             assert len(app.state.e003.commands) == 2
 
@@ -120,10 +136,15 @@ def test_delivery_failure_keeps_accepted_event(monkeypatch) -> None:
                     assert time.monotonic() < deadline
         command = next(iter(app.state.e003.commands.values()))
         assert (command.event_id, command.status, command.detail) == (
-            event_id, "failed", "delivery_failed"
+            event_id,
+            "failed",
+            "delivery_failed",
         )
         assert app.state.e003.event_commands[event_id] == command.command_id
-        assert client.get(f"/v1/commands/{command.command_id}").json()["status"] == "failed"
+        assert (
+            client.get(f"/v1/commands/{command.command_id}").json()["status"]
+            == "failed"
+        )
 
 
 def test_ready_delivery_failure_cleans_session(monkeypatch) -> None:
@@ -141,9 +162,13 @@ def test_ready_delivery_failure_cleans_session(monkeypatch) -> None:
         with monkeypatch.context() as patch:
             patch.setattr(WebSocket, "send_json", fail_ready)
             with client.websocket_connect(f"/v1/devices/{DEVICE_ID}/session") as socket:
-                socket.send_json({
-                    "type": "robot.hello", "device_id": DEVICE_ID, "version": 1,
-                })
+                socket.send_json(
+                    {
+                        "type": "robot.hello",
+                        "device_id": DEVICE_ID,
+                        "version": 1,
+                    }
+                )
                 assert ready_failed.wait(timeout=1)
                 deadline = time.monotonic() + 1
                 while app.state.e003.sessions:

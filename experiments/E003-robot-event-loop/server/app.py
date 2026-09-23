@@ -71,7 +71,11 @@ async def process_event(state: State, socket: WebSocket, message: RobotEvent) ->
             }
         else:
             pending = next(
-                (command for command in state.commands.values() if command.status == "pending"),
+                (
+                    command
+                    for command in state.commands.values()
+                    if command.status == "pending"
+                ),
                 None,
             )
             if pending is not None:
@@ -88,12 +92,14 @@ async def process_event(state: State, socket: WebSocket, message: RobotEvent) ->
                 state.commands[command.command_id] = command
                 state.event_commands[event_id] = command.command_id
                 try:
-                    await socket.send_json({
-                        "type": "robot.command",
-                        "command_id": command.command_id,
-                        "event_id": event_id,
-                        "action": "greet",
-                    })
+                    await socket.send_json(
+                        {
+                            "type": "robot.command",
+                            "command_id": command.command_id,
+                            "event_id": event_id,
+                            "action": "greet",
+                        }
+                    )
                 except (OSError, RuntimeError, WebSocketDisconnect):
                     command.status = "failed"
                     command.detail = "delivery_failed"
@@ -177,7 +183,9 @@ def create_app() -> FastAPI:
                             or command.device_id != device_id
                             or command.status != "pending"
                         ):
-                            await socket.close(code=1008, reason="unknown_pending_command")
+                            await socket.close(
+                                code=1008, reason="unknown_pending_command"
+                            )
                             break
                         command.status = result.status
                         command.detail = result.detail
@@ -191,7 +199,10 @@ def create_app() -> FastAPI:
                 if state.sessions.get(device_id) is socket:
                     del state.sessions[device_id]
                     for command in state.commands.values():
-                        if command.device_id == device_id and command.status == "pending":
+                        if (
+                            command.device_id == device_id
+                            and command.status == "pending"
+                        ):
                             command.status = "failed"
                             command.detail = "device_disconnected"
 
