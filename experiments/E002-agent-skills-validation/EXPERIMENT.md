@@ -45,7 +45,7 @@
 ### 問題與成功條件
 
 - 問題：新移植的 `typescript-tdd` 能否從 Coami 的 `server/` 被 Codex 發現，並讓 agent 在此 repo 的隔離 TypeScript fixture 中實際撰寫 failing test、完成行為及型別驗證？
-- 成功條件：agent 的派遣 prompt 只指定行為與範圍；agent 讀取 skill、自行選擇測試工具，新增一個可歸因的 failing test，接著使測試通過並完成 strict fixture typecheck。device 專案自身的 typecheck 另行驗證。
+- 成功條件：agent 的派遣 prompt 只指定行為與範圍；agent 回報讀取 skill、自行選擇測試工具，新增一個可歸因的 failing test，接著使測試通過並完成 strict fixture typecheck。device 專案自身的 typecheck 另行驗證。
 - 邊界：`tdd-fixture/add.ts` 與 `add.test.ts` 是純函式樣本，不代表 device 產品契約；不修改 `device/src/` 或 E003。
 
 ### 來源與環境
@@ -59,7 +59,7 @@
 
 - 起始狀態：`add.ts` 暫時回傳 `Math.max(0, a + b)`。原有兩個測試在此狀態下仍是 2 passed、0 failed；負的總和行為尚無測試。此缺陷只存在於演練過程，最終檔案已修正。
 - 對獨立 agent `/root/ts_tdd_forward_retest` 的派遣只指定 skill、可觀察行為與修改範圍，未指定 RED/GREEN 步驟、runner、compiler 旗標或預期退出碼。完整 prompt、skill 讀取結果、依序工具命令與退出碼、以及 agent 原始回報均保存在 [`FORWARD_TEST_TRANSCRIPT.md`](FORWARD_TEST_TRANSCRIPT.md)。
-- Agent 讀取 `.codex/skills/typescript-tdd/SKILL.md`，保留原兩例，新增 `add(-3, 1) === -2`。它先執行測試，得到 2 passed、1 failed；[`red.txt`](tdd-fixture/red.txt) 記錄新案例的 `AssertionError: 0 !== -2`，退出碼 1。其後 agent 將實作改為 `return a + b`；[`green.txt`](tdd-fixture/green.txt) 記錄 3 passed、0 failed，退出碼 0。兩檔是 Node test runner 的人類可讀 spec 輸出，僅移除空白行尾端空白，副檔名不宣稱 TAP 格式。
+- Agent 回報已讀取 `.codex/skills/typescript-tdd/SKILL.md`，保留原兩例，新增 `add(-3, 1) === -2`。原始 skill-read tool event 未從會話匯出，因此 repo 內無法獨立驗證該次讀取。它先執行測試，得到 2 passed、1 failed；[`red.txt`](tdd-fixture/red.txt) 記錄新案例的 `AssertionError: 0 !== -2`，退出碼 1。其後 agent 將實作改為 `return a + b`；[`green.txt`](tdd-fixture/green.txt) 記錄 3 passed、0 failed，退出碼 0。兩檔是 Node test runner 的人類可讀 spec 輸出，僅移除空白行尾端空白，副檔名不宣稱 TAP 格式。
 - Agent 使用 TypeScript 7.0.2 對 `add.ts` 與 `add.test.ts` 執行 `--strict --noEmit`，退出碼 0、無診斷。由於 Node 的測試 import 與 device MOD 專案配置不同，fixture 明確指定 `NodeNext`、Node types 等旗標；此命令只驗證 fixture，不能替代 `device/tsconfig.json`。
 - 另以 Node 24 執行 `npm --prefix device run typecheck`，退出碼 0；這是 repo 既有 device `tsconfig.json` 的檢查。
 
@@ -73,5 +73,5 @@ npm --prefix device run typecheck
 
 ### 決定與限制
 
-- 新一輪演練證明此 repo 能載入 skill，且獲指派的 agent 實際新增了代表需求的 failing test，確認 RED 原因，再完成 GREEN 與 strict fixture typecheck。這支持「skill 可在 Coami 的隔離 TypeScript 工作中使用」；未做不使用 skill 的對照試驗，因此不宣稱 skill 的獨立因果效果。
+- CLI 證據確認此 repo 能發現 skill；新一輪演練確認獲指派的 agent 新增了代表需求的 failing test、判定 RED 原因，再完成 GREEN 與 strict fixture typecheck。這證明觀察到的流程與 skill 指引相容。由於原始 skill-read tool event 未匯出，repo 證據不能獨立證明 agent 實際載入該 skill；也未做不使用 skill 的對照試驗，因此不宣稱 skill 的使用或獨立因果效果已被完整證實。
 - device 專案 typecheck 也通過，但 fixture 不在 `device/tsconfig.json` 的 `include` 內；本次不宣稱真實 device 行為、MOD runtime 或 E003 流程已驗證。

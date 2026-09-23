@@ -5,9 +5,9 @@
 - Date: 2026-09-22 (Asia/Taipei).
 - Agent task: `/root/ts_tdd_forward_retest`.
 - Feature commit under review when dispatched: `ffccbc05a5694e2cc85910da4cd789f2639e159f` plus the uncommitted review fixture setup described in `EXPERIMENT.md`.
-- Skill read from `.codex/skills/typescript-tdd/SKILL.md`; its SHA-256 was `bb65eb2c6eddb5abaa3dfddb8a02fd648c5e1be10ea2d5c9cc9285cefc45365a`.
+- The agent reported reading `.codex/skills/typescript-tdd/SKILL.md`; that tracked file had SHA-256 `bb65eb2c6eddb5abaa3dfddb8a02fd648c5e1be10ea2d5c9cc9285cefc45365a`.
 
-This file preserves the prompt, ordered tool record, and final agent report from the forward-test session. Tool chunk IDs are session-local locators; the commands, exit codes, changed test, and saved RED/GREEN output are the durable record.
+This file preserves the prompt, the tool sequence reported by the agent, and its final report. Tool chunk IDs are session-local locators. The original raw skill-read event was not exported from that session; this record therefore treats the read as an agent report rather than independently auditable evidence. The changed test and saved RED/GREEN output remain durable evidence of the observed workflow.
 
 ## Dispatch prompt
 
@@ -19,7 +19,7 @@ The prompt names the skill and observable behavior. It does not prescribe the te
 
 ## Ordered tool record
 
-1. **Read the skill.** `cat .codex/skills/typescript-tdd/SKILL.md` returned the full skill text, exit 0, tool chunk `307c67`.
+1. **Reported skill read.** The agent reported running `cat .codex/skills/typescript-tdd/SKILL.md` with exit 0 at tool chunk `307c67`. The raw tool event and returned text were not exported, so this step cannot be independently verified from the repository.
 2. **Add the behavior test.** The agent used `apply_patch` to add `add(-3, 1) === -2` while retaining the two existing cases. `apply_patch` returned no chunk ID; the following file read was chunk `3be1dc`.
 3. **Confirm RED.** The agent ran `node --test experiments/E002-agent-skills-validation/tdd-fixture/add.test.ts`, saved the human-readable output now tracked as `tdd-fixture/red.txt`, and received exit 1, chunk `20db4b`. The existing cases passed; only the new case failed with `0 !== -2`.
 4. **Apply the minimum implementation.** The agent used `apply_patch` to replace `Math.max(0, a + b)` with `a + b`. The following file read was chunk `06755f`.
@@ -42,4 +42,4 @@ The prompt names the skill and observable behavior. It does not prescribe the te
 
 ## Audit limits
 
-This transcript persists what the dispatched agent and its tool results reported. Together with the exact prompt, final diff, and saved RED/GREEN output, it makes the claimed skill read and operation order reviewable outside the original session. It does not prove the skill caused the choices; E002 therefore limits its conclusion to successful use of the skill in this isolated workflow and makes no causal comparison against an agent without the skill.
+This transcript persists what the dispatched agent reported, plus the exact prompt and operation ordering. The final diff and saved RED/GREEN output independently support the test-authoring and implementation sequence. Because the raw skill-read tool event was not exported, the repository cannot independently prove that read occurred, nor that the skill caused the choices. E002 therefore limits its conclusion to skill discovery and compatibility of the observed workflow with the skill instructions.
