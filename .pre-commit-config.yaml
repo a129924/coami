@@ -1,0 +1,33 @@
+# Run from the repository root:
+# uv --directory server run pre-commit run --config ../.pre-commit-config.yaml --all-files
+# Install the commit hook with:
+# uv --directory server run pre-commit install --config ../.pre-commit-config.yaml
+repos:
+  - repo: local
+    hooks:
+      - id: server-ruff-format
+        name: server Ruff format check
+        entry: uv --directory server run ruff format --check .
+        language: system
+        files: ^server/
+        pass_filenames: false
+      - id: server-ruff-check
+        name: server Ruff lint
+        entry: uv --directory server run ruff check .
+        language: system
+        files: ^server/
+        pass_filenames: false
+      - id: server-pyright
+        name: server Pyright
+        entry: uv --directory server run pyright
+        language: system
+        files: ^server/
+        pass_filenames: false
+        stages: [manual]
+      - id: server-pytest
+        name: server pytest
+        entry: uv --directory server run pytest
+        language: system
+        files: ^server/
+        pass_filenames: false
+        stages: [manual]
