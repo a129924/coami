@@ -58,13 +58,7 @@
 ### 第二次 agent 演練
 
 - 起始狀態：`add.ts` 暫時回傳 `Math.max(0, a + b)`。原有兩個測試在此狀態下仍是 2 passed、0 failed；負的總和行為尚無測試。此缺陷只存在於演練過程，最終檔案已修正。
-- 對獨立 agent `/root/ts_tdd_forward_retest` 的完整派遣 prompt 如下。prompt 未指定 RED/GREEN 步驟、runner、compiler 旗標或預期退出碼：
-
-```text
-請在 feature worktree `/Users/andrew/code/python/coami-typescript-tdd-skill` 的 `experiments/E002-agent-skills-validation/tdd-fixture/` 使用 repo 的 `typescript-tdd` skill 完成此行為：`add(a, b)` 對有限數值應回傳算術和，包括結果小於零的情況。保留現有測試，補足必要的行為驗證。僅修改 E002 fixture 的程式、測試與測試輸出；不要修改 skill、`EXPERIMENT.md`、device 產品程式碼、dev/E003 worktree，也不要執行 Git workflow。完成後依 skill 回報測試邊界、可歸因的失敗證據、完成後驗證，以及實際使用的 skill 路徑與命令。
-```
-
-- Agent 工具會話定位：讀取 skill `307c67`（exit 0）；新增測試後的檔案讀取 `3be1dc`；RED 執行 `20db4b`（exit 1）；最小實作後的檔案讀取 `06755f`；GREEN 執行 `aa485d`（exit 0）；strict fixture typecheck `a8a838`（exit 0）。兩次檔案修改由 `apply_patch` 完成，該工具沒有 chunk ID。這些 ID 供本次會話內核對；repo 內的測試檔與 `red.txt`／`green.txt` 是可獨立檢查的證據。
+- 對獨立 agent `/root/ts_tdd_forward_retest` 的派遣只指定 skill、可觀察行為與修改範圍，未指定 RED/GREEN 步驟、runner、compiler 旗標或預期退出碼。完整 prompt、skill 讀取結果、依序工具命令與退出碼、以及 agent 原始回報均保存在 [`FORWARD_TEST_TRANSCRIPT.md`](FORWARD_TEST_TRANSCRIPT.md)。
 - Agent 讀取 `.codex/skills/typescript-tdd/SKILL.md`，保留原兩例，新增 `add(-3, 1) === -2`。它先執行測試，得到 2 passed、1 failed；[`red.txt`](tdd-fixture/red.txt) 記錄新案例的 `AssertionError: 0 !== -2`，退出碼 1。其後 agent 將實作改為 `return a + b`；[`green.txt`](tdd-fixture/green.txt) 記錄 3 passed、0 failed，退出碼 0。兩檔是 Node test runner 的人類可讀 spec 輸出，僅移除空白行尾端空白，副檔名不宣稱 TAP 格式。
 - Agent 使用 TypeScript 7.0.2 對 `add.ts` 與 `add.test.ts` 執行 `--strict --noEmit`，退出碼 0、無診斷。由於 Node 的測試 import 與 device MOD 專案配置不同，fixture 明確指定 `NodeNext`、Node types 等旗標；此命令只驗證 fixture，不能替代 `device/tsconfig.json`。
 - 另以 Node 24 執行 `npm --prefix device run typecheck`，退出碼 0；這是 repo 既有 device `tsconfig.json` 的檢查。
