@@ -7,6 +7,10 @@ const SOCKET = `${API.replace(/^http/, 'ws')}/v1/devices/${DEVICE_ID}/session`
 const STAGE_ONE = new URLSearchParams(location.search).get('stage') === '1'
 
 type Result = 'completed' | 'cancelled' | 'failed'
+type ActiveGreeting = {
+  commandId: string
+  session: number
+}
 type Incoming = {
   type: string
   command_id?: string
@@ -31,7 +35,8 @@ let socket: WebSocket | undefined
 let ready = false
 let connected = false
 let received = 0
-let activeGreeting: string | undefined
+let sessionGeneration = 0
+let activeGreeting: ActiveGreeting | undefined
 
 function log(message: string): void {
   const item = document.createElement('li')
@@ -41,7 +46,7 @@ function log(message: string): void {
 }
 
 function updateControls(): void {
-  pressButton.disabled = !ready || (!STAGE_ONE && !connected)
+  pressButton.disabled = !ready || (!STAGE_ONE && (!connected || Boolean(activeGreeting)))
   stopButton.disabled = !ready || !activeGreeting
 }
 
@@ -51,16 +56,21 @@ function send(message: object): void {
 
 function report(status: Result, detail?: string): void {
   if (!activeGreeting) return
-  const commandId = activeGreeting
+  const greeting = activeGreeting
   activeGreeting = undefined
-  send({
-    type: 'robot.command_result',
-    command_id: commandId,
-    status,
-    ...(detail ? { detail } : {}),
-  })
-  commandStatus.textContent = `greet · ${status} · ${commandId}`
-  log(`結果 ${status} · command_id=${commandId}`)
+  if (connected && greeting.session === sessionGeneration) {
+    send({
+      type: 'robot.command_result',
+      command_id: greeting.commandId,
+      status,
+      ...(detail ? { detail } : {}),
+    })
+    commandStatus.textContent = `greet · ${status} · ${greeting.commandId}`
+    log(`結果 ${status} · command_id=${greeting.commandId}`)
+  } else {
+    commandStatus.textContent = `舊 session greet 已結束 · ${greeting.commandId}`
+    log(`丟棄舊 session 結果 ${status} · command_id=${greeting.commandId}`)
+  }
   updateControls()
 }
 
@@ -107,15 +117,16 @@ function connect(): void {
     const message = JSON.parse(String(event.data)) as Incoming
     if (message.type === 'robot.ready') {
       connected = true
+      sessionGeneration += 1
       serverStatus.textContent = '已連線'
       log('Server 已連線')
     } else if (message.type === 'robot.event_ack' && message.event_id && message.command_id) {
       log(`Server ${message.disposition} · event_id=${message.event_id} · command_id=${message.command_id}`)
     } else if (message.type === 'robot.command' && message.command_id && message.event_id) {
       if (message.action === 'greet' && !activeGreeting) {
-        activeGreeting = message.command_id
-        commandStatus.textContent = `greet · 執行中 · ${activeGreeting}`
-        log(`Server 決策 greet · event_id=${message.event_id} · command_id=${activeGreeting}`)
+        activeGreeting = { commandId: message.command_id, session: sessionGeneration }
+        commandStatus.textContent = `greet · 執行中 · ${message.command_id}`
+        log(`Server 決策 greet · event_id=${message.event_id} · command_id=${message.command_id}`)
         engine.pushButton('c')
       } else {
         send({
@@ -130,8 +141,8 @@ function connect(): void {
   }
   socket.onclose = () => {
     connected = false
-    activeGreeting = undefined
     serverStatus.textContent = '已斷線，重新連線中'
+    if (activeGreeting) commandStatus.textContent = '等待舊 session 的本機 greet 結束'
     updateControls()
     window.setTimeout(connect, 1500)
   }

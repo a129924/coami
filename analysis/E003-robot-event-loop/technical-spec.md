@@ -17,6 +17,7 @@
 - Server 以 `robot.event_ack` 回應 `accepted|duplicate|busy`，含 `event_id` 與 `command_id`。同一已接受 ID（含命令已終結）回 `duplicate` + 原 ID，不新建／重送。不同 ID 在 greet pending 時回 `busy` + 當前 ID，且不建立映射；待 pending 終結後可重送。
 - Browser 僅把 Server 的 greet command 映射到 `engine.pushButton('c')`；MOD 的 C callback 執行 E001 同等笑臉、點頭與 `COAMI_RESULT|greet|<status>`。B callback 保留 stop；C/B 不上報 `robot.event`，防止回圈。Browser 以 `robot.command_result`（`command_id`）回報。GET `/v1/commands/<command_id>` 含相同 `event_id` 和狀態。
 - Session 斷線：待執行命令變 `failed/device_disconnected`；已接受映射留在 Server 程序記憶體，重連後重送同 ID 回 duplicate，不自動重試。接受前斷線不留命令或映射。送達失敗使已接受命令變 `failed/delivery_failed`，即使 ack 遺失，GET 仍為準。Server 重啟清空記憶體狀態。
+- `robot.ready` 送出失敗仍須經 session cleanup，避免 stale socket 阻擋重連。若 greet 執行期間斷線，Bridge 保留本機 busy 到該 MOD 動作終結；重連後不接受新的 greet，舊結果只解除 busy 並丟棄，不得關聯到新 session 的 command。
 
 ## Verification
 Stage 1 驗證實際 simulator 按鍵、trace 與 bridge 接收，不以 fake Context 當作 simulator 證據。Stage 2 驗證完整 ID 鏈、可見動作、結果、重複／忙碌／斷線與 TS/Python checks。阻礙先留證並停止，TS mock 需 owner 另行決定。

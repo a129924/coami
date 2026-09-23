@@ -42,3 +42,8 @@ In a fresh Chrome session against the final E003 app, Tester repeated one full A
 
 ## Status
 PASS（2026-09-22）：獨立 Reviewer 核對 Stage 1 gate、Stage 2 事件與命令關聯、simulator 動作、結果查詢、重複／忙碌／斷線／送達失敗測試，以及 feature worktree 範圍，判定 approved，無 blocking issue。非阻斷限制：若 B 停止時回中立姿勢失敗，MOD 會輸出 stop failed，但不會輸出 greet 結果；本次觀察的正常完成與 B 中斷路徑均通過。
+
+## PR review follow-up（2026-09-23）
+- 修正初始 `robot.ready` 傳送失敗時可能殘留 session 的問題；新增測試先模擬 ready delivery failure，再確認相同裝置可以重連。
+- 修正 greet 執行期間斷線、重連後舊 MOD result 可能被套到新 command 的問題。Bridge 以 session generation 保留 busy，直到舊動作終結後丟棄 stale result；測試確認 stale result 不交付，新 command 只能在 busy 清除後開始。
+- Review fix 後：`uv run pytest -q` 4 passed（另有兩筆既有 upstream deprecation warnings）；Ruff、Pyright（0 errors）、TypeScript typecheck、`npm run build`、`npm run mod` 均通過。Vite 仍只有既有的大型 simulator chunk 警告。

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import time
+from threading import Event
 from typing import Any
 from uuid import uuid4
 
@@ -123,3 +124,30 @@ def test_delivery_failure_keeps_accepted_event(monkeypatch) -> None:
         )
         assert app.state.e003.event_commands[event_id] == command.command_id
         assert client.get(f"/v1/commands/{command.command_id}").json()["status"] == "failed"
+
+
+def test_ready_delivery_failure_cleans_session(monkeypatch) -> None:
+    app = create_app()
+    original_send = WebSocket.send_json
+    ready_failed = Event()
+
+    async def fail_ready(self: WebSocket, data: Any, mode: str = "text") -> None:
+        if isinstance(data, dict) and data.get("type") == "robot.ready":
+            ready_failed.set()
+            raise OSError("simulated ready delivery failure")
+        await original_send(self, data, mode=mode)
+
+    with TestClient(app) as client:
+        with monkeypatch.context() as patch:
+            patch.setattr(WebSocket, "send_json", fail_ready)
+            with client.websocket_connect(f"/v1/devices/{DEVICE_ID}/session") as socket:
+                socket.send_json({
+                    "type": "robot.hello", "device_id": DEVICE_ID, "version": 1,
+                })
+                assert ready_failed.wait(timeout=1)
+                deadline = time.monotonic() + 1
+                while app.state.e003.sessions:
+                    assert time.monotonic() < deadline
+
+        with client.websocket_connect(f"/v1/devices/{DEVICE_ID}/session") as socket:
+            connect(socket)

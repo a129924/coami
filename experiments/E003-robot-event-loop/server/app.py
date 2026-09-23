@@ -156,9 +156,9 @@ def create_app() -> FastAPI:
                 await socket.close(code=1008, reason="device_already_connected")
                 return
             state.sessions[device_id] = socket
-            await socket.send_json({"type": "robot.ready", "device_id": device_id})
 
         try:
+            await socket.send_json({"type": "robot.ready", "device_id": device_id})
             while True:
                 data = await socket.receive_json()
                 if not isinstance(data, dict):
@@ -184,7 +184,7 @@ def create_app() -> FastAPI:
                 else:
                     await socket.close(code=1008, reason="invalid_message")
                     break
-        except (ValueError, WebSocketDisconnect):
+        except (OSError, RuntimeError, ValueError, WebSocketDisconnect):
             pass
         finally:
             async with state.lock:

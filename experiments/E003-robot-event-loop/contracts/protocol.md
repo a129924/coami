@@ -29,3 +29,5 @@ Bridge 只對 Server greet command 模擬 C；MOD 完成笑臉與點頭後輸出
 ```
 
 `GET /v1/commands/<command_id>` 回 `command_id`、`event_id`、`device_id`、`action`、`status`、`detail`。斷線把 pending 命令標 `failed/device_disconnected`；映射在 Server 程序存活期間保留，不自動重試。Server 重啟清空狀態。E003 不提供直接 POST greet。
+
+若初始 `robot.ready` 送出失敗，Server 會移除已登記 session，允許裝置重連。若 greet 尚在 MOD 執行時 WebSocket 斷線，Bridge 保留 busy 狀態直到本機結果出現；重連期間不啟動新 greet，舊結果只在本機解除 busy 並被丟棄，不回報到新 session。
