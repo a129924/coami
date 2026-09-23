@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coami E004 · Named Action Dispatch</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">COAMI · EXPERIMENT E004</div>
+        <h1>具名 Robot 動作派送</h1>
+        <p id="mode-description">從 Server 的 FastAPI Docs 提交 greet；A 事件路徑亦可回歸驗證。</p>
+      </header>
+      <section class="workspace">
+        <div class="simulator">
+          <canvas id="viewport" aria-label="Stack-chan 3D simulator"></canvas>
+          <canvas id="screen" width="320" height="240" hidden></canvas>
+        </div>
+        <aside>
+          <h2>實驗控制台</h2>
+          <dl>
+            <dt>Device ID</dt><dd>coami-sim-001</dd>
+            <dt>Simulator</dt><dd id="simulator-status">載入中</dd>
+            <dt>Bridge</dt><dd id="bridge-status">尚未收到 A 事件</dd>
+            <dt>Server</dt><dd id="server-status">等待 simulator</dd>
+            <dt>最新命令</dt><dd id="command-status">尚未執行</dd>
+          </dl>
+          <div class="actions">
+            <button id="press-a" disabled>在 simulator 按 A</button>
+            <button id="stop" class="secondary" disabled>按 B 停止</button>
+          </div>
+          <p class="hint">從 FastAPI Docs 呼叫 POST /v1/devices/coami-sim-001/actions/greet；bridge 收到命令後以 C 執行動作。</p>
+          <h3>事件紀錄</h3>
+          <ol id="events" aria-live="polite"></ol>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
