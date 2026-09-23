@@ -10,7 +10,7 @@ This experiment uses one `coami-sim-001` browser simulator. The browser bridge r
 
 The bridge connects to `/v1/devices/coami-sim-001/session` and sends `{"type":"robot.hello","device_id":"coami-sim-001","version":1}`. Server sends `robot.ready` successfully before publishing the session for command dispatch. Ready and command sends are serialized and bounded.
 
-An operator calls `POST /v1/devices/coami-sim-001/actions/greet` from FastAPI Docs. Unknown device is `404/unknown_device`; no dispatchable session is `409/device_offline`; Server-known pending command is `409/device_busy`. These rejections create no command. Acceptance is HTTP 202 with:
+An operator calls `POST /v1/devices/coami-sim-001/actions/greet` from FastAPI Docs. Unknown device is `404/unknown_device`; no dispatchable session is `409/device_offline`; Server-known pending command is `409/device_busy`. These rejections create no command. The Server checks session identity under the same lock before accepting an event; a queued event from a removed socket cannot create a command. Acceptance is HTTP 202 with:
 
 ```json
 {"command_id":"<uuid>","event_id":null,"device_id":"coami-sim-001","action":"greet","status":"pending","detail":null}
@@ -24,7 +24,7 @@ Server records the command under one lock and sends:
 
 The bridge maps `greet` to MOD C. On result it sends `robot.command_result` with the same `command_id`, `status: completed|failed`, and optional `detail`. A direct B interruption is `failed/local_interrupted`; execution failure is `failed` with its Robot detail. GET `/v1/commands/<command_id>` returns the current command view.
 
-The direct command has a 10-second monotonic deadline from creation. A failed or stalled command send is terminal `failed/delivery_failed`; a successfully sent command without a result by the deadline is `failed/result_timeout`. Send success is evidence of WebSocket send completion, not physical receipt. Disconnect marks pending commands `failed/device_disconnected`. A known late result for a terminal direct command is ignored after checking current session identity. No terminal state is overwritten.
+The direct command has a 10-second monotonic deadline from creation. A failed or stalled command send is terminal `failed/delivery_failed`; a successfully sent command without a result by the deadline is `failed/result_timeout`. Send success is evidence of WebSocket send completion, not physical receipt. On send failure, the Server removes the session and attempts a bounded close frame outside the lock so the bridge can reconnect. Disconnect marks pending commands `failed/device_disconnected`. A known late result for a terminal direct command is ignored after checking current session identity. No terminal state is overwritten.
 
 The bridge retains local busy while MOD is acting, including across disconnect/reconnect. If Server accepts another command after losing its earlier pending state, the bridge rejects it with `failed/bridge_busy` under its own ID; it never starts a second greet. If MOD stop fails without a greet result, the Server timeout terminates the direct command, while bridge busy remains until an actual MOD terminal trace or simulator reset.
 

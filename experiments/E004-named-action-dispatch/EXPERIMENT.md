@@ -29,6 +29,10 @@ E003 回歸：MOD A → robot.event(event_id) → Server 固定 greet
 
 ## 結論與限制
 
-**Simulator 驗證通過（2026-09-23）**：FastAPI Docs Enum 僅含 `greet`；實際 Docs Execute 回傳 HTTP 202，bridge 執行招呼，GET 以同一 ID 回傳 `completed`。同次瀏覽器驗證的 A event 仍以其 event_id 和 command_id 完成。Python 13 個測試及 TypeScript 4 個測試通過，涵蓋拒絕、busy、送達／執行失敗、B 中斷、斷線、卡住的派送、timeout、late result、本機 busy 跨 session 和 E003 回歸；靜態檢查與建置也通過。這是技術實驗結論，尚待 PR human review，並非 production 升級決定。
+**Simulator 驗證通過（2026-09-23）**：FastAPI Docs Enum 僅含 `greet`；實際 Docs Execute 回傳 HTTP 202，bridge 執行招呼，GET 以同一 ID 回傳 `completed`。同次瀏覽器驗證的 A event 仍以其 event_id 和 command_id 完成。Python 14 個測試及 TypeScript 4 個測試通過，涵蓋拒絕、busy、送達／執行失敗、B 中斷、斷線、卡住的派送、timeout、late result、本機 busy 跨 session 和 E003 回歸；靜態檢查與建置也通過。這是技術實驗結論，尚待 PR human review，並非 production 升級決定。
+
+## PR comment review follow-up（2026-09-23）
+
+PR #3 審查指出首次 `uv sync --dev --offline` 在全新 checkout 無快取時不可重現；README 已改成容許下載且使用 lockfile 的 `uv sync --dev --locked`，另列已備快取時的 offline 選項。審查也指出 direct send 失敗移除 session 後，舊 socket 上排隊的 A event 仍可能建立 pending 命令；測試先重現，再把 session identity 檢查放進事件處理的同一把 lock。事件派送失敗現在嘗試送出有上限的 close frame，讓 bridge 得到關閉訊號。自動測試驗證 stale event 不建立命令，以及 direct／event send 失敗的 close frame；未宣稱在 browser 手動重現這個競態。
 
 未驗證實機 Wi-Fi／WebSocket client、真實馬達與姿勢容差、TLS／認證、跨進程持久化、多 Robot、多 Action、取消 API 與長時間可靠度。Server timeout 不代表 MOD 已停止或回中立；重連後若舊動作仍在執行，bridge 保留本機 busy 並可對新命令回 `failed/bridge_busy`。上正式時應以這些邊界另立驗證與設計決策，不直接搬移本 POC。

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from enum import StrEnum
@@ -17,6 +18,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 DEVICE_ID = "coami-sim-001"
+logger = logging.getLogger(__name__)
 Result = Literal["completed", "cancelled", "failed"]
 Status = Literal["pending", "completed", "cancelled", "failed"]
 
@@ -88,8 +90,8 @@ async def send_bounded(socket: WebSocket, payload: Mapping[str, object], timeout
 async def close_bounded(socket: WebSocket, reason: str) -> None:
     try:
         await asyncio.wait_for(socket.close(code=1008, reason=reason), timeout=2.0)
-    except (OSError, RuntimeError, TimeoutError, WebSocketDisconnect):
-        pass
+    except (OSError, RuntimeError, TimeoutError, WebSocketDisconnect) as exc:
+        logger.debug("WebSocket close failed (%s): %s", reason, exc)
 
 
 async def expire_direct(state: State, command_id: str) -> None:
@@ -105,6 +107,8 @@ async def process_event(state: State, socket: WebSocket, message: RobotEvent, se
     """Preserve E003 event mapping and ack behavior with bounded sends."""
     event_id = str(message.event_id)
     async with state.lock:
+        if state.sessions.get(DEVICE_ID) is not socket:
+            return False
         prior_id = state.event_commands.get(event_id)
         if prior_id is not None:
             acknowledgement = {
@@ -235,8 +239,8 @@ def create_app(command_timeout: float = 10.0, send_timeout: float = 2.0) -> Fast
                     await send_bounded(
                         socket, {"type": "robot.ready", "device_id": device_id}, send_timeout
                     )
-                except (OSError, RuntimeError, TimeoutError, WebSocketDisconnect):
-                    pass
+                except (OSError, RuntimeError, TimeoutError, WebSocketDisconnect) as exc:
+                    logger.debug("robot.ready delivery failed for %s: %s", device_id, exc)
                 else:
                     state.sessions[device_id] = socket
                     registered = True
@@ -253,6 +257,7 @@ def create_app(command_timeout: float = 10.0, send_timeout: float = 2.0) -> Fast
                 if data.get("type") == "robot.event":
                     event = RobotEvent.model_validate(data)
                     if not await process_event(state, socket, event, send_timeout):
+                        await close_bounded(socket, "session_unavailable")
                         break
                 elif data.get("type") == "robot.command_result":
                     result = RobotCommandResult.model_validate(data)
@@ -277,8 +282,8 @@ def create_app(command_timeout: float = 10.0, send_timeout: float = 2.0) -> Fast
                 else:
                     await close_bounded(socket, "invalid_message")
                     break
-        except (OSError, RuntimeError, ValueError, WebSocketDisconnect):
-            pass
+        except (OSError, RuntimeError, ValueError, WebSocketDisconnect) as exc:
+            logger.debug("Robot session ended for %s: %s", device_id, exc)
         finally:
             async with state.lock:
                 if state.sessions.get(device_id) is socket:

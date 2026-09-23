@@ -41,7 +41,7 @@ Server 直接派送 greet · command_id=b1816269-fdb7-40dd-9158-c452baa29abe
 
 ## 自動檢查與限制
 
-- `uv run --offline pytest -q`：13 passed；既有 Starlette/httpx 相關 warning 2 筆。獨立審查後補測直接 B 中斷轉 `failed/local_interrupted`、直接命令斷線終結與重連、卡住的 command send 轉 `failed/delivery_failed`。
+- `uv run --offline pytest -q`：14 passed；既有 Starlette/httpx 相關 warning 2 筆。獨立審查後補測直接 B 中斷轉 `failed/local_interrupted`、直接命令斷線終結與重連、卡住的 command send 轉 `failed/delivery_failed`；PR comment follow-up 再補 stale socket event 不得建立 command 與 send failure close frame。
 - `uv run ruff check .`：pass；`uv run pyright`：0 errors。
 - `npm run test:protocol`：4 passed；新增 `GreetingSlot` 測試模擬舊 greet 尚未終結而 session generation 已切換，新 command 仍遭拒，舊 greet 結束後才可開始。`main.ts` 使用同一 slot，因此斷線不清除本機 busy；此為狀態測試，不宣稱已在 browser 實際重連。`npm run typecheck`、`npm run mod`、`npm run build`：pass。Vite 有既有大型 simulator chunk warning。
 - `npm run assets`：pinned WASM／JS SHA-256 驗證通過。實測環境 Node v26.4.0，package 宣告支援 Node 24，npm 安裝時有 `EBADENGINE` warning；檢查與瀏覽器路徑仍通過，正式支援性未由 Node 26 驗證。

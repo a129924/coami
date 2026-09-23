@@ -6,6 +6,8 @@ from threading import Event
 from typing import Any
 from uuid import uuid4
 
+import pytest
+from fastapi import WebSocketDisconnect
 from fastapi.testclient import TestClient
 from starlette.testclient import WebSocketTestSession
 from starlette.websockets import WebSocket
@@ -119,6 +121,9 @@ def test_delivery_failure_keeps_accepted_event(monkeypatch) -> None:
                 deadline = time.monotonic() + 1
                 while not app.state.e004.commands:
                     assert time.monotonic() < deadline
+                with pytest.raises(WebSocketDisconnect) as closed:
+                    socket.receive_json()
+                assert closed.value.code == 1008
         command = next(iter(app.state.e004.commands.values()))
         assert (command.event_id, command.status, command.detail) == (
             event_id, "failed", "delivery_failed"
@@ -226,6 +231,9 @@ def test_direct_delivery_and_execution_failures_are_distinct(monkeypatch) -> Non
                 assert response.status_code == 202
                 assert response.json()["detail"] == "delivery_failed"
                 assert wait_for_view(client, response.json()["command_id"], "failed")["detail"] == "delivery_failed"
+                with pytest.raises(WebSocketDisconnect) as closed:
+                    socket.receive_json()
+                assert closed.value.code == 1008
 
         with client.websocket_connect(f"/v1/devices/{DEVICE_ID}/session") as socket:
             connect(socket)
@@ -286,6 +294,22 @@ def test_direct_and_event_requests_share_busy_slot() -> None:
         socket.send_json(event(event_id))
         assert socket.receive_json()["event_id"] == event_id
         assert socket.receive_json()["disposition"] == "accepted"
+
+
+def test_stale_socket_event_is_rejected_without_creating_command() -> None:
+    app = create_app()
+    with (
+        TestClient(app) as client,
+        client.websocket_connect(f"/v1/devices/{DEVICE_ID}/session") as socket,
+    ):
+        connect(socket)
+        # Reproduce the window after a failed direct send removes session identity.
+        app.state.e004.sessions.pop(DEVICE_ID)
+        socket.send_json(event(str(uuid4())))
+        with pytest.raises(WebSocketDisconnect) as closed:
+            socket.receive_json()
+        assert closed.value.code == 1008
+        assert not app.state.e004.commands
 
 
 def test_direct_b_interruption_is_terminal_failed() -> None:
