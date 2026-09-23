@@ -8,9 +8,11 @@
 
 ```sh
 cd experiments/E004-named-action-dispatch/server
-uv sync --dev --offline
+uv sync --dev --locked
 uv run uvicorn app:app --host 127.0.0.1 --port 8011
 ```
+
+首次安裝需允許 uv 下載鎖定的套件；只有已預先填好 uv cache 的環境才可選擇 `uv sync --dev --locked --offline`。
 
 另一終端機：
 
