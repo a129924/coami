@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coami E005 · Robot 動作目錄</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">COAMI · EXPERIMENT E005</div>
+        <h1>Robot 動作目錄</h1>
+        <p>逐項驗證 Stack-chan 的可見動作，保留每次人工觸發的結構化紀錄。</p>
+      </header>
+      <section class="workspace">
+        <div class="simulator"><canvas id="viewport" aria-label="Stack-chan 3D simulator"></canvas><canvas id="screen" width="320" height="240" hidden></canvas></div>
+        <aside>
+          <h2>動作控制</h2>
+          <dl><dt>Simulator</dt><dd id="simulator-status">載入中</dd><dt>派送狀態</dt><dd id="dispatch-status">等待 MOD</dd><dt>紀錄筆數</dt><dd id="record-count">0</dd></dl>
+          <div class="controls"><button id="stop" class="danger" disabled>停止並回中立</button><button id="restart" class="secondary">重新啟動</button><button id="download" class="secondary" disabled>下載 JSONL</button></div>
+          <h3>已驗證動作</h3>
+          <div id="supported-actions" class="action-grid"></div>
+          <h3>候選研究</h3>
+          <p class="hint">候選動作須逐項觀察並記錄證據，通過後才會加入上方專屬按鈕。</p>
+          <div class="research"><select id="candidate" aria-label="候選動作"></select><button id="run-candidate" disabled>執行候選測試</button></div>
+          <h3>操作紀錄</h3><ol id="events" aria-live="polite"></ol>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
