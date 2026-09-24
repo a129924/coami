@@ -25,6 +25,7 @@ export class ActionDispatcher {
   private selectionSeq = 0
   private actionBusy = false
   private stopBusy = false
+  private internalResetBusy = false
   private locked = false
   private activeAction: Promise<ActionResult> | null = null
   private pendingStopId: string | null = null
@@ -42,8 +43,9 @@ export class ActionDispatcher {
     this.timeoutMs = timeoutMs
   }
 
-  get canRun(): boolean { return this.ready && this.catalogReady && !this.actionBusy && !this.stopBusy && !this.locked }
-  get canStop(): boolean { return this.ready && this.catalogReady && !this.stopBusy && !this.locked }
+  get canRun(): boolean { return this.ready && this.catalogReady && !this.actionBusy && !this.stopBusy && !this.internalResetBusy && !this.locked }
+  get canStop(): boolean { return this.ready && this.catalogReady && !this.stopBusy && !this.internalResetBusy && !this.locked }
+  get canDownload(): boolean { return this.records.length > 0 && !this.actionBusy && !this.stopBusy && !this.internalResetBusy }
   get simulatorGeneration(): number { return this.generation }
   get isLocked(): boolean { return this.locked }
 
@@ -127,6 +129,7 @@ export class ActionDispatcher {
         return this.result(command, 'failed', null, startedAt, 'reset_failed', reset.trace.error ?? null)
       }
       this.selectedIndex = -1
+      this.selectionSeq = 0
       return this.result(command, 'completed', null, startedAt)
     } catch (error) {
       if (active) await active
@@ -179,7 +182,8 @@ export class ActionDispatcher {
         const released = await this.wait((trace) => trace.kind === 'selection' && trace.phase === 'released', pressed.seq)
         this.requireSelectionActive(generation)
         const release = released.trace
-        if (release.kind !== 'selection' || release.selection_seq !== seq || release.action_id !== selection.action_id) {
+        if (release.kind !== 'selection' || release.selection_seq !== seq || release.selected_index !== selection.selected_index ||
+          release.action_id !== selection.action_id) {
           throw new DispatchError('selection_mismatch', 'A release did not match the selection')
         }
         this.selectedIndex = next
@@ -200,6 +204,7 @@ export class ActionDispatcher {
       this.requireGeneration(generation)
       const end = terminal.trace
       if (end.kind !== 'run' || end.action_id !== command.action_id || end.phase === 'started') throw new DispatchError('run_mismatch', 'MOD ended another action')
+      if (end.phase === 'failed' && !this.stopBusy) await this.internalReset()
       return this.result(command, end.phase, runSeq, startedAt, end.phase === 'failed' ? 'mod_failed' : null,
         end.error ?? null, end.phase === 'cancelled' ? this.pendingStopId : null)
     } catch (error) {
@@ -211,6 +216,7 @@ export class ActionDispatcher {
   }
 
   private async internalReset(): Promise<void> {
+    this.internalResetBusy = true
     const generation = this.generation
     const cursor = this.eventSeq
     try {
@@ -221,8 +227,9 @@ export class ActionDispatcher {
       ])
       if (this.generation !== generation) return
       if (reset.trace.kind !== 'reset' || reset.trace.phase === 'failed') this.locked = true
-      else this.selectedIndex = -1
+      else { this.selectedIndex = -1; this.selectionSeq = 0 }
     } catch { if (this.generation === generation) this.locked = true }
+    finally { this.internalResetBusy = false }
   }
 
   private requireGeneration(generation: number): void {

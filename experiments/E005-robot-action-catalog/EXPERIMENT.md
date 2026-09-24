@@ -35,6 +35,16 @@ Can a human trigger named face/head actions through the existing three-button si
 - The independent Reviewer rechecked that fix and the final E005-only staged set, then returned `approved` with no blocking issues; all 15 dispatcher tests, strict typecheck, and web build passed.
 - Dispatcher tests cover selection mismatch, rapid clicks, cancellation during selection and active run, acknowledgement timeout, reset failure lockout, restart, catalog mismatch, and record pairing. `npm test`, strict typecheck, MOD archive build, and Vite build passed. The build reports a size warning for the pinned simulator bundle but completes successfully.
 
+## PR comment review-and-fix, 2026-09-24
+
+**Question:** Can a contradictory A release, a partial selection acknowledgement, a failed MOD action, or an in-flight download make the browser claim invalid action evidence?
+
+**Procedure:** Reproduce the review cases in dispatcher tests before changing production code. Require a matching release index, reset both selection counters after B, reset after a failed MOD terminal and lock on reset failure, block a second stop during internal reset, reject non-string run/reset phases, and disable JSONL export until every action/stop result is present. Rebuild the MOD and rerun the browser simulator.
+
+**Evidence:** Six added test cases failed against the reviewed PR commit for the targeted reasons; after the bounded fixes, 21/21 tests, strict TypeScript typecheck, MOD archive build, and web build passed. A fresh Chrome simulator run completed all 20 candidates with matching `run_seq=1–20` traces, then cancelled run 21 with B and completed another action after reset. Its download contained 46 rows with exactly one result per command and correct stop linkage; the Download button stayed disabled during each in-flight action. The 17 dedicated controls and three excluded emotions were unchanged.
+
+**Decision:** These protocol, state, and export corrections are necessary for trustworthy E005 records and do not change the simulator-only scope or the independent visual verdicts. The matrix now includes per-action run IDs, and documentation clarifies replay prerequisites and record semantics.
+
 ## Decision and limits
 
 The A/C/B selector protocol is viable in the browser simulator. Independent visual review supports dedicated buttons for 17 PASS actions; `face.doubtful`, `face.cold`, and `face.hot` are FAIL and have no dedicated buttons. MOD completion alone is not treated as visual proof. This experiment does not validate M5Stack hardware, real servos, or a future device/server wire contract.

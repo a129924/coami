@@ -1,6 +1,6 @@
 # E005 local Action record contract
 
-This is a browser-simulator experiment format, not a device/server wire contract. Every human click writes a `command` JSONL line and exactly one matching `result` line. `schema_version` is `1`; `source` is `human_button`. Pair lines by `(simulator_generation, request_id)` and require the same `action_id` and `category`.
+This is a browser-simulator experiment format, not a device/server wire contract. Every action or B-stop click writes a `command` JSONL line and exactly one matching `result` line; restart and download controls do not create records. Download is unavailable while an action or stop result is pending. `schema_version` is `1`; `source` is `human_button`. Pair lines by `(simulator_generation, request_id)` and require the same `action_id` and `category`.
 
 | Field | Command | Result | Meaning |
 | --- | --- | --- | --- |
@@ -13,7 +13,7 @@ This is a browser-simulator experiment format, not a device/server wire contract
 | `simulator_generation` | number | same number | Browser restart boundary |
 | `requested_at` | ISO 8601 string | absent | Browser click time |
 | `mod_run_seq` | absent | number or null | MOD run identity; null before C or for stop |
-| `started_at` | absent | ISO 8601 string or null | MOD run start when observed |
+| `started_at` | absent | ISO 8601 string or null | MOD run start when observed; B dispatch time for `control.stop` |
 | `finished_at` | absent | ISO 8601 string | Browser terminal time |
 | `status` | absent | `completed`, `cancelled`, `failed`, `timeout` | Browser outcome |
 | `error_code`, `detail` | absent | string or null | Failure detail |

@@ -104,11 +104,11 @@ export function parseModTrace(line: string): ModTrace | null {
       return trace as SelectionTrace
     }
     if (trace.kind === 'run' && Number.isInteger(trace.run_seq) && Number(trace.run_seq) > 0 && isActionId(trace.action_id) &&
-      ['started', 'completed', 'cancelled', 'failed'].includes(String(trace.phase)) &&
+      typeof trace.phase === 'string' && ['started', 'completed', 'cancelled', 'failed'].includes(trace.phase) &&
       (trace.error === undefined || typeof trace.error === 'string')) {
       return trace as RunTrace
     }
-    if (trace.kind === 'reset' && ['completed', 'failed', 'released'].includes(String(trace.phase)) &&
+    if (trace.kind === 'reset' && typeof trace.phase === 'string' && ['completed', 'failed', 'released'].includes(trace.phase) &&
       (trace.error === undefined || typeof trace.error === 'string')) {
       return trace as ResetTrace
     }

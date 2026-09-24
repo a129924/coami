@@ -155,6 +155,7 @@ export function onContextCreated(robot: Robot): void {
         if (previous) finish(previous, 'cancelled')
         await neutral()
         selectedIndex = -1
+        selectionSeq = 0
         emit({ kind: 'reset', phase: 'completed' })
       } catch (error) {
         emit({ kind: 'reset', phase: 'failed', error: String(error) })

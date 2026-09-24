@@ -38,7 +38,7 @@ function refresh(): void {
   runCandidate.disabled = !dispatcher.canRun
   stopButton.disabled = !dispatcher.canStop
   restartButton.disabled = starting
-  downloadButton.disabled = dispatcher.records.length === 0
+  downloadButton.disabled = !dispatcher.canDownload
   recordCount.textContent = String(dispatcher.records.length)
   for (const button of supportedActions.querySelectorAll<HTMLButtonElement>('button[data-action-id]')) {
     button.disabled = !dispatcher.canRun
@@ -96,6 +96,7 @@ stopButton.addEventListener('click', () => {
 })
 restartButton.addEventListener('click', () => { void startEngine() })
 downloadButton.addEventListener('click', () => {
+  if (!dispatcher.canDownload) return
   const blob = new Blob([recordsToJsonl(dispatcher.records)], { type: 'application/x-ndjson;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')

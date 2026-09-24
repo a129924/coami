@@ -66,6 +66,29 @@ test('wrong selected action stops before C and yields failed result', async () =
   assert.deepEqual(pushed, ['a', 'b'])
 })
 
+test('contradictory selected index on A release prevents C', async () => {
+  const pushed: ButtonName[] = []
+  let dispatcher: ActionDispatcher
+  dispatcher = new ActionDispatcher((name) => {
+    pushed.push(name)
+    if (name === 'a') {
+      dispatcher.ingest(trace({ kind: 'selection', selection_seq: 1, selected_index: 0, action_id: 'face.neutral', phase: 'pressed' }))
+      dispatcher.ingest(trace({ kind: 'selection', selection_seq: 1, selected_index: 19, action_id: 'face.neutral', phase: 'released' }))
+    }
+    if (name === 'b') {
+      dispatcher.ingest(trace({ kind: 'reset', phase: 'completed' }))
+      dispatcher.ingest(trace({ kind: 'reset', phase: 'released' }))
+    }
+  }, undefined, undefined, 30)
+  dispatcher.setReady(true)
+  dispatcher.ingest(trace({ kind: 'catalog', action_ids: ACTION_CATALOG.map((item) => item.id), selected_index: -1 }))
+
+  const result = await dispatcher.run('face.neutral')
+  assert.equal(result.status, 'failed')
+  assert.equal(result.error_code, 'selection_mismatch')
+  assert.deepEqual(pushed, ['a', 'b'])
+})
+
 test('catalog exposes fixed named candidates', () => {
   const ids: ActionId[] = ACTION_CATALOG.map((item) => item.id)
   assert.equal(ids.length, 20)
@@ -174,6 +197,134 @@ test('missing A acknowledgement times out, resets, and never executes C', async 
   assert.equal(dispatcher.canRun, true)
 })
 
+test('B reset restores selection sequence after a missing A release', async () => {
+  let selected = -1
+  let sequence = 0
+  let aCount = 0
+  let runSequence = 0
+  let dispatcher: ActionDispatcher
+  dispatcher = new ActionDispatcher((name) => {
+    if (name === 'a') {
+      selected = (selected + 1) % ACTION_CATALOG.length
+      sequence += 1
+      aCount += 1
+      const action_id = ACTION_CATALOG[selected].id
+      dispatcher.ingest(trace({ kind: 'selection', selection_seq: sequence, selected_index: selected, action_id, phase: 'pressed' }))
+      if (aCount !== 2) dispatcher.ingest(trace({ kind: 'selection', selection_seq: sequence, selected_index: selected, action_id, phase: 'released' }))
+    }
+    if (name === 'c') {
+      const action_id = ACTION_CATALOG[selected].id
+      runSequence += 1
+      dispatcher.ingest(trace({ kind: 'run', run_seq: runSequence, action_id, phase: 'started' }))
+      dispatcher.ingest(trace({ kind: 'run', run_seq: runSequence, action_id, phase: 'completed' }))
+    }
+    if (name === 'b') {
+      selected = -1
+      sequence = 0
+      dispatcher.ingest(trace({ kind: 'reset', phase: 'completed' }))
+      dispatcher.ingest(trace({ kind: 'reset', phase: 'released' }))
+    }
+  }, undefined, undefined, 10)
+  dispatcher.setReady(true)
+  dispatcher.ingest(trace({ kind: 'catalog', action_ids: ACTION_CATALOG.map((item) => item.id), selected_index: -1 }))
+
+  assert.equal((await dispatcher.run('face.neutral')).status, 'completed')
+  assert.equal((await dispatcher.run('face.angry')).status, 'timeout')
+  const recovered = await dispatcher.run('face.neutral')
+  assert.equal(recovered.status, 'completed')
+  assert.equal(recovered.mod_run_seq, 2)
+})
+
+test('failed MOD terminal triggers B reset and locks on reset failure', async () => {
+  const pushed: ButtonName[] = []
+  let dispatcher: ActionDispatcher
+  dispatcher = new ActionDispatcher((name) => {
+    pushed.push(name)
+    if (name === 'a') {
+      dispatcher.ingest(trace({ kind: 'selection', selection_seq: 1, selected_index: 0, action_id: 'face.neutral', phase: 'pressed' }))
+      dispatcher.ingest(trace({ kind: 'selection', selection_seq: 1, selected_index: 0, action_id: 'face.neutral', phase: 'released' }))
+    }
+    if (name === 'c') {
+      dispatcher.ingest(trace({ kind: 'run', run_seq: 1, action_id: 'face.neutral', phase: 'started' }))
+      dispatcher.ingest(trace({ kind: 'run', run_seq: 1, action_id: 'face.neutral', phase: 'failed', error: 'motion rejected' }))
+    }
+    if (name === 'b') {
+      dispatcher.ingest(trace({ kind: 'reset', phase: 'failed', error: 'pose failure' }))
+      dispatcher.ingest(trace({ kind: 'reset', phase: 'released' }))
+    }
+  }, undefined, undefined, 30)
+  dispatcher.setReady(true)
+  dispatcher.ingest(trace({ kind: 'catalog', action_ids: ACTION_CATALOG.map((item) => item.id), selected_index: -1 }))
+
+  const result = await dispatcher.run('face.neutral')
+  assert.equal(result.status, 'failed')
+  assert.equal(result.error_code, 'mod_failed')
+  assert.deepEqual(pushed, ['a', 'c', 'b'])
+  assert.equal(dispatcher.isLocked, true)
+  assert.equal(dispatcher.canRun, false)
+})
+
+test('successful B reset after a failed MOD terminal allows a clean next action', async () => {
+  let selected = -1
+  let sequence = 0
+  let runSequence = 0
+  const pushed: ButtonName[] = []
+  let dispatcher: ActionDispatcher
+  dispatcher = new ActionDispatcher((name) => {
+    pushed.push(name)
+    if (name === 'a') {
+      selected = (selected + 1) % ACTION_CATALOG.length
+      sequence += 1
+      for (const phase of ['pressed', 'released'] as const) {
+        dispatcher.ingest(trace({ kind: 'selection', selection_seq: sequence, selected_index: selected, action_id: ACTION_CATALOG[selected].id, phase }))
+      }
+    }
+    if (name === 'c') {
+      runSequence += 1
+      const action_id = ACTION_CATALOG[selected].id
+      dispatcher.ingest(trace({ kind: 'run', run_seq: runSequence, action_id, phase: 'started' }))
+      dispatcher.ingest(trace({ kind: 'run', run_seq: runSequence, action_id, phase: runSequence === 1 ? 'failed' : 'completed' }))
+    }
+    if (name === 'b') {
+      selected = -1
+      sequence = 0
+      dispatcher.ingest(trace({ kind: 'reset', phase: 'completed' }))
+      dispatcher.ingest(trace({ kind: 'reset', phase: 'released' }))
+    }
+  }, undefined, undefined, 30)
+  dispatcher.setReady(true)
+  dispatcher.ingest(trace({ kind: 'catalog', action_ids: ACTION_CATALOG.map((item) => item.id), selected_index: -1 }))
+
+  assert.equal((await dispatcher.run('face.neutral')).status, 'failed')
+  assert.equal(dispatcher.isLocked, false)
+  assert.equal(dispatcher.canRun, true)
+  assert.equal((await dispatcher.run('face.neutral')).status, 'completed')
+  assert.deepEqual(pushed, ['a', 'c', 'b', 'a', 'c'])
+})
+
+test('stop is unavailable while an internal reset is pending', async () => {
+  const pushed: ButtonName[] = []
+  let dispatcher: ActionDispatcher
+  dispatcher = new ActionDispatcher((name) => {
+    pushed.push(name)
+    if (name === 'a') dispatcher.ingest(trace({ kind: 'selection', selection_seq: 1, selected_index: 0, action_id: 'face.hot', phase: 'pressed' }))
+  }, undefined, undefined, 30)
+  dispatcher.setReady(true)
+  dispatcher.ingest(trace({ kind: 'catalog', action_ids: ACTION_CATALOG.map((item) => item.id), selected_index: -1 }))
+
+  const action = dispatcher.run('face.neutral')
+  await new Promise((resolve) => setImmediate(resolve))
+  assert.deepEqual(pushed, ['a', 'b'])
+  assert.equal(dispatcher.canStop, false)
+  const stop = await dispatcher.stop()
+  assert.equal(stop.status, 'failed')
+  assert.equal(stop.error_code, 'unavailable')
+  assert.deepEqual(pushed, ['a', 'b'])
+  dispatcher.ingest(trace({ kind: 'reset', phase: 'completed' }))
+  dispatcher.ingest(trace({ kind: 'reset', phase: 'released' }))
+  assert.equal((await action).error_code, 'selection_mismatch')
+})
+
 test('restart rejects the old pending selection and waits for a new catalog', async () => {
   const pushed: ButtonName[] = []
   const dispatcher = new ActionDispatcher((name) => pushed.push(name), undefined, undefined, 50)
@@ -223,6 +374,36 @@ test('malformed MOD trace fields never become typed acknowledgements', () => {
   assert.equal(parseModTrace('COAMI5|{"catalog_version":1,"kind":"selection","selection_seq":1,"selected_index":"bad","action_id":"face.neutral","phase":"pressed"}'), null)
   assert.equal(parseModTrace('COAMI5|{"catalog_version":1,"kind":"run","run_seq":"bad","action_id":"face.neutral","phase":"completed"}'), null)
   assert.equal(parseModTrace('COAMI5|not-json'), null)
+  assert.equal(parseModTrace('COAMI5|{"catalog_version":1,"kind":"run","run_seq":1,"action_id":"face.neutral","phase":["completed"]}'), null)
+  assert.equal(parseModTrace('COAMI5|{"catalog_version":1,"kind":"reset","phase":["completed"]}'), null)
+})
+
+test('download remains unavailable until action and stop results are complete', async () => {
+  let dispatcher: ActionDispatcher
+  dispatcher = new ActionDispatcher((name) => {
+    if (name === 'a') {
+      dispatcher.ingest(trace({ kind: 'selection', selection_seq: 1, selected_index: 0, action_id: 'face.neutral', phase: 'pressed' }))
+      dispatcher.ingest(trace({ kind: 'selection', selection_seq: 1, selected_index: 0, action_id: 'face.neutral', phase: 'released' }))
+    }
+    if (name === 'c') dispatcher.ingest(trace({ kind: 'run', run_seq: 1, action_id: 'face.neutral', phase: 'started' }))
+  }, undefined, undefined, 30)
+  dispatcher.setReady(true)
+  dispatcher.ingest(trace({ kind: 'catalog', action_ids: ACTION_CATALOG.map((item) => item.id), selected_index: -1 }))
+  assert.equal(dispatcher.canDownload, false)
+
+  const action = dispatcher.run('face.neutral')
+  assert.equal(dispatcher.canDownload, false)
+  await new Promise((resolve) => setImmediate(resolve))
+  dispatcher.ingest(trace({ kind: 'run', run_seq: 1, action_id: 'face.neutral', phase: 'completed' }))
+  assert.equal((await action).status, 'completed')
+  assert.equal(dispatcher.canDownload, true)
+
+  const stop = dispatcher.stop()
+  assert.equal(dispatcher.canDownload, false)
+  dispatcher.ingest(trace({ kind: 'reset', phase: 'completed' }))
+  dispatcher.ingest(trace({ kind: 'reset', phase: 'released' }))
+  assert.equal((await stop).status, 'completed')
+  assert.equal(dispatcher.canDownload, true)
 })
 
 test('stop started_at records B dispatch time rather than reset completion', async () => {

@@ -4,7 +4,13 @@ This TypeScript-only POC runs in the Stack-chan browser simulator. It researches
 
 ## Run
 
-Use Node 24–26. From this experiment's `web/` directory:
+Use Node 24–26. From the repository root, initialize the pinned simulator submodule first:
+
+```sh
+git submodule update --init vendor/stack-chan
+```
+
+Then, from this experiment's `web/` directory:
 
 ```sh
 npm ci
