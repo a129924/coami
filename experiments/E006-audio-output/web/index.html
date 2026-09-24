@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coami E006 · 音訊輸出</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">COAMI · EXPERIMENT E006</div>
+        <h1>音訊輸出可行性</h1>
+        <p>同一個 TypeScript MOD 分別播放提示音與固定 WAV。請先確認 Mac 音量與輸出裝置。</p>
+      </header>
+      <section class="workspace">
+        <div class="simulator"><canvas id="viewport" aria-label="Stack-chan 3D simulator"></canvas><canvas id="screen" width="320" height="240" hidden></canvas></div>
+        <aside>
+          <h2>實驗控制</h2>
+          <dl><dt>Simulator</dt><dd id="simulator-status">載入中</dd><dt>動作</dt><dd id="action-status">等待 MOD</dd><dt>錄製</dt><dd id="capture-status">尚未開始</dd></dl>
+          <div class="controls">
+            <button id="start-capture" class="secondary">錄製目前分頁與音訊</button>
+            <button id="tone" disabled>播放提示音 A</button>
+            <button id="wav" disabled>播放固定 WAV C</button>
+            <button id="stop-capture" class="secondary" disabled>停止並下載 WebM</button>
+            <button id="restart" class="secondary">重新啟動 MOD</button>
+          </div>
+          <p class="hint">錄製時選擇目前的 Chrome 分頁，開啟「分享分頁音訊」，再依序播放兩種聲音。下載後請重播檢查音軌。</p>
+          <h3>MOD trace</h3><ol id="events" aria-live="polite"></ol>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
