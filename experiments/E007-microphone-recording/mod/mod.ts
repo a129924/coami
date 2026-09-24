@@ -20,18 +20,29 @@ export function onContextCreated(robot: Robot): void {
     const runSeq = ++sequence
     emit({ kind: 'run', run_seq: runSeq, phase: 'started' })
     try {
-      const buffer = await robot.audio.record(2000)
+      let buffer: ArrayBuffer
+      try { buffer = await robot.audio.record(2000) }
+      catch (error) {
+        const errorCode = /permission|denied|notallowed/i.test(String(error)) ? 'permission_denied' : 'record_failed'
+        emit({ kind: 'run', run_seq: runSeq, phase: 'failed', error_code: errorCode })
+        return
+      }
       const byteLength = buffer.byteLength
-      if (byteLength === 0) throw new Error('empty_buffer')
+      if (byteLength === 0) {
+        emit({ kind: 'run', run_seq: runSeq, phase: 'failed', error_code: 'empty_buffer' })
+        return
+      }
       emit({ kind: 'run', run_seq: runSeq, phase: 'recorded', byte_length: byteLength })
-      if (!await robot.audio.playAudio(buffer)) throw new Error('playback_failed')
+      try {
+        if (!await robot.audio.playAudio(buffer)) {
+          emit({ kind: 'run', run_seq: runSeq, phase: 'failed', error_code: 'playback_failed' })
+          return
+        }
+      } catch {
+        emit({ kind: 'run', run_seq: runSeq, phase: 'failed', error_code: 'playback_failed' })
+        return
+      }
       emit({ kind: 'run', run_seq: runSeq, phase: 'completed', byte_length: byteLength })
-    } catch (error) {
-      const detail = String(error)
-      const errorCode = detail.includes('empty_buffer') ? 'empty_buffer'
-        : detail.includes('playback_failed') ? 'playback_failed'
-          : /permission|denied|notallowed/i.test(detail) ? 'permission_denied' : 'record_failed'
-      emit({ kind: 'run', run_seq: runSeq, phase: 'failed', error_code: errorCode, detail })
     } finally {
       busy = false
     }

@@ -9,6 +9,7 @@
     "mod": "node scripts/build-mod.mjs",
     "prepare:poc": "npm run assets && npm run mod",
     "dev": "vite --host 127.0.0.1",
+    "test": "node --test src/mod.test.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json",
     "build": "npm run typecheck && vite build"
   },

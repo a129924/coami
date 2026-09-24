@@ -9,6 +9,7 @@ Use Node 24–26. Initialize the pinned `vendor/stack-chan` submodule, then run 
 ```sh
 npm ci
 npm run prepare:poc
+npm test
 npm run typecheck
 npm run build
 npm run dev -- --port 5177
@@ -20,7 +21,7 @@ Open `http://127.0.0.1:5177/`. The page checks browser microphone and recorder f
 
 1. Use headphones to avoid speaker feedback and allow microphone access when the browser asks.
 2. Click **錄製並回放 A** once; within the two-second window say “一、二、三”. Wait for `recorded` with a byte count, followed by `completed` or `failed`.
-3. Listen to the local replay. An independent Tester must recognize the phrase before recording audible PASS in `evidence/recording-run.md`.
+3. Listen to the local replay. A human Tester other than the implementing agent must recognize the phrase and record their name or role, date, and verdict in `evidence/recording-run.md`; the repository owner may serve as that Tester.
 4. Repeat with microphone permission denied, if possible, and document the result. Do not save or upload the voice data.
 
 A nonempty buffer or `playAudio=true` alone does not prove recognizable speech. Browser-side format details are not available in the MOD trace; the trace contains only byte count and result.

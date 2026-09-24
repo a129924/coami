@@ -14,7 +14,7 @@ Will `robot.audio.record(2000)` return a nonempty segment to a TypeScript MOD an
 
 ## Procedure
 
-1. Run `npm ci`, `npm run prepare:poc`, `npm run typecheck`, and `npm run build` from `web/`.
+1. Run `npm ci`, `npm run prepare:poc`, `npm test`, `npm run typecheck`, and `npm run build` from `web/`.
 2. Run the page, grant microphone permission, speak “一、二、三” during the two-second capture and listen to local replay.
 3. Record trace, byte length, permission/failure cases and independent Tester verdict in `evidence/recording-run.md`. Do not persist voice media.
 
@@ -22,7 +22,14 @@ Will `robot.audio.record(2000)` return a nonempty segment to a TypeScript MOD an
 
 - `npm run typecheck`, `npm run mod`, and `npm run build` passed; the XS archive was 2,060 bytes. Vite reported only its bundle-size warning.
 - Bounded Node mocks invoked the actual MOD `onContextCreated`. An A press requested `record(2000)` once; a simultaneous second press and A release did not start another recording. The same 12-byte buffer object reached `playAudio`, and the terminal trace reported 12 bytes. A permission rejection produced `permission_denied`; separate empty-buffer and `playAudio=false` mocks produced `empty_buffer` and `playback_failed`.
-- The browser-control connection reported no available browser. On 2026-09-24, the owner manually tested the page, supplied `COAMI7|{"kind":"run","run_seq":3,"phase":"completed","byte_length":28310}`, and explicitly reported that the replayed “一、二、三” was clear.
+- The browser-control connection reported no available browser. On 2026-09-24, the repository owner manually tested the page as the independent human Tester (a different person from the implementing agent), supplied `COAMI7|{"kind":"run","run_seq":3,"phase":"completed","byte_length":28310}`, and explicitly reported that the replayed “一、二、三” was clear.
+
+## PR #6 review triage, 2026-09-24
+
+- Accepted the failure-classification finding. A failing `web/src/mod.test.ts` reproduced a `playAudio` rejection misreported as `permission_denied`; playback failure is now classified by the playback phase as `playback_failed`, regardless of exception text.
+- Accepted the raw-detail finding. Failure traces now emit only bounded `error_code` values, without the vendor exception string; the browser UI no longer parses or displays `detail`. A failing permission-rejection test reproduced the old leak before the fix. `npm test`, `npm run typecheck` and `npm run build` pass after the fix.
+- Accepted the Tester-attribution finding. The independent human Tester was the repository owner, not the implementing agent; the dated listening verdict and trace are recorded in `evidence/recording-run.md`. No voice media was stored and no additional person's testimony is claimed.
+- Accepted the stale workflow-status finding. The topic returned from `pr-open` through `needs-rework` for this bounded PR correction; its plan and step tracker now record the review route and the still-open PR. The independent re-review approved the correction with no blockers.
 
 ## Decision and limits
 

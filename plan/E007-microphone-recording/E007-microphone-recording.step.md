@@ -11,7 +11,7 @@ created: 2026-09-24
 
 | Current status | Allowed next transitions | Next actor |
 | --- | --- | --- |
-| publish-in-progress | publish-in-progress → pr-open | Main Agent |
+| pr-open (PR #6 already open; feedback in progress) | pr-open → needs-rework or merged | Main Agent / human reviewer |
 
 ## Actionable Steps
 
@@ -30,14 +30,15 @@ created: 2026-09-24
 - [X] 2. Create the browser harness with microphone/recorder format preflight, one request control, trace/result display and restart isolation; document the permission and headphones procedure.
 - [X] 3. Run MOD/web typechecks, XS archive build and web build; exercise success, permission denial, empty-buffer, playback-failure and repeated-click paths in the actual simulator or a bounded mock.
 - [X] 4. Document the operation, trace, byte count, provisional observations and limits for independent Tester handoff without persisting voice media.
+- [X] 5. Regression-test playback rejection and bounded error traces and record PR review triage in written evidence.
 
 ## Main Agent Actionable Steps — Fixed Tail
 
 - [X] **Actor:** Main Agent — **Action:** Validate the approved Written set and perform bounded staging only.
 - [X] **Actor:** Main Agent — **Action:** Obtain explicit human approval at STOP POINT 1 before commit, push, or PR creation.
-- [ ] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
-- [ ] **Actor:** Main Agent — **Action:** Push the topic branch.
-- [ ] **Actor:** Main Agent — **Action:** Open the pull request.
+- [X] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
+- [X] **Actor:** Main Agent — **Action:** Push the topic branch.
+- [X] **Actor:** Main Agent — **Action:** Open the pull request.
 - [ ] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
 - [ ] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
 - [ ] **Actor:** Main Agent — **Action:** Record exact human merge evidence after a new execution begins.

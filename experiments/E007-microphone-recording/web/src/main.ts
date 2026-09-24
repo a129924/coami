@@ -3,7 +3,7 @@ import './style.css'
 
 type Trace =
   | { kind: 'ready' }
-  | { kind: 'run'; run_seq: number; phase: 'started' | 'recorded' | 'completed' | 'failed'; byte_length?: number; error_code?: string; detail?: string }
+  | { kind: 'run'; run_seq: number; phase: 'started' | 'recorded' | 'completed' | 'failed'; byte_length?: number; error_code?: string }
 
 const viewport = document.querySelector<HTMLCanvasElement>('#viewport')!
 const screen = document.querySelector<HTMLCanvasElement>('#screen')!
@@ -58,8 +58,7 @@ function parseTrace(line: string): Trace | null {
     if (fields.phase !== 'started' && fields.phase !== 'recorded' && fields.phase !== 'completed' && fields.phase !== 'failed') return null
     return { kind: 'run', run_seq: fields.run_seq, phase: fields.phase,
       ...(typeof fields.byte_length === 'number' ? { byte_length: fields.byte_length } : {}),
-      ...(typeof fields.error_code === 'string' ? { error_code: fields.error_code } : {}),
-      ...(typeof fields.detail === 'string' ? { detail: fields.detail } : {}) }
+      ...(typeof fields.error_code === 'string' ? { error_code: fields.error_code } : {}) }
   } catch { return null }
 }
 
@@ -133,7 +132,7 @@ async function startEngine(): Promise<void> {
               if (parsed.phase === 'recorded') recordStatus.textContent = '已錄製，回放中'
               if (parsed.phase === 'completed' || parsed.phase === 'failed') {
                 recordStatus.textContent = parsed.phase === 'completed' ? '回放完成；請人工辨認內容'
-                  : `失敗：${parsed.error_code ?? 'unknown'}${parsed.detail ? ` · ${parsed.detail}` : ''}`
+                  : `失敗：${parsed.error_code ?? 'unknown'}`
                 clearPending()
               }
             }
