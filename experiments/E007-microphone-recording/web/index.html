@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coami E007 · 麥克風錄音</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">COAMI · EXPERIMENT E007</div>
+        <h1>定長麥克風錄音</h1>
+        <p>按一次錄製兩秒，再由同一個 MOD 本機重播。請使用耳機，避免喇叭回授。</p>
+      </header>
+      <section class="workspace">
+        <div class="simulator"><canvas id="viewport" aria-label="Stack-chan 3D simulator"></canvas><canvas id="screen" width="320" height="240" hidden></canvas></div>
+        <aside>
+          <h2>實驗控制</h2>
+          <dl><dt>Simulator</dt><dd id="simulator-status">載入中</dd><dt>麥克風</dt><dd id="mic-status">檢查中</dd><dt>錄音</dt><dd id="record-status">等待 MOD</dd><dt>資料長度</dt><dd id="byte-count">—</dd></dl>
+          <div class="controls"><button id="record" disabled>錄製並回放 A</button><button id="restart" class="secondary">重新啟動 MOD</button></div>
+          <p class="hint">授權麥克風後，在兩秒內說「一、二、三」。請在本機聽重播，確認內容可辨。頁面不下載或傳送錄音。</p>
+          <h3>MOD trace</h3><ol id="events" aria-live="polite"></ol>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
