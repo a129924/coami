@@ -93,7 +93,12 @@ startCaptureButton.addEventListener('click', () => {
   captureStarting = true
   captureStatus.textContent = '等待分頁與音訊授權'
   refresh()
-  void startTabCapture().then((started) => {
+  void startTabCapture((error) => {
+    capture = null
+    captureStatus.textContent = `錄製失敗：${error.message}`
+    log(`錄製失敗：${error.message}`)
+    refresh()
+  }).then((started) => {
     capture = started
     captureStatus.textContent = '錄製中（含分頁音軌）'
     log('分頁音訊錄製已開始')

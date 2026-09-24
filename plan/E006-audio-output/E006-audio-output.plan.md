@@ -29,9 +29,9 @@ Tracked writes stay in the exact E006 paths below and in the selected feature wo
 
 ## Status / Allowed Transitions
 
-- **Current**: `publish-in-progress`; **Next actor**: Main Agent; **Stage-local action**: commit the owner-approved E006 staged set, then publish the shared feature branch after E007's separate topic commit.
+- **Current**: `pr-open` (PR #6 remains open); **Next actor**: Main Agent for PR feedback, then human reviewer; **Stage-local action**: publish the independently approved bounded correction, reply to review comments, and route to human review. The correction passed `pr-open` → `needs-rework` → `creator-in-progress` → `review-ready` → `reviewer-in-progress` → `approved`.
 - **Execution model**: independent plan review, creator implementation, independent evidence review, publish as a topic commit on the shared feature branch, then human review of a draft PR containing E006 and E007.
-- **Allowed transitions**: `planned` → `creator-in-progress` → `review-ready` → `reviewer-in-progress` → `approved` or `needs-rework`; `needs-rework` → `creator-in-progress`; `approved` → `creator-in-progress` for bounded correction or `publish-in-progress` → `pr-open` → `merged`. `merged` is terminal.
+- **Allowed transitions**: `planned` → `creator-in-progress` → `review-ready` → `reviewer-in-progress` → `approved` or `needs-rework`; `needs-rework` → `creator-in-progress`; `approved` → `creator-in-progress` for bounded correction or `publish-in-progress` → `pr-open` → `merged`; `pr-open` → `needs-rework` for PR feedback. `merged` is terminal.
 - The owner confirms the proposed semantic commit message before the E006 commit. No release action follows merge.
 
 ## Artifact Paths
@@ -43,7 +43,7 @@ Tracked writes stay in the exact E006 paths below and in the selected feature wo
 | Topic plan | `plan/E006-audio-output/E006-audio-output.plan.md` | Planning actor |
 | Step tracker | `plan/E006-audio-output/E006-audio-output.step.md` | Step-Creator |
 | Guide | `experiments/E006-audio-output/README.md` | Creator |
-| Experiment record | `experiments/E006-audio-output/EXPERIMENT.md` | Creator/Tester |
+| Experiment record / PR review-log equivalent | `experiments/E006-audio-output/EXPERIMENT.md` | Creator/Tester |
 | MOD entry | `experiments/E006-audio-output/mod/mod.ts` | Creator |
 | WAV encoder | `experiments/E006-audio-output/mod/wav.ts` | Creator |
 | WAV test | `experiments/E006-audio-output/mod/wav.test.ts` | Creator |
@@ -59,10 +59,11 @@ Tracked writes stay in the exact E006 paths below and in the selected feature wo
 | Asset preparation | `experiments/E006-audio-output/web/scripts/prepare-assets.mjs` | Creator |
 | Browser controls | `experiments/E006-audio-output/web/src/main.ts` | Creator |
 | Tab capture | `experiments/E006-audio-output/web/src/tab-capture.ts` | Creator |
+| Tab capture regression test | `experiments/E006-audio-output/web/src/tab-capture.test.ts` | Creator |
 | Style | `experiments/E006-audio-output/web/src/style.css` | Creator |
 | Audible evidence | `experiments/E006-audio-output/evidence/output-capture.webm` | Creator captures; Tester verifies |
 
-**ReadOnly**: `AGENTS.md`, `plan/topic-plan-contract.md`, `plan/agent-handoff-workflow.md`, `experiments/E005-robot-action-catalog/mod/mod.ts`, `experiments/E005-robot-action-catalog/web/package.json`, `experiments/E005-robot-action-catalog/web/scripts/build-mod.mjs`, `experiments/E005-robot-action-catalog/web/scripts/prepare-assets.mjs`, `experiments/E005-robot-action-catalog/web/src/main.ts`, `experiments/E005-robot-action-catalog/web/vite.config.ts`, `vendor/stack-chan/firmware/host/app/capabilities.ts`, `vendor/stack-chan/firmware/host/modules/audio/wasm/stackchan-voice-wav.ts`, `vendor/stack-chan/firmware/host/modules/audio/wasm/speaker.ts`, `vendor/stack-chan/firmware/host/modules/audio/wasm/audio-bridge.c`, `vendor/stack-chan/web/simulator/bridge.mjs`, `vendor/stack-chan/web/src/services/simulator/simulator-engine.mjs`, `vendor/stack-chan/web/editor/mod-builder.mjs`. **Modify**: none. **Deleted**: none. No `README.md`, `VERSION` or `.github/copilot-instructions.md` edit is intended.
+**ReadOnly**: `AGENTS.md`, `plan/topic-plan-contract.md`, `plan/agent-handoff-workflow.md`, `experiments/E005-robot-action-catalog/mod/mod.ts`, `experiments/E005-robot-action-catalog/web/package.json`, `experiments/E005-robot-action-catalog/web/scripts/build-mod.mjs`, `experiments/E005-robot-action-catalog/web/scripts/prepare-assets.mjs`, `experiments/E005-robot-action-catalog/web/src/main.ts`, `experiments/E005-robot-action-catalog/web/vite.config.ts`, `vendor/stack-chan/firmware/host/app/capabilities.ts`, `vendor/stack-chan/firmware/host/modules/audio/wasm/stackchan-voice-wav.ts`, `vendor/stack-chan/firmware/host/modules/audio/wasm/speaker.ts`, `vendor/stack-chan/firmware/host/modules/audio/wasm/audio-bridge.c`, `vendor/stack-chan/web/simulator/bridge.mjs`, `vendor/stack-chan/web/src/services/simulator/simulator-engine.mjs`, `vendor/stack-chan/web/editor/mod-builder.mjs`. **Modify (PR rework only)**: `plan/E006-audio-output/E006-audio-output.plan.md`, `plan/E006-audio-output/E006-audio-output.step.md`, `experiments/E006-audio-output/EXPERIMENT.md`, `experiments/E006-audio-output/README.md`, `experiments/E006-audio-output/web/package.json`, `experiments/E006-audio-output/web/src/main.ts`, `experiments/E006-audio-output/web/src/tab-capture.ts`. **Deleted**: none. No root `README.md`, `VERSION` or `.github/copilot-instructions.md` edit is intended.
 
 ## Implementation Steps
 
@@ -70,12 +71,14 @@ Tracked writes stay in the exact E006 paths below and in the selected feature wo
 - [ ] 2. Create the browser harness with two serialized controls, trace/result display, restart isolation and current-tab audio capture that rejects a missing audio track.
 - [ ] 3. Run typechecks, WAV test, MOD build and web build; perform the actual simulator run and save the replayable audio WebM.
 - [ ] 4. Document the operation, trace, captured evidence, provisional observations and limitations in the E006 experiment record for independent Tester handoff.
+- [ ] 5. Regression-test asynchronous recorder failure cleanup and record PR review triage in the experiment record.
 
 ## Validation / Acceptance Checks
 
 - `node --test ../mod/wav.test.ts` from E006 `web/` checks RIFF format, sample format, length and non-silence. MOD/web strict typechecks, XS archive build and Vite build pass.
 - Browser A and C produce distinct start and terminal traces; unsupported output or `playAudio=false` is a failure. No duplicate button release triggers an action.
 - The captured WebM contains an audio track and is replayable; independent Tester hears both distinguishable sounds. Missing audio or an unsupported capture environment is not marked PASS.
+- A recorder error before manual stop ends all capture tracks, makes failure visible in the page, and cannot produce a success download; the focused regression test fails before the fix and passes afterward.
 - All tracked writes match Artifact Paths; no ReadOnly path, production code or stable-library file changed.
 
 ## Reviewer Handoff

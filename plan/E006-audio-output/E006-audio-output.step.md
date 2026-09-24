@@ -11,7 +11,7 @@ created: 2026-09-24
 
 | Current status | Allowed next transitions | Next actor |
 | --- | --- | --- |
-| publish-in-progress | publish-in-progress → pr-open | Main Agent |
+| pr-open (PR #6 already open; feedback in progress) | pr-open → needs-rework or merged | Main Agent / human reviewer |
 
 ## Actionable Steps
 
@@ -30,14 +30,15 @@ created: 2026-09-24
 - [X] 2. Create the browser harness with two serialized controls, trace/result display, restart isolation and current-tab audio capture that rejects a missing audio track.
 - [X] 3. Run typechecks, WAV test, MOD build and web build; perform the actual simulator run and save the replayable audio WebM.
 - [X] 4. Document the operation, trace, captured evidence, provisional observations and limitations in the E006 experiment record for independent Tester handoff.
+- [X] 5. Regression-test asynchronous recorder failure cleanup and record PR review triage in the experiment record.
 
 ## Main Agent Actionable Steps — Fixed Tail
 
 - [X] **Actor:** Main Agent — **Action:** Validate the approved Written set and perform bounded staging only.
 - [X] **Actor:** Main Agent — **Action:** Obtain explicit human approval at STOP POINT 1 before commit, push, or PR creation.
-- [ ] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
-- [ ] **Actor:** Main Agent — **Action:** Push the topic branch.
-- [ ] **Actor:** Main Agent — **Action:** Open the pull request.
+- [X] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
+- [X] **Actor:** Main Agent — **Action:** Push the topic branch.
+- [X] **Actor:** Main Agent — **Action:** Open the pull request.
 - [ ] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
 - [ ] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
 - [ ] **Actor:** Main Agent — **Action:** Record exact human merge evidence after a new execution begins.
