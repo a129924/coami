@@ -8,6 +8,20 @@ This experiment asks whether a real browser webcam frame reaches a TypeScript MO
 - The repository's `vendor/stack-chan` submodule checked out at `b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322`.
 - Moddable SDK 9.5.0 (`MODDABLE` set), Emscripten 5.0.1 (`emcc` on `PATH`), and executable `fontbm` (`FONTBM` set or on `PATH`). The pinned vendor `firmware/scripts/build-wasm.sh` requires these exact prerequisites.
 
+These are **required local build dependencies**, not npm packages. Without them, Vite can serve the page but the simulator has no `/simulator/mc.js` or `/simulator/mc.wasm`; the MOD buttons cannot provide camera evidence. They are not committed to the repository. The E008 feature worktree has local copies under ignored `web/generated/toolchain/`; a new checkout must install them or point to equivalent exact versions.
+
+For this feature worktree, from `experiments/E008-camera-input/web` on macOS:
+
+```sh
+export MODDABLE="$PWD/generated/toolchain/moddable"
+export FONTBM="$PWD/generated/toolchain/fontbm/build/fontbm"
+source generated/toolchain/emsdk/emsdk_env.sh
+export PATH="$MODDABLE/build/bin/mac/release:$PATH"
+npm run prepare:poc
+```
+
+The local tools were installed from the official Moddable `9.5.0` tag, emsdk `5.0.1`, and `fontbm` source. Building those tools on a fresh macOS checkout also requires Xcode, CMake, and FreeType. Check `evidence/camera-run.md` for the source and artifact hashes of this run.
+
 From `experiments/E008-camera-input/web`:
 
 ```sh

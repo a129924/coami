@@ -45,7 +45,8 @@ await cp(vendorRoot, sourceRoot, {
   force: true,
   filter: (source) => !['.git', 'node_modules', 'dist', 'mc.js', 'mc.wasm'].includes(path.basename(source)),
 })
-execFileSync('npm', ['ci'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit' })
+execFileSync('npm', ['ci'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit',
+  env: { ...process.env, CI: '1', LEFTHOOK: '0' } })
 execFileSync('npm', ['run', 'build:wasm'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit',
   env: { ...process.env, FONTBM: fontbm } })
 
