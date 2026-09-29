@@ -45,6 +45,13 @@ export class CaptureLedger {
     return { source: host.source, reason: 'matched', host, mod }
   }
 
+  resolveError(generation: number): HostCapture[] {
+    const pending = this.pending
+    if (!pending || pending.generation !== generation) return []
+    this.pending = null
+    return pending.hosts
+  }
+
   invalidate(): void { this.pending = null }
   get busy(): boolean { return this.pending !== null }
 }

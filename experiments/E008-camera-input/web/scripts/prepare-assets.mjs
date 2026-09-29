@@ -6,6 +6,8 @@ import path from 'node:path'
 
 const PINNED_COMMIT = 'b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322'
 const PINNED_MODDABLE_COMMIT = 'b6e06ba70506a7381ffb28e09e3175bf4e99f305'
+const PINNED_EMSDK_COMMIT = '14c18b569f55138fe4963924162244251f454fb0'
+const PINNED_EMSCRIPTEN_COMMIT = '8c5f43157a3f069ade75876e23061330521eabde'
 const PINNED_FONTBM_COMMIT = '7677b908523e909679f67cd5c170396bb9def1aa'
 const webRoot = fileURLToPath(new URL('../', import.meta.url))
 const repositoryRoot = path.resolve(webRoot, '../../..')
@@ -57,10 +59,30 @@ try {
 } catch (error) {
   throw new Error(`BLOCKED: pinned Moddable source and tools could not be verified: ${String(error)}`)
 }
-let emccVersion
-try { emccVersion = output('emcc', ['--version']).split('\n')[0] }
-catch { throw new Error('BLOCKED: Emscripten 5.0.1 (emcc) is unavailable') }
-if (!emccVersion.includes(' 5.0.1 ')) throw new Error(`BLOCKED: Emscripten 5.0.1 required, found ${emccVersion}`)
+const emsdk = process.env.EMSDK
+if (!emsdk) throw new Error('BLOCKED: pinned emsdk 5.0.1 is not configured')
+let emsdkRoot, emccBinary, emccSha256, emccVersion
+try {
+  emsdkRoot = await realpath(emsdk)
+  const checkoutRoot = await realpath(output('git', ['rev-parse', '--show-toplevel'], { cwd: emsdkRoot }))
+  if (checkoutRoot !== emsdkRoot) throw new Error('EMSDK is not the checkout root')
+  const sourceCommit = output('git', ['rev-parse', 'HEAD'], { cwd: emsdkRoot })
+  if (sourceCommit !== PINNED_EMSDK_COMMIT) throw new Error(`emsdk source commit is ${sourceCommit}`)
+  const trackedChanges = output('git', ['status', '--porcelain=v1', '--untracked-files=no'], { cwd: emsdkRoot })
+  if (trackedChanges) throw new Error('emsdk source has tracked changes')
+  emccBinary = await realpath(output('which', ['emcc']))
+  const binaryInfo = await stat(emccBinary)
+  if (!binaryInfo.isFile() || (binaryInfo.mode & 0o111) === 0) throw new Error('emcc is not executable')
+  const relative = path.relative(path.join(emsdkRoot, 'upstream/emscripten'), emccBinary)
+  if (!relative || relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative))
+    throw new Error('emcc is outside the emsdk upstream/emscripten directory')
+  emccVersion = output(emccBinary, ['--version']).split('\n')[0]
+  if (!emccVersion.includes(' 5.0.1 ') || !emccVersion.includes(PINNED_EMSCRIPTEN_COMMIT))
+    throw new Error(`Emscripten 5.0.1 (${PINNED_EMSCRIPTEN_COMMIT}) required, found ${emccVersion}`)
+  emccSha256 = createHash('sha256').update(await readFile(emccBinary)).digest('hex')
+} catch (error) {
+  throw new Error(`BLOCKED: pinned Emscripten source and executable could not be verified: ${String(error)}`)
+}
 let fontbm = process.env.FONTBM
 if (!fontbm) {
   try { fontbm = output('which', ['fontbm']) }
@@ -111,6 +133,8 @@ await cp(path.join(vendorRoot, 'web/simulator/assets/case/v1/shell.stl'),
   path.join(publicSimulator, 'assets/case/v1/shell.stl'))
 const provenance = { sourceCommit: PINNED_COMMIT, moddableVersion, emccVersion,
   moddable: { path: moddableRoot, sourceCommit: PINNED_MODDABLE_COMMIT, tools: moddableTools },
+  emscripten: { emsdkPath: emsdkRoot, emsdkCommit: PINNED_EMSDK_COMMIT,
+    upstreamCommit: PINNED_EMSCRIPTEN_COMMIT, emccPath: emccBinary, emccSha256 },
   fontbm: { path: fontbmBinary, sourceCommit: fontbmCommit, sha256: fontbmSha256 }, sha256: hashes }
 await writeFile(provenancePath, `${JSON.stringify(provenance, null, 2)}\n`)
 console.log(JSON.stringify(provenance, null, 2))

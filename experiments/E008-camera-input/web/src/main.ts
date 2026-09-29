@@ -22,7 +22,7 @@ const trackStatus = document.querySelector<HTMLElement>('#track-status')!
 const events = document.querySelector<HTMLOListElement>('#events')!
 
 type ModTrace = ModFrame | { kind: 'ready' | 'started' | 'stopped' | 'start-error' | 'stop-error' | 'frame-error';
-  error?: string; captureCount?: number } | { kind: 'digest-probe'; digest: string; empty: string;
+  error?: string; captureCount?: number; captureSeq?: number } | { kind: 'digest-probe'; digest: string; empty: string;
   zero: string; length: number; first: number; last: number }
 type Observer = ReturnType<typeof createObservedCameraBridge>
 type PendingCapture = { generation: number; timer: number; resolve(): void }
@@ -52,6 +52,11 @@ function log(message: string): void {
   item.textContent = message
   events.prepend(item)
   while (events.children.length > 60) events.lastElementChild?.remove()
+}
+
+function hostEvidence(hosts: HostCapture[]): string {
+  return hosts.map((host) =>
+    ` · host #${host.sequence} ${host.source} ${host.width}×${host.height} ${host.byteLength} bytes digest=${host.digest} 亮度=${host.meanLuma} 錯誤類別=${host.errorName ?? '無'} 階段=${host.errorPhase ?? '無'}`).join('')
 }
 
 function refresh(): void {
@@ -140,17 +145,16 @@ function receiveTrace(currentGeneration: number, line: string): void {
     if (observer) statusFromObserver(observer)
     frameSize.textContent = `${record.width}×${record.height} · ${record.byteLength} bytes`
     const hosts = result.hosts ?? (result.host ? [result.host] : [])
-    const hostEvidence = hosts.map((host) =>
-      ` · host #${host.sequence} ${host.source} ${host.width}×${host.height} ${host.byteLength} bytes digest=${host.digest} 亮度=${host.meanLuma}`).join('')
-    log(`MOD #${record.captureSeq} · ${source} · ${reason} · ${record.width}×${record.height} ${record.byteLength} bytes · digest=${record.digest} · 亮度=${record.meanLuma}${hostEvidence}`)
+    log(`MOD #${record.captureSeq} · ${source} · ${reason} · ${record.width}×${record.height} ${record.byteLength} bytes · digest=${record.digest} · 亮度=${record.meanLuma}${hostEvidence(hosts)}`)
     if (pendingCapture?.generation === currentGeneration) {
       window.clearTimeout(pendingCapture.timer)
       pendingCapture.resolve()
       pendingCapture = null
     }
   } else {
+    let errorHosts: HostCapture[] = []
     if (record.kind === 'frame-error') {
-      ledger.invalidate()
+      errorHosts = ledger.resolveError(currentGeneration)
       sourceStatus.textContent = 'unavailable'
     }
     if (record.kind === 'frame-error' && pendingCapture?.generation === currentGeneration) {
@@ -158,7 +162,8 @@ function receiveTrace(currentGeneration: number, line: string): void {
       pendingCapture.resolve()
       pendingCapture = null
     }
-    log(`MOD ${record.kind}${record.error ? ` · ${record.error}` : ''}`)
+    const label = record.kind === 'frame-error' ? `MOD #${record.captureSeq ?? 'unknown'} frame-error` : `MOD ${record.kind}`
+    log(`${label}${record.error ? ` · ${record.error}` : ''}${hostEvidence(errorHosts)}`)
   }
   refresh()
 }
@@ -216,7 +221,7 @@ async function startEngine(): Promise<void> {
         if (currentGeneration !== generation) return
         hostCaptures += 1
         ledger.addHost(currentGeneration, host)
-        if (!ledger.busy) log(`非要求中的 host capture #${host.sequence} · ${host.source}；不計入 PASS`)
+        if (!ledger.busy) log(`非要求中的 host capture；不計入 PASS${hostEvidence([host])}`)
       } })
     const created = new SimulatorEngine({
       viewport, screen, runtimeBaseUrl: new URL('/simulator/', location.href).href, modStorage,
@@ -274,10 +279,10 @@ async function captureFrame(): Promise<void> {
   await new Promise<void>((resolve) => {
     const timer = window.setTimeout(() => {
       if (pendingCapture?.generation === currentGeneration) {
-        ledger.invalidate()
+        const hosts = ledger.resolveError(currentGeneration)
         captureTimedOut = true
         sourceStatus.textContent = 'unverified'
-        log('MOD frame 等待逾時；請重啟後再擷取，該次不計入 PASS')
+        log(`MOD frame 等待逾時；請重啟後再擷取，該次不計入 PASS${hostEvidence(hosts)}`)
         pendingCapture = null
         refresh()
       }

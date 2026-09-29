@@ -62,7 +62,7 @@ describe('E008 observed camera bridge', () => {
 
   it('keeps the native denial category, labels fallback, and stops tracks', async () => {
     const denied = fixture({ reject: 'NotAllowedError' })
-    const records: { source: string }[] = []
+    const records: { source: string; errorName?: string | null; errorPhase?: string | null }[] = []
     const observer = createObservedCameraBridge({ videoElement: denied.video, canvasElement: denied.canvas,
       navigatorObj: denied.navigatorObj, onCapture: (record) => records.push(record) })
     await observer.bridge.start({ useBrowserCamera: true })
@@ -70,6 +70,8 @@ describe('E008 observed camera bridge', () => {
     assert.equal(observer.lastErrorName(), 'NotAllowedError')
     assert.equal(observer.lastErrorPhase(), 'start')
     assert.equal(records[0]?.source, 'synthetic')
+    assert.equal(records[0]?.errorName, 'NotAllowedError')
+    assert.equal(records[0]?.errorPhase, 'start')
 
     const granted = fixture()
     const live = createObservedCameraBridge({ videoElement: granted.video, canvasElement: granted.canvas,
@@ -95,7 +97,7 @@ describe('E008 observed camera bridge', () => {
   it('does not label a failed canvas read webcam when the stream is connected', async () => {
     const { video, canvas, navigatorObj } = fixture()
     canvas.getContext = () => ({ drawImage() {}, getImageData() { throw new DOMException('blocked read', 'SecurityError') } })
-    const records: { source: string }[] = []
+    const records: { source: string; errorName?: string | null; errorPhase?: string | null }[] = []
     const observer = createObservedCameraBridge({ videoElement: video, canvasElement: canvas,
       navigatorObj, onCapture: (record) => records.push(record) })
     await observer.bridge.start({ useBrowserCamera: true })
@@ -104,6 +106,8 @@ describe('E008 observed camera bridge', () => {
     assert.equal(observer.lastErrorName(), 'SecurityError')
     assert.equal(observer.lastErrorPhase(), 'capture')
     assert.equal(records[0]?.source, 'synthetic')
+    assert.equal(records[0]?.errorName, 'SecurityError')
+    assert.equal(records[0]?.errorPhase, 'capture')
   })
 
   it('clears a capture warning when the next frame succeeds', async () => {
@@ -115,7 +119,7 @@ describe('E008 observed camera bridge', () => {
         255, 0, 0, 255, 0, 255, 0, 255, 0, 0, 255, 255, 255, 255, 255, 255,
       ]) }
     } })
-    const records: { source: string }[] = []
+    const records: { source: string; errorName?: string | null; errorPhase?: string | null }[] = []
     const observer = createObservedCameraBridge({ videoElement: video, canvasElement: canvas,
       navigatorObj, onCapture: (record) => records.push(record) })
     await observer.bridge.start({ useBrowserCamera: true })
@@ -124,6 +128,8 @@ describe('E008 observed camera bridge', () => {
     assert.equal(observer.lastErrorPhase(), 'capture')
     observer.bridge.capture({ width: 2, height: 2, imageType: 'rgb565le' })
     assert.deepEqual(records.map((record) => record.source), ['synthetic', 'webcam'])
+    assert.deepEqual(records.map((record) => [record.errorName, record.errorPhase]),
+      [['SecurityError', 'capture'], [null, null]])
     assert.equal(observer.lastErrorName(), null)
     assert.equal(observer.lastErrorPhase(), null)
   })

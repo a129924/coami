@@ -11,6 +11,8 @@ export type HostCapture = {
   byteLength: number
   digest: string
   meanLuma: number
+  errorName: string | null
+  errorPhase: 'start' | 'capture' | null
 }
 
 type Track = { readyState: string; stop(): void }
@@ -158,7 +160,8 @@ export function createObservedCameraBridge(options: {
         && !captureWarning && sameBytes(bytes, rgb565FromPixels(capturedPixels)) ? 'webcam'
         : valid ? 'synthetic' : 'unavailable'
       options.onCapture({ sequence: ++sequence, source, width: frame?.width ?? 0, height: frame?.height ?? 0,
-        byteLength: bytes.length, digest: digestBytes(bytes), meanLuma: meanRgb565Luma(bytes) })
+        byteLength: bytes.length, digest: digestBytes(bytes), meanLuma: meanRgb565Luma(bytes),
+        errorName, errorPhase })
       pixels = null
       return frame
     },

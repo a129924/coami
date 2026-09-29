@@ -5,7 +5,7 @@ import { onContextCreated } from '../../mod/mod.ts'
 import { CaptureLedger } from './capture-ledger.ts'
 
 const host = { source: 'webcam' as const, sequence: 1, width: 2, height: 2,
-  byteLength: 8, digest: 'abcd1234', meanLuma: 70 }
+  byteLength: 8, digest: 'abcd1234', meanLuma: 70, errorName: null, errorPhase: null }
 const mod = { kind: 'frame' as const, captureSeq: 1, width: 2, height: 2,
   imageType: 'rgb565le' as const, byteLength: 8, digest: 'abcd1234', meanLuma: 70 }
 
@@ -39,6 +39,14 @@ describe('E008 capture ledger', () => {
     assert.equal(ledger.resolveMod(4, mod).source, 'unverified')
     ledger.invalidate()
     assert.equal(ledger.begin(6), true)
+  })
+
+  it('drains host evidence when the MOD emits a frame error', () => {
+    const ledger = new CaptureLedger()
+    ledger.begin(7)
+    ledger.addHost(7, host)
+    assert.deepEqual(ledger.resolveError(7), [host])
+    assert.equal(ledger.busy, false)
   })
 })
 
