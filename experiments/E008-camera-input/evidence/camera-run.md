@@ -100,9 +100,9 @@ On 2026-09-24, `npm test` passed all 9 tests, `npm run typecheck` passed both st
 ## Decision
 
 - Current webcam path: **PASS on the rebuilt and attested runtime**. The owner repeated three uniquely matched MOD webcam captures with open → covered → open scene change and verified stop release; the original run remains historical evidence. The current-runtime proof is recorded below.
-- Synthetic fallback through MOD: **PASS** in controlled unsupported/no-device scenarios and a real browser permission-denial run. Synthetic frames were explicitly marked and never counted as webcam success.
+- Synthetic fallback through MOD: **PASS on the rebuilt and attested runtime** in controlled unsupported/no-device scenarios and a real browser permission-denial run. Each MOD frame uniquely matched a synthetic host capture and was never counted as webcam success. The current-runtime proof is recorded below.
 - Independent implementation review: **approved** after the asset script was made to reject dirty vendor source and the stop status distinguished absent tracks from ended tracks.
-- The owner-operated cases are complete. Human review of the PR remains; no real image data was recorded.
+- The owner-operated webcam, fallback, and denial cases are complete on the rebuilt runtime; human review of the PR remains. No real image data was recorded.
 
 ## PR review follow-up — 2026-09-29
 
@@ -145,4 +145,17 @@ On 2026-09-24, `npm test` passed all 9 tests, `npm run typecheck` passed both st
 - The owner loaded the newly served runtime and reported a matching fixed digest probe: MOD and host `0a63029a`, with matching empty and zero probes.
 - Three consecutive MOD frames uniquely paired with host `webcam` captures, each 96×96 RGB565LE and 18,432 bytes, with no browser error: `#1 digest=6d7c3961, meanLuma=121`; `#2 digest=3fa8b4b5, meanLuma=47`; `#3 digest=635e1021, meanLuma=141`. The host sequence, checksum, dimensions, byte count, and luminance matched each MOD record.
 - Stop reported `captureCount=3`, old track `ended`, host capture count `3`, and stationary count `true`. A preceding empty generation also stopped with no track and a stationary count.
-- The owner explicitly confirmed #1 camera open, #2 covered/closed, #3 reopened, and visually observed the corresponding scene changes. Together with the probe, unique host/MOD pairs, and ended/stationary stop evidence, this meets the webcam PASS rule on the newly attested runtime. No raw image was recorded. The negative fallback and denial cases remain supported by the earlier owner-operated run and local regression tests; they were not repeated on this rebuilt runtime.
+- The owner explicitly confirmed #1 camera open, #2 covered/closed, #3 reopened, and visually observed the corresponding scene changes. Together with the probe, unique host/MOD pairs, and ended/stationary stop evidence, this meets the webcam PASS rule on the newly attested runtime. No raw image was recorded. At the time of this webcam trace, the negative cases had not yet been repeated; their later rebuilt-runtime results appear below.
+
+### Sixth PR review follow-up — 2026-09-29
+
+- Review found that Stop or Restart could invalidate a pending capture after a host frame arrived but before the MOD frame trace, losing the host metadata. The ledger now returns pending host records on invalidation; the page logs them as an unfinished, non-PASS capture before changing generations and clears the capture timer. The new regression test failed first because invalidation returned no evidence, then passed after the fix. `npm test` passed 14 tests, both strict TypeScript projects typechecked, `npm run build` passed, and `git diff --check` passed.
+- The rebuilt runtime's webcam PASS above remains valid. The owner also repeated fallback and denial on the same runtime; their separate evidence follows.
+
+### Owner fallback and denial trace on rebuilt runtime — 2026-09-29
+
+- Each generation reported the fixed digest probe `MOD=host=0a63029a`, then produced one uniquely paired 96×96, 18,432-byte `synthetic · matched` MOD frame with digest `7d9b3c4f` and mean luminance `125`. These are synthetic results, never webcam PASS evidence.
+- Real browser permission denial: camera status `授權遭拒`, error category `NotAllowedError`; the paired synthetic host capture retained `NotAllowedError/start`. Stop reported old track `無`, host capture count `1`, and stationary count `true`.
+- Simulated no-device: camera status `模擬 · unavailable · 相機不可用`, error category `NotFoundError`; the paired synthetic host capture retained `NotFoundError/start`. Stop reported old track `無`, host capture count `1`, and stationary count `true`.
+- Simulated no-camera API: camera status `模擬 · unsupported · getUserMedia 不存在`, error category `無`; the paired synthetic host capture also reported no browser error. Stop reported old track `無`, host capture count `1`, and stationary count `true`. A following empty generation stopped with no track, zero host captures, and a stationary count.
+- The three owner-operated cases meet the rebuilt-runtime fallback/denial PASS rule without promoting any synthetic frame to webcam success. No raw image was recorded.

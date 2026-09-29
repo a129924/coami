@@ -52,6 +52,10 @@ export class CaptureLedger {
     return pending.hosts
   }
 
-  invalidate(): void { this.pending = null }
+  invalidate(): HostCapture[] {
+    const hosts = this.pending?.hosts ?? []
+    this.pending = null
+    return hosts
+  }
   get busy(): boolean { return this.pending !== null }
 }

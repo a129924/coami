@@ -48,6 +48,16 @@ describe('E008 capture ledger', () => {
     assert.deepEqual(ledger.resolveError(7), [host])
     assert.equal(ledger.busy, false)
   })
+
+  it('returns pending host evidence when stop or restart invalidates a capture', () => {
+    const ledger = new CaptureLedger()
+    ledger.begin(8)
+    ledger.addHost(8, host)
+    assert.deepEqual(ledger.invalidate(), [host])
+    assert.equal(ledger.busy, false)
+    assert.equal(ledger.begin(9), true)
+    assert.equal(ledger.resolveMod(8, mod).reason, 'no-pending')
+  })
 })
 
 it('rejects a self-consistent MOD frame with dimensions other than requested', async (t) => {

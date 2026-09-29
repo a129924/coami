@@ -59,6 +59,17 @@ function hostEvidence(hosts: HostCapture[]): string {
     ` · host #${host.sequence} ${host.source} ${host.width}×${host.height} ${host.byteLength} bytes digest=${host.digest} 亮度=${host.meanLuma} 錯誤類別=${host.errorName ?? '無'} 階段=${host.errorPhase ?? '無'}`).join('')
 }
 
+function invalidatePendingCapture(reason: string): void {
+  const wasPending = ledger.busy
+  const hosts = ledger.invalidate()
+  if (wasPending) log(`MOD frame 未完成：${reason}；該次不計入 PASS${hostEvidence(hosts)}`)
+  if (pendingCapture) {
+    window.clearTimeout(pendingCapture.timer)
+    pendingCapture.resolve()
+    pendingCapture = null
+  }
+}
+
 function refresh(): void {
   authorize.disabled = !ready || cameraStarted || loading || stopping || authorizing || scenario.value !== activeScenario
   captureButton.disabled = !ready || !cameraStarted || ledger.busy || loading || stopping || authorizing || captureTimedOut
@@ -181,12 +192,12 @@ async function startEngine(): Promise<void> {
   loading = true
   activeScenario = scenario.value
   refresh()
+  invalidatePendingCapture('重新啟動 simulator')
   const currentGeneration = ++generation
   const previous = engine
   previous?.dispose()
   engine = null
   observer = null
-  ledger.invalidate()
   ready = false
   cameraStarted = false
   authorizing = false
@@ -314,14 +325,13 @@ async function stopCamera(): Promise<void> {
   const stoppedAt = currentObserver?.captureCount() ?? 0
   await new Promise((resolve) => window.setTimeout(resolve, 250))
   const capturesStationary = (currentObserver?.captureCount() ?? 0) === stoppedAt
+  invalidatePendingCapture('停止相機')
   engine = null
   observer = null
   generation += 1
   ready = false
   cameraStarted = false
   authorizing = false
-  ledger.invalidate()
-  if (pendingCapture) { window.clearTimeout(pendingCapture.timer); pendingCapture.resolve(); pendingCapture = null }
   pendingStop = null
   const states = currentObserver?.trackStates() ?? []
   trackStatus.textContent = states.length ? states.join(', ') : '無'
