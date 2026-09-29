@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { cp, mkdir, readFile, realpath, rm, stat, writeFile } from 'node:fs/promises'
+import { createReadStream } from 'node:fs'
+import { cp, lstat, mkdir, readdir, readFile, readlink, realpath, rm, stat, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 
@@ -8,6 +9,8 @@ const PINNED_COMMIT = 'b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322'
 const PINNED_MODDABLE_COMMIT = 'b6e06ba70506a7381ffb28e09e3175bf4e99f305'
 const PINNED_EMSDK_COMMIT = '14c18b569f55138fe4963924162244251f454fb0'
 const PINNED_EMSCRIPTEN_COMMIT = '8c5f43157a3f069ade75876e23061330521eabde'
+const PINNED_EMSCRIPTEN_RELEASE = 'bf32ae8b61ac8efeb7eca01b54c8307f992724f7'
+const PINNED_EMSCRIPTEN_TREE_SHA256 = '42ce84c65e00be2818a7733704b9f0217f4c3ee9c7f2bb3366293f60c8e47295'
 const PINNED_FONTBM_COMMIT = '7677b908523e909679f67cd5c170396bb9def1aa'
 const webRoot = fileURLToPath(new URL('../', import.meta.url))
 const repositoryRoot = path.resolve(webRoot, '../../..')
@@ -20,6 +23,29 @@ const provenancePath = path.join(generatedRoot, 'runtime-provenance.json')
 
 function output(command, args, options = {}) {
   return execFileSync(command, args, { encoding: 'utf8', ...options }).trim()
+}
+
+async function installedTreeSha256(root) {
+  const tree = createHash('sha256')
+  async function visit(directory, prefix = '') {
+    for (const name of (await readdir(directory)).sort()) {
+      const absolute = path.join(directory, name)
+      const relative = prefix ? `${prefix}/${name}` : name
+      const info = await lstat(absolute)
+      if (info.isDirectory()) {
+        tree.update(`d\0${relative}\0`)
+        await visit(absolute, relative)
+      } else if (info.isSymbolicLink()) {
+        tree.update(`l\0${relative}\0${await readlink(absolute)}\0`)
+      } else if (info.isFile()) {
+        const file = createHash('sha256')
+        for await (const chunk of createReadStream(absolute)) file.update(chunk)
+        tree.update(`f\0${relative}\0${info.mode & 0o111 ? 'x' : '-'}\0${file.digest('hex')}\0`)
+      } else throw new Error(`unsupported installed file ${relative}`)
+    }
+  }
+  await visit(root)
+  return tree.digest('hex')
 }
 
 // A failed repeat build must never leave a previously served runtime or MOD in place.
@@ -61,7 +87,7 @@ try {
 }
 const emsdk = process.env.EMSDK
 if (!emsdk) throw new Error('BLOCKED: pinned emsdk 5.0.1 is not configured')
-let emsdkRoot, emccBinary, emccSha256, emccVersion
+let emsdkRoot, emccBinary, emccSha256, emccVersion, emscriptenTreeSha256
 try {
   emsdkRoot = await realpath(emsdk)
   const checkoutRoot = await realpath(output('git', ['rev-parse', '--show-toplevel'], { cwd: emsdkRoot }))
@@ -70,6 +96,14 @@ try {
   if (sourceCommit !== PINNED_EMSDK_COMMIT) throw new Error(`emsdk source commit is ${sourceCommit}`)
   const trackedChanges = output('git', ['status', '--porcelain=v1', '--untracked-files=no'], { cwd: emsdkRoot })
   if (trackedChanges) throw new Error('emsdk source has tracked changes')
+  const releases = JSON.parse(await readFile(path.join(emsdkRoot, 'emscripten-releases-tags.json'), 'utf8'))
+  if (releases.releases['5.0.1'] !== PINNED_EMSCRIPTEN_RELEASE)
+    throw new Error('emsdk 5.0.1 release mapping differs from the pinned package')
+  if (process.platform !== 'darwin' || process.arch !== 'arm64')
+    throw new Error('installed Emscripten tree is attested only for macOS arm64')
+  emscriptenTreeSha256 = await installedTreeSha256(path.join(emsdkRoot, 'upstream'))
+  if (emscriptenTreeSha256 !== PINNED_EMSCRIPTEN_TREE_SHA256)
+    throw new Error(`installed Emscripten tree differs from the pinned package: ${emscriptenTreeSha256}`)
   emccBinary = await realpath(output('which', ['emcc']))
   const binaryInfo = await stat(emccBinary)
   if (!binaryInfo.isFile() || (binaryInfo.mode & 0o111) === 0) throw new Error('emcc is not executable')
@@ -134,7 +168,8 @@ await cp(path.join(vendorRoot, 'web/simulator/assets/case/v1/shell.stl'),
 const provenance = { sourceCommit: PINNED_COMMIT, moddableVersion, emccVersion,
   moddable: { path: moddableRoot, sourceCommit: PINNED_MODDABLE_COMMIT, tools: moddableTools },
   emscripten: { emsdkPath: emsdkRoot, emsdkCommit: PINNED_EMSDK_COMMIT,
-    upstreamCommit: PINNED_EMSCRIPTEN_COMMIT, emccPath: emccBinary, emccSha256 },
+    release: PINNED_EMSCRIPTEN_RELEASE, upstreamCommit: PINNED_EMSCRIPTEN_COMMIT,
+    installedTreeSha256: emscriptenTreeSha256, emccPath: emccBinary, emccSha256 },
   fontbm: { path: fontbmBinary, sourceCommit: fontbmCommit, sha256: fontbmSha256 }, sha256: hashes }
 await writeFile(provenancePath, `${JSON.stringify(provenance, null, 2)}\n`)
 console.log(JSON.stringify(provenance, null, 2))

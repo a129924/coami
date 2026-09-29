@@ -6,17 +6,17 @@ This experiment asks whether a real browser webcam frame reaches a TypeScript MO
 
 - Node 24–26 and npm.
 - The repository's `vendor/stack-chan` submodule checked out at `b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322`.
-- Moddable SDK 9.5.0 at source commit `b6e06ba70506a7381ffb28e09e3175bf4e99f305` (`MODDABLE` set, clean tracked checkout, `mcconfig` and `xsc` from its `build/bin` on `PATH`), emsdk 5.0.1 at source commit `14c18b569f55138fe4963924162244251f454fb0` (`EMSDK` set, clean tracked checkout, `emcc` from its `upstream/emscripten` on `PATH`, reporting Emscripten source `8c5f43157a3f069ade75876e23061330521eabde`), and executable `fontbm` from source commit `7677b908523e909679f67cd5c170396bb9def1aa` (`FONTBM` set or on `PATH`; set `FONTBM_SOURCE` if its checkout cannot be inferred from the binary path). The pinned vendor `firmware/scripts/build-wasm.sh` requires these prerequisites.
+- Moddable SDK 9.5.0 at source commit `b6e06ba70506a7381ffb28e09e3175bf4e99f305` (`MODDABLE` set, clean tracked checkout, `mcconfig` and `xsc` from its `build/bin` on `PATH`), emsdk 5.0.1 at source commit `14c18b569f55138fe4963924162244251f454fb0` (`EMSDK` set, clean tracked checkout, `emcc` from its `upstream/emscripten` on `PATH`, reporting Emscripten source `8c5f43157a3f069ade75876e23061330521eabde`), and executable `fontbm` from source commit `7677b908523e909679f67cd5c170396bb9def1aa` (`FONTBM` set or on `PATH`; set `FONTBM_SOURCE` if its checkout cannot be inferred from the binary path). The Emscripten installed-tree fingerprint is pinned for macOS arm64; other hosts stop as `BLOCKED`. The pinned vendor `firmware/scripts/build-wasm.sh` requires these prerequisites.
 
-These are **required local build dependencies**, not npm packages. Without them, Vite can serve the page but the simulator has no `/simulator/mc.js` or `/simulator/mc.wasm`; the MOD buttons cannot provide camera evidence. They are not committed to the repository. The recorded live run used local copies under ignored `web/generated/toolchain/`; temporary-directory cleanup later removed them. A new checkout or rerun must install them or point to equivalent exact versions.
+These are **required local build dependencies**, not npm packages. Without them, Vite can serve the page but the simulator has no `/simulator/mc.js` or `/simulator/mc.wasm`; the MOD buttons cannot provide camera evidence. They are not committed to the repository. The original owner-operated run used ignored `web/generated/toolchain/`; after those executables were cleared, the verified rebuild used ignored `web/generated/toolchain-verified/`. A new checkout or rerun must install the exact pinned sources and tools.
 
 For this feature worktree, from `experiments/E008-camera-input/web` on macOS:
 
 ```sh
-export MODDABLE="$PWD/generated/toolchain/moddable"
-export FONTBM="$PWD/generated/toolchain/fontbm/build/fontbm"
-export FONTBM_SOURCE="$PWD/generated/toolchain/fontbm"
-source generated/toolchain/emsdk/emsdk_env.sh
+export MODDABLE="$PWD/generated/toolchain-verified/moddable"
+export FONTBM="$PWD/generated/toolchain-verified/fontbm/build/fontbm"
+export FONTBM_SOURCE="$PWD/generated/toolchain-verified/fontbm"
+source generated/toolchain-verified/emsdk/emsdk_env.sh
 export PATH="$MODDABLE/build/bin/mac/release:$PATH"
 npm run prepare:poc
 ```
@@ -34,7 +34,16 @@ npm run build
 npm run dev
 ```
 
-`prepare:poc` removes previously published E008 runtime and MOD assets before checking prerequisites, so a failed repeat build cannot serve stale files. It copies the pinned vendor source into ignored `web/generated/`, verifies the Moddable, emsdk/Emscripten, and `fontbm` source revisions and executable locations, builds `mc.js` and `mc.wasm`, and records runtime and tool binary SHA-256 values in `web/generated/runtime-provenance.json`. It then builds the E008 MOD archive. The asset step stops with a `BLOCKED` prerequisite error if the exact runtime cannot be built. It does not use the older E005 simulator binaries or write into the vendor checkout.
+`prepare:poc` removes previously published E008 runtime and MOD assets before checking prerequisites, so a failed repeat build cannot serve stale files. It copies the pinned vendor source into ignored `web/generated/`, verifies the Moddable and `fontbm` sources and tools, and hashes the complete installed Emscripten `upstream` tree before invoking `emcc`. The macOS arm64 tree must match SHA-256 `42ce84c65e00be2818a7733704b9f0217f4c3ee9c7f2bb3366293f60c8e47295` from a fresh official 5.0.1 install. It then builds `mc.js`, `mc.wasm`, and the E008 MOD archive and records runtime and tool hashes in `web/generated/runtime-provenance.json`. Emscripten generates cache files during a build, so a repeat provenance-gated build requires a fresh 5.0.1 release payload. The asset step stops with a `BLOCKED` prerequisite error if the exact runtime cannot be built. It does not use the older E005 simulator binaries or write into the vendor checkout. Restart Vite after rebuilding, because the asset step replaces its public directory.
+
+For a repeat macOS arm64 build, refresh only the ignored Emscripten release payload before sourcing `emsdk_env.sh` again:
+
+```sh
+cd generated/toolchain-verified/emsdk
+./emsdk uninstall releases-bf32ae8b61ac8efeb7eca01b54c8307f992724f7-64bit
+./emsdk install 5.0.1
+./emsdk activate 5.0.1
+```
 
 Open the localhost URL printed by Vite. Use a secure localhost context and a browser with a camera for the live run.
 Before requesting the camera, confirm the event list says `固定 digest 探針 ... 一致`. A mismatched or missing probe leaves subsequent MOD frames `unverified`; rebuild the E008 MOD and refresh the page before collecting evidence.

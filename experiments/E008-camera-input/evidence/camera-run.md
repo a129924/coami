@@ -87,7 +87,7 @@ After restoring browser camera permission, the owner captured one `webcam · mat
 
 On 2026-09-24, `npm test` passed all 9 tests, `npm run typecheck` passed both strict TypeScript projects, `npm run mod` built a 3,931-byte E008 archive, and `npm run build` passed. `git diff --check` passed. The Vite build emitted only its nonblocking large-chunk warning. These local checks supplement the owner-operated browser traces above; they do not replace them.
 
-## Human camera scenarios
+## Human camera scenarios on the original runtime
 
 | Scenario | Status | Trace / observation |
 | --- | --- | --- |
@@ -99,7 +99,7 @@ On 2026-09-24, `npm test` passed all 9 tests, `npm run typecheck` passed both st
 
 ## Decision
 
-- Webcam path: **PASS** for the owner-operated run. The exact pinned runtime delivered three verified webcam frames to the TypeScript MOD; the owner confirmed scene-correlated change, and stop released the old track.
+- Current webcam path: **PASS on the rebuilt and attested runtime**. The owner repeated three uniquely matched MOD webcam captures with open → covered → open scene change and verified stop release; the original run remains historical evidence. The current-runtime proof is recorded below.
 - Synthetic fallback through MOD: **PASS** in controlled unsupported/no-device scenarios and a real browser permission-denial run. Synthetic frames were explicitly marked and never counted as webcam success.
 - Independent implementation review: **approved** after the asset script was made to reject dirty vendor source and the stop status distinguished absent tracks from ended tracks.
 - The owner-operated cases are complete. Human review of the PR remains; no real image data was recorded.
@@ -132,3 +132,17 @@ On 2026-09-24, `npm test` passed all 9 tests, `npm run typecheck` passed both st
 - Every host capture record now includes the browser error name and phase at capture time. Matched, mismatched, ambiguous, and synthetic fallback MOD event lines include those fields alongside host metadata. A synthetic frame caused by a `SecurityError` retains `SecurityError/capture` even after a later successful frame clears mutable status. The regression tests failed before the change and passed after it.
 - When the MOD emits `frame-error`, the ledger drains the pending host captures into the event line together with the MOD capture sequence and error. Timeout and unexpected host-capture lines also retain metadata. The ledger regression test failed before the change and passed after it.
 - `npm test` passed 13 tests, both strict TypeScript projects typechecked, `npm run build` passed, `node --check scripts/prepare-assets.mjs` passed, and `git diff --check` passed. The previous owner-operated webcam PASS is still the live evidence; no fresh camera run was performed for these review refinements.
+
+### Fifth PR review follow-up — 2026-09-29
+
+- Review found that checking only the emsdk Git commit and `emcc` executable did not attest the untracked installed compiler payload. The preflight now hashes every regular file, executable bit, directory path, and symlink in `EMSDK/upstream` before invoking `emcc`, then requires the pinned clean macOS arm64 tree digest `42ce84c65e00be2818a7733704b9f0217f4c3ee9c7f2bb3366293f60c8e47295`. The emsdk 5.0.1 release mapping pins package `bf32ae8b61ac8efeb7eca01b54c8307f992724f7`. Two fresh installs from that official release produced the same 15,001-file digest. An `emcc --version` run changed the tree to 15,050 files with a different digest, demonstrating why the check runs first and why repeat builds require a fresh release payload. Other host architectures are `BLOCKED` until attested separately.
+- Moddable SDK 9.5.0 and `fontbm` were rebuilt from the pinned source commits in ignored `web/generated/toolchain-verified/`; Emscripten 5.0.1 was installed from the pinned emsdk tag and release. `npm run prepare:poc` passed the new preflight and built a 3,944-byte E008 MOD, SHA-256 `e67bdfb0e4bcd70b5b0ad556549d907fc047f52e354db5951454a12a7d6f92f9`. The ignored runtime provenance records `mc.js` SHA-256 `16f794b22c9191d53e1c4db66e22dc3fcc0d02b611fc3cf012849d89e1830a81`, `mc.wasm` SHA-256 `ba3e68e425ecf27485b818599d70f1757e45f424969f47625646f0ede4cd907d`, the complete Emscripten tree digest, tool paths, source commits, and executable hashes. The compiler generated cache files during the build, so the post-build tree digest differs from the required fresh-install digest; repeat builds need a clean release payload.
+- `npm test` passed 13 tests; both strict TypeScript projects typechecked; `npm run build`, `node --check scripts/prepare-assets.mjs`, and `git diff --check` passed. After restarting Vite, HTTP 200 served the new 73,325-byte `mc.js`, 5,100,622-byte `mc.wasm`, and 3,944-byte MOD; downloaded runtime and MOD hashes matched the new local assets and provenance. A stale Vite process had temporarily returned the HTML fallback for asset URLs after the public directory was replaced, and was restarted before the HTTP check.
+- The original owner-operated webcam scene observation was made on an earlier runtime; its PASS was held as historical until the owner repeated the physical scene test on the rebuilt runtime. No synthetic or static build result was promoted to webcam PASS.
+
+### Owner trace on rebuilt runtime — 2026-09-29
+
+- The owner loaded the newly served runtime and reported a matching fixed digest probe: MOD and host `0a63029a`, with matching empty and zero probes.
+- Three consecutive MOD frames uniquely paired with host `webcam` captures, each 96×96 RGB565LE and 18,432 bytes, with no browser error: `#1 digest=6d7c3961, meanLuma=121`; `#2 digest=3fa8b4b5, meanLuma=47`; `#3 digest=635e1021, meanLuma=141`. The host sequence, checksum, dimensions, byte count, and luminance matched each MOD record.
+- Stop reported `captureCount=3`, old track `ended`, host capture count `3`, and stationary count `true`. A preceding empty generation also stopped with no track and a stationary count.
+- The owner explicitly confirmed #1 camera open, #2 covered/closed, #3 reopened, and visually observed the corresponding scene changes. Together with the probe, unique host/MOD pairs, and ended/stationary stop evidence, this meets the webcam PASS rule on the newly attested runtime. No raw image was recorded. The negative fallback and denial cases remain supported by the earlier owner-operated run and local regression tests; they were not repeated on this rebuilt runtime.
