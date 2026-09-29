@@ -105,4 +105,44 @@ describe('E008 observed camera bridge', () => {
     assert.equal(observer.lastErrorPhase(), 'capture')
     assert.equal(records[0]?.source, 'synthetic')
   })
+
+  it('clears a capture warning when the next frame succeeds', async () => {
+    const { video, canvas, navigatorObj } = fixture()
+    let reads = 0
+    canvas.getContext = () => ({ drawImage() {}, getImageData() {
+      if (reads++ === 0) throw new DOMException('blocked read', 'SecurityError')
+      return { data: new Uint8ClampedArray([
+        255, 0, 0, 255, 0, 255, 0, 255, 0, 0, 255, 255, 255, 255, 255, 255,
+      ]) }
+    } })
+    const records: { source: string }[] = []
+    const observer = createObservedCameraBridge({ videoElement: video, canvasElement: canvas,
+      navigatorObj, onCapture: (record) => records.push(record) })
+    await observer.bridge.start({ useBrowserCamera: true })
+    observer.bridge.capture({ width: 2, height: 2, imageType: 'rgb565le' })
+    assert.equal(observer.lastErrorName(), 'SecurityError')
+    assert.equal(observer.lastErrorPhase(), 'capture')
+    observer.bridge.capture({ width: 2, height: 2, imageType: 'rgb565le' })
+    assert.deepEqual(records.map((record) => record.source), ['synthetic', 'webcam'])
+    assert.equal(observer.lastErrorName(), null)
+    assert.equal(observer.lastErrorPhase(), null)
+  })
+
+  it('stops a camera track granted after the bridge was stopped', async () => {
+    const { video, canvas, stopped } = fixture()
+    const track = { readyState: 'live', stop() { this.readyState = 'ended'; stopped.push('stop') } }
+    let grant!: (stream: { getTracks(): typeof track[] }) => void
+    const navigatorObj = { mediaDevices: { getUserMedia: () => new Promise<{ getTracks(): typeof track[] }>((resolve) => {
+      grant = resolve
+    }) } }
+    const observer = createObservedCameraBridge({ videoElement: video, canvasElement: canvas,
+      navigatorObj, onCapture: () => {} })
+    const starting = observer.bridge.start({ useBrowserCamera: true })
+    observer.bridge.stop()
+    grant({ getTracks: () => [track] })
+    await starting
+    assert.equal(track.readyState, 'ended')
+    assert.deepEqual(stopped, ['stop'])
+    assert.equal(observer.bridge.isBrowserCameraStarted(), false)
+  })
 })

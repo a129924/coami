@@ -102,4 +102,11 @@ On 2026-09-24, `npm test` passed all 9 tests, `npm run typecheck` passed both st
 - Webcam path: **PASS** for the owner-operated run. The exact pinned runtime delivered three verified webcam frames to the TypeScript MOD; the owner confirmed scene-correlated change, and stop released the old track.
 - Synthetic fallback through MOD: **PASS** in controlled unsupported/no-device scenarios and a real browser permission-denial run. Synthetic frames were explicitly marked and never counted as webcam success.
 - Independent implementation review: **approved** after the asset script was made to reject dirty vendor source and the stop status distinguished absent tracks from ended tracks.
-- The owner-operated cases are complete. Human review of the draft PR remains; no real image data was recorded.
+- The owner-operated cases are complete. Human review of the PR remains; no real image data was recorded.
+
+## PR review follow-up — 2026-09-29
+
+- A regression test reproduced stale `SecurityError` status after a successful webcam capture. The observer now clears only a previous capture-phase error at the start of the next capture; start-phase errors such as permission denial remain distinguishable.
+- A delayed-permission test confirmed that the pinned vendor bridge stops a stream granted after `stop()` and does not report the browser camera as started. The E008 page already calls that stop during stop/restart, so no additional camera lifecycle change was needed for this review item.
+- A MOD `frame-error` now sets the page's current source to `unavailable` and invalidates the pending host/MOD pair. This presentation change has not been rerun with a live camera; the earlier owner-operated webcam PASS remains tied to the recorded frames above.
+- `npm test` passed 11 tests, strict `npm run typecheck` passed, `npm run build` passed, and `git diff --check` passed. The local MOD/WASM toolchain artifacts had been cleared from the temporary worktree, so this follow-up did not rebuild them.

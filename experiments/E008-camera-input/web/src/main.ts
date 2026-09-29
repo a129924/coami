@@ -149,7 +149,10 @@ function receiveTrace(currentGeneration: number, line: string): void {
       pendingCapture = null
     }
   } else {
-    if (record.kind === 'frame-error') ledger.invalidate()
+    if (record.kind === 'frame-error') {
+      ledger.invalidate()
+      sourceStatus.textContent = 'unavailable'
+    }
     if (record.kind === 'frame-error' && pendingCapture?.generation === currentGeneration) {
       window.clearTimeout(pendingCapture.timer)
       pendingCapture.resolve()

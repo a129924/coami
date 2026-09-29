@@ -146,6 +146,7 @@ export function createObservedCameraBridge(options: {
       active = true
       pixels = null
       captureWarning = false
+      if (errorPhase === 'capture') { errorName = null; errorPhase = null }
       let frame: CameraFrame | undefined
       try { frame = vendor.capture(captureOptions) }
       finally { active = false }
