@@ -38,15 +38,16 @@ export class TopTouchSurface {
   }
 
   cancel(event: SurfacePointer): void {
-    if (this.#active?.pointerId === event.pointerId) this.#active.cancelled = true
+    if (this.#active?.pointerId === event.pointerId) this.#active = null
   }
 
-  end(zone: TopZone, event: SurfacePointer): boolean {
+  end(zone: TopZone | null, event: SurfacePointer): boolean {
     const active = this.#active
     if (!active || active.pointerId !== event.pointerId) return false
     this.#active = null
     const duration = event.timeStamp - active.timeStamp
     if (
+      !zone ||
       active.cancelled ||
       zone !== active.zone ||
       !event.isPrimary ||

@@ -46,3 +46,13 @@ test('a second pointer cannot replace the active pointer', () => {
   assert.equal(surface.end('right', pointer({ timeStamp: 120 })), true)
   assert.deepEqual(emitted, [100])
 })
+
+test('cancellation immediately releases the active pointer for a later tap', () => {
+  const emitted: number[] = []
+  const surface = new TopTouchSurface((position) => emitted.push(position))
+  assert.equal(surface.begin('center', pointer()), true)
+  surface.cancel(pointer())
+  assert.equal(surface.begin('left', pointer({ pointerId: 8 })), true)
+  assert.equal(surface.end('left', pointer({ pointerId: 8, timeStamp: 120 })), true)
+  assert.deepEqual(emitted, [-100])
+})

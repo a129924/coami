@@ -20,6 +20,8 @@ export interface WasmHostBridgeOptions {
 
 export function createWasmHostBridge(options: WasmHostBridgeOptions): WasmHostBridge
 
+export function updateTopTouchBusy(bridge: HostTopTouchBridge, rawTrace: string): void
+
 export class SimulatorEngine {
   constructor(options: unknown)
   start(): Promise<void>

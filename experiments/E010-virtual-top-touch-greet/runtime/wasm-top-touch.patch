@@ -60,10 +60,10 @@ index 0d3dd788..415e4b3a 100644
        try {
          sample = this.#sample()
 diff --git a/web/simulator/bridge.mjs b/web/simulator/bridge.mjs
-index d549f4cb..ed32b52b 100644
+index d549f4cb..80365910 100644
 --- a/web/simulator/bridge.mjs
 +++ b/web/simulator/bridge.mjs
-@@ -102,6 +102,47 @@ export function createHostButtonBridge({
+@@ -102,6 +102,54 @@ export function createHostButtonBridge({
    }
  }
  
@@ -71,6 +71,7 @@ index d549f4cb..ed32b52b 100644
 +  const samples = []
 +  let current = { sample: [0, 0, 0], ticks: 0 }
 +  let ticks = 0
++  let busy = false
 +
 +  const enqueue = (sample) => {
 +    samples.push({ sample, ticks: ++ticks })
@@ -86,17 +87,23 @@ index d549f4cb..ed32b52b 100644
 +  return {
 +    tap(position) {
 +      const sample = positionSample(position)
-+      if (!sample) return false
++      if (!sample || busy || samples.length > 0) return false
 +      enqueue(sample)
 +      enqueue([0, 0, 0])
 +      return true
 +    },
 +    swipe(direction) {
++      if (busy || samples.length > 0) return false
 +      const first = direction === 'forward' ? [1, 0, 0] : [0, 0, 1]
 +      const second = direction === 'forward' ? [0, 0, 1] : [1, 0, 0]
 +      enqueue(first)
 +      enqueue(second)
 +      enqueue([0, 0, 0])
++      return true
++    },
++    setBusy(value) {
++      busy = Boolean(value)
++      if (busy) samples.length = 0
 +    },
 +    read(index) {
 +      if (index === 0 && samples.length > 0) current = samples.shift()
@@ -112,7 +119,7 @@ index d549f4cb..ed32b52b 100644
    if (!installedMod) return { status: 'empty' }
  
 diff --git a/web/src/services/simulator/simulator-engine.mjs b/web/src/services/simulator/simulator-engine.mjs
-index 4b30b3ee..7ce690b5 100644
+index 4b30b3ee..cf52a2e8 100644
 --- a/web/src/services/simulator/simulator-engine.mjs
 +++ b/web/src/services/simulator/simulator-engine.mjs
 @@ -10,6 +10,7 @@ import {
@@ -123,10 +130,22 @@ index 4b30b3ee..7ce690b5 100644
    installModArchiveIntoWasm,
    summarizeImageData,
  } from '../../../simulator/bridge.mjs'
-@@ -36,6 +37,24 @@ import { createModStorage } from '../../../simulator/mod-storage.mjs'
+@@ -36,6 +37,36 @@ import { createModStorage } from '../../../simulator/mod-storage.mjs'
  
  const DRIVER_MAX_ANGULAR_SPEED = 2.4
  
++export function updateTopTouchBusy(topTouchBridge, rawTrace) {
++  for (const line of String(rawTrace).split('\n')) {
++    if (!line.startsWith('COAMI10|')) continue
++    try {
++      const event = JSON.parse(line.slice(8))
++      if (event.kind !== 'run' || event.action_id !== 'greet') continue
++      if (event.phase === 'started') topTouchBridge.setBusy(true)
++      if (event.phase === 'completed' || event.phase === 'failed') topTouchBridge.setBusy(false)
++    } catch { /* Non-JSON trace output is not E010 lifecycle state. */ }
++  }
++}
++
 +export function createWasmHostBridge({
 +  buttonBridge,
 +  topTouchBridge,
@@ -148,7 +167,7 @@ index 4b30b3ee..7ce690b5 100644
  class StackchanScene {
    constructor({ viewport, screen, runtimeBaseUrl }) {
      this.viewport = viewport
-@@ -764,6 +783,7 @@ export class SimulatorEngine {
+@@ -764,6 +795,7 @@ export class SimulatorEngine {
      this.onError = onError
      this.modStorage = modStorage
      this.buttonBridge = createHostButtonBridge({ logger: (message) => this.onTrace(message) })
@@ -156,7 +175,7 @@ index 4b30b3ee..7ce690b5 100644
      this.audioOutBridge = createHostAudioOutBridge()
      this.audioInBridge = createHostAudioInBridge()
      this.cameraBridge = createHostCameraBridge()
-@@ -772,13 +792,14 @@ export class SimulatorEngine {
+@@ -772,12 +804,17 @@ export class SimulatorEngine {
        onRotation: (rotation) => this.scene.applyDriverRotation(rotation),
        onTorque: (torque) => this.scene.setTorqueEnabled(torque),
      })
@@ -166,7 +185,6 @@ index 4b30b3ee..7ce690b5 100644
 -      AudioIn: this.audioInBridge,
 -      Camera: this.cameraBridge,
 -      Driver: this.driverBridge,
--    }
 +    this.hostBridge = createWasmHostBridge({
 +      buttonBridge: this.buttonBridge,
 +      topTouchBridge: this.topTouchBridge,
@@ -175,10 +193,22 @@ index 4b30b3ee..7ce690b5 100644
 +      cameraBridge: this.cameraBridge,
 +      driverBridge: this.driverBridge,
 +    })
++    const onRuntimeTrace = (message) => {
++      updateTopTouchBusy(this.topTouchBridge, message)
++      onTrace(message)
+     }
      this.wasmView = new WasmView({
        scene: this.scene,
-       screen,
-@@ -864,6 +885,15 @@ export class SimulatorEngine {
+@@ -786,7 +823,7 @@ export class SimulatorEngine {
+       hostBridge: this.hostBridge,
+       runtimeBaseUrl,
+       onStatus,
+-      onTrace,
++      onTrace: onRuntimeTrace,
+       onModInstallStatus: onModStatus,
+       onReady: ({ runCount, installation }) => {
+         if (installation.status === 'prepared') {
+@@ -864,6 +901,15 @@ export class SimulatorEngine {
      this.buttonBridge.push(name)
    }
  

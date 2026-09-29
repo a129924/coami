@@ -1,4 +1,5 @@
 import { SimulatorEngine } from './preview-runtime.ts'
+import { releaseZoneAt } from './top-touch-release-zone.ts'
 import { TopTouchSurface, type TopZone } from './top-touch-surface.ts'
 import './style.css'
 
@@ -37,6 +38,13 @@ function zoneOf(button: HTMLButtonElement): TopZone {
   throw new Error(`Unknown top-touch zone: ${zone}`)
 }
 
+function releaseZone(event: PointerEvent): TopZone | null {
+  return releaseZoneAt(event, (clientX, clientY) => {
+    const target = document.elementFromPoint(clientX, clientY)
+    return target?.closest<HTMLElement>('[data-zone]')?.dataset.zone
+  })
+}
+
 for (const button of zoneButtons) {
   const zone = zoneOf(button)
   button.addEventListener('pointerdown', (event) => {
@@ -47,7 +55,7 @@ for (const button of zoneButtons) {
   button.addEventListener('pointercancel', (event) => surface.cancel(toPointer(event)))
   button.addEventListener('lostpointercapture', (event) => surface.cancel(toPointer(event)))
   button.addEventListener('pointerup', (event) => {
-    surface.end(zone, toPointer(event))
+    surface.end(releaseZone(event), toPointer(event))
     if (button.hasPointerCapture(event.pointerId)) button.releasePointerCapture(event.pointerId)
   })
 }

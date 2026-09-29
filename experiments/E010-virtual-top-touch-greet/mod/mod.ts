@@ -2,6 +2,7 @@ import 'piu/MC'
 import { Emotion } from 'face-state'
 import Timer from 'timer'
 import { TopTouchGreet, type Terminal, type TouchPanelEvent } from './top-touch-greet'
+import { renderTerminal } from './run-terminal'
 
 type Pose = { rotation: { y: number; p: number; r: number } }
 type Robot = {
@@ -61,8 +62,8 @@ export function onContextCreated(robot: Robot): void {
       terminal = 'failed'
       try { await neutral() } catch { /* Preserve the original failed terminal. */ }
     }
+    terminal = renderTerminal(showScreen, terminal)
     if (interaction.finish(run, terminal) === null) return
-    showScreen(terminal)
     emit({ kind: 'run', run, zone, action_id: 'greet', phase: terminal })
   }
 

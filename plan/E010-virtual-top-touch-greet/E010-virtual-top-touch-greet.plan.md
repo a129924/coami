@@ -37,7 +37,7 @@ Deliver a simulator-only, three-zone virtual top-touch POC whose valid tap is re
 
 ## Validation / Acceptance Checks
 
-- **TestCase**: each zone valid tap; secondary/cross-zone/moved/late/cancelled pointer; malformed/non-monotonic input; busy repeat; stale terminal; controlled failure; forward/backward swipe regression.
+- **TestCase**: each zone valid tap; secondary/cross-zone/moved/late/cancelled pointer with cancellation recovery; coordinate-derived final release zone; fresh generated-parent staging; malformed/non-monotonic input; busy repeat with no host sample backlog; stale terminal; controlled renderer failure; forward/backward swipe regression.
 - `npm test`, strict typecheck, MOD archive and Vite build must pass.
 - Contract test must stage the same patched browser engine used by the preview and prove `TopTouchPanel`, `pushTopTouch`, and press/release samples. Scratch checkout must pass `npm run test:unit` and `npm run build:wasm`; copied runtime hashes must match current-patch provenance.
 - Owner-provided manual trace proves surface → raw sample → recognized event → MOD acceptance → one matching terminal for left/center/right, plus busy rejection. Browser automation was unavailable to the agent; the evidence is classified as manual, not automated.

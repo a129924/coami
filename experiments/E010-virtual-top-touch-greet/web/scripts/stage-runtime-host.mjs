@@ -36,8 +36,10 @@ async function sha256(file) {
   return createHash('sha256').update(await readFile(file)).digest('hex')
 }
 
-export async function stagePatchedHostRuntime(scratch) {
-  const staging = await mkdtemp(path.join(webRoot, 'generated/.pinned-stack-chan-'))
+export async function stagePatchedHostRuntime(scratch, outputPath = output) {
+  const generatedRoot = path.dirname(outputPath)
+  await mkdir(generatedRoot, { recursive: true })
+  const staging = await mkdtemp(path.join(generatedRoot, '.pinned-stack-chan-'))
   try {
     for (const source of hostSources) {
       const destination = path.join(staging, source)
@@ -54,8 +56,8 @@ export async function stagePatchedHostRuntime(scratch) {
       patchSha256: await sha256(patchPath),
       sources: [...hostSources, ...typeSources.map(([, destination]) => destination)],
     }, null, 2)}\n`)
-    await rm(output, { recursive: true, force: true })
-    await rename(staging, output)
+    await rm(outputPath, { recursive: true, force: true })
+    await rename(staging, outputPath)
   } catch (error) {
     await rm(staging, { recursive: true, force: true })
     throw error
