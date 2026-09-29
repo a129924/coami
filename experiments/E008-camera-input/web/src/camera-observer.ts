@@ -33,9 +33,15 @@ export type ObservedBridge = {
 }
 
 export function digestBytes(bytes: Uint8Array): string {
-  let hash = 0x811c9dc5
-  for (const byte of bytes) hash = Math.imul(hash ^ byte, 0x01000193) >>> 0
-  return hash.toString(16).padStart(8, '0')
+  let a = 1
+  let b = 0
+  for (let index = 0; index < bytes.length; index += 1) {
+    a += bytes[index]!
+    if (a >= 65521) a -= 65521
+    b += a
+    if (b >= 65521) b -= 65521
+  }
+  return b.toString(16).padStart(4, '0') + a.toString(16).padStart(4, '0')
 }
 
 export function meanRgb565Luma(bytes: Uint8Array): number {

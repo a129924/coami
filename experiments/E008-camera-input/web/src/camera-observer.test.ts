@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
-import { createObservedCameraBridge } from './camera-observer.ts'
+import { createObservedCameraBridge, digestBytes } from './camera-observer.ts'
 
 function fixture(options: { ready?: boolean; reject?: string; pixels?: Uint8ClampedArray } = {}) {
   const stopped: string[] = []
@@ -31,6 +31,12 @@ function fixture(options: { ready?: boolean; reject?: string; pixels?: Uint8Clam
 }
 
 describe('E008 observed camera bridge', () => {
+  it('computes the fixed Adler-32 probe with small integer accumulators', () => {
+    assert.equal(digestBytes(new Uint8Array(0)), '00000001')
+    assert.equal(digestBytes(new Uint8Array([0])), '00010001')
+    assert.equal(digestBytes(new Uint8Array([0, 1, 127, 128, 255, 13, 42, 99])), '0a63029a')
+  })
+
   it('labels a returned frame webcam only when the dedicated canvas read produced those bytes', async () => {
     const { video, canvas, navigatorObj } = fixture()
     const records: unknown[] = []

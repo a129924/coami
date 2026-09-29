@@ -17,9 +17,15 @@ const FRAME_OPTIONS = { width: 96, height: 96, imageType: 'rgb565le' as const }
 const emit = (value: Record<string, unknown>): void => trace(`COAMI8|${JSON.stringify({ schemaVersion: 1, ...value })}\n`)
 
 function digest(bytes: Uint8Array): string {
-  let hash = 0x811c9dc5
-  for (const byte of bytes) hash = Math.imul(hash ^ byte, 0x01000193) >>> 0
-  return hash.toString(16).padStart(8, '0')
+  let a = 1
+  let b = 0
+  for (let index = 0; index < bytes.length; index += 1) {
+    a += bytes[index]!
+    if (a >= 65521) a -= 65521
+    b += a
+    if (b >= 65521) b -= 65521
+  }
+  return b.toString(16).padStart(4, '0') + a.toString(16).padStart(4, '0')
 }
 
 function meanLuma(bytes: Uint8Array): number {
@@ -98,5 +104,8 @@ export function onContextCreated(robot: Robot): void {
     })()
   }
 
+  const probe = new Uint8Array([0, 1, 127, 128, 255, 13, 42, 99])
+  emit({ kind: 'digest-probe', digest: digest(probe), empty: digest(new Uint8Array(0)),
+    zero: digest(new Uint8Array([0])), length: probe.length, first: probe[0], last: probe[7] })
   emit({ kind: 'ready' })
 }

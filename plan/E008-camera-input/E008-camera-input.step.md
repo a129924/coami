@@ -11,7 +11,7 @@ created: 2026-09-24
 
 | Current status | Allowed next transitions | Next actor |
 | --- | --- | --- |
-| approved | approved → publish-in-progress | Main Agent |
+| pr-open | pr-open → needs-rework or merged | Main Agent, then human reviewer |
 
 ## Actionable Steps
 
@@ -35,9 +35,9 @@ created: 2026-09-24
 
 - [X] **Actor:** Main Agent — **Action:** Validate the approved Written set and perform bounded staging only.
 - [X] **Actor:** Main Agent — **Action:** Obtain explicit human approval at STOP POINT 1 before commit, push, or PR creation.
-- [ ] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
-- [ ] **Actor:** Main Agent — **Action:** Push the topic branch.
-- [ ] **Actor:** Main Agent — **Action:** Open the pull request.
+- [X] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
+- [X] **Actor:** Main Agent — **Action:** Push the topic branch.
+- [X] **Actor:** Main Agent — **Action:** Open the pull request.
 - [ ] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
 - [ ] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
 - [ ] **Actor:** Main Agent — **Action:** Record exact human merge evidence after a new execution begins.
@@ -62,5 +62,6 @@ created: 2026-09-24
 - Progression truth inputs: `analysis/E008-camera-input/requirements.md`, `analysis/E008-camera-input/technical-spec.md`, `plan/E008-camera-input/E008-camera-input.plan.md`.
 - Completion evidence inputs: `git worktree list --porcelain`, `experiments/E008-camera-input/EXPERIMENT.md`, `experiments/E008-camera-input/evidence/camera-run.md`, E008 TypeScript checks and independent review verdict.
 - Marker semantics: `[X]` exact one-to-one evidence; `[ ]` pending/planned/unproved; lowercase source `[x]` is pending and warns.
+- Published evidence: commits `1c3f705` and `d16e315` are on `origin/feat/andrew/camera-input-feasibility`; draft PR #7 is `https://github.com/a129924/coami/pull/7`. The later checksum correction and owner-run camera evidence are pending a new topic commit and PR update.
 - Tracker semantics: `check_all_succeeded` covers rendered head/contextual/Implementation/tail checkboxes; `check_impl_steps_succeeded` covers only Implementation Steps.
 - Owner-only updates: only the action owner may update after exact evidence; step-creator never updates an existing output.

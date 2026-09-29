@@ -36,6 +36,7 @@ npm run dev
 `prepare:poc` first copies the pinned vendor source into ignored `web/generated/`, builds `mc.js` and `mc.wasm` there, and writes their SHA-256 values to `web/generated/runtime-provenance.json`. It then builds the E008 MOD archive. The asset step stops with a `BLOCKED` prerequisite error if the exact runtime cannot be built. It does not use the older E005 simulator binaries or write into the vendor checkout.
 
 Open the localhost URL printed by Vite. Use a secure localhost context and a browser with a camera for the live run.
+Before requesting the camera, confirm the event list says `固定 digest 探針 ... 一致`. A mismatched or missing probe leaves subsequent MOD frames `unverified`; rebuild the E008 MOD and refresh the page before collecting evidence.
 
 ## Operator procedure
 
@@ -43,6 +44,6 @@ Open the localhost URL printed by Vite. Use a secure localhost context and a bro
 2. Click **授權並啟動 MOD 相機** and grant access. The page reports the browser error category if access fails. A connected stream is advisory until MOD frames are paired.
 3. Click **擷取一張 MOD frame** with the lens uncovered, covered, then uncovered again. Record the three MOD digest/brightness readings and whether they changed with the physical scene. A `webcam` label requires a unique host-to-MOD frame match; `synthetic fallback` never counts toward webcam PASS.
 4. Click **停止並釋放相機**. Confirm the old track shows `ended` and the host capture count stays still. Restart and repeat to check generation isolation.
-5. Deny browser permission in a separate live run. The `unsupported` and `no-device` dropdown options exercise controlled negative paths; label those results simulated. Record all outcomes in `evidence/camera-run.md`.
+5. Deny browser permission in a separate live run. The `unsupported` and `no-device` dropdown options exercise controlled negative paths; label those results simulated. Record the page's camera status and error category before stopping, or copy the `相機狀態` event retained in the list. Record all outcomes in `evidence/camera-run.md`.
 
 Only dimensions, counts, digests, brightness, errors, track states, and human observations belong in evidence. Do not save screenshots, raw frames, or video from the real camera.

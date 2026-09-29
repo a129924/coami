@@ -1,5 +1,5 @@
 import { SimulatorEngine } from '../../../../vendor/stack-chan/web/src/services/simulator/simulator-engine.mjs'
-import { createObservedCameraBridge, type HostCapture, type ObservedBridge } from './camera-observer.ts'
+import { createObservedCameraBridge, digestBytes, type HostCapture, type ObservedBridge } from './camera-observer.ts'
 import { CaptureLedger, type ModFrame } from './capture-ledger.ts'
 import './style.css'
 
@@ -22,7 +22,8 @@ const trackStatus = document.querySelector<HTMLElement>('#track-status')!
 const events = document.querySelector<HTMLOListElement>('#events')!
 
 type ModTrace = ModFrame | { kind: 'ready' | 'started' | 'stopped' | 'start-error' | 'stop-error' | 'frame-error';
-  error?: string; captureCount?: number }
+  error?: string; captureCount?: number } | { kind: 'digest-probe'; digest: string; empty: string;
+  zero: string; length: number; first: number; last: number }
 type Observer = ReturnType<typeof createObservedCameraBridge>
 type PendingCapture = { generation: number; timer: number; resolve(): void }
 type PendingStop = { generation: number; resolve(): void }
@@ -40,6 +41,7 @@ let modFrames = 0
 let webcamFrames = 0
 let syntheticFrames = 0
 let hostCaptures = 0
+let digestProbePassed = false
 let pendingCapture: PendingCapture | null = null
 let pendingStop: PendingStop | null = null
 const ledger = new CaptureLedger()
@@ -75,6 +77,10 @@ function parseTrace(line: string): ModTrace | null {
         || typeof record.meanLuma !== 'number') return null
       return record as ModFrame
     }
+    if (record.kind === 'digest-probe' && typeof record.digest === 'string'
+      && typeof record.empty === 'string' && typeof record.zero === 'string'
+      && Number.isInteger(record.length) && Number.isInteger(record.first)
+      && Number.isInteger(record.last)) return record as ModTrace
     if (['ready', 'started', 'stopped', 'start-error', 'stop-error', 'frame-error'].includes(String(record.kind))) {
       return record as ModTrace
     }
@@ -100,11 +106,22 @@ function receiveTrace(currentGeneration: number, line: string): void {
   if (currentGeneration !== generation) return
   const record = parseTrace(line)
   if (!record) return
-  if (record.kind === 'ready') {
+  if (record.kind === 'digest-probe') {
+    const hostDigest = digestBytes(new Uint8Array([0, 1, 127, 128, 255, 13, 42, 99]))
+    digestProbePassed = record.digest === hostDigest
+      && record.empty === digestBytes(new Uint8Array(0))
+      && record.zero === digestBytes(new Uint8Array([0]))
+      && record.length === 8 && record.first === 0 && record.last === 99
+    log(`固定 digest 探針 · MOD=${record.digest} · host=${hostDigest} · ${digestProbePassed ? '一致' : '不一致'}`)
+    log(`探針細節 · MOD empty=${record.empty} zero=${record.zero} length=${record.length} first=${record.first} last=${record.last} · host empty=${digestBytes(new Uint8Array(0))} zero=${digestBytes(new Uint8Array([0]))}`)
+  } else if (record.kind === 'ready') {
     log('MOD 已載入')
   } else if (record.kind === 'started') {
     cameraStarted = true
-    if (observer) statusFromObserver(observer)
+    if (observer) {
+      statusFromObserver(observer)
+      log(`相機狀態：${cameraStatus.textContent} · 錯誤類別=${errorStatus.textContent}`)
+    }
     log('MOD camera.start 完成；尚未證明 frame 來源')
   } else if (record.kind === 'stopped') {
     cameraStarted = false
@@ -114,12 +131,18 @@ function receiveTrace(currentGeneration: number, line: string): void {
   } else if (record.kind === 'frame') {
     modFrames += 1
     const result = ledger.resolveMod(currentGeneration, record)
-    if (result.source === 'webcam') webcamFrames += 1
-    if (result.source === 'synthetic') syntheticFrames += 1
-    sourceStatus.textContent = result.source === 'synthetic' ? 'synthetic fallback' : result.source
+    const source = digestProbePassed ? result.source : 'unverified'
+    const reason = digestProbePassed ? result.reason : 'digest-probe-failed'
+    if (source === 'webcam') webcamFrames += 1
+    if (source === 'synthetic') syntheticFrames += 1
+    sourceStatus.textContent = source === 'synthetic' ? 'synthetic fallback' : source
     if (observer) statusFromObserver(observer)
     frameSize.textContent = `${record.width}×${record.height} · ${record.byteLength} bytes`
-    log(`MOD #${record.captureSeq} · ${result.source} · ${result.reason} · ${record.width}×${record.height} · digest=${record.digest} · 亮度=${record.meanLuma}`)
+    const host = source === 'unverified' ? result.host : undefined
+    const hostEvidence = host
+      ? ` · host #${host.sequence} ${host.source} ${host.width}×${host.height} ${host.byteLength} bytes digest=${host.digest} 亮度=${host.meanLuma}`
+      : ''
+    log(`MOD #${record.captureSeq} · ${source} · ${reason} · ${record.width}×${record.height} ${record.byteLength} bytes · digest=${record.digest} · 亮度=${record.meanLuma}${hostEvidence}`)
     if (pendingCapture?.generation === currentGeneration) {
       window.clearTimeout(pendingCapture.timer)
       pendingCapture.resolve()
@@ -163,6 +186,7 @@ async function startEngine(): Promise<void> {
   webcamFrames = 0
   syntheticFrames = 0
   hostCaptures = 0
+  digestProbePassed = false
   sourceStatus.textContent = 'unavailable'
   cameraStatus.textContent = '尚未要求授權'
   errorStatus.textContent = '無'

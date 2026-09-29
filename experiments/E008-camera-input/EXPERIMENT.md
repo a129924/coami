@@ -13,9 +13,9 @@ Build the exact pinned runtime and E008 MOD, run the localhost page, then follow
 - Pinned source: `b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322`.
 - The E008 TypeScript observer and ledger tests, strict typecheck, MOD archive build, and Vite build passed on 2026-09-24; exact commands and limits are in `evidence/camera-run.md`.
 - The initial simulator build stopped at missing toolchain prerequisites. After installing the required tools under ignored `web/generated/toolchain/`, the exact simulator runtime and E008 MOD built successfully. Asset SHA-256 values and prerequisites are recorded in `evidence/camera-run.md`.
-- No real webcam-to-MOD run or end-to-end synthetic MOD run has occurred. A served runtime and passing unit tests do not establish camera feasibility.
-- Independent implementation review approved the bounded TS experiment and its blocked verdict after source-provenance and stop-status fixes.
+- An owner-operated run on the pinned runtime produced three uniquely paired webcam frames inside the TypeScript MOD. The owner confirmed camera open/closed/open scene changes, and stop ended the old track. The fixed checksum probe also matched across host and MOD. Details are in `evidence/camera-run.md`.
+- Independent implementation review approved the initial bounded TS harness when the runtime was still blocked. The checksum correction and live-run evidence are now included for draft PR human review.
 
 ## Decision
 
-**Webcam: blocked pending owner-operated camera evidence. Fallback through MOD: unverified.** The pinned WASM build prerequisite is now satisfied locally. The remaining webcam PASS gate requires the operator to grant permission and confirm at least two MOD-paired webcam frames change when the lens is covered and uncovered. Unit-level synthetic behavior is not an end-to-end fallback PASS.
+**Webcam: PASS for the owner-operated pinned simulator run. Synthetic fallback through MOD: PASS for controlled unsupported/no-device and real permission-denial scenarios. Stop/restart: PASS.** Three webcam frames reached the TypeScript MOD with unique host matches, and the owner confirmed camera scene changes. Simulated unavailable cases displayed the appropriate `unsupported` or `unavailable` status; real denial displayed `NotAllowedError` and received only a synthetic MOD frame. A running-camera restart ended the old track, produced a new matched webcam frame, and the final stop ended the new track.
