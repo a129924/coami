@@ -1,0 +1,25 @@
+{
+  "name": "coami-e010-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24 <27" },
+  "scripts": {
+    "assets": "node scripts/prepare-assets.mjs",
+    "runtime": "node scripts/prepare-runtime.mjs",
+    "stage:runtime-host": "node scripts/stage-runtime-host.mjs",
+    "mod": "node scripts/build-mod.mjs",
+    "prepare:poc": "npm run runtime && npm run assets && npm run mod",
+    "dev": "vite --host 127.0.0.1",
+    "test": "npm run stage:runtime-host && node --test src/top-touch-surface.test.ts src/top-touch-greet.test.ts src/runtime-engine-contract.test.ts",
+    "typecheck": "npm run stage:runtime-host && tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json",
+    "build": "npm run typecheck && vite build"
+  },
+  "dependencies": { "three": "0.185.1" },
+  "devDependencies": {
+    "@types/node": "26.1.2",
+    "@types/three": "0.185.4",
+    "typescript": "7.0.2",
+    "vite": "8.2.1"
+  }
+}
