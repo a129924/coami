@@ -1,20 +1,27 @@
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
+import { cp, mkdir, readFile, realpath, rm, stat, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 
 const PINNED_COMMIT = 'b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322'
+const PINNED_FONTBM_COMMIT = '7677b908523e909679f67cd5c170396bb9def1aa'
 const webRoot = fileURLToPath(new URL('../', import.meta.url))
 const repositoryRoot = path.resolve(webRoot, '../../..')
 const vendorRoot = path.join(repositoryRoot, 'vendor/stack-chan')
 const generatedRoot = path.join(webRoot, 'generated')
 const sourceRoot = path.join(generatedRoot, 'pinned-stack-chan')
-const publicSimulator = path.join(generatedRoot, 'public/simulator')
+const publicRoot = path.join(generatedRoot, 'public')
+const publicSimulator = path.join(publicRoot, 'simulator')
+const provenancePath = path.join(generatedRoot, 'runtime-provenance.json')
 
 function output(command, args, options = {}) {
   return execFileSync(command, args, { encoding: 'utf8', ...options }).trim()
 }
+
+// A failed repeat build must never leave a previously served runtime or MOD in place.
+await rm(publicRoot, { recursive: true, force: true })
+await rm(provenancePath, { force: true })
 
 const gitlink = output('git', ['rev-parse', 'HEAD:vendor/stack-chan'], { cwd: repositoryRoot })
 const checkout = output('git', ['rev-parse', 'HEAD'], { cwd: vendorRoot })
@@ -37,6 +44,26 @@ if (!fontbm) {
   catch { throw new Error('BLOCKED: fontbm is unavailable') }
 }
 if (!fontbm) throw new Error('BLOCKED: fontbm is unavailable')
+const fontbmSource = process.env.FONTBM_SOURCE ?? path.resolve(fontbm, '../..')
+let fontbmBinary, fontbmSourceRoot, fontbmCommit, fontbmSha256
+try {
+  fontbmBinary = await realpath(fontbm)
+  fontbmSourceRoot = await realpath(fontbmSource)
+  const binaryInfo = await stat(fontbmBinary)
+  if (!binaryInfo.isFile() || (binaryInfo.mode & 0o111) === 0) throw new Error('fontbm is not executable')
+  const relativeBinary = path.relative(fontbmSourceRoot, fontbmBinary)
+  if (!relativeBinary || relativeBinary === '..' || relativeBinary.startsWith(`..${path.sep}`)
+    || path.isAbsolute(relativeBinary)) throw new Error('fontbm binary is outside its source checkout')
+  const checkoutRoot = await realpath(output('git', ['rev-parse', '--show-toplevel'], { cwd: fontbmSourceRoot }))
+  if (checkoutRoot !== fontbmSourceRoot) throw new Error('fontbm source is not the checkout root')
+  fontbmCommit = output('git', ['rev-parse', 'HEAD'], { cwd: fontbmSourceRoot })
+  if (fontbmCommit !== PINNED_FONTBM_COMMIT) throw new Error(`fontbm source commit is ${fontbmCommit}`)
+  const trackedChanges = output('git', ['status', '--porcelain=v1', '--untracked-files=no'], { cwd: fontbmSourceRoot })
+  if (trackedChanges) throw new Error('fontbm source has tracked changes')
+  fontbmSha256 = createHash('sha256').update(await readFile(fontbmBinary)).digest('hex')
+} catch (error) {
+  throw new Error(`BLOCKED: pinned fontbm source and executable could not be verified: ${String(error)}`)
+}
 
 await mkdir(generatedRoot, { recursive: true })
 await rm(sourceRoot, { recursive: true, force: true })
@@ -48,7 +75,7 @@ await cp(vendorRoot, sourceRoot, {
 execFileSync('npm', ['ci'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit',
   env: { ...process.env, CI: '1', LEFTHOOK: '0' } })
 execFileSync('npm', ['run', 'build:wasm'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit',
-  env: { ...process.env, FONTBM: fontbm } })
+  env: { ...process.env, FONTBM: fontbmBinary } })
 
 await mkdir(path.join(publicSimulator, 'assets/case/v1'), { recursive: true })
 const hashes = {}
@@ -59,6 +86,7 @@ for (const name of ['mc.js', 'mc.wasm']) {
 }
 await cp(path.join(vendorRoot, 'web/simulator/assets/case/v1/shell.stl'),
   path.join(publicSimulator, 'assets/case/v1/shell.stl'))
-const provenance = { sourceCommit: PINNED_COMMIT, moddableVersion, emccVersion, fontbm, sha256: hashes }
-await writeFile(path.join(generatedRoot, 'runtime-provenance.json'), `${JSON.stringify(provenance, null, 2)}\n`)
+const provenance = { sourceCommit: PINNED_COMMIT, moddableVersion, emccVersion,
+  fontbm: { path: fontbmBinary, sourceCommit: fontbmCommit, sha256: fontbmSha256 }, sha256: hashes }
+await writeFile(provenancePath, `${JSON.stringify(provenance, null, 2)}\n`)
 console.log(JSON.stringify(provenance, null, 2))

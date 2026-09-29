@@ -42,6 +42,7 @@ let webcamFrames = 0
 let syntheticFrames = 0
 let hostCaptures = 0
 let digestProbePassed = false
+let activeScenario = 'live'
 let pendingCapture: PendingCapture | null = null
 let pendingStop: PendingStop | null = null
 const ledger = new CaptureLedger()
@@ -54,11 +55,11 @@ function log(message: string): void {
 }
 
 function refresh(): void {
-  authorize.disabled = !ready || cameraStarted || loading || stopping || authorizing
+  authorize.disabled = !ready || cameraStarted || loading || stopping || authorizing || scenario.value !== activeScenario
   captureButton.disabled = !ready || !cameraStarted || ledger.busy || loading || stopping || authorizing || captureTimedOut
   stopButton.disabled = !engine || loading || stopping
   restartButton.disabled = loading || stopping
-  scenario.disabled = loading || cameraStarted || stopping
+  scenario.disabled = loading || cameraStarted || stopping || authorizing
   modCount.textContent = String(modFrames)
   webcamCount.textContent = String(webcamFrames)
   syntheticCount.textContent = String(syntheticFrames)
@@ -92,14 +93,14 @@ function statusFromObserver(current: Observer): void {
   const error = current.lastErrorName()
   const phase = current.lastErrorPhase()
   errorStatus.textContent = error ?? '無'
-  if (!current.apiSupported() && !window.isSecureContext && scenario.value === 'live') cameraStatus.textContent = 'unavailable · 非安全瀏覽環境'
+  if (!current.apiSupported() && !window.isSecureContext && activeScenario === 'live') cameraStatus.textContent = 'unavailable · 非安全瀏覽環境'
   else if (!current.apiSupported()) cameraStatus.textContent = 'unsupported · getUserMedia 不存在'
   else if (phase === 'capture' && error) cameraStatus.textContent = `capture unavailable · ${error}`
   else if (error === 'NotAllowedError' || error === 'SecurityError') cameraStatus.textContent = '授權遭拒'
   else if (error === 'NotFoundError' || error === 'NotReadableError') cameraStatus.textContent = 'unavailable · 相機不可用'
   else if (error) cameraStatus.textContent = `unavailable · ${error}`
   else cameraStatus.textContent = current.bridge.isBrowserCameraStarted() ? 'webcam stream 已啟動，等待 MOD 證據' : 'synthetic fallback'
-  if (scenario.value !== 'live') cameraStatus.textContent = `模擬 · ${cameraStatus.textContent}`
+  if (activeScenario !== 'live') cameraStatus.textContent = `模擬 · ${cameraStatus.textContent}`
 }
 
 function receiveTrace(currentGeneration: number, line: string): void {
@@ -138,7 +139,7 @@ function receiveTrace(currentGeneration: number, line: string): void {
     sourceStatus.textContent = source === 'synthetic' ? 'synthetic fallback' : source
     if (observer) statusFromObserver(observer)
     frameSize.textContent = `${record.width}×${record.height} · ${record.byteLength} bytes`
-    const host = source === 'unverified' ? result.host : undefined
+    const host = result.host
     const hostEvidence = host
       ? ` · host #${host.sequence} ${host.source} ${host.width}×${host.height} ${host.byteLength} bytes digest=${host.digest} 亮度=${host.meanLuma}`
       : ''
@@ -163,9 +164,9 @@ function receiveTrace(currentGeneration: number, line: string): void {
   refresh()
 }
 
-function selectedNavigator(): object {
-  if (scenario.value === 'unsupported') return {}
-  if (scenario.value === 'no-device') return { mediaDevices: { async getUserMedia() {
+function selectedNavigator(selectedScenario: string): object {
+  if (selectedScenario === 'unsupported') return {}
+  if (selectedScenario === 'no-device') return { mediaDevices: { async getUserMedia() {
     throw new DOMException('simulated no device', 'NotFoundError')
   } } }
   return navigator
@@ -174,6 +175,7 @@ function selectedNavigator(): object {
 async function startEngine(): Promise<void> {
   if (loading) return
   loading = true
+  activeScenario = scenario.value
   refresh()
   const currentGeneration = ++generation
   const previous = engine
@@ -211,7 +213,7 @@ async function startEngine(): Promise<void> {
     video.playsInline = true
     const canvas = document.createElement('canvas')
     const createdObserver = createObservedCameraBridge({ videoElement: video, canvasElement: canvas,
-      navigatorObj: selectedNavigator(), onCapture: (host: HostCapture) => {
+      navigatorObj: selectedNavigator(activeScenario), onCapture: (host: HostCapture) => {
         if (currentGeneration !== generation) return
         hostCaptures += 1
         ledger.addHost(currentGeneration, host)
@@ -333,5 +335,9 @@ authorize.addEventListener('click', () => { void startCamera() })
 captureButton.addEventListener('click', () => { void captureFrame() })
 stopButton.addEventListener('click', () => { void stopCamera() })
 restartButton.addEventListener('click', () => { void (async () => { await stopCamera(); await startEngine() })() })
+scenario.addEventListener('change', () => {
+  cameraStatus.textContent = scenario.value === activeScenario ? '尚未要求授權' : '情境已變更；重新啟動 simulator 後生效'
+  refresh()
+})
 refresh()
 void startEngine()
