@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coami E008 · 相機輸入可行性</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">COAMI · EXPERIMENT E008</div>
+        <h1>相機輸入可行性</h1>
+        <p>逐次核對 MOD 收到的是 webcam frame，還是 synthetic fallback。</p>
+      </header>
+      <section class="workspace">
+        <div class="simulator"><canvas id="viewport" aria-label="Stack-chan 3D simulator"></canvas><canvas id="screen" width="320" height="240" hidden></canvas></div>
+        <aside>
+          <h2>實驗操作</h2>
+          <label for="scenario">測試情境</label>
+          <select id="scenario">
+            <option value="live">真實瀏覽器相機</option>
+            <option value="unsupported">模擬：無相機 API</option>
+            <option value="no-device">模擬：無相機裝置</option>
+          </select>
+          <p class="hint">選擇模擬情境後請重新啟動。模擬結果不計入真實 webcam PASS。</p>
+          <div class="controls">
+            <button id="authorize" disabled>授權並啟動 MOD 相機</button>
+            <button id="capture" disabled>擷取一張 MOD frame</button>
+            <button id="stop" class="danger" disabled>停止並釋放相機</button>
+            <button id="restart" class="secondary">重新啟動 simulator</button>
+          </div>
+          <dl>
+            <dt>Simulator</dt><dd id="simulator-status">載入中</dd>
+            <dt>目前來源</dt><dd id="source-status">unavailable</dd>
+            <dt>相機狀態</dt><dd id="camera-status">尚未要求授權</dd>
+            <dt>錯誤類別</dt><dd id="error-status">無</dd>
+            <dt>MOD frame 數</dt><dd id="mod-count">0</dd>
+            <dt>webcam 配對</dt><dd id="webcam-count">0</dd>
+            <dt>synthetic 配對</dt><dd id="synthetic-count">0</dd>
+            <dt>最後尺寸</dt><dd id="frame-size">無</dd>
+            <dt>舊 track</dt><dd id="track-status">無</dd>
+          </dl>
+          <h3>MOD 內容指標</h3>
+          <p class="hint">依序擷取遮住前、遮住時、放開後；比較 MOD 的亮度與 digest，並由操作者記錄觀察。此頁不顯示、保存或上傳真人影像。</p>
+          <ol id="events" aria-live="polite"></ol>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
