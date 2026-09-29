@@ -7,5 +7,5 @@
     "noEmit": true,
     "skipLibCheck": true
   },
-  "include": ["mod.ts", "top-touch-greet.ts", "host.d.ts"]
+  "include": ["mod.ts", "top-touch-greet.ts", "run-terminal.ts", "host.d.ts"]
 }
