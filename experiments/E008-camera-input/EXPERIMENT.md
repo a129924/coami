@@ -14,7 +14,7 @@ Build the exact pinned runtime and E008 MOD, run the localhost page, then follow
 - The E008 TypeScript observer and ledger tests, strict typecheck, MOD archive build, and Vite build passed on 2026-09-24; exact commands and limits are in `evidence/camera-run.md`.
 - The initial simulator build stopped at missing toolchain prerequisites. After installing the required tools under ignored `web/generated/toolchain/`, the exact simulator runtime and E008 MOD built successfully. Asset SHA-256 values and prerequisites are recorded in `evidence/camera-run.md`.
 - An owner-operated run on the pinned runtime produced three uniquely paired webcam frames inside the TypeScript MOD. The owner confirmed camera open/closed/open scene changes, and stop ended the old track. The fixed checksum probe also matched across host and MOD. Details are in `evidence/camera-run.md`.
-- Independent implementation review approved the initial bounded TS harness when the runtime was still blocked. The checksum correction and live-run evidence are now included for draft PR human review.
+- Independent implementation review approved the initial bounded TS harness when the runtime was still blocked. The checksum correction and owner-operated live-run evidence are published in Ready PR #7 for human review.
 
 ## Decision
 

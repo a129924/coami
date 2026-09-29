@@ -15,6 +15,7 @@ export type PairResult = {
   source: CameraSource | 'unverified'
   reason: 'matched' | 'no-pending' | 'ambiguous-host' | 'mismatch'
   host?: HostCapture
+  hosts?: HostCapture[]
   mod?: ModFrame
 }
 
@@ -35,7 +36,7 @@ export class CaptureLedger {
     const pending = this.pending
     if (!pending || pending.generation !== generation) return { source: 'unverified', reason: 'no-pending' }
     this.pending = null
-    if (pending.hosts.length !== 1) return { source: 'unverified', reason: 'ambiguous-host', mod }
+    if (pending.hosts.length !== 1) return { source: 'unverified', reason: 'ambiguous-host', hosts: pending.hosts, mod }
     const [host] = pending.hosts
     if (!host || host.width !== mod.width || host.height !== mod.height || host.byteLength !== mod.byteLength
       || host.digest !== mod.digest || host.meanLuma !== mod.meanLuma || mod.imageType !== 'rgb565le') {

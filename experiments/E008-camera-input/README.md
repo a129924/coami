@@ -6,7 +6,7 @@ This experiment asks whether a real browser webcam frame reaches a TypeScript MO
 
 - Node 24–26 and npm.
 - The repository's `vendor/stack-chan` submodule checked out at `b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322`.
-- Moddable SDK 9.5.0 (`MODDABLE` set), Emscripten 5.0.1 (`emcc` on `PATH`), and executable `fontbm` from source commit `7677b908523e909679f67cd5c170396bb9def1aa` (`FONTBM` set or on `PATH`; set `FONTBM_SOURCE` if its checkout cannot be inferred from the binary path). The pinned vendor `firmware/scripts/build-wasm.sh` requires these prerequisites.
+- Moddable SDK 9.5.0 at source commit `b6e06ba70506a7381ffb28e09e3175bf4e99f305` (`MODDABLE` set, clean tracked checkout, `mcconfig` and `xsc` from its `build/bin` on `PATH`), Emscripten 5.0.1 (`emcc` on `PATH`), and executable `fontbm` from source commit `7677b908523e909679f67cd5c170396bb9def1aa` (`FONTBM` set or on `PATH`; set `FONTBM_SOURCE` if its checkout cannot be inferred from the binary path). The pinned vendor `firmware/scripts/build-wasm.sh` requires these prerequisites.
 
 These are **required local build dependencies**, not npm packages. Without them, Vite can serve the page but the simulator has no `/simulator/mc.js` or `/simulator/mc.wasm`; the MOD buttons cannot provide camera evidence. They are not committed to the repository. The recorded live run used local copies under ignored `web/generated/toolchain/`; temporary-directory cleanup later removed them. A new checkout or rerun must install them or point to equivalent exact versions.
 
@@ -34,7 +34,7 @@ npm run build
 npm run dev
 ```
 
-`prepare:poc` removes previously published E008 runtime and MOD assets before checking prerequisites, so a failed repeat build cannot serve stale files. It copies the pinned vendor source into ignored `web/generated/`, verifies the `fontbm` source revision and executable location, builds `mc.js` and `mc.wasm`, and records runtime and `fontbm` binary SHA-256 values in `web/generated/runtime-provenance.json`. It then builds the E008 MOD archive. The asset step stops with a `BLOCKED` prerequisite error if the exact runtime cannot be built. It does not use the older E005 simulator binaries or write into the vendor checkout.
+`prepare:poc` removes previously published E008 runtime and MOD assets before checking prerequisites, so a failed repeat build cannot serve stale files. It copies the pinned vendor source into ignored `web/generated/`, verifies the Moddable and `fontbm` source revisions and executable locations, builds `mc.js` and `mc.wasm`, and records runtime and tool binary SHA-256 values in `web/generated/runtime-provenance.json`. It then builds the E008 MOD archive. The asset step stops with a `BLOCKED` prerequisite error if the exact runtime cannot be built. It does not use the older E005 simulator binaries or write into the vendor checkout.
 
 Open the localhost URL printed by Vite. Use a secure localhost context and a browser with a camera for the live run.
 Before requesting the camera, confirm the event list says `固定 digest 探針 ... 一致`. A mismatched or missing probe leaves subsequent MOD frames `unverified`; rebuild the E008 MOD and refresh the page before collecting evidence.

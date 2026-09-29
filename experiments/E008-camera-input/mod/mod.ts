@@ -75,7 +75,8 @@ export function onContextCreated(robot: Robot): void {
         const frame = await robot.camera.capture(FRAME_OPTIONS)
         if (generation !== current) return
         if (!frame || frame.imageType !== 'rgb565le' || !(frame.buffer instanceof ArrayBuffer)
-          || frame.width <= 0 || frame.height <= 0 || frame.buffer.byteLength !== frame.width * frame.height * 2) {
+          || frame.width !== FRAME_OPTIONS.width || frame.height !== FRAME_OPTIONS.height
+          || frame.buffer.byteLength !== FRAME_OPTIONS.width * FRAME_OPTIONS.height * 2) {
           emit({ kind: 'frame-error', captureSeq: ++captureSeq, error: 'invalid-frame' })
           return
         }

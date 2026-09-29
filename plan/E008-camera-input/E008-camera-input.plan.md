@@ -29,7 +29,7 @@ All tracked writes stay in the exact E008 paths below and in the E008 feature wo
 
 ## Status / Allowed Transitions
 
-- **Current**: `pr-open`; **Next actor**: Main Agent, then human reviewer; **Stage-local action**: publish the bounded checksum correction and completed camera evidence to draft PR #7 after owner confirmation of the new commit message. Independent Plan-Reviewer approved the contract, and independent implementation Reviewer approved the initial experiment on 2026-09-24. The live-run correction and evidence remain for human review.
+- **Current**: `pr-open`; **Next actor**: Main Agent, then human reviewer; **Stage-local action**: address bounded PR review feedback, verify and publish owner-confirmed follow-up commits, then return to human review of Ready PR #7. Independent Plan-Reviewer approved the contract, and independent implementation Reviewer approved the initial experiment on 2026-09-24. The owner-operated camera evidence and later review fixes are recorded in the E008 experiment.
 - **Execution model**: independent plan review, bounded implementation, independent verification, then topic commit, push, draft PR, and human review. Owner confirmation of the proposed commit message is required before commit.
 - **Allowed transitions**: `planned` → `creator-in-progress` → `review-ready` → `reviewer-in-progress` → `approved` or `needs-rework`; `needs-rework` → `creator-in-progress`; `approved` → `creator-in-progress` or `publish-in-progress`; `publish-in-progress` → `pr-open` or `merged`; `pr-open` → `needs-rework` or `merged`; `merged` is terminal.
 - No round cap. Human review precedes merge.

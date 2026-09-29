@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 
 const PINNED_COMMIT = 'b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322'
+const PINNED_MODDABLE_COMMIT = 'b6e06ba70506a7381ffb28e09e3175bf4e99f305'
 const PINNED_FONTBM_COMMIT = '7677b908523e909679f67cd5c170396bb9def1aa'
 const webRoot = fileURLToPath(new URL('../', import.meta.url))
 const repositoryRoot = path.resolve(webRoot, '../../..')
@@ -32,8 +33,30 @@ const vendorChanges = output('git', ['status', '--porcelain=v1', '--untracked-fi
 if (vendorChanges) throw new Error('BLOCKED: pinned vendor checkout has tracked or untracked changes')
 const moddable = process.env.MODDABLE
 if (!moddable) throw new Error('BLOCKED: MODDABLE 9.5.0 is not configured')
-const moddableVersion = (await readFile(path.join(moddable, 'tools/VERSION'), 'utf8')).trim()
-if (moddableVersion !== '9.5.0') throw new Error(`BLOCKED: Moddable 9.5.0 required, found ${moddableVersion}`)
+let moddableRoot, moddableVersion, moddableTools
+try {
+  moddableRoot = await realpath(moddable)
+  const checkoutRoot = await realpath(output('git', ['rev-parse', '--show-toplevel'], { cwd: moddableRoot }))
+  if (checkoutRoot !== moddableRoot) throw new Error('MODDABLE is not the checkout root')
+  const sourceCommit = output('git', ['rev-parse', 'HEAD'], { cwd: moddableRoot })
+  if (sourceCommit !== PINNED_MODDABLE_COMMIT) throw new Error(`Moddable source commit is ${sourceCommit}`)
+  const trackedChanges = output('git', ['status', '--porcelain=v1', '--untracked-files=no'], { cwd: moddableRoot })
+  if (trackedChanges) throw new Error('Moddable source has tracked changes')
+  moddableVersion = (await readFile(path.join(moddableRoot, 'tools/VERSION'), 'utf8')).trim()
+  if (moddableVersion !== '9.5.0') throw new Error(`Moddable 9.5.0 required, found ${moddableVersion}`)
+  moddableTools = {}
+  for (const name of ['mcconfig', 'xsc']) {
+    const binary = await realpath(output('which', [name]))
+    const info = await stat(binary)
+    if (!info.isFile() || (info.mode & 0o111) === 0) throw new Error(`${name} is not executable`)
+    const relative = path.relative(path.join(moddableRoot, 'build/bin'), binary)
+    if (!relative || relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative))
+      throw new Error(`${name} is outside the Moddable build/bin directory`)
+    moddableTools[name] = { path: binary, sha256: createHash('sha256').update(await readFile(binary)).digest('hex') }
+  }
+} catch (error) {
+  throw new Error(`BLOCKED: pinned Moddable source and tools could not be verified: ${String(error)}`)
+}
 let emccVersion
 try { emccVersion = output('emcc', ['--version']).split('\n')[0] }
 catch { throw new Error('BLOCKED: Emscripten 5.0.1 (emcc) is unavailable') }
@@ -87,6 +110,7 @@ for (const name of ['mc.js', 'mc.wasm']) {
 await cp(path.join(vendorRoot, 'web/simulator/assets/case/v1/shell.stl'),
   path.join(publicSimulator, 'assets/case/v1/shell.stl'))
 const provenance = { sourceCommit: PINNED_COMMIT, moddableVersion, emccVersion,
+  moddable: { path: moddableRoot, sourceCommit: PINNED_MODDABLE_COMMIT, tools: moddableTools },
   fontbm: { path: fontbmBinary, sourceCommit: fontbmCommit, sha256: fontbmSha256 }, sha256: hashes }
 await writeFile(provenancePath, `${JSON.stringify(provenance, null, 2)}\n`)
 console.log(JSON.stringify(provenance, null, 2))

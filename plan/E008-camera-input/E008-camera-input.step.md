@@ -62,6 +62,6 @@ created: 2026-09-24
 - Progression truth inputs: `analysis/E008-camera-input/requirements.md`, `analysis/E008-camera-input/technical-spec.md`, `plan/E008-camera-input/E008-camera-input.plan.md`.
 - Completion evidence inputs: `git worktree list --porcelain`, `experiments/E008-camera-input/EXPERIMENT.md`, `experiments/E008-camera-input/evidence/camera-run.md`, E008 TypeScript checks and independent review verdict.
 - Marker semantics: `[X]` exact one-to-one evidence; `[ ]` pending/planned/unproved; lowercase source `[x]` is pending and warns.
-- Published evidence: commits `1c3f705` and `d16e315` are on `origin/feat/andrew/camera-input-feasibility`; draft PR #7 is `https://github.com/a129924/coami/pull/7`. The later checksum correction and owner-run camera evidence are pending a new topic commit and PR update.
+- Published evidence: PR #7 (`https://github.com/a129924/coami/pull/7`) is open and Ready for human review. The checksum correction, owner-operated webcam/fallback/denial/restart evidence, and subsequent review fixes have been pushed; the current PR head and thread status must be checked live. The human merge boundary remains pending.
 - Tracker semantics: `check_all_succeeded` covers rendered head/contextual/Implementation/tail checkboxes; `check_impl_steps_succeeded` covers only Implementation Steps.
 - Owner-only updates: only the action owner may update after exact evidence; step-creator never updates an existing output.

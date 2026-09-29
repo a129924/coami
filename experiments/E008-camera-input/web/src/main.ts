@@ -139,10 +139,9 @@ function receiveTrace(currentGeneration: number, line: string): void {
     sourceStatus.textContent = source === 'synthetic' ? 'synthetic fallback' : source
     if (observer) statusFromObserver(observer)
     frameSize.textContent = `${record.width}×${record.height} · ${record.byteLength} bytes`
-    const host = result.host
-    const hostEvidence = host
-      ? ` · host #${host.sequence} ${host.source} ${host.width}×${host.height} ${host.byteLength} bytes digest=${host.digest} 亮度=${host.meanLuma}`
-      : ''
+    const hosts = result.hosts ?? (result.host ? [result.host] : [])
+    const hostEvidence = hosts.map((host) =>
+      ` · host #${host.sequence} ${host.source} ${host.width}×${host.height} ${host.byteLength} bytes digest=${host.digest} 亮度=${host.meanLuma}`).join('')
     log(`MOD #${record.captureSeq} · ${source} · ${reason} · ${record.width}×${record.height} ${record.byteLength} bytes · digest=${record.digest} · 亮度=${record.meanLuma}${hostEvidence}`)
     if (pendingCapture?.generation === currentGeneration) {
       window.clearTimeout(pendingCapture.timer)
