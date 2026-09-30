@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coami E011 · 螢幕動作選單</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">COAMI · EXPERIMENT E011</div>
+        <h1>螢幕動作選單</h1>
+        <p>直接在模擬 Robot 螢幕內滑動清單，再點選一個動作；本頁不提供外部動作控制。</p>
+      </header>
+      <section class="workspace">
+        <div class="simulator"><canvas id="viewport" aria-label="Coami 3D simulator；請操作 Robot 螢幕"></canvas><canvas id="screen" width="320" height="240" hidden></canvas></div>
+        <aside>
+          <h2>驗證紀錄</h2>
+          <dl>
+            <dt>Simulator</dt><dd id="simulator-status">載入中</dd>
+            <dt>MOD</dt><dd id="mod-status">等待啟動</dd>
+            <dt>觸碰</dt><dd id="touch-count">0</dd>
+            <dt>選取／動作</dt><dd id="run-status">尚未執行</dd>
+          </dl>
+          <p class="hint">重新啟動只重設模擬器，不會派送動作。</p>
+          <button id="restart">重新啟動模擬器</button>
+          <h3>事件</h3><ol id="events" aria-live="polite"></ol>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
