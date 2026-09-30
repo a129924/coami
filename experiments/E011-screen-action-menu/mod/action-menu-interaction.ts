@@ -4,11 +4,33 @@ export type Terminal = 'completed' | 'failed' | 'cancelled'
 export type Selection = { runSeq: number; actionId: ActionId }
 export type Result = { actionId: ActionId; status: Terminal }
 
-type Candidate = { touchId: number; actionId: ActionId | null; startY: number; moved: boolean }
+type TouchPoint = { x: number; y: number }
+type Candidate = { touchId: number; actionId: ActionId | null; start: TouchPoint; moved: boolean }
 type ActiveRun = Selection
 
 export const TAP_SLOP = 10
+export const MENU_GEOMETRY = {
+  width: 320, rowLeft: 12, rowRight: 12, rowTop: 50,
+  rowHeight: 25, rowVisualHeight: 23, visibleHeight: 145,
+} as const
 export type MenuPhase = 'ready' | 'running' | Terminal
+
+export function rowTopInViewport(index: number, scrollOffset: number): number | null {
+  const top = index * MENU_GEOMETRY.rowHeight - scrollOffset
+  if (top + MENU_GEOMETRY.rowVisualHeight <= 0 || top >= MENU_GEOMETRY.visibleHeight) return null
+  return top
+}
+
+export function visibleRowIndex(x: number, y: number, scrollOffset: number, count: number): number | null {
+  const geometry = MENU_GEOMETRY
+  if (x < geometry.rowLeft || x >= geometry.width - geometry.rowRight) return null
+  if (y < geometry.rowTop || y >= geometry.rowTop + geometry.visibleHeight) return null
+  const index = Math.floor((y - geometry.rowTop + scrollOffset) / geometry.rowHeight)
+  if (index < 0 || index >= count) return null
+  const top = rowTopInViewport(index, scrollOffset)
+  const localY = y - geometry.rowTop
+  return top !== null && localY >= top && localY < top + geometry.rowVisualHeight ? index : null
+}
 
 export function menuFooterText(phase: MenuPhase): string {
   return phase === 'running' ? '請等待完成' : '滑動瀏覽，點選執行'
@@ -72,18 +94,18 @@ export class ActionMenuInteraction {
   get busy(): boolean { return this.activeRun !== null }
   get result(): Result | null { return this.lastResult }
 
-  begin(touchId: number, actionId: ActionId | null, y: number): boolean {
+  begin(touchId: number, actionId: ActionId | null, point: TouchPoint): boolean {
     if (this.activeRun !== null || (this.candidate !== null && this.candidate.touchId !== touchId)) return false
     // The pinned simulator can end a captured pointer without forwarding a Piu
     // cancel callback. Its next pointer reuses touch ID 0, which starts fresh.
-    this.candidate = { touchId, actionId, startY: y, moved: false }
+    this.candidate = { touchId, actionId, start: point, moved: false }
     return true
   }
 
-  move(touchId: number, y: number): void {
+  move(touchId: number, point: TouchPoint): void {
     const candidate = this.candidate
     if (!candidate || candidate.touchId !== touchId) return
-    if (Math.abs(y - candidate.startY) > TAP_SLOP) candidate.moved = true
+    if (Math.abs(point.x - candidate.start.x) > TAP_SLOP || Math.abs(point.y - candidate.start.y) > TAP_SLOP) candidate.moved = true
   }
 
   cancel(touchId: number): void {

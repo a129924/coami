@@ -73,6 +73,8 @@
 | Browser style | `experiments/E011-screen-action-menu/web/src/style.css` |
 | Interaction tests | `experiments/E011-screen-action-menu/web/src/action-menu-interaction.test.ts` |
 | Result screenshot | `experiments/E011-screen-action-menu/evidence/action-menu-result.jpg` |
+| PR review-fix record | `experiments/E011-screen-action-menu/evidence/pr-review-fix.md` |
+| PR review-fix screenshot | `experiments/E011-screen-action-menu/evidence/pr-review-fix.jpg` |
 
 ## Implementation Steps
 
@@ -83,7 +85,7 @@
 
 ## Validation / Acceptance Checks
 
-- **TestCase**：17 項 snapshot/mapping；捲動至初始不可見項目後選取；純滑動／選單外／移出／取消均無 run；busy 不排隊；failure/cancel/stale terminal 不顯示成功。
+- **TestCase**：17 項 snapshot/mapping；捲動至初始不可見項目後選取；純滑動／選單外／移出／取消均無 run；側邊留白、列間空白、裁切列邊界與水平拖曳不誤選；busy 不排隊；failure/cancel/stale terminal 不顯示成功。
 - 純互動測試不得載入 `piu/MC`；MOD/Web strict typecheck、Node tests、XS archive 與 Vite build 必須通過。
 - 同次 pinned-simulator evidence 必須核對可見標籤、selected action ID、一次開始、可辨識動作、matching terminal 與終態畫面。
 - 所有 tracked writes 必須在 Artifact Paths；ReadOnly、Modify、Deleted 邊界不變。

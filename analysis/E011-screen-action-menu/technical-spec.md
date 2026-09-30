@@ -8,6 +8,8 @@
 
 選單至少有一項初始不可見。只有同一 touch 在可見列開始與結束、未被識別為滑動且未取消時，才建立一個遞增 `run_seq` 與對應 action ID。滑動、選單外、移出或取消沒有 run；動作忙碌時新觸碰不排隊。matching `completed|failed|cancelled` 才解除鎖定並更新畫面；不相符或遲到的 terminal 不得覆寫結果。
 
+列位於 `clip: true` 的 50–195 viewport，命中測試與實際列的 x 範圍、23px 高度、列間空白及裁切邊界共用同一幾何規則。觸控點以 x/y 雙軸的 10px slop 判定是否仍為 tap。
+
 ## Build 與 evidence
 
 Node tests 僅載入純 interaction state。MOD build 會收錄 `mod`、catalog 與 interaction modules；web build 使用 pinned simulator assets。每行 `COAMI11|` trace 是 E011 本地 evidence，不是 device/server contract。通過需同時有測試、typecheck、archive、Vite build 和一次 Robot 螢幕實際操作錄影／trace。

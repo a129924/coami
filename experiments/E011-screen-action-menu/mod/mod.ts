@@ -2,7 +2,7 @@ import 'piu/MC'
 import Timer from 'timer'
 import { Emotion } from 'face-state'
 import { ACTION_MENU, actionFor, type ActionId } from './action-catalog'
-import { ActionMenuInteraction, MenuScrollState, menuFooterText, type Result, type Selection, type Terminal } from './action-menu-interaction'
+import { ActionMenuInteraction, MENU_GEOMETRY, MenuScrollState, menuFooterText, rowTopInViewport, visibleRowIndex, type Result, type Selection, type Terminal } from './action-menu-interaction'
 
 type Pose = { rotation: { y: number; p: number; r: number } }
 type Robot = {
@@ -13,9 +13,7 @@ type Robot = {
 
 const ZERO: Pose = { rotation: { y: 0, p: 0, r: 0 } }
 const pose = (y: number, p: number): Pose => ({ rotation: { y, p, r: 0 } })
-const ROW_TOP = 50
-const ROW_HEIGHT = 25
-const VISIBLE_HEIGHT = 145
+const { rowTop: ROW_TOP, rowHeight: ROW_HEIGHT, visibleHeight: VISIBLE_HEIGHT } = MENU_GEOMETRY
 const emit = (message: Record<string, unknown>): void => trace(`COAMI11|${JSON.stringify(message)}\n`)
 const wait = (milliseconds: number): Promise<void> => new Promise((resolve) => { Timer.set(resolve, milliseconds) })
 
@@ -27,10 +25,9 @@ export function onContextCreated(robot: Robot): void {
   const rowStyle = new Style({ font: 'k8x12-12', color: '#263538', horizontal: 'left', vertical: 'middle' })
   const scroll = new MenuScrollState(Math.max(0, ACTION_MENU.length * ROW_HEIGHT - VISIBLE_HEIGHT))
 
-  const actionAt = (y: number): ActionId | null => {
-    if (y < ROW_TOP || y >= ROW_TOP + VISIBLE_HEIGHT) return null
-    const index = Math.floor((y - ROW_TOP + scroll.offset) / ROW_HEIGHT)
-    return ACTION_MENU[index]?.id ?? null
+  const actionAt = (x: number, y: number): ActionId | null => {
+    const index = visibleRowIndex(x, y, scroll.offset, ACTION_MENU.length)
+    return index === null ? null : ACTION_MENU[index].id
   }
   const resultText = (result: Result | null, activeLabel: string | null): string => {
     if (activeLabel) return `執行中：${activeLabel}`
@@ -43,34 +40,38 @@ export function onContextCreated(robot: Robot): void {
     const phase = activeLabel ? 'running' : displayResult?.status ?? 'ready'
     const rows: PiuContainer[] = []
     for (let index = 0; index < ACTION_MENU.length; index += 1) {
-      const top = ROW_TOP + index * ROW_HEIGHT - scroll.offset
-      if (top + ROW_HEIGHT <= ROW_TOP || top >= ROW_TOP + VISIBLE_HEIGHT) continue
+      const top = rowTopInViewport(index, scroll.offset)
+      if (top === null) continue
       rows.push(new Container(null, {
-        name: `action-row-${ACTION_MENU[index].id}`, left: 12, right: 12, top, height: ROW_HEIGHT - 2, skin: rowSkin,
+        name: `action-row-${ACTION_MENU[index].id}`, left: MENU_GEOMETRY.rowLeft, right: MENU_GEOMETRY.rowRight,
+        top, height: MENU_GEOMETRY.rowVisualHeight, skin: rowSkin,
         contents: [new Label(null, { left: 8, right: 4, top: 0, bottom: 0, string: ACTION_MENU[index].label, style: rowStyle })],
       }))
     }
+    const rowViewport = new Container(null, {
+      left: 0, right: 0, top: ROW_TOP, height: VISIBLE_HEIGHT, clip: true, contents: rows,
+    })
     const root = new Container(null, {
       name: 'action-menu-screen', left: 0, right: 0, top: 0, bottom: 0, skin: screenSkin, active: true,
       contents: [
         new Label(null, { left: 8, right: 8, top: 7, height: 30, string: resultText(displayResult, activeLabel), style: titleStyle }),
-        ...rows,
+        rowViewport,
         new Label(null, { left: 8, right: 8, top: 204, height: 27, string: menuFooterText(phase), style: titleStyle }),
       ],
       Behavior: class extends Behavior {
-        onTouchBegan(_content: PiuContainer, touchId: number, _x: number, y: number): void {
+        onTouchBegan(_content: PiuContainer, touchId: number, x: number, y: number): void {
           if (scroll.recover(touchId)) {
             // A viewport leave can suppress Piu's cancel/end callbacks. No menu
             // redraw occurred, so restore the offset shown on the screen.
             emit({ kind: 'touch', phase: 'recovered', touch_id: touchId })
           }
-          const actionId = actionAt(y)
-          const accepted = interaction.begin(touchId, actionId, y)
+          const actionId = actionAt(x, y)
+          const accepted = interaction.begin(touchId, actionId, { x, y })
           if (accepted) scroll.begin(touchId, y)
           emit({ kind: 'touch', phase: 'began', touch_id: touchId, action_id: actionId, accepted })
         }
-        onTouchMoved(_content: PiuContainer, touchId: number, _x: number, y: number): void {
-          interaction.move(touchId, y)
+        onTouchMoved(_content: PiuContainer, touchId: number, x: number, y: number): void {
+          interaction.move(touchId, { x, y })
           if (scroll.move(touchId, y)) emit({ kind: 'scroll', offset: scroll.offset })
         }
         onTouchCancelled(_content: PiuContainer, touchId: number): void {
@@ -78,10 +79,10 @@ export function onContextCreated(robot: Robot): void {
           scroll.cancel(touchId)
           emit({ kind: 'touch', phase: 'cancelled', touch_id: touchId })
         }
-        onTouchEnded(_content: PiuContainer, touchId: number, _x: number, y: number): void {
-          interaction.move(touchId, y)
+        onTouchEnded(_content: PiuContainer, touchId: number, x: number, y: number): void {
+          interaction.move(touchId, { x, y })
           if (scroll.move(touchId, y)) emit({ kind: 'scroll', offset: scroll.offset })
-          const selection = interaction.end(touchId, actionAt(y))
+          const selection = interaction.end(touchId, actionAt(x, y))
           const scrolled = scroll.end(touchId)
           emit({ kind: 'touch', phase: 'ended', touch_id: touchId, run_seq: selection?.runSeq ?? null, action_id: selection?.actionId ?? null })
           if (scrolled) showMenu()

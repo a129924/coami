@@ -17,6 +17,7 @@ Robot 螢幕是否能在不使用網頁外動作控制的前提下，完成捲�
 - 2026-09-30：in-app Browser 在 localhost 的 pinned simulator 重新完成螢幕滑動、初始不可見的 `head.center` 選取、同次可見動作與 matching terminal；詳見 `evidence/action-menu-run.md`、`.webm` 與修正後 result screenshot。
 - 負向實測：三次純滑動無 run、busy 連點無排隊、指標移出無 run 且後續點選能對應畫面可見項目。forced action failure 與實際收到 cancel callback 的 offset 還原僅由純測試覆蓋。
 - 2026-09-30：owner 回報已在 localhost 手動點選 Robot 螢幕，操作正常；這是使用者驗證回報，非獨立 code review。
+- 2026-09-30：PR #10 的三項 inline review suggestions 已列為 ADDRESS，修正部分列裁切、空白區命中與水平拖曳誤選；13/13 tests、typecheck、MOD archive、build 和 pinned-simulator 回歸通過，詳見 `evidence/pr-review-fix.md` 與 `pr-review-fix.jpg`。
 
 ## Decision
 
