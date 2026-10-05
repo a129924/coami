@@ -36,3 +36,9 @@ Owner選定probabilities[原始choice]、全部三stage所有choice須達門檻�
 Follow-up verification：36/36 offline unittest、Ruff lint/format、frozen oracle validator通過；既存回傳offline replay保留原choice與模型FAIL。缺門檻1次、非法文字／空值2次CLI preflight均BLOCKED、零case／API calls，非新模型驗證。原live-results.jsonl逐byte不變，原run-summary的FAIL物件不變；只追加preflight紀錄。
 
 獨立bounded technical review最終approved，無blocking issues。複審前指出CLI type=float繞過protected preflight，已改由run_live解析並增加CLI regressions；不輸出非法原值。Owner TC08仍human-check，實際門檻選定仍不在此topic；維持Draft PR，不merge或release。
+
+## PR comment review and fix — discussion_r4181731362
+
+Decision: ADDRESS。Reviewer指出bare `--min-choice-probability`在argparse退出、漏寫preflight summary，確實違反缺門檻契約。僅修改此option為nargs="?"／const=None，讓缺值進既有protected preflight，仍無default門檻。
+
+Verification: 先用CLI regression重現RED，再修正後37/37 offline unittest及Ruff lint/format PASS；省略flag、bare flag在--live前／後均exit2、MISSING_GATE_THRESHOLD、BLOCKED summary、兩suite completed=0、零SDK factory／case loading、stderr空。測試mock evidence writes，不新增live或preflight run。原live-results與run-summary整份檔案未改；原FAIL、人審pending及oracle保留。

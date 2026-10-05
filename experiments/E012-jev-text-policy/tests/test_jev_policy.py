@@ -339,6 +339,45 @@ class PolicyTests(unittest.TestCase):
             save.call_args.args[1]["blocked_code"], "MISSING_GATE_THRESHOLD"
         )
 
+    def test_TC02_main_missing_threshold_forms_record_blocked_summary(self) -> None:
+        real_run = p.run_live
+        for args in (
+            ["--live"],
+            ["--live", "--min-choice-probability"],
+            ["--min-choice-probability", "--live"],
+        ):
+            with self.subTest(args=args):
+                factory = MagicMock()
+                stdout, stderr = io.StringIO(), io.StringIO()
+                with (
+                    patch.object(sys, "argv", ["jev_policy.py", *args]),
+                    patch.object(
+                        p,
+                        "run_live",
+                        side_effect=lambda **kwargs: real_run(
+                            factory=factory, **kwargs
+                        ),
+                    ),
+                    patch.object(Path, "mkdir"),
+                    patch.object(p, "load_cases") as cases,
+                    patch.object(p, "save_summary") as save,
+                    patch.object(p, "metadata", return_value={}),
+                    redirect_stdout(stdout),
+                    patch("sys.stderr", stderr),
+                ):
+                    self.assertEqual(p.main(), 2)
+                factory.assert_not_called()
+                cases.assert_not_called()
+                save.assert_called_once()
+                summary = save.call_args.args[1]
+                self.assertEqual(summary["automatic_verdict"], "BLOCKED")
+                self.assertEqual(summary["blocked_code"], "MISSING_GATE_THRESHOLD")
+                self.assertFalse(summary["adoption_gate"]["configured"])
+                for suite in ("policy8", "oracle15"):
+                    self.assertEqual(summary["suites"][suite]["completed"], 0)
+                self.assertEqual(stderr.getvalue(), "")
+                self.assertIn("MISSING_GATE_THRESHOLD", stdout.getvalue())
+
     def test_TC02_main_invalid_threshold_records_fixed_blocked_code_without_echo(
         self,
     ) -> None:

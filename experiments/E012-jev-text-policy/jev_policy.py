@@ -825,6 +825,8 @@ def main() -> int:
     )
     parser.add_argument(
         "--min-choice-probability",
+        nargs="?",
+        const=None,  # Bare option follows the same protected preflight as absence.
         default=None,
         help="Caller-selected threshold in [0,1], required for live; no default/calibration",
     )

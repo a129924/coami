@@ -326,3 +326,153 @@ CLI INVALID-CONFIG CHECK (synthetic text / empty):
 E012 20261005T072345Z-9aaa024c: BLOCKED human-check=human-check code=INVALID_GATE_THRESHOLD
 EXIT: 2
 After lexical-invalid fix: original live bytes and original FAIL summary object remain hash-identical.
+
+PR #11 discussion_r4181731362 — bare threshold flag regression RED
+COMMAND: experiments/E012-jev-text-policy/.venv/bin/python -m unittest discover -s experiments/E012-jev-text-policy/tests -k missing_threshold_forms -v
+test_TC02_main_missing_threshold_forms_record_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_missing_threshold_forms_record_blocked_summary) ...
+  test_TC02_main_missing_threshold_forms_record_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_missing_threshold_forms_record_blocked_summary) (args=['--live', '--min-choice-probability']) ... ERROR
+  test_TC02_main_missing_threshold_forms_record_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_missing_threshold_forms_record_blocked_summary) (args=['--min-choice-probability', '--live']) ... ERROR
+
+======================================================================
+ERROR: test_TC02_main_missing_threshold_forms_record_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_missing_threshold_forms_record_blocked_summary) (args=['--live', '--min-choice-probability'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1943, in _parse_known_args2
+    namespace, args = self._parse_known_args(args, namespace, intermixed)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2184, in _parse_known_args
+    start_index = consume_optional(start_index)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2103, in consume_optional
+    arg_count = match_argument(action, selected_patterns)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2298, in _match_argument
+    raise ArgumentError(action, msg)
+argparse.ArgumentError: argument --min-choice-probability: expected one argument
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 368, in test_TC02_main_missing_threshold_forms_record_blocked_summary
+    self.assertEqual(p.main(), 2)
+                     ^^^^^^^^
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/jev_policy.py", line 831, in main
+    args = parser.parse_args()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1904, in parse_args
+    args, argv = self.parse_known_args(args, namespace)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1914, in parse_known_args
+    return self._parse_known_args2(args, namespace, intermixed=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1945, in _parse_known_args2
+    self.error(str(err))
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2650, in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2637, in exit
+    _sys.exit(status)
+SystemExit: 2
+
+======================================================================
+ERROR: test_TC02_main_missing_threshold_forms_record_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_missing_threshold_forms_record_blocked_summary) (args=['--min-choice-probability', '--live'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1943, in _parse_known_args2
+    namespace, args = self._parse_known_args(args, namespace, intermixed)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2184, in _parse_known_args
+    start_index = consume_optional(start_index)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2103, in consume_optional
+    arg_count = match_argument(action, selected_patterns)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2298, in _match_argument
+    raise ArgumentError(action, msg)
+argparse.ArgumentError: argument --min-choice-probability: expected one argument
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 368, in test_TC02_main_missing_threshold_forms_record_blocked_summary
+    self.assertEqual(p.main(), 2)
+                     ^^^^^^^^
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/jev_policy.py", line 831, in main
+    args = parser.parse_args()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1904, in parse_args
+    args, argv = self.parse_known_args(args, namespace)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1914, in parse_known_args
+    return self._parse_known_args2(args, namespace, intermixed=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1945, in _parse_known_args2
+    self.error(str(err))
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2650, in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2637, in exit
+    _sys.exit(status)
+SystemExit: 2
+
+----------------------------------------------------------------------
+Ran 1 test in 0.006s
+
+FAILED (errors=2)
+EXIT: 1
+
+PR comment fix GREEN verification
+COMMAND: experiments/E012-jev-text-policy/.venv/bin/python -m unittest discover -s experiments/E012-jev-text-policy/tests -v
+test_TC01_all_23_expected_paths_offline (test_jev_policy.PolicyTests.test_TC01_all_23_expected_paths_offline) ... ok
+test_TC01_handoff_skips_downstream_and_preserves_destination (test_jev_policy.PolicyTests.test_TC01_handoff_skips_downstream_and_preserves_destination) ... ok
+test_TC02_env_loader_hard_failure_classification (test_jev_policy.PolicyTests.test_TC02_env_loader_hard_failure_classification) ... ok
+test_TC02_gate_requires_valid_external_threshold (test_jev_policy.PolicyTests.test_TC02_gate_requires_valid_external_threshold) ... ok
+test_TC02_invalid_candidate_never_calls_model (test_jev_policy.PolicyTests.test_TC02_invalid_candidate_never_calls_model) ... ok
+test_TC02_invalid_response_cannot_pass_even_zero_threshold (test_jev_policy.PolicyTests.test_TC02_invalid_response_cannot_pass_even_zero_threshold) ... ok
+test_TC02_inventory_and_hash_preflight (test_jev_policy.PolicyTests.test_TC02_inventory_and_hash_preflight) ... ok
+test_TC02_main_invalid_threshold_records_fixed_blocked_code_without_echo (test_jev_policy.PolicyTests.test_TC02_main_invalid_threshold_records_fixed_blocked_code_without_echo) ... ok
+test_TC02_main_missing_threshold_forms_record_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_missing_threshold_forms_record_blocked_summary) ... ok
+test_TC02_main_numeric_text_threshold_parses_before_key_preflight (test_jev_policy.PolicyTests.test_TC02_main_numeric_text_threshold_parses_before_key_preflight) ... ok
+test_TC02_missing_gate_threshold_no_factory_or_cases (test_jev_policy.PolicyTests.test_TC02_missing_gate_threshold_no_factory_or_cases) ... ok
+test_TC02_missing_key_no_client_no_case_results (test_jev_policy.PolicyTests.test_TC02_missing_key_no_client_no_case_results) ... ok
+test_TC02_missing_source (test_jev_policy.PolicyTests.test_TC02_missing_source) ... ok
+test_TC02_non_json_blocks (test_jev_policy.PolicyTests.test_TC02_non_json_blocks) ... ok
+test_TC02_probability_and_confidence_contract (test_jev_policy.PolicyTests.test_TC02_probability_and_confidence_contract) ... ok
+test_TC02_unknown_missing_malformed_response (test_jev_policy.PolicyTests.test_TC02_unknown_missing_malformed_response) ... ok
+test_TC02_wrong_id_and_type (test_jev_policy.PolicyTests.test_TC02_wrong_id_and_type) ... ok
+test_TC03_both_candidate_mismatch_directions_still_evaluate_output (test_jev_policy.PolicyTests.test_TC03_both_candidate_mismatch_directions_still_evaluate_output) ... ok
+test_TC03_context_gate_rejects_both_choices_no_output_or_replacement (test_jev_policy.PolicyTests.test_TC03_context_gate_rejects_both_choices_no_output_or_replacement) ... ok
+test_TC03_faults_block_without_retry_or_error_body (test_jev_policy.PolicyTests.test_TC03_faults_block_without_retry_or_error_body) ... ok
+test_TC03_gate_boundary_uses_unrounded_selected_probability (test_jev_policy.PolicyTests.test_TC03_gate_boundary_uses_unrounded_selected_probability) ... ok
+test_TC03_gate_rejects_every_input_choice_and_stops (test_jev_policy.PolicyTests.test_TC03_gate_rejects_every_input_choice_and_stops) ... ok
+test_TC03_invalid_context_skips_output (test_jev_policy.PolicyTests.test_TC03_invalid_context_skips_output) ... ok
+test_TC03_low_confidence_and_argmax_tie_are_valid (test_jev_policy.PolicyTests.test_TC03_low_confidence_and_argmax_tie_are_valid) ... ok
+test_TC03_output_gate_rejects_every_choice_no_delivery (test_jev_policy.PolicyTests.test_TC03_output_gate_rejects_every_choice_no_delivery) ... ok
+test_TC03_output_timeout_blocks_and_marks_incomplete (test_jev_policy.PolicyTests.test_TC03_output_timeout_blocks_and_marks_incomplete) ... ok
+test_TC03_sdk_validation_error_is_fail_before_generic_http (test_jev_policy.PolicyTests.test_TC03_sdk_validation_error_is_fail_before_generic_http) ... ok
+test_TC03_uncertain_and_disallowed_output_never_delivers (test_jev_policy.PolicyTests.test_TC03_uncertain_and_disallowed_output_never_delivers) ... ok
+test_TC04_correct_raw_choice_rejected_is_not_model_failure (test_jev_policy.PolicyTests.test_TC04_correct_raw_choice_rejected_is_not_model_failure) ... ok
+test_TC04_gate_threshold_not_sent_to_model (test_jev_policy.PolicyTests.test_TC04_gate_threshold_not_sent_to_model) ... ok
+test_TC04_oracle_and_nested_metadata_do_not_leak (test_jev_policy.PolicyTests.test_TC04_oracle_and_nested_metadata_do_not_leak) ... ok
+test_TC04_partial_valid_denominator (test_jev_policy.PolicyTests.test_TC04_partial_valid_denominator) ... ok
+test_TC04_router_does_not_observe_changed_evaluator_expectations (test_jev_policy.PolicyTests.test_TC04_router_does_not_observe_changed_evaluator_expectations) ... ok
+test_TC04_skip_denominators_and_fail_priority (test_jev_policy.PolicyTests.test_TC04_skip_denominators_and_fail_priority) ... ok
+test_TC05_factory_logging_disabled_cleanup_and_sdk_settings (test_jev_policy.PolicyTests.test_TC05_factory_logging_disabled_cleanup_and_sdk_settings) ... ok
+test_TC05_logged_method_and_complete_runner_flush (test_jev_policy.PolicyTests.test_TC05_logged_method_and_complete_runner_flush) ... ok
+test_TC07_gate_replay_retains_original_fail_and_valid_denominator (test_jev_policy.PolicyTests.test_TC07_gate_replay_retains_original_fail_and_valid_denominator) ... ok
+
+----------------------------------------------------------------------
+Ran 37 tests in 0.022s
+
+OK
+EXIT: 0
+
+PR comment fix GREEN verification
+COMMAND: ruff check experiments/E012-jev-text-policy
+All checks passed!
+EXIT: 0
+
+PR comment fix GREEN verification
+COMMAND: ruff format --check experiments/E012-jev-text-policy
+2 files already formatted
+EXIT: 0
+
+PR comment fix history check PASS: live-results.jsonl and run-summary.json entirely byte-identical to 8cf532f; original FAIL preserved, no new runs.
