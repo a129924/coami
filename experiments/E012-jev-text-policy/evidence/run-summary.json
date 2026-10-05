@@ -1,0 +1,1048 @@
+{
+  "runs": [
+    {
+      "run_id": "20261005T042808Z-1a07e13b",
+      "automatic_verdict": "FAIL",
+      "has_failures": true,
+      "incomplete": false,
+      "interrupted": false,
+      "blocked_code": null,
+      "human_review": "human-check",
+      "final_verdict": "FAIL",
+      "suites": {
+        "policy8": {
+          "total": 8,
+          "completed": 8,
+          "case_verdicts": {
+            "PASS": 8
+          },
+          "stages": {
+            "input_policy": {
+              "statuses": {
+                "VALID": 8
+              },
+              "matches": 8
+            },
+            "context_sufficiency": {
+              "statuses": {
+                "NOT_APPLICABLE": 8
+              },
+              "matches": 0
+            },
+            "output_policy": {
+              "statuses": {
+                "VALID": 4,
+                "SKIPPED": 4
+              },
+              "matches": 4
+            }
+          }
+        },
+        "oracle15": {
+          "total": 15,
+          "completed": 15,
+          "case_verdicts": {
+            "PASS": 14,
+            "FAIL": 1
+          },
+          "stages": {
+            "input_policy": {
+              "statuses": {
+                "VALID": 15
+              },
+              "matches": 15
+            },
+            "context_sufficiency": {
+              "statuses": {
+                "VALID": 15
+              },
+              "matches": 14
+            },
+            "output_policy": {
+              "statuses": {
+                "VALID": 15
+              },
+              "matches": 15
+            }
+          }
+        }
+      },
+      "context_sufficiency": {
+        "correct": 14,
+        "valid_predictions": 15,
+        "total": 15,
+        "accuracy": 0.9333333333333333,
+        "coverage": 1.0,
+        "correct_over_total": 0.9333333333333333,
+        "confusion_matrix": {
+          "SUFFICIENT": {
+            "SUFFICIENT": 5,
+            "INSUFFICIENT": 0
+          },
+          "INSUFFICIENT": {
+            "SUFFICIENT": 1,
+            "INSUFFICIENT": 9
+          }
+        },
+        "groups": {
+          "topic": {
+            "toy_car": {
+              "observed": 3,
+              "valid": 3,
+              "correct": 2
+            },
+            "water": {
+              "observed": 3,
+              "valid": 3,
+              "correct": 3
+            },
+            "ball": {
+              "observed": 3,
+              "valid": 3,
+              "correct": 3
+            },
+            "hug": {
+              "observed": 1,
+              "valid": 1,
+              "correct": 1
+            },
+            "food": {
+              "observed": 1,
+              "valid": 1,
+              "correct": 1
+            },
+            "sleep": {
+              "observed": 1,
+              "valid": 1,
+              "correct": 1
+            },
+            "parent": {
+              "observed": 1,
+              "valid": 1,
+              "correct": 1
+            },
+            "book": {
+              "observed": 1,
+              "valid": 1,
+              "correct": 1
+            },
+            "outside": {
+              "observed": 1,
+              "valid": 1,
+              "correct": 1
+            }
+          },
+          "context_type": {
+            "clear": {
+              "observed": 5,
+              "valid": 5,
+              "correct": 5
+            },
+            "ambiguous": {
+              "observed": 5,
+              "valid": 5,
+              "correct": 4
+            },
+            "irrelevant": {
+              "observed": 5,
+              "valid": 5,
+              "correct": 5
+            }
+          },
+          "expected_label": {
+            "SUFFICIENT": {
+              "observed": 5,
+              "valid": 5,
+              "correct": 5
+            },
+            "INSUFFICIENT": {
+              "observed": 10,
+              "valid": 10,
+              "correct": 9
+            }
+          }
+        },
+        "contrastive_topics": {
+          "toy_car": {
+            "observed": 3,
+            "valid": 3,
+            "correct": 2
+          },
+          "water": {
+            "observed": 3,
+            "valid": 3,
+            "correct": 3
+          },
+          "ball": {
+            "observed": 3,
+            "valid": 3,
+            "correct": 3
+          }
+        },
+        "contrastive_cases": {
+          "toy_car": [
+            {
+              "id": "toy_car_clear_001",
+              "context_type": "clear",
+              "sufficiency": {
+                "status": "VALID",
+                "choice": "SUFFICIENT",
+                "confidence": 0.68,
+                "probabilities": {
+                  "SUFFICIENT": 0.84,
+                  "INSUFFICIENT": 0.16
+                },
+                "error_code": null,
+                "http_status": null,
+                "skip_reason": null,
+                "request": {
+                  "state": {
+                    "background": "沒有其他可用背景；只依下列近期對話與孩子最新輸入判斷。",
+                    "conversation": [
+                      {
+                        "speaker": "parent",
+                        "text": "你想玩桌上的紅色小汽車嗎？"
+                      },
+                      {
+                        "speaker": "child",
+                        "text": "嗯，玩。"
+                      },
+                      {
+                        "speaker": "parent",
+                        "text": "那台紅色車車在桌上。"
+                      }
+                    ],
+                    "utterance": "寶寶 車車"
+                  },
+                  "model": "jev-1.13.0",
+                  "questions": {
+                    "context_sufficiency": {
+                      "type": "choice",
+                      "instructions": "只依可見文字，判斷是否已足以支持一個合理、低風險的主要意思，讓對話繼續。不要將關鍵字重疊當作充分證據，不借用影像、手勢或過去記憶。",
+                      "criteria": {
+                        "SUFFICIENT": "可見文字足以支持一個合理、低風險的主要 interpretation，不需先取得更多關鍵資訊即可繼續 conversation；不要求百分之百確定。",
+                        "INSUFFICIENT": "至少兩個合理 interpretation 會導向不同的後續回應，應先取得關鍵資訊；目前需要釐清一件事。"
+                      }
+                    }
+                  }
+                },
+                "expected": "SUFFICIENT",
+                "matches": true
+              },
+              "action": "DELIVER_ANSWER",
+              "expected_action": "DELIVER_ANSWER",
+              "verdict": "PASS"
+            },
+            {
+              "id": "toy_car_ambiguous_001",
+              "context_type": "ambiguous",
+              "sufficiency": {
+                "status": "VALID",
+                "choice": "SUFFICIENT",
+                "confidence": 0.53,
+                "probabilities": {
+                  "INSUFFICIENT": 0.24,
+                  "SUFFICIENT": 0.76
+                },
+                "error_code": null,
+                "http_status": null,
+                "skip_reason": null,
+                "request": {
+                  "state": {
+                    "background": "沒有其他可用背景；只依下列近期對話與孩子最新輸入判斷。",
+                    "conversation": [
+                      {
+                        "speaker": "parent",
+                        "text": "桌上有玩具車，窗外也有車經過。"
+                      },
+                      {
+                        "speaker": "child",
+                        "text": "車車。"
+                      },
+                      {
+                        "speaker": "parent",
+                        "text": "你可以在這裡玩，也可以到窗邊看。"
+                      }
+                    ],
+                    "utterance": "寶寶 車車"
+                  },
+                  "model": "jev-1.13.0",
+                  "questions": {
+                    "context_sufficiency": {
+                      "type": "choice",
+                      "instructions": "只依可見文字，判斷是否已足以支持一個合理、低風險的主要意思，讓對話繼續。不要將關鍵字重疊當作充分證據，不借用影像、手勢或過去記憶。",
+                      "criteria": {
+                        "SUFFICIENT": "可見文字足以支持一個合理、低風險的主要 interpretation，不需先取得更多關鍵資訊即可繼續 conversation；不要求百分之百確定。",
+                        "INSUFFICIENT": "至少兩個合理 interpretation 會導向不同的後續回應，應先取得關鍵資訊；目前需要釐清一件事。"
+                      }
+                    }
+                  }
+                },
+                "expected": "INSUFFICIENT",
+                "matches": false
+              },
+              "action": "BLOCK",
+              "expected_action": "DELIVER_QUESTION",
+              "verdict": "FAIL"
+            },
+            {
+              "id": "toy_car_irrelevant_001",
+              "context_type": "irrelevant",
+              "sufficiency": {
+                "status": "VALID",
+                "choice": "INSUFFICIENT",
+                "confidence": 0.61,
+                "probabilities": {
+                  "INSUFFICIENT": 0.81,
+                  "SUFFICIENT": 0.19
+                },
+                "error_code": null,
+                "http_status": null,
+                "skip_reason": null,
+                "request": {
+                  "state": {
+                    "background": "沒有其他可用背景；只依下列近期對話與孩子最新輸入判斷。",
+                    "conversation": [
+                      {
+                        "speaker": "parent",
+                        "text": "等一下要洗澡囉。"
+                      },
+                      {
+                        "speaker": "child",
+                        "text": "不要。"
+                      },
+                      {
+                        "speaker": "parent",
+                        "text": "那先坐著休息一下。"
+                      }
+                    ],
+                    "utterance": "寶寶 車車"
+                  },
+                  "model": "jev-1.13.0",
+                  "questions": {
+                    "context_sufficiency": {
+                      "type": "choice",
+                      "instructions": "只依可見文字，判斷是否已足以支持一個合理、低風險的主要意思，讓對話繼續。不要將關鍵字重疊當作充分證據，不借用影像、手勢或過去記憶。",
+                      "criteria": {
+                        "SUFFICIENT": "可見文字足以支持一個合理、低風險的主要 interpretation，不需先取得更多關鍵資訊即可繼續 conversation；不要求百分之百確定。",
+                        "INSUFFICIENT": "至少兩個合理 interpretation 會導向不同的後續回應，應先取得關鍵資訊；目前需要釐清一件事。"
+                      }
+                    }
+                  }
+                },
+                "expected": "INSUFFICIENT",
+                "matches": true
+              },
+              "action": "DELIVER_QUESTION",
+              "expected_action": "DELIVER_QUESTION",
+              "verdict": "PASS"
+            }
+          ],
+          "water": [
+            {
+              "id": "water_clear_001",
+              "context_type": "clear",
+              "sufficiency": {
+                "status": "VALID",
+                "choice": "SUFFICIENT",
+                "confidence": 0.64,
+                "probabilities": {
+                  "SUFFICIENT": 0.82,
+                  "INSUFFICIENT": 0.18
+                },
+                "error_code": null,
+                "http_status": null,
+                "skip_reason": null,
+                "request": {
+                  "state": {
+                    "background": "沒有其他可用背景；只依下列近期對話與孩子最新輸入判斷。",
+                    "conversation": [
+                      {
+                        "speaker": "parent",
+                        "text": "你要喝杯子裡的水嗎？"
+                      },
+                      {
+                        "speaker": "child",
+                        "text": "要，喝。"
+                      },
+                      {
+                        "speaker": "parent",
+                        "text": "杯子放在桌上。"
+                      }
+                    ],
+                    "utterance": "水水"
+                  },
+                  "model": "jev-1.13.0",
+                  "questions": {
+                    "context_sufficiency": {
+                      "type": "choice",
+                      "instructions": "只依可見文字，判斷是否已足以支持一個合理、低風險的主要意思，讓對話繼續。不要將關鍵字重疊當作充分證據，不借用影像、手勢或過去記憶。",
+                      "criteria": {
+                        "SUFFICIENT": "可見文字足以支持一個合理、低風險的主要 interpretation，不需先取得更多關鍵資訊即可繼續 conversation；不要求百分之百確定。",
+                        "INSUFFICIENT": "至少兩個合理 interpretation 會導向不同的後續回應，應先取得關鍵資訊；目前需要釐清一件事。"
+                      }
+                    }
+                  }
+                },
+                "expected": "SUFFICIENT",
+                "matches": true
+              },
+              "action": "DELIVER_ANSWER",
+              "expected_action": "DELIVER_ANSWER",
+              "verdict": "PASS"
+            },
+            {
+              "id": "water_ambiguous_001",
+              "context_type": "ambiguous",
+              "sufficiency": {
+                "status": "VALID",
+                "choice": "INSUFFICIENT",
+                "confidence": 0.92,
+                "probabilities": {
+                  "SUFFICIENT": 0.04,
+                  "INSUFFICIENT": 0.96
+                },
+                "error_code": null,
+                "http_status": null,
+                "skip_reason": null,
+                "request": {
+                  "state": {
+                    "background": "沒有其他可用背景；只依下列近期對話與孩子最新輸入判斷。",
+                    "conversation": [
+                      {
+                        "speaker": "parent",
+                        "text": "杯子裡的水可以喝，盆裡的水是用來洗手的。"
+                      },
+                      {
+                        "speaker": "child",
+                        "text": "水水。"
+                      },
+                      {
+                        "speaker": "parent",
+                        "text": "你是想喝，還是想洗手？"
+                      }
+                    ],
+                    "utterance": "水水"
+                  },
+                  "model": "jev-1.13.0",
+                  "questions": {
+                    "context_sufficiency": {
+                      "type": "choice",
+                      "instructions": "只依可見文字，判斷是否已足以支持一個合理、低風險的主要意思，讓對話繼續。不要將關鍵字重疊當作充分證據，不借用影像、手勢或過去記憶。",
+                      "criteria": {
+                        "SUFFICIENT": "可見文字足以支持一個合理、低風險的主要 interpretation，不需先取得更多關鍵資訊即可繼續 conversation；不要求百分之百確定。",
+                        "INSUFFICIENT": "至少兩個合理 interpretation 會導向不同的後續回應，應先取得關鍵資訊；目前需要釐清一件事。"
+                      }
+                    }
+                  }
+                },
+                "expected": "INSUFFICIENT",
+                "matches": true
+              },
+              "action": "DELIVER_QUESTION",
+              "expected_action": "DELIVER_QUESTION",
+              "verdict": "PASS"
+            },
+            {
+              "id": "water_irrelevant_001",
+              "context_type": "irrelevant",
+              "sufficiency": {
+                "status": "VALID",
+                "choice": "INSUFFICIENT",
+                "confidence": 0.76,
+                "probabilities": {
+                  "SUFFICIENT": 0.12,
+                  "INSUFFICIENT": 0.88
+                },
+                "error_code": null,
+                "http_status": null,
+                "skip_reason": null,
+                "request": {
+                  "state": {
+                    "background": "沒有其他可用背景；只依下列近期對話與孩子最新輸入判斷。",
+                    "conversation": [
+                      {
+                        "speaker": "parent",
+                        "text": "襪子穿好了。"
+                      },
+                      {
+                        "speaker": "child",
+                        "text": "嗯。"
+                      },
+                      {
+                        "speaker": "parent",
+                        "text": "接著穿鞋子。"
+                      }
+                    ],
+                    "utterance": "水水"
+                  },
+                  "model": "jev-1.13.0",
+                  "questions": {
+                    "context_sufficiency": {
+                      "type": "choice",
+                      "instructions": "只依可見文字，判斷是否已足以支持一個合理、低風險的主要意思，讓對話繼續。不要將關鍵字重疊當作充分證據，不借用影像、手勢或過去記憶。",
+                      "criteria": {
+                        "SUFFICIENT": "可見文字足以支持一個合理、低風險的主要 interpretation，不需先取得更多關鍵資訊即可繼續 conversation；不要求百分之百確定。",
+                        "INSUFFICIENT": "至少兩個合理 interpretation 會導向不同的後續回應，應先取得關鍵資訊；目前需要釐清一件事。"
+                      }
+                    }
+                  }
+                },
+                "expected": "INSUFFICIENT",
+                "matches": true
+              },
+              "action": "DELIVER_QUESTION",
+              "expected_action": "DELIVER_QUESTION",
+              "verdict": "PASS"
+            }
+          ],
+          "ball": [
+            {
+              "id": "ball_clear_001",
+              "context_type": "clear",
+              "sufficiency": {
+                "status": "VALID",
+                "choice": "SUFFICIENT",
+                "confidence": 0.91,
+                "probabilities": {
+                  "INSUFFICIENT": 0.05,
+                  "SUFFICIENT": 0.95
+                },
+                "error_code": null,
+                "http_status": null,
+                "skip_reason": null,
+                "request": {
+                  "state": {
+                    "background": "沒有其他可用背景；只依下列近期對話與孩子最新輸入判斷。",
+                    "conversation": [
+                      {
+                        "speaker": "parent",
+                        "text": "你要玩那個圓圓的、可以拍著彈起來的玩具嗎？"
+                      },
+                      {
+                        "speaker": "child",
+                        "text": "嗯，拍。"
+                      },
+                      {
+                        "speaker": "parent",
+                        "text": "它就在桌上。"
+                      }
+                    ],
+                    "utterance": "球球"
+                  },
+                  "model": "jev-1.13.0",
+                  "questions": {
+                    "context_sufficiency": {
+                      "type": "choice",
+                      "instructions": "只依可見文字，判斷是否已足以支持一個合理、低風險的主要意思，讓對話繼續。不要將關鍵字重疊當作充分證據，不借用影像、手勢或過去記憶。",
+                      "criteria": {
+                        "SUFFICIENT": "可見文字足以支持一個合理、低風險的主要 interpretation，不需先取得更多關鍵資訊即可繼續 conversation；不要求百分之百確定。",
+                        "INSUFFICIENT": "至少兩個合理 interpretation 會導向不同的後續回應，應先取得關鍵資訊；目前需要釐清一件事。"
+                      }
+                    }
+                  }
+                },
+                "expected": "SUFFICIENT",
+                "matches": true
+              },
+              "action": "DELIVER_ANSWER",
+              "expected_action": "DELIVER_ANSWER",
+              "verdict": "PASS"
+            },
+            {
+              "id": "ball_ambiguous_001",
+              "context_type": "ambiguous",
+              "sufficiency": {
+                "status": "VALID",
+                "choice": "INSUFFICIENT",
+                "confidence": 0.57,
+                "probabilities": {
+                  "SUFFICIENT": 0.22,
+                  "INSUFFICIENT": 0.78
+                },
+                "error_code": null,
+                "http_status": null,
+                "skip_reason": null,
+                "request": {
+                  "state": {
+                    "background": "沒有其他可用背景；只依下列近期對話與孩子最新輸入判斷。",
+                    "conversation": [
+                      {
+                        "speaker": "parent",
+                        "text": "軟球可以抱著，會彈的球可以拍著玩。"
+                      },
+                      {
+                        "speaker": "child",
+                        "text": "球球。"
+                      },
+                      {
+                        "speaker": "parent",
+                        "text": "你想玩哪一個呢？"
+                      }
+                    ],
+                    "utterance": "球球"
+                  },
+                  "model": "jev-1.13.0",
+                  "questions": {
+                    "context_sufficiency": {
+                      "type": "choice",
+                      "instructions": "只依可見文字，判斷是否已足以支持一個合理、低風險的主要意思，讓對話繼續。不要將關鍵字重疊當作充分證據，不借用影像、手勢或過去記憶。",
+                      "criteria": {
+                        "SUFFICIENT": "可見文字足以支持一個合理、低風險的主要 interpretation，不需先取得更多關鍵資訊即可繼續 conversation；不要求百分之百確定。",
+                        "INSUFFICIENT": "至少兩個合理 interpretation 會導向不同的後續回應，應先取得關鍵資訊；目前需要釐清一件事。"
+                      }
+                    }
+                  }
+                },
+                "expected": "INSUFFICIENT",
+                "matches": true
+              },
+              "action": "DELIVER_QUESTION",
+              "expected_action": "DELIVER_QUESTION",
+              "verdict": "PASS"
+            },
+            {
+              "id": "ball_irrelevant_001",
+              "context_type": "irrelevant",
+              "sufficiency": {
+                "status": "VALID",
+                "choice": "INSUFFICIENT",
+                "confidence": 0.69,
+                "probabilities": {
+                  "SUFFICIENT": 0.16,
+                  "INSUFFICIENT": 0.84
+                },
+                "error_code": null,
+                "http_status": null,
+                "skip_reason": null,
+                "request": {
+                  "state": {
+                    "background": "沒有其他可用背景；只依下列近期對話與孩子最新輸入判斷。",
+                    "conversation": [
+                      {
+                        "speaker": "parent",
+                        "text": "午飯吃完了。"
+                      },
+                      {
+                        "speaker": "child",
+                        "text": "嗯。"
+                      },
+                      {
+                        "speaker": "parent",
+                        "text": "先把碗放在桌上。"
+                      }
+                    ],
+                    "utterance": "球球"
+                  },
+                  "model": "jev-1.13.0",
+                  "questions": {
+                    "context_sufficiency": {
+                      "type": "choice",
+                      "instructions": "只依可見文字，判斷是否已足以支持一個合理、低風險的主要意思，讓對話繼續。不要將關鍵字重疊當作充分證據，不借用影像、手勢或過去記憶。",
+                      "criteria": {
+                        "SUFFICIENT": "可見文字足以支持一個合理、低風險的主要 interpretation，不需先取得更多關鍵資訊即可繼續 conversation；不要求百分之百確定。",
+                        "INSUFFICIENT": "至少兩個合理 interpretation 會導向不同的後續回應，應先取得關鍵資訊；目前需要釐清一件事。"
+                      }
+                    }
+                  }
+                },
+                "expected": "INSUFFICIENT",
+                "matches": true
+              },
+              "action": "DELIVER_QUESTION",
+              "expected_action": "DELIVER_QUESTION",
+              "verdict": "PASS"
+            }
+          ]
+        }
+      },
+      "metadata": {
+        "utc": "2026-10-05T04:28:25.866613+00:00",
+        "head": "7cacd4b3b23c1e5516ed672a25e1d8fd7c723625",
+        "python": "3.12.9",
+        "sdk": "0.7.2",
+        "model": "jev-1.13.0",
+        "oracle_hashes": {
+          "README.md": "32471da22cde6410764e319a1eda114d91c6c78b233258239aa6da81108d7b1f",
+          "dataset/context_sufficiency_v0.jsonl": "35f8511d30c112eafd3387866d588cd1df3f9a80f2f12029b6298e7a60d8cdb5",
+          "validate_dataset.py": "45f0f0d8efe685b2514c2ae27109ea7586db5bc57858d382518cbc078da1db38"
+        },
+        "artifact_hashes": {
+          "uv.lock": "e285622ac25c72ca281df2e9c58f80ea244b3724c1d07d7e12872c2396974235",
+          "cases.json": "f802354452f10d4598f5f609dff78bd07546aadc28ac3c9ea75423211d315859",
+          "policies.json": "96709ed6e7f8026dabf825b5eef84a88fe74bd1fdec8b571777bbdcd223ca87f"
+        }
+      }
+    },
+    {
+      "run_id": "20261005T071737Z-0bfcf17c",
+      "automatic_verdict": "BLOCKED",
+      "has_failures": false,
+      "model_has_failures": false,
+      "incomplete": true,
+      "interrupted": false,
+      "blocked_code": "MISSING_GATE_THRESHOLD",
+      "human_review": "human-check",
+      "final_verdict": "BLOCKED",
+      "suites": {
+        "policy8": {
+          "total": 8,
+          "completed": 0,
+          "case_verdicts": {},
+          "stages": {
+            "input_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "context_sufficiency": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "output_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            }
+          }
+        },
+        "oracle15": {
+          "total": 15,
+          "completed": 0,
+          "case_verdicts": {},
+          "stages": {
+            "input_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "context_sufficiency": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "output_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            }
+          }
+        }
+      },
+      "context_sufficiency": {
+        "correct": 0,
+        "valid_predictions": 0,
+        "total": 15,
+        "accuracy": null,
+        "coverage": 0.0,
+        "correct_over_total": 0.0,
+        "confusion_matrix": {
+          "SUFFICIENT": {
+            "SUFFICIENT": 0,
+            "INSUFFICIENT": 0
+          },
+          "INSUFFICIENT": {
+            "SUFFICIENT": 0,
+            "INSUFFICIENT": 0
+          }
+        },
+        "groups": {
+          "topic": {},
+          "context_type": {},
+          "expected_label": {}
+        },
+        "contrastive_topics": {
+          "toy_car": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          },
+          "water": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          },
+          "ball": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          }
+        },
+        "contrastive_cases": {
+          "toy_car": [],
+          "water": [],
+          "ball": []
+        }
+      },
+      "metadata": {
+        "utc": "2026-10-05T07:17:37.632149+00:00",
+        "head": "7c14357aa8c78cb54ea2a7074f4806d1729d17b0",
+        "python": "3.12.9",
+        "sdk": "0.7.2",
+        "model": "jev-1.13.0",
+        "oracle_hashes": {
+          "README.md": "32471da22cde6410764e319a1eda114d91c6c78b233258239aa6da81108d7b1f",
+          "dataset/context_sufficiency_v0.jsonl": "35f8511d30c112eafd3387866d588cd1df3f9a80f2f12029b6298e7a60d8cdb5",
+          "validate_dataset.py": "45f0f0d8efe685b2514c2ae27109ea7586db5bc57858d382518cbc078da1db38"
+        },
+        "artifact_hashes": {
+          "uv.lock": "e285622ac25c72ca281df2e9c58f80ea244b3724c1d07d7e12872c2396974235",
+          "cases.json": "f802354452f10d4598f5f609dff78bd07546aadc28ac3c9ea75423211d315859",
+          "policies.json": "96709ed6e7f8026dabf825b5eef84a88fe74bd1fdec8b571777bbdcd223ca87f"
+        }
+      },
+      "adoption_gate": {
+        "version": "E012-gate-v1",
+        "configured": false
+      }
+    },
+    {
+      "run_id": "20261005T072345Z-d8e897cc",
+      "automatic_verdict": "BLOCKED",
+      "has_failures": false,
+      "model_has_failures": false,
+      "incomplete": true,
+      "interrupted": false,
+      "blocked_code": "INVALID_GATE_THRESHOLD",
+      "human_review": "human-check",
+      "final_verdict": "BLOCKED",
+      "suites": {
+        "policy8": {
+          "total": 8,
+          "completed": 0,
+          "case_verdicts": {},
+          "stages": {
+            "input_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "context_sufficiency": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "output_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            }
+          }
+        },
+        "oracle15": {
+          "total": 15,
+          "completed": 0,
+          "case_verdicts": {},
+          "stages": {
+            "input_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "context_sufficiency": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "output_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            }
+          }
+        }
+      },
+      "context_sufficiency": {
+        "correct": 0,
+        "valid_predictions": 0,
+        "total": 15,
+        "accuracy": null,
+        "coverage": 0.0,
+        "correct_over_total": 0.0,
+        "confusion_matrix": {
+          "SUFFICIENT": {
+            "SUFFICIENT": 0,
+            "INSUFFICIENT": 0
+          },
+          "INSUFFICIENT": {
+            "SUFFICIENT": 0,
+            "INSUFFICIENT": 0
+          }
+        },
+        "groups": {
+          "topic": {},
+          "context_type": {},
+          "expected_label": {}
+        },
+        "contrastive_topics": {
+          "toy_car": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          },
+          "water": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          },
+          "ball": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          }
+        },
+        "contrastive_cases": {
+          "toy_car": [],
+          "water": [],
+          "ball": []
+        }
+      },
+      "metadata": {
+        "utc": "2026-10-05T07:23:45.408285+00:00",
+        "head": "7c14357aa8c78cb54ea2a7074f4806d1729d17b0",
+        "python": "3.12.9",
+        "sdk": "0.7.2",
+        "model": "jev-1.13.0",
+        "oracle_hashes": {
+          "README.md": "32471da22cde6410764e319a1eda114d91c6c78b233258239aa6da81108d7b1f",
+          "dataset/context_sufficiency_v0.jsonl": "35f8511d30c112eafd3387866d588cd1df3f9a80f2f12029b6298e7a60d8cdb5",
+          "validate_dataset.py": "45f0f0d8efe685b2514c2ae27109ea7586db5bc57858d382518cbc078da1db38"
+        },
+        "artifact_hashes": {
+          "uv.lock": "e285622ac25c72ca281df2e9c58f80ea244b3724c1d07d7e12872c2396974235",
+          "cases.json": "f802354452f10d4598f5f609dff78bd07546aadc28ac3c9ea75423211d315859",
+          "policies.json": "96709ed6e7f8026dabf825b5eef84a88fe74bd1fdec8b571777bbdcd223ca87f"
+        }
+      },
+      "adoption_gate": {
+        "version": "E012-gate-v1",
+        "configured": false
+      }
+    },
+    {
+      "run_id": "20261005T072345Z-9aaa024c",
+      "automatic_verdict": "BLOCKED",
+      "has_failures": false,
+      "model_has_failures": false,
+      "incomplete": true,
+      "interrupted": false,
+      "blocked_code": "INVALID_GATE_THRESHOLD",
+      "human_review": "human-check",
+      "final_verdict": "BLOCKED",
+      "suites": {
+        "policy8": {
+          "total": 8,
+          "completed": 0,
+          "case_verdicts": {},
+          "stages": {
+            "input_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "context_sufficiency": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "output_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            }
+          }
+        },
+        "oracle15": {
+          "total": 15,
+          "completed": 0,
+          "case_verdicts": {},
+          "stages": {
+            "input_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "context_sufficiency": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "output_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            }
+          }
+        }
+      },
+      "context_sufficiency": {
+        "correct": 0,
+        "valid_predictions": 0,
+        "total": 15,
+        "accuracy": null,
+        "coverage": 0.0,
+        "correct_over_total": 0.0,
+        "confusion_matrix": {
+          "SUFFICIENT": {
+            "SUFFICIENT": 0,
+            "INSUFFICIENT": 0
+          },
+          "INSUFFICIENT": {
+            "SUFFICIENT": 0,
+            "INSUFFICIENT": 0
+          }
+        },
+        "groups": {
+          "topic": {},
+          "context_type": {},
+          "expected_label": {}
+        },
+        "contrastive_topics": {
+          "toy_car": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          },
+          "water": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          },
+          "ball": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          }
+        },
+        "contrastive_cases": {
+          "toy_car": [],
+          "water": [],
+          "ball": []
+        }
+      },
+      "metadata": {
+        "utc": "2026-10-05T07:23:45.550905+00:00",
+        "head": "7c14357aa8c78cb54ea2a7074f4806d1729d17b0",
+        "python": "3.12.9",
+        "sdk": "0.7.2",
+        "model": "jev-1.13.0",
+        "oracle_hashes": {
+          "README.md": "32471da22cde6410764e319a1eda114d91c6c78b233258239aa6da81108d7b1f",
+          "dataset/context_sufficiency_v0.jsonl": "35f8511d30c112eafd3387866d588cd1df3f9a80f2f12029b6298e7a60d8cdb5",
+          "validate_dataset.py": "45f0f0d8efe685b2514c2ae27109ea7586db5bc57858d382518cbc078da1db38"
+        },
+        "artifact_hashes": {
+          "uv.lock": "e285622ac25c72ca281df2e9c58f80ea244b3724c1d07d7e12872c2396974235",
+          "cases.json": "f802354452f10d4598f5f609dff78bd07546aadc28ac3c9ea75423211d315859",
+          "policies.json": "96709ed6e7f8026dabf825b5eef84a88fe74bd1fdec8b571777bbdcd223ca87f"
+        }
+      },
+      "adoption_gate": {
+        "version": "E012-gate-v1",
+        "configured": false
+      }
+    }
+  ],
+  "latest_run_id": "20261005T072345Z-9aaa024c"
+}
