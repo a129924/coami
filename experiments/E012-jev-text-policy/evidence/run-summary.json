@@ -673,7 +673,376 @@
           "policies.json": "96709ed6e7f8026dabf825b5eef84a88fe74bd1fdec8b571777bbdcd223ca87f"
         }
       }
+    },
+    {
+      "run_id": "20261005T071737Z-0bfcf17c",
+      "automatic_verdict": "BLOCKED",
+      "has_failures": false,
+      "model_has_failures": false,
+      "incomplete": true,
+      "interrupted": false,
+      "blocked_code": "MISSING_GATE_THRESHOLD",
+      "human_review": "human-check",
+      "final_verdict": "BLOCKED",
+      "suites": {
+        "policy8": {
+          "total": 8,
+          "completed": 0,
+          "case_verdicts": {},
+          "stages": {
+            "input_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "context_sufficiency": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "output_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            }
+          }
+        },
+        "oracle15": {
+          "total": 15,
+          "completed": 0,
+          "case_verdicts": {},
+          "stages": {
+            "input_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "context_sufficiency": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "output_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            }
+          }
+        }
+      },
+      "context_sufficiency": {
+        "correct": 0,
+        "valid_predictions": 0,
+        "total": 15,
+        "accuracy": null,
+        "coverage": 0.0,
+        "correct_over_total": 0.0,
+        "confusion_matrix": {
+          "SUFFICIENT": {
+            "SUFFICIENT": 0,
+            "INSUFFICIENT": 0
+          },
+          "INSUFFICIENT": {
+            "SUFFICIENT": 0,
+            "INSUFFICIENT": 0
+          }
+        },
+        "groups": {
+          "topic": {},
+          "context_type": {},
+          "expected_label": {}
+        },
+        "contrastive_topics": {
+          "toy_car": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          },
+          "water": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          },
+          "ball": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          }
+        },
+        "contrastive_cases": {
+          "toy_car": [],
+          "water": [],
+          "ball": []
+        }
+      },
+      "metadata": {
+        "utc": "2026-10-05T07:17:37.632149+00:00",
+        "head": "7c14357aa8c78cb54ea2a7074f4806d1729d17b0",
+        "python": "3.12.9",
+        "sdk": "0.7.2",
+        "model": "jev-1.13.0",
+        "oracle_hashes": {
+          "README.md": "32471da22cde6410764e319a1eda114d91c6c78b233258239aa6da81108d7b1f",
+          "dataset/context_sufficiency_v0.jsonl": "35f8511d30c112eafd3387866d588cd1df3f9a80f2f12029b6298e7a60d8cdb5",
+          "validate_dataset.py": "45f0f0d8efe685b2514c2ae27109ea7586db5bc57858d382518cbc078da1db38"
+        },
+        "artifact_hashes": {
+          "uv.lock": "e285622ac25c72ca281df2e9c58f80ea244b3724c1d07d7e12872c2396974235",
+          "cases.json": "f802354452f10d4598f5f609dff78bd07546aadc28ac3c9ea75423211d315859",
+          "policies.json": "96709ed6e7f8026dabf825b5eef84a88fe74bd1fdec8b571777bbdcd223ca87f"
+        }
+      },
+      "adoption_gate": {
+        "version": "E012-gate-v1",
+        "configured": false
+      }
+    },
+    {
+      "run_id": "20261005T072345Z-d8e897cc",
+      "automatic_verdict": "BLOCKED",
+      "has_failures": false,
+      "model_has_failures": false,
+      "incomplete": true,
+      "interrupted": false,
+      "blocked_code": "INVALID_GATE_THRESHOLD",
+      "human_review": "human-check",
+      "final_verdict": "BLOCKED",
+      "suites": {
+        "policy8": {
+          "total": 8,
+          "completed": 0,
+          "case_verdicts": {},
+          "stages": {
+            "input_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "context_sufficiency": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "output_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            }
+          }
+        },
+        "oracle15": {
+          "total": 15,
+          "completed": 0,
+          "case_verdicts": {},
+          "stages": {
+            "input_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "context_sufficiency": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "output_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            }
+          }
+        }
+      },
+      "context_sufficiency": {
+        "correct": 0,
+        "valid_predictions": 0,
+        "total": 15,
+        "accuracy": null,
+        "coverage": 0.0,
+        "correct_over_total": 0.0,
+        "confusion_matrix": {
+          "SUFFICIENT": {
+            "SUFFICIENT": 0,
+            "INSUFFICIENT": 0
+          },
+          "INSUFFICIENT": {
+            "SUFFICIENT": 0,
+            "INSUFFICIENT": 0
+          }
+        },
+        "groups": {
+          "topic": {},
+          "context_type": {},
+          "expected_label": {}
+        },
+        "contrastive_topics": {
+          "toy_car": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          },
+          "water": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          },
+          "ball": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          }
+        },
+        "contrastive_cases": {
+          "toy_car": [],
+          "water": [],
+          "ball": []
+        }
+      },
+      "metadata": {
+        "utc": "2026-10-05T07:23:45.408285+00:00",
+        "head": "7c14357aa8c78cb54ea2a7074f4806d1729d17b0",
+        "python": "3.12.9",
+        "sdk": "0.7.2",
+        "model": "jev-1.13.0",
+        "oracle_hashes": {
+          "README.md": "32471da22cde6410764e319a1eda114d91c6c78b233258239aa6da81108d7b1f",
+          "dataset/context_sufficiency_v0.jsonl": "35f8511d30c112eafd3387866d588cd1df3f9a80f2f12029b6298e7a60d8cdb5",
+          "validate_dataset.py": "45f0f0d8efe685b2514c2ae27109ea7586db5bc57858d382518cbc078da1db38"
+        },
+        "artifact_hashes": {
+          "uv.lock": "e285622ac25c72ca281df2e9c58f80ea244b3724c1d07d7e12872c2396974235",
+          "cases.json": "f802354452f10d4598f5f609dff78bd07546aadc28ac3c9ea75423211d315859",
+          "policies.json": "96709ed6e7f8026dabf825b5eef84a88fe74bd1fdec8b571777bbdcd223ca87f"
+        }
+      },
+      "adoption_gate": {
+        "version": "E012-gate-v1",
+        "configured": false
+      }
+    },
+    {
+      "run_id": "20261005T072345Z-9aaa024c",
+      "automatic_verdict": "BLOCKED",
+      "has_failures": false,
+      "model_has_failures": false,
+      "incomplete": true,
+      "interrupted": false,
+      "blocked_code": "INVALID_GATE_THRESHOLD",
+      "human_review": "human-check",
+      "final_verdict": "BLOCKED",
+      "suites": {
+        "policy8": {
+          "total": 8,
+          "completed": 0,
+          "case_verdicts": {},
+          "stages": {
+            "input_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "context_sufficiency": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "output_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            }
+          }
+        },
+        "oracle15": {
+          "total": 15,
+          "completed": 0,
+          "case_verdicts": {},
+          "stages": {
+            "input_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "context_sufficiency": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            },
+            "output_policy": {
+              "statuses": {},
+              "matches": 0,
+              "adoption": {}
+            }
+          }
+        }
+      },
+      "context_sufficiency": {
+        "correct": 0,
+        "valid_predictions": 0,
+        "total": 15,
+        "accuracy": null,
+        "coverage": 0.0,
+        "correct_over_total": 0.0,
+        "confusion_matrix": {
+          "SUFFICIENT": {
+            "SUFFICIENT": 0,
+            "INSUFFICIENT": 0
+          },
+          "INSUFFICIENT": {
+            "SUFFICIENT": 0,
+            "INSUFFICIENT": 0
+          }
+        },
+        "groups": {
+          "topic": {},
+          "context_type": {},
+          "expected_label": {}
+        },
+        "contrastive_topics": {
+          "toy_car": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          },
+          "water": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          },
+          "ball": {
+            "observed": 0,
+            "valid": 0,
+            "correct": 0
+          }
+        },
+        "contrastive_cases": {
+          "toy_car": [],
+          "water": [],
+          "ball": []
+        }
+      },
+      "metadata": {
+        "utc": "2026-10-05T07:23:45.550905+00:00",
+        "head": "7c14357aa8c78cb54ea2a7074f4806d1729d17b0",
+        "python": "3.12.9",
+        "sdk": "0.7.2",
+        "model": "jev-1.13.0",
+        "oracle_hashes": {
+          "README.md": "32471da22cde6410764e319a1eda114d91c6c78b233258239aa6da81108d7b1f",
+          "dataset/context_sufficiency_v0.jsonl": "35f8511d30c112eafd3387866d588cd1df3f9a80f2f12029b6298e7a60d8cdb5",
+          "validate_dataset.py": "45f0f0d8efe685b2514c2ae27109ea7586db5bc57858d382518cbc078da1db38"
+        },
+        "artifact_hashes": {
+          "uv.lock": "e285622ac25c72ca281df2e9c58f80ea244b3724c1d07d7e12872c2396974235",
+          "cases.json": "f802354452f10d4598f5f609dff78bd07546aadc28ac3c9ea75423211d315859",
+          "policies.json": "96709ed6e7f8026dabf825b5eef84a88fe74bd1fdec8b571777bbdcd223ca87f"
+        }
+      },
+      "adoption_gate": {
+        "version": "E012-gate-v1",
+        "configured": false
+      }
     }
   ],
-  "latest_run_id": "20261005T042808Z-1a07e13b"
+  "latest_run_id": "20261005T072345Z-9aaa024c"
 }

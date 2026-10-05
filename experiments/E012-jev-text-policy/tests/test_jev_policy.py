@@ -72,8 +72,347 @@ class PolicyTests(unittest.TestCase):
             case.suite == "oracle15",
             client,
             self.questions,
+            p.AdoptionGate(0.5),  # Explicit test-only parameter, no product default.
         )
         return result, client
+
+    def test_TC03_gate_boundary_uses_unrounded_selected_probability(self) -> None:
+        # Test constants demonstrate comparison semantics, not a selected product policy.
+        threshold = 0.625
+        for score, expected in (
+            (0.624999999999, "REJECT"),
+            (threshold, "ADOPT"),
+            (0.625000000001, "ADOPT"),
+        ):
+            with self.subTest(score=score):
+                value = payload("context_sufficiency", "SUFFICIENT", confidence=0.01)
+                value["answers"]["context_sufficiency"]["probabilities"] = {
+                    "SUFFICIENT": score,
+                    "INSUFFICIENT": 1 - score,
+                }
+                raw = p.validate_answer(value, "context_sufficiency")
+                result = p.AdoptionGate(threshold).assess(raw)
+                self.assertEqual(result.decision, expected)
+                self.assertEqual(result.score, score)
+                self.assertEqual(
+                    result.adopted_choice, "SUFFICIENT" if expected == "ADOPT" else None
+                )
+                self.assertEqual(raw.choice, "SUFFICIENT")
+                self.assertEqual(raw.confidence, 0.01)
+
+    def test_TC02_gate_requires_valid_external_threshold(self) -> None:
+        for value in (None, True, "0.8", float("nan"), float("inf"), -0.01, 1.01):
+            with self.subTest(value=value), self.assertRaises(p.ContractError):
+                p.AdoptionGate(value)
+        for value in (0.0, 1.0):
+            with self.subTest(value=value):
+                self.assertEqual(p.AdoptionGate(value).threshold, value)
+
+    def test_TC03_gate_rejects_every_input_choice_and_stops(self) -> None:
+        for choice in p.OPTIONS["input_policy"]:
+            with self.subTest(choice=choice):
+                value = payload("input_policy", choice)
+                value["answers"]["input_policy"]["probabilities"] = {
+                    key: 0.8
+                    if key == choice
+                    else (
+                        0.2
+                        if key
+                        == next(k for k in p.OPTIONS["input_policy"] if k != choice)
+                        else 0.0
+                    )
+                    for key in p.OPTIONS["input_policy"]
+                }
+                client = FakeClient([value])
+                result = p.route(
+                    self.cases[8].visible,
+                    self.cases[8].candidate,
+                    True,
+                    client,
+                    self.questions,
+                    p.AdoptionGate(0.85),
+                )
+                self.assertEqual(result.action, "BLOCK")
+                self.assertEqual(result.reason, "INPUT_GATE_REJECTED")
+                self.assertIsNone(result.delivery)
+                self.assertEqual(result.stages["input_policy"].choice, choice)
+                self.assertEqual(
+                    result.stages["input_policy"].adoption.decision, "REJECT"
+                )
+                self.assertIsNone(result.stages["input_policy"].adoption.adopted_choice)
+                self.assertEqual(
+                    result.stages["context_sufficiency"].skip_reason,
+                    "UPSTREAM_GATE_REJECTED",
+                )
+                self.assertEqual(len(client.calls), 1)
+
+    def test_TC03_context_gate_rejects_both_choices_no_output_or_replacement(
+        self,
+    ) -> None:
+        for choice in p.OPTIONS["context_sufficiency"]:
+            with self.subTest(choice=choice):
+                value = payload("context_sufficiency", choice)
+                value["answers"]["context_sufficiency"]["probabilities"] = {
+                    choice: 0.8,
+                    next(
+                        k for k in p.OPTIONS["context_sufficiency"] if k != choice
+                    ): 0.2,
+                }
+                client = FakeClient(["COMPANION", value])
+                result = p.route(
+                    self.cases[8].visible,
+                    self.cases[8].candidate,
+                    True,
+                    client,
+                    self.questions,
+                    p.AdoptionGate(0.85),
+                )
+                self.assertEqual(result.action, "BLOCK")
+                self.assertEqual(result.reason, "CONTEXT_GATE_REJECTED")
+                self.assertIsNone(result.proposed_action)
+                self.assertEqual(result.stages["context_sufficiency"].choice, choice)
+                self.assertEqual(
+                    result.stages["output_policy"].adoption.decision, "NOT_EVALUATED"
+                )
+                self.assertEqual(len(client.calls), 2)
+
+    def test_TC03_output_gate_rejects_every_choice_no_delivery(self) -> None:
+        for choice in p.OPTIONS["output_policy"]:
+            with self.subTest(choice=choice):
+                value = payload("output_policy", choice)
+                value["answers"]["output_policy"]["probabilities"] = {
+                    key: 0.8
+                    if key == choice
+                    else (
+                        0.2
+                        if key
+                        == next(k for k in p.OPTIONS["output_policy"] if k != choice)
+                        else 0.0
+                    )
+                    for key in p.OPTIONS["output_policy"]
+                }
+                client = FakeClient(["COMPANION", value])
+                result = p.route(
+                    self.cases[0].visible,
+                    self.cases[0].candidate,
+                    False,
+                    client,
+                    self.questions,
+                    p.AdoptionGate(0.85),
+                )
+                self.assertEqual(result.action, "BLOCK")
+                self.assertEqual(result.reason, "OUTPUT_GATE_REJECTED")
+                self.assertIsNone(result.delivery)
+                self.assertEqual(result.stages["output_policy"].choice, choice)
+                self.assertEqual(len(client.calls), 2)
+
+    def test_TC04_gate_threshold_not_sent_to_model(self) -> None:
+        clients = []
+        for threshold in (0.5, 1.0):
+            client = FakeClient(["COMPANION", "SUFFICIENT", "ALLOW"])
+            p.route(
+                self.cases[8].visible,
+                self.cases[8].candidate,
+                True,
+                client,
+                self.questions,
+                p.AdoptionGate(threshold),
+            )
+            clients.append(client)
+        self.assertEqual(clients[0].calls, clients[1].calls)
+        self.assertNotIn("threshold", repr(clients[0].calls))
+
+    def test_TC04_correct_raw_choice_rejected_is_not_model_failure(self) -> None:
+        value = payload("input_policy", "COMPANION")
+        value["answers"]["input_policy"]["probabilities"] = {
+            "COMPANION": 0.8,
+            "PARENT": 0.2,
+            "SAFETY": 0.0,
+            "UNCERTAIN": 0.0,
+        }
+        client = FakeClient([value])
+        result = p.route(
+            self.cases[0].visible,
+            self.cases[0].candidate,
+            False,
+            client,
+            self.questions,
+            p.AdoptionGate(0.85),
+        )
+        record = p.evaluate(self.cases[0], result, "offline")
+        self.assertTrue(record["stages"]["input_policy"]["matches"])
+        self.assertFalse(record["model_has_failures"])
+        self.assertEqual(
+            record["verdict"], "FAIL"
+        )  # Original expected final Action is unchanged.
+        self.assertFalse(record["incomplete"])
+        self.assertEqual(record["differences"], ["action"])
+        self.assertIsNone(record["stages"]["output_policy"]["matches"])
+        summary = p.summarize([record], "offline")
+        self.assertEqual(
+            summary["suites"]["policy8"]["stages"]["input_policy"]["adoption"],
+            {"REJECT": 1},
+        )
+
+    def test_TC02_invalid_response_cannot_pass_even_zero_threshold(self) -> None:
+        value = payload("input_policy", "COMPANION")
+        value["answers"]["input_policy"]["confidence"] = float("nan")
+        client = FakeClient([value])
+        result = p.route(
+            self.cases[0].visible,
+            self.cases[0].candidate,
+            False,
+            client,
+            self.questions,
+            p.AdoptionGate(0.0),
+        )
+        self.assertEqual(result.action, "BLOCK")
+        stage = result.stages["input_policy"]
+        self.assertEqual(stage.status, "INVALID")
+        self.assertEqual(stage.adoption.decision, "NOT_EVALUATED")
+        self.assertIsNone(stage.adoption.score)
+        self.assertIsNone(stage.adoption.adopted_choice)
+        self.assertEqual(len(client.calls), 1)
+
+    def test_TC07_gate_replay_retains_original_fail_and_valid_denominator(self) -> None:
+        # Replay recorded model responses only; threshold is a test value, not calibration.
+        source = (p.DIRECTORY / "evidence/live-results.jsonl").read_bytes()
+        rows = [json.loads(line) for line in source.splitlines()]
+        original = next(
+            row
+            for row in rows
+            if row["run_id"] == "20261005T042808Z-1a07e13b"
+            and row["id"] == "toy_car_ambiguous_001"
+        )
+        responses = []
+        for stage in p.STAGES:
+            s = original["stages"][stage]
+            responses.append(
+                {
+                    "model": p.MODEL,
+                    "answers": {
+                        stage: {
+                            key: s[key]
+                            for key in ("choice", "confidence", "probabilities")
+                        }
+                        | {"type": "choice"}
+                    },
+                }
+            )
+        client = FakeClient(responses)
+        result = p.route(
+            self.cases[9].visible,
+            self.cases[9].candidate,
+            True,
+            client,
+            self.questions,
+            p.AdoptionGate(0.8),
+        )
+        record = p.evaluate(self.cases[9], result, "offline-replay")
+        self.assertEqual(result.stages["context_sufficiency"].choice, "SUFFICIENT")
+        self.assertEqual(
+            result.stages["context_sufficiency"].adoption.decision, "REJECT"
+        )
+        self.assertEqual(result.action, "BLOCK")
+        self.assertEqual(record["verdict"], "FAIL")
+        self.assertTrue(record["model_has_failures"])
+        summary = p.summarize([record], "offline-replay")
+        self.assertEqual(summary["context_sufficiency"]["valid_predictions"], 1)
+        self.assertEqual(summary["context_sufficiency"]["correct"], 0)
+        self.assertEqual(
+            p.DIRECTORY.joinpath("evidence/live-results.jsonl").read_bytes(), source
+        )
+
+    def test_TC02_missing_gate_threshold_no_factory_or_cases(self) -> None:
+        factory = MagicMock()
+        with (
+            patch.object(Path, "mkdir"),
+            patch.object(p, "load_cases") as cases,
+            patch.object(p, "save_summary") as save,
+            patch.object(p, "metadata", return_value={}),
+            redirect_stdout(io.StringIO()),
+        ):
+            self.assertEqual(p.run_live(factory=factory), 2)
+        factory.assert_not_called()
+        cases.assert_not_called()
+        self.assertEqual(
+            save.call_args.args[1]["blocked_code"], "MISSING_GATE_THRESHOLD"
+        )
+
+    def test_TC02_main_invalid_threshold_records_fixed_blocked_code_without_echo(
+        self,
+    ) -> None:
+        real_run = p.run_live
+        for value in (
+            "abc-secret-sentinel",
+            "true",
+            "",
+            "nan",
+            "inf",
+            "-inf",
+            "-0.1",
+            "1.1",
+        ):
+            with self.subTest(value=value):
+                factory = MagicMock()
+                stdout, stderr = io.StringIO(), io.StringIO()
+                with (
+                    patch.object(
+                        sys,
+                        "argv",
+                        [
+                            "jev_policy.py",
+                            "--live",
+                            "--min-choice-probability=" + value,
+                        ],
+                    ),
+                    patch.object(
+                        p,
+                        "run_live",
+                        side_effect=lambda **kwargs: real_run(
+                            factory=factory, **kwargs
+                        ),
+                    ),
+                    patch.object(Path, "mkdir"),
+                    patch.object(p, "save_summary") as save,
+                    patch.object(p, "metadata", return_value={}),
+                    redirect_stdout(stdout),
+                    unittest.mock.patch("sys.stderr", stderr),
+                ):
+                    self.assertEqual(p.main(), 2)
+                factory.assert_not_called()
+                self.assertEqual(save.call_args.args[1]["automatic_verdict"], "BLOCKED")
+                self.assertEqual(
+                    save.call_args.args[1]["blocked_code"], "INVALID_GATE_THRESHOLD"
+                )
+                self.assertEqual(
+                    save.call_args.args[1]["suites"]["oracle15"]["completed"], 0
+                )
+                self.assertEqual(stderr.getvalue(), "")
+                self.assertNotIn("abc-secret-sentinel", stdout.getvalue())
+
+    def test_TC02_main_numeric_text_threshold_parses_before_key_preflight(self) -> None:
+        real_run = p.run_live
+        for value in ("0", "0.625", "1"):
+            with (
+                self.subTest(value=value),
+                patch.dict(p.os.environ, {}, clear=True),
+                patch.object(
+                    sys,
+                    "argv",
+                    ["jev_policy.py", "--live", "--min-choice-probability=" + value],
+                ),
+                patch.object(p, "run_live", side_effect=real_run),
+                patch.object(Path, "mkdir"),
+                patch.object(p, "save_summary") as save,
+                patch.object(p, "metadata", return_value={}),
+                redirect_stdout(io.StringIO()),
+            ):
+                self.assertEqual(p.main(), 2)
+                self.assertEqual(save.call_args.args[1]["blocked_code"], "MISSING_KEY")
+                self.assertEqual(
+                    save.call_args.args[1]["adoption_gate"]["threshold"], float(value)
+                )
 
     def test_TC01_all_23_expected_paths_offline(self) -> None:
         self.assertEqual(counter_suites(self.cases), {"policy8": 8, "oracle15": 15})
@@ -207,6 +546,7 @@ class PolicyTests(unittest.TestCase):
             False,
             client,
             self.questions,
+            p.AdoptionGate(0.5),  # Explicit test-only parameter, no product default.
         )
         self.assertEqual(result.action, "BLOCK")
         self.assertEqual(result.stages["input_policy"].status, "INVALID")
@@ -216,7 +556,14 @@ class PolicyTests(unittest.TestCase):
             "candidate", "invalid"
         )  # Deliberate runtime-invalid input.
         client = FakeClient([])
-        result = p.route(self.cases[0].visible, invalid, False, client, self.questions)
+        result = p.route(
+            self.cases[0].visible,
+            invalid,
+            False,
+            client,
+            self.questions,
+            p.AdoptionGate(0.5),
+        )
         self.assertEqual(result.action, "BLOCK")
         self.assertEqual(client.calls, [])
 
@@ -259,7 +606,7 @@ class PolicyTests(unittest.TestCase):
             patch.object(p, "metadata", return_value={}),
             redirect_stdout(io.StringIO()),
         ):
-            self.assertEqual(p.run_live(factory=factory), 2)
+            self.assertEqual(p.run_live(factory=factory, threshold=0.5), 2)
         factory.assert_not_called()
         self.assertEqual(save.call_args.args[1]["blocked_code"], "MISSING_KEY")
         self.assertEqual(save.call_args.args[1]["suites"]["policy8"]["completed"], 0)
@@ -381,7 +728,12 @@ class PolicyTests(unittest.TestCase):
         visible = p.VisibleInput.project(source)
         first = FakeClient(["COMPANION", "SUFFICIENT", "ALLOW"])
         original = p.route(
-            visible, p.Candidate("hi", "ANSWER"), True, first, self.questions
+            visible,
+            p.Candidate("hi", "ANSWER"),
+            True,
+            first,
+            self.questions,
+            p.AdoptionGate(0.5),
         )
         source["expected"] = "BOGUS"
         source["rationale"] = "OTHER"
@@ -393,6 +745,7 @@ class PolicyTests(unittest.TestCase):
             True,
             second,
             self.questions,
+            p.AdoptionGate(0.5),  # Explicit test-only parameter, no product default.
         )
         self.assertEqual(original, changed)
         self.assertEqual(first.calls, second.calls)
@@ -483,7 +836,7 @@ class PolicyTests(unittest.TestCase):
             patch.object(p, "metadata", return_value={}),
             redirect_stdout(stdout),
         ):
-            self.assertEqual(p.run_live(factory=factory), 130)
+            self.assertEqual(p.run_live(factory=factory, threshold=0.5), 130)
         manager.__exit__.assert_called_once()
         self.assertEqual(observed[0]["model"], p.MODEL)
         self.assertEqual(observed[0]["timeout"], 30.0)
@@ -524,7 +877,7 @@ class PolicyTests(unittest.TestCase):
             patch.object(p, "metadata", return_value={}),
             redirect_stdout(stdout),
         ):
-            self.assertEqual(p.run_live(factory=lambda **kw: manager), 2)
+            self.assertEqual(p.run_live(factory=lambda **kw: manager, threshold=0.5), 2)
         manager.__exit__.assert_called_once()
         file_mock().flush.assert_called_once()
         self.assertNotIn(

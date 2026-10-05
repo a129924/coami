@@ -26,3 +26,13 @@ Python 3.12.9、typesafe-sdk==0.7.2、jev-1.13.0；30 秒 I/O timeout、零重�
 程式按既定契約安全處置本次不一致；不調整rubric、oracle或candidate來提高本次成績。後續如要研究prompt或模型變更，另開topic並保留本次證據。
 
 獨立 technical alignment／Python quality／evidence review：approved，無blocking findings；owner TC08 human review pending。交付Draft PR，不merge或release。
+
+## Numeric adoption gate follow-up — contract
+
+Owner選定probabilities[原始choice]、全部三stage所有choice須達門檻，拒絕即BLOCK且停止後續。Owner說明門檻選定不是此topic；因此門檻由caller必填，無預設，合法有限[0,1]，比較原數值 >=，等於採用。未提供／非法設定啟動BLOCKED且零API呼叫；confidence只保留，不參與gate。
+
+原model choice/status/confidence/probabilities不改写，另記adoption決策及adopted_choice。合法被拒結果仍計入raw模型準確率；gate不改oracle期望、不把原FAIL改成PASS。此輪不新增真實Jev呼叫或選定產品門檻；以合成分數、既存回傳offline replay及缺門檻CLI preflight驗證。原23案live與FAIL結論保留。
+
+Follow-up verification：36/36 offline unittest、Ruff lint/format、frozen oracle validator通過；既存回傳offline replay保留原choice與模型FAIL。缺門檻1次、非法文字／空值2次CLI preflight均BLOCKED、零case／API calls，非新模型驗證。原live-results.jsonl逐byte不變，原run-summary的FAIL物件不變；只追加preflight紀錄。
+
+獨立bounded technical review最終approved，無blocking issues。複審前指出CLI type=float繞過protected preflight，已改由run_live解析並增加CLI regressions；不輸出非法原值。Owner TC08仍human-check，實際門檻選定仍不在此topic；維持Draft PR，不merge或release。

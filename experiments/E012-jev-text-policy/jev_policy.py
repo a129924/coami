@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import datetime, timezone
 import hashlib
 from importlib.metadata import version
@@ -137,6 +137,64 @@ class Question:
 
 
 @dataclass(frozen=True)
+class AdoptionDecision:
+    decision: Literal["ADOPT", "REJECT", "NOT_EVALUATED"]
+    score: float | None
+    threshold: float
+    adopted_choice: str | None
+    reason: str
+    score_name: str = "probabilities[choice]"
+    comparison: str = ">="
+
+
+@dataclass(frozen=True)
+class AdoptionGate:
+    """Caller supplies policy; this experiment does not select/calibrate a threshold."""
+
+    threshold: float
+
+    def __post_init__(self) -> None:
+        if self.threshold is None:
+            raise ContractError("MISSING_GATE_THRESHOLD")
+        try:
+            probability(self.threshold)
+        except ContractError as exc:
+            raise ContractError("INVALID_GATE_THRESHOLD") from exc
+
+    def assess(self, result: StageResult) -> AdoptionDecision:
+        if result.status != "VALID":
+            reason = {
+                "SKIPPED": "STAGE_SKIPPED",
+                "NOT_APPLICABLE": "NOT_APPLICABLE",
+            }.get(result.status, "RESPONSE_NOT_VALID")
+            return AdoptionDecision("NOT_EVALUATED", None, self.threshold, None, reason)
+        if result.probabilities is None or result.choice not in result.probabilities:
+            return AdoptionDecision(
+                "NOT_EVALUATED", None, self.threshold, None, "SCORE_UNAVAILABLE"
+            )
+        score = probability(result.probabilities[result.choice])
+        adopted = score >= self.threshold  # No rounding, epsilon, confidence or oracle.
+        return AdoptionDecision(
+            "ADOPT" if adopted else "REJECT",
+            score,
+            self.threshold,
+            result.choice if adopted else None,
+            "SCORE_AT_OR_ABOVE_THRESHOLD" if adopted else "SCORE_BELOW_THRESHOLD",
+        )
+
+    def contract(self) -> dict[str, object]:
+        return {
+            "version": "E012-gate-v1",
+            "score": "probabilities[choice]",
+            "threshold": self.threshold,
+            "comparison": ">=",
+            "stages": list(STAGES),
+            "fallback": "BLOCK",
+            "stop_downstream_on_reject": True,
+        }
+
+
+@dataclass(frozen=True)
 class StageResult:
     status: str
     choice: str | None = None
@@ -146,6 +204,7 @@ class StageResult:
     http_status: int | None = None
     skip_reason: str | None = None
     request: dict[str, object] | None = None
+    adoption: AdoptionDecision | None = None
 
 
 @dataclass(frozen=True)
@@ -266,7 +325,7 @@ def load_cases(root: Path = ROOT, directory: Path = DIRECTORY) -> list[Case]:
 def probability(value: object) -> float:
     if isinstance(value, bool) or not isinstance(value, (float, int)):
         raise ContractError("INVALID_NUMBER")
-    if not math.isfinite(value) or not 0 <= value <= 1:
+    if not 0 <= value <= 1 or not math.isfinite(value):
         raise ContractError("INVALID_NUMBER")
     return float(value)
 
@@ -297,7 +356,11 @@ def validate_answer(payload: object, stage: str) -> StageResult:
 
 
 def classify(
-    client: Client, stage: str, state: dict[str, object], question: Question
+    client: Client,
+    stage: str,
+    state: dict[str, object],
+    question: Question,
+    gate: AdoptionGate,
 ) -> StageResult:
     """Only whitelisted values leave this SDK/raw JSON boundary."""
     request = {
@@ -342,7 +405,7 @@ def classify(
         result = StageResult("INVALID", error_code=exc.code)
     except (ValueError, TypeError, KeyError, OverflowError):
         result = StageResult("INVALID", error_code="INVALID_RESPONSE")
-    return StageResult(**{**asdict(result), "request": request})
+    return replace(result, request=request, adoption=gate.assess(result))
 
 
 def route(
@@ -351,15 +414,34 @@ def route(
     use_context: bool,
     client: Client,
     questions: dict[str, Question],
+    gate: AdoptionGate,
 ) -> Decision:
     """No oracle expectations or fixture metadata are accepted here."""
     stages = {
-        stage: StageResult("SKIPPED", skip_reason="UPSTREAM_STOP") for stage in STAGES
+        stage: StageResult(
+            "SKIPPED",
+            skip_reason="UPSTREAM_STOP",
+            adoption=gate.assess(StageResult("SKIPPED")),
+        )
+        for stage in STAGES
     }
     if not use_context:
         stages["context_sufficiency"] = StageResult(
-            "NOT_APPLICABLE", skip_reason="POLICY8_PATH"
+            "NOT_APPLICABLE",
+            skip_reason="POLICY8_PATH",
+            adoption=gate.assess(StageResult("NOT_APPLICABLE")),
         )
+
+    def gate_rejected(stage: str) -> bool:
+        result = stages[stage]
+        if result.adoption is not None and result.adoption.decision == "ADOPT":
+            return False
+        for downstream in STAGES[STAGES.index(stage) + 1 :]:
+            if stages[downstream].status == "SKIPPED":
+                stages[downstream] = replace(
+                    stages[downstream], skip_reason="UPSTREAM_GATE_REJECTED"
+                )
+        return True
 
     def finish(
         action: str,
@@ -380,11 +462,13 @@ def route(
         return finish("BLOCK", "INVALID_CANDIDATE")
     state = visible.state()
     stages["input_policy"] = classify(
-        client, "input_policy", state, questions["input_policy"]
+        client, "input_policy", state, questions["input_policy"], gate
     )
     ip = stages["input_policy"]
     if ip.status != "VALID":
         return finish("BLOCK", "INPUT_INVALID_OR_FAILED")
+    if gate_rejected("input_policy"):
+        return finish("BLOCK", "INPUT_GATE_REJECTED")
     if ip.choice == "PARENT":
         return finish("HANDOFF_PARENT", "PARENT_REQUIRED")
     if ip.choice == "SAFETY":
@@ -398,10 +482,13 @@ def route(
             "context_sufficiency",
             visible.state(),
             questions["context_sufficiency"],
+            gate,
         )
         suff = stages["context_sufficiency"]
         if suff.status != "VALID":
             return finish("BLOCK", "CONTEXT_INVALID_OR_FAILED")
+        if gate_rejected("context_sufficiency"):
+            return finish("BLOCK", "CONTEXT_GATE_REJECTED")
         proposed_kind = "ANSWER" if suff.choice == "SUFFICIENT" else "QUESTION"
     proposed = "DELIVER_" + proposed_kind
     compatible = proposed_kind == candidate.kind
@@ -410,8 +497,11 @@ def route(
         "output_policy",
         {**visible.state(), "candidate_text": candidate.text},
         questions["output_policy"],
+        gate,
     )
     op = stages["output_policy"]
+    if op.status == "VALID" and gate_rejected("output_policy"):
+        return finish("BLOCK", "OUTPUT_GATE_REJECTED", proposed, compatible)
     if op.status != "VALID" or op.choice != "ALLOW":
         return finish("BLOCK", "OUTPUT_NOT_ALLOWED", proposed, compatible)
     if not compatible:
@@ -424,6 +514,7 @@ def evaluate(case: Case, decision: Decision, run_id: str) -> dict[str, object]:
     differences = []
     failed = decision.reason == "INVALID_CANDIDATE"
     incomplete = False
+    model_has_failures = False
     for stage in STAGES:
         actual = decision.stages[stage]
         expected = case.expected[stage]
@@ -432,10 +523,12 @@ def evaluate(case: Case, decision: Decision, run_id: str) -> dict[str, object]:
             if not match:
                 differences.append(stage)
                 failed = True
+                model_has_failures = True
         elif actual.status == "INVALID":
             match = False
             differences.append(stage)
             failed = True
+            model_has_failures = True
         else:
             match = (
                 None  # SKIPPED / ERROR / NOT_APPLICABLE is never a passed prediction.
@@ -443,6 +536,7 @@ def evaluate(case: Case, decision: Decision, run_id: str) -> dict[str, object]:
             incomplete |= actual.status == "ERROR"
             if (
                 actual.status == "SKIPPED"
+                and actual.skip_reason != "UPSTREAM_GATE_REJECTED"
                 and expected != "SKIPPED"
                 and not any(s.status == "ERROR" for s in decision.stages.values())
             ):
@@ -476,6 +570,7 @@ def evaluate(case: Case, decision: Decision, run_id: str) -> dict[str, object]:
         "reason": decision.reason,
         "differences": differences,
         "has_failures": failed,
+        "model_has_failures": model_has_failures,
         "incomplete": incomplete,
         "verdict": "FAIL" if failed else "BLOCKED" if incomplete else "PASS",
     }
@@ -497,6 +592,14 @@ def summarize(
             stage_counts[stage] = {
                 "statuses": dict(Counter(text(r["status"]) for r in results)),
                 "matches": sum(r["matches"] is True for r in results),
+                "adoption": dict(
+                    Counter(
+                        text(object_map(r["adoption"])["decision"])
+                        if r.get("adoption") is not None
+                        else "NOT_RECORDED"
+                        for r in results
+                    )
+                ),
             }
         suites[suite] = {
             "total": total,
@@ -540,6 +643,7 @@ def summarize(
         "run_id": run_id,
         "automatic_verdict": verdict,
         "has_failures": failures,
+        "model_has_failures": any(row.get("model_has_failures") for row in records),
         "incomplete": incomplete,
         "interrupted": interrupted,
         "blocked_code": blocked_code,
@@ -627,6 +731,8 @@ def run_live(
     directory: Path = DIRECTORY,
     root: Path = ROOT,
     factory: Callable[..., TypeSafeClient] = TypeSafeClient,
+    *,
+    threshold: float | str | None = None,
 ) -> int:
     logging.getLogger("typesafe_sdk").disabled = True
     run_id = (
@@ -637,7 +743,17 @@ def run_live(
     blocked_code = None
     evidence = directory / "evidence"
     evidence.mkdir(exist_ok=True)
+    gate = None
     try:
+        if threshold is None:
+            raise ContractError("MISSING_GATE_THRESHOLD")
+        try:
+            numeric_threshold = (
+                float(threshold) if isinstance(threshold, str) else threshold
+            )
+        except (ValueError, OverflowError) as exc:
+            raise ContractError("INVALID_GATE_THRESHOLD") from exc
+        gate = AdoptionGate(numeric_threshold)
         if not os.environ.get("TYPESAFE_API_KEY", "").strip():
             raise ContractError("MISSING_KEY")
         if version("typesafe-sdk") != SDK_VERSION:
@@ -660,6 +776,7 @@ def run_live(
                         case.suite == "oracle15",
                         client,
                         questions,
+                        gate,
                     )
                     record = evaluate(case, decision, run_id)
                     output.write(
@@ -688,6 +805,9 @@ def run_live(
             records, run_id, interrupted=interrupted, blocked_code=blocked_code
         ),
         "metadata": metadata(directory, root),
+        "adoption_gate": gate.contract()
+        if gate is not None
+        else {"version": "E012-gate-v1", "configured": False},
     }
     save_summary(evidence / "run-summary.json", summary)
     print(
@@ -703,12 +823,17 @@ def main() -> int:
     parser.add_argument(
         "--live", action="store_true", help="Run all 23 real Jev cases; no mock mode"
     )
+    parser.add_argument(
+        "--min-choice-probability",
+        default=None,
+        help="Caller-selected threshold in [0,1], required for live; no default/calibration",
+    )
     args = parser.parse_args()
     if not args.live:
         parser.print_help()
         return 0
     try:
-        return run_live()
+        return run_live(threshold=args.min_choice_probability)
     except (OSError, ContractError, ValueError):
         print("E012 BLOCKED: EVIDENCE_WRITE_FAILED; no raw diagnostic emitted")
         return 2

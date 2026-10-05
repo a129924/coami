@@ -53,3 +53,15 @@ Nonblocking quality note: some orchestration functions exceed 50 lines; no refac
   }
 }
 ```
+
+## Numeric adoption gate follow-up — independent review
+
+Final bounded alignment / standalone Python quality review: **approved**, blocking_issues=[]。Reviewer唯讀核對gate、source/tests/docs及證據，不讀.env、不改檔、不執行live。
+
+- 三stage所有VALID choice使用probabilities[choice]；score >= caller必填threshold採用，拒絕BLOCK且停止下游。無產品門檻選定／預設／校準。
+- 原choice/status/confidence/probabilities保留；adoption另外記錄，VALID但REJECT仍計入raw模型分母，門檻不進model request。
+- 初審needs-rework：argparse type=float會在protected preflight前拒絕非法文字、漏寫BLOCKED並echo原值。修正後main傳原字串，run_live安全解析；新增CLI級regressions，固定INVALID_GATE_THRESHOLD，不echo且零factory。缺參數仍MISSING_GATE_THRESHOLD。
+- 最終證據：36/36 offline unittest、Ruff lint/format及既存oracle validator PASS；recorded-response replay保留模型FAIL，沒有新Jev呼叫。
+- 獨立確認原live JSONL bytes及原summary runs物件不變；追加1筆missing與2筆invalid preflight全為BLOCKED、零case。
+
+此核准只涵蓋機制與技術品質。原23案實驗FAIL、上方逐案Owner人審pending保持；不補寫人審PASS、不聲稱正式repo-file gate通過。

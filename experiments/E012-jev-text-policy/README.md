@@ -4,7 +4,7 @@
 
 ## 已接受的執行契約
 
-Input Policy (`COMPANION/PARENT/SAFETY/UNCERTAIN`)、Context Sufficiency (`SUFFICIENT/INSUFFICIENT`)、Output Policy (`ALLOW/BLOCK/UNCERTAIN`) 是三種不同判斷。Input 非 COMPANION 短路；SAFETY 在 Input rubric 中優先 PARENT。Policy8 不問 sufficiency，提議類型取人工候選 kind。Oracle15 valid sufficiency 決定 ANSWER／QUESTION；invalid 則停止。單一候選 kind 不相容仍評估 Output，最終 BLOCK；不生成第二候選或改 oracle。
+Input Policy (`COMPANION/PARENT/SAFETY/UNCERTAIN`)、Context Sufficiency (`SUFFICIENT/INSUFFICIENT`)、Output Policy (`ALLOW/BLOCK/UNCERTAIN`) 是三種不同判斷。各stage的VALID回傳先經純數據採用gate；拒絕即BLOCK並停止後續stage。採用後才依choice路由，Input非COMPANION短路；SAFETY在Input rubric中優先PARENT。Policy8 不問 sufficiency，提議類型取人工候選 kind。Oracle15 已採用的valid sufficiency決定ANSWER／QUESTION；invalid或gate拒絕則停止。單一候選 已採用sufficiency且kind不相容仍評估Output，最終BLOCK；不生成第二候選或改 oracle。
 
 | Action | 條件 | 允許效果 |
 |---|---|---|
@@ -18,7 +18,27 @@ Input Policy (`COMPANION/PARENT/SAFETY/UNCERTAIN`)、Context Sufficiency (`SUFFI
 
 Input／Context state 只取 background、conversation、utterance；每 turn 只有 speaker／text。Output 再加 candidate_text，不加 kind 或實際 sufficiency。id、topic、context_type、expected、interpretation、rationale、expected_* 都只留 evaluator，不能進 model state／instructions／criteria。固定 rubrics 位於 policies.json；人工 kind inventory 位於 cases.json；候選原文取 frozen v0。啟動先核對 README／dataset／validator 三份 hashes，缺檔或不符零 API calls。
 
-同步 CLI、單一 context-managed SDK client、串行 stages／cases、30 秒 HTTP I/O timeout、零自動重試、不追隨 redirect。SDK import 後且 factory 前禁用 `typesafe_sdk` logger；不依賴 log level 或 header redaction。Raw response 另驗 model、answer ID、type、choice、完整 probabilities、有限 [0,1]、sum 容差 1e-6、argmax（允許 ties）、confidence [0,1]；無信心門檻，不補值。未知或無效成功回傳標 FAIL，輸出 BLOCK。
+同步 CLI、單一 context-managed SDK client、串行 stages／cases、30 秒 HTTP I/O timeout、零自動重試、不追隨 redirect。SDK import 後且 factory 前禁用 `typesafe_sdk` logger；不依賴 log level 或 header redaction。Raw response 另驗 model、answer ID、type、choice、完整 probabilities、有限 [0,1]、sum 容差 1e-6、argmax（允許 ties）、confidence [0,1]；confidence不參與採用gate，不補值。未知或無效成功回傳標 FAIL，輸出 BLOCK。
+
+## 純數據採用 gate — E012-gate-v1
+
+Owner 已鎖定 score=`probabilities[原始 choice]`；Input／Context／Output 的所有 choice 都適用。這個 topic 只實作放行機制，**不選定或校準門檻**，`0.90` 不作預設。
+
+| 項目 | 執行契約 |
+|---|---|
+| 門檻來源 | 呼叫端必填 `--min-choice-probability`；單一門檻套用全部stage，無default／env猜測／自動調整 |
+| 合法範圍 | 有限數值 `[0,1]`；缺值、bool、非數值文字、NaN／Infinity、越界不合法；CLI數值文字在preflight轉換，不印原始非法值 |
+| 邊界 | 對未四捨五入分數使用 `score >= threshold`；等於採用，無epsilon或近似比較 |
+| ADOPT | 分數達門檻；adopted_choice等於原始choice，再按既定政策／候選種類路由 |
+| REJECT | VALID分數低於門檻；adopted_choice=null，final BLOCK、delivery=null，停止後續stage，無retry／新候選／替代choice |
+| NOT_EVALUATED | 回傳INVALID／ERROR、stage被跳過或NOT_APPLICABLE；不是低分或已採用 |
+| 啟動失敗 | 未提供／非法門檻：BLOCKED、固定 MISSING_GATE_THRESHOLD／INVALID_GATE_THRESHOLD，零API呼叫、無逐案結果 |
+
+採用choice不等於交付文字：即使ADOPT，PARENT／SAFETY仍handoff，UNCERTAIN／Output BLOCK仍阻擋，原單候選不相容規則仍成立。未達門檻的PARENT／SAFETY也按已選契約BLOCK，不冒稱已handoff。
+
+Model `choice/confidence/probabilities/status`保持原值；每stage另記`adoption`的decision、score_name、score、threshold、comparison、adopted_choice、reason。門檻只在程式端，不能進SDK state／questions。VALID但REJECT仍計入模型準確率及valid_predictions；沒有呼叫的stage不計模型預測。`model_has_failures`只反映已觀察到的raw choice差異／invalid，原`verdict`仍比較完整oracle預期Action，因此正確拒絕可以同時是模型match與end-to-end FAIL；不可用gate把原模型錯誤改成PASS。
+
+每次新run記`adoption_gate`契約與實際外部門檻；舊run沒有此欄位就表示舊契約，不能回填採用判斷或改寫舊結果。歷史FAIL保留。
 
 ## 憑證與重現
 
@@ -38,11 +58,14 @@ env -u TYPESAFE_API_KEY uv run --locked --project experiments/E012-jev-text-poli
 env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u RUST_LOG uv run \
   --quiet --locked --project experiments/E012-jev-text-policy \
   --env-file experiments/E012-jev-text-policy/.env \
-  python experiments/E012-jev-text-policy/jev_policy.py --live
+  python experiments/E012-jev-text-policy/jev_policy.py --live \
+  --min-choice-probability="$E012_MIN_CHOICE_PROBABILITY"
 
 ruff check experiments/E012-jev-text-policy
 ruff format --check experiments/E012-jev-text-policy
 ```
+
+呼叫端須先設定非秘密變數 `E012_MIN_CHOICE_PROBABILITY`（實際政策由外部決定）；不在 `.env` 或此topic內選值。完全省略門檻參數時runner會BLOCKED，不會開始模型呼叫。
 
 同名 process env 優先 env file，所以 live 清除子程序的舊 key／UV_NO_ENV_FILE。Quiet 及清 RUST_LOG 防止 uv parse warning 印出憑證行；不得加入 verbose。這些不修改父 shell 或檔案。離線不載入 env file，也不繼承真 key。SDK 預先檢查 key presence，不印內容。
 
@@ -55,12 +78,12 @@ Exit codes：automatic PASS=0、FAIL=1、BLOCKED=2、Ctrl+C=130。缺 key／來�
 | ID | 覆蓋 |
 |---|---|
 | TC01 | 固定 23 案路徑、交付、handoff 短路 |
-| TC02 | 非法回傳／inventory／hash／kind、缺 key、loader hard failure |
-| TC03 | 單候選 mismatch、uncertainty、fault、timeout、cleanup／interrupt |
-| TC04 | oracle exclusion、actual／expected、skip 分母、無重試 |
+| TC02 | 非法回傳／inventory／hash／kind、缺 key、loader hard failure、缺值／非法門檻及INVALID不採用 |
+| TC03 | 單候選 mismatch、uncertainty、fault、timeout、cleanup／interrupt；gate上下／相等邊界、三stage所有choice拒絕後短路 |
+| TC04 | oracle／門檻不入model、actual／expected、raw與採用分離、skip分母、無重試 |
 | TC05 | logger／秘密輸出、factory 設定、flush |
 | TC06 | Backward compatibility=N/A；未改產品接口，不列為已通過 |
-| TC07 | 真實 23 案、suite／stage 指標與 confusion matrix |
+| TC07 | 原真實23案保留；既存回傳offline gate replay／model FAIL與分母保留，非新live／校準 |
 | TC08 | 審 delivery 適齡／安全／承諾權限；blocked/handoff 必須無 delivery |
 
 Evidence：test-results.txt 是 offline；live-results.jsonl 以 run ID 追加；run-summary.json 保存歷史 runs，latest_run_id 指最新。每案保存 expected → actual stage → proposed／final Action → 差異；未完成個案不捏造結果。Oracle sufficiency 報 correct/valid、valid/15 coverage、correct/15，valid=0 時 accuracy=null，並報 context／topic／triplets。UTC、HEAD、Python／SDK／model、source3 hashes、lock／cases／policies hashes可重現；不保存 `.env` 内容或 hash、headers、raw error body／exception／traceback。勿用 cat／printenv 顯示 key。
@@ -71,12 +94,12 @@ D=experiments/E012-jev-text-policy；O=evaluation/context_sufficiency。
 
 | 欄位 | 契約 |
 |---|---|
-| In-Scope | 獨立 SDK runner、policy8＋oracle15、三段判斷／單候選、五個有限 Action、故障阻擋、證據及審查 |
-| Out-Of-Scope | 真兒童資料、文字生成、Context LLM、parent/safety 實際處理、記憶、語音、裝置、production、公開 API、release、repo planning 工件 |
+| In-Scope | 獨立 SDK runner、policy8＋oracle15、三段判斷／單候選、外部門檻數值gate、五個有限Action、故障阻擋、證據及審查 |
+| Out-Of-Scope | 真兒童資料、文字生成、Context LLM、parent/safety 實際處理、記憶、語音、裝置、production、公開 API、release、repo planning工件、實際門檻選定／校準 |
 | ReadOnly | D/.env；O 四份工件；docs/companion-flow.md；root README／AGENTS／.gitignore／.python-version；server／device；既有 plan／skills 與所有非 E012 工件 |
-| Written | D/README.md、EXPERIMENT.md、pyproject.toml、uv.lock、policies.json、cases.json、jev_policy.py、tests/test_jev_policy.py、evidence/test-results.txt、live-results.jsonl、run-summary.json、human-review.md（原 12 個新路徑） |
+| Written | D/README.md、EXPERIMENT.md、pyproject.toml、uv.lock、policies.json、cases.json、jev_policy.py、tests/test_jev_policy.py、evidence/test-results.txt、live-results.jsonl、run-summary.json、human-review.md（原初次實作12個新路徑；本次gate follow-up無新增路徑） |
 | Deleted | 正常實作無；僅回滾節所列例外 |
-| Modify | Written 建立後可修正；既存 .env.example 僅必要的安全模板修正，本次無需修改；證據保留 run 歷史，不覆蓋舊結論 |
+| Modify | 本次gate follow-up修改D/README.md、EXPERIMENT.md、jev_policy.py、tests/test_jev_policy.py、evidence/test-results.txt、run-summary.json、human-review.md；原live-results.jsonl逐byte保留。既存.env.example無需修改；只追加證據與review，不覆蓋舊結論 |
 | Goal | 真實判斷轉成唯一、有限 Companion Action |
 | Non-Goal | 不擴大 Out-Of-Scope，不以 mock 或單次通過宣稱產品安全 |
 | TestCase | TC01–TC08 如上；TC06=N/A |
