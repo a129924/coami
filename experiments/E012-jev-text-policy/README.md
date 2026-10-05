@@ -86,7 +86,7 @@ Exit codes：automatic PASS=0、FAIL=1、BLOCKED=2、Ctrl+C=130。缺 key／來�
 | TC07 | 原真實23案保留；既存回傳offline gate replay／model FAIL與分母保留，非新live／校準 |
 | TC08 | 審 delivery 適齡／安全／承諾權限；blocked/handoff 必須無 delivery |
 
-Evidence：test-results.txt 是 offline；live-results.jsonl 以 run ID 追加；run-summary.json 保存歷史 runs，latest_run_id 指最新。每案保存 expected → actual stage → proposed／final Action → 差異；未完成個案不捏造結果。Oracle sufficiency 報 correct/valid、valid/15 coverage、correct/15，valid=0 時 accuracy=null，並報 context／topic／triplets。UTC、HEAD、Python／SDK／model、source3 hashes、lock／cases／policies hashes可重現；不保存 `.env` 内容或 hash、headers、raw error body／exception／traceback。勿用 cat／printenv 顯示 key。
+Evidence：test-results.txt 是 offline；live-results.jsonl 以 run ID 追加；run-summary.json 保存歷史 runs，latest_run_id 指最新。每案保存 expected → actual stage → proposed／final Action → 差異；未完成個案不捏造結果。Oracle sufficiency 報 correct/valid、valid/15 coverage、correct/15，valid=0 時 accuracy=null，並報 context／topic／triplets。UTC、HEAD、Python／SDK／model、source3 hashes、lock／cases／policies／執行中jev_policy.py的SHA-256可追蹤；新run在SDK呼叫前擷取metadata；不保存 `.env` 内容或 hash、headers、raw error body／exception／traceback。勿用 cat／printenv 顯示 key。
 
 ## Python implementation contract
 
@@ -97,7 +97,7 @@ D=experiments/E012-jev-text-policy；O=evaluation/context_sufficiency。
 | In-Scope | 獨立 SDK runner、policy8＋oracle15、三段判斷／單候選、外部門檻數值gate、五個有限Action、故障阻擋、證據及審查 |
 | Out-Of-Scope | 真兒童資料、文字生成、Context LLM、parent/safety 實際處理、記憶、語音、裝置、production、公開 API、release、repo planning工件、實際門檻選定／校準 |
 | ReadOnly | D/.env；O 四份工件；docs/companion-flow.md；root README／AGENTS／.gitignore／.python-version；server／device；既有 plan／skills 與所有非 E012 工件 |
-| Written | D/README.md、EXPERIMENT.md、pyproject.toml、uv.lock、policies.json、cases.json、jev_policy.py、tests/test_jev_policy.py、evidence/test-results.txt、live-results.jsonl、run-summary.json、human-review.md（原初次實作12個新路徑；本次gate follow-up無新增路徑） |
+| Written | 本次review fix新增D/evidence/source-provenance.json；D/README.md、EXPERIMENT.md、pyproject.toml、uv.lock、policies.json、cases.json、jev_policy.py、tests/test_jev_policy.py、evidence/test-results.txt、live-results.jsonl、run-summary.json、human-review.md（初次實作12個新路徑；本次另有上述1個provenance工件） |
 | Deleted | 正常實作無；僅回滾節所列例外 |
 | Modify | 本次gate follow-up修改D/README.md、EXPERIMENT.md、jev_policy.py、tests/test_jev_policy.py、evidence/test-results.txt、run-summary.json、human-review.md；原live-results.jsonl逐byte保留。既存.env.example無需修改；只追加證據與review，不覆蓋舊結論 |
 | Goal | 真實判斷轉成唯一、有限 Companion Action |
@@ -111,3 +111,7 @@ D=experiments/E012-jev-text-policy；O=evaluation/context_sufficiency。
 撤銷本 topic 的 runner／tests／配置／lock／README，保留 owner .env、既存 .env.example、EXPERIMENT／evidence 與 oracle 歷史；不整個刪除目錄。若確有 oracle 錯誤，另建 v0.1 並重做人審與獨立 review，不改 v0 或為成績改期望。
 
 [SDK Choice](https://docs.typesafe.ai/primitives/choice) · [SDK response](https://docs.typesafe.ai/sdk/python/api/types/responses) · [uv env-file](https://docs.astral.sh/uv/concepts/configuration-files/#environment-variable-files)
+
+## Historical source provenance
+
+原run的HEAD是base且未收錄runner hash。`evidence/source-provenance.json`提供事後對應的原實作Git snapshot、blob及SHA-256；其lock/cases/policies與原run hashes一致。這是retrospective association，不是原執行當時的source attestation；原summary不回填。新run另在SDK呼叫前記執行中module的hash，不以HEAD代替source指紋。

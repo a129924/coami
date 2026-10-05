@@ -1,0 +1,16 @@
+{
+  "run_id": "20261005T042808Z-1a07e13b",
+  "recorded_at_utc": "2026-10-05T08:01:54.796420+00:00",
+  "provenance_kind": "RETROSPECTIVE_GIT_SNAPSHOT",
+  "contemporaneous_runner_hash": false,
+  "source_snapshot": {
+    "commit": "7c14357aa8c78cb54ea2a7074f4806d1729d17b0",
+    "path": "experiments/E012-jev-text-policy/jev_policy.py",
+    "git_blob_oid": "18fc74aff01cf4b0762567d63dc05b0320865ae5",
+    "sha256": "448b5553269b96b07b1a6e95c9af410051e8a3ab4a86f051cf2c0b8ad8f9bbbb",
+    "url": "https://github.com/a129924/coami/blob/7c14357aa8c78cb54ea2a7074f4806d1729d17b0/experiments/E012-jev-text-policy/jev_policy.py"
+  },
+  "basis": "First implementation commit before numeric gate changes; its lock/cases/policies hashes match the original run. The implementation workflow associates this snapshot with the uncommitted live runner.",
+  "limitation": "The original live run did not capture a runner hash. This later snapshot association is not contemporaneous proof of the exact executed bytes; the recorded base HEAD and original FAIL summary remain unchanged.",
+  "original_live_results_sha256": "521123698ec56f4581e3f4f2350831e73835e3a14e70afefd3b8b8e9d0921f92"
+}

@@ -691,6 +691,13 @@ def metadata(directory: Path, root: Path) -> dict[str, object]:
             hashes[name] = hashlib.sha256((directory / name).read_bytes()).hexdigest()
         except OSError:
             hashes[name] = None
+    # Hash this executing module, even when evidence/config uses another directory.
+    try:
+        hashes["jev_policy.py"] = hashlib.sha256(
+            Path(__file__).resolve().read_bytes()
+        ).hexdigest()
+    except OSError:
+        hashes["jev_policy.py"] = None
     head = subprocess.run(
         ["git", "rev-parse", "HEAD"],
         cwd=root,
@@ -743,6 +750,7 @@ def run_live(
     blocked_code = None
     evidence = directory / "evidence"
     evidence.mkdir(exist_ok=True)
+    run_metadata = metadata(directory, root)  # Capture source before any SDK calls.
     gate = None
     try:
         if threshold is None:
@@ -804,7 +812,7 @@ def run_live(
         **summarize(
             records, run_id, interrupted=interrupted, blocked_code=blocked_code
         ),
-        "metadata": metadata(directory, root),
+        "metadata": run_metadata,
         "adoption_gate": gate.contract()
         if gate is not None
         else {"version": "E012-gate-v1", "configured": False},

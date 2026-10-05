@@ -42,3 +42,11 @@ Follow-up verification：36/36 offline unittest、Ruff lint/format、frozen orac
 Decision: ADDRESS。Reviewer指出bare `--min-choice-probability`在argparse退出、漏寫preflight summary，確實違反缺門檻契約。僅修改此option為nargs="?"／const=None，讓缺值進既有protected preflight，仍無default門檻。
 
 Verification: 先用CLI regression重現RED，再修正後37/37 offline unittest及Ruff lint/format PASS；省略flag、bare flag在--live前／後均exit2、MISSING_GATE_THRESHOLD、BLOCKED summary、兩suite completed=0、零SDK factory／case loading、stderr空。測試mock evidence writes，不新增live或preflight run。原live-results與run-summary整份檔案未改；原FAIL、人審pending及oracle保留。
+
+## PR source provenance follow-up — discussion_r4181802886
+
+Decision: ADDRESS。新run的metadata在任何SDK呼叫前記錄執行中jev_policy.py的SHA-256，與HEAD分離。新增evidence/source-provenance.json，保留原實作commit 7c14357的不可變Git snapshot定位、blob及hash；核對三份lock/cases/policies均與原實測metadata吻合。原run未捕捉source hash，此事後關聯不等同當時精確執行bytes的證明；不回填或重寫原summary。
+
+新增same HEAD／different module bytes及不同配置目錄的metadata regression。無新live，原FAIL及人審pending保留。discussion_r4181802897為缺值旗標的重複建議，已由046f4df修正，引用相同測試回覆。
+
+Source follow-up verification：38/38 offline unittest及Ruff lint/format PASS；原live-results.jsonl與run-summary.json整份逐byte未變。

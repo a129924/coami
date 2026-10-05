@@ -9,6 +9,7 @@ from contextlib import redirect_stdout
 from copy import deepcopy
 from dataclasses import replace
 import io
+import hashlib
 import json
 import logging
 from pathlib import Path
@@ -338,6 +339,37 @@ class PolicyTests(unittest.TestCase):
         self.assertEqual(
             save.call_args.args[1]["blocked_code"], "MISSING_GATE_THRESHOLD"
         )
+
+    def test_TC07_metadata_hashes_executing_runner_independent_of_head(self) -> None:
+        directory = Path("/private/tmp/e012-test-config")
+        source = Path(p.__file__).resolve()
+        fingerprints = []
+        for runner in (b"runner revision one", b"runner revision two"):
+            reads = {
+                source: runner,
+                **{
+                    directory / name: name.encode()
+                    for name in ("uv.lock", "cases.json", "policies.json")
+                },
+            }
+            with (
+                self.subTest(runner=runner),
+                patch.object(
+                    Path, "read_bytes", autospec=True, side_effect=reads.__getitem__
+                ),
+                patch.object(
+                    p.subprocess,
+                    "run",
+                    return_value=SimpleNamespace(stdout="same-head\n"),
+                ),
+                patch.object(p, "version", return_value=p.SDK_VERSION),
+            ):
+                result = p.metadata(directory, p.ROOT)
+            self.assertEqual(result["head"], "same-head")
+            fingerprint = result["artifact_hashes"]["jev_policy.py"]
+            self.assertEqual(fingerprint, hashlib.sha256(runner).hexdigest())
+            fingerprints.append(fingerprint)
+        self.assertNotEqual(*fingerprints)
 
     def test_TC02_main_missing_threshold_forms_record_blocked_summary(self) -> None:
         real_run = p.run_live
