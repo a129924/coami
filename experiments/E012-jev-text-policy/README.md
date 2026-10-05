@@ -65,7 +65,7 @@ ruff check experiments/E012-jev-text-policy
 ruff format --check experiments/E012-jev-text-policy
 ```
 
-呼叫端須先設定非秘密變數 `E012_MIN_CHOICE_PROBABILITY`（實際政策由外部決定）；不在 `.env` 或此topic內選值。完全省略門檻參數或只寫`--min-choice-probability`而未給值時，runner記MISSING_GATE_THRESHOLD／BLOCKED summary，不會開始模型呼叫。
+呼叫端須先設定非秘密變數 `E012_MIN_CHOICE_PROBABILITY`（實際政策由外部決定）；不在 `.env` 或此topic內選值。完全省略門檻參數或只寫`--min-choice-probability`而未給值時，runner記MISSING_GATE_THRESHOLD／BLOCKED summary，不會開始模型呼叫。分開傳入的負號值（如`--min-choice-probability -1e-3`或`-inf`）也進protected preflight，記INVALID_GATE_THRESHOLD且不印原值；`--live`／`--help`／`-h`保留option語意。
 
 同名 process env 優先 env file，所以 live 清除子程序的舊 key／UV_NO_ENV_FILE。Quiet 及清 RUST_LOG 防止 uv parse warning 印出憑證行；不得加入 verbose。這些不修改父 shell 或檔案。離線不載入 env file，也不繼承真 key。SDK 預先檢查 key presence，不印內容。
 
@@ -78,7 +78,7 @@ Exit codes：automatic PASS=0、FAIL=1、BLOCKED=2、Ctrl+C=130。缺 key／來�
 | ID | 覆蓋 |
 |---|---|
 | TC01 | 固定 23 案路徑、交付、handoff 短路 |
-| TC02 | 非法回傳／inventory／hash／kind、缺 key、loader hard failure、缺值／非法門檻及INVALID不採用 |
+| TC02 | 非法回傳／inventory／hash／kind、缺 key、loader hard failure、缺值／非法門檻（含分開傳入的負號值）、runner fingerprint不可用及INVALID不採用 |
 | TC03 | 單候選 mismatch、uncertainty、fault、timeout、cleanup／interrupt；gate上下／相等邊界、三stage所有choice拒絕後短路 |
 | TC04 | oracle／門檻不入model、actual／expected、raw與採用分離、skip分母、無重試 |
 | TC05 | logger／秘密輸出、factory 設定、flush |
@@ -114,4 +114,4 @@ D=experiments/E012-jev-text-policy；O=evaluation/context_sufficiency。
 
 ## Historical source provenance
 
-原run的HEAD是base且未收錄runner hash。`evidence/source-provenance.json`提供事後對應的原實作Git snapshot、blob及SHA-256；其lock/cases/policies與原run hashes一致。這是retrospective association，不是原執行當時的source attestation；原summary不回填。新run另在SDK呼叫前記執行中module的hash，不以HEAD代替source指紋。
+原run的HEAD是base且未收錄runner hash。`evidence/source-provenance.json`提供事後對應的原實作Git snapshot、blob及SHA-256；其lock/cases/policies與原run hashes一致。這是retrospective association，不是原執行當時的source attestation；原summary不回填。新run另在SDK呼叫前記執行中module的hash，不以HEAD代替source指紋。若runner不可讀、fingerprint為null，preflight記RUNNER_FINGERPRINT_UNAVAILABLE／BLOCKED、零API calls及逐案結果；保留失敗metadata，不將null當成有效provenance。

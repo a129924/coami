@@ -330,7 +330,11 @@ class PolicyTests(unittest.TestCase):
             patch.object(Path, "mkdir"),
             patch.object(p, "load_cases") as cases,
             patch.object(p, "save_summary") as save,
-            patch.object(p, "metadata", return_value={}),
+            patch.object(
+                p,
+                "metadata",
+                return_value={"artifact_hashes": {"jev_policy.py": "0" * 64}},
+            ),
             redirect_stdout(io.StringIO()),
         ):
             self.assertEqual(p.run_live(factory=factory), 2)
@@ -393,7 +397,11 @@ class PolicyTests(unittest.TestCase):
                     patch.object(Path, "mkdir"),
                     patch.object(p, "load_cases") as cases,
                     patch.object(p, "save_summary") as save,
-                    patch.object(p, "metadata", return_value={}),
+                    patch.object(
+                        p,
+                        "metadata",
+                        return_value={"artifact_hashes": {"jev_policy.py": "0" * 64}},
+                    ),
                     redirect_stdout(stdout),
                     patch("sys.stderr", stderr),
                 ):
@@ -446,7 +454,11 @@ class PolicyTests(unittest.TestCase):
                     ),
                     patch.object(Path, "mkdir"),
                     patch.object(p, "save_summary") as save,
-                    patch.object(p, "metadata", return_value={}),
+                    patch.object(
+                        p,
+                        "metadata",
+                        return_value={"artifact_hashes": {"jev_policy.py": "0" * 64}},
+                    ),
                     redirect_stdout(stdout),
                     unittest.mock.patch("sys.stderr", stderr),
                 ):
@@ -476,7 +488,11 @@ class PolicyTests(unittest.TestCase):
                 patch.object(p, "run_live", side_effect=real_run),
                 patch.object(Path, "mkdir"),
                 patch.object(p, "save_summary") as save,
-                patch.object(p, "metadata", return_value={}),
+                patch.object(
+                    p,
+                    "metadata",
+                    return_value={"artifact_hashes": {"jev_policy.py": "0" * 64}},
+                ),
                 redirect_stdout(io.StringIO()),
             ):
                 self.assertEqual(p.main(), 2)
@@ -484,6 +500,120 @@ class PolicyTests(unittest.TestCase):
                 self.assertEqual(
                     save.call_args.args[1]["adoption_gate"]["threshold"], float(value)
                 )
+
+    def test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary(
+        self,
+    ) -> None:
+        real_run = p.run_live
+        for value in ("-1e-3", "-inf", "-nan", "-secret-sentinel", "--secret-sentinel"):
+            for args in (
+                ["--live", "--min-choice-probability", value],
+                ["--min-choice-probability", value, "--live"],
+            ):
+                with self.subTest(value=value, args=args):
+                    factory = MagicMock()
+                    stdout, stderr = io.StringIO(), io.StringIO()
+                    with (
+                        patch.object(sys, "argv", ["jev_policy.py", *args]),
+                        patch.object(
+                            p,
+                            "run_live",
+                            side_effect=lambda **kwargs: real_run(
+                                factory=factory, **kwargs
+                            ),
+                        ),
+                        patch.object(Path, "mkdir"),
+                        patch.object(p, "load_cases") as cases,
+                        patch.object(p, "save_summary") as save,
+                        patch.object(
+                            p,
+                            "metadata",
+                            return_value={
+                                "artifact_hashes": {"jev_policy.py": "0" * 64}
+                            },
+                        ),
+                        redirect_stdout(stdout),
+                        patch("sys.stderr", stderr),
+                    ):
+                        self.assertEqual(p.main(), 2)
+                    factory.assert_not_called()
+                    cases.assert_not_called()
+                    save.assert_called_once()
+                    summary = save.call_args.args[1]
+                    self.assertEqual(summary["blocked_code"], "INVALID_GATE_THRESHOLD")
+                    self.assertEqual(summary["automatic_verdict"], "BLOCKED")
+                    for suite in ("oracle15", "policy8"):
+                        self.assertEqual(summary["suites"][suite]["completed"], 0)
+                    self.assertEqual(stderr.getvalue(), "")
+                    self.assertNotIn(value, stdout.getvalue())
+
+    def test_TC02_gate_argument_binding_preserves_help_options(self) -> None:
+        for help_flag in ("--help", "-h"):
+            with (
+                self.subTest(help_flag=help_flag),
+                patch.object(
+                    sys,
+                    "argv",
+                    ["jev_policy.py", "--live", "--min-choice-probability", help_flag],
+                ),
+                patch.object(p, "run_live") as run,
+                redirect_stdout(io.StringIO()),
+                patch("sys.stderr", io.StringIO()) as stderr,
+                self.assertRaises(SystemExit) as exit_result,
+            ):
+                p.main()
+            self.assertEqual(exit_result.exception.code, 0)
+            self.assertEqual(stderr.getvalue(), "")
+            run.assert_not_called()
+
+    def test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata(
+        self,
+    ) -> None:
+        source = Path(p.__file__).resolve()
+        for error in (
+            FileNotFoundError("secret-error-sentinel"),
+            PermissionError("secret-error-sentinel"),
+        ):
+            with self.subTest(error=type(error).__name__):
+
+                def read(path: Path) -> bytes:
+                    if path == source:
+                        raise error
+                    return b"config"
+
+                factory = MagicMock()
+                stdout = io.StringIO()
+                with (
+                    patch.object(Path, "read_bytes", autospec=True, side_effect=read),
+                    patch.object(
+                        p.subprocess,
+                        "run",
+                        return_value=SimpleNamespace(stdout="head\n"),
+                    ),
+                    patch.object(p, "version", return_value=p.SDK_VERSION),
+                    patch.dict(p.os.environ, {"TYPESAFE_API_KEY": "fake-key-sentinel"}),
+                    patch.object(Path, "mkdir"),
+                    patch.object(p, "load_cases", return_value=[]) as cases,
+                    patch.object(p, "load_questions", return_value=self.questions),
+                    patch.object(p, "save_summary") as save,
+                    redirect_stdout(stdout),
+                ):
+                    self.assertEqual(p.run_live(factory=factory, threshold=0.5), 2)
+                factory.assert_not_called()
+                cases.assert_not_called()
+                save.assert_called_once()
+                summary = save.call_args.args[1]
+                self.assertEqual(
+                    summary["blocked_code"], "RUNNER_FINGERPRINT_UNAVAILABLE"
+                )
+                self.assertEqual(summary["automatic_verdict"], "BLOCKED")
+                self.assertIsNone(
+                    summary["metadata"]["artifact_hashes"]["jev_policy.py"]
+                )
+                for suite in ("oracle15", "policy8"):
+                    self.assertEqual(summary["suites"][suite]["completed"], 0)
+                self.assertNotIn("secret-error-sentinel", stdout.getvalue())
+                self.assertNotIn("fake-key-sentinel", stdout.getvalue() + repr(summary))
 
     def test_TC01_all_23_expected_paths_offline(self) -> None:
         self.assertEqual(counter_suites(self.cases), {"policy8": 8, "oracle15": 15})
@@ -674,7 +804,11 @@ class PolicyTests(unittest.TestCase):
             patch.dict(p.os.environ, {}, clear=True),
             patch.object(Path, "mkdir"),
             patch.object(p, "save_summary") as save,
-            patch.object(p, "metadata", return_value={}),
+            patch.object(
+                p,
+                "metadata",
+                return_value={"artifact_hashes": {"jev_policy.py": "0" * 64}},
+            ),
             redirect_stdout(io.StringIO()),
         ):
             self.assertEqual(p.run_live(factory=factory, threshold=0.5), 2)
@@ -904,7 +1038,11 @@ class PolicyTests(unittest.TestCase):
             patch.object(Path, "mkdir"),
             patch.object(Path, "open", unittest.mock.mock_open()),
             patch.object(p, "save_summary") as save,
-            patch.object(p, "metadata", return_value={}),
+            patch.object(
+                p,
+                "metadata",
+                return_value={"artifact_hashes": {"jev_policy.py": "0" * 64}},
+            ),
             redirect_stdout(stdout),
         ):
             self.assertEqual(p.run_live(factory=factory, threshold=0.5), 130)
@@ -945,7 +1083,11 @@ class PolicyTests(unittest.TestCase):
             patch.object(Path, "mkdir"),
             patch.object(Path, "open", file_mock),
             patch.object(p, "save_summary"),
-            patch.object(p, "metadata", return_value={}),
+            patch.object(
+                p,
+                "metadata",
+                return_value={"artifact_hashes": {"jev_policy.py": "0" * 64}},
+            ),
             redirect_stdout(stdout),
         ):
             self.assertEqual(p.run_live(factory=lambda **kw: manager, threshold=0.5), 2)

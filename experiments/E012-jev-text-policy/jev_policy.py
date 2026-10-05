@@ -14,6 +14,7 @@ import math
 import os
 from pathlib import Path
 import subprocess
+import sys
 from typing import Callable, Literal, Protocol
 from uuid import uuid4
 
@@ -762,6 +763,11 @@ def run_live(
         except (ValueError, OverflowError) as exc:
             raise ContractError("INVALID_GATE_THRESHOLD") from exc
         gate = AdoptionGate(numeric_threshold)
+        if (
+            object_map(run_metadata.get("artifact_hashes", {})).get("jev_policy.py")
+            is None
+        ):
+            raise ContractError("RUNNER_FINGERPRINT_UNAVAILABLE")
         if not os.environ.get("TYPESAFE_API_KEY", "").strip():
             raise ContractError("MISSING_KEY")
         if version("typesafe-sdk") != SDK_VERSION:
@@ -826,6 +832,25 @@ def run_live(
     return {"PASS": 0, "FAIL": 1, "BLOCKED": 2}[text(summary["automatic_verdict"])]
 
 
+def _gate_arguments(arguments: list[str]) -> list[str]:
+    """Bind separated gate values before argparse interprets leading hyphens."""
+    flag = "--min-choice-probability"
+    options = {flag, "--live", "--help", "-h", "--"}
+    normalized = []
+    index = 0
+    while index < len(arguments):
+        argument = arguments[index]
+        if argument == flag and index + 1 < len(arguments):
+            value = arguments[index + 1]
+            if value not in options and not value.startswith(flag + "="):
+                normalized.append(flag + "=" + value)
+                index += 2
+                continue
+        normalized.append(argument)
+        index += 1
+    return normalized
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -838,7 +863,7 @@ def main() -> int:
         default=None,
         help="Caller-selected threshold in [0,1], required for live; no default/calibration",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(_gate_arguments(sys.argv[1:]))
     if not args.live:
         parser.print_help()
         return 0

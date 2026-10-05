@@ -551,3 +551,301 @@ Source provenance fix GREEN
 COMMAND: ruff format --check experiments/E012-jev-text-policy
 2 files already formatted
 EXIT: 0
+
+PR round 2 preflight regressions RED: separated_hyphen
+test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) ...
+  test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-1e-3', args=['--live', '--min-choice-probability', '-1e-3']) ... ERROR
+  test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-1e-3', args=['--min-choice-probability', '-1e-3', '--live']) ... ERROR
+  test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-inf', args=['--live', '--min-choice-probability', '-inf']) ... ERROR
+  test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-inf', args=['--min-choice-probability', '-inf', '--live']) ... ERROR
+  test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-nan', args=['--live', '--min-choice-probability', '-nan']) ... ERROR
+  test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-nan', args=['--min-choice-probability', '-nan', '--live']) ... ERROR
+  test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-secret-sentinel', args=['--live', '--min-choice-probability', '-secret-sentinel']) ... ERROR
+  test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-secret-sentinel', args=['--min-choice-probability', '-secret-sentinel', '--live']) ... ERROR
+  test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='--secret-sentinel', args=['--live', '--min-choice-probability', '--secret-sentinel']) ... ERROR
+  test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='--secret-sentinel', args=['--min-choice-probability', '--secret-sentinel', '--live']) ... ERROR
+
+======================================================================
+ERROR: test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-1e-3', args=['--live', '--min-choice-probability', '-1e-3'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 508, in test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary
+    self.assertEqual(p.main(), 2)
+                     ^^^^^^^^
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/jev_policy.py", line 841, in main
+    args = parser.parse_args()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1908, in parse_args
+    self.error(msg)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2650, in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2637, in exit
+    _sys.exit(status)
+SystemExit: 2
+
+======================================================================
+ERROR: test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-1e-3', args=['--min-choice-probability', '-1e-3', '--live'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 508, in test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary
+    self.assertEqual(p.main(), 2)
+                     ^^^^^^^^
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/jev_policy.py", line 841, in main
+    args = parser.parse_args()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1908, in parse_args
+    self.error(msg)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2650, in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2637, in exit
+    _sys.exit(status)
+SystemExit: 2
+
+======================================================================
+ERROR: test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-inf', args=['--live', '--min-choice-probability', '-inf'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 508, in test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary
+    self.assertEqual(p.main(), 2)
+                     ^^^^^^^^
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/jev_policy.py", line 841, in main
+    args = parser.parse_args()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1908, in parse_args
+    self.error(msg)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2650, in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2637, in exit
+    _sys.exit(status)
+SystemExit: 2
+
+======================================================================
+ERROR: test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-inf', args=['--min-choice-probability', '-inf', '--live'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 508, in test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary
+    self.assertEqual(p.main(), 2)
+                     ^^^^^^^^
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/jev_policy.py", line 841, in main
+    args = parser.parse_args()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1908, in parse_args
+    self.error(msg)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2650, in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2637, in exit
+    _sys.exit(status)
+SystemExit: 2
+
+======================================================================
+ERROR: test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-nan', args=['--live', '--min-choice-probability', '-nan'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 508, in test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary
+    self.assertEqual(p.main(), 2)
+                     ^^^^^^^^
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/jev_policy.py", line 841, in main
+    args = parser.parse_args()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1908, in parse_args
+    self.error(msg)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2650, in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2637, in exit
+    _sys.exit(status)
+SystemExit: 2
+
+======================================================================
+ERROR: test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-nan', args=['--min-choice-probability', '-nan', '--live'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 508, in test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary
+    self.assertEqual(p.main(), 2)
+                     ^^^^^^^^
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/jev_policy.py", line 841, in main
+    args = parser.parse_args()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1908, in parse_args
+    self.error(msg)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2650, in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2637, in exit
+    _sys.exit(status)
+SystemExit: 2
+
+======================================================================
+ERROR: test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-secret-sentinel', args=['--live', '--min-choice-probability', '-secret-sentinel'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 508, in test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary
+    self.assertEqual(p.main(), 2)
+                     ^^^^^^^^
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/jev_policy.py", line 841, in main
+    args = parser.parse_args()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1908, in parse_args
+    self.error(msg)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2650, in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2637, in exit
+    _sys.exit(status)
+SystemExit: 2
+
+======================================================================
+ERROR: test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='-secret-sentinel', args=['--min-choice-probability', '-secret-sentinel', '--live'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 508, in test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary
+    self.assertEqual(p.main(), 2)
+                     ^^^^^^^^
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/jev_policy.py", line 841, in main
+    args = parser.parse_args()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1908, in parse_args
+    self.error(msg)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2650, in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2637, in exit
+    _sys.exit(status)
+SystemExit: 2
+
+======================================================================
+ERROR: test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='--secret-sentinel', args=['--live', '--min-choice-probability', '--secret-sentinel'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 508, in test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary
+    self.assertEqual(p.main(), 2)
+                     ^^^^^^^^
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/jev_policy.py", line 841, in main
+    args = parser.parse_args()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1908, in parse_args
+    self.error(msg)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2650, in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2637, in exit
+    _sys.exit(status)
+SystemExit: 2
+
+======================================================================
+ERROR: test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) (value='--secret-sentinel', args=['--min-choice-probability', '--secret-sentinel', '--live'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 508, in test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary
+    self.assertEqual(p.main(), 2)
+                     ^^^^^^^^
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/jev_policy.py", line 841, in main
+    args = parser.parse_args()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 1908, in parse_args
+    self.error(msg)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2650, in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/argparse.py", line 2637, in exit
+    _sys.exit(status)
+SystemExit: 2
+
+----------------------------------------------------------------------
+Ran 1 test in 0.011s
+
+FAILED (errors=10)
+EXIT: 1
+
+PR round 2 preflight regressions RED: unreadable_runner
+test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata (test_jev_policy.PolicyTests.test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata) ...
+  test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata (test_jev_policy.PolicyTests.test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata) (error='FileNotFoundError') ... FAIL
+  test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata (test_jev_policy.PolicyTests.test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata) (error='PermissionError') ... FAIL
+
+======================================================================
+FAIL: test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata (test_jev_policy.PolicyTests.test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata) (error='FileNotFoundError')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 543, in test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata
+    factory.assert_not_called()
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/unittest/mock.py", line 910, in assert_not_called
+    raise AssertionError(msg)
+AssertionError: Expected 'mock' to not have been called. Called 1 times.
+Calls: [call(model='jev-1.13.0', base_url='https://api.typesafe.ai', timeout=30.0, retry=RetryPolicy(max_retries=0, backoff_initial=0.5, backoff_max=5.0, backoff_jitter=0.25, http_statuses={512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 408, 429, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511}, respect_retry_after=True, api_connection_error=True, api_timeout_error=True, exceptions=set(), predicate=None, timeout=30.0)),
+ call().__enter__(),
+ call().__exit__(None, None, None)].
+
+======================================================================
+FAIL: test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata (test_jev_policy.PolicyTests.test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata) (error='PermissionError')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/coami-e012-jev-decisions/experiments/E012-jev-text-policy/tests/test_jev_policy.py", line 543, in test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata
+    factory.assert_not_called()
+  File "/Users/andrew/.rye/py/cpython@3.12.9/lib/python3.12/unittest/mock.py", line 910, in assert_not_called
+    raise AssertionError(msg)
+AssertionError: Expected 'mock' to not have been called. Called 1 times.
+Calls: [call(model='jev-1.13.0', base_url='https://api.typesafe.ai', timeout=30.0, retry=RetryPolicy(max_retries=0, backoff_initial=0.5, backoff_max=5.0, backoff_jitter=0.25, http_statuses={512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 408, 429, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511}, respect_retry_after=True, api_connection_error=True, api_timeout_error=True, exceptions=set(), predicate=None, timeout=30.0)),
+ call().__enter__(),
+ call().__exit__(None, None, None)].
+
+----------------------------------------------------------------------
+Ran 1 test in 0.005s
+
+FAILED (failures=2)
+EXIT: 1
+
+PR round 2 preflight GREEN
+COMMAND: experiments/E012-jev-text-policy/.venv/bin/python -m unittest discover -s experiments/E012-jev-text-policy/tests -v
+test_TC01_all_23_expected_paths_offline (test_jev_policy.PolicyTests.test_TC01_all_23_expected_paths_offline) ... ok
+test_TC01_handoff_skips_downstream_and_preserves_destination (test_jev_policy.PolicyTests.test_TC01_handoff_skips_downstream_and_preserves_destination) ... ok
+test_TC02_env_loader_hard_failure_classification (test_jev_policy.PolicyTests.test_TC02_env_loader_hard_failure_classification) ... ok
+test_TC02_gate_argument_binding_preserves_help_options (test_jev_policy.PolicyTests.test_TC02_gate_argument_binding_preserves_help_options) ... ok
+test_TC02_gate_requires_valid_external_threshold (test_jev_policy.PolicyTests.test_TC02_gate_requires_valid_external_threshold) ... ok
+test_TC02_invalid_candidate_never_calls_model (test_jev_policy.PolicyTests.test_TC02_invalid_candidate_never_calls_model) ... ok
+test_TC02_invalid_response_cannot_pass_even_zero_threshold (test_jev_policy.PolicyTests.test_TC02_invalid_response_cannot_pass_even_zero_threshold) ... ok
+test_TC02_inventory_and_hash_preflight (test_jev_policy.PolicyTests.test_TC02_inventory_and_hash_preflight) ... ok
+test_TC02_main_invalid_threshold_records_fixed_blocked_code_without_echo (test_jev_policy.PolicyTests.test_TC02_main_invalid_threshold_records_fixed_blocked_code_without_echo) ... ok
+test_TC02_main_missing_threshold_forms_record_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_missing_threshold_forms_record_blocked_summary) ... ok
+test_TC02_main_numeric_text_threshold_parses_before_key_preflight (test_jev_policy.PolicyTests.test_TC02_main_numeric_text_threshold_parses_before_key_preflight) ... ok
+test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary (test_jev_policy.PolicyTests.test_TC02_main_separated_hyphen_threshold_records_safe_blocked_summary) ... ok
+test_TC02_missing_gate_threshold_no_factory_or_cases (test_jev_policy.PolicyTests.test_TC02_missing_gate_threshold_no_factory_or_cases) ... ok
+test_TC02_missing_key_no_client_no_case_results (test_jev_policy.PolicyTests.test_TC02_missing_key_no_client_no_case_results) ... ok
+test_TC02_missing_source (test_jev_policy.PolicyTests.test_TC02_missing_source) ... ok
+test_TC02_non_json_blocks (test_jev_policy.PolicyTests.test_TC02_non_json_blocks) ... ok
+test_TC02_probability_and_confidence_contract (test_jev_policy.PolicyTests.test_TC02_probability_and_confidence_contract) ... ok
+test_TC02_unknown_missing_malformed_response (test_jev_policy.PolicyTests.test_TC02_unknown_missing_malformed_response) ... ok
+test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata (test_jev_policy.PolicyTests.test_TC02_unreadable_runner_blocks_before_client_and_preserves_metadata) ... ok
+test_TC02_wrong_id_and_type (test_jev_policy.PolicyTests.test_TC02_wrong_id_and_type) ... ok
+test_TC03_both_candidate_mismatch_directions_still_evaluate_output (test_jev_policy.PolicyTests.test_TC03_both_candidate_mismatch_directions_still_evaluate_output) ... ok
+test_TC03_context_gate_rejects_both_choices_no_output_or_replacement (test_jev_policy.PolicyTests.test_TC03_context_gate_rejects_both_choices_no_output_or_replacement) ... ok
+test_TC03_faults_block_without_retry_or_error_body (test_jev_policy.PolicyTests.test_TC03_faults_block_without_retry_or_error_body) ... ok
+test_TC03_gate_boundary_uses_unrounded_selected_probability (test_jev_policy.PolicyTests.test_TC03_gate_boundary_uses_unrounded_selected_probability) ... ok
+test_TC03_gate_rejects_every_input_choice_and_stops (test_jev_policy.PolicyTests.test_TC03_gate_rejects_every_input_choice_and_stops) ... ok
+test_TC03_invalid_context_skips_output (test_jev_policy.PolicyTests.test_TC03_invalid_context_skips_output) ... ok
+test_TC03_low_confidence_and_argmax_tie_are_valid (test_jev_policy.PolicyTests.test_TC03_low_confidence_and_argmax_tie_are_valid) ... ok
+test_TC03_output_gate_rejects_every_choice_no_delivery (test_jev_policy.PolicyTests.test_TC03_output_gate_rejects_every_choice_no_delivery) ... ok
+test_TC03_output_timeout_blocks_and_marks_incomplete (test_jev_policy.PolicyTests.test_TC03_output_timeout_blocks_and_marks_incomplete) ... ok
+test_TC03_sdk_validation_error_is_fail_before_generic_http (test_jev_policy.PolicyTests.test_TC03_sdk_validation_error_is_fail_before_generic_http) ... ok
+test_TC03_uncertain_and_disallowed_output_never_delivers (test_jev_policy.PolicyTests.test_TC03_uncertain_and_disallowed_output_never_delivers) ... ok
+test_TC04_correct_raw_choice_rejected_is_not_model_failure (test_jev_policy.PolicyTests.test_TC04_correct_raw_choice_rejected_is_not_model_failure) ... ok
+test_TC04_gate_threshold_not_sent_to_model (test_jev_policy.PolicyTests.test_TC04_gate_threshold_not_sent_to_model) ... ok
+test_TC04_oracle_and_nested_metadata_do_not_leak (test_jev_policy.PolicyTests.test_TC04_oracle_and_nested_metadata_do_not_leak) ... ok
+test_TC04_partial_valid_denominator (test_jev_policy.PolicyTests.test_TC04_partial_valid_denominator) ... ok
+test_TC04_router_does_not_observe_changed_evaluator_expectations (test_jev_policy.PolicyTests.test_TC04_router_does_not_observe_changed_evaluator_expectations) ... ok
+test_TC04_skip_denominators_and_fail_priority (test_jev_policy.PolicyTests.test_TC04_skip_denominators_and_fail_priority) ... ok
+test_TC05_factory_logging_disabled_cleanup_and_sdk_settings (test_jev_policy.PolicyTests.test_TC05_factory_logging_disabled_cleanup_and_sdk_settings) ... ok
+test_TC05_logged_method_and_complete_runner_flush (test_jev_policy.PolicyTests.test_TC05_logged_method_and_complete_runner_flush) ... ok
+test_TC07_gate_replay_retains_original_fail_and_valid_denominator (test_jev_policy.PolicyTests.test_TC07_gate_replay_retains_original_fail_and_valid_denominator) ... ok
+test_TC07_metadata_hashes_executing_runner_independent_of_head (test_jev_policy.PolicyTests.test_TC07_metadata_hashes_executing_runner_independent_of_head) ... ok
+
+----------------------------------------------------------------------
+Ran 41 tests in 0.035s
+
+OK
+EXIT: 0
+
+PR round 2 preflight GREEN
+COMMAND: ruff check experiments/E012-jev-text-policy
+All checks passed!
+EXIT: 0
+
+PR round 2 preflight GREEN
+COMMAND: ruff format --check experiments/E012-jev-text-policy
+2 files already formatted
+EXIT: 0
+
+Second-round history check PASS: live-results.jsonl, run-summary.json and source-provenance.json remain entirely byte-identical to a9c343a. No new runs; original FAIL preserved.

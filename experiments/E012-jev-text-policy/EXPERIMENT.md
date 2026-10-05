@@ -50,3 +50,10 @@ Decision: ADDRESS。新run的metadata在任何SDK呼叫前記錄執行中jev_pol
 新增same HEAD／different module bytes及不同配置目錄的metadata regression。無新live，原FAIL及人審pending保留。discussion_r4181802897為缺值旗標的重複建議，已由046f4df修正，引用相同測試回覆。
 
 Source follow-up verification：38/38 offline unittest及Ruff lint/format PASS；原live-results.jsonl與run-summary.json整份逐byte未變。
+
+## PR comment review and fix — second round
+
+- discussion_r4181971837: ADDRESS。僅對完整門檻flag的分開value先綁成flag=value，再由argparse解析，避免-1e-3／-inf等被當成option並echo原值。既有--live、--help、-h及bare flag語意保留；score與實際門檻政策未改。
+- discussion_r4181971844: ADDRESS。metadata在原位置捕捉runner讀取失敗，protected preflight新增固定RUNNER_FINGERPRINT_UNAVAILABLE；指紋為null即BLOCKED，零case loading／SDK calls，summary保留失敗metadata，不印exception。
+
+Verification：先重現兩項RED；修正後41/41 offline unittest、Ruff lint/format PASS。CLI負號值前後順序、合成秘密sentinel與help保留皆有regression；FileNotFoundError／PermissionError皆記zero-case BLOCKED。測試mock所有runner writes，不新增live或preflight runs。原live-results與run-summary整份逐byte保留，原FAIL、人審pending、oracle及歷史source-provenance未改。
