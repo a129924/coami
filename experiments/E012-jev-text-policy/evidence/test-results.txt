@@ -1,0 +1,56 @@
+
+OFFLINE verification 2026-10-05T04:28:47.293707+00:00
+No real key/env file/API used. Static fixture reads only; runner writes mocked.
+COMMAND: env -u TYPESAFE_API_KEY UV_CACHE_DIR=/private/tmp/coami-e012-uv-cache uv run --locked --project experiments/E012-jev-text-policy --no-env-file python evaluation/context_sufficiency/validate_dataset.py
+validation: PASS (structure and fixture constraints only)
+total cases: 15
+INSUFFICIENT: 10
+SUFFICIENT: 5
+ambiguous: 5
+clear: 5
+irrelevant: 5
+DELIVER_ANSWER: 5
+DELIVER_QUESTION: 10
+topics: 9
+contrastive utterance groups: 3
+  '寶寶 車車': clear / ambiguous / irrelevant, both labels
+  '水水': clear / ambiguous / irrelevant, both labels
+  '球球': clear / ambiguous / irrelevant, both labels
+EXIT: 0
+COMMAND: env -u TYPESAFE_API_KEY UV_CACHE_DIR=/private/tmp/coami-e012-uv-cache uv run --locked --project experiments/E012-jev-text-policy --no-env-file python -m unittest discover -s experiments/E012-jev-text-policy/tests -v
+test_TC01_all_23_expected_paths_offline (test_jev_policy.PolicyTests.test_TC01_all_23_expected_paths_offline) ... ok
+test_TC01_handoff_skips_downstream_and_preserves_destination (test_jev_policy.PolicyTests.test_TC01_handoff_skips_downstream_and_preserves_destination) ... ok
+test_TC02_env_loader_hard_failure_classification (test_jev_policy.PolicyTests.test_TC02_env_loader_hard_failure_classification) ... ok
+test_TC02_invalid_candidate_never_calls_model (test_jev_policy.PolicyTests.test_TC02_invalid_candidate_never_calls_model) ... ok
+test_TC02_inventory_and_hash_preflight (test_jev_policy.PolicyTests.test_TC02_inventory_and_hash_preflight) ... ok
+test_TC02_missing_key_no_client_no_case_results (test_jev_policy.PolicyTests.test_TC02_missing_key_no_client_no_case_results) ... ok
+test_TC02_missing_source (test_jev_policy.PolicyTests.test_TC02_missing_source) ... ok
+test_TC02_non_json_blocks (test_jev_policy.PolicyTests.test_TC02_non_json_blocks) ... ok
+test_TC02_probability_and_confidence_contract (test_jev_policy.PolicyTests.test_TC02_probability_and_confidence_contract) ... ok
+test_TC02_unknown_missing_malformed_response (test_jev_policy.PolicyTests.test_TC02_unknown_missing_malformed_response) ... ok
+test_TC02_wrong_id_and_type (test_jev_policy.PolicyTests.test_TC02_wrong_id_and_type) ... ok
+test_TC03_both_candidate_mismatch_directions_still_evaluate_output (test_jev_policy.PolicyTests.test_TC03_both_candidate_mismatch_directions_still_evaluate_output) ... ok
+test_TC03_faults_block_without_retry_or_error_body (test_jev_policy.PolicyTests.test_TC03_faults_block_without_retry_or_error_body) ... ok
+test_TC03_invalid_context_skips_output (test_jev_policy.PolicyTests.test_TC03_invalid_context_skips_output) ... ok
+test_TC03_low_confidence_and_argmax_tie_are_valid (test_jev_policy.PolicyTests.test_TC03_low_confidence_and_argmax_tie_are_valid) ... ok
+test_TC03_output_timeout_blocks_and_marks_incomplete (test_jev_policy.PolicyTests.test_TC03_output_timeout_blocks_and_marks_incomplete) ... ok
+test_TC03_sdk_validation_error_is_fail_before_generic_http (test_jev_policy.PolicyTests.test_TC03_sdk_validation_error_is_fail_before_generic_http) ... ok
+test_TC03_uncertain_and_disallowed_output_never_delivers (test_jev_policy.PolicyTests.test_TC03_uncertain_and_disallowed_output_never_delivers) ... ok
+test_TC04_oracle_and_nested_metadata_do_not_leak (test_jev_policy.PolicyTests.test_TC04_oracle_and_nested_metadata_do_not_leak) ... ok
+test_TC04_partial_valid_denominator (test_jev_policy.PolicyTests.test_TC04_partial_valid_denominator) ... ok
+test_TC04_router_does_not_observe_changed_evaluator_expectations (test_jev_policy.PolicyTests.test_TC04_router_does_not_observe_changed_evaluator_expectations) ... ok
+test_TC04_skip_denominators_and_fail_priority (test_jev_policy.PolicyTests.test_TC04_skip_denominators_and_fail_priority) ... ok
+test_TC05_factory_logging_disabled_cleanup_and_sdk_settings (test_jev_policy.PolicyTests.test_TC05_factory_logging_disabled_cleanup_and_sdk_settings) ... ok
+test_TC05_logged_method_and_complete_runner_flush (test_jev_policy.PolicyTests.test_TC05_logged_method_and_complete_runner_flush) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.010s
+
+OK
+EXIT: 0
+COMMAND: ruff check experiments/E012-jev-text-policy
+All checks passed!
+EXIT: 0
+COMMAND: ruff format --check experiments/E012-jev-text-policy
+2 files already formatted
+EXIT: 0
