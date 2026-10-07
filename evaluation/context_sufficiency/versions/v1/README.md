@@ -16,7 +16,7 @@ Lifecycle：先固定下列 slots → 作者撰寫 → 結構驗證 → Owner �
 
 ## Schema and visible input
 
-UTF-8 JSONL，一行一 object。每欄必備；額外欄位不得含模型觀察结果。
+UTF-8 JSONL，一行一 object。每欄必備；頂層恰含下表欄位，所有額外 key 一律拒絕，包含模型觀察、預測、分數與任意 notes。
 
 | Field | Contract |
 | --- | --- |

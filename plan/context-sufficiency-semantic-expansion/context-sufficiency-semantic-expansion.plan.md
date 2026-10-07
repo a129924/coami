@@ -33,7 +33,7 @@ Authority：`plan/agent-handoff-workflow.md`、`plan/topic-plan-contract.md`。O
 - group 可單案或多案；刻意對照、同情境近義改寫與無關細節變體整組同 split。
 - 撰寫前在新版 README 固定全部 60 slots 的 id／category／topic／group／split 並記 hash；不預填 label／文字／候選。變更 slots 先回覆蓋核對，不依模型成績調整。
 - Holdout repo 可見，禁止用於選擇改善方式，不宣稱 unseen。
-- UTF-8 JSONL，v0 core fields 加 coverage_category／split／group_id；ID `cs_v1_NNN`。Conversation 2–5 turns，每turn恰含speaker／text，其他key拒絕以防oracle／模型觀察洩漏；speaker 為 parent／child／robot，context_type 為 clear／ambiguous／irrelevant，不鎖配額。
+- UTF-8 JSONL，v0 core fields 加 coverage_category／split／group_id；頂層恰含README schema欄位，所有額外key拒絕；ID `cs_v1_NNN`。Conversation 2–5 turns，每turn恰含speaker／text，其他key拒絕以防oracle／模型觀察洩漏；speaker 為 parent／child／robot，context_type 為 clear／ambiguous／irrelevant，不鎖配額。
 - 固定 COMPANION／ALLOW；SUFFICIENT→DELIVER_ANSWER、INSUFFICIENT→DELIVER_QUESTION。S interpretation 非空，I 為 null，I rationale 至少兩合理意思與回應差異。
 - 模型僅取 background／conversation／utterance；Output 可另取 candidate_text，其餘均為 metadata／oracle。
 - 無 stable-library、公開 API 或裝置合約變更，無新增依賴。
@@ -46,7 +46,7 @@ Implementer 寫修；Tester 提供證據；Owner 接受答案；獨立 Reviewer 
 
 ## Status / Allowed Transitions
 
-Current：approved（PR #12 第二輪correction draft v1-draft-003；122checks與bounded技術重審完成，待Owner確認本輪commit訊息後publish／thread回覆resolve與human review；oracle未接受、未凍結）。先固定 slots／核對，再撰全文、驗證、Owner human check、獨立 fixture review、matching-evidence gate、freeze。
+Current：approved（PR #12 第三輪correction draft v1-draft-004；166checks及獨立bounded技術重審完成，待Owner明確確認本輪commit訊息，再publish／thread回覆resolve／human review；oracle未接受、未凍結）。先固定slots／核對，再撰全文、驗證、Owner human check、獨立fixture review、matching-evidence gate、freeze。
 
 Canonical：planned→creator-in-progress→review-ready→reviewer-in-progress→approved 或 needs-rework；needs-rework→creator-in-progress；approved→creator-in-progress。Freeze 是資料標記。Snapshot 改動重走驗證／Owner／fixture review，保留歷史。
 
@@ -77,7 +77,7 @@ README／dataset／validator 三個 SHA-256 定義 exact snapshot；review.md �
 
 Python 3.10+ stdlib：`python3 evaluation/context_sufficiency/versions/v1/validate_dataset.py [candidate.jsonl]`。預設相鄰 dataset，其他 cwd 亦可用。Success 0 輸出 counts／matrix／topics／groups；failure 1 有 line／ID／配置錯誤，不 traceback、不改檔。
 
-檢查必要欄位、非空文字、型別、enum、唯一 ID、2–5 turns、speaker、interpretation、policy／Action；60、六類各10、40／20 matrix、十二 topic、各類至少兩 topic、同 group 同 split、完整 visible input 不重複、對照最低配置。
+檢查必要欄位、頂層與turn額外key拒絕、非空文字、型別、enum、唯一 ID、2–5 turns、speaker、interpretation、policy／Action；60、六類各10、40／20 matrix、十二 topic、各類至少兩 topic、同 group 同 split、完整 visible input 不重複、對照最低配置。
 
 Tester 暫存負例：malformed JSON、duplicate ID／input、缺欄、enum／turn 錯、interpretation／Action 錯、數量／matrix／topic／對照不足、group 跨 split；預期 exit1 無 traceback。結構有效但語義錯誤的暫存案例應通過，證明不是程式推答案。核對 v0／E012／正式資料不被測試改動。
 
@@ -108,3 +108,5 @@ Freeze 後若有 oracle 錯誤，另版本／任務保留 v0／v1、歷史答案
 PR comment rework：六個threads均ADDRESS。保留固定slots與分組，049/050換成不同活動；054/055/058依既有可見文字更正S；validator按實際檔案行讀取。新002 snapshot重新驗證與Owner/fixture review，舊001證據保留，不因關thread宣稱已freeze。
 
 PR comment第二輪：028洗手用水、029拒絕被抱以去除跨split近義；model-visible turn恰含speaker/text，oracle/模型觀察額外key拒絕。slots不變，README只同步schema；新003 snapshot全量重驗、Owner／fixture review/freeze仍pending，002證據保留。
+
+PR comment第三輪：頂層schema allowlist拒絕模型觀察／預測及所有未知key；036沿用文字更正S／自己作畫，044改為清洗袖口果汁。全部slots不變，004全量重验166checks；001/002/003歷史保留，Owner／fixture review/freeze仍pending。

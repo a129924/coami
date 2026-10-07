@@ -1,6 +1,6 @@
 # context_sufficiency_v1 — Draft review and evidence
 
-Current：`approved`（PR #12 第二輪bounded technical correction）；Owner human-check pending。未經 Owner 逐案接受、未進 independent fixture review、**NOT FROZEN**。Owner 接受計畫與實作授權，不代表接受60筆答案。
+Current：`approved`（PR #12 第三輪bounded technical correction）；Owner human-check pending。未經Owner逐案接受、未進independent fixture review、**NOT FROZEN**。
 
 ## Question, procedure, evidence, decision
 
@@ -32,6 +32,18 @@ Owner 最新授權：接受計畫並要求 create-feature-worktree，禁止 dev-
 
 ## Exact draft snapshot
 
+Snapshot ID：`v1-draft-004`。PR #12 第三輪 bounded correction；未經Owner接受，NOT FROZEN。036沿用可見文字更正為自己作畫的SUFFICIENT；044改為清洗袖口果汁，與010穿紅外套不同。頂層只允許schema欄位。全部60 slots、coverage/group/split不變；README只同步schema，pre-authoring baseline保留為歷史。
+
+| File | SHA-256 |
+| --- | --- |
+| [README.md](README.md) | `b230ca3f6dea08d62ca0d0facb6374255649bd620913bac81803a73698d9a898` |
+| [context_sufficiency_v1.jsonl](context_sufficiency_v1.jsonl) | `d2dc258088caf4f9ee7f0f44f7123adb96ee50a5a71a805532d1857d7a16c3f9` |
+| [validate_dataset.py](validate_dataset.py) | `b563e47b656d55107b98f7e352d25884ed05d9cb8e17327aeddeb1e89a630b4f` |
+
+Snapshot recorded UTC：2026-10-07T06:35:14.336666+00:00。
+
+## Previous snapshot — v1-draft-003 (historical)
+
 Snapshot ID：`v1-draft-003`。PR #12 第二輪 bounded correction；未經Owner接受，NOT FROZEN。028／029改為洗手用水與拒絕被抱；visible conversation turn僅允許speaker/text。全部60 slot欄位不變，coverage/group/split不變；README只修schema的turn key allowlist，原pre-authoring baseline仍保留為历史，不能把它當新README hash。
 
 | File | SHA-256 |
@@ -41,6 +53,8 @@ Snapshot ID：`v1-draft-003`。PR #12 第二輪 bounded correction；未經Owner
 | [validate_dataset.py](validate_dataset.py) | `62d9b33fcde6b3704953004e9aeff36fa5b002b1be6b764501013fb196412e05` |
 
 Snapshot recorded UTC：2026-10-07T06:04:35.718212+00:00。
+
+003完整工件與證據保留於 [29f5460](https://github.com/a129924/coami/blob/29f546014ac7b208250903ba79690348d7eec3d0/evaluation/context_sufficiency/versions/v1/review.md)；舊hash、122checks與技術批准不能替代004的matching gates。
 
 ## Previous snapshot — v1-draft-002 (historical)
 
@@ -70,7 +84,187 @@ Snapshot recorded UTC：2026-10-07T04:04:00.659759+00:00。
 
 舊版完整案例與證據保留於 [a65d3b6](https://github.com/a129924/coami/blob/a65d3b640423b772d07822bb0c351f523c8fc8c2/evaluation/context_sufficiency/versions/v1/review.md)；舊hash／65checks／技術批准只指001，不能接受或凍結002。
 
-## Current validation — v1-draft-003
+## Current validation — v1-draft-004
+
+Codex本機Tester pass：2026-10-07T06:34:46.547556+00:00，Python 3.14.0；**166 checks 通過**。TemporaryDirectory候選透過實際CLI subprocess檢查exit、stderr、line/ID診斷與無traceback；正式dataset前後SHA-256相同。
+
+- RED：修正前頂層新增model_observation或predicted_label均exit0；修正後全部額外key拒絕，不以模型結果黑名單限制。
+- 首／中／末記錄各測10種額外key（含nested observation/results/notes/metadata），共30個拒絕案例；多個extra keys亦拒絕並列出名稱。新增其餘12種schema缺欄回歸，與原4種合併覆蓋16欄；合法schema仍通過。
+- 原122checks全量重跑，保留turn allowlist、Unicode實際行、CLI路徑、enum/type/policy/action/group/coverage/contrast與v0/E012檢查。
+- 與29f5460比較，僅036 oracle與044清洗情境更動；036可見文字不變。60 slots及README slotrows完全不變；所有meaning_without_keyword前文仍無目標關鍵字。
+- 60案，40research/20holdout，十二topics、54groups，35 SUFFICIENT/25 INSUFFICIENT；跨label對照research toy_car/water、holdout book，三distinct topics。
+- Ruff lint/format、v0 validator及v0/E012不變檢查通過；不跑Jev，不把結構或技術審查當oracle接受。
+
+| Check | Expected and observed exit |
+| --- | ---: |
+| default from different cwd | 0 |
+| explicit absolute dataset | 0 |
+| explicit relative dataset | 0 |
+| malformed JSON | 1 |
+| non-object JSON | 1 |
+| empty line | 1 |
+| NaN | 1 |
+| duplicate JSON key | 1 |
+| non-UTF8 | 1 |
+| empty file | 1 |
+| missing file | 1 |
+| directory input | 1 |
+| duplicate ID | 1 |
+| duplicate visible input | 1 |
+| missing background | 1 |
+| missing conversation | 1 |
+| missing interpretation | 1 |
+| missing group_id | 1 |
+| invalid background | 1 |
+| invalid candidate_text | 1 |
+| invalid utterance | 1 |
+| invalid group_id | 1 |
+| invalid id | 1 |
+| invalid enum topic | 1 |
+| unhashable enum topic | 1 |
+| invalid enum context_type | 1 |
+| unhashable enum context_type | 1 |
+| invalid enum coverage_category | 1 |
+| unhashable enum coverage_category | 1 |
+| invalid enum split | 1 |
+| unhashable enum split | 1 |
+| invalid enum expected | 1 |
+| unhashable enum expected | 1 |
+| invalid enum expected_input_policy | 1 |
+| unhashable enum expected_input_policy | 1 |
+| invalid enum expected_output_policy | 1 |
+| unhashable enum expected_output_policy | 1 |
+| invalid enum expected_action | 1 |
+| unhashable enum expected_action | 1 |
+| conversation not list | 1 |
+| too few turns | 1 |
+| too many turns | 1 |
+| turn not object | 1 |
+| invalid speaker | 1 |
+| empty turn text | 1 |
+| sufficient null interpretation | 1 |
+| insufficient string interpretation | 1 |
+| wrong label Action | 1 |
+| too few cases | 1 |
+| wrong matrix | 1 |
+| group crosses split | 1 |
+| missing topic | 1 |
+| category only one topic | 1 |
+| research contrast missing | 1 |
+| holdout contrast missing | 1 |
+| fewer than three contrast topics | 1 |
+| structure-valid semantic error | 0 |
+| counts-preserving slot swap structural pass | 0 |
+| all 60 slot assignments match README; swapped split detected independently | 0 |
+| 10 no-keyword cases checked in visible context | 0 |
+| literal U+2028 in background, '\n' physical rows | 0 |
+| literal U+2028 in background, '\r\n' physical rows | 0 |
+| literal U+2028 in conversation, '\n' physical rows | 0 |
+| literal U+2028 in conversation, '\r\n' physical rows | 0 |
+| literal U+2028 in candidate_text, '\n' physical rows | 0 |
+| literal U+2028 in candidate_text, '\r\n' physical rows | 0 |
+| physical line 2 after U+2028 | 1 |
+| literal U+2029 in background, '\n' physical rows | 0 |
+| literal U+2029 in background, '\r\n' physical rows | 0 |
+| literal U+2029 in conversation, '\n' physical rows | 0 |
+| literal U+2029 in conversation, '\r\n' physical rows | 0 |
+| literal U+2029 in candidate_text, '\n' physical rows | 0 |
+| literal U+2029 in candidate_text, '\r\n' physical rows | 0 |
+| physical line 2 after U+2029 | 1 |
+| literal U+0085 in background, '\n' physical rows | 0 |
+| literal U+0085 in background, '\r\n' physical rows | 0 |
+| literal U+0085 in conversation, '\n' physical rows | 0 |
+| literal U+0085 in conversation, '\r\n' physical rows | 0 |
+| literal U+0085 in candidate_text, '\n' physical rows | 0 |
+| literal U+0085 in candidate_text, '\r\n' physical rows | 0 |
+| physical line 2 after U+0085 | 1 |
+| final physical row without newline | 0 |
+| extra blank physical row rejected | 1 |
+| prior corrections retained; all60 metadata and README slots unchanged | 0 |
+| visible turn 1 rejects extra expected | 1 |
+| visible turn 1 rejects extra expected_action | 1 |
+| visible turn 1 rejects extra expected_input_policy | 1 |
+| visible turn 1 rejects extra expected_output_policy | 1 |
+| visible turn 1 rejects extra interpretation | 1 |
+| visible turn 1 rejects extra rationale | 1 |
+| visible turn 1 rejects extra id | 1 |
+| visible turn 1 rejects extra topic | 1 |
+| visible turn 1 rejects extra coverage_category | 1 |
+| visible turn 1 rejects extra split | 1 |
+| visible turn 1 rejects extra group_id | 1 |
+| visible turn 1 rejects extra model_prediction | 1 |
+| visible turn 1 rejects extra score | 1 |
+| visible turn 1 rejects extra notes | 1 |
+| visible turn 2 rejects extra expected | 1 |
+| visible turn 2 rejects extra expected_action | 1 |
+| visible turn 2 rejects extra expected_input_policy | 1 |
+| visible turn 2 rejects extra expected_output_policy | 1 |
+| visible turn 2 rejects extra interpretation | 1 |
+| visible turn 2 rejects extra rationale | 1 |
+| visible turn 2 rejects extra id | 1 |
+| visible turn 2 rejects extra topic | 1 |
+| visible turn 2 rejects extra coverage_category | 1 |
+| visible turn 2 rejects extra split | 1 |
+| visible turn 2 rejects extra group_id | 1 |
+| visible turn 2 rejects extra model_prediction | 1 |
+| visible turn 2 rejects extra score | 1 |
+| visible turn 2 rejects extra notes | 1 |
+| visible turn rejects nested oracle object | 1 |
+| visible text rejects nested oracle object | 1 |
+| visible speaker rejects nested oracle object | 1 |
+| exact speaker-text keys accept parent | 0 |
+| exact speaker-text keys accept child | 0 |
+| exact speaker-text keys accept robot | 0 |
+| top-level row 1 rejects model_observation | 1 |
+| top-level row 1 rejects predicted_label | 1 |
+| top-level row 1 rejects model_prediction | 1 |
+| top-level row 1 rejects score | 1 |
+| top-level row 1 rejects probability | 1 |
+| top-level row 1 rejects accuracy | 1 |
+| top-level row 1 rejects results | 1 |
+| top-level row 1 rejects oracle | 1 |
+| top-level row 1 rejects notes | 1 |
+| top-level row 1 rejects metadata | 1 |
+| top-level row 30 rejects model_observation | 1 |
+| top-level row 30 rejects predicted_label | 1 |
+| top-level row 30 rejects model_prediction | 1 |
+| top-level row 30 rejects score | 1 |
+| top-level row 30 rejects probability | 1 |
+| top-level row 30 rejects accuracy | 1 |
+| top-level row 30 rejects results | 1 |
+| top-level row 30 rejects oracle | 1 |
+| top-level row 30 rejects notes | 1 |
+| top-level row 30 rejects metadata | 1 |
+| top-level row 60 rejects model_observation | 1 |
+| top-level row 60 rejects predicted_label | 1 |
+| top-level row 60 rejects model_prediction | 1 |
+| top-level row 60 rejects score | 1 |
+| top-level row 60 rejects probability | 1 |
+| top-level row 60 rejects accuracy | 1 |
+| top-level row 60 rejects results | 1 |
+| top-level row 60 rejects oracle | 1 |
+| top-level row 60 rejects notes | 1 |
+| top-level row 60 rejects metadata | 1 |
+| multiple top-level result fields rejected | 1 |
+| missing schema field id | 1 |
+| missing schema field topic | 1 |
+| missing schema field context_type | 1 |
+| missing schema field coverage_category | 1 |
+| missing schema field split | 1 |
+| missing schema field utterance | 1 |
+| missing schema field expected | 1 |
+| missing schema field candidate_text | 1 |
+| missing schema field expected_input_policy | 1 |
+| missing schema field expected_output_policy | 1 |
+| missing schema field expected_action | 1 |
+| missing schema field rationale | 1 |
+| round3 changes bounded to036 oracle and044 cleaning activity; all60 slots unchanged | 0 |
+| ruff check /private/tmp/coami-worktrees/context-sufficiency-expansion/evaluation/context_sufficiency/versions/v1/validate_dataset.py | 0 |
+| ruff format --check | 0 |
+| /opt/homebrew/opt/python@3.14/bin/python3.14 /private/tmp/coami-worktrees/context-sufficiency-expansion/evaluation/context_sufficiency/validate_dataset.py | 0 |
+| git diff --exit-code | 0 |
+
+## Previous validation — v1-draft-003 (historical)
 
 Codex本機Tester pass：2026-10-07T06:03:50.984246+00:00，Python 3.14.0；**122 checks 通過**。全量CLI/structure/slot/keyword/歷史不變與既有Unicode回歸重新執行，再加visible-turn allowlist与兩案回歸。候選均於TemporaryDirectory deep-copy後實際subprocess執行；核對exit、stderr與無traceback，正式資料在驗證前後SHA-256相同。
 
@@ -406,11 +600,11 @@ python3 evaluation/context_sufficiency/validate_dataset.py
 
 逐案確認：S主意思是否由文字支持；I至少兩合理意思是否導向不同回應；候選是否簡短且只確認／釐清一件事；COMPANION／ALLOW與Action是否合宜；是否依賴隱藏訊息或硬套category；對照及同情境group是否合理。
 
-可一次明示接受 **v1-draft-003三hash所指的全部60案**，或用Case編號／展開的ID提修訂。任何snapshot變更均更新版本證據並重走全量驗證、Owner接受與後續獨立fixture review，不用本機PASS代替接受。
+可一次明示接受 **v1-draft-004三hash所指的全部60案**，或用Case編號／展開的ID提修訂。任何snapshot變更均更新版本證據並重走全量驗證、Owner接受與後續獨立fixture review，不用本機PASS代替接受。
 
 ## Case review package
 
-以下60案對應目前 v1-draft-003；Case編號沿用001/002，便於追蹤；舊版接受不能套用新snapshot。
+以下60案對應目前 v1-draft-004；Case編號沿用001/002/003，便於追蹤；舊版接受不能套用新snapshot。
 
 ### Case 01
 
@@ -554,9 +748,9 @@ Owner：pending；independent fixture review：pending。
 
 前文（全部在當句之前）：
 
-> **parent**：紅色那件有袖子，穿在身上能保暖，你要穿它嗎？
+> **parent**：這件有袖子的布料，袖口沾到果汁了。你要把它拿去洗，還是先晾著？
 >
-> **child**：要穿紅的。
+> **child**：我要洗掉袖口的果汁。
 >
 
 孩子當句：**衣衣**
@@ -571,12 +765,12 @@ Owner：pending；independent fixture review：pending。
 - **group_id**：case-044
 - **split**：research
 - **expected**：SUFFICIENT
-- **interpretation**：孩子想穿紅色有袖的保暖衣物。
-- **candidate_text**：你想穿紅色那件。
+- **interpretation**：孩子想清洗袖口沾到果汁的衣物。
+- **candidate_text**：你想洗掉袖口的果汁。
 - **expected_input_policy**：COMPANION
 - **expected_output_policy**：ALLOW
 - **expected_action**：DELIVER_ANSWER
-- **rationale**：前文沒有衣字，物件特徵與穿的動作已由孩子確認，不需要靠相同keyword。
+- **rationale**：前文沒有衣字，但袖子、袖口與孩子明選洗掉果汁已建立清洗衣物的用途。這是清潔活動，與保留組010選擇穿紅外套的穿著目的不同；不需靠相同keyword確認。
 
 Owner：pending；independent fixture review：pending。
 
@@ -1634,17 +1828,17 @@ Owner：pending；independent fixture review：pending。
 
 - **id**：cs_v1_036
 - **topic**：drawing
-- **context_type**：ambiguous
+- **context_type**：clear
 - **coverage_category**：keyword_misdirection
 - **group_id**：case-036
 - **split**：research
-- **expected**：INSUFFICIENT
-- **interpretation**：null
-- **candidate_text**：你想看媽媽的畫，還是自己畫？
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想自己在白紙上畫畫。
+- **candidate_text**：你想自己在白紙上畫畫。
 - **expected_input_policy**：COMPANION
 - **expected_output_policy**：ALLOW
-- **expected_action**：DELIVER_QUESTION
-- **rationale**：可能要看既有作品，確認欣賞；也可能自己作畫，確認創作。同字涵蓋作品與活動，未選定。
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：前文把畫畫用於白紙上的創作活動，並區分看媽媽的畫與自己畫；孩子的畫畫重複自己作畫的動作，支持主要意思。媽媽的作品雖也含畫字，不構成同等合理的欣賞請求。
 
 Owner：pending；independent fixture review：pending。
 
@@ -2474,7 +2668,7 @@ Owner：pending；independent fixture review：pending。
 
 ## Coverage and contrast summary
 
-60案：research40／holdout20；十二topics；54groups（6個相關案例pairs＋48singleton，其中4個pairs跨label）；34 SUFFICIENT／26 INSUFFICIENT是作者完成結果，不是預先答案配額。
+60案：research40／holdout20；十二topics；54groups（6個相關案例pairs＋48singleton，其中4個pairs跨label）；35 SUFFICIENT／25 INSUFFICIENT是作者完成結果，不是預先答案配額。
 
 | Category | Research | Holdout |
 | --- | ---: | ---: |
@@ -2499,8 +2693,8 @@ Owner：pending；independent fixture review：pending。
 | Evidence | State |
 | --- | --- |
 | Repo plan review | approved; contract only |
-| Local structure／CLI／slot checks | 003: 122 checks PASS; not oracle approval |
-| Independent technical draft review | 001/002 historical; 003 bounded review approved, no blocker; not fixture verdict |
+| Local structure／CLI／slot checks | 004: 166 checks PASS; not oracle approval |
+| Independent technical draft review | 001/002/003 historical; 004 bounded review approved, no blocker; not fixture verdict |
 | Owner full60 exact-snapshot acceptance | pending |
 | Independent fixture review after Owner | pending |
 | Matching-evidence sufficiency for freeze | pending |
@@ -2557,3 +2751,19 @@ README新hash反映shape契約修正，不是重新配置slots；舊baseline與0
 Reviewer：`/root/plan_reviewer` 依python-code-review唯讀檢查本輪兩threads修正，verdict approved／blocking_issues=[]，七quality維度無findings。核對028洗手用途與029拒絕擁抱、turn只允許speaker/text且缺欄仍拒絕、README/plan相符；重新核對003三hash、全部60案human包逐欄一致、60slots及README slotrows與e54907c相同、v0/E012 diff無變更、122check entries與record一致。未執行tests/lint，不是全量fixture語義審查。
 
 Decision：本輪技術修正可進publish；待Owner明確確認本輪commit訊息後commit/push，再對兩個threads留言resolve。Owner接受／fixture review/freeze仍pending，不將關thread當oracle接受。
+
+## PR-comment-review-and-fix — round 3 / v1-draft-004
+
+| Thread | Triage | Change |
+| --- | --- | --- |
+| [4203799302](https://github.com/a129924/coami/pull/12#discussion_r4203799302) | ADDRESS | 頂層schema allowlist，拒絕所有額外key，含模型觀察及快取預測 |
+| [4203799313](https://github.com/a129924/coami/pull/12#discussion_r4203799313) | ADDRESS | 036保留可見文字，按畫畫動作更正S／自己作畫，不將媽媽作品同字當同等意思 |
+| [4203799324](https://github.com/a129924/coami/pull/12#discussion_r4203799324) | ADDRESS | 044改為洗掉袖口果汁，與010穿紅外套實質用途不同，前文仍無衣字 |
+
+003兩threads已於29f5460推送後回覆resolve；本輪三threads待修正commit/push後才回覆resolve。歷史hash／驗證／review保留，004全60human包同步；Owner接受／fixture review／freeze仍pending。
+
+## Independent bounded technical re-review — 004
+
+Reviewer：`/root/plan_reviewer` 依python-code-review進行唯讀獨立審查，verdict approved／blocking_issues=[]，七品質維度無findings。核驗頂層REQUIRED_FIELDS allowlist與README/plan一致，036可見文字未改且自己作畫oracle回應thread，044清洗袖口果汁與010穿衣目的不同、前文無衣字。004三hash相符、60packet逐欄一致、全部60slots與003相同、v0/E012無diff；166checks記錄／entries與harness一致。未執行tests/lint，不代替Owner接受或全60fixture語義審查。
+
+Decision：bounded技術修正可進publish。依AGENTS.md仍待Owner明確確認本輪commit訊息，再commit→push→三threads回覆resolve；Owner／fixture／freeze pending。

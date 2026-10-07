@@ -93,6 +93,11 @@ def validate_case(case: dict[str, object], line: int) -> list[str]:
     issues = [
         f"missing field: {field}" for field in REQUIRED_FIELDS if field not in case
     ]
+    unexpected = case.keys() - set(REQUIRED_FIELDS)
+    if unexpected:
+        issues.append(
+            f"unexpected fields: {sorted(unexpected)}; only schema fields allowed"
+        )
     for field in STRING_FIELDS:
         if field in case:
             value = case[field]
