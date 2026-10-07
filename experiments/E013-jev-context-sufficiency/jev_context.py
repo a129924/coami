@@ -49,6 +49,7 @@ V0_HASHES = {
     "validate_dataset.py": "45f0f0d8efe685b2514c2ae27109ea7586db5bc57858d382518cbc078da1db38",
 }
 V1_FILES = ("README.md", "context_sufficiency_v1.jsonl", "validate_dataset.py")
+LOCAL_STORE_ROOT = Path("/Users/andrew/coami-evidence/E013")
 CASE_ID = re.compile(r"[A-Za-z0-9_-]+\Z")
 
 
@@ -148,16 +149,22 @@ def load_freeze(attestation: Path, root: Path = ROOT) -> dict[str, str]:
     return {str(name): str(value) for name, value in hashes.items()}
 
 
-def load_store_policy(path: Path, store: Path, root: Path = ROOT) -> dict[str, str]:
+def load_store_policy(path: Path, store: Path, root: Path = ROOT) -> dict[str, Any]:
     policy = read_object(path)
-    required = ("approved_by", "store_id", "retention_until", "agent_access")
+    required = ("approved_by", "store_id", "agent_access")
     if any(
         not isinstance(policy.get(key), str) or not policy[key].strip()
         for key in required
     ):
         raise ContractError("STORE_APPROVAL_MISSING")
-    if policy.get("versioned_immutable") is not True or policy.get("root") != str(
-        store.resolve()
+    if (
+        policy.get("storage_mode") != "local_staging"
+        or policy.get("versioned_immutable") is not False
+        or policy.get("backup_verified") is not False
+        or policy.get("retention_until") is not None
+        or policy.get("root") != str(LOCAL_STORE_ROOT)
+        or store != LOCAL_STORE_ROOT
+        or store.resolve() != store
     ):
         raise ContractError("STORE_APPROVAL_MISMATCH")
     resolved = store.resolve()
@@ -172,7 +179,13 @@ def load_store_policy(path: Path, store: Path, root: Path = ROOT) -> dict[str, s
         raise ContractError("STORE_NOT_DURABLE")
     if not resolved.is_dir() or not os.access(resolved, os.W_OK):
         raise ContractError("STORE_UNAVAILABLE")
-    return {key: str(policy[key]) for key in required}
+    return {
+        **{key: str(policy[key]) for key in required},
+        "storage_mode": "local_staging",
+        "versioned_immutable": False,
+        "backup_verified": False,
+        "retention_until": None,
+    }
 
 
 def load_cases(root: Path = ROOT) -> list[dict[str, Any]]:
@@ -520,7 +533,7 @@ def run_live(
         "store": policy_metadata,
         "store_root": str(store.resolve()),
         "conditions": {"timeout_seconds": 30, "retries": 0, "order": list(GROUPS)},
-        "publication": "restricted-until-reviewed",
+        "publication": "local-unbacked-until-reviewed-git-export",
     }
     write_exclusive(run_dir / "manifest.json", json_bytes(manifest))
     rows: list[dict[str, Any]] = []
@@ -606,7 +619,7 @@ def run_live(
         {
             "run_id": run_id,
             "generated_utc": utc(),
-            "evidence_status": "restricted-until-reviewed",
+            "evidence_status": "local-unbacked-until-reviewed-git-export",
         }
     )
     write_exclusive(run_dir / "summary.json", json_bytes(summary))
@@ -624,6 +637,7 @@ def main() -> int:
     modes.add_argument("--live", action="store_true")
     modes.add_argument("--publish-reviewed", action="store_true")
     modes.add_argument("--verify-evidence", action="store_true")
+    modes.add_argument("--verify-local-run", action="store_true")
     parser.add_argument("--freeze-attestation", type=Path)
     parser.add_argument("--store-policy", type=Path)
     parser.add_argument("--store-root", type=Path)
@@ -634,8 +648,8 @@ def main() -> int:
     parser.add_argument("--restricted-run", type=Path)
     parser.add_argument("--candidate-threshold", type=float)
     args = parser.parse_args()
-    if args.publish_reviewed or args.verify_evidence:
-        from evidence_tools import publish_reviewed, verify_evidence
+    if args.publish_reviewed or args.verify_evidence or args.verify_local_run:
+        from evidence_tools import publish_reviewed, verify_evidence, verify_local_run
 
         try:
             if args.publish_reviewed:
@@ -646,6 +660,12 @@ def main() -> int:
                 )
                 print(f"E013 reviewed evidence: {output}")
                 return 0
+            if args.verify_local_run:
+                if args.run_dir is None:
+                    raise ContractError("MISSING_LOCAL_RUN")
+                result = verify_local_run(args.run_dir)
+                print(json.dumps(result, ensure_ascii=False, allow_nan=False))
+                return 0 if not result["gaps"] else 2
             if args.evidence_run is None:
                 raise ContractError("MISSING_EVIDENCE_RUN")
             result = verify_evidence(

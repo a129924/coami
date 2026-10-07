@@ -218,8 +218,16 @@ class E013Tests(unittest.TestCase):
                     }
                 )
             )
-            with self.assertRaisesRegex(e.ContractError, "STORE_NOT_DURABLE"):
+            with self.assertRaisesRegex(e.ContractError, "STORE_APPROVAL_MISMATCH"):
                 e.load_store_policy(policy, store)
+
+    def test_local_policy_states_no_immutability_or_backup(self) -> None:
+        policy = e.read_object(e.TOPIC / "local-store-policy.json")
+        self.assertEqual(policy["root"], str(e.LOCAL_STORE_ROOT))
+        self.assertEqual(policy["storage_mode"], "local_staging")
+        self.assertIs(policy["versioned_immutable"], False)
+        self.assertIs(policy["backup_verified"], False)
+        self.assertIsNone(policy["retention_until"])
 
     def test_missing_key_preflight_never_constructs_sdk(self) -> None:
         with (
@@ -308,7 +316,8 @@ class E013Tests(unittest.TestCase):
                         "store": {
                             "store_id": "owner-store",
                             "agent_access": "approved agents",
-                            "retention_until": "2099-01-01",
+                            "retention_until": None,
+                            "storage_mode": "local_staging",
                         },
                     }
                 ),
@@ -346,6 +355,7 @@ class E013Tests(unittest.TestCase):
                         "case_id": case["case_id"],
                         "analysis_public": index != 1,
                         "raw_public": index == 0,
+                        "safety_checked": True,
                         "analysis_sha256": e.sha(e.json_bytes(row)),
                         "raw_sha256": row["raw_sha256"],
                     }
@@ -368,9 +378,37 @@ class E013Tests(unittest.TestCase):
                     }
                 )
             )
+            unchecked = deepcopy(decisions)
+            unchecked[0]["safety_checked"] = False
+            approval.write_bytes(
+                e.json_bytes(
+                    {
+                        "run_id": "run-1",
+                        "approved_by": "owner",
+                        "summary_public": True,
+                        "cases": unchecked,
+                    }
+                )
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_PUBLICATION_REVIEW"):
+                evidence.publish_reviewed(
+                    restricted, approval, root / "checkout-evidence"
+                )
+            self.assertFalse((root / "checkout-evidence").exists())
+            approval.write_bytes(
+                e.json_bytes(
+                    {
+                        "run_id": "run-1",
+                        "approved_by": "owner",
+                        "summary_public": True,
+                        "cases": decisions,
+                    }
+                )
+            )
             output = evidence.publish_reviewed(
                 restricted, approval, root / "checkout-evidence"
             )
+            self.assertEqual(evidence.verify_local_run(restricted)["gaps"], [])
             public_manifest = e.read_object(output / "manifest.json")
             self.assertNotIn("store_root", public_manifest)
             self.assertEqual(
@@ -406,6 +444,11 @@ class E013Tests(unittest.TestCase):
             self.assertEqual(
                 evidence.verify_evidence(output, restricted)["gaps"][0]["reason"],
                 "RAW_HASH_MISMATCH",
+            )
+            (restricted / rows[0]["raw_locator"]).write_bytes(b"tampered")
+            self.assertEqual(
+                evidence.verify_local_run(restricted)["gaps"][0]["reason"],
+                "RAW_SHA256_MISMATCH",
             )
 
 

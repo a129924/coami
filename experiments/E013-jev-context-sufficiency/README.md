@@ -4,7 +4,7 @@ E013 evaluates the frozen 60-case v1 research/holdout benchmark and the frozen 1
 
 ## Current gate
 
-The v1 dataset at `origin/dev` is `v1-draft-004`, Owner acceptance and independent fixture review are pending, and `review.md` says **NOT FROZEN**. No live Jev run is permitted yet. The repository also has no Owner-approved durable restricted evidence store. Both gates must be resolved before `--live`.
+The exact `v1-draft-004` 60-case snapshot has Owner human acceptance recorded with three file hashes in its `review.md`. The Owner clarified that they performed the human review; an independent fixture verdict is still pending, so v1 remains **NOT FROZEN** and no freeze attestation exists. No live Jev run is permitted yet. The Owner selected local E013 storage, but that directory is only local staging until reviewed evidence is committed and pushed.
 
 ## Inputs and conditions
 
@@ -12,7 +12,7 @@ The v1 dataset at `origin/dev` is `v1-draft-004`, Owner acceptance and independe
 - The Context question is read without modification from E012 `policies.json`; its hash is recorded. Only `background`, `conversation`, and `utterance` reach Jev. Case ID, split, oracle, rationale, candidate, and threshold remain evaluator-only.
 - The fixed run order is v1 research 40, v1 holdout 20, then v0 15. Calls are sequential. E013 does not run Input/Output Policy, route an Action, or generate an answer.
 - A future freeze attestation JSON must contain `owner_accepted_60: true`, `fixture_review_approved: true`, `frozen: true`, the SHA-256 of the exact `review.md`, and a `v1_hashes` object keyed by `README.md`, `context_sufficiency_v1.jsonl`, `validate_dataset.py`. The runner checks the files, current review status, frozen v0 hashes, both validators, 75-case inventory, SDK version, and key before any call. The attestation is evidence of human decisions, not a substitute for those decisions.
-- A future store-policy JSON must identify an Owner-approved absolute `root`, `store_id`, `approved_by`, `agent_access`, `retention_until`, and `versioned_immutable: true`. The root must be outside the repository and temporary directories and already be writable. An Owner must choose the actual durable location, access rules, and retention policy. No default store is inferred.
+- [local-store-policy.json](local-store-policy.json) records the Owner-selected `/Users/andrew/coami-evidence/E013` root. It says `storage_mode: local_staging`, `versioned_immutable: false`, `backup_verified: false`, and `retention_until: null`; these are deliberate facts, not a claim of durable or immutable backup. Only Owner-authorized local processes may read it. The preflight checks the exact root and policy, then uses `runs/<run_id>/` with exclusive creation. A read-only mode after completion and SHA-256 checks detect or discourage changes but cannot stop the local owner from altering or deleting evidence.
 
 ## Offline validation
 
@@ -30,24 +30,24 @@ The tests use fake HTTP transport and synthetic responses. They do not measure J
 
 ## Future live execution and evidence review
 
-Only after the freeze, store, and separate live-execution authorization:
+Only after the independent fixture review is recorded, the exact freeze attestation is created and verified, and the Owner separately authorizes a live run:
 
 ```sh
 uv run --quiet --locked --project experiments/E013-jev-context-sufficiency \
   --env-file experiments/E013-jev-context-sufficiency/.env \
   python experiments/E013-jev-context-sufficiency/jev_context.py --live \
   --freeze-attestation /approved/freeze-attestation.json \
-  --store-policy /approved/store-policy.json \
-  --store-root /approved/durable-store
+  --store-policy experiments/E013-jev-context-sufficiency/local-store-policy.json \
+  --store-root /Users/andrew/coami-evidence/E013
 ```
 
-`.env` is an Owner-maintained, Git-ignored local credential file. Never print, hash, or commit it. The example paths above are placeholders for a later Owner decision, not an approved destination.
+`.env` is an Owner-maintained, Git-ignored local credential file. Never print, hash, or commit it. The freeze attestation path remains a placeholder; no attestation is valid yet. The local store path is approved for staging, not backed-up archival storage.
 
-The runner writes an exclusive `runs/<run_id>/` in the approved store: `manifest.json`, `events.jsonl`, `analysis.jsonl`, `summary.json`, exact emitted request bytes, and exact 2xx response bytes. Each body is keyed by `(run_id, group, case_id)` and has a SHA-256. A failed or interrupted run remains incomplete and is never overwritten or automatically resumed. `ERROR`, `UNKNOWN`, and `NOT_RUN` do not count as correct model predictions.
+The runner writes an exclusive `runs/<run_id>/` in the local store: `manifest.json`, `events.jsonl`, `analysis.jsonl`, `summary.json`, exact emitted request bytes, and exact 2xx response bytes. Each body is keyed by `(run_id, group, case_id)` and has a SHA-256. A failed or interrupted run remains incomplete and is never overwritten or automatically resumed. `ERROR`, `UNKNOWN`, and `NOT_RUN` do not count as correct model predictions. Verify the local bytes after each run with `--verify-local-run --run-dir /Users/andrew/coami-evidence/E013/runs/<run_id>`; a clean verification is a point-in-time integrity check, not a backup.
 
-`private-evidence/` is ignored temporary staging only. A reviewed export may be placed under `evidence/runs/<run_id>/` in Git. An Owner review JSON must list all 75 cases and each exact analysis/body hash, with `analysis_public` and `raw_public` decisions, plus `summary_public: true`. Run `--publish-reviewed --run-dir <restricted-run> --approval <review.json>` only after reviewing the content. Approved raw files are copied byte-for-byte; restricted full rows and bodies remain in the durable store. The public manifest records stable relative locators, store ID, run version, hashes, access rules, and retention. A sanitized index never stands in for the full row or raw body.
+`private-evidence/` is ignored temporary staging only. After a local integrity check, a reviewer must inspect **each case's** exact analysis row and body for unexpected sensitive content, recording `safety_checked: true`, each exact analysis/body SHA-256, and `analysis_public`/`raw_public` decisions in an approval JSON with all 75 cases and `summary_public: true`. API keys, authentication headers, non-2xx error bodies, and raw tracebacks must never enter Git. Run `--publish-reviewed --run-dir <local-run> --approval <review.json>` only after that review. The tool checks all local hashes before creating the exclusive `evidence/runs/<run_id>/` Git output. Approved raw files are copied byte-for-byte; unapproved full rows and bodies remain local. Commit and push the reviewed evidence as a separate versioned topic; until then, the run is **local and unbacked**. If any case cannot be published, the Git index records a gap and later Agents need authorized local access to verify it. The index records stable relative locators, store ID, run version, hashes, access limits, and the absence of a retention promise.
 
-From a clean checkout, `--verify-evidence --evidence-run <tracked-run> [--restricted-run <authorized-run>]` checks available objects and reports explicit gaps. Future threshold research may use the full research rows to propose candidates, then examine holdout separately, especially `INSUFFICIENT → SUFFICIENT`; E013 itself does not choose a threshold.
+From a clean checkout, `--verify-evidence --evidence-run <tracked-run> [--restricted-run <authorized-run>]` checks available objects and reports explicit gaps. Future threshold research may use the full research rows to propose candidates, then examine holdout separately, especially `INSUFFICIENT → SUFFICIENT`; E013 itself does not choose a threshold. A single mutable local directory has no independent retention or immutability guarantee, even after chmod; Git publication makes only the reviewed subset versioned and remotely retrievable.
 
 ## Interpretation
 

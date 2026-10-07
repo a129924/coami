@@ -21,7 +21,7 @@ created: 2026-10-07
 
 - [X] 1. Add E013-only pinned Python scaffold, frozen case loader and zero-call preflight.
 - [X] 2. Capture exact emitted request and successful response bytes before SDK parsing; retain invalid responses and classify failures without error-body exposure.
-- [X] 3. Add per-case durable store rows, descriptive group report, review-gated Git export, and clean-checkout verification.
+- [X] 3. Add per-case local run rows, descriptive group report, review-gated Git export, and clean-checkout verification.
 - [ ] 4. Complete offline tests, validators, static checks and evidence record; obtain independent technical review.
 - [ ] 5. After Owner freeze, store decision and explicit live authorization, run 75 cases once and reconcile raw hashes and group counts. Blocked today.
 

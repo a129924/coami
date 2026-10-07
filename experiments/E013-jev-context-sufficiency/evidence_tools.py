@@ -41,8 +41,74 @@ def read_rows(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def verify_local_run(run_dir: Path) -> dict[str, Any]:
+    """Verify current local bytes; this does not establish backup or immutability."""
+    manifest = e.read_object(run_dir / "manifest.json")
+    run_id = manifest.get("run_id")
+    store = manifest.get("store")
+    if (
+        run_dir.name != run_id
+        or not isinstance(store, dict)
+        or store.get("storage_mode") != "local_staging"
+    ):
+        raise e.ContractError("LOCAL_RUN_MISMATCH")
+    rows = read_rows(run_dir / "analysis.jsonl")
+    if any(row["run_id"] != run_id for row in rows):
+        raise e.ContractError("RUN_ID_MISMATCH")
+    gaps = []
+    for row in rows:
+        group, case_id = row["group"], row["case_id"]
+        if row.get("status") == "VALID" and row.get("raw_sha256") is None:
+            gaps.append(
+                {"group": group, "case_id": case_id, "reason": "VALID_BODY_MISSING"}
+            )
+        for field, locator in (
+            ("request_sha256", f"requests/{group}/{case_id}.body"),
+            ("raw_sha256", f"responses/{group}/{case_id}.body"),
+        ):
+            expected = row.get(field)
+            if expected is None:
+                continue
+            if field == "raw_sha256" and row.get("raw_locator") != locator:
+                gaps.append(
+                    {
+                        "group": group,
+                        "case_id": case_id,
+                        "reason": "RAW_LOCATOR_MISMATCH",
+                    }
+                )
+                continue
+            try:
+                actual = e.sha(bounded_path(run_dir, locator).read_bytes())
+            except OSError:
+                actual = None
+            if actual != expected:
+                gaps.append(
+                    {
+                        "group": group,
+                        "case_id": case_id,
+                        "reason": f"{field.upper()}_MISMATCH",
+                    }
+                )
+    recorded = e.read_object(run_dir / "summary.json")
+    recalculated = e.summarize(rows)
+    if (
+        recorded.get("groups") != recalculated["groups"]
+        or recorded.get("complete") != recalculated["complete"]
+    ):
+        gaps.append({"reason": "SUMMARY_MISMATCH"})
+    return {
+        "run_id": run_id,
+        "verified_cases": 75 if not gaps else None,
+        "gaps": gaps,
+        "evidence_status": "local-unbacked",
+    }
+
+
 def publish_reviewed(run_dir: Path, approval_path: Path, evidence_root: Path) -> Path:
     """Export only reviewed rows and byte-identical approved raw bodies."""
+    if verify_local_run(run_dir)["gaps"]:
+        raise e.ContractError("LOCAL_EVIDENCE_UNVERIFIED")
     manifest = e.read_object(run_dir / "manifest.json")
     approval = e.read_object(approval_path)
     run_id = manifest.get("run_id")
@@ -66,9 +132,13 @@ def publish_reviewed(run_dir: Path, approval_path: Path, evidence_root: Path) ->
         if not isinstance(decision, dict):
             raise e.ContractError("INVALID_PUBLICATION_REVIEW")
         key = (decision.get("group"), decision.get("case_id"))
-        if key in review or any(
-            type(decision.get(name)) is not bool
-            for name in ("analysis_public", "raw_public")
+        if (
+            key in review
+            or decision.get("safety_checked") is not True
+            or any(
+                type(decision.get(name)) is not bool
+                for name in ("analysis_public", "raw_public")
+            )
         ):
             raise e.ContractError("INVALID_PUBLICATION_REVIEW")
         review[key] = decision
@@ -201,6 +271,11 @@ def verify_evidence(
     for row in rows:
         key = (row["group"], row["case_id"])
         item = by_key[key]
+        if row.get("status") == "VALID" and item.get("raw_sha256") is None:
+            gaps.append(
+                {"group": key[0], "case_id": key[1], "reason": "VALID_BODY_MISSING"}
+            )
+            continue
         full = (
             restricted[key]
             if row.get("analysis_restricted") and restricted is not None
