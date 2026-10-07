@@ -242,7 +242,9 @@ def load_dataset(path: Path) -> tuple[list[dict[str, object]], list[str]]:
     cases: list[dict[str, object]] = []
     issues: list[str] = []
     try:
-        lines = path.read_text(encoding="utf-8").splitlines()
+        # Iterate physical file lines, preserving legal Unicode separators in JSON strings.
+        with path.open(encoding="utf-8") as source:
+            lines = source.readlines()
     except (OSError, UnicodeError) as error:
         return cases, [f"{path}: cannot read UTF-8 dataset: {error}"]
     for line_number, line in enumerate(lines, start=1):

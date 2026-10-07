@@ -1,6 +1,6 @@
 # context_sufficiency_v1 — Draft review and evidence
 
-Current：`approved`（技術draft交付）；Owner human-check pending。未經 Owner 逐案接受、未進 independent fixture review、**NOT FROZEN**。Owner 接受計畫與實作授權，不代表接受60筆答案。
+Current：`approved`（PR #12 bounded technical correction draft）；Owner human-check pending。未經 Owner 逐案接受、未進 independent fixture review、**NOT FROZEN**。Owner 接受計畫與實作授權，不代表接受60筆答案。
 
 ## Question, procedure, evidence, decision
 
@@ -32,6 +32,18 @@ Owner 最新授權：接受計畫並要求 create-feature-worktree，禁止 dev-
 
 ## Exact draft snapshot
 
+Snapshot ID：`v1-draft-002`。PR-comment-review-and-fix 修訂版；未經 Owner 接受，NOT FROZEN。README的60 slots、coverage matrix、group/split與pre-authoring baseline完全不變；更正五個案例的語義內容及validator實際行讀取。
+
+| File | SHA-256 |
+| --- | --- |
+| [README.md](README.md) | `2c812698e72934d0b704ce286a690b21100679a01d9b141339a4b5893187e00a` |
+| [context_sufficiency_v1.jsonl](context_sufficiency_v1.jsonl) | `b5ef56f8ecf1221944cc5df4084dcd00cfd536e0de00051766778b6266abbbd2` |
+| [validate_dataset.py](validate_dataset.py) | `3a4661ed2beb457c2852ee2d51789bbfa19963323fdbda9e42df64541d83e374` |
+
+Snapshot recorded UTC：2026-10-07T04:29:41.479385+00:00。
+
+## Previous snapshot — v1-draft-001 (historical)
+
 Snapshot ID：`v1-draft-001`。這是待 Owner 檢查的 exact snapshot；非 frozen version。下列三份 SHA-256 供後續驗證、Owner接受與獨立fixture review共同指向；review.md本身不納入hash。
 
 | File | SHA-256 |
@@ -42,7 +54,112 @@ Snapshot ID：`v1-draft-001`。這是待 Owner 檢查的 exact snapshot；非 fr
 
 Snapshot recorded UTC：2026-10-07T04:04:00.659759+00:00。
 
-## Local validation evidence
+舊版完整案例與證據保留於 [a65d3b6](https://github.com/a129924/coami/blob/a65d3b640423b772d07822bb0c351f523c8fc8c2/evaluation/context_sufficiency/versions/v1/review.md)；舊hash／65checks／技術批准只指001，不能接受或凍結002。
+
+## Current validation — v1-draft-002
+
+Codex 本機 Tester pass：2026-10-07T04:28:54.326339+00:00，Python 3.14.0；**88 checks 通過**。既有全量CLI/structure/slot/字詞缺席/歷史不變驗收，加本輪Unicode與五案回歸。所有CLI檢查實際subprocess執行，核對exit與stderr，無traceback；TemporaryDirectory候選不寫回正式資料。
+
+- RED證據：修正前，合法60行JSONL中的U+2028被splitlines拆散，exit1；修正後同類候選exit0。
+- U+2028／U+2029／U+0085分別在background、conversation.text、candidate_text出現，LF與CRLF實際記錄行共18個正常候選exit0；三種字元之後的缺background仍準確回報physical line2。
+- 最後一行沒有newline仍通過；多一個空physical row在line61拒絕。
+- 全60 slots與原README完全相符；從a65d3b6比對僅049／050／054／055／058五案變更，id/category/topic/group/split均不变。三筆明確選擇同步expected、interpretation、Action及候選／理由。
+- 049不含抱字，以孩子主動陪小熊玩偶為主，與004被媽媽抱不同；050不含還要短句，以繼續剝橘子為主，與005追加食物份量不同。語義仍待Owner，不以字詞檢查或自檢代替接受。
+- 34 SUFFICIENT／26 INSUFFICIENT不設配額；跨label對照research為toy_car／water，holdout為book，共三個distinct topics，仍符合原下限；drawing與outside同組兩案皆S，保留已解的意思而非為對照數硬套答案。
+- Ruff lint／format、v0 validator、v0/E012 diff不變檢查通過。完整正常／負例驗收重新執行，正式dataset測試前後hash相同。
+
+| Check | Expected and observed exit |
+| --- | ---: |
+| default from different cwd | 0 |
+| explicit absolute dataset | 0 |
+| explicit relative dataset | 0 |
+| malformed JSON | 1 |
+| non-object JSON | 1 |
+| empty line | 1 |
+| NaN | 1 |
+| duplicate JSON key | 1 |
+| non-UTF8 | 1 |
+| empty file | 1 |
+| missing file | 1 |
+| directory input | 1 |
+| duplicate ID | 1 |
+| duplicate visible input | 1 |
+| missing background | 1 |
+| missing conversation | 1 |
+| missing interpretation | 1 |
+| missing group_id | 1 |
+| invalid background | 1 |
+| invalid candidate_text | 1 |
+| invalid utterance | 1 |
+| invalid group_id | 1 |
+| invalid id | 1 |
+| invalid enum topic | 1 |
+| unhashable enum topic | 1 |
+| invalid enum context_type | 1 |
+| unhashable enum context_type | 1 |
+| invalid enum coverage_category | 1 |
+| unhashable enum coverage_category | 1 |
+| invalid enum split | 1 |
+| unhashable enum split | 1 |
+| invalid enum expected | 1 |
+| unhashable enum expected | 1 |
+| invalid enum expected_input_policy | 1 |
+| unhashable enum expected_input_policy | 1 |
+| invalid enum expected_output_policy | 1 |
+| unhashable enum expected_output_policy | 1 |
+| invalid enum expected_action | 1 |
+| unhashable enum expected_action | 1 |
+| conversation not list | 1 |
+| too few turns | 1 |
+| too many turns | 1 |
+| turn not object | 1 |
+| invalid speaker | 1 |
+| empty turn text | 1 |
+| sufficient null interpretation | 1 |
+| insufficient string interpretation | 1 |
+| wrong label Action | 1 |
+| too few cases | 1 |
+| wrong matrix | 1 |
+| group crosses split | 1 |
+| missing topic | 1 |
+| category only one topic | 1 |
+| research contrast missing | 1 |
+| holdout contrast missing | 1 |
+| fewer than three contrast topics | 1 |
+| structure-valid semantic error | 0 |
+| counts-preserving slot swap structural pass | 0 |
+| all 60 slot assignments match README; swapped split detected independently | 0 |
+| 10 no-keyword cases checked in visible context | 0 |
+| literal U+2028 in background, '\n' physical rows | 0 |
+| literal U+2028 in background, '\r\n' physical rows | 0 |
+| literal U+2028 in conversation, '\n' physical rows | 0 |
+| literal U+2028 in conversation, '\r\n' physical rows | 0 |
+| literal U+2028 in candidate_text, '\n' physical rows | 0 |
+| literal U+2028 in candidate_text, '\r\n' physical rows | 0 |
+| physical line 2 after U+2028 | 1 |
+| literal U+2029 in background, '\n' physical rows | 0 |
+| literal U+2029 in background, '\r\n' physical rows | 0 |
+| literal U+2029 in conversation, '\n' physical rows | 0 |
+| literal U+2029 in conversation, '\r\n' physical rows | 0 |
+| literal U+2029 in candidate_text, '\n' physical rows | 0 |
+| literal U+2029 in candidate_text, '\r\n' physical rows | 0 |
+| physical line 2 after U+2029 | 1 |
+| literal U+0085 in background, '\n' physical rows | 0 |
+| literal U+0085 in background, '\r\n' physical rows | 0 |
+| literal U+0085 in conversation, '\n' physical rows | 0 |
+| literal U+0085 in conversation, '\r\n' physical rows | 0 |
+| literal U+0085 in candidate_text, '\n' physical rows | 0 |
+| literal U+0085 in candidate_text, '\r\n' physical rows | 0 |
+| physical line 2 after U+0085 | 1 |
+| final physical row without newline | 0 |
+| extra blank physical row rejected | 1 |
+| bounded five-case correction; metadata unchanged; three explicit choices sufficient | 0 |
+| ruff check /private/tmp/coami-worktrees/context-sufficiency-expansion/evaluation/context_sufficiency/versions/v1/validate_dataset.py | 0 |
+| ruff format --check | 0 |
+| /opt/homebrew/opt/python@3.14/bin/python3.14 /private/tmp/coami-worktrees/context-sufficiency-expansion/evaluation/context_sufficiency/validate_dataset.py | 0 |
+| git diff --exit-code | 0 |
+
+## Initial validation — v1-draft-001 (historical)
 
 執行者：Codex 本機 Tester pass；不是獨立fixture review、Owner接受或模型評估。Python 3.14.0，recorded UTC 2026-10-07T04:03:16.510568+00:00。
 
@@ -139,15 +256,17 @@ python3 evaluation/context_sufficiency/validate_dataset.py
 
 逐案確認：S主意思是否由文字支持；I至少兩合理意思是否導向不同回應；候選是否簡短且只確認／釐清一件事；COMPANION／ALLOW與Action是否合宜；是否依賴隱藏訊息或硬套category；對照及同情境group是否合理。
 
-可一次明示接受 **v1-draft-001三hash所指的全部60案**，或用Case編號／展開的ID提修訂。任何snapshot變更均更新版本證據並重走全量驗證、Owner接受與後續獨立fixture review，不用本機PASS代替接受。
+可一次明示接受 **v1-draft-002三hash所指的全部60案**，或用Case編號／展開的ID提修訂。任何snapshot變更均更新版本證據並重走全量驗證、Owner接受與後續獨立fixture review，不用本機PASS代替接受。
 
 ## Case review package
+
+以下60案對應目前 v1-draft-002；Case編號沿用001，便於追蹤，但舊版接受不能套用新snapshot。
 
 ### Case 01
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：外面有院子，外面的路上也有小狗。
 >
@@ -181,7 +300,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：門的另一邊是院子，屋裡很悶，你想出去看樹嗎？
 >
@@ -215,7 +334,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：這個黃色圓玩具用手拍到地上會彈起來，你想拍它嗎？
 >
@@ -249,7 +368,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：大人剛才聊了明天的天氣和午餐；沒有說到玩具。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：你要用手拍這顆紅球嗎？
 >
@@ -283,7 +402,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：紅色那件有袖子，穿在身上能保暖，你要穿它嗎？
 >
@@ -317,7 +436,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：奶奶今天早餐喝了茶；這與外套扣子沒有關係。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：紅外套上的扣子要自己扣，還是要我幫忙？
 >
@@ -351,7 +470,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：藍色那本是海龜故事。
 >
@@ -385,7 +504,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：書架有故事書、圖畫書和字母書。你剛說想聽哪一本？
 >
@@ -419,7 +538,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：這裡有白紙和彩色筆，你想自己用筆在紙上做個太陽嗎？
 >
@@ -453,7 +572,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **child**：別唱歌，我要故事。
 >
@@ -469,17 +588,17 @@ Owner：pending；independent fixture review：pending。
 
 - **id**：cs_v1_054
 - **topic**：sleep
-- **context_type**：ambiguous
+- **context_type**：clear
 - **coverage_category**：conflicting_context
 - **group_id**：case-054
 - **split**：research
-- **expected**：INSUFFICIENT
-- **interpretation**：null
-- **candidate_text**：你現在不要故事，還是不要唱歌？
+- **expected**：SUFFICIENT
+- **interpretation**：孩子現在不想聽故事，沒有明確拒絕唱歌。
+- **candidate_text**：你現在不想聽故事。
 - **expected_input_policy**：COMPANION
 - **expected_output_policy**：ALLOW
-- **expected_action**：DELIVER_QUESTION
-- **rationale**：可能延續不要故事，應確認停止故事；也可能重新拒絕歌，應確認停止歌。意願反覆且最後省略對象，不能替孩子選。
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：最後明說故事也不要，歌又好像可以；當句不要可合理延續已明確的故事拒絕，不必把沒有文字支持的突然反悔唱歌當同等競爭意思。先前意願衝突已有主要解讀，不需百分之百確定。
 
 Owner：pending；independent fixture review：pending。
 
@@ -489,7 +608,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：藍襪子洗好了，白襪子還在洗。
 >
@@ -523,7 +642,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：床邊這本有小牛和農場的故事，你想聽我念嗎？
 >
@@ -557,7 +676,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：你說累了，現在想睡覺嗎？
 >
@@ -591,11 +710,15 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
-> **parent**：剛才那小塊香蕉麵包吃完了，再吃一塊嗎？
+> **parent**：你剛剝好一顆橘子，桌上另有一顆完整的。
 >
-> **child**：再吃一塊香蕉麵包。
+> **child**：這顆我也自己剝。
+>
+> **parent**：你說先剝下一顆，吃的事等一下？
+>
+> **child**：對，先剝。
 >
 
 孩子當句：**還要**
@@ -610,12 +733,12 @@ Owner：pending；independent fixture review：pending。
 - **group_id**：case-050
 - **split**：holdout
 - **expected**：SUFFICIENT
-- **interpretation**：孩子想再吃一塊香蕉麵包。
-- **candidate_text**：你想再吃一塊香蕉麵包。
+- **interpretation**：孩子想繼續自己剝下一顆橘子，暫不吃。
+- **candidate_text**：你想繼續自己剝橘子。
 - **expected_input_policy**：COMPANION
 - **expected_output_policy**：ALLOW
 - **expected_action**：DELIVER_ANSWER
-- **rationale**：前文沒有還要這個短句，追加數量及食物卻已明選，意思不需靠同詞重複。
+- **rationale**：前文未用還要短句，但孩子明選繼續剝下一顆，且確認先剝、吃等一下。主要意思是延續食物準備與練習，不是cs_v1_005的吃完後追加一份食物。
 
 Owner：pending；independent fixture review：pending。
 
@@ -625,11 +748,11 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
-> **parent**：你想靠在媽媽懷裡一下嗎？
+> **parent**：小熊玩偶從枕頭上掉下來了。你想讓牠待在你的懷裡，陪著牠嗎？
 >
-> **child**：想，靠媽媽。
+> **child**：要，我陪小熊，放我懷裡。
 >
 
 孩子當句：**抱抱**
@@ -644,12 +767,12 @@ Owner：pending；independent fixture review：pending。
 - **group_id**：case-049
 - **split**：holdout
 - **expected**：SUFFICIENT
-- **interpretation**：孩子想被媽媽抱在懷裡。
-- **candidate_text**：你想靠在媽媽懷裡。
+- **interpretation**：孩子想自己把小熊玩偶放在懷裡陪伴牠。
+- **candidate_text**：你想把小熊放在自己懷裡，陪著牠。
 - **expected_input_policy**：COMPANION
 - **expected_output_policy**：ALLOW
 - **expected_action**：DELIVER_ANSWER
-- **rationale**：前文未用抱字，但靠媽媽懷裡的需要已被確認；只根據文字，不借未提供的手勢。
+- **rationale**：前文未用抱字，卻以玩偶待在孩子懷裡與孩子自己陪牠建立主意思。這是孩子主動照顧玩偶，不是cs_v1_004的孩子請求被媽媽抱，參與角色與回應目的不同。
 
 Owner：pending；independent fixture review：pending。
 
@@ -659,7 +782,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：門外正在下雨，在屋裡也能聽到雨聲。
 >
@@ -693,7 +816,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：你想讓媽媽抱一下嗎？
 >
@@ -727,7 +850,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：媽媽現在在廚房。
 >
@@ -761,7 +884,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：把這些方塊一層一層疊成小屋，好嗎？
 >
@@ -795,7 +918,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：故事裡的媽媽正在找小兔子。
 >
@@ -829,7 +952,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **child**：讓娃娃抱我。
 >
@@ -865,7 +988,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：窗外的小鳥來了，你想留在屋裡看嗎？
 >
@@ -899,7 +1022,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：剛才的小饅頭吃完了，還想吃一個嗎？
 >
@@ -933,7 +1056,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：餅乾故事剛講完，桌上也有一盤餅乾。
 >
@@ -967,7 +1090,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：你口渴了嗎？想喝杯裡的涼開水嗎？
 >
@@ -1001,7 +1124,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：水的故事講到河水流向瀑布。
 >
@@ -1035,7 +1158,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **child**：先念床邊那本小牛故事。
 >
@@ -1071,7 +1194,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：你想聽那本海龜故事嗎？藍色封面那本。
 >
@@ -1105,7 +1228,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：球滾到沙發下面了。
 >
@@ -1139,7 +1262,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：你想推地墊上的紅色小汽車嗎？
 >
@@ -1173,7 +1296,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：杯裡有能喝的水，水壺裡有要澆花的水。
 >
@@ -1207,7 +1330,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：媽媽說今天穿紅外套。
 >
@@ -1241,7 +1364,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：衣櫃有外衣、毛衣和雨衣，門口還有一件雨衣。
 >
@@ -1275,7 +1398,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **child**：我要自己用筆做太陽。
 >
@@ -1291,17 +1414,17 @@ Owner：pending；independent fixture review：pending。
 
 - **id**：cs_v1_055
 - **topic**：drawing
-- **context_type**：ambiguous
+- **context_type**：clear
 - **coverage_category**：conflicting_context
 - **group_id**：drawing-make-or-show
 - **split**：research
-- **expected**：INSUFFICIENT
-- **interpretation**：null
-- **candidate_text**：你想先看媽媽的畫，還是先自己畫？
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想先看媽媽的畫，之後也想自己作畫。
+- **candidate_text**：你想先看媽媽的畫，也想自己畫。
 - **expected_input_policy**：COMPANION
 - **expected_output_policy**：ALLOW
-- **expected_action**：DELIVER_QUESTION
-- **rationale**：孩子先要創作，後同時提先看作品與自己做，未選當下活動；可能看作品或自己作畫，後續確認不同。
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：最後的先看媽媽那張已選定眼前的第一個活動，自己做是另一個後續願望；可見先後足以支持主要意思，不能為保留歧義標籤忽略先看的明確選擇。
 
 Owner：pending；independent fixture review：pending。
 
@@ -1311,7 +1434,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **child**：我要出去看院子。
 >
@@ -1327,17 +1450,17 @@ Owner：pending；independent fixture review：pending。
 
 - **id**：cs_v1_058
 - **topic**：outside
-- **context_type**：ambiguous
+- **context_type**：clear
 - **coverage_category**：conflicting_context
 - **group_id**：outside-watch-or-go
 - **split**：holdout
-- **expected**：INSUFFICIENT
-- **interpretation**：null
-- **candidate_text**：你想先出門，還是留在窗邊看？
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想先留在窗邊看外面的小鳥。
+- **candidate_text**：你想先留在窗邊看外面的小鳥。
 - **expected_input_policy**：COMPANION
 - **expected_output_policy**：ALLOW
-- **expected_action**：DELIVER_QUESTION
-- **rationale**：可能延續出門到院子，應確認出門；也可能先留屋內看鳥，應確認觀看。兩個位置與先後都未定，短句不能裁定。
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：最後提留在窗邊看小鳥並說先看外面，可合理延續窗邊觀看的選擇。更早的出門願望沒有讓當下的第一個活動仍未選定；主意思充分，不需臆測立即反悔。
 
 Owner：pending；independent fixture review：pending。
 
@@ -1347,7 +1470,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：媽媽畫的畫放在桌上，旁邊有給你畫畫的白紙。
 >
@@ -1381,7 +1504,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：媽媽在客廳，你想找她嗎？
 >
@@ -1415,7 +1538,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：早上大人說週末要洗車，與眼前的飯和故事無關。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：剛吃完飯，也剛聽完一個故事。
 >
@@ -1449,7 +1572,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：這件衣服可以穿上，也可以脫下換另一件。
 >
@@ -1483,7 +1606,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **child**：我要香蕉。
 >
@@ -1519,7 +1642,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：昨天吃的是芒果布丁，與現在的積木活動無關。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：桌上那座積木塔可以繼續疊，也可以拆掉。
 >
@@ -1553,7 +1676,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：盤子裡還有餅乾。
 >
@@ -1587,7 +1710,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：今天車棚重新粉刷，沒有提到睡前故事或燈。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：睡前故事講到一半，房間的大燈還亮著。
 >
@@ -1621,7 +1744,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：你要拍黃色球，還是把藍色球放回盒子？
 >
@@ -1655,7 +1778,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：隔壁剛才放了一首歌；沒有談到顏色或畫紙。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：你要把紙上的太陽塗紅色還是黃色？
 >
@@ -1689,7 +1812,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：故事有火車、汽車和消防車。
 >
@@ -1723,7 +1846,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：這個有四個輪子的小玩具能沿著地墊推，你想推它嗎？
 >
@@ -1757,7 +1880,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **child**：把長方塊放上面。
 >
@@ -1793,7 +1916,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：地墊上有紅色玩具車，窗外有一台大車。
 >
@@ -1827,7 +1950,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：故事裡媽媽先找小熊，媽媽再幫小熊蓋被。
 >
@@ -1861,7 +1984,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：大人剛說今天搭公車花了十分鐘，沒有描述杯子。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：你的杯子裡還有飲用水，你想再喝一口嗎？
 >
@@ -1895,7 +2018,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：睡床、睡袋和睡枕都是睡覺時用的。你要先聽故事嗎？
 >
@@ -1929,7 +2052,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：午餐有三支湯匙，這與擁抱沒有關係。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：你剛說想讓爸爸抱一下，是嗎？
 >
@@ -1963,7 +2086,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：透明杯裡是煮過放涼、沒有甜味的飲料，你口渴想喝嗎？
 >
@@ -1997,7 +2120,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：積木塔疊高會倒，這袋積木也可以放到高架子。
 >
@@ -2031,7 +2154,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：等一下買蘋果和雞蛋。
 >
@@ -2065,7 +2188,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：你說娃娃想要被抱，也說你想靠媽媽懷裡。
 >
@@ -2099,7 +2222,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：睡覺前要把積木收進箱子。
 >
@@ -2133,7 +2256,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **child**：我只要推紅車。
 >
@@ -2169,7 +2292,7 @@ Owner：pending；independent fixture review：pending。
 
 背景：沒有其他可用背景；只依以下文字判斷。
 
-前文（全部在当句之前）：
+前文（全部在當句之前）：
 
 > **parent**：你想穿紅色外套嗎？
 >
@@ -2201,7 +2324,7 @@ Owner：pending；independent fixture review：pending。
 
 ## Coverage and contrast summary
 
-60案：research40／holdout20；十二topics；54groups（6對照pairs＋48singleton）；31 SUFFICIENT／29 INSUFFICIENT是作者完成結果，不是預先答案配額。
+60案：research40／holdout20；十二topics；54groups（6個相關案例pairs＋48singleton，其中4個pairs跨label）；34 SUFFICIENT／26 INSUFFICIENT是作者完成結果，不是預先答案配額。
 
 | Category | Research | Holdout |
 | --- | ---: | ---: |
@@ -2212,7 +2335,7 @@ Owner：pending；independent fixture review：pending。
 | meaning_without_keyword | 6 | 4 |
 | conflicting_context | 6 | 4 |
 
-| Contrast group | IDs | Split | Topic |
+| Related group (not every pair crosses labels) | IDs | Split | Topic |
 | --- | --- | --- | --- |
 | car-play-or-look | cs_v1_001, cs_v1_011 | research | toy_car |
 | water-drink-or-use | cs_v1_002, cs_v1_012 | research | water |
@@ -2226,8 +2349,8 @@ Owner：pending；independent fixture review：pending。
 | Evidence | State |
 | --- | --- |
 | Repo plan review | approved; contract only |
-| Local structure／CLI／slot checks | PASS; not oracle approval |
-| Independent technical draft review | approved; no blocker; not fixture verdict |
+| Local structure／CLI／slot checks | 002: 88 checks PASS; not oracle approval |
+| Independent technical draft review | 001 historical; 002 bounded re-review approved, no blocker; not fixture verdict |
 | Owner full60 exact-snapshot acceptance | pending |
 | Independent fixture review after Owner | pending |
 | Matching-evidence sufficiency for freeze | pending |
@@ -2241,10 +2364,31 @@ Owner：pending；independent fixture review：pending。
 - Plan已記Owner新publish授權，交未凍結draft→human review，不merge/release。
 - Commit／push／PR交付結果另以實際Git與remote結果回報，不預填成功。
 
-## Independent technical draft review
+## Initial independent technical draft review — 001 (historical)
 
 Reviewer：`/root/plan_reviewer` 切獨立 Reviewer 路徑；讀 python-code-review skill、五個工件與暫存test harness/results。Standalone quality verdict approved／blocking_issues=[]。Typing、lint、readability、error handling、anti-patterns、observability無findings；test quality有一個warning，已處理如下。此技術draft審查不是Owner接受或fixture語義批准，未重新執行工具或宣稱freshhash核驗。
 
 Reviewer 發現初輪名為relative-path的check其harness覆寫為絕對path，因此不能用原check證明相對路徑。已更正上表初輪check名稱，並另在TemporaryDirectory中實際傳入argv `candidate.jsonl`、以該目錄為cwd呼叫絕對validator；觀察exit0、60案、stderr空、candidate bytes不變。新增這一項後共65checks，不重跑已通過且未受影響的其餘檢查。README/dataset/validator snapshot未變。
 
 技術交付 Decision：可依Owner既有授權按topic commit/push供human review，Owner全60接受／後續fixture review／matching freeze gates均pending，NOT FROZEN。
+
+## PR-comment-review-and-fix — v1-draft-002
+
+Decision：六個threads皆ADDRESS，無SKIP項；採可見文字證據修正，不以模型得分選答案。既有slot/group/split不改、case數不改、README不改、v0/E012不改；Owner與fixture review/freeze仍pending。
+
+| Thread | Addressed change | Verification |
+| --- | --- | --- |
+| [4203001851](https://github.com/a129924/coami/pull/12#discussion_r4203001851) | 049改成孩子主動陪小熊玩偶，非被媽媽抱 | 角色／目的不同；hug slot與keyword缺席保留 |
+| [4203001893](https://github.com/a129924/coami/pull/12#discussion_r4203001893) | loader讀physical file lines，不用splitlines | Unicode LF/CRLF与physical line2回歸 |
+| [4203003244](https://github.com/a129924/coami/pull/12#discussion_r4203003244) | 058保留原文字，改S，先留窗邊看 | 主要解讀、candidate、rationale、Action同步 |
+| [4203003248](https://github.com/a129924/coami/pull/12#discussion_r4203003248) | 054保留原文字，改S，拒絕故事 | 不假設立即反悔唱歌，候選只確認故事拒絕 |
+| [4203003251](https://github.com/a129924/coami/pull/12#discussion_r4203003251) | 055保留原文字，改S，先看媽媽作品 | 明確先後不硬改成未解歧義 |
+| [4203003254](https://github.com/a129924/coami/pull/12#discussion_r4203003254) | 050改成繼續自己剝橘子，非追加吃一份 | 準備活動／吃的目的不同；food slot不變 |
+
+Review packet与snapshot已同步；舊001內容保留於Git commit與上述歷史證據。留言／resolve待修正commit已push後執行；不預稱遠端thread已關閉。
+
+## Independent bounded technical re-review — 002
+
+Reviewer：`/root/plan_reviewer`，針對PR12六個threads以python-code-review path唯讀重審，verdict approved／blocking_issues=[]，七quality維度無findings。核對六項修正、physical-line loader、88checks證據（未run工具）、60slots不變、全60案human packet逐欄一致，重新計算current三hash均符合002。v0三hash與baseline一致，v0/E012無變更。只核對bounded thread論點，不是全量fixture語義review，不批准Owner接受或freeze。
+
+Decision：技術修正可進publish；本輪commit訊息仍須Owner明確確認，之後commit→push→逐thread回覆／resolve。未先留言或關閉thread，未merge或release。

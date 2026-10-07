@@ -46,7 +46,7 @@ Implementer 寫修；Tester 提供證據；Owner 接受答案；獨立 Reviewer 
 
 ## Status / Allowed Transitions
 
-Current：approved（repo計畫與技術draft已獨立核准；creator四步完成，待publish與Owner human review；oracle未接受、未凍結）。先固定 slots／核對，再撰全文、驗證、Owner human check、獨立 fixture review、matching-evidence gate、freeze。
+Current：approved（PR #12 correction draft v1-draft-002；88checks與bounded技術重審完成；待Owner確認本輪commit訊息後publish並resolve threads；oracle未接受、未凍結）。先固定 slots／核對，再撰全文、驗證、Owner human check、獨立 fixture review、matching-evidence gate、freeze。
 
 Canonical：planned→creator-in-progress→review-ready→reviewer-in-progress→approved 或 needs-rework；needs-rework→creator-in-progress；approved→creator-in-progress。Freeze 是資料標記。Snapshot 改動重走驗證／Owner／fixture review，保留歷史。
 
@@ -104,3 +104,5 @@ Freeze 後若有 oracle 錯誤，另版本／任務保留 v0／v1、歷史答案
 ## Open Questions / Unresolved Items
 
 需求決策無未解項。Owner 已接受計畫與執行方向，尚未接受60筆答案。Optional analysis 缺失已明示；repo計畫、實作驗證／技術審查與 fixture lifecycle 證據分別記 review.md，不相互代替。
+
+PR comment rework：六個threads均ADDRESS。保留固定slots與分組，049/050換成不同活動；054/055/058依既有可見文字更正S；validator按實際檔案行讀取。新002 snapshot重新驗證與Owner/fixture review，舊001證據保留，不因關thread宣稱已freeze。
