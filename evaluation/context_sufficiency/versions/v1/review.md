@@ -1,0 +1,2250 @@
+# context_sufficiency_v1 — Draft review and evidence
+
+Current：`approved`（技術draft交付）；Owner human-check pending。未經 Owner 逐案接受、未進 independent fixture review、**NOT FROZEN**。Owner 接受計畫與實作授權，不代表接受60筆答案。
+
+## Question, procedure, evidence, decision
+
+Question：在六類語義機制、十二生活主題下，何時可根據可見文字回答，何時須追問？
+Procedure：先固定60 slots/category/topic/group/split，再寫案例；本機結構／CLI負例與逐列slot核對；提交技術draft供 human review。無Jev、無模型調整或分數門檻。
+Evidence：下列 baseline 在案例文字、label與候選尚未建立時記錄。
+Decision：維持 v0、不編E013；新v1只60案。Owner最新授權commit/push未凍結draft→human review，fixture review/freeze仍待同版本Owner接受。
+
+## Pre-authoring baseline
+
+- Recorded UTC：2026-10-07T03:58:29.837707+00:00
+- README SHA-256：`2c812698e72934d0b704ce286a690b21100679a01d9b141339a4b5893187e00a`
+- 60 slots 先固定，無案例內容／labels／interpretation／candidate；category-split matrix已固定。
+- Topic plan 對話 advisory review approved；repo-visible gate另記，不冒稱已過。
+
+## v0 frozen baseline (read-only)
+
+| File | SHA-256 |
+| --- | --- |
+| evaluation/context_sufficiency/README.md | `32471da22cde6410764e319a1eda114d91c6c78b233258239aa6da81108d7b1f` |
+| evaluation/context_sufficiency/dataset/context_sufficiency_v0.jsonl | `35f8511d30c112eafd3387866d588cd1df3f9a80f2f12029b6298e7a60d8cdb5` |
+| evaluation/context_sufficiency/validate_dataset.py | `45f0f0d8efe685b2514c2ae27109ea7586db5bc57858d382518cbc078da1db38` |
+
+## Repo-visible plan review
+
+獨立 Plan-Reviewer：`/root/plan_reviewer`，讀 feature worktree 中的 topic plan、shared contracts、README slots 與 baseline；verdict approved／blocking_issues=[]。唯讀核對60唯一ID、六類各10、40/20matrix、十二topic、各類至少兩topic、所有group同split、README baseline與v0三hash。當時尚無dataset；只批准執行契約，不批准任何答案。
+
+Owner 最新授權：接受計畫並要求 create-feature-worktree，禁止 dev-worktree 實作，無重大問題直接 commit by topic→push→human review。此授權涵蓋未凍結draft交付；不等於逐案接受，未開放Jev、threshold、merge或release。
+
+## Exact draft snapshot
+
+Snapshot ID：`v1-draft-001`。這是待 Owner 檢查的 exact snapshot；非 frozen version。下列三份 SHA-256 供後續驗證、Owner接受與獨立fixture review共同指向；review.md本身不納入hash。
+
+| File | SHA-256 |
+| --- | --- |
+| [README.md](README.md) | `2c812698e72934d0b704ce286a690b21100679a01d9b141339a4b5893187e00a` |
+| [context_sufficiency_v1.jsonl](context_sufficiency_v1.jsonl) | `f97f5b0091e7a68d5bf43d63036fe2f54775fa4575d2535196e84debf8e3ab80` |
+| [validate_dataset.py](validate_dataset.py) | `44d1d1765dc8e1fed80dcee6b18304735ff50d7a107837527a78f1c649bb77f7` |
+
+Snapshot recorded UTC：2026-10-07T04:04:00.659759+00:00。
+
+## Local validation evidence
+
+執行者：Codex 本機 Tester pass；不是獨立fixture review、Owner接受或模型評估。Python 3.14.0，recorded UTC 2026-10-07T04:03:16.510568+00:00。
+
+```sh
+python3 evaluation/context_sufficiency/versions/v1/validate_dataset.py
+ruff check evaluation/context_sufficiency/versions/v1/validate_dataset.py
+ruff format --check evaluation/context_sufficiency/versions/v1/validate_dataset.py
+python3 evaluation/context_sufficiency/validate_dataset.py
+```
+
+全 **65 checks 通過**。使用 TemporaryDirectory 與 deep-copy的暫存JSONL，實際subprocess執行CLI，核對預期exit、stderr診斷及無traceback；結束清除候選檔。驗證前後正式dataset SHA-256相同。未新增測試framework、測試repo工件或網路呼叫。
+
+- CLI正常路徑：其他cwd預設、明確絕對與相對candidate。
+- 負例：malformed／非object／空行／NaN／duplicate JSON key／非UTF8／空檔／不存在／directory；duplicate ID／完整visible input；缺欄、型別、空字串、ID格式、enum（含dict值）、turn shape/count/speaker/text、interpretation／Action錯配。
+- 配置負例：不足60、matrix錯、group跨split、缺topic、category只有一topic、research／holdout對照缺失與不足三個distinct對照topic。
+- 結構有效但故意給錯語義的暫存案仍exit0：程式不推答案；不寫回oracle。
+- 逐列核對60案 id/category/topic/group/split 與 README 已固定slots全部相符。另交換 cs_v1_004／cs_v1_010 的split，維持matrix且CLI exit0，但逐列核對準確找出兩筆差異，證明counts不代替slot驗收。
+- cs_v1_041–050 的前文／背景逐案未出現對應target keyword；此檢查只證明字詞缺席，不證明語義充分。
+- Ruff lint與format check exit0；既有v0 validator exit0；git diff base確認v0及E012原樣。
+
+### Individual check inventory
+
+| Check | Expected and observed exit |
+| --- | ---: |
+| default from different cwd | 0 |
+| explicit absolute dataset | 0 |
+| explicit candidate (initial harness supplied absolute path) | 0 |
+| actual relative argv candidate.jsonl from temporary cwd | 0 |
+| malformed JSON | 1 |
+| non-object JSON | 1 |
+| empty line | 1 |
+| NaN | 1 |
+| duplicate JSON key | 1 |
+| non-UTF8 | 1 |
+| empty file | 1 |
+| missing file | 1 |
+| directory input | 1 |
+| duplicate ID | 1 |
+| duplicate visible input | 1 |
+| missing background | 1 |
+| missing conversation | 1 |
+| missing interpretation | 1 |
+| missing group_id | 1 |
+| invalid background | 1 |
+| invalid candidate_text | 1 |
+| invalid utterance | 1 |
+| invalid group_id | 1 |
+| invalid id | 1 |
+| invalid enum topic | 1 |
+| unhashable enum topic | 1 |
+| invalid enum context_type | 1 |
+| unhashable enum context_type | 1 |
+| invalid enum coverage_category | 1 |
+| unhashable enum coverage_category | 1 |
+| invalid enum split | 1 |
+| unhashable enum split | 1 |
+| invalid enum expected | 1 |
+| unhashable enum expected | 1 |
+| invalid enum expected_input_policy | 1 |
+| unhashable enum expected_input_policy | 1 |
+| invalid enum expected_output_policy | 1 |
+| unhashable enum expected_output_policy | 1 |
+| invalid enum expected_action | 1 |
+| unhashable enum expected_action | 1 |
+| conversation not list | 1 |
+| too few turns | 1 |
+| too many turns | 1 |
+| turn not object | 1 |
+| invalid speaker | 1 |
+| empty turn text | 1 |
+| sufficient null interpretation | 1 |
+| insufficient string interpretation | 1 |
+| wrong label Action | 1 |
+| too few cases | 1 |
+| wrong matrix | 1 |
+| group crosses split | 1 |
+| missing topic | 1 |
+| category only one topic | 1 |
+| research contrast missing | 1 |
+| holdout contrast missing | 1 |
+| fewer than three contrast topics | 1 |
+| structure-valid semantic error | 0 |
+| counts-preserving slot swap structural pass | 0 |
+| all 60 slot assignments match README; swapped split detected independently | 0 |
+| 10 no-keyword cases checked in visible context | 0 |
+| ruff check /private/tmp/coami-worktrees/context-sufficiency-expansion/evaluation/context_sufficiency/versions/v1/validate_dataset.py | 0 |
+| ruff format --check | 0 |
+| /opt/homebrew/opt/python@3.14/bin/python3.14 /private/tmp/coami-worktrees/context-sufficiency-expansion/evaluation/context_sufficiency/validate_dataset.py | 0 |
+| git diff --exit-code | 0 |
+
+## Human-check procedure
+
+請先只讀每案可見background／conversation／utterance，自行判斷，再展開固定oracle。中性Case編號只是此包的定位；case ID／category／group／split與候選均放展開區，不作判斷線索。這個可見human包不構成unseen或blind holdout的宣稱。
+
+逐案確認：S主意思是否由文字支持；I至少兩合理意思是否導向不同回應；候選是否簡短且只確認／釐清一件事；COMPANION／ALLOW與Action是否合宜；是否依賴隱藏訊息或硬套category；對照及同情境group是否合理。
+
+可一次明示接受 **v1-draft-001三hash所指的全部60案**，或用Case編號／展開的ID提修訂。任何snapshot變更均更新版本證據並重走全量驗證、Owner接受與後續獨立fixture review，不用本機PASS代替接受。
+
+## Case review package
+
+### Case 01
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：外面有院子，外面的路上也有小狗。
+>
+> **parent**：可以隔著窗看外面，也可以出門去院子。
+>
+
+孩子當句：**外面**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_040
+- **topic**：outside
+- **context_type**：ambiguous
+- **coverage_category**：keyword_misdirection
+- **group_id**：case-040
+- **split**：holdout
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想出門去院子，還是隔著窗看？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能要出門，回應移動意願；可能要窗邊看，回應觀看。外面重複不解決兩種不同活動。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 02
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：門的另一邊是院子，屋裡很悶，你想出去看樹嗎？
+>
+> **child**：想出去看樹。
+>
+
+孩子當句：**外面**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_048
+- **topic**：outside
+- **context_type**：clear
+- **coverage_category**：meaning_without_keyword
+- **group_id**：case-048
+- **split**：holdout
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想到院子看樹。
+- **candidate_text**：你想去院子看樹。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：前文沒有外面兩字，出門方向、院子與看樹的目的已由文字確立。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 03
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：這個黃色圓玩具用手拍到地上會彈起來，你想拍它嗎？
+>
+> **child**：要拍黃色那個。
+>
+
+孩子當句：**球球**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_041
+- **topic**：ball
+- **context_type**：clear
+- **coverage_category**：meaning_without_keyword
+- **group_id**：case-041
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想拍黃色會彈起的圓玩具。
+- **candidate_text**：你想拍黃色那個球。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：前文未用球字，卻以會彈、用手拍及孩子確認建立具體物件和玩法，不借影像。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 04
+
+背景：大人剛才聊了明天的天氣和午餐；沒有說到玩具。
+
+前文（全部在当句之前）：
+
+> **parent**：你要用手拍這顆紅球嗎？
+>
+> **child**：要，我想拍紅球。
+>
+
+孩子當句：**球球**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_021
+- **topic**：ball
+- **context_type**：irrelevant
+- **coverage_category**：irrelevant_background
+- **group_id**：case-021
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想拍紅球。
+- **candidate_text**：你想拍紅球。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：背景的天氣和午餐無關；近前文已由孩子選定紅球與拍的玩法，無關背景不應抹掉充分性。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 05
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：紅色那件有袖子，穿在身上能保暖，你要穿它嗎？
+>
+> **child**：要穿紅的。
+>
+
+孩子當句：**衣衣**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_044
+- **topic**：clothing
+- **context_type**：clear
+- **coverage_category**：meaning_without_keyword
+- **group_id**：case-044
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想穿紅色有袖的保暖衣物。
+- **candidate_text**：你想穿紅色那件。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：前文沒有衣字，物件特徵與穿的動作已由孩子確認，不需要靠相同keyword。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 06
+
+背景：奶奶今天早餐喝了茶；這與外套扣子沒有關係。
+
+前文（全部在当句之前）：
+
+> **parent**：紅外套上的扣子要自己扣，還是要我幫忙？
+>
+> **child**：自己扣紅的。
+>
+
+孩子當句：**扣扣**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_024
+- **topic**：clothing
+- **context_type**：irrelevant
+- **coverage_category**：irrelevant_background
+- **group_id**：case-024
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想自己扣紅外套的扣子。
+- **candidate_text**：你想自己扣紅外套的扣子。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：雖有喝茶背景，當下對話已選定扣子與自己扣的方式，不需再釐清衣物。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 07
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：藍色那本是海龜故事。
+>
+> **parent**：你要我念那本，還是把它放回書架？
+>
+
+孩子當句：**書書**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_018
+- **topic**：book
+- **context_type**：ambiguous
+- **coverage_category**：multiple_meanings
+- **group_id**：book-sea-reading
+- **split**：holdout
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想聽海龜故事，還是把書放回去？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：同一本書可能指請人念，也可能指收回；前者確認聽故事，後者確認收書，短句未選用途。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 08
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：書架有故事書、圖畫書和字母書。你剛說想聽哪一本？
+>
+> **child**：想聽綠色封面的字母書。
+>
+
+孩子當句：**那本**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_034
+- **topic**：book
+- **context_type**：clear
+- **coverage_category**：keyword_misdirection
+- **group_id**：case-034
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想聽綠色封面的字母書。
+- **candidate_text**：你想聽綠色那本字母書。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：多種書名並未破壞孩子最後的明確選擇；真正證據是封面與聽的意圖，不是書字頻率。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 09
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：這裡有白紙和彩色筆，你想自己用筆在紙上做個太陽嗎？
+>
+> **child**：要，我自己做太陽。
+>
+
+孩子當句：**畫畫**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_045
+- **topic**：drawing
+- **context_type**：clear
+- **coverage_category**：meaning_without_keyword
+- **group_id**：drawing-make-or-show
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想自己用彩色筆在紙上畫太陽。
+- **candidate_text**：你想自己在紙上畫太陽。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：前文沒有畫字，但紙筆、用筆做太陽和孩子確認建立作畫活動；不是私下看見作品才推斷。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 10
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **child**：別唱歌，我要故事。
+>
+> **parent**：先聽故事？
+>
+> **child**：故事也不要，歌又好像可以。
+>
+
+孩子當句：**不要**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_054
+- **topic**：sleep
+- **context_type**：ambiguous
+- **coverage_category**：conflicting_context
+- **group_id**：case-054
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你現在不要故事，還是不要唱歌？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能延續不要故事，應確認停止故事；也可能重新拒絕歌，應確認停止歌。意願反覆且最後省略對象，不能替孩子選。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 11
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：藍襪子洗好了，白襪子還在洗。
+>
+> **child**：襪袜。
+>
+
+孩子當句：**外面**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_025
+- **topic**：outside
+- **context_type**：irrelevant
+- **coverage_category**：irrelevant_background
+- **group_id**：case-025
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想出去，還是想看外面？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能想出門，回應出去；也可能想看戶外，回應觀看。洗襪子的文字不支持選定任何一種外面用途。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 12
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：床邊這本有小牛和農場的故事，你想聽我念嗎？
+>
+> **child**：想聽小牛，念這本。
+>
+
+孩子當句：**書書**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_047
+- **topic**：book
+- **context_type**：clear
+- **coverage_category**：meaning_without_keyword
+- **group_id**：book-bedtime-choice
+- **split**：holdout
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想聽床邊這本小牛與農場故事。
+- **candidate_text**：你想聽床邊這本小牛故事。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：前文未用書字，卻明說一本故事、念及孩子選擇，足以建立閱讀；另一對照案保留未解的先後選擇。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 13
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：你說累了，現在想睡覺嗎？
+>
+> **child**：想睡，不玩了。
+>
+
+孩子當句：**睡睡**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_006
+- **topic**：sleep
+- **context_type**：clear
+- **coverage_category**：explicit_reference
+- **group_id**：case-006
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想停止玩耍並睡覺。
+- **candidate_text**：你想睡覺了。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：孩子已明說想睡且不再玩，候選只確認狀態，不承諾安排睡眠。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 14
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：剛才那小塊香蕉麵包吃完了，再吃一塊嗎？
+>
+> **child**：再吃一塊香蕉麵包。
+>
+
+孩子當句：**還要**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_050
+- **topic**：food
+- **context_type**：clear
+- **coverage_category**：meaning_without_keyword
+- **group_id**：case-050
+- **split**：holdout
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想再吃一塊香蕉麵包。
+- **candidate_text**：你想再吃一塊香蕉麵包。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：前文沒有還要這個短句，追加數量及食物卻已明選，意思不需靠同詞重複。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 15
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：你想靠在媽媽懷裡一下嗎？
+>
+> **child**：想，靠媽媽。
+>
+
+孩子當句：**抱抱**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_049
+- **topic**：hug
+- **context_type**：clear
+- **coverage_category**：meaning_without_keyword
+- **group_id**：case-049
+- **split**：holdout
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想被媽媽抱在懷裡。
+- **candidate_text**：你想靠在媽媽懷裡。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：前文未用抱字，但靠媽媽懷裡的需要已被確認；只根據文字，不借未提供的手勢。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 16
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：門外正在下雨，在屋裡也能聽到雨聲。
+>
+> **parent**：你可以留在窗邊看，也可以穿雨衣出門。
+>
+
+孩子當句：**外面**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_019
+- **topic**：outside
+- **context_type**：ambiguous
+- **coverage_category**：multiple_meanings
+- **group_id**：case-019
+- **split**：holdout
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想出門，還是在屋裡看外面？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能要出門，回應出門意願；也可能指在屋內觀看外面的雨，回應觀看。未選身處位置與活動。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 17
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：你想讓媽媽抱一下嗎？
+>
+> **child**：要媽媽抱。
+>
+
+孩子當句：**抱抱**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_004
+- **topic**：hug
+- **context_type**：clear
+- **coverage_category**：explicit_reference
+- **group_id**：case-004
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想被媽媽抱一下。
+- **candidate_text**：你想讓媽媽抱一下。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：孩子直接確認接受媽媽的擁抱，最新疊字延續同一意願。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 18
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：媽媽現在在廚房。
+>
+> **parent**：我剛說錯了，媽媽其實已經出門了。
+>
+
+孩子當句：**媽媽**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_051
+- **topic**：parent
+- **context_type**：ambiguous
+- **coverage_category**：conflicting_context
+- **group_id**：case-051
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想知道媽媽在哪裡，還是想跟媽媽說話？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：位置已更正，但可能是在問位置，應談在哪；也可能想與媽媽說話，應談聯絡意願。更正事實未建立孩子目的。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 19
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：把這些方塊一層一層疊成小屋，好嗎？
+>
+> **child**：要疊小屋。
+>
+
+孩子當句：**積木**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_046
+- **topic**：blocks
+- **context_type**：clear
+- **coverage_category**：meaning_without_keyword
+- **group_id**：case-046
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想把方塊疊成小屋。
+- **candidate_text**：你想用這些方塊疊小屋。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：前文未用積木兩字，文字中的方塊、疊小屋及確認已建立具體玩法，不依字面重複。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 20
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：故事裡的媽媽正在找小兔子。
+>
+> **parent**：你家裡的媽媽現在在廚房。
+>
+
+孩子當句：**媽媽**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_017
+- **topic**：parent
+- **context_type**：ambiguous
+- **coverage_category**：multiple_meanings
+- **group_id**：case-017
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你在說故事裡的媽媽，還是想找家裡的媽媽？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能提問故事角色，應談故事；也可能想找真實媽媽，應談找人。兩個 referent 都在當下文字中。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 21
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **child**：讓娃娃抱我。
+>
+> **parent**：你想抱著娃娃嗎？
+>
+> **child**：不要娃娃，我要媽媽抱我。
+>
+
+孩子當句：**抱抱**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_059
+- **topic**：hug
+- **context_type**：clear
+- **coverage_category**：conflicting_context
+- **group_id**：case-059
+- **split**：holdout
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想被媽媽抱。
+- **candidate_text**：你想讓媽媽抱你。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：早先娃娃相關意思與新要求不同，但孩子明排娃娃且指定媽媽抱自己，衝突被可見更正解除。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 22
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：窗外的小鳥來了，你想留在屋裡看嗎？
+>
+> **child**：在這裡看鳥，不出去。
+>
+
+孩子當句：**外面**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_009
+- **topic**：outside
+- **context_type**：clear
+- **coverage_category**：explicit_reference
+- **group_id**：outside-watch-or-go
+- **split**：holdout
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想留在屋內看窗外的小鳥。
+- **candidate_text**：你想在屋裡看外面的小鳥。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：孩子已排除出門，外面延續觀看對象，不必先問是否要出去。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 23
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：剛才的小饅頭吃完了，還想吃一個嗎？
+>
+> **child**：要，再一個。
+>
+
+孩子當句：**還要**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_005
+- **topic**：food
+- **context_type**：clear
+- **coverage_category**：explicit_reference
+- **group_id**：case-005
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想再吃一個小饅頭。
+- **candidate_text**：你還想吃一個小饅頭。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：吃完的小饅頭與孩子回答建立追加食物的主要意思，並未涉及別的待選活動。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 24
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：餅乾故事剛講完，桌上也有一盤餅乾。
+>
+> **parent**：你想再來嗎？
+>
+
+孩子當句：**餅餅**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_032
+- **topic**：food
+- **context_type**：ambiguous
+- **coverage_category**：keyword_misdirection
+- **group_id**：case-032
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想吃餅乾，還是再聽餅乾故事？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能要真的餅乾，確認吃；也可能要重聽餅乾故事，確認故事。相同詞橫跨食物與故事不會自动定義意圖。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 25
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：你口渴了嗎？想喝杯裡的涼開水嗎？
+>
+> **child**：口渴，要喝。
+>
+
+孩子當句：**水水**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_002
+- **topic**：water
+- **context_type**：clear
+- **coverage_category**：explicit_reference
+- **group_id**：water-drink-or-use
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想喝杯裡的涼開水。
+- **candidate_text**：你想喝杯裡的水。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：口渴、杯中飲用水與孩子的要喝回答共同確立喝水目的。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 26
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：水的故事講到河水流向瀑布。
+>
+> **parent**：桌上杯子也裝了能喝的水。
+>
+
+孩子當句：**水水**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_039
+- **topic**：water
+- **context_type**：ambiguous
+- **coverage_category**：keyword_misdirection
+- **group_id**：case-039
+- **split**：holdout
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想喝水，還是繼續聽水的故事？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能要飲用水，確認喝；也可能要故事繼續，確認聽。水相關詞並未建立用途，兩種都有文字依據。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 27
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **child**：先念床邊那本小牛故事。
+>
+> **parent**：先小牛那本？
+>
+> **child**：車子的那本也要先念。
+>
+
+孩子當句：**書書**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_057
+- **topic**：book
+- **context_type**：ambiguous
+- **coverage_category**：conflicting_context
+- **group_id**：book-bedtime-choice
+- **split**：holdout
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想先聽小牛故事，還是車子的故事？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能仍以小牛先，確認農場故事；也可能改以車故事先，確認另一本。也要先未明撤前選擇，先後衝突未解。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 28
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：你想聽那本海龜故事嗎？藍色封面那本。
+>
+> **child**：要聽海龜，念那本。
+>
+
+孩子當句：**書書**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_008
+- **topic**：book
+- **context_type**：clear
+- **coverage_category**：explicit_reference
+- **group_id**：book-sea-reading
+- **split**：holdout
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想聽藍色封面的海龜故事。
+- **candidate_text**：你想聽藍色那本海龜故事。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：孩子明選書與聽故事目的；同組另一案保留同一句短句但不選閱讀或收書。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 29
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：球滾到沙發下面了。
+>
+> **parent**：我們剛才也說等一下要踢球。
+>
+
+孩子當句：**球球**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_013
+- **topic**：ball
+- **context_type**：ambiguous
+- **coverage_category**：multiple_meanings
+- **group_id**：case-013
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你在說沙發下面的球，還是想踢球？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能提醒球的位置，應確認找球；也可能重提踢球活動，應確認玩法。球這個字不足以區分提醒與請求。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 30
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：你想推地墊上的紅色小汽車嗎？
+>
+> **child**：要，推紅的。
+>
+
+孩子當句：**車車**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_001
+- **topic**：toy_car
+- **context_type**：clear
+- **coverage_category**：explicit_reference
+- **group_id**：car-play-or-look
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想推地墊上的紅色玩具車。
+- **candidate_text**：你想推地墊上的紅色車車。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：孩子已明確選定推紅色玩具車；短句延續同一物件和玩法，無須再問車的種類。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 31
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：杯裡有能喝的水，水壺裡有要澆花的水。
+>
+> **parent**：你想喝一口，還是和我一起澆花？
+>
+
+孩子當句：**水水**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_012
+- **topic**：water
+- **context_type**：ambiguous
+- **coverage_category**：multiple_meanings
+- **group_id**：water-drink-or-use
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想喝水，還是用水澆花？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能想喝杯水，回應飲用；也可能想用水澆花，回應活動。兩種用途都已提出但未選定。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 32
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：媽媽說今天穿紅外套。
+>
+> **parent**：爸爸又說今天穿藍外套，一次只穿一件。
+>
+
+孩子當句：**穿穿**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_060
+- **topic**：clothing
+- **context_type**：ambiguous
+- **coverage_category**：conflicting_context
+- **group_id**：case-060
+- **split**：holdout
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想穿紅外套，還是藍外套？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：兩位照顧者說法衝突，孩子尚未選；可能紅或藍，應確認不同衣物，不能假定哪位指示優先或最後一句勝出。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 33
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：衣櫃有外衣、毛衣和雨衣，門口還有一件雨衣。
+>
+> **child**：我要穿門口那件雨衣。
+>
+
+孩子當句：**衣衣**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_038
+- **topic**：clothing
+- **context_type**：clear
+- **coverage_category**：keyword_misdirection
+- **group_id**：case-038
+- **split**：holdout
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想穿門口的雨衣。
+- **candidate_text**：你想穿門口那件雨衣。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：衣物相關詞雖多，孩子明選位置、種類與穿的用途；不能因多keyword就反向判歧義。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 34
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **child**：我要自己用筆做太陽。
+>
+> **parent**：是想自己畫一張嗎？
+>
+> **child**：先看媽媽那張，我又想自己做。
+>
+
+孩子當句：**畫畫**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_055
+- **topic**：drawing
+- **context_type**：ambiguous
+- **coverage_category**：conflicting_context
+- **group_id**：drawing-make-or-show
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想先看媽媽的畫，還是先自己畫？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：孩子先要創作，後同時提先看作品與自己做，未選當下活動；可能看作品或自己作畫，後續確認不同。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 35
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **child**：我要出去看院子。
+>
+> **parent**：想出門？
+>
+> **child**：也想留在窗邊看小鳥，先看外面。
+>
+
+孩子當句：**外面**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_058
+- **topic**：outside
+- **context_type**：ambiguous
+- **coverage_category**：conflicting_context
+- **group_id**：outside-watch-or-go
+- **split**：holdout
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想先出門，還是留在窗邊看？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能延續出門到院子，應確認出門；也可能先留屋內看鳥，應確認觀看。兩個位置與先後都未定，短句不能裁定。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 36
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：媽媽畫的畫放在桌上，旁邊有給你畫畫的白紙。
+>
+> **parent**：你想看媽媽的畫，還是自己畫？
+>
+
+孩子當句：**畫畫**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_036
+- **topic**：drawing
+- **context_type**：ambiguous
+- **coverage_category**：keyword_misdirection
+- **group_id**：case-036
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想看媽媽的畫，還是自己畫？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能要看既有作品，確認欣賞；也可能自己作畫，確認創作。同字涵蓋作品與活動，未選定。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 37
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：媽媽在客廳，你想找她嗎？
+>
+> **child**：想找媽媽。
+>
+
+孩子當句：**媽媽**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_007
+- **topic**：parent
+- **context_type**：clear
+- **coverage_category**：explicit_reference
+- **group_id**：case-007
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想找客廳的媽媽。
+- **candidate_text**：你想找客廳的媽媽。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：位置與找人的意圖都有可見文字，媽媽不是未選定的故事人物。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 38
+
+背景：早上大人說週末要洗車，與眼前的飯和故事無關。
+
+前文（全部在当句之前）：
+
+> **parent**：剛吃完飯，也剛聽完一個故事。
+>
+> **parent**：還有飯，故事也可以再講一次。
+>
+
+孩子當句：**還要**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_022
+- **topic**：food
+- **context_type**：irrelevant
+- **coverage_category**：irrelevant_background
+- **group_id**：case-022
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想再吃飯，還是再聽故事？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能追加飯，回應吃飯；也可能追加故事，回應再講。背景的洗車話題不替孩子選定其中一項。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 39
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：這件衣服可以穿上，也可以脫下換另一件。
+>
+> **parent**：你現在想穿，還是想脫？
+>
+
+孩子當句：**衣衣**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_020
+- **topic**：clothing
+- **context_type**：ambiguous
+- **coverage_category**：multiple_meanings
+- **group_id**：case-020
+- **split**：holdout
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想穿衣服，還是想脫下來？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能要穿上，應確認穿衣；也可能想脫下換衣，應確認脫下。前文直接保留兩種相反動作。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 40
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **child**：我要香蕉。
+>
+> **parent**：你要吃香蕉嗎？
+>
+> **child**：不是香蕉，我要餅乾，再一片。
+>
+
+孩子當句：**還要**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_052
+- **topic**：food
+- **context_type**：clear
+- **coverage_category**：conflicting_context
+- **group_id**：case-052
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想再吃一片餅乾。
+- **candidate_text**：你還想吃一片餅乾。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：早先香蕉與後來餅乾衝突，但孩子明確否定香蕉、選餅乾及追加一片；不能把已解的更正當未解矛盾。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 41
+
+背景：昨天吃的是芒果布丁，與現在的積木活動無關。
+
+前文（全部在当句之前）：
+
+> **parent**：桌上那座積木塔可以繼續疊，也可以拆掉。
+>
+> **parent**：你想怎麼玩？
+>
+
+孩子當句：**積木**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_027
+- **topic**：blocks
+- **context_type**：irrelevant
+- **coverage_category**：irrelevant_background
+- **group_id**：case-027
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想繼續疊積木，還是拆掉？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能續疊，確認建造；也可能拆塔，確認拆卸。甜點背景與短句都不選定玩法。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 42
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：盤子裡還有餅乾。
+>
+> **parent**：剛才的兔子故事也可以再講一次。
+>
+
+孩子當句：**還要**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_015
+- **topic**：food
+- **context_type**：ambiguous
+- **coverage_category**：multiple_meanings
+- **group_id**：case-015
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想再吃餅乾，還是再聽兔子故事？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能要追加食物，確認再吃餅乾；也可能要故事重播，確認再聽。省略受詞而兩件事都待選。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 43
+
+背景：今天車棚重新粉刷，沒有提到睡前故事或燈。
+
+前文（全部在当句之前）：
+
+> **parent**：睡前故事講到一半，房間的大燈還亮著。
+>
+> **child**：嗯。
+>
+
+孩子當句：**不要**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_030
+- **topic**：sleep
+- **context_type**：irrelevant
+- **coverage_category**：irrelevant_background
+- **group_id**：case-030
+- **split**：holdout
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你不要聽故事，還是不要亮著的大燈？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能拒絕故事，需確認停止聽；也可能拒絕燈光，需確認環境。車棚背景不能選定拒絕對象。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 44
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：你要拍黃色球，還是把藍色球放回盒子？
+>
+> **child**：我要拍黃的。
+>
+
+孩子當句：**球球**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_003
+- **topic**：ball
+- **context_type**：clear
+- **coverage_category**：explicit_reference
+- **group_id**：case-003
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想拍黃色球。
+- **candidate_text**：你想拍黃色球。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：前文雖有兩球兩種活動，孩子明選黃色球和拍的玩法，未留下須追問的競爭意思。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 45
+
+背景：隔壁剛才放了一首歌；沒有談到顏色或畫紙。
+
+前文（全部在当句之前）：
+
+> **parent**：你要把紙上的太陽塗紅色還是黃色？
+>
+> **child**：紅色，太陽要紅。
+>
+
+孩子當句：**紅紅**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_026
+- **topic**：drawing
+- **context_type**：irrelevant
+- **coverage_category**：irrelevant_background
+- **group_id**：case-026
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想把紙上的太陽塗紅色。
+- **candidate_text**：你想把太陽塗紅色。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：音樂背景沒有指涉作用；孩子已指定太陽和紅色，省略句仍有充分的可見受詞。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 46
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：故事有火車、汽車和消防車。
+>
+> **parent**：你可以再聽車子的故事，也可以玩桌上的小車。
+>
+
+孩子當句：**車車**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_031
+- **topic**：toy_car
+- **context_type**：ambiguous
+- **coverage_category**：keyword_misdirection
+- **group_id**：case-031
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想聽車子的故事，還是玩小車？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：車字很多但用途未選：可能要故事，應確認聽；可能要玩具，應確認玩。不能以 keyword 次數取代目的。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 47
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：這個有四個輪子的小玩具能沿著地墊推，你想推它嗎？
+>
+> **child**：要推四個輪子的。
+>
+
+孩子當句：**車車**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_043
+- **topic**：toy_car
+- **context_type**：clear
+- **coverage_category**：meaning_without_keyword
+- **group_id**：case-043
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想推地墊上的四輪小玩具。
+- **candidate_text**：你想推那個四個輪子的玩具車。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：前文未說車，卻描述輪子、玩具、推的玩法並得到孩子選擇，足以確認主要意思。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 48
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **child**：把長方塊放上面。
+>
+> **parent**：放小屋上面？
+>
+> **child**：不對，放下面，當底。
+>
+
+孩子當句：**下面**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_056
+- **topic**：blocks
+- **context_type**：clear
+- **coverage_category**：conflicting_context
+- **group_id**：case-056
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想把長方塊放在小屋下面當底。
+- **candidate_text**：你想把長方塊放下面當底。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：上下指令曾衝突，但孩子明確更正並說當底，最後意思已建立；不用僵化地把所有矛盾都判不足。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 49
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：地墊上有紅色玩具車，窗外有一台大車。
+>
+> **parent**：可以推玩具，也可以在窗邊看大車。
+>
+
+孩子當句：**車車**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_011
+- **topic**：toy_car
+- **context_type**：ambiguous
+- **coverage_category**：multiple_meanings
+- **group_id**：car-play-or-look
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想推玩具車，還是看窗外的大車？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能要推地墊的玩具車，應確認玩耍；也可能要看窗外的大車，應確認觀看。可見文字未選物件或目的。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 50
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：故事裡媽媽先找小熊，媽媽再幫小熊蓋被。
+>
+> **parent**：你家的媽媽剛才去陽台了。
+>
+
+孩子當句：**媽媽**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_033
+- **topic**：parent
+- **context_type**：ambiguous
+- **coverage_category**：keyword_misdirection
+- **group_id**：case-033
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你在說故事裡的媽媽，還是想找你媽媽？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能延續故事角色，需談情節；可能找真實照顧者，需談找人。媽媽多次出現仍跨兩referent。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 51
+
+背景：大人剛說今天搭公車花了十分鐘，沒有描述杯子。
+
+前文（全部在当句之前）：
+
+> **parent**：你的杯子裡還有飲用水，你想再喝一口嗎？
+>
+> **child**：要，再喝。
+>
+
+孩子當句：**水水**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_028
+- **topic**：water
+- **context_type**：irrelevant
+- **coverage_category**：irrelevant_background
+- **group_id**：case-028
+- **split**：holdout
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想再喝自己杯裡的水。
+- **candidate_text**：你想再喝一口杯裡的水。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：搭公車背景無關，但眼前杯水及再喝回答已建立主要意思。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 52
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：睡床、睡袋和睡枕都是睡覺時用的。你要先聽故事嗎？
+>
+> **child**：不要故事，我想睡了。
+>
+
+孩子當句：**睡睡**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_037
+- **topic**：sleep
+- **context_type**：clear
+- **coverage_category**：keyword_misdirection
+- **group_id**：case-037
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想睡覺而非聽故事。
+- **candidate_text**：你想睡覺了。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：睡字出現很多但不是判定依據；孩子明說排除故事並想睡，文字足以支持主要意思。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 53
+
+背景：午餐有三支湯匙，這與擁抱沒有關係。
+
+前文（全部在当句之前）：
+
+> **parent**：你剛說想讓爸爸抱一下，是嗎？
+>
+> **child**：是，要爸爸抱。
+>
+
+孩子當句：**抱抱**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_029
+- **topic**：hug
+- **context_type**：irrelevant
+- **coverage_category**：irrelevant_background
+- **group_id**：case-029
+- **split**：holdout
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想被爸爸抱一下。
+- **candidate_text**：你想讓爸爸抱一下。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：湯匙數量不影響孩子明確確認被爸爸抱的意思，不為無關背景硬標不足。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 54
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：透明杯裡是煮過放涼、沒有甜味的飲料，你口渴想喝嗎？
+>
+> **child**：口渴，喝杯裡的。
+>
+
+孩子當句：**水水**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_042
+- **topic**：water
+- **context_type**：clear
+- **coverage_category**：meaning_without_keyword
+- **group_id**：case-042
+- **split**：research
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想喝透明杯裡的飲料。
+- **candidate_text**：你想喝透明杯裡的。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：前文無水字但文字指定杯中可飲液體與喝的意圖；候選只確認可見referent，不增加成分或動作承諾。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 55
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：積木塔疊高會倒，這袋積木也可以放到高架子。
+>
+> **parent**：你想怎麼弄積木？
+>
+
+孩子當句：**高高**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_035
+- **topic**：blocks
+- **context_type**：ambiguous
+- **coverage_category**：keyword_misdirection
+- **group_id**：case-035
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想把積木疊高，還是放到高架子？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能要塔更高，確認建造高度；也可能要收袋到高處，確認收納位置。高和積木重複不選定動作。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 56
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：等一下買蘋果和雞蛋。
+>
+> **child**：蘋果。
+>
+
+孩子當句：**書書**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_023
+- **topic**：book
+- **context_type**：irrelevant
+- **coverage_category**：irrelevant_background
+- **group_id**：case-023
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想找書，還是想聽故事？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能想找一本書，確認找物；也可能想聽故事，確認閱讀。購物前文沒有選定書或用途，不能借假定的場外書。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 57
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：你說娃娃想要被抱，也說你想靠媽媽懷裡。
+>
+> **parent**：現在是你要抱娃娃，還是媽媽抱你？
+>
+
+孩子當句：**抱抱**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_014
+- **topic**：hug
+- **context_type**：ambiguous
+- **coverage_category**：multiple_meanings
+- **group_id**：case-014
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想抱娃娃，還是想讓媽媽抱你？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能要自己抱娃娃，回應照顧玩具；也可能要被媽媽抱，回應被抱需求。前文同時支持兩種方向。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 58
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：睡覺前要把積木收進箱子。
+>
+> **parent**：我們現在要收積木，然後上床睡。
+>
+
+孩子當句：**不要**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_016
+- **topic**：sleep
+- **context_type**：ambiguous
+- **coverage_category**：multiple_meanings
+- **group_id**：case-016
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你不要收積木，還是不想睡覺？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：可能拒絕收拾，需釐清整理意願；也可能拒絕睡覺，需釐清休息意願。沒有文字選定拒絕對象。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 59
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **child**：我只要推紅車。
+>
+> **parent**：那先玩紅的嗎？
+>
+> **child**：藍車也要先玩。
+>
+
+孩子當句：**車車**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_053
+- **topic**：toy_car
+- **context_type**：ambiguous
+- **coverage_category**：conflicting_context
+- **group_id**：case-053
+- **split**：research
+- **expected**：INSUFFICIENT
+- **interpretation**：null
+- **candidate_text**：你想先玩紅車，還是藍車？
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_QUESTION
+- **rationale**：孩子先說只紅，後又說藍也先，未明確撤回或排好先後；可能先紅或先藍，確認不同待選物件，需追問。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+### Case 60
+
+背景：沒有其他可用背景；只依以下文字判斷。
+
+前文（全部在当句之前）：
+
+> **parent**：你想穿紅色外套嗎？
+>
+> **child**：要穿紅色那件。
+>
+
+孩子當句：**穿穿**
+
+<details>
+<summary>展開固定預期、理由與分組</summary>
+
+- **id**：cs_v1_010
+- **topic**：clothing
+- **context_type**：clear
+- **coverage_category**：explicit_reference
+- **group_id**：case-010
+- **split**：holdout
+- **expected**：SUFFICIENT
+- **interpretation**：孩子想穿紅色外套。
+- **candidate_text**：你想穿紅色外套。
+- **expected_input_policy**：COMPANION
+- **expected_output_policy**：ALLOW
+- **expected_action**：DELIVER_ANSWER
+- **rationale**：孩子已選定紅色外套與穿的動作，候選不代人穿衣。
+
+Owner：pending；independent fixture review：pending。
+
+</details>
+
+## Coverage and contrast summary
+
+60案：research40／holdout20；十二topics；54groups（6對照pairs＋48singleton）；31 SUFFICIENT／29 INSUFFICIENT是作者完成結果，不是預先答案配額。
+
+| Category | Research | Holdout |
+| --- | ---: | ---: |
+| explicit_reference | 7 | 3 |
+| multiple_meanings | 7 | 3 |
+| irrelevant_background | 7 | 3 |
+| keyword_misdirection | 7 | 3 |
+| meaning_without_keyword | 6 | 4 |
+| conflicting_context | 6 | 4 |
+
+| Contrast group | IDs | Split | Topic |
+| --- | --- | --- | --- |
+| car-play-or-look | cs_v1_001, cs_v1_011 | research | toy_car |
+| water-drink-or-use | cs_v1_002, cs_v1_012 | research | water |
+| book-sea-reading | cs_v1_008, cs_v1_018 | holdout | book |
+| outside-watch-or-go | cs_v1_009, cs_v1_058 | holdout | outside |
+| drawing-make-or-show | cs_v1_045, cs_v1_055 | research | drawing |
+| book-bedtime-choice | cs_v1_047, cs_v1_057 | holdout | book |
+
+## Acceptance, independent review and freeze gates
+
+| Evidence | State |
+| --- | --- |
+| Repo plan review | approved; contract only |
+| Local structure／CLI／slot checks | PASS; not oracle approval |
+| Independent technical draft review | approved; no blocker; not fixture verdict |
+| Owner full60 exact-snapshot acceptance | pending |
+| Independent fixture review after Owner | pending |
+| Matching-evidence sufficiency for freeze | pending |
+| Freeze | NOT FROZEN |
+
+沒有Owner逐案接受訊息／時間，不填假接受證據。Owner接受後再交獨立fixture Reviewer，先抽三可見欄以中性編號判斷，再讀oracle；Reviewer verdict／blocking issues須對matching snapshot並記實際程序。所有matching gates齊全、Planner核對後才由Implementer原樣記freeze。技術draft review和commit/push不跳過這個順序。
+
+## Revision and delivery history
+
+- v1-draft-001：預先slots不變，完成60案、独立validator与可讀human包；未呼叫模型。
+- Plan已記Owner新publish授權，交未凍結draft→human review，不merge/release。
+- Commit／push／PR交付結果另以實際Git與remote結果回報，不預填成功。
+
+## Independent technical draft review
+
+Reviewer：`/root/plan_reviewer` 切獨立 Reviewer 路徑；讀 python-code-review skill、五個工件與暫存test harness/results。Standalone quality verdict approved／blocking_issues=[]。Typing、lint、readability、error handling、anti-patterns、observability無findings；test quality有一個warning，已處理如下。此技術draft審查不是Owner接受或fixture語義批准，未重新執行工具或宣稱freshhash核驗。
+
+Reviewer 發現初輪名為relative-path的check其harness覆寫為絕對path，因此不能用原check證明相對路徑。已更正上表初輪check名稱，並另在TemporaryDirectory中實際傳入argv `candidate.jsonl`、以該目錄為cwd呼叫絕對validator；觀察exit0、60案、stderr空、candidate bytes不變。新增這一項後共65checks，不重跑已通過且未受影響的其餘檢查。README/dataset/validator snapshot未變。
+
+技術交付 Decision：可依Owner既有授權按topic commit/push供human review，Owner全60接受／後續fixture review／matching freeze gates均pending，NOT FROZEN。
