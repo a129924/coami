@@ -1,6 +1,14 @@
 # context_sufficiency_v1 — Draft review and evidence
 
-Current：`approved`（PR #12 第三輪bounded technical correction）；Owner human-check pending。未經Owner逐案接受、未進independent fixture review、**NOT FROZEN**。
+Current：`v1-draft-004` 的 60 筆答案已獲 Owner 親自人工審查並接受；獨立案例語意審查尚未完成，**NOT FROZEN**。下方逐案 `pending` 為先前 draft packet 的歷史標記；本節的 Owner 接受紀錄適用於全部 60 筆，並不代替獨立審查紀錄。
+
+## Owner acceptance of exact v1-draft-004 snapshot
+
+- 記錄時間：2026-10-07T08:53:10Z；原始訊息的獨立 timestamp 未提供，這是本次核對時間。
+- 來源：本對話 Owner 訊息：「接受 v1 的 60 筆人工答案及獨立案例審查結果。」
+- 接受範圍：`v1-draft-004` 全部 60 筆人工答案。README、dataset、validator 的 SHA-256 分別為 `b230ca3f6dea08d62ca0d0facb6374255649bd620913bac81803a73698d9a898`、`d2dc258088caf4f9ee7f0f44f7123adb96ee50a5a71a805532d1857d7a16c3f9`、`b563e47b656d55107b98f7e352d25884ed05d9cb8e17327aeddeb1e89a630b4f`；記錄時逐檔重新核對，內容未修改。
+- Owner 後續釐清「我是人工 review 的」；因此前述「接受獨立案例審查結果」指的是 Owner 自己的人工審查，不能視作獨立 reviewer 的 verdict。目前可見的 PR #12 紀錄僅有 bounded 技術審查，明言不是全量 fixture 語意審查。獨立案例審查者、程序、matching snapshot verdict 與 blocking issues 仍待完成，不能據此標記 freeze。
+- 此紀錄只確認 Owner 決定。獨立案例審查與 matching-evidence sufficiency 仍待核對，未建立 runner 可接受的 freeze attestation；Jev live run 仍需另行授權。
 
 ## Question, procedure, evidence, decision
 
@@ -2695,12 +2703,12 @@ Owner：pending；independent fixture review：pending。
 | Repo plan review | approved; contract only |
 | Local structure／CLI／slot checks | 004: 166 checks PASS; not oracle approval |
 | Independent technical draft review | 001/002/003 historical; 004 bounded review approved, no blocker; not fixture verdict |
-| Owner full60 exact-snapshot acceptance | pending |
-| Independent fixture review after Owner | pending |
+| Owner full60 exact-snapshot acceptance | accepted；本文件頂部記錄本次 Owner 訊息及 004 三份 SHA-256 |
+| Independent fixture review after Owner | pending；Owner 釐清由本人進行人工 review，沒有獨立 fixture verdict |
 | Matching-evidence sufficiency for freeze | pending |
 | Freeze | NOT FROZEN |
 
-沒有Owner逐案接受訊息／時間，不填假接受證據。Owner接受後再交獨立fixture Reviewer，先抽三可見欄以中性編號判斷，再讀oracle；Reviewer verdict／blocking issues須對matching snapshot並記實際程序。所有matching gates齊全、Planner核對後才由Implementer原樣記freeze。技術draft review和commit/push不跳過這個順序。
+Owner 接受已按本次訊息記錄。獨立 fixture Reviewer 應先抽三可見欄以中性編號判斷，再讀 oracle；Reviewer verdict／blocking issues 須對 matching snapshot 並記實際程序。找到或補齊可核對的獨立審查、matching gates 齊全且完成核對後，才可原樣記 freeze。技術 draft review 和 commit/push 不跳過這個順序。
 
 ## Revision and delivery history
 
