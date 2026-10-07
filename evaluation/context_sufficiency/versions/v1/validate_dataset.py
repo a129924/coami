@@ -75,6 +75,12 @@ def validate_conversation(conversation: object) -> list[str]:
         if not isinstance(turn, dict):
             issues.append(f"conversation turn {index} must be an object")
             continue
+        unexpected = turn.keys() - {"speaker", "text"}
+        if unexpected:
+            issues.append(
+                f"conversation turn {index}: unexpected fields {sorted(unexpected)}; "
+                "only speaker and text are model-visible"
+            )
         speaker, text = turn.get("speaker"), turn.get("text")
         if not isinstance(speaker, str) or speaker not in ("parent", "child", "robot"):
             issues.append(f"conversation turn {index}: invalid speaker")

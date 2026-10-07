@@ -27,7 +27,7 @@ UTF-8 JSONL，一行一 object。每欄必備；額外欄位不得含模型觀�
 | split | research / holdout，須符合 slots |
 | group_id | 非空字串，須符合 slots；相關變體整組同 split |
 | background | 非空可見文字，無其他背景也明寫，不藏作者私有資訊 |
-| conversation | target 之前2–5 turns，每 turn 為 object，speaker 僅 parent/child/robot，text 非空 |
+| conversation | target 之前2–5 turns，每 turn 為 object，恰含 speaker／text；speaker 僅 parent/child/robot，text 非空；其他 key 一律拒絕，包含 oracle／模型觀察欄位 |
 | utterance | 非空繁中幼兒短句，可含疊字／省略，不借手勢或影像 |
 | expected | SUFFICIENT / INSUFFICIENT |
 | interpretation | S 非空字串，I 為 null |

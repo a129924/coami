@@ -1,6 +1,6 @@
 # context_sufficiency_v1 — Draft review and evidence
 
-Current：`approved`（PR #12 bounded technical correction draft）；Owner human-check pending。未經 Owner 逐案接受、未進 independent fixture review、**NOT FROZEN**。Owner 接受計畫與實作授權，不代表接受60筆答案。
+Current：`approved`（PR #12 第二輪bounded technical correction）；Owner human-check pending。未經 Owner 逐案接受、未進 independent fixture review、**NOT FROZEN**。Owner 接受計畫與實作授權，不代表接受60筆答案。
 
 ## Question, procedure, evidence, decision
 
@@ -32,6 +32,18 @@ Owner 最新授權：接受計畫並要求 create-feature-worktree，禁止 dev-
 
 ## Exact draft snapshot
 
+Snapshot ID：`v1-draft-003`。PR #12 第二輪 bounded correction；未經Owner接受，NOT FROZEN。028／029改為洗手用水與拒絕被抱；visible conversation turn僅允許speaker/text。全部60 slot欄位不變，coverage/group/split不變；README只修schema的turn key allowlist，原pre-authoring baseline仍保留為历史，不能把它當新README hash。
+
+| File | SHA-256 |
+| --- | --- |
+| [README.md](README.md) | `48c27d80629ee4052298cf96d24076654b70321f401b04ea5162f0eb440a9072` |
+| [context_sufficiency_v1.jsonl](context_sufficiency_v1.jsonl) | `f4982171386194c8e1fd69207d01372f1d1f58bd2bd14e09b4b4f381a95b9bc5` |
+| [validate_dataset.py](validate_dataset.py) | `62d9b33fcde6b3704953004e9aeff36fa5b002b1be6b764501013fb196412e05` |
+
+Snapshot recorded UTC：2026-10-07T06:04:35.718212+00:00。
+
+## Previous snapshot — v1-draft-002 (historical)
+
 Snapshot ID：`v1-draft-002`。PR-comment-review-and-fix 修訂版；未經 Owner 接受，NOT FROZEN。README的60 slots、coverage matrix、group/split與pre-authoring baseline完全不變；更正五個案例的語義內容及validator實際行讀取。
 
 | File | SHA-256 |
@@ -41,6 +53,8 @@ Snapshot ID：`v1-draft-002`。PR-comment-review-and-fix 修訂版；未經 Owne
 | [validate_dataset.py](validate_dataset.py) | `3a4661ed2beb457c2852ee2d51789bbfa19963323fdbda9e42df64541d83e374` |
 
 Snapshot recorded UTC：2026-10-07T04:29:41.479385+00:00。
+
+002完整工件與審查證據保留於 [e54907c](https://github.com/a129924/coami/blob/e54907c1eef9d9c93a66a4ae4567622df708881f/evaluation/context_sufficiency/versions/v1/review.md)；舊hash、88checks與bounded技術批准不能替代003的matching gates。
 
 ## Previous snapshot — v1-draft-001 (historical)
 
@@ -56,7 +70,143 @@ Snapshot recorded UTC：2026-10-07T04:04:00.659759+00:00。
 
 舊版完整案例與證據保留於 [a65d3b6](https://github.com/a129924/coami/blob/a65d3b640423b772d07822bb0c351f523c8fc8c2/evaluation/context_sufficiency/versions/v1/review.md)；舊hash／65checks／技術批准只指001，不能接受或凍結002。
 
-## Current validation — v1-draft-002
+## Current validation — v1-draft-003
+
+Codex本機Tester pass：2026-10-07T06:03:50.984246+00:00，Python 3.14.0；**122 checks 通過**。全量CLI/structure/slot/keyword/歷史不變與既有Unicode回歸重新執行，再加visible-turn allowlist与兩案回歸。候選均於TemporaryDirectory deep-copy後實際subprocess執行；核對exit、stderr與無traceback，正式資料在驗證前後SHA-256相同。
+
+- RED：修正前，turn新增expected=SUFFICIENT仍exit0，會將oracle夾帶到整個model-visible conversation；修正後exit1，指出line/ID/turn及unexpected fields。
+- 兩個可見turn各測14種附加欄位（oracle/policy/Action/metadata/model_prediction/score/notes），28候選都拒絕；附加nested oracle object及text/speaker內的object payload也拒絕。speaker/text恰有兩key且合法parent/child/robot的三種正常候選仍通過。
+- 舊88check範圍保留，literal U+2028/2029/0085、LF/CRLF及physical line2正常；真正relative argv與JSON/UTF8/enum/turn/policy/action/group/contrast負例正常。
+- 與e54907c比對，只有028/029兩案更動；60筆id/category/topic/group/split及README全部60slot rows完全不變。028明確以水洗手而非喝杯水，029明確拒絕爸爸抱而非肯定被抱請求；語義接受仍待Owner。
+- 60案、research40/holdout20、十二topics、54groups、34 S/26 I；research跨label對照toy_car/water，holdout為book，共三distinct topics。沒有為分布或label數硬改答案。
+- Ruff lint/format、v0 validator、v0/E012不變檢查通過；不跑模型，不把結構PASS當oracle批准。
+
+| Check | Expected and observed exit |
+| --- | ---: |
+| default from different cwd | 0 |
+| explicit absolute dataset | 0 |
+| explicit relative dataset | 0 |
+| malformed JSON | 1 |
+| non-object JSON | 1 |
+| empty line | 1 |
+| NaN | 1 |
+| duplicate JSON key | 1 |
+| non-UTF8 | 1 |
+| empty file | 1 |
+| missing file | 1 |
+| directory input | 1 |
+| duplicate ID | 1 |
+| duplicate visible input | 1 |
+| missing background | 1 |
+| missing conversation | 1 |
+| missing interpretation | 1 |
+| missing group_id | 1 |
+| invalid background | 1 |
+| invalid candidate_text | 1 |
+| invalid utterance | 1 |
+| invalid group_id | 1 |
+| invalid id | 1 |
+| invalid enum topic | 1 |
+| unhashable enum topic | 1 |
+| invalid enum context_type | 1 |
+| unhashable enum context_type | 1 |
+| invalid enum coverage_category | 1 |
+| unhashable enum coverage_category | 1 |
+| invalid enum split | 1 |
+| unhashable enum split | 1 |
+| invalid enum expected | 1 |
+| unhashable enum expected | 1 |
+| invalid enum expected_input_policy | 1 |
+| unhashable enum expected_input_policy | 1 |
+| invalid enum expected_output_policy | 1 |
+| unhashable enum expected_output_policy | 1 |
+| invalid enum expected_action | 1 |
+| unhashable enum expected_action | 1 |
+| conversation not list | 1 |
+| too few turns | 1 |
+| too many turns | 1 |
+| turn not object | 1 |
+| invalid speaker | 1 |
+| empty turn text | 1 |
+| sufficient null interpretation | 1 |
+| insufficient string interpretation | 1 |
+| wrong label Action | 1 |
+| too few cases | 1 |
+| wrong matrix | 1 |
+| group crosses split | 1 |
+| missing topic | 1 |
+| category only one topic | 1 |
+| research contrast missing | 1 |
+| holdout contrast missing | 1 |
+| fewer than three contrast topics | 1 |
+| structure-valid semantic error | 0 |
+| counts-preserving slot swap structural pass | 0 |
+| all 60 slot assignments match README; swapped split detected independently | 0 |
+| 10 no-keyword cases checked in visible context | 0 |
+| literal U+2028 in background, '\n' physical rows | 0 |
+| literal U+2028 in background, '\r\n' physical rows | 0 |
+| literal U+2028 in conversation, '\n' physical rows | 0 |
+| literal U+2028 in conversation, '\r\n' physical rows | 0 |
+| literal U+2028 in candidate_text, '\n' physical rows | 0 |
+| literal U+2028 in candidate_text, '\r\n' physical rows | 0 |
+| physical line 2 after U+2028 | 1 |
+| literal U+2029 in background, '\n' physical rows | 0 |
+| literal U+2029 in background, '\r\n' physical rows | 0 |
+| literal U+2029 in conversation, '\n' physical rows | 0 |
+| literal U+2029 in conversation, '\r\n' physical rows | 0 |
+| literal U+2029 in candidate_text, '\n' physical rows | 0 |
+| literal U+2029 in candidate_text, '\r\n' physical rows | 0 |
+| physical line 2 after U+2029 | 1 |
+| literal U+0085 in background, '\n' physical rows | 0 |
+| literal U+0085 in background, '\r\n' physical rows | 0 |
+| literal U+0085 in conversation, '\n' physical rows | 0 |
+| literal U+0085 in conversation, '\r\n' physical rows | 0 |
+| literal U+0085 in candidate_text, '\n' physical rows | 0 |
+| literal U+0085 in candidate_text, '\r\n' physical rows | 0 |
+| physical line 2 after U+0085 | 1 |
+| final physical row without newline | 0 |
+| extra blank physical row rejected | 1 |
+| bounded two-case correction; all60 metadata and README slots unchanged; new activities distinct | 0 |
+| visible turn 1 rejects extra expected | 1 |
+| visible turn 1 rejects extra expected_action | 1 |
+| visible turn 1 rejects extra expected_input_policy | 1 |
+| visible turn 1 rejects extra expected_output_policy | 1 |
+| visible turn 1 rejects extra interpretation | 1 |
+| visible turn 1 rejects extra rationale | 1 |
+| visible turn 1 rejects extra id | 1 |
+| visible turn 1 rejects extra topic | 1 |
+| visible turn 1 rejects extra coverage_category | 1 |
+| visible turn 1 rejects extra split | 1 |
+| visible turn 1 rejects extra group_id | 1 |
+| visible turn 1 rejects extra model_prediction | 1 |
+| visible turn 1 rejects extra score | 1 |
+| visible turn 1 rejects extra notes | 1 |
+| visible turn 2 rejects extra expected | 1 |
+| visible turn 2 rejects extra expected_action | 1 |
+| visible turn 2 rejects extra expected_input_policy | 1 |
+| visible turn 2 rejects extra expected_output_policy | 1 |
+| visible turn 2 rejects extra interpretation | 1 |
+| visible turn 2 rejects extra rationale | 1 |
+| visible turn 2 rejects extra id | 1 |
+| visible turn 2 rejects extra topic | 1 |
+| visible turn 2 rejects extra coverage_category | 1 |
+| visible turn 2 rejects extra split | 1 |
+| visible turn 2 rejects extra group_id | 1 |
+| visible turn 2 rejects extra model_prediction | 1 |
+| visible turn 2 rejects extra score | 1 |
+| visible turn 2 rejects extra notes | 1 |
+| visible turn rejects nested oracle object | 1 |
+| visible text rejects nested oracle object | 1 |
+| visible speaker rejects nested oracle object | 1 |
+| exact speaker-text keys accept parent | 0 |
+| exact speaker-text keys accept child | 0 |
+| exact speaker-text keys accept robot | 0 |
+| ruff check /private/tmp/coami-worktrees/context-sufficiency-expansion/evaluation/context_sufficiency/versions/v1/validate_dataset.py | 0 |
+| ruff format --check | 0 |
+| /opt/homebrew/opt/python@3.14/bin/python3.14 /private/tmp/coami-worktrees/context-sufficiency-expansion/evaluation/context_sufficiency/validate_dataset.py | 0 |
+| git diff --exit-code | 0 |
+
+## Previous validation — v1-draft-002 (historical)
 
 Codex 本機 Tester pass：2026-10-07T04:28:54.326339+00:00，Python 3.14.0；**88 checks 通過**。既有全量CLI/structure/slot/字詞缺席/歷史不變驗收，加本輪Unicode與五案回歸。所有CLI檢查實際subprocess執行，核對exit與stderr，無traceback；TemporaryDirectory候選不寫回正式資料。
 
@@ -256,11 +406,11 @@ python3 evaluation/context_sufficiency/validate_dataset.py
 
 逐案確認：S主意思是否由文字支持；I至少兩合理意思是否導向不同回應；候選是否簡短且只確認／釐清一件事；COMPANION／ALLOW與Action是否合宜；是否依賴隱藏訊息或硬套category；對照及同情境group是否合理。
 
-可一次明示接受 **v1-draft-002三hash所指的全部60案**，或用Case編號／展開的ID提修訂。任何snapshot變更均更新版本證據並重走全量驗證、Owner接受與後續獨立fixture review，不用本機PASS代替接受。
+可一次明示接受 **v1-draft-003三hash所指的全部60案**，或用Case編號／展開的ID提修訂。任何snapshot變更均更新版本證據並重走全量驗證、Owner接受與後續獨立fixture review，不用本機PASS代替接受。
 
 ## Case review package
 
-以下60案對應目前 v1-draft-002；Case編號沿用001，便於追蹤，但舊版接受不能套用新snapshot。
+以下60案對應目前 v1-draft-003；Case編號沿用001/002，便於追蹤；舊版接受不能套用新snapshot。
 
 ### Case 01
 
@@ -1986,9 +2136,9 @@ Owner：pending；independent fixture review：pending。
 
 前文（全部在當句之前）：
 
-> **parent**：你的杯子裡還有飲用水，你想再喝一口嗎？
+> **parent**：你的手上黏了顏料，要用水把手洗乾淨嗎？
 >
-> **child**：要，再喝。
+> **child**：要洗手，把黏黏洗掉。
 >
 
 孩子當句：**水水**
@@ -2003,12 +2153,12 @@ Owner：pending；independent fixture review：pending。
 - **group_id**：case-028
 - **split**：holdout
 - **expected**：SUFFICIENT
-- **interpretation**：孩子想再喝自己杯裡的水。
-- **candidate_text**：你想再喝一口杯裡的水。
+- **interpretation**：孩子想用水洗掉手上的顏料。
+- **candidate_text**：你想用水把手上的顏料洗掉。
 - **expected_input_policy**：COMPANION
 - **expected_output_policy**：ALLOW
 - **expected_action**：DELIVER_ANSWER
-- **rationale**：搭公車背景無關，但眼前杯水及再喝回答已建立主要意思。
+- **rationale**：搭公車背景無關；近前文已建立洗手目的，孩子確認要洗掉黏顏料。水水可合理延續清洗用途，不是cs_v1_002的口渴飲水或只改追加喝一口。候選確認用途，不承諾執行清洗。
 
 Owner：pending；independent fixture review：pending。
 
@@ -2054,12 +2204,12 @@ Owner：pending；independent fixture review：pending。
 
 前文（全部在當句之前）：
 
-> **parent**：你剛說想讓爸爸抱一下，是嗎？
+> **parent**：爸爸想抱你一下，你現在想讓爸爸抱嗎？
 >
-> **child**：是，要爸爸抱。
+> **child**：不要，我要自己坐著。
 >
 
-孩子當句：**抱抱**
+孩子當句：**不要**
 
 <details>
 <summary>展開固定預期、理由與分組</summary>
@@ -2071,12 +2221,12 @@ Owner：pending；independent fixture review：pending。
 - **group_id**：case-029
 - **split**：holdout
 - **expected**：SUFFICIENT
-- **interpretation**：孩子想被爸爸抱一下。
-- **candidate_text**：你想讓爸爸抱一下。
+- **interpretation**：孩子現在不想被爸爸抱，想自己坐著。
+- **candidate_text**：你現在不想讓爸爸抱，想自己坐著。
 - **expected_input_policy**：COMPANION
 - **expected_output_policy**：ALLOW
 - **expected_action**：DELIVER_ANSWER
-- **rationale**：湯匙數量不影響孩子明確確認被爸爸抱的意思，不為無關背景硬標不足。
+- **rationale**：湯匙背景無關；孩子已拒絕爸爸的擁抱，並選自己坐著。當句不要延續明確拒絕，不是cs_v1_004接受媽媽抱的肯定請求，也不是只替換照顧者。
 
 Owner：pending；independent fixture review：pending。
 
@@ -2349,8 +2499,8 @@ Owner：pending；independent fixture review：pending。
 | Evidence | State |
 | --- | --- |
 | Repo plan review | approved; contract only |
-| Local structure／CLI／slot checks | 002: 88 checks PASS; not oracle approval |
-| Independent technical draft review | 001 historical; 002 bounded re-review approved, no blocker; not fixture verdict |
+| Local structure／CLI／slot checks | 003: 122 checks PASS; not oracle approval |
+| Independent technical draft review | 001/002 historical; 003 bounded review approved, no blocker; not fixture verdict |
 | Owner full60 exact-snapshot acceptance | pending |
 | Independent fixture review after Owner | pending |
 | Matching-evidence sufficiency for freeze | pending |
@@ -2387,8 +2537,23 @@ Decision：六個threads皆ADDRESS，無SKIP項；採可見文字證據修正，
 
 Review packet与snapshot已同步；舊001內容保留於Git commit與上述歷史證據。留言／resolve待修正commit已push後執行；不預稱遠端thread已關閉。
 
-## Independent bounded technical re-review — 002
+## Previous bounded technical re-review — 002 (historical)
 
 Reviewer：`/root/plan_reviewer`，針對PR12六個threads以python-code-review path唯讀重審，verdict approved／blocking_issues=[]，七quality維度無findings。核對六項修正、physical-line loader、88checks證據（未run工具）、60slots不變、全60案human packet逐欄一致，重新計算current三hash均符合002。v0三hash與baseline一致，v0/E012無變更。只核對bounded thread論點，不是全量fixture語義review，不批准Owner接受或freeze。
 
 Decision：技術修正可進publish；本輪commit訊息仍須Owner明確確認，之後commit→push→逐thread回覆／resolve。未先留言或關閉thread，未merge或release。
+
+## PR-comment-review-and-fix — round 2 / v1-draft-003
+
+| Thread | Triage | Change |
+| --- | --- | --- |
+| [4203589184](https://github.com/a129924/coami/pull/12#discussion_r4203589184) | ADDRESS | 028以水洗手、029拒絕被抱，與002飲水／004接受被抱不同；固定slots與分組不變 |
+| [4203589187](https://github.com/a129924/coami/pull/12#discussion_r4203589187) | ADDRESS | 每turn恰含speaker/text，所有其他key拒絕；README schema、validator與回歸同步 |
+
+README新hash反映shape契約修正，不是重新配置slots；舊baseline與001/002 snapshot、驗證及review保留。全60human包更新到003，Owner／fixture／freeze pending。第一輪六threads已在e54907c推送後留言並resolve；本輪兩thread回覆／resolve待003的commit已push才執行，不預填遠端成功。
+
+## Independent bounded technical review — 003
+
+Reviewer：`/root/plan_reviewer` 依python-code-review唯讀檢查本輪兩threads修正，verdict approved／blocking_issues=[]，七quality維度無findings。核對028洗手用途與029拒絕擁抱、turn只允許speaker/text且缺欄仍拒絕、README/plan相符；重新核對003三hash、全部60案human包逐欄一致、60slots及README slotrows與e54907c相同、v0/E012 diff無變更、122check entries與record一致。未執行tests/lint，不是全量fixture語義審查。
+
+Decision：本輪技術修正可進publish；待Owner明確確認本輪commit訊息後commit/push，再對兩個threads留言resolve。Owner接受／fixture review/freeze仍pending，不將關thread當oracle接受。
