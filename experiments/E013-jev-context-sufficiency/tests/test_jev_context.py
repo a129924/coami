@@ -6,6 +6,7 @@ from copy import deepcopy
 import json
 import os
 from pathlib import Path
+import subprocess
 import sys
 from tempfile import TemporaryDirectory
 import unittest
@@ -228,13 +229,60 @@ class E013Tests(unittest.TestCase):
         with (
             patch.object(e, "load_freeze", return_value={}),
             patch.object(e, "load_store_policy", return_value={}),
+            patch.object(
+                e, "load_live_authorization", return_value=("run-unique", "0" * 64)
+            ),
             patch.object(e, "TypeSafeClient") as client,
             patch.dict(os.environ, {"TYPESAFE_API_KEY": ""}),
         ):
             self.assertEqual(
-                e.run_live(Path("freeze"), Path("policy"), Path("store")), 2
+                e.run_live(Path("freeze"), Path("policy"), Path("store"), Path("auth")),
+                2,
             )
             client.assert_not_called()
+
+    def test_live_authorization_is_committed_specific_and_one_use(self) -> None:
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            auth = root / "live.json"
+            freeze = root / "freeze.json"
+            policy = root / "policy.json"
+            freeze.write_bytes(b"freeze")
+            policy.write_bytes(b"policy")
+            document = {
+                "run_id": "run-unique",
+                "authorized_by": "Owner",
+                "scope": "one E013 75-case Context Sufficiency run",
+                "model": e.MODEL,
+                "freeze_attestation_sha256": e.sha(b"freeze"),
+                "store_policy_sha256": e.sha(b"policy"),
+            }
+            auth.write_bytes(e.json_bytes(document))
+            with patch.object(
+                e.subprocess,
+                "run",
+                return_value=subprocess.CompletedProcess([], 0, auth.read_bytes()),
+            ):
+                self.assertEqual(
+                    e.load_live_authorization(auth, freeze, policy, root)[0],
+                    "run-unique",
+                )
+                auth.write_bytes(e.json_bytes({**document, "run_id": "reused"}))
+                with self.assertRaisesRegex(
+                    e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
+                ):
+                    e.load_live_authorization(auth, freeze, policy, root)
+            (root / "runs" / "run-unique").mkdir(parents=True)
+            with (
+                patch.object(e, "load_freeze", return_value={}),
+                patch.object(e, "load_store_policy", return_value={}),
+                patch.object(
+                    e, "load_live_authorization", return_value=("run-unique", "0" * 64)
+                ),
+                patch.object(e, "TypeSafeClient") as client,
+            ):
+                self.assertEqual(e.run_live(freeze, policy, root, auth), 2)
+                client.assert_not_called()
 
     def test_capture_write_failure_retains_no_model_choice(self) -> None:
         case = self.cases[0]
@@ -307,6 +355,13 @@ class E013Tests(unittest.TestCase):
                 e.json_bytes(
                     {
                         "run_id": "run-1",
+                        "model": e.MODEL,
+                        "freeze_hashes": e.load_freeze(
+                            e.ORACLE / "versions/v1/freeze-attestation.json"
+                        ),
+                        "v0_hashes": e.V0_HASHES,
+                        "rubric_sha256": e.POLICY_HASH,
+                        "runner_sha256": "test-runner",
                         "store_root": str(root / "restricted"),
                         "store": {
                             "store_id": "owner-store",
@@ -331,9 +386,18 @@ class E013Tests(unittest.TestCase):
                     e.write_exclusive(restricted / locator, body)
                 row = {
                     "run_id": "run-1",
+                    "ordinal": index + 1,
                     "group": case["group"],
                     "case_id": case["case_id"],
                     "expected": case["expected"],
+                    "model": e.MODEL,
+                    "rubric_sha256": e.POLICY_HASH,
+                    "runner_sha256": "test-runner",
+                    "case_version": e.V0_HASHES
+                    if case["group"] == "v0"
+                    else e.load_freeze(
+                        e.ORACLE / "versions/v1/freeze-attestation.json"
+                    ),
                     "status": "VALID" if body else "NOT_RUN",
                     "choice": "SUFFICIENT" if body else None,
                     "probabilities": {"SUFFICIENT": 0.8, "INSUFFICIENT": 0.2}
@@ -362,6 +426,16 @@ class E013Tests(unittest.TestCase):
             e.write_exclusive(
                 restricted / "summary.json", e.json_bytes(e.summarize(rows))
             )
+            summary = e.read_object(restricted / "summary.json")
+            summary.update(
+                {
+                    "run_id": "run-1",
+                    "generated_utc": "2026-10-08T00:00:00Z",
+                    "evidence_status": "local-unbacked-until-reviewed-git-export",
+                }
+            )
+            (restricted / "summary.json").write_bytes(e.json_bytes(summary))
+            summary_hash = e.sha((restricted / "summary.json").read_bytes())
             approval = root / "approval.json"
             approval.write_bytes(
                 e.json_bytes(
@@ -369,6 +443,8 @@ class E013Tests(unittest.TestCase):
                         "run_id": "run-1",
                         "approved_by": "owner",
                         "summary_public": True,
+                        "summary_safety_checked": True,
+                        "summary_sha256": summary_hash,
                         "cases": decisions,
                     }
                 )
@@ -381,6 +457,8 @@ class E013Tests(unittest.TestCase):
                         "run_id": "run-1",
                         "approved_by": "owner",
                         "summary_public": True,
+                        "summary_safety_checked": True,
+                        "summary_sha256": summary_hash,
                         "cases": unchecked,
                     }
                 )
@@ -396,6 +474,8 @@ class E013Tests(unittest.TestCase):
                         "run_id": "run-1",
                         "approved_by": "owner",
                         "summary_public": True,
+                        "summary_safety_checked": True,
+                        "summary_sha256": summary_hash,
                         "cases": decisions,
                     }
                 )
@@ -430,6 +510,132 @@ class E013Tests(unittest.TestCase):
             self.assertEqual(
                 with_access["summary"]["groups"]["research"]["planned"], 40
             )
+            public_rows = (output / "analysis.jsonl").read_bytes()
+            public_manifest = (output / "manifest.json").read_bytes()
+            summary_bytes = (output / "summary.json").read_bytes()
+            restricted_rows = (restricted / "analysis.jsonl").read_bytes()
+            raw_file = (
+                output
+                / "raw"
+                / self.cases[0]["group"]
+                / f"{self.cases[0]['case_id']}.body"
+            )
+
+            # A coherent forged row/hash still conflicts with the frozen oracle.
+            forged = [json.loads(line) for line in public_rows.splitlines()]
+            forged[0]["expected"] = (
+                "INSUFFICIENT"
+                if forged[0]["expected"] == "SUFFICIENT"
+                else "SUFFICIENT"
+            )
+            (output / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in forged)
+            )
+            altered = e.read_object(output / "manifest.json")
+            altered["cases"][0]["analysis_sha256"] = e.sha(e.json_bytes(forged[0]))
+            (output / "manifest.json").write_bytes(e.json_bytes(altered))
+            self.assertIn(
+                "CASE_INVENTORY_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "analysis.jsonl").write_bytes(public_rows)
+            (output / "manifest.json").write_bytes(public_manifest)
+
+            # A byte-consistent alternate raw response cannot redefine its analysis.
+            changed_raw = response().replace(b'"confidence":0.7', b'"confidence":0.6')
+            raw_file.write_bytes(changed_raw)
+            altered = e.read_object(output / "manifest.json")
+            altered["cases"][0]["raw_sha256"] = e.sha(changed_raw)
+            (output / "manifest.json").write_bytes(e.json_bytes(altered))
+            self.assertIn(
+                "RAW_ANALYSIS_HASH_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            forged = [json.loads(line) for line in public_rows.splitlines()]
+            forged[0]["raw_sha256"] = e.sha(changed_raw)
+            (output / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in forged)
+            )
+            altered["cases"][0]["analysis_sha256"] = e.sha(e.json_bytes(forged[0]))
+            (output / "manifest.json").write_bytes(e.json_bytes(altered))
+            self.assertIn(
+                "RAW_ANALYSIS_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            raw_file.write_bytes(raw)
+            (output / "analysis.jsonl").write_bytes(public_rows)
+            (output / "manifest.json").write_bytes(public_manifest)
+
+            altered_restricted = [
+                json.loads(line) for line in restricted_rows.splitlines()
+            ]
+            altered_restricted[1]["case_id"] = "different-case"
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in altered_restricted)
+            )
+            # A malformed restricted inventory is a gap, never a traceback.
+            self.assertIn(
+                "RESTRICTED_ANALYSIS_MISSING",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (restricted / "analysis.jsonl").write_bytes(restricted_rows)
+
+            (output / "summary.json").write_bytes(summary_bytes + b" ")
+            self.assertIn(
+                "SUMMARY_HASH_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "summary.json").write_bytes(summary_bytes)
+
+            # A failed copy leaves no published run and permits a clean retry.
+            second_root = root / "retry-evidence"
+            original_write = e.write_exclusive
+
+            def fail_analysis(path: Path, data: bytes) -> None:
+                if path.name == "analysis.jsonl":
+                    raise OSError("injected failure")
+                original_write(path, data)
+
+            with patch.object(e, "write_exclusive", side_effect=fail_analysis):
+                with self.assertRaises(OSError):
+                    evidence.publish_reviewed(restricted, approval, second_root)
+            self.assertFalse((second_root / "runs" / "run-1").exists())
+            self.assertEqual(list((second_root / "runs").iterdir()), [])
+            evidence.publish_reviewed(restricted, approval, second_root)
+
+            # Even INVALID 2xx observations must carry the captured body.
+            altered = e.read_object(output / "manifest.json")
+            altered["cases"][0]["raw_sha256"] = None
+            (output / "manifest.json").write_bytes(e.json_bytes(altered))
+            forged = [json.loads(line) for line in public_rows.splitlines()]
+            forged[0]["status"] = "INVALID"
+            (output / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in forged)
+            )
+            self.assertIn(
+                "CAPTURED_BODY_MISSING",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "analysis.jsonl").write_bytes(public_rows)
+            (output / "manifest.json").write_bytes(public_manifest)
             (
                 output
                 / "raw"
