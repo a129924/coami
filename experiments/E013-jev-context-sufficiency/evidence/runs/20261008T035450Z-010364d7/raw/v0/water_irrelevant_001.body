@@ -1,0 +1,1 @@
+{"model":"jev-1.13.0","answers":{"context_sufficiency":{"type":"choice","choice":"INSUFFICIENT","confidence":0.74,"probabilities":{"INSUFFICIENT":0.87,"SUFFICIENT":0.13}}},"usage":{"input_tokens":578,"output_tokens":44}}

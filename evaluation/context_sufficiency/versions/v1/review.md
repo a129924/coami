@@ -1,6 +1,25 @@
 # context_sufficiency_v1 — Draft review and evidence
 
-Current：`approved`（PR #12 第三輪bounded technical correction）；Owner human-check pending。未經Owner逐案接受、未進independent fixture review、**NOT FROZEN**。
+Current：`v1-draft-004` 的 60 筆答案已獲 Owner 親自人工審查並接受，且獨立 fixture review 已核准；確切 snapshot **FROZEN** 為 `context_sufficiency_v1`。下方逐案 `pending` 為先前 draft packet 的歷史標記。
+
+## Independent fixture review and freeze — v1-draft-004
+
+- 獨立 Reviewer：`/root/v1_fixture_reviewer`；2026-10-08T03:32:41Z 記錄 verdict。Reviewer 唯讀審查，未建立案例、修改 oracle 或呼叫 Jev；與 Owner 人工接受及先前 bounded 技術審查分開。
+- 程序：先以中性編號只讀全部 60 案的 background／conversation／utterance，在看 expected、candidate 與 rationale 前盲判 Context Sufficiency。初判與 oracle 56/60 一致；再讀全部 60 筆 oracle、candidate、rationale、policy／Action 和固定 slot 表，對四筆差異做逐案複核。
+- 初判差異：`cs_v1_036` 的明確選擇支持自己作畫；`cs_v1_054` 最新的「故事也不要」表明拒絕；`cs_v1_055` 最新的「先看媽媽那張」建立順序；`cs_v1_058` 最新的「留在窗邊…先看外面」建立窗邊觀看。Reviewer 複核後接受四筆原 oracle 判斷，最終 60/60 可接受；未發現剩餘語意阻擋。
+- Reviewer 核對全部 60 筆 candidate／rationale：SUFFICIENT 的候選依據可見文字確認主要意思，INSUFFICIENT 的候選區分實質不同的可能意思。README 固定 slot 表與 60 筆 category／topic／group／split 全部相符。
+- 重新計算三份 SHA-256：README `b230ca3f6dea08d62ca0d0facb6374255649bd620913bac81803a73698d9a898`；dataset `d2dc258088caf4f9ee7f0f44f7123adb96ee50a5a71a805532d1857d7a16c3f9`；validator `b563e47b656d55107b98f7e352d25884ed05d9cb8e17327aeddeb1e89a630b4f`。獨立執行 validator exit 0：60 案、40 research／20 holdout、35 S／25 I、12 topics／54 groups。
+- 原始 verdict：`{"verdict":"approved","blocking_issues":[],"snapshot":"v1-draft-004","reviewer":"/root/v1_fixture_reviewer"}`。限制：此為人工語意 oracle 審查，不能證明 Jev 表現或產品安全。
+- Matching gate 核對：Owner 接受同一 004 snapshot，獨立審查三份 hash 相同，validator 通過，v0 凍結三份 hash 未變；未改動 v1 案例內容。Freeze 決定時間：2026-10-08T03:33:27Z；版本 `context_sufficiency_v1`。Runner 的 [freeze-attestation.json](freeze-attestation.json) 另以本文件完整 SHA-256 綁定本紀錄與三份來源檔。
+- 此 freeze 只開啟 E013 的 fixture gate；Jev live run 仍需另行明確授權，E013 模型分數／通過門檻均未決定。
+
+## Owner acceptance of exact v1-draft-004 snapshot
+
+- 記錄時間：2026-10-07T08:53:10Z；原始訊息的獨立 timestamp 未提供，這是本次核對時間。
+- 來源：本對話 Owner 訊息：「接受 v1 的 60 筆人工答案及獨立案例審查結果。」
+- 接受範圍：`v1-draft-004` 全部 60 筆人工答案。README、dataset、validator 的 SHA-256 分別為 `b230ca3f6dea08d62ca0d0facb6374255649bd620913bac81803a73698d9a898`、`d2dc258088caf4f9ee7f0f44f7123adb96ee50a5a71a805532d1857d7a16c3f9`、`b563e47b656d55107b98f7e352d25884ed05d9cb8e17327aeddeb1e89a630b4f`；記錄時逐檔重新核對，內容未修改。
+- Owner 後續釐清「我是人工 review 的」；因此前述「接受獨立案例審查結果」指的是 Owner 自己的人工審查，不能視作獨立 reviewer 的 verdict。目前可見的 PR #12 紀錄僅有 bounded 技術審查，明言不是全量 fixture 語意審查。獨立案例審查者、程序、matching snapshot verdict 與 blocking issues 仍待完成，不能據此標記 freeze。
+- 此紀錄只確認 Owner 決定。獨立案例審查與 matching-evidence sufficiency 仍待核對，未建立 runner 可接受的 freeze attestation；Jev live run 仍需另行授權。
 
 ## Question, procedure, evidence, decision
 
@@ -2695,12 +2714,12 @@ Owner：pending；independent fixture review：pending。
 | Repo plan review | approved; contract only |
 | Local structure／CLI／slot checks | 004: 166 checks PASS; not oracle approval |
 | Independent technical draft review | 001/002/003 historical; 004 bounded review approved, no blocker; not fixture verdict |
-| Owner full60 exact-snapshot acceptance | pending |
-| Independent fixture review after Owner | pending |
-| Matching-evidence sufficiency for freeze | pending |
-| Freeze | NOT FROZEN |
+| Owner full60 exact-snapshot acceptance | accepted；本文件頂部記錄本次 Owner 訊息及 004 三份 SHA-256 |
+| Independent fixture review after Owner | approved；`/root/v1_fixture_reviewer` 對 004 完成 60 案盲判／複核，無 blocking issues，詳見文件頂部 |
+| Matching-evidence sufficiency for freeze | Owner、獨立 Reviewer、validator 均指向 004 三份相同 SHA-256；v0 hash 未變 |
+| Freeze | FROZEN；`context_sufficiency_v1`，2026-10-08T03:33:27Z |
 
-沒有Owner逐案接受訊息／時間，不填假接受證據。Owner接受後再交獨立fixture Reviewer，先抽三可見欄以中性編號判斷，再讀oracle；Reviewer verdict／blocking issues須對matching snapshot並記實際程序。所有matching gates齊全、Planner核對後才由Implementer原樣記freeze。技術draft review和commit/push不跳過這個順序。
+Owner 接受與獨立 fixture Reviewer verdict 已按 matching snapshot 記錄。先盲判三個可見欄位、再讀 oracle 的程序、差異複核及 gate 核對詳見文件頂部；技術 draft review 和 commit/push 未代替這些證據。
 
 ## Revision and delivery history
 

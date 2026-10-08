@@ -1,0 +1,16 @@
+{
+  "snapshot_id": "v1-draft-004",
+  "freeze_version": "context_sufficiency_v1",
+  "frozen_utc": "2026-10-08T03:33:27Z",
+  "owner_accepted_60": true,
+  "fixture_review_approved": true,
+  "fixture_reviewer": "/root/v1_fixture_reviewer",
+  "fixture_verdict": "approved",
+  "frozen": true,
+  "review_sha256": "55a740bbff29fb6f3cef7ba01f322bde94ba3c61eb9ec2a118d7602cea7cb649",
+  "v1_hashes": {
+    "README.md": "b230ca3f6dea08d62ca0d0facb6374255649bd620913bac81803a73698d9a898",
+    "context_sufficiency_v1.jsonl": "d2dc258088caf4f9ee7f0f44f7123adb96ee50a5a71a805532d1857d7a16c3f9",
+    "validate_dataset.py": "b563e47b656d55107b98f7e352d25884ed05d9cb8e17327aeddeb1e89a630b4f"
+  }
+}
