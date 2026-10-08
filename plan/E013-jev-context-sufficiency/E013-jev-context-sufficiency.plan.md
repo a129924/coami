@@ -21,7 +21,7 @@
 
 ## Locked Decisions
 
-- The exact v1 `v1-draft-004` 60-case snapshot now has Owner acceptance with three SHA-256 values recorded in `review.md`. The Owner performed the human review; an independent fixture verdict is still pending, so v1 remains **NOT FROZEN**. A matching independent review, freeze record, validators and hashes must precede live calls; technical PR merge does not satisfy these gates.
+- The exact v1 `v1-draft-004` 60-case snapshot has Owner acceptance and a separate independent fixture verdict recorded in `review.md`. The matching review, three source hashes and tracked attestation establish `context_sufficiency_v1` as **FROZEN**. A live call still requires separate Owner authorization and the remaining preflight checks; technical PR merge does not supply that authorization.
 - Pin `jev-1.13.0`, `typesafe-sdk==0.7.2`, E012 Context rubric, 30-second timeout, zero retries, disabled SDK logger. Fixed order research → holdout → v0, one request per case and one in flight.
 - Jev state is only background/conversation/utterance; no oracle, split, ID, candidate, or threshold enters the request. Capture actual request body and entire 2xx response bytes before SDK parsing.
 - Raw responses first reach the Owner-selected local staging root `/Users/andrew/coami-evidence/E013/runs/<run_id>/`, outside the repo and `/private/tmp`. Unique run directories, exclusive writes, point-in-time hashes and read-only file modes do not make one local directory immutable or backed up. Only case-by-case security-reviewed analysis/body bytes may be exported unchanged to Git, committed and pushed for versioned retrieval; restricted-only objects retain locators and hashes, with access limits and no promised retention.
@@ -31,9 +31,9 @@
 
 **ReadOnly:** v0 and v1 oracle data/validator/README, `experiments/E012-jev-text-policy/`, shared workflow contracts, `server/src/`, `device/src/`, root `README.md` and `VERSION`.
 
-**Written:** E013 plan and experiment paths listed below, v1 `review.md` for the exact Owner acceptance and later independently verified freeze record, and the Owner-selected external local `runs/<run_id>/` staging root. Reviewed E013 Git evidence is written only after per-case safety approval. No live run is authorized by this update.
+**Written:** E013 plan and experiment paths listed below, v1 `review.md` and `freeze-attestation.json` for the exact Owner acceptance and independent fixture freeze, and the Owner-selected external local `runs/<run_id>/` staging root. Reviewed E013 Git evidence is written only after per-case safety approval. No live run is authorized by this update.
 
-**Modify:** v1 `review.md` acceptance/gate status and E013 tracked plan, runner, evidence tool, tests and docs. **Deleted:** none.
+**Modify:** v1 `review.md` acceptance/gate status and E013 tracked plan, runner, evidence tool, tests and docs. **Added:** v1 freeze attestation. **Deleted:** none.
 
 ## Status / Allowed Transitions
 
@@ -49,6 +49,7 @@
 | Step tracker | `plan/E013-jev-context-sufficiency/E013-jev-context-sufficiency.step.md` |
 | Python spec | `plan/E013-jev-context-sufficiency/E013-jev-context-sufficiency.spec.md` |
 | Experiment guide | `experiments/E013-jev-context-sufficiency/README.md` |
+| v1 freeze record | `evaluation/context_sufficiency/versions/v1/review.md`, `evaluation/context_sufficiency/versions/v1/freeze-attestation.json` |
 | Local staging policy | `experiments/E013-jev-context-sufficiency/local-store-policy.json` |
 | Experiment record | `experiments/E013-jev-context-sufficiency/EXPERIMENT.md` |
 | Runner | `experiments/E013-jev-context-sufficiency/jev_context.py` |
@@ -71,11 +72,11 @@ The Owner-selected local staging root `/Users/andrew/coami-evidence/E013` uses `
 - [X] 2. Capture exact emitted request and successful response bytes before SDK parsing; retain invalid responses and classify failures without error-body exposure.
 - [X] 3. Add per-case local run rows, descriptive group report, review-gated Git export, and clean-checkout verification.
 - [ ] 4. Complete offline tests, validators, static checks and evidence record; obtain independent technical review.
-- [ ] 5. After Owner freeze, store decision and explicit live authorization, run 75 cases once and reconcile raw hashes and group counts. This step is blocked today.
+- [ ] 5. After separate explicit live authorization, run 75 cases once and reconcile raw hashes and group counts. Freeze and local store policy are recorded; live authorization remains pending.
 
 ## Validation / Acceptance Checks
 
-**TestCase:** Owner acceptance alone leaves v1 zero-call blocked until independent review and freeze. Fake HTTP transport verifies request projection, 2xx byte equality including unknown/invalid bodies, and exclusion of non-2xx body. Inventory has unique 40/20/15 keys. Missing key/freeze/local policy/dependency blocks before network. Interruption, write failure and rerun do not invent a choice or overwrite evidence. Local verification checks run/case request and raw hashes and summary but does not assert immutability or backup. Per-case safety approval is required before export. A clean checkout resolves reviewed run/group/case, hashes raw and complete rows, recomputes groups and arbitrary candidate-threshold error counts, and reports inaccessible/mismatched evidence as unverified.
+**TestCase:** Exact freeze attestation passes, while a changed review hash blocks before network. Fake HTTP transport verifies request projection, 2xx byte equality including unknown/invalid bodies, and exclusion of non-2xx body. Inventory has unique 40/20/15 keys. Missing key/freeze/local policy/dependency blocks before network. Interruption, write failure and rerun do not invent a choice or overwrite evidence. Local verification checks run/case request and raw hashes and summary but does not assert immutability or backup. Per-case safety approval is required before export. A clean checkout resolves reviewed run/group/case, hashes raw and complete rows, recomputes groups and arbitrary candidate-threshold error counts, and reports inaccessible/mismatched evidence as unverified.
 
 No successful offline test is a Jev model score or product pass. No threshold is selected in E013.
 
@@ -96,4 +97,4 @@ Draft PR stops for human review. No merge, README/VERSION change, tag, release n
 ## Open Questions / Unresolved Items
 
 - Owner has selected local staging only. A backed-up immutable restricted archive and retention period remain undecided; no such guarantee is claimed for restricted-only objects.
-- Owner has accepted the exact v1 snapshot. Independent fixture review and matching freeze are still required. No live run until that evidence and separate authorization exist.
+- Owner acceptance, independent fixture review and matching freeze are complete for exact v1-draft-004. No live run until separate Owner authorization exists.

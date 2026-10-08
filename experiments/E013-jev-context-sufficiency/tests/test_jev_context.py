@@ -68,25 +68,20 @@ class E013Tests(unittest.TestCase):
                 )
             )
 
-    def test_current_v1_cannot_pass_freeze_gate(self) -> None:
+    def test_exact_v1_freeze_attestation_and_mismatch_gate(self) -> None:
+        frozen = e.ORACLE / "versions/v1/freeze-attestation.json"
+        self.assertEqual(
+            e.load_freeze(frozen),
+            {
+                name: e.sha((e.ORACLE / "versions/v1" / name).read_bytes())
+                for name in e.V1_FILES
+            },
+        )
         with TemporaryDirectory() as temporary:
             attestation = Path(temporary) / "freeze.json"
-            attestation.write_text(
-                json.dumps(
-                    {
-                        "owner_accepted_60": True,
-                        "fixture_review_approved": True,
-                        "frozen": True,
-                        "review_sha256": e.sha(
-                            (e.ORACLE / "versions/v1/review.md").read_bytes()
-                        ),
-                        "v1_hashes": {
-                            name: e.sha((e.ORACLE / "versions/v1" / name).read_bytes())
-                            for name in e.V1_FILES
-                        },
-                    }
-                )
-            )
+            changed = e.read_object(frozen)
+            changed["review_sha256"] = "0" * 64
+            attestation.write_bytes(e.json_bytes(changed))
             with self.assertRaisesRegex(e.ContractError, "V1_NOT_FROZEN"):
                 e.load_freeze(attestation)
 

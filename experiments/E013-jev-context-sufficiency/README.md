@@ -4,14 +4,14 @@ E013 evaluates the frozen 60-case v1 research/holdout benchmark and the frozen 1
 
 ## Current gate
 
-The exact `v1-draft-004` 60-case snapshot has Owner human acceptance recorded with three file hashes in its `review.md`. The Owner clarified that they performed the human review; an independent fixture verdict is still pending, so v1 remains **NOT FROZEN** and no freeze attestation exists. No live Jev run is permitted yet. The Owner selected local E013 storage, but that directory is only local staging until reviewed evidence is committed and pushed.
+The exact `v1-draft-004` 60-case snapshot has Owner human acceptance and an independent fixture verdict recorded in its `review.md`. The matching snapshot is **FROZEN** as `context_sufficiency_v1`; [freeze-attestation.json](../../evaluation/context_sufficiency/versions/v1/freeze-attestation.json) binds the review and three source files by SHA-256. No live Jev run is authorized yet. The Owner selected local E013 storage, but that directory is only local staging until reviewed evidence is committed and pushed.
 
 ## Inputs and conditions
 
 - Python 3.12, `typesafe-sdk==0.7.2`, model `jev-1.13.0`, 30-second I/O timeout, zero automatic retries, SDK logger disabled.
 - The Context question is read without modification from E012 `policies.json`; its hash is recorded. Only `background`, `conversation`, and `utterance` reach Jev. Case ID, split, oracle, rationale, candidate, and threshold remain evaluator-only.
 - The fixed run order is v1 research 40, v1 holdout 20, then v0 15. Calls are sequential. E013 does not run Input/Output Policy, route an Action, or generate an answer.
-- A future freeze attestation JSON must contain `owner_accepted_60: true`, `fixture_review_approved: true`, `frozen: true`, the SHA-256 of the exact `review.md`, and a `v1_hashes` object keyed by `README.md`, `context_sufficiency_v1.jsonl`, `validate_dataset.py`. The runner checks the files, current review status, frozen v0 hashes, both validators, 75-case inventory, SDK version, and key before any call. The attestation is evidence of human decisions, not a substitute for those decisions.
+- The tracked freeze attestation contains `owner_accepted_60: true`, `fixture_review_approved: true`, `frozen: true`, the SHA-256 of the exact `review.md`, and a `v1_hashes` object keyed by `README.md`, `context_sufficiency_v1.jsonl`, `validate_dataset.py`. The runner checks the files, current review status, frozen v0 hashes, both validators, 75-case inventory, SDK version, and key before any call. The attestation records the separate human decisions; it does not authorize a live call.
 - [local-store-policy.json](local-store-policy.json) records the Owner-selected `/Users/andrew/coami-evidence/E013` root. It says `storage_mode: local_staging`, `versioned_immutable: false`, `backup_verified: false`, and `retention_until: null`; these are deliberate facts, not a claim of durable or immutable backup. Only Owner-authorized local processes may read it. The preflight checks the exact root and policy, then uses `runs/<run_id>/` with exclusive creation. A read-only mode after completion and SHA-256 checks detect or discourage changes but cannot stop the local owner from altering or deleting evidence.
 
 ## Offline validation
@@ -30,18 +30,18 @@ The tests use fake HTTP transport and synthetic responses. They do not measure J
 
 ## Future live execution and evidence review
 
-Only after the independent fixture review is recorded, the exact freeze attestation is created and verified, and the Owner separately authorizes a live run:
+Only after the Owner separately authorizes a live run and its remaining preflight inputs are ready:
 
 ```sh
 uv run --quiet --locked --project experiments/E013-jev-context-sufficiency \
   --env-file experiments/E013-jev-context-sufficiency/.env \
   python experiments/E013-jev-context-sufficiency/jev_context.py --live \
-  --freeze-attestation /approved/freeze-attestation.json \
+  --freeze-attestation evaluation/context_sufficiency/versions/v1/freeze-attestation.json \
   --store-policy experiments/E013-jev-context-sufficiency/local-store-policy.json \
   --store-root /Users/andrew/coami-evidence/E013
 ```
 
-`.env` is an Owner-maintained, Git-ignored local credential file. Never print, hash, or commit it. The freeze attestation path remains a placeholder; no attestation is valid yet. The local store path is approved for staging, not backed-up archival storage.
+`.env` is an Owner-maintained, Git-ignored local credential file. Never print, hash, or commit it. The freeze attestation path above is tracked and verified; the local store path is approved for staging, not backed-up archival storage. The example command is documentation, not permission to execute it now.
 
 The runner writes an exclusive `runs/<run_id>/` in the local store: `manifest.json`, `events.jsonl`, `analysis.jsonl`, `summary.json`, exact emitted request bytes, and exact 2xx response bytes. Each body is keyed by `(run_id, group, case_id)` and has a SHA-256. A failed or interrupted run remains incomplete and is never overwritten or automatically resumed. `ERROR`, `UNKNOWN`, and `NOT_RUN` do not count as correct model predictions. Verify the local bytes after each run with `--verify-local-run --run-dir /Users/andrew/coami-evidence/E013/runs/<run_id>`; a clean verification is a point-in-time integrity check, not a backup.
 
