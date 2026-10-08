@@ -12,6 +12,7 @@ import jev_context as e
 
 HASH = re.compile(r"[0-9a-f]{64}\Z")
 STATUSES = {"VALID", "INVALID", "ERROR", "UNKNOWN", "NOT_RUN"}
+PRE_RECORD_RUN_ID = "20261008T035450Z-010364d7"
 
 
 def bounded_path(root: Path, locator: str) -> Path:
@@ -31,9 +32,6 @@ def read_rows(path: Path) -> list[dict[str, Any]]:
         raise e.ContractError("ANALYSIS_UNAVAILABLE") from exc
     if len(rows) != 75 or any(not isinstance(row, dict) for row in rows):
         raise e.ContractError("INVALID_ANALYSIS")
-    keys = [(row.get("run_id"), row.get("group"), row.get("case_id")) for row in rows]
-    if len(set(keys)) != 75:
-        raise e.ContractError("DUPLICATE_ANALYSIS_KEY")
     if any(
         not isinstance(row.get("run_id"), str)
         or not e.CASE_ID.fullmatch(row["run_id"])
@@ -43,6 +41,9 @@ def read_rows(path: Path) -> list[dict[str, Any]]:
         for row in rows
     ):
         raise e.ContractError("INVALID_ANALYSIS_KEY")
+    keys = [(row["run_id"], row["group"], row["case_id"]) for row in rows]
+    if len(set(keys)) != 75:
+        raise e.ContractError("DUPLICATE_ANALYSIS_KEY")
     for row in rows:
         status = row.get("status")
         if status not in STATUSES:
@@ -104,6 +105,91 @@ def summary_bytes(run_dir: Path) -> bytes:
     return data
 
 
+def metadata_gaps(manifest: dict[str, Any]) -> list[dict[str, str]]:
+    """Check the honest local-store claims against the tracked approval."""
+    try:
+        policy = e.read_object(e.TOPIC / "local-store-policy.json")
+        store = manifest["store"]
+        if not isinstance(store, dict):
+            raise ValueError
+        if any(
+            store.get(name) != policy.get(name)
+            for name in ("approved_by", "store_id", "agent_access")
+        ):
+            raise ValueError
+        if any(
+            (
+                policy.get("root") != str(e.LOCAL_STORE_ROOT),
+                store.get("storage_mode") != "local_staging",
+                store.get("versioned_immutable") is not False,
+                store.get("backup_verified") is not False,
+                store.get("retention_until") is not None,
+                manifest.get("restricted_store_id", store["store_id"])
+                != store["store_id"],
+                manifest.get("restricted_access", store["agent_access"])
+                != store["agent_access"],
+                manifest.get("restricted_retention_until", None) is not None,
+            )
+        ):
+            raise ValueError
+    except (OSError, KeyError, ValueError, e.ContractError):
+        return [{"reason": "STORE_POLICY_MISMATCH"}]
+    return []
+
+
+def summary_identity_gap(summary: dict[str, Any], run_id: str) -> bool:
+    return (
+        summary.get("run_id") != run_id
+        or summary.get("evidence_status") != "local-unbacked-until-reviewed-git-export"
+        or summary.get("threshold_selected") is not False
+    )
+
+
+def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
+    """The pre-record-gate historical run has no authorization snapshot."""
+    expected_hash = manifest.get("live_authorization_sha256")
+    if expected_hash is None:
+        return (
+            None
+            if manifest.get("run_id") == PRE_RECORD_RUN_ID
+            else "AUTHORIZATION_MISSING"
+        )
+    if manifest.get("live_authorization_path") != "authorization.json":
+        return "AUTHORIZATION_MISSING"
+    try:
+        data = (root / "authorization.json").read_bytes()
+        document = json.loads(data)
+        if e.sha(data) != expected_hash:
+            return "AUTHORIZATION_HASH_MISMATCH"
+        if not isinstance(document, dict) or set(document) != {
+            "run_id",
+            "authorized_by",
+            "scope",
+            "model",
+            "freeze_attestation_sha256",
+            "store_policy_sha256",
+        }:
+            return "AUTHORIZATION_MISMATCH"
+        if any(
+            (
+                document["run_id"] != manifest.get("run_id"),
+                document["authorized_by"] != "Owner",
+                document["scope"] != "one E013 75-case Context Sufficiency run",
+                document["model"] != e.MODEL,
+                document["freeze_attestation_sha256"]
+                != e.sha(
+                    (e.ORACLE / "versions/v1/freeze-attestation.json").read_bytes()
+                ),
+                document["store_policy_sha256"]
+                != e.sha((e.TOPIC / "local-store-policy.json").read_bytes()),
+            )
+        ):
+            return "AUTHORIZATION_MISMATCH"
+    except (OSError, ValueError, UnicodeDecodeError):
+        return "AUTHORIZATION_MISSING"
+    return None
+
+
 def inventory_gaps(
     manifest: dict[str, Any], rows: list[dict[str, Any]]
 ) -> list[dict[str, str]]:
@@ -156,7 +242,33 @@ def inventory_gaps(
     return gaps
 
 
-def response_gap(row: dict[str, Any], raw: bytes) -> str | None:
+def sdk_rejects(raw: bytes, case: dict[str, Any], question: dict[str, Any]) -> bool:
+    """Replay captured bytes through the pinned SDK without network access."""
+    if e.version("typesafe-sdk") != e.SDK_VERSION:
+        raise e.ContractError("SDK_VERSION_MISMATCH")
+    transport = e.httpx2.MockTransport(
+        lambda request: e.httpx2.Response(200, content=raw)
+    )
+    try:
+        with e.TypeSafeClient(
+            api_key="offline-verification",
+            model=e.MODEL,
+            base_url="https://example.invalid",
+            retry=e.RetryPolicy(max_retries=0),
+            http_client=e.httpx2.Client(transport=transport),
+        ) as client:
+            client.system_one(
+                state=case["state"],
+                questions={"context_sufficiency": e.Choice(**question)},
+            )
+    except e.TypeSafeError:
+        return True
+    return False
+
+
+def response_gap(
+    row: dict[str, Any], raw: bytes, case: dict[str, Any], question: dict[str, Any]
+) -> str | None:
     parsed = e.parse_answer(raw)
     if row["status"] == "VALID":
         if any(
@@ -174,6 +286,14 @@ def response_gap(row: dict[str, Any], raw: bytes) -> str | None:
         if any(
             row.get(field) is not None
             for field in ("choice", "probabilities", "confidence")
+        ):
+            return "RAW_ANALYSIS_MISMATCH"
+        if row.get("error_code") == "SDK_RESPONSE_INVALID":
+            if not sdk_rejects(raw, case, question):
+                return "RAW_ANALYSIS_MISMATCH"
+        elif (
+            parsed["status"] != "INVALID"
+            or row.get("error_code") != parsed["error_code"]
         ):
             return "RAW_ANALYSIS_MISMATCH"
         try:
@@ -222,7 +342,9 @@ def verify_local_run(run_dir: Path) -> dict[str, Any]:
         raise e.ContractError("LOCAL_ANALYSIS_RESTRICTED")
     if any(row["run_id"] != run_id for row in rows):
         raise e.ContractError("RUN_ID_MISMATCH")
-    gaps = inventory_gaps(manifest, rows)
+    gaps = inventory_gaps(manifest, rows) + metadata_gaps(manifest)
+    if issue := authorization_gap(run_dir, manifest):
+        gaps.append({"reason": issue})
     cases = {(case["group"], case["case_id"]): case for case in e.load_cases()}
     question = e.load_question()
     source_locator = manifest.get("runner_source_path")
@@ -276,7 +398,12 @@ def verify_local_run(run_dir: Path) -> dict[str, Any]:
                     }
                 )
             elif field == "raw_sha256" and row.get("status") in ("VALID", "INVALID"):
-                mismatch = response_gap(row, body)
+                case = cases.get((group, case_id))
+                mismatch = (
+                    response_gap(row, body, case, question)
+                    if case
+                    else "CASE_INVENTORY_MISMATCH"
+                )
                 if mismatch:
                     gaps.append(
                         {"group": group, "case_id": case_id, "reason": mismatch}
@@ -296,6 +423,7 @@ def verify_local_run(run_dir: Path) -> dict[str, Any]:
     if (
         recorded.get("groups") != recalculated["groups"]
         or recorded.get("complete") != recalculated["complete"]
+        or summary_identity_gap(recorded, run_id)
     ):
         gaps.append({"reason": "SUMMARY_MISMATCH"})
     return {
@@ -395,6 +523,12 @@ def _write_publication(
     if e.sha(runner_source) != manifest.get("runner_sha256"):
         raise e.ContractError("RUNNER_SOURCE_MISMATCH")
     e.write_exclusive(output / "runner.py", runner_source)
+    if manifest.get("live_authorization_sha256") is not None:
+        if authorization_gap(run_dir, manifest):
+            raise e.ContractError("AUTHORIZATION_UNVERIFIED")
+        e.write_exclusive(
+            output / "authorization.json", (run_dir / "authorization.json").read_bytes()
+        )
     public_review = {
         "run_id": run_id,
         "approved_by": approval["approved_by"],
@@ -556,7 +690,9 @@ def verify_evidence(
         (row["group"], row["case_id"]) for row in rows
     }:
         raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
-    gaps = []
+    gaps = metadata_gaps(manifest)
+    if issue := authorization_gap(evidence_run, manifest):
+        gaps.append({"reason": issue})
     try:
         runner = bounded_path(evidence_run, manifest["runner_public_path"]).read_bytes()
         if e.sha(runner) != manifest.get("runner_sha256"):
@@ -599,6 +735,8 @@ def verify_evidence(
     except (OSError, e.ContractError):
         gaps.append({"reason": "REVIEW_MISSING"})
     full_rows = []
+    cases = {(case["group"], case["case_id"]): case for case in e.load_cases()}
+    question = e.load_question()
     restricted = None
     if restricted_run is not None:
         try:
@@ -696,7 +834,12 @@ def verify_evidence(
                     {"group": key[0], "case_id": key[1], "reason": "RAW_HASH_MISMATCH"}
                 )
                 continue
-            mismatch = response_gap(full, raw)
+            case = cases.get(key)
+            mismatch = (
+                response_gap(full, raw, case, question)
+                if case
+                else "CASE_INVENTORY_MISMATCH"
+            )
             if mismatch:
                 gaps.append({"group": key[0], "case_id": key[1], "reason": mismatch})
                 continue
@@ -716,6 +859,7 @@ def verify_evidence(
             if (
                 recorded.get("groups") != recalculated["groups"]
                 or recorded.get("complete") != recalculated["complete"]
+                or summary_identity_gap(recorded, manifest.get("run_id"))
             ):
                 gaps.append({"reason": "SUMMARY_MISMATCH"})
     result = {

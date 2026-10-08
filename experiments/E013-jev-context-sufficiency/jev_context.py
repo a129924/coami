@@ -206,6 +206,15 @@ def load_live_authorization(
         document = json.loads(current)
         if committed != current or not isinstance(document, dict):
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+        if set(document) != {
+            "run_id",
+            "authorized_by",
+            "scope",
+            "model",
+            "freeze_attestation_sha256",
+            "store_policy_sha256",
+        }:
+            raise ContractError("LIVE_AUTHORIZATION_MISMATCH")
         run_id = document.get("run_id")
         if (
             not isinstance(run_id, str)
@@ -549,6 +558,9 @@ def run_live(
         run_id, authorization_sha256 = load_live_authorization(
             authorization, attestation, store_policy, root
         )
+        authorization_bytes = authorization.read_bytes()
+        if sha(authorization_bytes) != authorization_sha256:
+            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         use_marker = store / "authorization-uses" / f"{run_id}.json"
         if use_marker.exists() or (store / "runs" / run_id).exists():
             raise ContractError("LIVE_AUTHORIZATION_ALREADY_USED")
@@ -591,6 +603,7 @@ def run_live(
         "runner_sha256": runner_hash,
         "runner_source_path": "runner.py",
         "live_authorization_sha256": authorization_sha256,
+        "live_authorization_path": "authorization.json",
         "store": policy_metadata,
         "store_root": str(store.resolve()),
         "conditions": {"timeout_seconds": 30, "retries": 0, "order": list(GROUPS)},
@@ -598,6 +611,7 @@ def run_live(
     }
     write_exclusive(run_dir / "manifest.json", json_bytes(manifest))
     write_exclusive(run_dir / "runner.py", runner_source)
+    write_exclusive(run_dir / "authorization.json", authorization_bytes)
     rows: list[dict[str, Any]] = []
     stopped = False
     for index, case in enumerate(cases):

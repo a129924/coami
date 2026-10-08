@@ -181,6 +181,29 @@ class E013Tests(unittest.TestCase):
         self.assertEqual(row["choice"], "SUFFICIENT")
         self.assertEqual(e.parse_answer(b"{bad")["status"], "INVALID")
 
+    def test_invalid_analysis_cannot_hide_a_valid_captured_choice(self) -> None:
+        case = self.cases[0]
+        forged = {
+            "status": "INVALID",
+            "choice": None,
+            "probabilities": None,
+            "confidence": None,
+            "error_code": "SDK_RESPONSE_INVALID",
+            "model": e.MODEL,
+        }
+        self.assertEqual(
+            evidence.response_gap(forged, response(), case, self.question),
+            "RAW_ANALYSIS_MISMATCH",
+        )
+        forged["error_code"] = "INVALID_RESPONSE"
+        self.assertEqual(
+            evidence.response_gap(forged, response(), case, self.question),
+            "RAW_ANALYSIS_MISMATCH",
+        )
+        self.assertIsNone(evidence.response_gap(forged, b"{bad", case, self.question))
+        forged["error_code"] = "SDK_RESPONSE_INVALID"
+        self.assertIsNone(evidence.response_gap(forged, b"{bad", case, self.question))
+
     def test_group_summary_does_not_count_missing_as_correct(self) -> None:
         rows = []
         for case in self.cases:
@@ -226,20 +249,24 @@ class E013Tests(unittest.TestCase):
         self.assertIsNone(policy["retention_until"])
 
     def test_missing_key_preflight_never_constructs_sdk(self) -> None:
-        with (
-            patch.object(e, "load_freeze", return_value={}),
-            patch.object(e, "load_store_policy", return_value={}),
-            patch.object(
-                e, "load_live_authorization", return_value=("run-unique", "0" * 64)
-            ),
-            patch.object(e, "TypeSafeClient") as client,
-            patch.dict(os.environ, {"TYPESAFE_API_KEY": ""}),
-        ):
-            self.assertEqual(
-                e.run_live(Path("freeze"), Path("policy"), Path("store"), Path("auth")),
-                2,
-            )
-            client.assert_not_called()
+        with TemporaryDirectory() as temporary:
+            auth = Path(temporary) / "auth.json"
+            auth.write_bytes(b"authorized")
+            with (
+                patch.object(e, "load_freeze", return_value={}),
+                patch.object(e, "load_store_policy", return_value={}),
+                patch.object(
+                    e,
+                    "load_live_authorization",
+                    return_value=("run-unique", e.sha(auth.read_bytes())),
+                ),
+                patch.object(e, "TypeSafeClient") as client,
+                patch.dict(os.environ, {"TYPESAFE_API_KEY": ""}),
+            ):
+                self.assertEqual(
+                    e.run_live(Path("freeze"), Path("policy"), Path(temporary), auth), 2
+                )
+                client.assert_not_called()
 
     def test_live_authorization_is_committed_specific_and_one_use(self) -> None:
         with TemporaryDirectory() as temporary:
@@ -280,7 +307,9 @@ class E013Tests(unittest.TestCase):
                 patch.object(e, "load_freeze", return_value={}),
                 patch.object(e, "load_store_policy", return_value={}),
                 patch.object(
-                    e, "load_live_authorization", return_value=("run-unique", "0" * 64)
+                    e,
+                    "load_live_authorization",
+                    return_value=("run-unique", e.sha(auth.read_bytes())),
                 ),
                 patch.object(e, "TypeSafeClient") as client,
             ):
@@ -355,6 +384,21 @@ class E013Tests(unittest.TestCase):
             restricted.mkdir(parents=True)
             runner_source = b"synthetic runner source\n"
             e.write_exclusive(restricted / "runner.py", runner_source)
+            authorization = e.json_bytes(
+                {
+                    "run_id": "run-1",
+                    "authorized_by": "Owner",
+                    "scope": "one E013 75-case Context Sufficiency run",
+                    "model": e.MODEL,
+                    "freeze_attestation_sha256": e.sha(
+                        (e.ORACLE / "versions/v1/freeze-attestation.json").read_bytes()
+                    ),
+                    "store_policy_sha256": e.sha(
+                        (e.TOPIC / "local-store-policy.json").read_bytes()
+                    ),
+                }
+            )
+            e.write_exclusive(restricted / "authorization.json", authorization)
             e.write_exclusive(
                 restricted / "manifest.json",
                 e.json_bytes(
@@ -368,6 +412,8 @@ class E013Tests(unittest.TestCase):
                         "rubric_sha256": e.POLICY_HASH,
                         "runner_sha256": e.sha(runner_source),
                         "runner_source_path": "runner.py",
+                        "live_authorization_sha256": e.sha(authorization),
+                        "live_authorization_path": "authorization.json",
                         "sdk_version": e.SDK_VERSION,
                         "conditions": {
                             "timeout_seconds": 30,
@@ -376,10 +422,16 @@ class E013Tests(unittest.TestCase):
                         },
                         "store_root": str(root / "restricted"),
                         "store": {
-                            "store_id": "owner-store",
-                            "agent_access": "approved agents",
+                            **{
+                                name: e.read_object(
+                                    e.TOPIC / "local-store-policy.json"
+                                )[name]
+                                for name in ("approved_by", "store_id", "agent_access")
+                            },
                             "retention_until": None,
                             "storage_mode": "local_staging",
+                            "versioned_immutable": False,
+                            "backup_verified": False,
                         },
                     }
                 ),
@@ -555,6 +607,57 @@ class E013Tests(unittest.TestCase):
                 e.read_object(output / "manifest.json")["review_sha256"],
             )
             self.assertEqual(len(e.read_object(output / "review.json")["cases"]), 75)
+            self.assertEqual(
+                (output / "authorization.json").read_bytes(), authorization
+            )
+
+            (output / "authorization.json").write_bytes(authorization + b" ")
+            self.assertIn(
+                "AUTHORIZATION_HASH_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "authorization.json").write_bytes(authorization)
+            missing_authorization = e.read_object(output / "manifest.json")
+            del missing_authorization["live_authorization_sha256"]
+            del missing_authorization["live_authorization_path"]
+            (output / "manifest.json").write_bytes(e.json_bytes(missing_authorization))
+            self.assertIn(
+                "AUTHORIZATION_MISSING",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "manifest.json").write_bytes(public_manifest)
+
+            altered_store = e.read_object(restricted / "manifest.json")
+            original_store_manifest = (restricted / "manifest.json").read_bytes()
+            altered_store["store"]["backup_verified"] = True
+            (restricted / "manifest.json").write_bytes(e.json_bytes(altered_store))
+            self.assertIn(
+                "STORE_POLICY_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_local_run(restricted)["gaps"]
+                },
+            )
+            (restricted / "manifest.json").write_bytes(original_store_manifest)
+
+            changed_summary = e.read_object(restricted / "summary.json")
+            original_summary = (restricted / "summary.json").read_bytes()
+            changed_summary["run_id"] = "other-run"
+            (restricted / "summary.json").write_bytes(e.json_bytes(changed_summary))
+            self.assertIn(
+                "SUMMARY_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_local_run(restricted)["gaps"]
+                },
+            )
+            (restricted / "summary.json").write_bytes(original_summary)
 
             # The local publication gate needs the emitted request for each response.
             missing_request = [
@@ -579,6 +682,14 @@ class E013Tests(unittest.TestCase):
                 b"".join(e.json_bytes(row) for row in unknown)
             )
             with self.assertRaisesRegex(e.ContractError, "INVALID_ANALYSIS_STATUS"):
+                evidence.verify_evidence(output, restricted)
+            (output / "analysis.jsonl").write_bytes(public_rows)
+            malformed = [json.loads(line) for line in public_rows.splitlines()]
+            malformed[0]["group"] = []
+            (output / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in malformed)
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_ANALYSIS_KEY"):
                 evidence.verify_evidence(output, restricted)
             (output / "analysis.jsonl").write_bytes(public_rows)
 
