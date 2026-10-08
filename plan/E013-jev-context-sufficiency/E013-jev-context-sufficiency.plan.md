@@ -37,9 +37,9 @@
 
 ## Status / Allowed Transitions
 
-- Current: `creator-in-progress`; implementation and offline verification are being prepared in the feature worktree. Formal independent review has not yet approved this repository plan or code.
+- Current: Draft PR #13 is open. The independent v1 fixture review and freeze are recorded; one separately authorized live run has completed and its reviewed Git evidence is prepared. Formal independent technical review of this E013 plan and implementation remains pending.
 - Allowed: `planned` → `creator-in-progress` → `review-ready` → `reviewer-in-progress` → `approved|needs-rework`; `needs-rework` → `creator-in-progress`; `approved` → `publish-in-progress` → `pr-open` → `merged`.
-- Live execution is a separate human boundary requiring v1 independent fixture review/freeze, verified local staging policy, and explicit live instruction. Human review follows Draft PR; merge/release is excluded from this handoff.
+- The Owner separately authorized the single `20261008T035450Z-010364d7` live run after fixture freeze and local staging preflight. Another run requires another explicit instruction. Human review follows Draft PR; merge/release is excluded from this handoff.
 
 ## Artifact Paths
 
@@ -72,7 +72,7 @@ The Owner-selected local staging root `/Users/andrew/coami-evidence/E013` uses `
 - [X] 2. Capture exact emitted request and successful response bytes before SDK parsing; retain invalid responses and classify failures without error-body exposure.
 - [X] 3. Add per-case local run rows, descriptive group report, review-gated Git export, and clean-checkout verification.
 - [ ] 4. Complete offline tests, validators, static checks and evidence record; obtain independent technical review.
-- [ ] 5. After separate explicit live authorization, run 75 cases once and reconcile raw hashes and group counts. Freeze and local store policy are recorded; live authorization remains pending.
+- [X] 5. Owner authorized the single run `20261008T035450Z-010364d7`; 75/75 received bodies and analysis rows passed local and reviewed-export hash verification, with research 40, holdout 20, v0 15.
 
 ## Validation / Acceptance Checks
 
@@ -97,4 +97,4 @@ Draft PR stops for human review. No merge, README/VERSION change, tag, release n
 ## Open Questions / Unresolved Items
 
 - Owner has selected local staging only. A backed-up immutable restricted archive and retention period remain undecided; no such guarantee is claimed for restricted-only objects.
-- Owner acceptance, independent fixture review and matching freeze are complete for exact v1-draft-004. No live run until separate Owner authorization exists.
+- Owner acceptance, independent fixture review and matching freeze are complete for exact v1-draft-004. The separate Owner authorization was used for one 75-case run; no further live run is authorized.

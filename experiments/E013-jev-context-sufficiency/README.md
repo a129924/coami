@@ -4,7 +4,7 @@ E013 evaluates the frozen 60-case v1 research/holdout benchmark and the frozen 1
 
 ## Current gate
 
-The exact `v1-draft-004` 60-case snapshot has Owner human acceptance and an independent fixture verdict recorded in its `review.md`. The matching snapshot is **FROZEN** as `context_sufficiency_v1`; [freeze-attestation.json](../../evaluation/context_sufficiency/versions/v1/freeze-attestation.json) binds the review and three source files by SHA-256. No live Jev run is authorized yet. The Owner selected local E013 storage, but that directory is only local staging until reviewed evidence is committed and pushed.
+The exact `v1-draft-004` 60-case snapshot has Owner human acceptance and an independent fixture verdict recorded in its `review.md`. The matching snapshot is **FROZEN** as `context_sufficiency_v1`; [freeze-attestation.json](../../evaluation/context_sufficiency/versions/v1/freeze-attestation.json) binds the review and three source files by SHA-256. The Owner separately authorized one live 75-case run on 2026-10-08: `20261008T035450Z-010364d7`. Its local bytes passed integrity and per-case safety review; the reviewed Git export is under [evidence/runs/20261008T035450Z-010364d7](evidence/runs/20261008T035450Z-010364d7). The local directory alone has no verified backup or immutability.
 
 ## Inputs and conditions
 
@@ -30,18 +30,19 @@ The tests use fake HTTP transport and synthetic responses. They do not measure J
 
 ## Future live execution and evidence review
 
-Only after the Owner separately authorizes a live run and its remaining preflight inputs are ready:
+The following command was used for the separately authorized run, with the existing E012 `.env` loaded read-only in place of an E013 credential copy. It is not a standing authorization for another run:
 
 ```sh
-uv run --quiet --locked --project experiments/E013-jev-context-sufficiency \
-  --env-file experiments/E013-jev-context-sufficiency/.env \
+env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u RUST_LOG \
+  uv run --quiet --locked --no-sync --project experiments/E013-jev-context-sufficiency \
+  --env-file /Users/andrew/code/python/coami/experiments/E012-jev-text-policy/.env \
   python experiments/E013-jev-context-sufficiency/jev_context.py --live \
   --freeze-attestation evaluation/context_sufficiency/versions/v1/freeze-attestation.json \
   --store-policy experiments/E013-jev-context-sufficiency/local-store-policy.json \
   --store-root /Users/andrew/coami-evidence/E013
 ```
 
-`.env` is an Owner-maintained, Git-ignored local credential file. Never print, hash, or commit it. The freeze attestation path above is tracked and verified; the local store path is approved for staging, not backed-up archival storage. The example command is documentation, not permission to execute it now.
+`.env` is an Owner-maintained, Git-ignored local credential file. Never print, hash, or commit it. The freeze attestation path above is tracked and verified; the local store path is approved for staging, not backed-up archival storage. Any later live run needs a new explicit Owner instruction.
 
 The runner writes an exclusive `runs/<run_id>/` in the local store: `manifest.json`, `events.jsonl`, `analysis.jsonl`, `summary.json`, exact emitted request bytes, and exact 2xx response bytes. Each body is keyed by `(run_id, group, case_id)` and has a SHA-256. A failed or interrupted run remains incomplete and is never overwritten or automatically resumed. `ERROR`, `UNKNOWN`, and `NOT_RUN` do not count as correct model predictions. Verify the local bytes after each run with `--verify-local-run --run-dir /Users/andrew/coami-evidence/E013/runs/<run_id>`; a clean verification is a point-in-time integrity check, not a backup.
 
