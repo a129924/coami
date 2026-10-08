@@ -273,6 +273,9 @@ class E013Tests(unittest.TestCase):
                 ):
                     e.load_live_authorization(auth, freeze, policy, root)
             (root / "runs" / "run-unique").mkdir(parents=True)
+            (root / "authorization-uses").mkdir()
+            (root / "authorization-uses" / "run-unique.json").write_bytes(b"used")
+            (root / "runs" / "run-unique").rmdir()
             with (
                 patch.object(e, "load_freeze", return_value={}),
                 patch.object(e, "load_store_policy", return_value={}),
@@ -350,6 +353,8 @@ class E013Tests(unittest.TestCase):
             root = Path(temporary)
             restricted = root / "restricted" / "runs" / "run-1"
             restricted.mkdir(parents=True)
+            runner_source = b"synthetic runner source\n"
+            e.write_exclusive(restricted / "runner.py", runner_source)
             e.write_exclusive(
                 restricted / "manifest.json",
                 e.json_bytes(
@@ -361,7 +366,14 @@ class E013Tests(unittest.TestCase):
                         ),
                         "v0_hashes": e.V0_HASHES,
                         "rubric_sha256": e.POLICY_HASH,
-                        "runner_sha256": "test-runner",
+                        "runner_sha256": e.sha(runner_source),
+                        "runner_source_path": "runner.py",
+                        "sdk_version": e.SDK_VERSION,
+                        "conditions": {
+                            "timeout_seconds": 30,
+                            "retries": 0,
+                            "order": list(e.GROUPS),
+                        },
                         "store_root": str(root / "restricted"),
                         "store": {
                             "store_id": "owner-store",
@@ -384,6 +396,25 @@ class E013Tests(unittest.TestCase):
                 )
                 if body:
                     e.write_exclusive(restricted / locator, body)
+                    request = e.json_bytes(
+                        {
+                            "model": e.MODEL,
+                            "state": case["state"],
+                            "questions": {
+                                "context_sufficiency": {
+                                    "type": "choice",
+                                    **self.question,
+                                }
+                            },
+                        }
+                    )
+                    e.write_exclusive(
+                        restricted
+                        / "requests"
+                        / case["group"]
+                        / f"{case['case_id']}.body",
+                        request,
+                    )
                 row = {
                     "run_id": "run-1",
                     "ordinal": index + 1,
@@ -392,7 +423,7 @@ class E013Tests(unittest.TestCase):
                     "expected": case["expected"],
                     "model": e.MODEL,
                     "rubric_sha256": e.POLICY_HASH,
-                    "runner_sha256": "test-runner",
+                    "runner_sha256": e.sha(runner_source),
                     "case_version": e.V0_HASHES
                     if case["group"] == "v0"
                     else e.load_freeze(
@@ -404,6 +435,8 @@ class E013Tests(unittest.TestCase):
                     if body
                     else None,
                     "confidence": 0.7 if body else None,
+                    "error_code": None,
+                    "request_sha256": e.sha(request) if body else None,
                     "raw_sha256": e.sha(body) if body else None,
                     "raw_locator": locator,
                 }
@@ -514,6 +547,89 @@ class E013Tests(unittest.TestCase):
             public_manifest = (output / "manifest.json").read_bytes()
             summary_bytes = (output / "summary.json").read_bytes()
             restricted_rows = (restricted / "analysis.jsonl").read_bytes()
+            self.assertEqual(
+                e.sha((output / "runner.py").read_bytes()), e.sha(runner_source)
+            )
+            self.assertEqual(
+                e.sha((output / "review.json").read_bytes()),
+                e.read_object(output / "manifest.json")["review_sha256"],
+            )
+            self.assertEqual(len(e.read_object(output / "review.json")["cases"]), 75)
+
+            # The local publication gate needs the emitted request for each response.
+            missing_request = [
+                json.loads(line) for line in restricted_rows.splitlines()
+            ]
+            missing_request[0]["request_sha256"] = None
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in missing_request)
+            )
+            self.assertIn(
+                "REQUEST_BODY_MISSING",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_local_run(restricted)["gaps"]
+                },
+            )
+            (restricted / "analysis.jsonl").write_bytes(restricted_rows)
+
+            unknown = [json.loads(line) for line in public_rows.splitlines()]
+            unknown[0]["status"] = "SURPRISE"
+            (output / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in unknown)
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_ANALYSIS_STATUS"):
+                evidence.verify_evidence(output, restricted)
+            (output / "analysis.jsonl").write_bytes(public_rows)
+
+            altered = e.read_object(output / "manifest.json")
+            altered["conditions"]["retries"] = 1
+            (output / "manifest.json").write_bytes(e.json_bytes(altered))
+            self.assertIn(
+                "RUN_CONTRACT_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "manifest.json").write_bytes(public_manifest)
+
+            altered = e.read_object(output / "manifest.json")
+            del altered["cases"][0]["analysis_sha256"]
+            (output / "manifest.json").write_bytes(e.json_bytes(altered))
+            with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_MANIFEST"):
+                evidence.verify_evidence(output, restricted)
+            (output / "manifest.json").write_bytes(public_manifest)
+
+            review_bytes = (output / "review.json").read_bytes()
+            (output / "review.json").write_bytes(b"tampered")
+            self.assertIn(
+                "REVIEW_MISSING",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "review.json").write_bytes(review_bytes + b" ")
+            self.assertIn(
+                "REVIEW_HASH_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "review.json").write_bytes(review_bytes)
+            self.assertEqual(evidence.verify_evidence(output, restricted)["gaps"], [])
+
+            (output / "runner.py").write_bytes(b"changed runner")
+            self.assertIn(
+                "RUNNER_SOURCE_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "runner.py").write_bytes(runner_source)
             raw_file = (
                 output
                 / "raw"
@@ -621,9 +737,17 @@ class E013Tests(unittest.TestCase):
             # Even INVALID 2xx observations must carry the captured body.
             altered = e.read_object(output / "manifest.json")
             altered["cases"][0]["raw_sha256"] = None
-            (output / "manifest.json").write_bytes(e.json_bytes(altered))
+            altered["cases"][0]["raw_public_path"] = None
+            altered["cases"][0]["raw_restricted_path"] = None
             forged = [json.loads(line) for line in public_rows.splitlines()]
             forged[0]["status"] = "INVALID"
+            forged[0]["choice"] = None
+            forged[0]["probabilities"] = None
+            forged[0]["confidence"] = None
+            forged[0]["error_code"] = "INVALID_RESPONSE"
+            forged[0]["raw_sha256"] = None
+            altered["cases"][0]["analysis_sha256"] = e.sha(e.json_bytes(forged[0]))
+            (output / "manifest.json").write_bytes(e.json_bytes(altered))
             (output / "analysis.jsonl").write_bytes(
                 b"".join(e.json_bytes(row) for row in forged)
             )

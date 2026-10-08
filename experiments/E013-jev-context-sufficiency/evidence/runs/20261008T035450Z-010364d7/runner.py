@@ -17,6 +17,7 @@ import subprocess
 import sys
 import tempfile
 from typing import Any
+from uuid import uuid4
 
 import httpx2
 from typesafe_sdk import (
@@ -185,44 +186,6 @@ def load_store_policy(path: Path, store: Path, root: Path = ROOT) -> dict[str, A
         "backup_verified": False,
         "retention_until": None,
     }
-
-
-def load_live_authorization(
-    path: Path, attestation: Path, store_policy: Path, root: Path = ROOT
-) -> tuple[str, str]:
-    """Require a committed, run-specific Owner record before any network call.
-
-    The record is auditable, but a Git commit is not proof of the signer's identity.
-    """
-    try:
-        relative = path.resolve().relative_to(root.resolve())
-        committed = subprocess.run(
-            ["git", "show", f"HEAD:{relative.as_posix()}"],
-            cwd=root,
-            capture_output=True,
-            check=True,
-        ).stdout
-        current = path.read_bytes()
-        document = json.loads(current)
-        if committed != current or not isinstance(document, dict):
-            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
-        run_id = document.get("run_id")
-        if (
-            not isinstance(run_id, str)
-            or not CASE_ID.fullmatch(run_id)
-            or document.get("authorized_by") != "Owner"
-            or document.get("scope") != "one E013 75-case Context Sufficiency run"
-            or document.get("model") != MODEL
-            or document.get("freeze_attestation_sha256")
-            != sha(attestation.read_bytes())
-            or document.get("store_policy_sha256") != sha(store_policy.read_bytes())
-        ):
-            raise ContractError("LIVE_AUTHORIZATION_MISMATCH")
-        return run_id, sha(current)
-    except (OSError, ValueError, subprocess.CalledProcessError) as exc:
-        if isinstance(exc, ContractError):
-            raise
-        raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED") from exc
 
 
 def load_cases(root: Path = ROOT) -> list[dict[str, Any]]:
@@ -533,25 +496,13 @@ def candidate_errors(
 
 
 def run_live(
-    attestation: Path,
-    store_policy: Path,
-    store: Path,
-    authorization: Path | None = None,
-    root: Path = ROOT,
+    attestation: Path, store_policy: Path, store: Path, root: Path = ROOT
 ) -> int:
     """A live run is unavailable until the exact freeze and store are approved."""
     logging.getLogger("typesafe_sdk").disabled = True
     try:
         freeze_hashes = load_freeze(attestation, root)
         policy_metadata = load_store_policy(store_policy, store, root)
-        if authorization is None:
-            raise ContractError("MISSING_LIVE_AUTHORIZATION")
-        run_id, authorization_sha256 = load_live_authorization(
-            authorization, attestation, store_policy, root
-        )
-        use_marker = store / "authorization-uses" / f"{run_id}.json"
-        if use_marker.exists() or (store / "runs" / run_id).exists():
-            raise ContractError("LIVE_AUTHORIZATION_ALREADY_USED")
         if not os.environ.get("TYPESAFE_API_KEY", "").strip():
             raise ContractError("MISSING_KEY")
         if version("typesafe-sdk") != SDK_VERSION:
@@ -559,24 +510,14 @@ def run_live(
         cases = load_cases(root)
         validate_oracles(root)
         question = load_question(root)
-        runner_source = Path(__file__).read_bytes()
-        runner_hash = sha(runner_source)
+        runner_hash = sha(Path(__file__).read_bytes())
         policy_hash = POLICY_HASH
     except (ContractError, OSError, ValueError) as exc:
         code = exc.code if isinstance(exc, ContractError) else "PREFLIGHT_FAILED"
         print(f"E013 BLOCKED {code}", flush=True)
         return 2
-    # This marker survives removal of the mutable runs/<run_id> directory.
-    # It is still owner-mutable local state, not an immutable authorization log.
-    write_exclusive(
-        use_marker,
-        json_bytes(
-            {
-                "run_id": run_id,
-                "authorization_sha256": authorization_sha256,
-                "used_utc": utc(),
-            }
-        ),
+    run_id = (
+        datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
     )
     run_dir = store / "runs" / run_id
     run_dir.mkdir(mode=0o700, parents=True, exist_ok=False)
@@ -589,15 +530,12 @@ def run_live(
         "v0_hashes": V0_HASHES,
         "rubric_sha256": policy_hash,
         "runner_sha256": runner_hash,
-        "runner_source_path": "runner.py",
-        "live_authorization_sha256": authorization_sha256,
         "store": policy_metadata,
         "store_root": str(store.resolve()),
         "conditions": {"timeout_seconds": 30, "retries": 0, "order": list(GROUPS)},
         "publication": "local-unbacked-until-reviewed-git-export",
     }
     write_exclusive(run_dir / "manifest.json", json_bytes(manifest))
-    write_exclusive(run_dir / "runner.py", runner_source)
     rows: list[dict[str, Any]] = []
     stopped = False
     for index, case in enumerate(cases):
@@ -702,7 +640,6 @@ def main() -> int:
     modes.add_argument("--verify-local-run", action="store_true")
     parser.add_argument("--freeze-attestation", type=Path)
     parser.add_argument("--store-policy", type=Path)
-    parser.add_argument("--live-authorization", type=Path)
     parser.add_argument("--store-root", type=Path)
     parser.add_argument("--run-dir", type=Path)
     parser.add_argument("--approval", type=Path)
@@ -746,17 +683,11 @@ def main() -> int:
         args.freeze_attestation is None
         or args.store_policy is None
         or args.store_root is None
-        or args.live_authorization is None
     ):
         print("E013 BLOCKED MISSING_PREFLIGHT_INPUT", flush=True)
         return 2
     try:
-        return run_live(
-            args.freeze_attestation,
-            args.store_policy,
-            args.store_root,
-            args.live_authorization,
-        )
+        return run_live(args.freeze_attestation, args.store_policy, args.store_root)
     except (ContractError, OSError, ValueError):
         print("E013 BLOCKED EVIDENCE_WRITE_FAILED", flush=True)
         return 2

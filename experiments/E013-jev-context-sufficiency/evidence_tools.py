@@ -4,10 +4,14 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import re
 import tempfile
 from typing import Any
 
 import jev_context as e
+
+HASH = re.compile(r"[0-9a-f]{64}\Z")
+STATUSES = {"VALID", "INVALID", "ERROR", "UNKNOWN", "NOT_RUN"}
 
 
 def bounded_path(root: Path, locator: str) -> Path:
@@ -39,6 +43,40 @@ def read_rows(path: Path) -> list[dict[str, Any]]:
         for row in rows
     ):
         raise e.ContractError("INVALID_ANALYSIS_KEY")
+    for row in rows:
+        status = row.get("status")
+        if status not in STATUSES:
+            raise e.ContractError("INVALID_ANALYSIS_STATUS")
+        if row.get("analysis_restricted") is True:
+            continue
+        if any(
+            row.get(field) is not None
+            and (not isinstance(row[field], str) or not HASH.fullmatch(row[field]))
+            for field in ("request_sha256", "raw_sha256")
+        ):
+            raise e.ContractError("INVALID_ANALYSIS_HASH")
+        if status == "VALID" and (
+            row.get("choice") not in e.CHOICES
+            or not isinstance(row.get("probabilities"), dict)
+            or type(row.get("confidence")) not in (int, float)
+            or row.get("error_code") is not None
+        ):
+            raise e.ContractError("INVALID_ANALYSIS_STATUS_FIELDS")
+        if status != "VALID" and any(
+            row.get(field) is not None
+            for field in ("choice", "probabilities", "confidence")
+        ):
+            raise e.ContractError("INVALID_ANALYSIS_STATUS_FIELDS")
+        if status == "NOT_RUN" and any(
+            row.get(field) is not None for field in ("request_sha256", "raw_sha256")
+        ):
+            raise e.ContractError("INVALID_ANALYSIS_STATUS_FIELDS")
+        if status in ("INVALID", "ERROR", "UNKNOWN") and not isinstance(
+            row.get("error_code"), str
+        ):
+            raise e.ContractError("INVALID_ANALYSIS_STATUS_FIELDS")
+        if status == "NOT_RUN" and row.get("error_code") is not None:
+            raise e.ContractError("INVALID_ANALYSIS_STATUS_FIELDS")
     return rows
 
 
@@ -74,6 +112,9 @@ def inventory_gaps(
     if (
         manifest.get("model") != e.MODEL
         or manifest.get("rubric_sha256") != e.POLICY_HASH
+        or manifest.get("sdk_version") != e.SDK_VERSION
+        or manifest.get("conditions")
+        != {"timeout_seconds": 30, "retries": 0, "order": list(e.GROUPS)}
     ):
         return [{"reason": "RUN_CONTRACT_MISMATCH"}]
     try:
@@ -148,6 +189,23 @@ def response_gap(row: dict[str, Any], raw: bytes) -> str | None:
     return None
 
 
+def request_gap(
+    body: bytes, case: dict[str, Any], question: dict[str, Any]
+) -> str | None:
+    try:
+        actual = json.loads(body)
+    except (ValueError, UnicodeDecodeError):
+        return "REQUEST_CONTENT_MISMATCH"
+    expected = {
+        "model": e.MODEL,
+        "state": case["state"],
+        "questions": {"context_sufficiency": {"type": "choice", **question}},
+    }
+    if actual != expected:
+        return "REQUEST_CONTENT_MISMATCH"
+    return None
+
+
 def verify_local_run(run_dir: Path) -> dict[str, Any]:
     """Verify current local bytes; this does not establish backup or immutability."""
     manifest = e.read_object(run_dir / "manifest.json")
@@ -160,11 +218,30 @@ def verify_local_run(run_dir: Path) -> dict[str, Any]:
     ):
         raise e.ContractError("LOCAL_RUN_MISMATCH")
     rows = read_rows(run_dir / "analysis.jsonl")
+    if any(row.get("analysis_restricted") is True for row in rows):
+        raise e.ContractError("LOCAL_ANALYSIS_RESTRICTED")
     if any(row["run_id"] != run_id for row in rows):
         raise e.ContractError("RUN_ID_MISMATCH")
     gaps = inventory_gaps(manifest, rows)
+    cases = {(case["group"], case["case_id"]): case for case in e.load_cases()}
+    question = e.load_question()
+    source_locator = manifest.get("runner_source_path")
+    if source_locator is not None:
+        try:
+            source_hash = e.sha(bounded_path(run_dir, source_locator).read_bytes())
+        except (OSError, TypeError, e.ContractError):
+            source_hash = None
+        if source_hash != manifest.get("runner_sha256"):
+            gaps.append({"reason": "RUNNER_SOURCE_MISMATCH"})
     for row in rows:
         group, case_id = row["group"], row["case_id"]
+        if (
+            row.get("status") in ("VALID", "INVALID")
+            and row.get("request_sha256") is None
+        ):
+            gaps.append(
+                {"group": group, "case_id": case_id, "reason": "REQUEST_BODY_MISSING"}
+            )
         if row.get("status") in ("VALID", "INVALID") and row.get("raw_sha256") is None:
             gaps.append(
                 {"group": group, "case_id": case_id, "reason": "CAPTURED_BODY_MISSING"}
@@ -200,6 +277,12 @@ def verify_local_run(run_dir: Path) -> dict[str, Any]:
                 )
             elif field == "raw_sha256" and row.get("status") in ("VALID", "INVALID"):
                 mismatch = response_gap(row, body)
+                if mismatch:
+                    gaps.append(
+                        {"group": group, "case_id": case_id, "reason": mismatch}
+                    )
+            elif field == "request_sha256" and (group, case_id) in cases:
+                mismatch = request_gap(body, cases[(group, case_id)], question)
                 if mismatch:
                     gaps.append(
                         {"group": group, "case_id": case_id, "reason": mismatch}
@@ -305,6 +388,37 @@ def _write_publication(
     review: dict[tuple[str, str], dict[str, Any]],
 ) -> None:
     run_id = manifest["run_id"]
+    runner_path = manifest.get("runner_source_path")
+    if runner_path != "runner.py":
+        raise e.ContractError("RUNNER_SOURCE_MISSING")
+    runner_source = bounded_path(run_dir, runner_path).read_bytes()
+    if e.sha(runner_source) != manifest.get("runner_sha256"):
+        raise e.ContractError("RUNNER_SOURCE_MISMATCH")
+    e.write_exclusive(output / "runner.py", runner_source)
+    public_review = {
+        "run_id": run_id,
+        "approved_by": approval["approved_by"],
+        "summary_public": True,
+        "summary_safety_checked": True,
+        "summary_sha256": approval["summary_sha256"],
+        "cases": [
+            {
+                field: decision[field]
+                for field in (
+                    "group",
+                    "case_id",
+                    "safety_checked",
+                    "analysis_public",
+                    "raw_public",
+                    "analysis_sha256",
+                    "raw_sha256",
+                )
+            }
+            for decision in approval["cases"]
+        ],
+    }
+    review_bytes = e.json_bytes(public_review)
+    e.write_exclusive(output / "review.json", review_bytes)
     public_rows = []
     locators = []
     for row in rows:
@@ -368,6 +482,8 @@ def _write_publication(
             "restricted_access": manifest["store"]["agent_access"],
             "restricted_retention_until": manifest["store"]["retention_until"],
             "summary_sha256": approval["summary_sha256"],
+            "review_sha256": e.sha(review_bytes),
+            "runner_public_path": "runner.py",
         }
     )
     e.write_exclusive(output / "manifest.json", e.json_bytes(public_manifest))
@@ -400,6 +516,38 @@ def verify_evidence(
         or item.get("group") not in e.GROUPS
         or not isinstance(item.get("case_id"), str)
         or not e.CASE_ID.fullmatch(item["case_id"])
+        or not isinstance(item.get("analysis_sha256"), str)
+        or not HASH.fullmatch(item["analysis_sha256"])
+        or (
+            item.get("raw_sha256") is not None
+            and (
+                not isinstance(item["raw_sha256"], str)
+                or not HASH.fullmatch(item["raw_sha256"])
+            )
+        )
+        or type(item.get("analysis_restricted")) is not bool
+        or item.get("restricted_run_version") != manifest.get("run_id")
+        or not all(
+            field in item for field in ("raw_public_path", "raw_restricted_path")
+        )
+        or any(
+            value is not None and not isinstance(value, str)
+            for value in (item["raw_public_path"], item["raw_restricted_path"])
+        )
+        or (
+            item.get("raw_sha256") is None
+            and (
+                item["raw_public_path"] is not None
+                or item["raw_restricted_path"] is not None
+            )
+        )
+        or (
+            item.get("raw_sha256") is not None
+            and (
+                (item["raw_public_path"] is None)
+                == (item["raw_restricted_path"] is None)
+            )
+        )
         for item in locators
     ):
         raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
@@ -409,6 +557,47 @@ def verify_evidence(
     }:
         raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
     gaps = []
+    try:
+        runner = bounded_path(evidence_run, manifest["runner_public_path"]).read_bytes()
+        if e.sha(runner) != manifest.get("runner_sha256"):
+            gaps.append({"reason": "RUNNER_SOURCE_MISMATCH"})
+    except (KeyError, OSError, TypeError, e.ContractError):
+        gaps.append({"reason": "RUNNER_SOURCE_MISSING"})
+    try:
+        review_bytes = (evidence_run / "review.json").read_bytes()
+        review = e.read_object(evidence_run / "review.json")
+        if e.sha(review_bytes) != manifest.get("review_sha256"):
+            gaps.append({"reason": "REVIEW_HASH_MISMATCH"})
+        decisions = review.get("cases")
+        if (
+            review.get("run_id") != manifest.get("run_id")
+            or review.get("summary_public") is not True
+            or review.get("summary_safety_checked") is not True
+            or review.get("summary_sha256") != manifest.get("summary_sha256")
+            or not isinstance(decisions, list)
+            or len(decisions) != 75
+        ):
+            gaps.append({"reason": "REVIEW_MISMATCH"})
+        else:
+            approved = {
+                (decision.get("group"), decision.get("case_id")): decision
+                for decision in decisions
+                if isinstance(decision, dict)
+            }
+            if len(approved) != 75 or any(
+                (key := (item["group"], item["case_id"])) not in approved
+                or approved[key].get("safety_checked") is not True
+                or approved[key].get("analysis_sha256") != item["analysis_sha256"]
+                or approved[key].get("raw_sha256") != item["raw_sha256"]
+                or approved[key].get("analysis_public")
+                is not (not item["analysis_restricted"])
+                or approved[key].get("raw_public")
+                is not (item["raw_public_path"] is not None)
+                for item in locators
+            ):
+                gaps.append({"reason": "REVIEW_MISMATCH"})
+    except (OSError, e.ContractError):
+        gaps.append({"reason": "REVIEW_MISSING"})
     full_rows = []
     restricted = None
     if restricted_run is not None:
@@ -463,6 +652,14 @@ def verify_evidence(
         if full.get("run_id") != manifest.get("run_id"):
             gaps.append(
                 {"group": key[0], "case_id": key[1], "reason": "RUN_ID_MISMATCH"}
+            )
+            continue
+        if (
+            full.get("status") in ("VALID", "INVALID")
+            and full.get("request_sha256") is None
+        ):
+            gaps.append(
+                {"group": key[0], "case_id": key[1], "reason": "REQUEST_BODY_MISSING"}
             )
             continue
         raw_hash = item["raw_sha256"]
