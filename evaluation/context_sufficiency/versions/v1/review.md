@@ -1,6 +1,17 @@
 # context_sufficiency_v1 — Draft review and evidence
 
-Current：`v1-draft-004` 的 60 筆答案已獲 Owner 親自人工審查並接受；獨立案例語意審查尚未完成，**NOT FROZEN**。下方逐案 `pending` 為先前 draft packet 的歷史標記；本節的 Owner 接受紀錄適用於全部 60 筆，並不代替獨立審查紀錄。
+Current：`v1-draft-004` 的 60 筆答案已獲 Owner 親自人工審查並接受，且獨立 fixture review 已核准；確切 snapshot **FROZEN** 為 `context_sufficiency_v1`。下方逐案 `pending` 為先前 draft packet 的歷史標記。
+
+## Independent fixture review and freeze — v1-draft-004
+
+- 獨立 Reviewer：`/root/v1_fixture_reviewer`；2026-10-08T03:32:41Z 記錄 verdict。Reviewer 唯讀審查，未建立案例、修改 oracle 或呼叫 Jev；與 Owner 人工接受及先前 bounded 技術審查分開。
+- 程序：先以中性編號只讀全部 60 案的 background／conversation／utterance，在看 expected、candidate 與 rationale 前盲判 Context Sufficiency。初判與 oracle 56/60 一致；再讀全部 60 筆 oracle、candidate、rationale、policy／Action 和固定 slot 表，對四筆差異做逐案複核。
+- 初判差異：`cs_v1_036` 的明確選擇支持自己作畫；`cs_v1_054` 最新的「故事也不要」表明拒絕；`cs_v1_055` 最新的「先看媽媽那張」建立順序；`cs_v1_058` 最新的「留在窗邊…先看外面」建立窗邊觀看。Reviewer 複核後接受四筆原 oracle 判斷，最終 60/60 可接受；未發現剩餘語意阻擋。
+- Reviewer 核對全部 60 筆 candidate／rationale：SUFFICIENT 的候選依據可見文字確認主要意思，INSUFFICIENT 的候選區分實質不同的可能意思。README 固定 slot 表與 60 筆 category／topic／group／split 全部相符。
+- 重新計算三份 SHA-256：README `b230ca3f6dea08d62ca0d0facb6374255649bd620913bac81803a73698d9a898`；dataset `d2dc258088caf4f9ee7f0f44f7123adb96ee50a5a71a805532d1857d7a16c3f9`；validator `b563e47b656d55107b98f7e352d25884ed05d9cb8e17327aeddeb1e89a630b4f`。獨立執行 validator exit 0：60 案、40 research／20 holdout、35 S／25 I、12 topics／54 groups。
+- 原始 verdict：`{"verdict":"approved","blocking_issues":[],"snapshot":"v1-draft-004","reviewer":"/root/v1_fixture_reviewer"}`。限制：此為人工語意 oracle 審查，不能證明 Jev 表現或產品安全。
+- Matching gate 核對：Owner 接受同一 004 snapshot，獨立審查三份 hash 相同，validator 通過，v0 凍結三份 hash 未變；未改動 v1 案例內容。Freeze 決定時間：2026-10-08T03:33:27Z；版本 `context_sufficiency_v1`。Runner 的 [freeze-attestation.json](freeze-attestation.json) 另以本文件完整 SHA-256 綁定本紀錄與三份來源檔。
+- 此 freeze 只開啟 E013 的 fixture gate；Jev live run 仍需另行明確授權，E013 模型分數／通過門檻均未決定。
 
 ## Owner acceptance of exact v1-draft-004 snapshot
 
@@ -2704,11 +2715,11 @@ Owner：pending；independent fixture review：pending。
 | Local structure／CLI／slot checks | 004: 166 checks PASS; not oracle approval |
 | Independent technical draft review | 001/002/003 historical; 004 bounded review approved, no blocker; not fixture verdict |
 | Owner full60 exact-snapshot acceptance | accepted；本文件頂部記錄本次 Owner 訊息及 004 三份 SHA-256 |
-| Independent fixture review after Owner | pending；Owner 釐清由本人進行人工 review，沒有獨立 fixture verdict |
-| Matching-evidence sufficiency for freeze | pending |
-| Freeze | NOT FROZEN |
+| Independent fixture review after Owner | approved；`/root/v1_fixture_reviewer` 對 004 完成 60 案盲判／複核，無 blocking issues，詳見文件頂部 |
+| Matching-evidence sufficiency for freeze | Owner、獨立 Reviewer、validator 均指向 004 三份相同 SHA-256；v0 hash 未變 |
+| Freeze | FROZEN；`context_sufficiency_v1`，2026-10-08T03:33:27Z |
 
-Owner 接受已按本次訊息記錄。獨立 fixture Reviewer 應先抽三可見欄以中性編號判斷，再讀 oracle；Reviewer verdict／blocking issues 須對 matching snapshot 並記實際程序。找到或補齊可核對的獨立審查、matching gates 齊全且完成核對後，才可原樣記 freeze。技術 draft review 和 commit/push 不跳過這個順序。
+Owner 接受與獨立 fixture Reviewer verdict 已按 matching snapshot 記錄。先盲判三個可見欄位、再讀 oracle 的程序、差異複核及 gate 核對詳見文件頂部；技術 draft review 和 commit/push 未代替這些證據。
 
 ## Revision and delivery history
 
