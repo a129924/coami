@@ -42,10 +42,10 @@ env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u RUST_LOG \
   --store-root /Users/andrew/coami-evidence/E013
 ```
 
-For a separately authorized future run, use the committed one-run record and let `uv run --locked` synchronize the full project environment **before** Python can consume its authorization marker. Clear `UV_NO_SYNC` so an inherited setting cannot skip that sync:
+For a separately authorized future run, use the committed one-run record and let `uv run --locked` synchronize the full project environment **before** Python can consume its authorization marker. Clear `UV_NO_SYNC` and `PYTHONPATH` so inherited settings cannot skip synchronization or shadow the imported SDK:
 
 ```sh
-env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u RUST_LOG \
+env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u PYTHONPATH -u RUST_LOG \
   uv run --quiet --locked --project experiments/E013-jev-context-sufficiency \
   --env-file /Users/andrew/code/python/coami/experiments/E012-jev-text-policy/.env \
   python experiments/E013-jev-context-sufficiency/jev_context.py --live \

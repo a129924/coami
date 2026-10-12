@@ -190,7 +190,7 @@ def read_review(path: Path) -> dict[str, Any]:
         raise e.ContractError("INVALID_PUBLICATION_REVIEW") from exc
     if not isinstance(review, dict):
         raise e.ContractError("INVALID_PUBLICATION_REVIEW")
-    historical = review.get("run_id") == PRE_RECORD_RUN_ID and "method" in review
+    historical = review.get("run_id") == PRE_RECORD_RUN_ID
     if historical:
         try:
             timestamp = datetime.fromisoformat(review["reviewed_utc"])
@@ -497,12 +497,20 @@ def summary_identity_gap(summary: dict[str, Any], run_id: str) -> bool:
 def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
     """The pre-record-gate historical run has no authorization snapshot."""
     expected_hash = manifest.get("live_authorization_sha256")
+    if manifest.get("run_id") == PRE_RECORD_RUN_ID:
+        if any(
+            manifest.get(field) is not None
+            for field in (
+                "live_authorization_sha256",
+                "live_authorization_path",
+                "uv_lock_sha256",
+                "uv_lock_path",
+            )
+        ):
+            return "AUTHORIZATION_MISMATCH"
+        return None
     if expected_hash is None:
-        return (
-            None
-            if manifest.get("run_id") == PRE_RECORD_RUN_ID
-            else "AUTHORIZATION_MISSING"
-        )
+        return "AUTHORIZATION_MISSING"
     if manifest.get("live_authorization_path") != "authorization.json":
         return "AUTHORIZATION_MISSING"
     try:

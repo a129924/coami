@@ -3,12 +3,16 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import base64
+import hashlib
+from importlib.machinery import SourceFileLoader
 import json
 import os
 from pathlib import Path
 import subprocess
 import sys
 from tempfile import TemporaryDirectory
+from types import ModuleType, SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -132,6 +136,100 @@ class E013Tests(unittest.TestCase):
                 load_freeze.assert_not_called()
                 client.assert_not_called()
             self.assertFalse((store / "authorization-uses").exists())
+
+    def test_validator_executes_frozen_source_and_rejects_replacement(self) -> None:
+        freeze = e.load_freeze(e.ORACLE / "versions/v1/freeze-attestation.json")
+        sources = e.read_frozen_case_sources(e.ROOT, freeze)
+        e.validate_oracles(e.ROOT, freeze, sources)
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for relative in (
+                "evaluation/context_sufficiency/validate_dataset.py",
+                "evaluation/context_sufficiency/versions/v1/validate_dataset.py",
+            ):
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes((e.ROOT / relative).read_bytes())
+            altered = root / "evaluation/context_sufficiency/validate_dataset.py"
+            altered.write_bytes(b"raise SystemExit(0)\n")
+            with self.assertRaisesRegex(e.ContractError, "ORACLE_VALIDATOR_MISMATCH"):
+                e.validate_oracles(root, freeze, sources)
+
+    def test_sdk_preflight_rejects_shadowed_import_environment(self) -> None:
+        with patch.dict(os.environ, {"PYTHONPATH": "/unreviewed"}):
+            with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
+                e.verify_sdk_imports()
+        with TemporaryDirectory() as temporary:
+            topic = Path(temporary)
+            environment = topic / ".venv"
+            site = environment / "lib/python3.12/site-packages"
+            packages = {}
+            loaded = {}
+            for name, prefix, expected_version in (
+                ("typesafe-sdk", "typesafe_sdk", e.SDK_VERSION),
+                ("httpx2", "httpx2", e.HTTPX2_VERSION),
+            ):
+                location = site / prefix / "__init__.py"
+                location.parent.mkdir(parents=True)
+                location.write_bytes(b"verified source\n")
+                digest = (
+                    base64.urlsafe_b64encode(
+                        hashlib.sha256(location.read_bytes()).digest()
+                    )
+                    .rstrip(b"=")
+                    .decode("ascii")
+                )
+                entry = SimpleNamespace(
+                    parts=(prefix, "__init__.py"),
+                    suffix=".py",
+                    hash=SimpleNamespace(mode="sha256", value=digest),
+                )
+                packages[name] = SimpleNamespace(
+                    version=expected_version,
+                    files=[entry],
+                    locate_file=lambda unused, path=location: path,
+                )
+                module = ModuleType(prefix)
+                module.__loader__ = SourceFileLoader(prefix, str(location))
+                module.__spec__ = SimpleNamespace(origin=str(location))
+                loaded[prefix] = module
+            with (
+                patch.object(e, "TOPIC", topic),
+                patch.object(e.sys, "prefix", str(environment)),
+                patch.object(e, "distribution", side_effect=packages.__getitem__),
+                patch.object(e.sys, "modules", loaded),
+                patch.dict(os.environ, {"PYTHONPATH": ""}),
+            ):
+                e.verify_sdk_imports()
+                (site / "httpx2/__init__.py").write_bytes(b"modified source\n")
+                with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
+                    e.verify_sdk_imports()
+
+    def test_historical_review_and_authorization_shapes_cannot_be_erased(self) -> None:
+        run = e.TOPIC / "evidence/runs/20261008T035450Z-010364d7"
+        manifest = e.read_object(run / "manifest.json")
+        with TemporaryDirectory() as temporary:
+            review = e.read_object(run / "review.json")
+            del review["method"]
+            del review["reviewed_utc"]
+            for decision in review["cases"]:
+                del decision["checks"]
+            path = Path(temporary) / "review.json"
+            path.write_bytes(e.json_bytes(review))
+            with self.assertRaisesRegex(e.ContractError, "INVALID_PUBLICATION_REVIEW"):
+                evidence.read_review(path)
+        for field, value in (
+            ("live_authorization_sha256", "0" * 64),
+            ("live_authorization_path", "authorization.json"),
+            ("uv_lock_path", "uv.lock"),
+            ("uv_lock_sha256", "0" * 64),
+        ):
+            altered = deepcopy(manifest)
+            altered[field] = value
+            with self.subTest(field=field):
+                self.assertEqual(
+                    evidence.authorization_gap(run, altered), "AUTHORIZATION_MISMATCH"
+                )
 
     def test_live_cases_use_validated_source_bytes(self) -> None:
         with TemporaryDirectory() as temporary:

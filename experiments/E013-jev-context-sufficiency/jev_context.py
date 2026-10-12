@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import base64
 from collections import Counter
 from datetime import datetime, timezone
 import hashlib
-from importlib.metadata import version
+from importlib.machinery import SourceFileLoader
+from importlib.metadata import PackageNotFoundError, distribution, version
 import json
 import logging
 import math
@@ -36,6 +38,7 @@ logging.getLogger("typesafe_sdk").disabled = True
 
 MODEL = "jev-1.13.0"
 SDK_VERSION = "0.7.2"
+HTTPX2_VERSION = "2.13.1"
 GROUPS = ("research", "holdout", "v0")
 CHOICES = ("SUFFICIENT", "INSUFFICIENT")
 TOPIC = Path(__file__).resolve().parent
@@ -456,19 +459,107 @@ def load_question(root: Path = ROOT) -> dict[str, Any]:
     return row
 
 
-def validate_oracles(root: Path = ROOT) -> None:
-    for relative in (
-        "evaluation/context_sufficiency/validate_dataset.py",
-        "evaluation/context_sufficiency/versions/v1/validate_dataset.py",
+def validate_oracles(
+    root: Path, freeze_hashes: dict[str, str], case_sources: dict[str, bytes]
+) -> None:
+    """Execute the exact frozen validator bytes against frozen case bytes."""
+    validators = (
+        (
+            "evaluation/context_sufficiency/validate_dataset.py",
+            V0_HASHES["validate_dataset.py"],
+            "v0",
+        ),
+        (
+            "evaluation/context_sufficiency/versions/v1/validate_dataset.py",
+            freeze_hashes["validate_dataset.py"],
+            "research",
+        ),
+    )
+    bootstrap = (
+        "import sys; source = sys.stdin.buffer.read(); path = sys.argv[1]; "
+        "sys.argv = [path, *sys.argv[2:]]; "
+        "exec(compile(source, path, 'exec'), {'__name__': '__main__', '__file__': path})"
+    )
+    with tempfile.TemporaryDirectory() as temporary:
+        snapshot = Path(temporary)
+        for relative, expected_hash, group in validators:
+            script = (root / relative).read_bytes()
+            if sha(script) != expected_hash:
+                raise ContractError("ORACLE_VALIDATOR_MISMATCH")
+            dataset = snapshot / f"{group}.jsonl"
+            dataset.write_bytes(case_sources[group])
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "-I",
+                    "-c",
+                    bootstrap,
+                    str(root / relative),
+                    str(dataset),
+                ],
+                input=script,
+                cwd=root,
+                capture_output=True,
+                check=False,
+            )
+            if result.returncode != 0:
+                raise ContractError("ORACLE_VALIDATION_FAILED")
+
+
+def verify_sdk_imports() -> None:
+    """Bind loaded SDK modules to hashed wheel files inside this project venv."""
+    environment = (TOPIC / ".venv").resolve()
+    if Path(sys.prefix).resolve() != environment or os.environ.get("PYTHONPATH"):
+        raise ContractError("SDK_IMPORT_MISMATCH")
+    for package, module_prefix, expected_version in (
+        ("typesafe-sdk", "typesafe_sdk", SDK_VERSION),
+        ("httpx2", "httpx2", HTTPX2_VERSION),
     ):
-        result = subprocess.run(
-            [sys.executable, str(root / relative)],
-            cwd=root,
-            capture_output=True,
-            check=False,
-        )
-        if result.returncode != 0:
-            raise ContractError("ORACLE_VALIDATION_FAILED")
+        try:
+            installed = distribution(package)
+            if installed.version != expected_version or installed.files is None:
+                raise ContractError("SDK_IMPORT_MISMATCH")
+            expected_files: set[Path] = set()
+            for entry in installed.files:
+                if not (entry.parts[0] == module_prefix and entry.suffix == ".py"):
+                    continue
+                record_hash = entry.hash
+                location = Path(installed.locate_file(entry)).resolve()
+                if (
+                    record_hash is None
+                    or record_hash.mode != "sha256"
+                    or not location.is_relative_to(environment)
+                    or base64.urlsafe_b64encode(
+                        hashlib.sha256(location.read_bytes()).digest()
+                    )
+                    .rstrip(b"=")
+                    .decode("ascii")
+                    != record_hash.value
+                ):
+                    raise ContractError("SDK_IMPORT_MISMATCH")
+                expected_files.add(location)
+            if not expected_files:
+                raise ContractError("SDK_IMPORT_MISMATCH")
+            loaded = [
+                module
+                for name, module in sys.modules.items()
+                if name == module_prefix or name.startswith(module_prefix + ".")
+            ]
+            if not loaded or any(
+                not isinstance(getattr(module, "__loader__", None), SourceFileLoader)
+                or Path(getattr(module.__spec__, "origin", "")).resolve()
+                not in expected_files
+                for module in loaded
+            ):
+                raise ContractError("SDK_IMPORT_MISMATCH")
+        except (
+            PackageNotFoundError,
+            OSError,
+            TypeError,
+            ValueError,
+            AttributeError,
+        ) as exc:
+            raise ContractError("SDK_IMPORT_MISMATCH") from exc
 
 
 def parse_answer(raw: bytes) -> dict[str, Any]:
@@ -757,8 +848,9 @@ def run_live(
             raise ContractError("MISSING_KEY")
         if version("typesafe-sdk") != SDK_VERSION:
             raise ContractError("SDK_VERSION_MISMATCH")
-        validate_oracles(root)
+        verify_sdk_imports()
         case_sources = read_frozen_case_sources(root, freeze_hashes)
+        validate_oracles(root, freeze_hashes, case_sources)
         cases = load_cases(root, case_sources)
         question = load_question(root)
         runner_source = Path(__file__).read_bytes()
