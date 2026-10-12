@@ -1,0 +1,10 @@
+{
+  "approved_by": "Owner conversation 2026-10-07",
+  "store_id": "coami-e013-local",
+  "root": "/Users/andrew/coami-evidence/E013",
+  "storage_mode": "local_staging",
+  "versioned_immutable": false,
+  "backup_verified": false,
+  "retention_until": null,
+  "agent_access": "Owner-authorized local access only"
+}

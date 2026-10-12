@@ -49,7 +49,25 @@ V0_HASHES = {
 }
 V1_FILES = ("README.md", "context_sufficiency_v1.jsonl", "validate_dataset.py")
 LOCAL_STORE_ROOT = Path("/Users/andrew/coami-evidence/E013")
+HISTORICAL_RUN_ID = "20261008T035450Z-010364d7"
+RUNNER_RELATIVE = Path("experiments/E013-jev-context-sufficiency/jev_context.py")
+POLICY_RELATIVE = Path(
+    "experiments/E013-jev-context-sufficiency/local-store-policy.json"
+)
+FREEZE_RELATIVE = Path(
+    "evaluation/context_sufficiency/versions/v1/freeze-attestation.json"
+)
 CASE_ID = re.compile(r"[A-Za-z0-9_-]+\Z")
+STORE_POLICY_KEYS = {
+    "approved_by",
+    "store_id",
+    "root",
+    "storage_mode",
+    "versioned_immutable",
+    "backup_verified",
+    "retention_until",
+    "agent_access",
+}
 
 
 class ContractError(ValueError):
@@ -172,6 +190,8 @@ def load_freeze(attestation: Path, root: Path = ROOT) -> dict[str, str]:
 
 def load_store_policy(path: Path, store: Path, root: Path = ROOT) -> dict[str, Any]:
     policy = read_object(path)
+    if set(policy) != STORE_POLICY_KEYS:
+        raise ContractError("STORE_APPROVAL_MISMATCH")
     required = ("approved_by", "store_id", "agent_access")
     if any(
         not isinstance(policy.get(key), str) or not policy[key].strip()
@@ -210,29 +230,27 @@ def load_store_policy(path: Path, store: Path, root: Path = ROOT) -> dict[str, A
 
 
 def load_live_authorization(
-    path: Path, attestation: Path, store_policy: Path, root: Path = ROOT
+    path: Path,
+    attestation: Path,
+    store_policy: Path,
+    root: Path = ROOT,
+    runner_path: Path | None = None,
 ) -> tuple[str, str]:
     """Require a committed, run-specific Owner record before any network call.
 
     The record is auditable, but a Git commit is not proof of the signer's identity.
     """
     try:
+        runner = runner_path or Path(__file__)
         if (
-            attestation.resolve()
-            != (
-                root
-                / "evaluation/context_sufficiency/versions/v1/freeze-attestation.json"
-            ).resolve()
-            or store_policy.resolve()
-            != (
-                root
-                / "experiments/E013-jev-context-sufficiency/local-store-policy.json"
-            ).resolve()
+            attestation.resolve() != (root / FREEZE_RELATIVE).resolve()
+            or store_policy.resolve() != (root / POLICY_RELATIVE).resolve()
+            or runner.resolve() != (root / RUNNER_RELATIVE).resolve()
         ):
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         current = path.read_bytes()
         document = parse_live_authorization(current)
-        for dependency in (path, attestation, store_policy):
+        for dependency in (path, attestation, store_policy, runner):
             dependency_relative = dependency.resolve().relative_to(root.resolve())
             committed = subprocess.run(
                 ["git", "show", f"HEAD:{dependency_relative.as_posix()}"],
@@ -249,6 +267,7 @@ def load_live_authorization(
             "model",
             "freeze_attestation_sha256",
             "store_policy_sha256",
+            "runner_sha256",
         }:
             raise ContractError("LIVE_AUTHORIZATION_MISMATCH")
         run_id = document.get("run_id")
@@ -261,6 +280,7 @@ def load_live_authorization(
             or document.get("freeze_attestation_sha256")
             != sha(attestation.read_bytes())
             or document.get("store_policy_sha256") != sha(store_policy.read_bytes())
+            or document.get("runner_sha256") != sha(runner.read_bytes())
         ):
             raise ContractError("LIVE_AUTHORIZATION_MISMATCH")
         return run_id, sha(current)
@@ -598,7 +618,36 @@ def run_live(
         if sha(authorization_bytes) != authorization_sha256:
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         use_marker = store / "authorization-uses" / f"{run_id}.json"
-        if use_marker.exists() or (store / "runs" / run_id).exists():
+        published = (
+            root / "experiments/E013-jev-context-sufficiency/evidence/runs" / run_id
+        )
+        if (
+            run_id == HISTORICAL_RUN_ID
+            or published.exists()
+            or use_marker.exists()
+            or (store / "runs" / run_id).exists()
+        ):
+            raise ContractError("LIVE_AUTHORIZATION_ALREADY_USED")
+        tracked_manifest = (
+            RUNNER_RELATIVE.parent / "evidence/runs" / run_id / "manifest.json"
+        )
+        try:
+            tracked = subprocess.run(
+                [
+                    "git",
+                    "ls-tree",
+                    "--name-only",
+                    "HEAD",
+                    "--",
+                    tracked_manifest.as_posix(),
+                ],
+                cwd=root,
+                capture_output=True,
+                check=True,
+            ).stdout
+        except subprocess.CalledProcessError as exc:
+            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED") from exc
+        if tracked.strip():
             raise ContractError("LIVE_AUTHORIZATION_ALREADY_USED")
         if not os.environ.get("TYPESAFE_API_KEY", "").strip():
             raise ContractError("MISSING_KEY")
@@ -609,6 +658,17 @@ def run_live(
         question = load_question(root)
         runner_source = Path(__file__).read_bytes()
         runner_hash = sha(runner_source)
+        if (
+            runner_hash
+            != parse_live_authorization(authorization_bytes)["runner_sha256"]
+        ):
+            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+        store_policy_bytes = store_policy.read_bytes()
+        if (
+            sha(store_policy_bytes)
+            != parse_live_authorization(authorization_bytes)["store_policy_sha256"]
+        ):
+            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         policy_hash = POLICY_HASH
     except (ContractError, OSError, ValueError) as exc:
         code = exc.code if isinstance(exc, ContractError) else "PREFLIGHT_FAILED"
@@ -640,6 +700,8 @@ def run_live(
         "runner_source_path": "runner.py",
         "live_authorization_sha256": authorization_sha256,
         "live_authorization_path": "authorization.json",
+        "store_policy_sha256": sha(store_policy_bytes),
+        "store_policy_path": "store-policy.json",
         "store": policy_metadata,
         "store_root": str(store.resolve()),
         "conditions": {"timeout_seconds": 30, "retries": 0, "order": list(GROUPS)},
@@ -648,6 +710,7 @@ def run_live(
     write_exclusive(run_dir / "manifest.json", json_bytes(manifest))
     write_exclusive(run_dir / "runner.py", runner_source)
     write_exclusive(run_dir / "authorization.json", authorization_bytes)
+    write_exclusive(run_dir / "store-policy.json", store_policy_bytes)
     rows: list[dict[str, Any]] = []
     stopped = False
     for index, case in enumerate(cases):

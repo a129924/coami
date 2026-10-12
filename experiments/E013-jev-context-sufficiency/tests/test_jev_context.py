@@ -286,10 +286,12 @@ class E013Tests(unittest.TestCase):
                 root
                 / "experiments/E013-jev-context-sufficiency/local-store-policy.json"
             )
+            runner = root / e.RUNNER_RELATIVE
             freeze.parent.mkdir(parents=True)
             policy.parent.mkdir(parents=True)
             freeze.write_bytes(b"freeze")
             policy.write_bytes(b"policy")
+            runner.write_bytes(b"runner")
             document = {
                 "run_id": "run-unique",
                 "authorized_by": "Owner",
@@ -297,12 +299,14 @@ class E013Tests(unittest.TestCase):
                 "model": e.MODEL,
                 "freeze_attestation_sha256": e.sha(b"freeze"),
                 "store_policy_sha256": e.sha(b"policy"),
+                "runner_sha256": e.sha(b"runner"),
             }
             auth.write_bytes(e.json_bytes(document))
             committed = {
                 "live.json": auth.read_bytes(),
                 freeze.relative_to(root).as_posix(): freeze.read_bytes(),
                 policy.relative_to(root).as_posix(): policy.read_bytes(),
+                runner.relative_to(root).as_posix(): runner.read_bytes(),
             }
 
             def git_show(
@@ -318,7 +322,7 @@ class E013Tests(unittest.TestCase):
                 side_effect=git_show,
             ):
                 self.assertEqual(
-                    e.load_live_authorization(auth, freeze, policy, root)[0],
+                    e.load_live_authorization(auth, freeze, policy, root, runner)[0],
                     "run-unique",
                 )
                 alternate = root / "alternate-freeze.json"
@@ -326,33 +330,39 @@ class E013Tests(unittest.TestCase):
                 with self.assertRaisesRegex(
                     e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
                 ):
-                    e.load_live_authorization(auth, alternate, policy, root)
+                    e.load_live_authorization(auth, alternate, policy, root, runner)
                 duplicate = b'{"run_id":"other",' + auth.read_bytes()[1:]
                 auth.write_bytes(duplicate)
                 committed["live.json"] = duplicate
                 with self.assertRaisesRegex(
                     e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
                 ):
-                    e.load_live_authorization(auth, freeze, policy, root)
+                    e.load_live_authorization(auth, freeze, policy, root, runner)
                 auth.write_bytes(e.json_bytes(document))
                 committed["live.json"] = auth.read_bytes()
                 freeze.write_bytes(b"dirty freeze")
                 with self.assertRaisesRegex(
                     e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
                 ):
-                    e.load_live_authorization(auth, freeze, policy, root)
+                    e.load_live_authorization(auth, freeze, policy, root, runner)
                 freeze.write_bytes(b"freeze")
                 policy.write_bytes(b"dirty policy")
                 with self.assertRaisesRegex(
                     e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
                 ):
-                    e.load_live_authorization(auth, freeze, policy, root)
+                    e.load_live_authorization(auth, freeze, policy, root, runner)
                 policy.write_bytes(b"policy")
+                runner.write_bytes(b"dirty runner")
+                with self.assertRaisesRegex(
+                    e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
+                ):
+                    e.load_live_authorization(auth, freeze, policy, root, runner)
+                runner.write_bytes(b"runner")
                 auth.write_bytes(e.json_bytes({**document, "run_id": "reused"}))
                 with self.assertRaisesRegex(
                     e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
                 ):
-                    e.load_live_authorization(auth, freeze, policy, root)
+                    e.load_live_authorization(auth, freeze, policy, root, runner)
             (root / "runs" / "run-unique").mkdir(parents=True)
             (root / "authorization-uses").mkdir()
             (root / "authorization-uses" / "run-unique.json").write_bytes(b"used")
@@ -368,6 +378,61 @@ class E013Tests(unittest.TestCase):
                 patch.object(e, "TypeSafeClient") as client,
             ):
                 self.assertEqual(e.run_live(freeze, policy, root, auth), 2)
+                client.assert_not_called()
+            with (
+                patch.object(e, "load_freeze", return_value={}),
+                patch.object(e, "load_store_policy", return_value={}),
+                patch.object(
+                    e,
+                    "load_live_authorization",
+                    return_value=(e.HISTORICAL_RUN_ID, e.sha(auth.read_bytes())),
+                ),
+                patch.object(e, "TypeSafeClient") as client,
+            ):
+                self.assertEqual(e.run_live(freeze, policy, root, auth), 2)
+                self.assertFalse(
+                    (
+                        root / "authorization-uses" / f"{e.HISTORICAL_RUN_ID}.json"
+                    ).exists()
+                )
+                client.assert_not_called()
+
+            tracked = (
+                root
+                / "experiments/E013-jev-context-sufficiency/evidence/runs"
+                / "run-published"
+            )
+            tracked.mkdir(parents=True)
+            with (
+                patch.object(e, "load_freeze", return_value={}),
+                patch.object(e, "load_store_policy", return_value={}),
+                patch.object(
+                    e,
+                    "load_live_authorization",
+                    return_value=("run-published", e.sha(auth.read_bytes())),
+                ),
+                patch.object(e, "TypeSafeClient") as client,
+            ):
+                self.assertEqual(e.run_live(freeze, policy, root, auth, root), 2)
+                client.assert_not_called()
+            with (
+                patch.object(e, "load_freeze", return_value={}),
+                patch.object(e, "load_store_policy", return_value={}),
+                patch.object(
+                    e,
+                    "load_live_authorization",
+                    return_value=("run-git-only", e.sha(auth.read_bytes())),
+                ),
+                patch.object(
+                    e.subprocess,
+                    "run",
+                    return_value=subprocess.CompletedProcess(
+                        [], 0, b"tracked manifest\n"
+                    ),
+                ),
+                patch.object(e, "TypeSafeClient") as client,
+            ):
+                self.assertEqual(e.run_live(freeze, policy, root, auth, root), 2)
                 client.assert_not_called()
 
     def test_capture_write_failure_retains_no_model_choice(self) -> None:
@@ -438,6 +503,8 @@ class E013Tests(unittest.TestCase):
             restricted.mkdir(parents=True)
             runner_source = b"synthetic runner source\n"
             e.write_exclusive(restricted / "runner.py", runner_source)
+            store_policy_bytes = (e.TOPIC / "local-store-policy.json").read_bytes()
+            e.write_exclusive(restricted / "store-policy.json", store_policy_bytes)
             authorization = e.json_bytes(
                 {
                     "run_id": "run-1",
@@ -447,9 +514,8 @@ class E013Tests(unittest.TestCase):
                     "freeze_attestation_sha256": e.sha(
                         (e.ORACLE / "versions/v1/freeze-attestation.json").read_bytes()
                     ),
-                    "store_policy_sha256": e.sha(
-                        (e.TOPIC / "local-store-policy.json").read_bytes()
-                    ),
+                    "store_policy_sha256": e.sha(store_policy_bytes),
+                    "runner_sha256": e.sha(runner_source),
                 }
             )
             e.write_exclusive(restricted / "authorization.json", authorization)
@@ -470,6 +536,8 @@ class E013Tests(unittest.TestCase):
                         "runner_source_path": "runner.py",
                         "live_authorization_sha256": e.sha(authorization),
                         "live_authorization_path": "authorization.json",
+                        "store_policy_sha256": e.sha(store_policy_bytes),
+                        "store_policy_path": "store-policy.json",
                         "sdk_version": e.SDK_VERSION,
                         "conditions": {
                             "timeout_seconds": 30,
@@ -536,6 +604,8 @@ class E013Tests(unittest.TestCase):
                     "request_sha256": e.sha(request) if body else None,
                     "raw_sha256": e.sha(body) if body else None,
                     "raw_locator": locator,
+                    "started_utc": "2026-10-08T00:00:00+00:00" if body else None,
+                    "ended_utc": "2026-10-08T00:00:01+00:00" if body else None,
                 }
                 rows.append(row)
                 decisions.append(
@@ -682,6 +752,79 @@ class E013Tests(unittest.TestCase):
             public_manifest = (output / "manifest.json").read_bytes()
             summary_bytes = (output / "summary.json").read_bytes()
             restricted_rows = (restricted / "analysis.jsonl").read_bytes()
+            with patch.object(e, "TOPIC", root / "changed-policy-location"):
+                self.assertEqual(
+                    evidence.verify_evidence(output, restricted)["gaps"], []
+                )
+            policy_file = output / "store-policy.json"
+            published_policy = policy_file.read_bytes()
+            policy_file.write_bytes(published_policy + b" ")
+            self.assertIn(
+                "STORE_POLICY_MISMATCH",
+                {gap["reason"] for gap in evidence.verify_evidence(output)["gaps"]},
+            )
+            policy_file.write_bytes(published_policy)
+
+            malformed_time = [json.loads(line) for line in restricted_rows.splitlines()]
+            malformed_time[0]["ended_utc"] = "2026-10-07T23:59:59+00:00"
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in malformed_time)
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_ANALYSIS_TIME"):
+                evidence.verify_local_run(restricted)
+            malformed_time[0] = json.loads(restricted_rows.splitlines()[0])
+            malformed_time[2]["started_utc"] = "2026-10-08T00:00:00+00:00"
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in malformed_time)
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_ANALYSIS_TIME"):
+                evidence.verify_local_run(restricted)
+            (restricted / "analysis.jsonl").write_bytes(restricted_rows)
+
+            duplicate_manifest = public_manifest[:-2] + b', "reviewed_by": "other"}\n'
+            (output / "manifest.json").write_bytes(duplicate_manifest)
+            with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_MANIFEST"):
+                evidence.verify_evidence(output)
+            (output / "manifest.json").write_bytes(public_manifest)
+            (output / "manifest.json").write_bytes(public_manifest + b" ")
+            with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_MANIFEST"):
+                evidence.verify_evidence(output)
+            (output / "manifest.json").write_bytes(public_manifest)
+            altered_revision = e.read_object(output / "manifest.json")
+            altered_revision["runner_revision"] = "0" * 40
+            (output / "manifest.json").write_bytes(e.json_bytes(altered_revision))
+            self.assertIn(
+                "RUNNER_REVISION_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "manifest.json").write_bytes(public_manifest)
+
+            local_manifest = (restricted / "manifest.json").read_bytes()
+            actual_verify = evidence.verify_local_run
+
+            def mutate_after_verify(
+                run_dir: Path, manifest: dict[str, object]
+            ) -> dict[str, object]:
+                result = actual_verify(run_dir, manifest)
+                changed = e.read_object(run_dir / "manifest.json")
+                changed["store"]["unreviewed_secret"] = "must-not-publish"
+                (run_dir / "manifest.json").write_bytes(e.json_bytes(changed))
+                return result
+
+            with patch.object(
+                evidence, "verify_local_run", side_effect=mutate_after_verify
+            ):
+                race_output = evidence.publish_reviewed(
+                    restricted, approval, root / "race-evidence"
+                )
+            self.assertNotIn(
+                "unreviewed_secret",
+                e.read_object(race_output / "manifest.json")["store"],
+            )
+            (restricted / "manifest.json").write_bytes(local_manifest)
             visible = [json.loads(line) for line in public_rows.splitlines()]
             full_local = [json.loads(line) for line in restricted_rows.splitlines()]
             visible[1] = full_local[1]

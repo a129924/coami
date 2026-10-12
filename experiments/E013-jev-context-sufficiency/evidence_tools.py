@@ -6,6 +6,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 import re
+import subprocess
 import tempfile
 from typing import Any
 
@@ -14,6 +15,10 @@ import jev_context as e
 HASH = re.compile(r"[0-9a-f]{64}\Z")
 STATUSES = {"VALID", "INVALID", "ERROR", "UNKNOWN", "NOT_RUN"}
 PRE_RECORD_RUN_ID = "20261008T035450Z-010364d7"
+PRE_RECORD_POLICY_HASH = (
+    "ec532b9bf729a59074b63d57ce22cc4cbf04ffe6be8dcf52527f6b00b492a2ea"
+)
+REVISION = re.compile(r"[0-9a-f]{40}\Z")
 LOCAL_MANIFEST_KEYS = {
     "run_id",
     "created_utc",
@@ -30,11 +35,15 @@ LOCAL_MANIFEST_KEYS = {
     "runner_source_path",
     "live_authorization_sha256",
     "live_authorization_path",
+    "store_policy_sha256",
+    "store_policy_path",
 }
 LOCAL_REQUIRED_KEYS = LOCAL_MANIFEST_KEYS - {
     "runner_source_path",
     "live_authorization_sha256",
     "live_authorization_path",
+    "store_policy_sha256",
+    "store_policy_path",
 }
 PUBLIC_MANIFEST_KEYS = (LOCAL_MANIFEST_KEYS - {"store_root"}) | {
     "cases",
@@ -91,6 +100,29 @@ def read_review(path: Path) -> dict[str, Any]:
     return review
 
 
+def read_manifest(path: Path) -> dict[str, Any]:
+    """Read one unambiguous, byte-canonical run manifest."""
+
+    def unique(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        document = {}
+        for key, value in pairs:
+            if key in document:
+                raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
+            document[key] = value
+        return document
+
+    try:
+        data = path.read_bytes()
+        manifest = json.loads(data, object_pairs_hook=unique)
+        if not isinstance(manifest, dict) or e.json_bytes(manifest) != data:
+            raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
+    except (OSError, ValueError, TypeError, UnicodeDecodeError) as exc:
+        if isinstance(exc, e.ContractError):
+            raise
+        raise e.ContractError("INVALID_EVIDENCE_MANIFEST") from exc
+    return manifest
+
+
 def bounded_path(root: Path, locator: str) -> Path:
     relative = Path(locator)
     if relative.is_absolute() or any(part in ("..", ".") for part in relative.parts):
@@ -142,6 +174,25 @@ def read_rows(path: Path) -> list[dict[str, Any]]:
             raise e.ContractError("INVALID_ANALYSIS_STATUS")
         if row.get("analysis_restricted") is True:
             continue
+        started = row.get("started_utc")
+        ended = row.get("ended_utc")
+        if status == "NOT_RUN":
+            if started is not None or ended is not None:
+                raise e.ContractError("INVALID_ANALYSIS_TIME")
+        else:
+            try:
+                if not isinstance(started, str) or not isinstance(ended, str):
+                    raise ValueError
+                started_at = datetime.fromisoformat(started)
+                ended_at = datetime.fromisoformat(ended)
+                if (
+                    started_at.tzinfo is None
+                    or ended_at.tzinfo is None
+                    or ended_at < started_at
+                ):
+                    raise ValueError
+            except ValueError as exc:
+                raise e.ContractError("INVALID_ANALYSIS_TIME") from exc
         if any(
             row.get(field) is not None
             and (not isinstance(row[field], str) or not HASH.fullmatch(row[field]))
@@ -199,10 +250,39 @@ def summary_bytes(run_dir: Path) -> bytes:
     return data
 
 
-def metadata_gaps(manifest: dict[str, Any]) -> list[dict[str, str]]:
-    """Check the honest local-store claims against the tracked approval."""
+def policy_snapshot(root: Path, manifest: dict[str, Any]) -> bytes:
+    """Use run-bound policy bytes; the pre-record run uses its tracked amendment."""
+    path = manifest.get("store_policy_path")
+    digest = manifest.get("store_policy_sha256")
+    if (
+        path == "store-policy.json"
+        and isinstance(digest, str)
+        and HASH.fullmatch(digest)
+    ):
+        data = bounded_path(root, path).read_bytes()
+        if e.sha(data) == digest:
+            return data
+    elif (
+        manifest.get("run_id") == PRE_RECORD_RUN_ID and path is None and digest is None
+    ):
+        data = (
+            e.TOPIC / "evidence/runs" / PRE_RECORD_RUN_ID / "store-policy.json"
+        ).read_bytes()
+        if e.sha(data) == PRE_RECORD_POLICY_HASH:
+            return data
+    raise e.ContractError("STORE_POLICY_MISMATCH")
+
+
+def metadata_gaps(root: Path, manifest: dict[str, Any]) -> list[dict[str, str]]:
+    """Check local-store claims against the run's retained approval policy."""
     try:
-        policy = e.read_object(e.TOPIC / "local-store-policy.json")
+        policy = json.loads(
+            policy_snapshot(root, manifest),
+            object_pairs_hook=unique_object,
+            parse_constant=invalid_constant,
+        )
+        if not isinstance(policy, dict) or set(policy) != e.STORE_POLICY_KEYS:
+            raise ValueError
         store = manifest["store"]
         if not isinstance(store, dict) or set(store) != {
             "approved_by",
@@ -234,7 +314,7 @@ def metadata_gaps(manifest: dict[str, Any]) -> list[dict[str, str]]:
             )
         ):
             raise ValueError
-    except (OSError, KeyError, ValueError, e.ContractError):
+    except (OSError, KeyError, TypeError, ValueError, e.ContractError):
         return [{"reason": "STORE_POLICY_MISMATCH"}]
     return []
 
@@ -287,6 +367,7 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
             "model",
             "freeze_attestation_sha256",
             "store_policy_sha256",
+            "runner_sha256",
         }:
             return "AUTHORIZATION_MISMATCH"
         if any(
@@ -300,7 +381,8 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
                     (e.ORACLE / "versions/v1/freeze-attestation.json").read_bytes()
                 ),
                 document["store_policy_sha256"]
-                != e.sha((e.TOPIC / "local-store-policy.json").read_bytes()),
+                != e.sha(policy_snapshot(root, manifest)),
+                document["runner_sha256"] != e.sha((root / "runner.py").read_bytes()),
             )
         ):
             return "AUTHORIZATION_MISMATCH"
@@ -478,9 +560,12 @@ def emitted_request(case: dict[str, Any], question: dict[str, Any]) -> bytes:
     return captured[0]
 
 
-def verify_local_run(run_dir: Path) -> dict[str, Any]:
+def verify_local_run(
+    run_dir: Path, manifest: dict[str, Any] | None = None
+) -> dict[str, Any]:
     """Verify current local bytes; this does not establish backup or immutability."""
-    manifest = e.read_object(run_dir / "manifest.json")
+    if manifest is None:
+        manifest = read_manifest(run_dir / "manifest.json")
     if not set(manifest).issubset(LOCAL_MANIFEST_KEYS):
         raise e.ContractError("UNREVIEWED_MANIFEST_FIELD")
     if not LOCAL_REQUIRED_KEYS.issubset(manifest):
@@ -500,7 +585,7 @@ def verify_local_run(run_dir: Path) -> dict[str, Any]:
         raise e.ContractError("LOCAL_ANALYSIS_RESTRICTED")
     if any(row["run_id"] != run_id for row in rows):
         raise e.ContractError("RUN_ID_MISMATCH")
-    gaps = inventory_gaps(manifest, rows) + metadata_gaps(manifest)
+    gaps = inventory_gaps(manifest, rows) + metadata_gaps(run_dir, manifest)
     if issue := authorization_gap(run_dir, manifest):
         gaps.append({"reason": issue})
     cases = {(case["group"], case["case_id"]): case for case in e.load_cases()}
@@ -598,9 +683,9 @@ def verify_local_run(run_dir: Path) -> dict[str, Any]:
 
 def publish_reviewed(run_dir: Path, approval_path: Path, evidence_root: Path) -> Path:
     """Export only reviewed rows and byte-identical approved raw bodies."""
-    if verify_local_run(run_dir)["gaps"]:
+    manifest = read_manifest(run_dir / "manifest.json")
+    if verify_local_run(run_dir, manifest)["gaps"]:
         raise e.ContractError("LOCAL_EVIDENCE_UNVERIFIED")
-    manifest = e.read_object(run_dir / "manifest.json")
     approval = read_review(approval_path)
     run_id = manifest.get("run_id")
     if (
@@ -697,6 +782,7 @@ def _write_publication(
         e.write_exclusive(
             output / "authorization.json", (run_dir / "authorization.json").read_bytes()
         )
+    e.write_exclusive(output / "store-policy.json", policy_snapshot(run_dir, manifest))
     public_review = {
         "run_id": run_id,
         "approved_by": approval["approved_by"],
@@ -806,7 +892,7 @@ def verify_evidence(
     candidate_threshold: float | None = None,
 ) -> dict[str, Any]:
     """Check exact objects and recompute statistics from a clean checkout."""
-    manifest = e.read_object(evidence_run / "manifest.json")
+    manifest = read_manifest(evidence_run / "manifest.json")
     if evidence_run.name != manifest.get("run_id"):
         raise e.ContractError("EVIDENCE_RUN_MISMATCH")
     if not set(manifest).issubset(PUBLIC_MANIFEST_KEYS):
@@ -866,13 +952,26 @@ def verify_evidence(
         (row["group"], row["case_id"]) for row in rows
     }:
         raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
-    gaps = metadata_gaps(manifest)
+    gaps = metadata_gaps(evidence_run, manifest)
     if issue := authorization_gap(evidence_run, manifest):
         gaps.append({"reason": issue})
     try:
         runner = bounded_path(evidence_run, manifest["runner_public_path"]).read_bytes()
         if e.sha(runner) != manifest.get("runner_sha256"):
             gaps.append({"reason": "RUNNER_SOURCE_MISMATCH"})
+        revision = manifest.get("runner_revision")
+        if revision is not None:
+            if not isinstance(revision, str) or not REVISION.fullmatch(revision):
+                gaps.append({"reason": "RUNNER_REVISION_MISMATCH"})
+            else:
+                committed = subprocess.run(
+                    ["git", "show", f"{revision}:{e.RUNNER_RELATIVE.as_posix()}"],
+                    cwd=e.ROOT,
+                    capture_output=True,
+                    check=False,
+                )
+                if committed.returncode != 0 or committed.stdout != runner:
+                    gaps.append({"reason": "RUNNER_REVISION_MISMATCH"})
     except (KeyError, OSError, TypeError, e.ContractError):
         gaps.append({"reason": "RUNNER_SOURCE_MISSING"})
     try:
