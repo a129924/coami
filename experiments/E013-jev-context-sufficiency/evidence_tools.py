@@ -82,6 +82,44 @@ LOCATOR_KEYS = {
     "analysis_restricted",
     "restricted_run_version",
 }
+FULL_ANALYSIS_KEYS = {
+    "run_id",
+    "ordinal",
+    "group",
+    "case_id",
+    "expected",
+    "model",
+    "rubric_sha256",
+    "case_version",
+    "runner_sha256",
+    "status",
+    "choice",
+    "probabilities",
+    "confidence",
+    "error_code",
+    "request_sha256",
+    "raw_sha256",
+    "raw_locator",
+    "started_utc",
+    "ended_utc",
+}
+PUBLIC_STUB_KEYS = {
+    "run_id",
+    "group",
+    "case_id",
+    "status",
+    "raw_sha256",
+    "analysis_restricted",
+    "analysis_sha256",
+}
+PUBLIC_EVIDENCE_FILES = {
+    "manifest.json",
+    "analysis.jsonl",
+    "summary.json",
+    "review.json",
+    "runner.py",
+    "store-policy.json",
+}
 REVIEW_KEYS = {
     "run_id",
     "approved_by",
@@ -214,7 +252,8 @@ def bounded_path(root: Path, locator: str) -> Path:
 
 def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
     try:
-        lines = path.read_bytes().splitlines()
+        data = path.read_bytes()
+        lines = data.splitlines()
         rows = [
             json.loads(
                 line,
@@ -233,7 +272,7 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
         canonical = [e.json_bytes(row) for row in rows]
     except (TypeError, ValueError) as exc:
         raise e.ContractError("INVALID_ANALYSIS") from exc
-    if any(line + b"\n" != expected for line, expected in zip(lines, canonical)):
+    if data != b"".join(canonical):
         raise e.ContractError("NONCANONICAL_ANALYSIS")
     if any(
         not isinstance(row.get("run_id"), str)
@@ -248,6 +287,11 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
     if len(set(keys)) != 75:
         raise e.ContractError("DUPLICATE_ANALYSIS_KEY")
     for row in rows:
+        if row.get("analysis_restricted") is True and allow_stubs:
+            if set(row) != PUBLIC_STUB_KEYS:
+                raise e.ContractError("INVALID_RESTRICTED_ANALYSIS")
+        elif set(row) != FULL_ANALYSIS_KEYS:
+            raise e.ContractError("UNREVIEWED_ANALYSIS_FIELD")
         status = row.get("status")
         if status not in STATUSES:
             raise e.ContractError("INVALID_ANALYSIS_STATUS")
@@ -310,7 +354,11 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
             raise e.ContractError("INVALID_ANALYSIS_STATUS_FIELDS")
         if status == "NOT_RUN" and row.get("error_code") is not None:
             raise e.ContractError("INVALID_ANALYSIS_STATUS_FIELDS")
-        if row.get("raw_sha256") is None and row.get("raw_locator") is not None:
+        if row.get("raw_locator") != (
+            f"responses/{row['group']}/{row['case_id']}.body"
+            if row.get("raw_sha256") is not None
+            else None
+        ):
             raise e.ContractError("INVALID_RAW_LOCATOR_STATE")
     return rows
 
@@ -1089,6 +1137,15 @@ def verify_evidence(
                 == (item["raw_restricted_path"] is None)
             )
         )
+        or (
+            item.get("raw_public_path") is not None
+            and item["raw_public_path"] != f"raw/{item['group']}/{item['case_id']}.body"
+        )
+        or (
+            item.get("raw_restricted_path") is not None
+            and item["raw_restricted_path"]
+            != f"responses/{item['group']}/{item['case_id']}.body"
+        )
         for item in locators
     ):
         raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
@@ -1098,6 +1155,24 @@ def verify_evidence(
     }:
         raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
     gaps = metadata_gaps(evidence_run, manifest)
+    allowed_files = PUBLIC_EVIDENCE_FILES | {
+        item["raw_public_path"]
+        for item in locators
+        if item["raw_public_path"] is not None
+    }
+    if manifest.get("live_authorization_sha256") is not None:
+        allowed_files |= {"authorization.json", "uv.lock"}
+    for path in evidence_run.rglob("*"):
+        if path.is_symlink() or (
+            path.is_file()
+            and path.relative_to(evidence_run).as_posix() not in allowed_files
+        ):
+            gaps.append(
+                {
+                    "reason": "UNREVIEWED_EVIDENCE_FILE",
+                    "path": path.relative_to(evidence_run).as_posix(),
+                }
+            )
     if issue := authorization_gap(evidence_run, manifest):
         gaps.append({"reason": issue})
     source_path = manifest.get("runner_source_path")

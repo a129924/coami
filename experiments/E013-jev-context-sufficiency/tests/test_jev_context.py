@@ -934,6 +934,41 @@ class E013Tests(unittest.TestCase):
             public_manifest = (output / "manifest.json").read_bytes()
             summary_bytes = (output / "summary.json").read_bytes()
             restricted_rows = (restricted / "analysis.jsonl").read_bytes()
+            extra_file = output / ".env"
+            extra_file.write_bytes(b"unreviewed local secret")
+            self.assertIn(
+                "UNREVIEWED_EVIDENCE_FILE",
+                {gap["reason"] for gap in evidence.verify_evidence(output)["gaps"]},
+            )
+            extra_file.unlink()
+            extra_raw = output / "raw" / "research" / "unexpected.body"
+            extra_raw.write_bytes(b"unreviewed response")
+            self.assertIn(
+                "UNREVIEWED_EVIDENCE_FILE",
+                {gap["reason"] for gap in evidence.verify_evidence(output)["gaps"]},
+            )
+            extra_raw.unlink()
+            full_rows = [json.loads(line) for line in public_rows.splitlines()]
+            full_rows[0]["unreviewed_secret"] = "credential"
+            (output / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in full_rows)
+            )
+            with self.assertRaisesRegex(e.ContractError, "UNREVIEWED_ANALYSIS_FIELD"):
+                evidence.verify_evidence(output)
+            (output / "analysis.jsonl").write_bytes(public_rows)
+            for malformed in (public_rows.replace(b"\n", b"\r\n"), public_rows[:-1]):
+                (output / "analysis.jsonl").write_bytes(malformed)
+                with self.assertRaisesRegex(e.ContractError, "NONCANONICAL_ANALYSIS"):
+                    evidence.verify_evidence(output)
+            (output / "analysis.jsonl").write_bytes(public_rows)
+            wrong_full_locator = [json.loads(line) for line in public_rows.splitlines()]
+            wrong_full_locator[0]["raw_locator"] = "responses/research/wrong.body"
+            (output / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in wrong_full_locator)
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_RAW_LOCATOR_STATE"):
+                evidence.verify_evidence(output)
+            (output / "analysis.jsonl").write_bytes(public_rows)
             wrong_source = e.read_object(output / "manifest.json")
             wrong_source["runner_source_path"] = "other.py"
             (output / "manifest.json").write_bytes(e.json_bytes(wrong_source))
