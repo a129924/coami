@@ -278,8 +278,16 @@ class E013Tests(unittest.TestCase):
         with TemporaryDirectory() as temporary:
             root = Path(temporary)
             auth = root / "live.json"
-            freeze = root / "freeze.json"
-            policy = root / "policy.json"
+            freeze = (
+                root
+                / "evaluation/context_sufficiency/versions/v1/freeze-attestation.json"
+            )
+            policy = (
+                root
+                / "experiments/E013-jev-context-sufficiency/local-store-policy.json"
+            )
+            freeze.parent.mkdir(parents=True)
+            policy.parent.mkdir(parents=True)
             freeze.write_bytes(b"freeze")
             policy.write_bytes(b"policy")
             document = {
@@ -293,8 +301,8 @@ class E013Tests(unittest.TestCase):
             auth.write_bytes(e.json_bytes(document))
             committed = {
                 "live.json": auth.read_bytes(),
-                "freeze.json": freeze.read_bytes(),
-                "policy.json": policy.read_bytes(),
+                freeze.relative_to(root).as_posix(): freeze.read_bytes(),
+                policy.relative_to(root).as_posix(): policy.read_bytes(),
             }
 
             def git_show(
@@ -313,6 +321,21 @@ class E013Tests(unittest.TestCase):
                     e.load_live_authorization(auth, freeze, policy, root)[0],
                     "run-unique",
                 )
+                alternate = root / "alternate-freeze.json"
+                alternate.write_bytes(freeze.read_bytes())
+                with self.assertRaisesRegex(
+                    e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
+                ):
+                    e.load_live_authorization(auth, alternate, policy, root)
+                duplicate = b'{"run_id":"other",' + auth.read_bytes()[1:]
+                auth.write_bytes(duplicate)
+                committed["live.json"] = duplicate
+                with self.assertRaisesRegex(
+                    e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
+                ):
+                    e.load_live_authorization(auth, freeze, policy, root)
+                auth.write_bytes(e.json_bytes(document))
+                committed["live.json"] = auth.read_bytes()
                 freeze.write_bytes(b"dirty freeze")
                 with self.assertRaisesRegex(
                     e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
@@ -592,6 +615,26 @@ class E013Tests(unittest.TestCase):
                 evidence.publish_reviewed(
                     restricted, approval, root / "checkout-evidence"
                 )
+            duplicate_review = e.json_bytes(
+                {
+                    "run_id": "run-1",
+                    "approved_by": "owner",
+                    "summary_public": True,
+                    "summary_safety_checked": True,
+                    "summary_sha256": summary_hash,
+                    "cases": decisions,
+                }
+            ).replace(
+                b'"raw_public": true',
+                b'"raw_public": false, "raw_public": true',
+                1,
+            )
+            self.assertIn(b'"raw_public": false, "raw_public": true', duplicate_review)
+            approval.write_bytes(duplicate_review)
+            with self.assertRaisesRegex(e.ContractError, "INVALID_PUBLICATION_REVIEW"):
+                evidence.publish_reviewed(
+                    restricted, approval, root / "checkout-evidence"
+                )
             self.assertFalse((root / "checkout-evidence").exists())
             approval.write_bytes(
                 e.json_bytes(
@@ -697,6 +740,29 @@ class E013Tests(unittest.TestCase):
                 },
             )
             request_path.write_bytes(request_bytes)
+            reformatted_request = json.dumps(
+                json.loads(request_bytes), ensure_ascii=False, indent=2
+            ).encode()
+            self.assertNotEqual(reformatted_request, request_bytes)
+            altered_local = [json.loads(line) for line in restricted_rows.splitlines()]
+            altered_local[0]["request_sha256"] = e.sha(reformatted_request)
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in altered_local)
+            )
+            request_path.write_bytes(reformatted_request)
+            self.assertIn(
+                "REQUEST_CONTENT_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_local_run(restricted)["gaps"]
+                },
+            )
+            with self.assertRaisesRegex(e.ContractError, "LOCAL_EVIDENCE_UNVERIFIED"):
+                evidence.publish_reviewed(
+                    restricted, approval, root / "another-evidence"
+                )
+            request_path.write_bytes(request_bytes)
+            (restricted / "analysis.jsonl").write_bytes(restricted_rows)
 
             public_review = e.read_object(output / "review.json")
             original_review = (output / "review.json").read_bytes()

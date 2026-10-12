@@ -62,6 +62,35 @@ def invalid_constant(value: str) -> None:
     raise e.ContractError("INVALID_ANALYSIS_NUMBER")
 
 
+def read_review(path: Path) -> dict[str, Any]:
+    """Reject ambiguous approval and retained review documents."""
+
+    def unique(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        document = {}
+        for key, value in pairs:
+            if key in document:
+                raise e.ContractError("INVALID_PUBLICATION_REVIEW")
+            document[key] = value
+        return document
+
+    def invalid_number(value: str) -> None:
+        raise e.ContractError("INVALID_PUBLICATION_REVIEW")
+
+    try:
+        review = json.loads(
+            path.read_bytes(),
+            object_pairs_hook=unique,
+            parse_constant=invalid_number,
+        )
+    except (OSError, ValueError, UnicodeDecodeError) as exc:
+        if isinstance(exc, e.ContractError):
+            raise
+        raise e.ContractError("INVALID_PUBLICATION_REVIEW") from exc
+    if not isinstance(review, dict):
+        raise e.ContractError("INVALID_PUBLICATION_REVIEW")
+    return review
+
+
 def bounded_path(root: Path, locator: str) -> Path:
     relative = Path(locator)
     if relative.is_absolute() or any(part in ("..", ".") for part in relative.parts):
@@ -248,9 +277,9 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
         return "AUTHORIZATION_MISSING"
     try:
         data = (root / "authorization.json").read_bytes()
-        document = json.loads(data)
         if e.sha(data) != expected_hash:
             return "AUTHORIZATION_HASH_MISMATCH"
+        document = e.parse_live_authorization(data)
         if not isinstance(document, dict) or set(document) != {
             "run_id",
             "authorized_by",
@@ -538,7 +567,11 @@ def verify_local_run(run_dir: Path) -> dict[str, Any]:
                         {"group": group, "case_id": case_id, "reason": mismatch}
                     )
             elif field == "request_sha256" and (group, case_id) in cases:
-                mismatch = request_gap(body, cases[(group, case_id)], question)
+                try:
+                    expected_body = emitted_request(cases[(group, case_id)], question)
+                except (e.ContractError, e.TypeSafeError, OSError, ValueError):
+                    expected_body = None
+                mismatch = "REQUEST_CONTENT_MISMATCH" if body != expected_body else None
                 if mismatch:
                     gaps.append(
                         {"group": group, "case_id": case_id, "reason": mismatch}
@@ -568,7 +601,7 @@ def publish_reviewed(run_dir: Path, approval_path: Path, evidence_root: Path) ->
     if verify_local_run(run_dir)["gaps"]:
         raise e.ContractError("LOCAL_EVIDENCE_UNVERIFIED")
     manifest = e.read_object(run_dir / "manifest.json")
-    approval = e.read_object(approval_path)
+    approval = read_review(approval_path)
     run_id = manifest.get("run_id")
     if (
         not isinstance(run_id, str)
@@ -844,7 +877,7 @@ def verify_evidence(
         gaps.append({"reason": "RUNNER_SOURCE_MISSING"})
     try:
         review_bytes = (evidence_run / "review.json").read_bytes()
-        review = e.read_object(evidence_run / "review.json")
+        review = read_review(evidence_run / "review.json")
         if e.sha(review_bytes) != manifest.get("review_sha256"):
             gaps.append({"reason": "REVIEW_HASH_MISMATCH"})
         decisions = review.get("cases")

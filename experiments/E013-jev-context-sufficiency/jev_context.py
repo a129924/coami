@@ -84,6 +84,28 @@ def read_object(path: Path) -> dict[str, Any]:
     return value
 
 
+def parse_live_authorization(data: bytes) -> dict[str, Any]:
+    """Require one unambiguous, canonical Owner authorization document."""
+
+    def unique(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        document = {}
+        for key, value in pairs:
+            if key in document:
+                raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+            document[key] = value
+        return document
+
+    try:
+        document = json.loads(data, object_pairs_hook=unique)
+        if not isinstance(document, dict) or json_bytes(document) != data:
+            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+    except (ValueError, TypeError, UnicodeDecodeError) as exc:
+        if isinstance(exc, ContractError):
+            raise
+        raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED") from exc
+    return document
+
+
 def write_exclusive(path: Path, data: bytes) -> None:
     path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
     with path.open("xb") as output:
@@ -195,10 +217,21 @@ def load_live_authorization(
     The record is auditable, but a Git commit is not proof of the signer's identity.
     """
     try:
-        current = path.read_bytes()
-        document = json.loads(current)
-        if not isinstance(document, dict):
+        if (
+            attestation.resolve()
+            != (
+                root
+                / "evaluation/context_sufficiency/versions/v1/freeze-attestation.json"
+            ).resolve()
+            or store_policy.resolve()
+            != (
+                root
+                / "experiments/E013-jev-context-sufficiency/local-store-policy.json"
+            ).resolve()
+        ):
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+        current = path.read_bytes()
+        document = parse_live_authorization(current)
         for dependency in (path, attestation, store_policy):
             dependency_relative = dependency.resolve().relative_to(root.resolve())
             committed = subprocess.run(
