@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Robot 使用期限：到期停用，連線保留",
+    "quality_profile": "showcase",
+    "column_fit": "spread",
+    "viewBox": [900, 900]
+  },
+  "participants": [
+    { "id": "robot-client", "type": "frontend", "label": "Node.js Robot", "sublabel": "strict TypeScript 模擬端" },
+    { "id": "usage-server", "type": "backend", "label": "FastAPI Server", "sublabel": "Server 時間決定使用權" }
+  ],
+  "segments": [
+    { "from": 155, "to": 290, "label": "首次授權" },
+    { "from": 310, "to": 445, "label": "期限內可用" },
+    { "from": 465, "to": 835, "label": "到期仍可查詢" }
+  ],
+  "messages": [
+    { "id": "start-request", "from": "robot-client", "to": "usage-server", "y": 195, "label": "robot.start", "variant": "emphasis" },
+    { "id": "grant-response", "from": "usage-server", "to": "robot-client", "y": 255, "label": "Success：固定 grant／deadline", "variant": "return" },
+    { "id": "active-probe", "from": "robot-client", "to": "usage-server", "y": 350, "label": "operation.probe", "variant": "default" },
+    { "id": "allowed-response", "from": "usage-server", "to": "robot-client", "y": 410, "label": "allowed：允許操作", "variant": "return" },
+    { "id": "expiry-notice", "from": "usage-server", "to": "robot-client", "y": 505, "label": "usage.expired：停用操作", "variant": "security" },
+    { "id": "expired-probe", "from": "robot-client", "to": "usage-server", "y": 575, "label": "operation.probe（診斷）", "variant": "dashed" },
+    { "id": "denied-response", "from": "usage-server", "to": "robot-client", "y": 635, "label": "expired：拒絕操作", "variant": "return" },
+    { "id": "status-request", "from": "robot-client", "to": "usage-server", "y": 725, "label": "usage.status（仍保持連線）", "variant": "default" },
+    { "id": "status-response", "from": "usage-server", "to": "robot-client", "y": 790, "label": "usage.state：expired", "variant": "return" }
+  ]
+}

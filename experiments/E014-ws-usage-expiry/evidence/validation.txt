@@ -1,0 +1,398 @@
+✔ startup is disabled until a grant is received (0.47775ms)
+✖ the exact usage deadline disables operations (0.474875ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 97.621416
+
+✖ failing tests:
+
+test at robot.test.ts:10:1
+✖ the exact usage deadline disables operations (0.474875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  true !== false
+
+      at TestContext.<anonymous> (file:///private/tmp/coami-e014-ws-usage-expiry/experiments/E014-ws-usage-expiry/robot.test.ts:17:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "sequence",
+  "input": "/private/tmp/coami-e014-ws-usage-expiry/experiments/E014-ws-usage-expiry/diagram/sequence.candidate.json",
+  "output": "/private/tmp/coami-e014-ws-usage-expiry/experiments/E014-ws-usage-expiry/diagram/sequence.html",
+  "specification": {
+    "sha256": "911faf48e0547bb5e4cbfd335f70fe7cd2a07b8901347f089f718d17b8de4736",
+    "bytes": 2025
+  },
+  "artifact": {
+    "sha256": "89c2e712473e3368314af852ad564e32fc6fa2fce2c370e017d49f5e5be02190",
+    "bytes": 699505
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}
+✔ startup is disabled until a grant is received (0.66375ms)
+✔ response latency is included conservatively and old grants never revive expiry (0.087917ms)
+✔ repeated grants cannot extend the existing local deadline (0.051459ms)
+✔ disconnect and expiry notifications fail closed (0.07475ms)
+✔ invalid grant values and changed identity are rejected (0.199916ms)
+✔ matched startup grants enable the client and expiry leaves the socket open (26.507125ms)
+✔ wrong correlation and connection identifiers never enable startup (0.902458ms)
+✔ send failures and log failures cannot turn into successful requests (0.49825ms)
+✔ unexpected disconnect rejects a pending request (0.594167ms)
+✔ invalid server frames and inconsistent decisions are rejected (1.835042ms)
+✔ the exact usage deadline disables operations (0.097583ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 201.680458
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "validate",
+  "stage": "check",
+  "type": "sequence",
+  "input": "/private/tmp/coami-e014-ws-usage-expiry/experiments/E014-ws-usage-expiry/diagram/sequence.candidate.json",
+  "error": "Final artifact check failed.",
+  "diagnostics": [
+    {
+      "code": "composition/desktop-readability",
+      "severity": "error",
+      "message": "Final artifact failed composition/desktop-readability.",
+      "subject": {
+        "check": "composition"
+      },
+      "evidence": {
+        "viewportWidth": 1440,
+        "viewportHeight": 900,
+        "availableDiagramWidth": 930,
+        "viewBoxWidth": 1600,
+        "scale": 0.58125,
+        "text": "strict TypeScript 模擬端",
+        "detail": "context",
+        "sourceFontPx": 7,
+        "projectedFontPx": 4.0687500000000005,
+        "minimumProjectedFontPx": 6
+      },
+      "supportedFixes": [
+        "reduce the viewBox width, shorten node copy, widen affected nodes, or split the diagram so node context remains at least 6px at a 1440px desktop viewport"
+      ]
+    }
+  ],
+  "checker": {
+    "ok": false,
+    "file": "/private/tmp/coami-e014-ws-usage-expiry/experiments/E014-ws-usage-expiry/diagram/sequence.candidate.json",
+    "checks": [
+      {
+        "name": "single_svg",
+        "ok": true,
+        "details": [
+          "found 1 <svg> block(s)"
+        ]
+      },
+      {
+        "name": "finite_svg",
+        "ok": true,
+        "details": []
+      },
+      {
+        "name": "orthogonal_arrows",
+        "ok": true,
+        "details": []
+      },
+      {
+        "name": "label_route_clearance",
+        "ok": true,
+        "details": []
+      },
+      {
+        "name": "relationship_crossings",
+        "ok": true,
+        "details": []
+      },
+      {
+        "name": "relationship_corridors",
+        "ok": true,
+        "details": []
+      },
+      {
+        "name": "container_border_runs",
+        "ok": true,
+        "details": []
+      },
+      {
+        "name": "route_rhythm",
+        "ok": true,
+        "details": []
+      },
+      {
+        "name": "legend_clearance",
+        "ok": true,
+        "details": []
+      }
+    ],
+    "composition": {
+      "schemaVersion": 1,
+      "profile": "showcase",
+      "status": "fail",
+      "summary": {
+        "errors": 1,
+        "warnings": 0
+      },
+      "metrics": {
+        "properCrossings": 0,
+        "ambiguousCorridors": 0,
+        "containerBorderRuns": 0,
+        "labelRouteClearanceIssues": 0,
+        "minLabelRouteClearance": 40,
+        "desktopReadabilityIssues": 1,
+        "minProjectedNodeTextPx": 4.0687500000000005,
+        "maxBends": 0,
+        "routesOverSuggestedBends": 0,
+        "maxStretch": 1,
+        "routesOverSuggestedStretch": 0,
+        "minSegmentPx": 1294,
+        "minInteriorSegmentPx": null,
+        "shortSegmentCount": 0,
+        "shortEndpointSegmentCount": 0,
+        "shortInteriorSegmentCount": 0,
+        "microSegmentCount": 0
+      },
+      "suggestedLimits": {
+        "bendsPerRelationship": 2,
+        "stretch": 1.35,
+        "segmentPx": 16,
+        "microSegmentPx": 8
+      },
+      "issues": [
+        {
+          "severity": "error",
+          "code": "composition/desktop-readability",
+          "viewportWidth": 1440,
+          "viewportHeight": 900,
+          "availableDiagramWidth": 930,
+          "viewBoxWidth": 1600,
+          "scale": 0.58125,
+          "text": "strict TypeScript 模擬端",
+          "detail": "context",
+          "sourceFontPx": 7,
+          "projectedFontPx": 4.0687500000000005,
+          "minimumProjectedFontPx": 6
+        }
+      ]
+    }
+  }
+}
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "validate",
+  "stage": "render",
+  "type": "sequence",
+  "input": "/private/tmp/coami-e014-ws-usage-expiry/experiments/E014-ws-usage-expiry/diagram/sequence.candidate.json",
+  "error": "Sequence layout validation failed:\n- Message \"usage.state：expired\" sits outside the readable timeline — keep y between 160 and 417.\n- Segment \"到期仍可查詢\" extends outside the canvas — keep its y range between 72 and 455.",
+  "diagnostics": [
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Message \"usage.state：expired\" sits outside the readable timeline — keep y between 160 and 417.",
+      "subject": {
+        "diagramType": "sequence"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    },
+    {
+      "code": "layout/constraint",
+      "severity": "error",
+      "message": "Segment \"到期仍可查詢\" extends outside the canvas — keep its y range between 72 and 455.",
+      "subject": {
+        "diagramType": "sequence"
+      },
+      "evidence": {},
+      "supportedFixes": []
+    }
+  ]
+}
+
+=== Independent Tester verification: 2026-10-12T04:01:21Z to 2026-10-12T04:02:29Z ===
+Worktree: /private/tmp/coami-e014-ws-usage-expiry
+Branch: feat/andrew/ws-usage-expiry
+CWD: experiments/E014-ws-usage-expiry within feature worktree
+Scope: approved E014 only; no source/docs/diagram edits or commits by Tester.
+Testing skills inspected: python-testing-pytest and typescript-tdd.
+Unit boundary: Python fake clock/socket/in-memory journal; TypeScript fake socket/in-memory journal and injected monotonic clock. Real loopback and filesystem verification belongs to smoke, not pure unit tests.
+
+$ Sandbox: PATH=/opt/homebrew/opt/node@24/bin:$PATH; node --version; npm --version; npm ci --ignore-scripts --cache /private/tmp/coami-e014-npm-cache
+UTC 2026-10-12T04:01:21Z
+/opt/homebrew/opt/node@24/bin/node
+v24.19.0
+/opt/homebrew/opt/node@24/bin/npm
+11.17.0
+
+added 4 packages in 559ms
+
+COMMAND_EXIT npm-ci 0
+
+Execution exit_code=0; wall_time_seconds=1.3142610000000001
+
+$ Sandbox: PATH=/opt/homebrew/opt/node@24/bin:$PATH; npm run typecheck; npm test
+v24.19.0
+
+> coami-e014-ws-usage-expiry@0.1.0 typecheck
+> tsc --noEmit --project tsconfig.json
+
+
+COMMAND_EXIT typecheck 0
+
+> coami-e014-ws-usage-expiry@0.1.0 test
+> node --test robot.test.ts
+
+✔ startup is disabled until a grant is received (0.439334ms)
+✔ response latency is included conservatively and old grants never revive expiry (0.08875ms)
+✔ repeated grants cannot extend the existing local deadline (0.052ms)
+✔ disconnect and expiry notifications fail closed (0.079ms)
+✔ invalid grant values and changed identity are rejected (0.21825ms)
+✔ matched startup grants enable the client and expiry leaves the socket open (11.9145ms)
+✔ wrong correlation and connection identifiers never enable startup (0.719375ms)
+✔ send failures and log failures cannot turn into successful requests (0.166209ms)
+✔ unexpected disconnect rejects a pending request (0.118708ms)
+✔ invalid server frames and inconsistent decisions are rejected (0.1445ms)
+✔ the exact usage deadline disables operations (0.057125ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 103.059709
+
+COMMAND_EXIT ts-tests 0
+
+Execution exit_code=0; wall_time_seconds=0.983431041
+
+$ Sandbox: PATH=/opt/homebrew/opt/node@24/bin:$PATH UV_CACHE_DIR=/private/tmp/coami-e014-uv-cache; uv --version; uv sync --locked
+uv 0.9.2 (141369ce7 2025-10-10)
+
+thread 'main2' panicked at /Users/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/system-configuration-0.6.1/src/dynamic_store.rs:154:1:
+Attempted to create a NULL object.
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'main' panicked at /Users/runner/work/uv/uv/crates/uv/src/lib.rs:2407:10:
+Tokio executor failed, was there a panic?: Any { .. }
+
+COMMAND_EXIT uv-sync 101
+
+Execution exit_code=101; wall_time_seconds=0.000006875
+
+$ Escalated retry of same uv sync --locked command; no source changes
+uv 0.9.2 (141369ce7 2025-10-10)
+Resolved 24 packages in 17ms
+Audited 22 packages in 6ms
+
+COMMAND_EXIT uv-sync 0
+
+Execution exit_code=0; wall_time_seconds=0.000010208
+
+$ Escalated: PATH=/opt/homebrew/opt/node@24/bin:$PATH UV_CACHE_DIR=/private/tmp/coami-e014-uv-cache; uv run python --version; uv run pytest -q; uv run ruff check .; uv run pyright
+Python 3.12.12
+
+COMMAND_EXIT python-version 0
+.......................................                                  [100%]
+39 passed in 0.15s
+
+COMMAND_EXIT pytest 0
+All checks passed!
+
+COMMAND_EXIT ruff 0
+0 errors, 0 warnings, 0 informations
+
+COMMAND_EXIT pyright 0
+
+Execution exit_code=0; wall_time_seconds=2.4903775
+
+$ Sandbox: PATH=/opt/homebrew/opt/node@24/bin:$PATH; /opt/homebrew/opt/node@24/bin/node smoke.ts
+v24.19.0
+Error: listen EPERM: operation not permitted 127.0.0.1
+    at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+    at listenInCluster (node:net:2224:12)
+    at node:net:2448:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1'
+}
+
+COMMAND_EXIT real-smoke 1
+
+Execution exit_code=1; wall_time_seconds=0
+
+$ Escalated retry of same explicit Node24 smoke.ts command; no source changes
+v24.19.0
+{"result":"PASS","run_id":"1b545039-4384-4c71-a098-16f7347f6611","node":"24.19.0","usage_ms":5000,"pairedFrames":18,"clientInstances":3,"expiry_kept_connection":true,"restart_did_not_renew":true}
+
+COMMAND_EXIT real-smoke 0
+
+Execution exit_code=0; wall_time_seconds=6.179403667
+
+Independent result: PASS for requested executable checks. Python 3.12.12: 39 tests passed; Ruff passed; strict Pyright 0 errors/0 warnings. Node24.19.0/npm11.17.0: locked npm ci passed, strict typecheck passed, 11 tests passed.
+Real smoke PASS run_id=1b545039-4384-4c71-a098-16f7347f6611; USAGE_MS=5000; 18 paired frames; 3 separate Robot processes; startup Success; restart preserved grant/deadline; expiry locally and server-side denied probe; same connection still served status; third restart remained Expired; graceful Server shutdown recorded with SIGTERM.
+Infrastructure failures retained, not code failures: sandbox uv sync exit101 macOS NULL-object panic (same command escalated passed); sandbox smoke exit1 listen EPERM (run_id=6e9a1cac-cdfc-4c92-a2e9-5132fadbdcfe), escalated explicit Node24 smoke passed.
+Append evidence retained earlier smoke runs. Developer worktree git status --short remained empty at final read-only check. No code fixes attempted.
+Archify was not touched or revalidated by Tester. Desktop visual overflow remains a known limitation accepted by owner for Draft PR; this report does NOT claim visual acceptance passed.
+=== End independent Tester verification ===
+
+=== Final integration checks 2026-10-12 ===
+Main fixed Reviewer nonblocking stderr-chunk warning by retaining bounded 64KiB diagnostic tail.
+$ PATH=/opt/homebrew/opt/node@24/bin:$PATH npm run typecheck && npm test; /opt/homebrew/opt/node@24/bin/node smoke.ts
+typecheck exit0; Node24 tests 11 pass/0 fail; smoke exit0:
+{"result":"PASS","run_id":"3dc3ec34-8ba8-4279-ae29-4f55da08ad2f","node":"24.19.0","usage_ms":5000,"pairedFrames":18,"clientInstances":3,"expiry_kept_connection":true,"restart_did_not_renew":true}
+$ GRAPHIFY_NO_AUTO_REFRESH=1 /Users/andrew/.local/bin/graphify --version
+graphify 0.9.73; exit0. No graph exists; no query/build/refresh performed.
+$ /Users/andrew/.local/share/pr-lens-runtime/bin/pr-lens --version
+0.11.0; exit0.
+Initial bounded-diff graph validate exit1: provenance.head required by strict schema. Fixed using actual current HEAD 7b5772483a8cc62cdcb959d475a1a15ebbe98053 (same as base), explicit summary says uncommitted additions are not in commit; no invented SHA.
+$ pr-lens validate /private/tmp/e014-ws-usage-expiry/pr-lens/graph.json
+exit0; 3 lanes, 7 nodes, 6 edges, 0 flows, architecture, 5 walkthrough steps.
+$ pr-lens render /private/tmp/e014-ws-usage-expiry/pr-lens/graph.json --theme light --no-config --out /private/tmp/e014-ws-usage-expiry/pr-lens/rendered
+exit0; manifest.json; renderer @coldtea/pr-lens-renderer 0.3.1; graph contentHash 7c304de270ccd417044ba28f6b14e24d; one SVG containers-light-6ac3150870c052b5aa9ca84d1a484aaf.svg, 12673 bytes, 1284x492. Local-only, no attachments/uploads/config writes.
+Archify restoration is rollback to last trusted candidate, NOT correction round3.
+$ node /Users/andrew/.codex/skills/archify/bin/archify.mjs validate sequence experiments/E014-ws-usage-expiry/diagram/sequence.candidate.json --quality showcase --json
+exit0; 9/9 showcase, composition 0 errors/0 warnings.
+$ node /Users/andrew/.codex/skills/archify/bin/archify.mjs deliver sequence experiments/E014-ws-usage-expiry/diagram/sequence.candidate.json experiments/E014-ws-usage-expiry/diagram/sequence.html --quality showcase --json
+exit0; spec sha256 911faf48e0547bb5e4cbfd335f70fe7cd2a07b8901347f089f718d17b8de4736, bytes2025; artifact sha256 89c2e712473e3368314af852ad564e32fc6fa2fce2c370e017d49f5e5be02190, bytes699505; 9/9 composition pass zero errors/warnings. Artifact identical to visual-check receipt.
+visual_review: failed; correction_rounds: 2. Inspected actual 1440x900 light and 2048x1320 dark images: bottom messages exceed first screen. Four-view containment failure retained in JSON receipt; captures do not imply visual pass.
+Owner explicit response 2026-10-12: 同意，註明限制後開 Draft PR. Exception authorizes known visual limitation for human review only.
+$ experiments/E014-ws-usage-expiry/.venv/bin/python .codex/skills/plan-step-tracker/scripts/step_tracker.py check_impl_steps_succeeded E014-ws-usage-expiry
+exit0; SUCCESS All 4 implementation steps complete. Independent Reviewer reran same gate exit0 and approved final routing; full lifecycle not complete.
+Publication note: repository Git hook prints "Can't find lefthook in PATH" but commit exits0. No hook/config/tools changed or installed; independently executed pytest/Ruff/strict Pyright/TS tests/typecheck/smoke evidence remains authoritative. Do not claim hooks ran successfully.
