@@ -82,6 +82,35 @@ LOCATOR_KEYS = {
     "analysis_restricted",
     "restricted_run_version",
 }
+REVIEW_KEYS = {
+    "run_id",
+    "approved_by",
+    "summary_public",
+    "summary_safety_checked",
+    "summary_sha256",
+    "cases",
+}
+REVIEW_DECISION_KEYS = {
+    "group",
+    "case_id",
+    "safety_checked",
+    "analysis_public",
+    "raw_public",
+    "analysis_sha256",
+    "raw_sha256",
+}
+HISTORICAL_REVIEW_METHOD = (
+    "Checked each exact body and analysis row for known schema, SHA-256, parsed "
+    "equality, credential echo, and sensitive markers; request bytes remain local."
+)
+HISTORICAL_REVIEW_CHECKS = [
+    "exact_body_hash",
+    "request_hash",
+    "credential_absent",
+    "sensitive_markers_absent",
+    "known_json_shape",
+    "parsed_row_matches",
+]
 
 
 def unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -123,6 +152,30 @@ def read_review(path: Path) -> dict[str, Any]:
         raise e.ContractError("INVALID_PUBLICATION_REVIEW") from exc
     if not isinstance(review, dict):
         raise e.ContractError("INVALID_PUBLICATION_REVIEW")
+    historical = review.get("run_id") == PRE_RECORD_RUN_ID and "method" in review
+    if historical:
+        try:
+            timestamp = datetime.fromisoformat(review["reviewed_utc"])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise e.ContractError("INVALID_PUBLICATION_REVIEW") from exc
+        if (
+            set(review) != REVIEW_KEYS | {"method", "reviewed_utc"}
+            or review["method"] != HISTORICAL_REVIEW_METHOD
+            or timestamp.tzinfo is None
+            or timestamp.utcoffset() is None
+        ):
+            raise e.ContractError("INVALID_PUBLICATION_REVIEW")
+    elif set(review) != REVIEW_KEYS:
+        raise e.ContractError("INVALID_PUBLICATION_REVIEW")
+    decisions = review.get("cases")
+    if not isinstance(decisions, list) or any(
+        not isinstance(item, dict)
+        or set(item)
+        != (REVIEW_DECISION_KEYS | {"checks"} if historical else REVIEW_DECISION_KEYS)
+        or (historical and item["checks"] != HISTORICAL_REVIEW_CHECKS)
+        for item in decisions
+    ):
+        raise e.ContractError("INVALID_PUBLICATION_REVIEW")
     return review
 
 
@@ -159,7 +212,7 @@ def bounded_path(root: Path, locator: str) -> Path:
     return result
 
 
-def read_rows(path: Path) -> list[dict[str, Any]]:
+def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
     try:
         lines = path.read_bytes().splitlines()
         rows = [
@@ -198,6 +251,8 @@ def read_rows(path: Path) -> list[dict[str, Any]]:
         status = row.get("status")
         if status not in STATUSES:
             raise e.ContractError("INVALID_ANALYSIS_STATUS")
+        if row.get("analysis_restricted") is not None and not allow_stubs:
+            raise e.ContractError("INVALID_RESTRICTED_ANALYSIS")
         if row.get("analysis_restricted") is True:
             continue
         started = row.get("started_utc")
@@ -988,7 +1043,7 @@ def verify_evidence(
         raise e.ContractError("UNREVIEWED_MANIFEST_FIELD")
     if manifest_identity_gap(manifest, published=True):
         raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
-    rows = read_rows(evidence_run / "analysis.jsonl")
+    rows = read_rows(evidence_run / "analysis.jsonl", allow_stubs=True)
     if any(row["run_id"] != manifest.get("run_id") for row in rows):
         raise e.ContractError("RUN_ID_MISMATCH")
     if restricted_run is not None and restricted_run.name != manifest.get("run_id"):
@@ -1045,6 +1100,14 @@ def verify_evidence(
     gaps = metadata_gaps(evidence_run, manifest)
     if issue := authorization_gap(evidence_run, manifest):
         gaps.append({"reason": issue})
+    source_path = manifest.get("runner_source_path")
+    historical_without_source = (
+        manifest.get("run_id") == PRE_RECORD_RUN_ID and source_path is None
+    )
+    if manifest.get("runner_public_path") != "runner.py" or (
+        source_path != "runner.py" and not historical_without_source
+    ):
+        gaps.append({"reason": "RUNNER_SOURCE_MISMATCH"})
     try:
         runner = bounded_path(evidence_run, manifest["runner_public_path"]).read_bytes()
         if e.sha(runner) != manifest.get("runner_sha256"):

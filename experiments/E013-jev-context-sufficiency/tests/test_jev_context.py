@@ -96,9 +96,42 @@ class E013Tests(unittest.TestCase):
             )
             with self.assertRaisesRegex(e.ContractError, "INVALID_FREEZE_ATTESTATION"):
                 e.load_freeze(attestation)
+            for field, value in (
+                ("snapshot_id", "v1-draft-003"),
+                ("freeze_version", "other-version"),
+                ("frozen_utc", "not-a-time"),
+                ("fixture_reviewer", "Owner"),
+                ("fixture_verdict", "rejected"),
+                ("extra", "unreviewed"),
+            ):
+                altered = e.read_object(frozen)
+                altered[field] = value
+                attestation.write_bytes(
+                    (json.dumps(altered, ensure_ascii=False, indent=2) + "\n").encode()
+                )
+                with (
+                    self.subTest(field=field),
+                    self.assertRaisesRegex(
+                        e.ContractError, "INVALID_FREEZE_ATTESTATION"
+                    ),
+                ):
+                    e.load_freeze(attestation)
             attestation.write_bytes(e.json_bytes(e.read_object(frozen)))
             with self.assertRaisesRegex(e.ContractError, "INVALID_FREEZE_ATTESTATION"):
                 e.load_freeze(attestation)
+
+    def test_live_requires_python_312_before_using_authorization(self) -> None:
+        with TemporaryDirectory() as temporary:
+            store = Path(temporary)
+            with (
+                patch.object(e.sys, "version_info", (3, 13, 0)),
+                patch.object(e, "load_freeze") as load_freeze,
+                patch.object(e, "TypeSafeClient") as client,
+            ):
+                self.assertEqual(e.run_live(Path("freeze"), Path("policy"), store), 2)
+                load_freeze.assert_not_called()
+                client.assert_not_called()
+            self.assertFalse((store / "authorization-uses").exists())
 
     def test_live_cases_use_validated_source_bytes(self) -> None:
         with TemporaryDirectory() as temporary:
@@ -901,6 +934,54 @@ class E013Tests(unittest.TestCase):
             public_manifest = (output / "manifest.json").read_bytes()
             summary_bytes = (output / "summary.json").read_bytes()
             restricted_rows = (restricted / "analysis.jsonl").read_bytes()
+            wrong_source = e.read_object(output / "manifest.json")
+            wrong_source["runner_source_path"] = "other.py"
+            (output / "manifest.json").write_bytes(e.json_bytes(wrong_source))
+            self.assertIn(
+                "RUNNER_SOURCE_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "manifest.json").write_bytes(public_manifest)
+            review_bytes = (output / "review.json").read_bytes()
+            for location in ("top", "decision"):
+                altered_review = e.read_object(output / "review.json")
+                if location == "top":
+                    altered_review["unreviewed_note"] = "secret"
+                else:
+                    altered_review["cases"][0]["unreviewed_note"] = "secret"
+                (output / "review.json").write_bytes(e.json_bytes(altered_review))
+                updated_manifest = e.read_object(output / "manifest.json")
+                updated_manifest["review_sha256"] = e.sha(
+                    (output / "review.json").read_bytes()
+                )
+                (output / "manifest.json").write_bytes(e.json_bytes(updated_manifest))
+                self.assertIn(
+                    "REVIEW_MISSING",
+                    {
+                        gap["reason"]
+                        for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                    },
+                )
+                (output / "review.json").write_bytes(review_bytes)
+                (output / "manifest.json").write_bytes(public_manifest)
+            marked_restricted = [
+                json.loads(line) for line in restricted_rows.splitlines()
+            ]
+            marked_restricted[1]["analysis_restricted"] = True
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in marked_restricted)
+            )
+            self.assertIn(
+                "RESTRICTED_ANALYSIS_INVALID",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (restricted / "analysis.jsonl").write_bytes(restricted_rows)
             with patch.object(e, "TOPIC", root / "changed-policy-location"):
                 self.assertEqual(
                     evidence.verify_evidence(output, restricted)["gaps"], []

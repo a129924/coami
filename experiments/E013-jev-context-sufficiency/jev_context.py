@@ -48,6 +48,18 @@ V0_HASHES = {
     "validate_dataset.py": "45f0f0d8efe685b2514c2ae27109ea7586db5bc57858d382518cbc078da1db38",
 }
 V1_FILES = ("README.md", "context_sufficiency_v1.jsonl", "validate_dataset.py")
+V1_FREEZE_KEYS = {
+    "snapshot_id",
+    "freeze_version",
+    "frozen_utc",
+    "owner_accepted_60",
+    "fixture_review_approved",
+    "fixture_reviewer",
+    "fixture_verdict",
+    "frozen",
+    "review_sha256",
+    "v1_hashes",
+}
 LOCAL_STORE_ROOT = Path("/Users/andrew/coami-evidence/E013")
 HISTORICAL_RUN_ID = "20261008T035450Z-010364d7"
 RUNNER_RELATIVE = Path("experiments/E013-jev-context-sufficiency/jev_context.py")
@@ -195,6 +207,15 @@ def seal_run(run_dir: Path) -> None:
 def load_freeze(attestation: Path, root: Path = ROOT) -> dict[str, str]:
     """Match a separately accepted freeze record to exact on-disk bytes."""
     document = read_gate_document(attestation, "INVALID_FREEZE_ATTESTATION")
+    if (
+        set(document) != V1_FREEZE_KEYS
+        or document.get("snapshot_id") != "v1-draft-004"
+        or document.get("freeze_version") != "context_sufficiency_v1"
+        or document.get("frozen_utc") != "2026-10-08T03:33:27Z"
+        or document.get("fixture_reviewer") != "/root/v1_fixture_reviewer"
+        or document.get("fixture_verdict") != "approved"
+    ):
+        raise ContractError("INVALID_FREEZE_ATTESTATION")
     if any(
         document.get(field) is not True
         for field in ("owner_accepted_60", "fixture_review_approved", "frozen")
@@ -688,6 +709,8 @@ def run_live(
     """A live run is unavailable until the exact freeze and store are approved."""
     logging.getLogger("typesafe_sdk").disabled = True
     try:
+        if sys.version_info[:2] != (3, 12):
+            raise ContractError("PYTHON_VERSION_MISMATCH")
         freeze_hashes = load_freeze(attestation, root)
         policy_metadata = load_store_policy(store_policy, store, root)
         if authorization is None:
