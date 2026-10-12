@@ -11,7 +11,7 @@ created: 2026-10-12
 
 | Current status | Allowed next transitions | Next actor |
 | --- | --- | --- |
-| publish-in-progress | pr-open, merged | Main Agent |
+| pr-open | needs-rework, merged | Main Agent |
 
 ## Actionable Steps
 
@@ -22,7 +22,7 @@ created: 2026-10-12
 
 ### Contextual Actions
 
-- [ ] **Actor:** Main Agent — **Action:** 依核准範圍完成 topic commit、push 與 Draft PR，交人工 review。
+- [ ] **Actor:** Main Agent — **Action:** 等待 Ready PR 人工 review；未獲新明確授權不繼續修改、merge 或 cleanup。
 
 ## Implementation Steps
 
@@ -35,11 +35,11 @@ created: 2026-10-12
 
 - [X] **Actor:** Main Agent — **Action:** Validate the approved Written set and perform bounded staging only.
 - [X] **Actor:** Main Agent — **Action:** Obtain explicit human approval at STOP POINT 1 before commit, push, or PR creation.
-- [ ] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
-- [ ] **Actor:** Main Agent — **Action:** Push the topic branch.
-- [ ] **Actor:** Main Agent — **Action:** Open the pull request.
-- [ ] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
-- [ ] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
+- [X] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
+- [X] **Actor:** Main Agent — **Action:** Push the topic branch.
+- [X] **Actor:** Main Agent — **Action:** Open the pull request.
+- [X] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
+- [X] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
 - [ ] **Actor:** Main Agent — **Action:** Record exact human merge evidence after a new execution begins.
 - [ ] **Actor:** Main Agent — **Action:** Require a new explicit human resume before post-merge work.
 - [ ] **Actor:** Main Agent — **Action:** Verify the pull request is merged.
@@ -65,6 +65,9 @@ created: 2026-10-12
 - Step 4 records delivered diagram plus failed visual evidence, NOT visual acceptance. Owner explicitly accepted vertical overflow as Draft PR limitation on 2026-10-12. PR Lens 0.11.0 local bounded-diff map validated/rendered; schema requires actual current HEAD even for uncommitted diff, explicitly labeled. No upload. Graphify 0.9.73 verified with refresh opt-out; no graph found, targeted-source fallback.
 - Owner explicitly authorized feature-only implementation, topic commits/push/Draft PR, then human review. This is STOP POINT 1 evidence; no merge/cleanup/release authorization.
 - Main and independent Reviewer both ran implementation-only tracker gate: exit0, all four complete. Reviewer 01a12e45-fccc-7791-b100-a374f601545b approved final routing without blockers. Lifecycle: creator-in-progress → review-ready → reviewer-in-progress → approved → publish-in-progress, based on final code/docs/tool evidence plus owner visual exception; see review.md.
+- Publication evidence: 9bcc507 build, ffbdcbb feat, dcdd5b5 docs; pushed actual head dcdd5b5b3c3083be3023242625e5481b611e026f. Draft PR https://github.com/a129924/coami/pull/14 verified OPEN/isDraft=true/base=dev/head=feat/andrew/ws-usage-expiry; reviews/comments empty at snapshot, some CI checks still in progress. No remote feedback fabricated. Follow-up metadata commit records this exact snapshot; final SHA is discoverable via git log, not self-referential metadata.
+- Prior final response handed off at human review and stopped. Post-Draft metadata commit/push was blocked by auto-review and not executed. Owner then explicitly replied “可以 To Ready PR” to the bounded three-document commit/push request and Ready transition; this new execution only records that authorization and changes PR readiness, not implementation or merge authority.
+- Ready evidence: gh pr ready 14 succeeded; gh pr view verified OPEN/isDraft=false/base=dev/head=feat/andrew/ws-usage-expiry at dcdd5b5b3c3083be3023242625e5481b611e026f. Before the metadata follow-up push, all 12 listed CI checks completed SUCCESS, reviews/comments empty. A new push may trigger new checks; no future all-green claim. Human review, merge, target sync, retention decisions and cleanup remain incomplete. Primary dev worktree verified clean at original baseline.
 - Marker semantics: `[X]` exact one-to-one evidence; `[ ]` pending/planned/unproved; lowercase source `[x]` is pending and warns.
 - Tracker semantics: `check_all_succeeded` covers rendered head/contextual/Implementation/tail checkboxes; `check_impl_steps_succeeded` covers only Implementation Steps. Full lifecycle intentionally remains pending at the human boundary.
 - Owner-only updates: only the action owner may update after exact evidence; step-creator never updates an existing output.

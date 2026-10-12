@@ -26,4 +26,14 @@ Graphify0.9.73 runtime verified with refresh opt-out; no existing graph, so appr
 
 ## Publication
 
-Status: publish-in-progress. GitHub authenticated; default branch main; intended PR base dev. Remote dev `189ee5b56471f2386dd0aad21c6ca00f9b201e63` is ahead by five unrelated context-sufficiency commits; baseline `7b5772483a8cc62cdcb959d475a1a15ebbe98053` is the verified merge-base. No existing path overlaps, no primary dev update required. Commit/push/PR identifiers will be recorded only after actual execution. Human merge/cleanup/release remain unauthorized.
+Status: pr-open, awaiting human review. GitHub authenticated; default branch main; PR base dev. Remote dev `189ee5b56471f2386dd0aad21c6ca00f9b201e63` is ahead by five unrelated context-sufficiency commits; baseline `7b5772483a8cc62cdcb959d475a1a15ebbe98053` is the verified merge-base. No existing path overlaps, no primary dev update required.
+
+Actually committed and pushed: `9bcc507` build toolchains, `ffbdcbb` feature/tests, `dcdd5b5` plan/docs/evidence. Remote branch verified at `dcdd5b5b3c3083be3023242625e5481b611e026f`. Draft PR **https://github.com/a129924/coami/pull/14**, verified OPEN, isDraft=true, base=dev, head=feat/andrew/ws-usage-expiry. PR body prominently discloses Archify failure, owner exception, unverified 30-minute soak/real robot and missing lefthook. PR Lens was not used for publication or asset attachment; general gh CLI opened the user-authorized PR.
+
+Initial observation snapshot: no remote reviews/comments; server/e003 checks succeeded while several device/e001 checks remained in progress, mergeStateStatus UNSTABLE. This was not a CI all-green or human approval claim. Primary dev clean and still `7b5772483a8cc62cdcb959d475a1a15ebbe98053`. No implementation changes after independent approval.
+
+## Ready for review authorization
+
+The first post-Draft metadata commit/push attempt was rejected by auto-review as exceeding the stop-at-human-review boundary; no commit or push executed. The prior final response disclosed the three local documentation changes and asked for separate bounded commit/push authorization. Owner replied **“可以 To Ready PR”**, explicitly resuming this bounded publication/Ready transition. No merge, implementation change, cleanup, release or post-merge sync is authorized.
+
+Before this metadata follow-up, PR head `dcdd5b5b3c3083be3023242625e5481b611e026f` had all 12 listed CI checks completed SUCCESS and no remote reviews/comments. Executed `gh pr ready 14` successfully; subsequent `gh pr view` verified **OPEN, isDraft=false**, base=dev, head=feat/andrew/ws-usage-expiry. The Ready transition does not resolve Archify visual failure, prove 30-minute soak/real hardware, or replace human review. The three planning documents are the only follow-up commit scope. Any push-triggered new CI results must be checked separately; no speculative completion claim. Stop again for human review.

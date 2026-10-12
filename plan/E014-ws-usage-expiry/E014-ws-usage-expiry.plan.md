@@ -30,10 +30,10 @@
 
 ## Status / Allowed Transitions
 
-- Current status: `publish-in-progress`.
+- Current status: `pr-open`.
 - Next actor: Main Agent.
-- Stage-local action: 依核准範圍完成 topic commit、push 與 Draft PR，交人工 review。
-- Allowed transitions: `creator-in-progress → review-ready → reviewer-in-progress → approved|needs-rework`；`needs-rework → creator-in-progress`；`approved → publish-in-progress → pr-open`。
+- Stage-local action: 等待 Ready PR 人工 review；未獲新明確授權不繼續修改、merge 或 cleanup。
+- Allowed transitions: `creator-in-progress → review-ready → reviewer-in-progress → approved|needs-rework`；`needs-rework → creator-in-progress`；`approved → publish-in-progress → pr-open`；`pr-open → needs-rework|merged`（本次未授權 merge）。
 - Profile: `base-plan`，不是 Python specialized profile；四步一對一鏡像。Selector: topic=E014-ws-usage-expiry; branch=feat/andrew/ws-usage-expiry; managed-path-intent=/private/tmp/coami-e014-ws-usage-expiry; primary-worktree=false。
 - Baseline `7b5772483a8cc62cdcb959d475a1a15ebbe98053`，不聲稱最新遠端。Owner 已批准實作及無重大問題時 topic commit／push／Draft PR；人工 review 為停點，不 merge。
 
@@ -73,7 +73,7 @@ PR Lens external allowlist：`/private/tmp/e014-ws-usage-expiry/pr-lens/graph.js
 
 ## Post-merge / release actions
 
-本次獲授權 topic commit／push／Draft PR，停在 human review；不 merge。未來 merge 為 terminal，無 release／VERSION bump／tag。保留 worktree／branch，cleanup pending；rollback 僅撤除本 topic 新增工件。
+本次已開 https://github.com/a129924/coami/pull/14（base dev）；owner 後續明確回覆「可以 To Ready PR」，授權提交三個交接文件更新並轉為 Ready for review。已查證 OPEN、isDraft=false；停在 human review，不 merge。Archify 視覺失敗限制仍保留，不因 Ready 狀態變為通過。未來 merge 為 terminal，無 release／VERSION bump／tag。保留 worktree／branch，cleanup pending；rollback 僅撤除本 topic 新增工件。
 
 ## Open Questions / Unresolved Items
 
