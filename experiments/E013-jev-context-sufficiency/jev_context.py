@@ -195,17 +195,20 @@ def load_live_authorization(
     The record is auditable, but a Git commit is not proof of the signer's identity.
     """
     try:
-        relative = path.resolve().relative_to(root.resolve())
-        committed = subprocess.run(
-            ["git", "show", f"HEAD:{relative.as_posix()}"],
-            cwd=root,
-            capture_output=True,
-            check=True,
-        ).stdout
         current = path.read_bytes()
         document = json.loads(current)
-        if committed != current or not isinstance(document, dict):
+        if not isinstance(document, dict):
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+        for dependency in (path, attestation, store_policy):
+            dependency_relative = dependency.resolve().relative_to(root.resolve())
+            committed = subprocess.run(
+                ["git", "show", f"HEAD:{dependency_relative.as_posix()}"],
+                cwd=root,
+                capture_output=True,
+                check=True,
+            ).stdout
+            if committed != dependency.read_bytes():
+                raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         if set(document) != {
             "run_id",
             "authorized_by",

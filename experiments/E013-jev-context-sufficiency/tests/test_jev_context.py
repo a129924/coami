@@ -291,15 +291,40 @@ class E013Tests(unittest.TestCase):
                 "store_policy_sha256": e.sha(b"policy"),
             }
             auth.write_bytes(e.json_bytes(document))
+            committed = {
+                "live.json": auth.read_bytes(),
+                "freeze.json": freeze.read_bytes(),
+                "policy.json": policy.read_bytes(),
+            }
+
+            def git_show(
+                args: list[str], **kwargs: object
+            ) -> subprocess.CompletedProcess[bytes]:
+                return subprocess.CompletedProcess(
+                    args, 0, committed[args[-1].split(":", 1)[1]]
+                )
+
             with patch.object(
                 e.subprocess,
                 "run",
-                return_value=subprocess.CompletedProcess([], 0, auth.read_bytes()),
+                side_effect=git_show,
             ):
                 self.assertEqual(
                     e.load_live_authorization(auth, freeze, policy, root)[0],
                     "run-unique",
                 )
+                freeze.write_bytes(b"dirty freeze")
+                with self.assertRaisesRegex(
+                    e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
+                ):
+                    e.load_live_authorization(auth, freeze, policy, root)
+                freeze.write_bytes(b"freeze")
+                policy.write_bytes(b"dirty policy")
+                with self.assertRaisesRegex(
+                    e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
+                ):
+                    e.load_live_authorization(auth, freeze, policy, root)
+                policy.write_bytes(b"policy")
                 auth.write_bytes(e.json_bytes({**document, "run_id": "reused"}))
                 with self.assertRaisesRegex(
                     e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
@@ -456,18 +481,7 @@ class E013Tests(unittest.TestCase):
                 )
                 if body:
                     e.write_exclusive(restricted / locator, body)
-                    request = e.json_bytes(
-                        {
-                            "model": e.MODEL,
-                            "state": case["state"],
-                            "questions": {
-                                "context_sufficiency": {
-                                    "type": "choice",
-                                    **self.question,
-                                }
-                            },
-                        }
-                    )
+                    request = evidence.emitted_request(case, self.question)
                     e.write_exclusive(
                         restricted
                         / "requests"
@@ -625,6 +639,90 @@ class E013Tests(unittest.TestCase):
             public_manifest = (output / "manifest.json").read_bytes()
             summary_bytes = (output / "summary.json").read_bytes()
             restricted_rows = (restricted / "analysis.jsonl").read_bytes()
+            visible = [json.loads(line) for line in public_rows.splitlines()]
+            full_local = [json.loads(line) for line in restricted_rows.splitlines()]
+            visible[1] = full_local[1]
+            (output / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in visible)
+            )
+            self.assertIn(
+                "ANALYSIS_VISIBILITY_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "analysis.jsonl").write_bytes(public_rows)
+
+            wrong_request = [json.loads(line) for line in public_rows.splitlines()]
+            wrong_request[0]["request_sha256"] = "0" * 64
+            (output / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in wrong_request)
+            )
+            request_review_bytes = (output / "review.json").read_bytes()
+            request_review = e.read_object(output / "review.json")
+            request_review["cases"][0]["analysis_sha256"] = e.sha(
+                e.json_bytes(wrong_request[0])
+            )
+            (output / "review.json").write_bytes(e.json_bytes(request_review))
+            request_manifest = e.read_object(output / "manifest.json")
+            request_manifest["cases"][0]["analysis_sha256"] = request_review["cases"][
+                0
+            ]["analysis_sha256"]
+            request_manifest["review_sha256"] = e.sha(
+                (output / "review.json").read_bytes()
+            )
+            (output / "manifest.json").write_bytes(e.json_bytes(request_manifest))
+            self.assertIn(
+                "REQUEST_HASH_MISMATCH",
+                {gap["reason"] for gap in evidence.verify_evidence(output)["gaps"]},
+            )
+            (output / "analysis.jsonl").write_bytes(public_rows)
+            (output / "review.json").write_bytes(request_review_bytes)
+            (output / "manifest.json").write_bytes(public_manifest)
+
+            request_path = (
+                restricted
+                / "requests"
+                / self.cases[0]["group"]
+                / f"{self.cases[0]['case_id']}.body"
+            )
+            request_bytes = request_path.read_bytes()
+            request_path.unlink()
+            self.assertIn(
+                "REQUEST_BODY_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            request_path.write_bytes(request_bytes)
+
+            public_review = e.read_object(output / "review.json")
+            original_review = (output / "review.json").read_bytes()
+            public_review["cases"][0]["group"] = []
+            (output / "review.json").write_bytes(e.json_bytes(public_review))
+            self.assertIn(
+                "REVIEW_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "review.json").write_bytes(original_review)
+
+            wrong_reviewer = e.read_object(output / "manifest.json")
+            wrong_reviewer["reviewed_by"] = "someone else"
+            (output / "manifest.json").write_bytes(e.json_bytes(wrong_reviewer))
+            self.assertIn(
+                "REVIEW_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "manifest.json").write_bytes(public_manifest)
+
             stale_locator = [json.loads(line) for line in restricted_rows.splitlines()]
             stale_locator[2]["raw_locator"] = "responses/research/stale.body"
             (restricted / "analysis.jsonl").write_bytes(

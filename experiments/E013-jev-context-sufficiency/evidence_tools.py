@@ -420,6 +420,35 @@ def request_gap(
     return None
 
 
+def emitted_request(case: dict[str, Any], question: dict[str, Any]) -> bytes:
+    """Recreate the pinned SDK's exact request bytes without network access."""
+    if e.version("typesafe-sdk") != e.SDK_VERSION:
+        raise e.ContractError("SDK_VERSION_MISMATCH")
+    captured: list[bytes] = []
+
+    def capture(request: e.httpx2.Request) -> e.httpx2.Response:
+        captured.append(request.content)
+        return e.httpx2.Response(200, content=b"{}")
+
+    with e.TypeSafeClient(
+        api_key="offline-verification",
+        model=e.MODEL,
+        base_url="https://example.invalid",
+        retry=e.RetryPolicy(max_retries=0),
+        http_client=e.httpx2.Client(transport=e.httpx2.MockTransport(capture)),
+    ) as client:
+        try:
+            client.system_one(
+                state=case["state"],
+                questions={"context_sufficiency": e.Choice(**question)},
+            )
+        except e.TypeSafeError:
+            pass
+    if len(captured) != 1 or request_gap(captured[0], case, question):
+        raise e.ContractError("REQUEST_RECONSTRUCTION_FAILED")
+    return captured[0]
+
+
 def verify_local_run(run_dir: Path) -> dict[str, Any]:
     """Verify current local bytes; this does not establish backup or immutability."""
     manifest = e.read_object(run_dir / "manifest.json")
@@ -821,11 +850,21 @@ def verify_evidence(
         decisions = review.get("cases")
         if (
             review.get("run_id") != manifest.get("run_id")
+            or not isinstance(review.get("approved_by"), str)
+            or not review["approved_by"].strip()
+            or manifest.get("reviewed_by") != review["approved_by"]
             or review.get("summary_public") is not True
             or review.get("summary_safety_checked") is not True
             or review.get("summary_sha256") != manifest.get("summary_sha256")
             or not isinstance(decisions, list)
             or len(decisions) != 75
+            or any(
+                not isinstance(decision, dict)
+                or decision.get("group") not in e.GROUPS
+                or not isinstance(decision.get("case_id"), str)
+                or not e.CASE_ID.fullmatch(decision["case_id"])
+                for decision in decisions
+            )
         ):
             gaps.append({"reason": "REVIEW_MISMATCH"})
         else:
@@ -864,16 +903,44 @@ def verify_evidence(
     for row in rows:
         key = (row["group"], row["case_id"])
         item = by_key[key]
+        restricted_analysis = item["analysis_restricted"]
+        if restricted_analysis:
+            if (
+                set(row)
+                != {
+                    "run_id",
+                    "group",
+                    "case_id",
+                    "status",
+                    "raw_sha256",
+                    "analysis_restricted",
+                    "analysis_sha256",
+                }
+                or row["analysis_restricted"] is not True
+            ):
+                gaps.append(
+                    {
+                        "group": key[0],
+                        "case_id": key[1],
+                        "reason": "ANALYSIS_VISIBILITY_MISMATCH",
+                    }
+                )
+                continue
+        elif row.get("analysis_restricted") is not None:
+            gaps.append(
+                {
+                    "group": key[0],
+                    "case_id": key[1],
+                    "reason": "ANALYSIS_VISIBILITY_MISMATCH",
+                }
+            )
+            continue
         if row.get("status") in ("VALID", "INVALID") and item.get("raw_sha256") is None:
             gaps.append(
                 {"group": key[0], "case_id": key[1], "reason": "CAPTURED_BODY_MISSING"}
             )
             continue
-        if (
-            row.get("analysis_restricted")
-            and restricted is not None
-            and key not in restricted
-        ):
+        if restricted_analysis and restricted is not None and key not in restricted:
             gaps.append(
                 {
                     "group": key[0],
@@ -883,11 +950,9 @@ def verify_evidence(
             )
             continue
         full = (
-            restricted[key]
-            if row.get("analysis_restricted") and restricted is not None
-            else row
+            restricted[key] if restricted_analysis and restricted is not None else row
         )
-        if row.get("analysis_restricted") and restricted is None:
+        if restricted_analysis and restricted is None:
             gaps.append(
                 {
                     "group": key[0],
@@ -906,6 +971,15 @@ def verify_evidence(
                 {"group": key[0], "case_id": key[1], "reason": "RUN_ID_MISMATCH"}
             )
             continue
+        if restricted_analysis and full.get("status") != row.get("status"):
+            gaps.append(
+                {
+                    "group": key[0],
+                    "case_id": key[1],
+                    "reason": "ANALYSIS_STATUS_MISMATCH",
+                }
+            )
+            continue
         if (
             full.get("status") in ("VALID", "INVALID")
             and full.get("request_sha256") is None
@@ -914,6 +988,38 @@ def verify_evidence(
                 {"group": key[0], "case_id": key[1], "reason": "REQUEST_BODY_MISSING"}
             )
             continue
+        request_hash = full.get("request_sha256")
+        if request_hash is not None:
+            case = cases.get(key)
+            try:
+                reconstructed = emitted_request(case, question) if case else None
+            except (e.ContractError, e.TypeSafeError, OSError, ValueError):
+                reconstructed = None
+            if reconstructed is None or e.sha(reconstructed) != request_hash:
+                gaps.append(
+                    {
+                        "group": key[0],
+                        "case_id": key[1],
+                        "reason": "REQUEST_HASH_MISMATCH",
+                    }
+                )
+                continue
+            if restricted_run is not None:
+                try:
+                    retained = bounded_path(
+                        restricted_run, f"requests/{key[0]}/{key[1]}.body"
+                    ).read_bytes()
+                except (OSError, e.ContractError):
+                    retained = None
+                if retained != reconstructed:
+                    gaps.append(
+                        {
+                            "group": key[0],
+                            "case_id": key[1],
+                            "reason": "REQUEST_BODY_MISMATCH",
+                        }
+                    )
+                    continue
         raw_hash = item["raw_sha256"]
         if full.get("raw_sha256") != raw_hash or row.get("raw_sha256") != raw_hash:
             gaps.append(
