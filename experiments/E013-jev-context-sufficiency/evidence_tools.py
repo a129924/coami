@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from contextlib import contextmanager
 import json
 from datetime import datetime
 from pathlib import Path
@@ -48,6 +49,8 @@ LOCAL_MANIFEST_KEYS = {
     "live_authorization_path",
     "store_policy_sha256",
     "store_policy_path",
+    "uv_lock_sha256",
+    "uv_lock_path",
 }
 LOCAL_REQUIRED_KEYS = LOCAL_MANIFEST_KEYS - {
     "runner_source_path",
@@ -55,6 +58,8 @@ LOCAL_REQUIRED_KEYS = LOCAL_MANIFEST_KEYS - {
     "live_authorization_path",
     "store_policy_sha256",
     "store_policy_path",
+    "uv_lock_sha256",
+    "uv_lock_path",
 }
 PUBLIC_MANIFEST_KEYS = (LOCAL_MANIFEST_KEYS - {"store_root"}) | {
     "cases",
@@ -66,6 +71,16 @@ PUBLIC_MANIFEST_KEYS = (LOCAL_MANIFEST_KEYS - {"store_root"}) | {
     "review_sha256",
     "runner_public_path",
     "runner_revision",
+}
+LOCATOR_KEYS = {
+    "group",
+    "case_id",
+    "raw_sha256",
+    "raw_public_path",
+    "raw_restricted_path",
+    "analysis_sha256",
+    "analysis_restricted",
+    "restricted_run_version",
 }
 
 
@@ -272,6 +287,15 @@ def summary_bytes(run_dir: Path) -> bytes:
         or summary.get("threshold_selected") is not False
     ):
         raise e.ContractError("INVALID_SUMMARY")
+    try:
+        generated = summary["generated_utc"]
+        if not isinstance(generated, str):
+            raise ValueError
+        timestamp = datetime.fromisoformat(generated)
+        if timestamp.tzinfo is None or timestamp.utcoffset() is None:
+            raise ValueError
+    except (ValueError, TypeError) as exc:
+        raise e.ContractError("INVALID_SUMMARY") from exc
     return data
 
 
@@ -391,6 +415,7 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
             "freeze_attestation_sha256",
             "store_policy_sha256",
             "runner_sha256",
+            "uv_lock_sha256",
         }:
             return "AUTHORIZATION_MISMATCH"
         if any(
@@ -406,6 +431,10 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
                 document["store_policy_sha256"]
                 != e.sha(policy_snapshot(root, manifest)),
                 document["runner_sha256"] != e.sha((root / "runner.py").read_bytes()),
+                manifest.get("uv_lock_path") != "uv.lock",
+                manifest.get("uv_lock_sha256")
+                != e.sha((root / "uv.lock").read_bytes()),
+                document["uv_lock_sha256"] != manifest.get("uv_lock_sha256"),
             )
         ):
             return "AUTHORIZATION_MISMATCH"
@@ -706,6 +735,41 @@ def verify_local_run(
 
 def publish_reviewed(run_dir: Path, approval_path: Path, evidence_root: Path) -> Path:
     """Export only reviewed rows and byte-identical approved raw bodies."""
+    with snapshot_run(run_dir) as snapshot:
+        return _publish_snapshot(snapshot, approval_path, evidence_root)
+
+
+@contextmanager
+def snapshot_run(run_dir: Path):
+    """Keep verification and publication on one private byte snapshot."""
+    with tempfile.TemporaryDirectory(
+        prefix=".e013-review-", dir=run_dir.parent
+    ) as temp:
+        snapshot = Path(temp) / run_dir.name
+        snapshot.mkdir(mode=0o700)
+        files = [
+            "manifest.json",
+            "analysis.jsonl",
+            "summary.json",
+            "runner.py",
+            "authorization.json",
+            "store-policy.json",
+            "uv.lock",
+        ]
+        for case in e.load_cases():
+            for kind in ("requests", "responses"):
+                files.append(f"{kind}/{case['group']}/{case['case_id']}.body")
+        for locator in files:
+            source = bounded_path(run_dir, locator)
+            try:
+                data = source.read_bytes()
+            except FileNotFoundError:
+                continue
+            e.write_exclusive(snapshot / locator, data)
+        yield snapshot
+
+
+def _publish_snapshot(run_dir: Path, approval_path: Path, evidence_root: Path) -> Path:
     manifest = read_manifest(run_dir / "manifest.json")
     if verify_local_run(run_dir, manifest)["gaps"]:
         raise e.ContractError("LOCAL_EVIDENCE_UNVERIFIED")
@@ -806,6 +870,8 @@ def _write_publication(
             output / "authorization.json", (run_dir / "authorization.json").read_bytes()
         )
     e.write_exclusive(output / "store-policy.json", policy_snapshot(run_dir, manifest))
+    if manifest.get("live_authorization_sha256") is not None:
+        e.write_exclusive(output / "uv.lock", (run_dir / "uv.lock").read_bytes())
     public_review = {
         "run_id": run_id,
         "approved_by": approval["approved_by"],
@@ -932,6 +998,7 @@ def verify_evidence(
         raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
     if any(
         not isinstance(item, dict)
+        or set(item) != LOCATOR_KEYS
         or item.get("group") not in e.GROUPS
         or not isinstance(item.get("case_id"), str)
         or not e.CASE_ID.fullmatch(item["case_id"])
@@ -1072,6 +1139,7 @@ def verify_evidence(
                     "analysis_sha256",
                 }
                 or row["analysis_restricted"] is not True
+                or row["analysis_sha256"] != item["analysis_sha256"]
             ):
                 gaps.append(
                     {

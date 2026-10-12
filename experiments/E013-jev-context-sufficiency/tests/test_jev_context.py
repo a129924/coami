@@ -100,6 +100,34 @@ class E013Tests(unittest.TestCase):
             with self.assertRaisesRegex(e.ContractError, "INVALID_FREEZE_ATTESTATION"):
                 e.load_freeze(attestation)
 
+    def test_live_cases_use_validated_source_bytes(self) -> None:
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source_paths = {
+                "research": root
+                / "evaluation/context_sufficiency/versions/v1/context_sufficiency_v1.jsonl",
+                "v0": root
+                / "evaluation/context_sufficiency/dataset/context_sufficiency_v0.jsonl",
+            }
+            for group, path in source_paths.items():
+                original = (
+                    e.ORACLE
+                    / (
+                        "versions/v1/context_sufficiency_v1.jsonl"
+                        if group == "research"
+                        else "dataset/context_sufficiency_v0.jsonl"
+                    )
+                ).read_bytes()
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(original)
+            hashes = e.load_freeze(e.ORACLE / "versions/v1/freeze-attestation.json")
+            snapshot = e.read_frozen_case_sources(root, hashes)
+            expected = e.load_cases(root, snapshot)
+            source_paths["research"].write_bytes(b"changed after snapshot")
+            self.assertEqual(e.load_cases(root, snapshot), expected)
+            with self.assertRaisesRegex(e.ContractError, "CASE_SOURCE_MISMATCH"):
+                e.read_frozen_case_sources(root, hashes)
+
     def test_response_capture_precedes_sdk_validation_and_preserves_unknown_bytes(
         self,
     ) -> None:
@@ -133,6 +161,13 @@ class E013Tests(unittest.TestCase):
             self.assertEqual(len(sent), 1)
             self.assertEqual(capture.raw_sha, e.sha(raw))
             self.assertEqual((run_dir / capture.raw_path).read_bytes(), raw)
+            ambiguous = raw.replace(
+                b'"choice":"SUFFICIENT"',
+                b'"choice":"INSUFFICIENT","choice":"SUFFICIENT"',
+            )
+            self.assertEqual(
+                e.parse_answer(ambiguous)["error_code"], "DUPLICATE_RESPONSE_FIELD"
+            )
             emitted = (
                 run_dir / "requests" / case["group"] / f"{case['case_id']}.body"
             ).read_bytes()
@@ -301,6 +336,12 @@ class E013Tests(unittest.TestCase):
             )
             with self.assertRaisesRegex(e.ContractError, "INVALID_SUMMARY"):
                 evidence.summary_bytes(path.parent)
+            changed = json.loads(source)
+            for bad_time in (None, "not-a-time", "2026-10-08T00:00:00"):
+                changed["generated_utc"] = bad_time
+                path.write_bytes(e.json_bytes(changed))
+                with self.assertRaisesRegex(e.ContractError, "INVALID_SUMMARY"):
+                    evidence.summary_bytes(path.parent)
             path.write_bytes(source + b" ")
             with self.assertRaisesRegex(e.ContractError, "INVALID_SUMMARY"):
                 evidence.summary_bytes(path.parent)
@@ -358,11 +399,13 @@ class E013Tests(unittest.TestCase):
                 / "experiments/E013-jev-context-sufficiency/local-store-policy.json"
             )
             runner = root / e.RUNNER_RELATIVE
+            lock = root / e.LOCK_RELATIVE
             freeze.parent.mkdir(parents=True)
             policy.parent.mkdir(parents=True)
             freeze.write_bytes(b"freeze")
             policy.write_bytes(b"policy")
             runner.write_bytes(b"runner")
+            lock.write_bytes(b"lock")
             document = {
                 "run_id": "run-unique",
                 "authorized_by": "Owner",
@@ -371,6 +414,7 @@ class E013Tests(unittest.TestCase):
                 "freeze_attestation_sha256": e.sha(b"freeze"),
                 "store_policy_sha256": e.sha(b"policy"),
                 "runner_sha256": e.sha(b"runner"),
+                "uv_lock_sha256": e.sha(b"lock"),
             }
             auth.write_bytes(e.json_bytes(document))
             committed = {
@@ -378,6 +422,7 @@ class E013Tests(unittest.TestCase):
                 freeze.relative_to(root).as_posix(): freeze.read_bytes(),
                 policy.relative_to(root).as_posix(): policy.read_bytes(),
                 runner.relative_to(root).as_posix(): runner.read_bytes(),
+                lock.relative_to(root).as_posix(): lock.read_bytes(),
             }
 
             def git_show(
@@ -429,6 +474,24 @@ class E013Tests(unittest.TestCase):
                 ):
                     e.load_live_authorization(auth, freeze, policy, root, runner)
                 runner.write_bytes(b"runner")
+                lock.write_bytes(b"dirty lock")
+                with self.assertRaisesRegex(
+                    e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
+                ):
+                    e.load_live_authorization(auth, freeze, policy, root, runner)
+                lock.write_bytes(b"lock")
+                committed[lock.relative_to(root).as_posix()] = b"changed lock"
+                with self.assertRaisesRegex(
+                    e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
+                ):
+                    e.load_live_authorization(auth, freeze, policy, root, runner)
+                lock.write_bytes(b"changed lock")
+                with self.assertRaisesRegex(
+                    e.ContractError, "LIVE_AUTHORIZATION_MISMATCH"
+                ):
+                    e.load_live_authorization(auth, freeze, policy, root, runner)
+                lock.write_bytes(b"lock")
+                committed[lock.relative_to(root).as_posix()] = b"lock"
                 auth.write_bytes(e.json_bytes({**document, "run_id": "reused"}))
                 with self.assertRaisesRegex(
                     e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
@@ -576,6 +639,8 @@ class E013Tests(unittest.TestCase):
             e.write_exclusive(restricted / "runner.py", runner_source)
             store_policy_bytes = (e.TOPIC / "local-store-policy.json").read_bytes()
             e.write_exclusive(restricted / "store-policy.json", store_policy_bytes)
+            uv_lock_bytes = (e.TOPIC / "uv.lock").read_bytes()
+            e.write_exclusive(restricted / "uv.lock", uv_lock_bytes)
             authorization = e.json_bytes(
                 {
                     "run_id": "run-1",
@@ -587,6 +652,7 @@ class E013Tests(unittest.TestCase):
                     ),
                     "store_policy_sha256": e.sha(store_policy_bytes),
                     "runner_sha256": e.sha(runner_source),
+                    "uv_lock_sha256": e.sha(uv_lock_bytes),
                 }
             )
             e.write_exclusive(restricted / "authorization.json", authorization)
@@ -609,6 +675,8 @@ class E013Tests(unittest.TestCase):
                         "live_authorization_path": "authorization.json",
                         "store_policy_sha256": e.sha(store_policy_bytes),
                         "store_policy_path": "store-policy.json",
+                        "uv_lock_sha256": e.sha(uv_lock_bytes),
+                        "uv_lock_path": "uv.lock",
                         "sdk_version": e.SDK_VERSION,
                         "conditions": {
                             "timeout_seconds": 30,
@@ -813,6 +881,16 @@ class E013Tests(unittest.TestCase):
             with_access = evidence.verify_evidence(output, restricted, 0.8)
             self.assertEqual(with_access["verified_cases"], 75)
             self.assertEqual(with_access["gaps"], [])
+            published_lock = (output / "uv.lock").read_bytes()
+            (output / "uv.lock").write_bytes(published_lock + b"\n")
+            self.assertIn(
+                "AUTHORIZATION_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "uv.lock").write_bytes(published_lock)
             self.assertEqual(
                 with_access["candidate_threshold_errors"]["research"]["eligible"], 2
             )
@@ -861,6 +939,12 @@ class E013Tests(unittest.TestCase):
             with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_MANIFEST"):
                 evidence.verify_evidence(output)
             (output / "manifest.json").write_bytes(public_manifest)
+            extra_locator = e.read_object(output / "manifest.json")
+            extra_locator["cases"][0]["unreviewed_note"] = "must-not-publish"
+            (output / "manifest.json").write_bytes(e.json_bytes(extra_locator))
+            with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_MANIFEST"):
+                evidence.verify_evidence(output, restricted)
+            (output / "manifest.json").write_bytes(public_manifest)
             altered_revision = e.read_object(output / "manifest.json")
             altered_revision["runner_revision"] = "0" * 40
             (output / "manifest.json").write_bytes(e.json_bytes(altered_revision))
@@ -901,6 +985,19 @@ class E013Tests(unittest.TestCase):
             visible[1] = full_local[1]
             (output / "analysis.jsonl").write_bytes(
                 b"".join(e.json_bytes(row) for row in visible)
+            )
+            self.assertIn(
+                "ANALYSIS_VISIBILITY_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "analysis.jsonl").write_bytes(public_rows)
+            wrong_stub = [json.loads(line) for line in public_rows.splitlines()]
+            wrong_stub[1]["analysis_sha256"] = "0" * 64
+            (output / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in wrong_stub)
             )
             self.assertIn(
                 "ANALYSIS_VISIBILITY_MISMATCH",
@@ -1314,8 +1411,30 @@ class E013Tests(unittest.TestCase):
                 with self.assertRaises(OSError):
                     evidence.publish_reviewed(restricted, approval, second_root)
             self.assertFalse((second_root / "runs" / "run-1").exists())
-            self.assertEqual(list((second_root / "runs").iterdir()), [])
-            evidence.publish_reviewed(restricted, approval, second_root)
+            if (second_root / "runs").exists():
+                self.assertEqual(list((second_root / "runs").iterdir()), [])
+
+            def mutate_original_after_verify(
+                run_dir: Path, manifest: dict[str, object]
+            ) -> dict[str, object]:
+                result = actual_verify(run_dir, manifest)
+                changed = [json.loads(line) for line in restricted_rows.splitlines()]
+                changed[0]["status"] = "ERROR"
+                (restricted / "analysis.jsonl").write_bytes(
+                    b"".join(e.json_bytes(row) for row in changed)
+                )
+                return result
+
+            with patch.object(
+                evidence, "verify_local_run", side_effect=mutate_original_after_verify
+            ):
+                retry_output = evidence.publish_reviewed(
+                    restricted, approval, second_root
+                )
+            (restricted / "analysis.jsonl").write_bytes(restricted_rows)
+            self.assertEqual(
+                evidence.verify_evidence(retry_output, restricted)["gaps"], []
+            )
 
             # Even INVALID 2xx observations must carry the captured body.
             altered = e.read_object(output / "manifest.json")

@@ -51,6 +51,7 @@ V1_FILES = ("README.md", "context_sufficiency_v1.jsonl", "validate_dataset.py")
 LOCAL_STORE_ROOT = Path("/Users/andrew/coami-evidence/E013")
 HISTORICAL_RUN_ID = "20261008T035450Z-010364d7"
 RUNNER_RELATIVE = Path("experiments/E013-jev-context-sufficiency/jev_context.py")
+LOCK_RELATIVE = RUNNER_RELATIVE.parent / "uv.lock"
 POLICY_RELATIVE = Path(
     "experiments/E013-jev-context-sufficiency/local-store-policy.json"
 )
@@ -287,7 +288,13 @@ def load_live_authorization(
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         current = path.read_bytes()
         document = parse_live_authorization(current)
-        for dependency in (path, attestation, store_policy, runner):
+        for dependency in (
+            path,
+            attestation,
+            store_policy,
+            runner,
+            root / LOCK_RELATIVE,
+        ):
             dependency_relative = dependency.resolve().relative_to(root.resolve())
             committed = subprocess.run(
                 ["git", "show", f"HEAD:{dependency_relative.as_posix()}"],
@@ -305,6 +312,7 @@ def load_live_authorization(
             "freeze_attestation_sha256",
             "store_policy_sha256",
             "runner_sha256",
+            "uv_lock_sha256",
         }:
             raise ContractError("LIVE_AUTHORIZATION_MISMATCH")
         run_id = document.get("run_id")
@@ -318,6 +326,8 @@ def load_live_authorization(
             != sha(attestation.read_bytes())
             or document.get("store_policy_sha256") != sha(store_policy.read_bytes())
             or document.get("runner_sha256") != sha(runner.read_bytes())
+            or document.get("uv_lock_sha256")
+            != sha((root / LOCK_RELATIVE).read_bytes())
         ):
             raise ContractError("LIVE_AUTHORIZATION_MISMATCH")
         return run_id, sha(current)
@@ -327,7 +337,9 @@ def load_live_authorization(
         raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED") from exc
 
 
-def load_cases(root: Path = ROOT) -> list[dict[str, Any]]:
+def load_cases(
+    root: Path = ROOT, source_bytes: dict[str, bytes] | None = None
+) -> list[dict[str, Any]]:
     result = []
     paths = (
         (
@@ -342,7 +354,8 @@ def load_cases(root: Path = ROOT) -> list[dict[str, Any]]:
         ),
     )
     for source, path in paths:
-        for line in path.read_text(encoding="utf-8").splitlines():
+        data = source_bytes[source] if source_bytes is not None else path.read_bytes()
+        for line in data.decode("utf-8").splitlines():
             row = json.loads(line)
             group = row["split"] if source == "research" else "v0"
             case_id = row["id"]
@@ -387,11 +400,34 @@ def load_cases(root: Path = ROOT) -> list[dict[str, Any]]:
     return result
 
 
+def read_frozen_case_sources(
+    root: Path, freeze_hashes: dict[str, str]
+) -> dict[str, bytes]:
+    """Read each case file once and bind the bytes used for the live requests."""
+    sources = {
+        "research": (
+            root
+            / "evaluation/context_sufficiency/versions/v1/context_sufficiency_v1.jsonl"
+        ).read_bytes(),
+        "v0": (
+            root / "evaluation/context_sufficiency/dataset/context_sufficiency_v0.jsonl"
+        ).read_bytes(),
+    }
+    if (
+        sha(sources["research"]) != freeze_hashes["context_sufficiency_v1.jsonl"]
+        or sha(sources["v0"]) != V0_HASHES["dataset/context_sufficiency_v0.jsonl"]
+    ):
+        raise ContractError("CASE_SOURCE_MISMATCH")
+    return sources
+
+
 def load_question(root: Path = ROOT) -> dict[str, Any]:
     policy_path = root / "experiments/E012-jev-text-policy/policies.json"
-    if sha(policy_path.read_bytes()) != POLICY_HASH:
+    data = policy_path.read_bytes()
+    if sha(data) != POLICY_HASH:
         raise ContractError("POLICY_HASH_MISMATCH")
-    row = read_object(policy_path).get("context_sufficiency")
+    policy = json.loads(data)
+    row = policy.get("context_sufficiency") if isinstance(policy, dict) else None
     if not isinstance(row, dict) or set(row) != {"instructions", "criteria"}:
         raise ContractError("INVALID_POLICY")
     if not isinstance(row["criteria"], dict) or set(row["criteria"]) != set(CHOICES):
@@ -415,8 +451,16 @@ def validate_oracles(root: Path = ROOT) -> None:
 
 
 def parse_answer(raw: bytes) -> dict[str, Any]:
+    def unique(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ContractError("DUPLICATE_RESPONSE_FIELD")
+            result[key] = value
+        return result
+
     try:
-        value = json.loads(raw)
+        value = json.loads(raw, object_pairs_hook=unique)
         if not isinstance(value, dict) or value.get("model") != MODEL:
             raise ContractError("INVALID_MODEL")
         answers = value.get("answers")
@@ -690,8 +734,9 @@ def run_live(
             raise ContractError("MISSING_KEY")
         if version("typesafe-sdk") != SDK_VERSION:
             raise ContractError("SDK_VERSION_MISMATCH")
-        cases = load_cases(root)
         validate_oracles(root)
+        case_sources = read_frozen_case_sources(root, freeze_hashes)
+        cases = load_cases(root, case_sources)
         question = load_question(root)
         runner_source = Path(__file__).read_bytes()
         runner_hash = sha(runner_source)
@@ -704,6 +749,12 @@ def run_live(
         if (
             sha(store_policy_bytes)
             != parse_live_authorization(authorization_bytes)["store_policy_sha256"]
+        ):
+            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+        lock_bytes = (root / LOCK_RELATIVE).read_bytes()
+        if (
+            sha(lock_bytes)
+            != parse_live_authorization(authorization_bytes)["uv_lock_sha256"]
         ):
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         policy_hash = POLICY_HASH
@@ -739,6 +790,8 @@ def run_live(
         "live_authorization_path": "authorization.json",
         "store_policy_sha256": sha(store_policy_bytes),
         "store_policy_path": "store-policy.json",
+        "uv_lock_sha256": sha(lock_bytes),
+        "uv_lock_path": "uv.lock",
         "store": policy_metadata,
         "store_root": str(store.resolve()),
         "conditions": {"timeout_seconds": 30, "retries": 0, "order": list(GROUPS)},
@@ -748,6 +801,7 @@ def run_live(
     write_exclusive(run_dir / "runner.py", runner_source)
     write_exclusive(run_dir / "authorization.json", authorization_bytes)
     write_exclusive(run_dir / "store-policy.json", store_policy_bytes)
+    write_exclusive(run_dir / "uv.lock", lock_bytes)
     rows: list[dict[str, Any]] = []
     stopped = False
     for index, case in enumerate(cases):
