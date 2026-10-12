@@ -102,6 +102,43 @@ def read_object(path: Path) -> dict[str, Any]:
     return value
 
 
+def parse_gate_document(data: bytes, code: str) -> dict[str, Any]:
+    """Accept the frozen, two-space JSON format without ambiguous fields."""
+
+    def unique(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        document = {}
+        for key, value in pairs:
+            if key in document:
+                raise ContractError(code)
+            document[key] = value
+        return document
+
+    def invalid_number(value: str) -> None:
+        raise ContractError(code)
+
+    try:
+        document = json.loads(
+            data, object_pairs_hook=unique, parse_constant=invalid_number
+        )
+        canonical = (
+            json.dumps(document, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
+        ).encode()
+        if not isinstance(document, dict) or data != canonical:
+            raise ContractError(code)
+    except (ValueError, TypeError, UnicodeDecodeError) as exc:
+        if isinstance(exc, ContractError):
+            raise
+        raise ContractError(code) from exc
+    return document
+
+
+def read_gate_document(path: Path, code: str) -> dict[str, Any]:
+    try:
+        return parse_gate_document(path.read_bytes(), code)
+    except OSError as exc:
+        raise ContractError(code) from exc
+
+
 def parse_live_authorization(data: bytes) -> dict[str, Any]:
     """Require one unambiguous, canonical Owner authorization document."""
 
@@ -156,7 +193,7 @@ def seal_run(run_dir: Path) -> None:
 
 def load_freeze(attestation: Path, root: Path = ROOT) -> dict[str, str]:
     """Match a separately accepted freeze record to exact on-disk bytes."""
-    document = read_object(attestation)
+    document = read_gate_document(attestation, "INVALID_FREEZE_ATTESTATION")
     if any(
         document.get(field) is not True
         for field in ("owner_accepted_60", "fixture_review_approved", "frozen")
@@ -189,7 +226,7 @@ def load_freeze(attestation: Path, root: Path = ROOT) -> dict[str, str]:
 
 
 def load_store_policy(path: Path, store: Path, root: Path = ROOT) -> dict[str, Any]:
-    policy = read_object(path)
+    policy = read_gate_document(path, "STORE_APPROVAL_MISMATCH")
     if set(policy) != STORE_POLICY_KEYS:
         raise ContractError("STORE_APPROVAL_MISMATCH")
     required = ("approved_by", "store_id", "agent_access")

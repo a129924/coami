@@ -14,6 +14,17 @@ import jev_context as e
 
 HASH = re.compile(r"[0-9a-f]{64}\Z")
 STATUSES = {"VALID", "INVALID", "ERROR", "UNKNOWN", "NOT_RUN"}
+ERROR_CODES = {
+    "IO_TIMEOUT",
+    "AUTH_FAILED",
+    "ACCESS_DENIED",
+    "CONNECTION_FAILED",
+    "SDK_RESPONSE_INVALID",
+    "HTTP_FAILED",
+    "SDK_FAILED",
+    "INTERNAL_ERROR",
+}
+UNKNOWN_CODES = {"CAPTURE_OR_RUNTIME_FAILED"}
 PRE_RECORD_RUN_ID = "20261008T035450Z-010364d7"
 PRE_RECORD_POLICY_HASH = (
     "ec532b9bf729a59074b63d57ce22cc4cbf04ffe6be8dcf52527f6b00b492a2ea"
@@ -215,8 +226,16 @@ def read_rows(path: Path) -> list[dict[str, Any]]:
             row.get(field) is not None for field in ("request_sha256", "raw_sha256")
         ):
             raise e.ContractError("INVALID_ANALYSIS_STATUS_FIELDS")
-        if status in ("INVALID", "ERROR", "UNKNOWN") and not isinstance(
-            row.get("error_code"), str
+        if status == "INVALID" and not isinstance(row.get("error_code"), str):
+            raise e.ContractError("INVALID_ANALYSIS_STATUS_FIELDS")
+        if status == "ERROR" and (
+            not isinstance(row.get("error_code"), str)
+            or row["error_code"] not in ERROR_CODES
+        ):
+            raise e.ContractError("INVALID_ANALYSIS_STATUS_FIELDS")
+        if status == "UNKNOWN" and (
+            not isinstance(row.get("error_code"), str)
+            or row["error_code"] not in UNKNOWN_CODES
         ):
             raise e.ContractError("INVALID_ANALYSIS_STATUS_FIELDS")
         if status == "NOT_RUN" and row.get("error_code") is not None:
@@ -230,8 +249,14 @@ def summary_bytes(run_dir: Path) -> bytes:
     """Reject extra metadata and require exact, reviewable summary content."""
     data = (run_dir / "summary.json").read_bytes()
     try:
-        summary = json.loads(data)
-    except (ValueError, UnicodeDecodeError) as exc:
+        summary = json.loads(
+            data,
+            object_pairs_hook=unique_object,
+            parse_constant=invalid_constant,
+        )
+        if e.json_bytes(summary) != data:
+            raise e.ContractError("INVALID_SUMMARY")
+    except (ValueError, TypeError, UnicodeDecodeError) as exc:
         raise e.ContractError("INVALID_SUMMARY") from exc
     if (
         not isinstance(summary, dict)
@@ -276,10 +301,8 @@ def policy_snapshot(root: Path, manifest: dict[str, Any]) -> bytes:
 def metadata_gaps(root: Path, manifest: dict[str, Any]) -> list[dict[str, str]]:
     """Check local-store claims against the run's retained approval policy."""
     try:
-        policy = json.loads(
-            policy_snapshot(root, manifest),
-            object_pairs_hook=unique_object,
-            parse_constant=invalid_constant,
+        policy = e.parse_gate_document(
+            policy_snapshot(root, manifest), "STORE_POLICY_MISMATCH"
         )
         if not isinstance(policy, dict) or set(policy) != e.STORE_POLICY_KEYS:
             raise ValueError

@@ -82,8 +82,22 @@ class E013Tests(unittest.TestCase):
             attestation = Path(temporary) / "freeze.json"
             changed = e.read_object(frozen)
             changed["review_sha256"] = "0" * 64
-            attestation.write_bytes(e.json_bytes(changed))
+            attestation.write_bytes(
+                (json.dumps(changed, ensure_ascii=False, indent=2) + "\n").encode()
+            )
             with self.assertRaisesRegex(e.ContractError, "V1_NOT_FROZEN"):
+                e.load_freeze(attestation)
+
+            original = frozen.read_bytes()
+            attestation.write_bytes(
+                original.replace(
+                    b'  "frozen": true,', b'  "frozen": false,\n  "frozen": true,'
+                )
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_FREEZE_ATTESTATION"):
+                e.load_freeze(attestation)
+            attestation.write_bytes(e.json_bytes(e.read_object(frozen)))
+            with self.assertRaisesRegex(e.ContractError, "INVALID_FREEZE_ATTESTATION"):
                 e.load_freeze(attestation)
 
     def test_response_capture_precedes_sdk_validation_and_preserves_unknown_bytes(
@@ -253,6 +267,63 @@ class E013Tests(unittest.TestCase):
         self.assertIs(policy["versioned_immutable"], False)
         self.assertIs(policy["backup_verified"], False)
         self.assertIsNone(policy["retention_until"])
+
+    def test_store_policy_gate_rejects_duplicate_and_noncanonical_json(self) -> None:
+        original = (e.TOPIC / "local-store-policy.json").read_bytes()
+        with TemporaryDirectory() as temporary:
+            path = Path(temporary) / "policy.json"
+            path.write_bytes(
+                original.replace(
+                    b'  "backup_verified": false,',
+                    b'  "backup_verified": true,\n  "backup_verified": false,',
+                )
+            )
+            with self.assertRaisesRegex(e.ContractError, "STORE_APPROVAL_MISMATCH"):
+                e.load_store_policy(path, e.LOCAL_STORE_ROOT)
+            path.write_bytes(
+                e.json_bytes(e.read_object(e.TOPIC / "local-store-policy.json"))
+            )
+            with self.assertRaisesRegex(e.ContractError, "STORE_APPROVAL_MISMATCH"):
+                e.load_store_policy(path, e.LOCAL_STORE_ROOT)
+
+    def test_reviewed_summary_rejects_duplicate_and_noncanonical_json(self) -> None:
+        source = (
+            e.TOPIC / "evidence/runs/20261008T035450Z-010364d7/summary.json"
+        ).read_bytes()
+        with TemporaryDirectory() as temporary:
+            path = Path(temporary) / "summary.json"
+            path.write_bytes(source)
+            self.assertEqual(evidence.summary_bytes(path.parent), source)
+            path.write_bytes(
+                source.replace(
+                    b'"complete": true', b'"complete": false, "complete": true'
+                )
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_SUMMARY"):
+                evidence.summary_bytes(path.parent)
+            path.write_bytes(source + b" ")
+            with self.assertRaisesRegex(e.ContractError, "INVALID_SUMMARY"):
+                evidence.summary_bytes(path.parent)
+
+    def test_analysis_rejects_unbounded_failure_reasons(self) -> None:
+        source = e.TOPIC / "evidence/runs/20261008T035450Z-010364d7/analysis.jsonl"
+        rows = [json.loads(line) for line in source.read_bytes().splitlines()]
+        with TemporaryDirectory() as temporary:
+            path = Path(temporary) / "analysis.jsonl"
+            for status in ("ERROR", "UNKNOWN"):
+                changed = deepcopy(rows)
+                changed[0].update(
+                    status=status,
+                    choice=None,
+                    probabilities=None,
+                    confidence=None,
+                    error_code="secret traceback details",
+                )
+                path.write_bytes(b"".join(e.json_bytes(row) for row in changed))
+                with self.assertRaisesRegex(
+                    e.ContractError, "INVALID_ANALYSIS_STATUS_FIELDS"
+                ):
+                    evidence.read_rows(path)
 
     def test_missing_key_preflight_never_constructs_sdk(self) -> None:
         with TemporaryDirectory() as temporary:
@@ -948,7 +1019,7 @@ class E013Tests(unittest.TestCase):
                     "choice": None,
                     "probabilities": None,
                     "confidence": None,
-                    "error_code": "IO_ERROR",
+                    "error_code": "INTERNAL_ERROR",
                 }
             )
             (restricted / "analysis.jsonl").write_bytes(
