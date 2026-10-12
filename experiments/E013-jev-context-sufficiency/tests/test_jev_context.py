@@ -203,6 +203,12 @@ class E013Tests(unittest.TestCase):
         self.assertIsNone(evidence.response_gap(forged, b"{bad", case, self.question))
         forged["error_code"] = "SDK_RESPONSE_INVALID"
         self.assertIsNone(evidence.response_gap(forged, b"{bad", case, self.question))
+        for status in ("ERROR", "UNKNOWN"):
+            forged["status"] = status
+            self.assertEqual(
+                evidence.response_gap(forged, response(), case, self.question),
+                "UNEXPECTED_CAPTURED_BODY",
+            )
 
     def test_group_summary_does_not_count_missing_as_correct(self) -> None:
         rows = []
@@ -404,6 +410,8 @@ class E013Tests(unittest.TestCase):
                 e.json_bytes(
                     {
                         "run_id": "run-1",
+                        "created_utc": "2026-10-08T00:00:00+00:00",
+                        "publication": "local-unbacked-until-reviewed-git-export",
                         "model": e.MODEL,
                         "freeze_hashes": e.load_freeze(
                             e.ORACLE / "versions/v1/freeze-attestation.json"
@@ -420,7 +428,7 @@ class E013Tests(unittest.TestCase):
                             "retries": 0,
                             "order": list(e.GROUPS),
                         },
-                        "store_root": str(root / "restricted"),
+                        "store_root": str(e.LOCAL_STORE_ROOT),
                         "store": {
                             **{
                                 name: e.read_object(
@@ -552,6 +560,24 @@ class E013Tests(unittest.TestCase):
                 evidence.publish_reviewed(
                     restricted, approval, root / "checkout-evidence"
                 )
+            bad_key = deepcopy(decisions)
+            bad_key[0]["group"] = []
+            approval.write_bytes(
+                e.json_bytes(
+                    {
+                        "run_id": "run-1",
+                        "approved_by": "owner",
+                        "summary_public": True,
+                        "summary_safety_checked": True,
+                        "summary_sha256": summary_hash,
+                        "cases": bad_key,
+                    }
+                )
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_PUBLICATION_REVIEW"):
+                evidence.publish_reviewed(
+                    restricted, approval, root / "checkout-evidence"
+                )
             self.assertFalse((root / "checkout-evidence").exists())
             approval.write_bytes(
                 e.json_bytes(
@@ -599,6 +625,74 @@ class E013Tests(unittest.TestCase):
             public_manifest = (output / "manifest.json").read_bytes()
             summary_bytes = (output / "summary.json").read_bytes()
             restricted_rows = (restricted / "analysis.jsonl").read_bytes()
+            stale_locator = [json.loads(line) for line in restricted_rows.splitlines()]
+            stale_locator[2]["raw_locator"] = "responses/research/stale.body"
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in stale_locator)
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_RAW_LOCATOR_STATE"):
+                evidence.verify_local_run(restricted)
+            (restricted / "analysis.jsonl").write_bytes(restricted_rows)
+
+            captured_error = [json.loads(line) for line in restricted_rows.splitlines()]
+            captured_error[0].update(
+                {
+                    "status": "ERROR",
+                    "choice": None,
+                    "probabilities": None,
+                    "confidence": None,
+                    "error_code": "IO_ERROR",
+                }
+            )
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in captured_error)
+            )
+            self.assertIn(
+                "UNEXPECTED_CAPTURED_BODY",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_local_run(restricted)["gaps"]
+                },
+            )
+            (restricted / "analysis.jsonl").write_bytes(restricted_rows)
+
+            lines = public_rows.splitlines()
+            duplicate = lines[0][:-1] + b',"status":"INVALID"}'
+            (output / "analysis.jsonl").write_bytes(
+                b"\n".join([duplicate, *lines[1:]]) + b"\n"
+            )
+            with self.assertRaisesRegex(e.ContractError, "DUPLICATE_ANALYSIS_FIELD"):
+                evidence.verify_evidence(output, restricted)
+            (output / "analysis.jsonl").write_bytes(
+                b"\n".join([lines[0] + b" ", *lines[1:]]) + b"\n"
+            )
+            with self.assertRaisesRegex(e.ContractError, "NONCANONICAL_ANALYSIS"):
+                evidence.verify_evidence(output, restricted)
+            (output / "analysis.jsonl").write_bytes(public_rows)
+            unexpected_manifest = e.read_object(restricted / "manifest.json")
+            original_local_manifest = (restricted / "manifest.json").read_bytes()
+            unexpected_manifest["debug_secret"] = "should-never-publish"
+            (restricted / "manifest.json").write_bytes(
+                e.json_bytes(unexpected_manifest)
+            )
+            with self.assertRaisesRegex(e.ContractError, "UNREVIEWED_MANIFEST_FIELD"):
+                evidence.publish_reviewed(
+                    restricted, approval, root / "another-evidence"
+                )
+            (restricted / "manifest.json").write_bytes(original_local_manifest)
+
+            unexpected_public = e.read_object(output / "manifest.json")
+            unexpected_public["debug_secret"] = "should-never-publish"
+            (output / "manifest.json").write_bytes(e.json_bytes(unexpected_public))
+            with self.assertRaisesRegex(e.ContractError, "UNREVIEWED_MANIFEST_FIELD"):
+                evidence.verify_evidence(output, restricted)
+            (output / "manifest.json").write_bytes(public_manifest)
+
+            other_directory = output.with_name("other-run")
+            output.rename(other_directory)
+            with self.assertRaisesRegex(e.ContractError, "EVIDENCE_RUN_MISMATCH"):
+                evidence.verify_evidence(other_directory, restricted)
+            other_directory.rename(output)
             self.assertEqual(
                 e.sha((output / "runner.py").read_bytes()), e.sha(runner_source)
             )
@@ -857,6 +951,7 @@ class E013Tests(unittest.TestCase):
             forged[0]["confidence"] = None
             forged[0]["error_code"] = "INVALID_RESPONSE"
             forged[0]["raw_sha256"] = None
+            forged[0]["raw_locator"] = None
             altered["cases"][0]["analysis_sha256"] = e.sha(e.json_bytes(forged[0]))
             (output / "manifest.json").write_bytes(e.json_bytes(altered))
             (output / "analysis.jsonl").write_bytes(

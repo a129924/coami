@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from pathlib import Path
 import re
 import tempfile
@@ -13,6 +14,52 @@ import jev_context as e
 HASH = re.compile(r"[0-9a-f]{64}\Z")
 STATUSES = {"VALID", "INVALID", "ERROR", "UNKNOWN", "NOT_RUN"}
 PRE_RECORD_RUN_ID = "20261008T035450Z-010364d7"
+LOCAL_MANIFEST_KEYS = {
+    "run_id",
+    "created_utc",
+    "model",
+    "sdk_version",
+    "freeze_hashes",
+    "v0_hashes",
+    "rubric_sha256",
+    "runner_sha256",
+    "store",
+    "store_root",
+    "conditions",
+    "publication",
+    "runner_source_path",
+    "live_authorization_sha256",
+    "live_authorization_path",
+}
+LOCAL_REQUIRED_KEYS = LOCAL_MANIFEST_KEYS - {
+    "runner_source_path",
+    "live_authorization_sha256",
+    "live_authorization_path",
+}
+PUBLIC_MANIFEST_KEYS = (LOCAL_MANIFEST_KEYS - {"store_root"}) | {
+    "cases",
+    "reviewed_by",
+    "restricted_store_id",
+    "restricted_access",
+    "restricted_retention_until",
+    "summary_sha256",
+    "review_sha256",
+    "runner_public_path",
+    "runner_revision",
+}
+
+
+def unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise e.ContractError("DUPLICATE_ANALYSIS_FIELD")
+        result[key] = value
+    return result
+
+
+def invalid_constant(value: str) -> None:
+    raise e.ContractError("INVALID_ANALYSIS_NUMBER")
 
 
 def bounded_path(root: Path, locator: str) -> Path:
@@ -27,11 +74,27 @@ def bounded_path(root: Path, locator: str) -> Path:
 
 def read_rows(path: Path) -> list[dict[str, Any]]:
     try:
-        rows = [json.loads(line) for line in path.read_bytes().splitlines()]
+        lines = path.read_bytes().splitlines()
+        rows = [
+            json.loads(
+                line,
+                object_pairs_hook=unique_object,
+                parse_constant=invalid_constant,
+            )
+            for line in lines
+        ]
+    except e.ContractError:
+        raise
     except (OSError, ValueError) as exc:
         raise e.ContractError("ANALYSIS_UNAVAILABLE") from exc
     if len(rows) != 75 or any(not isinstance(row, dict) for row in rows):
         raise e.ContractError("INVALID_ANALYSIS")
+    try:
+        canonical = [e.json_bytes(row) for row in rows]
+    except (TypeError, ValueError) as exc:
+        raise e.ContractError("INVALID_ANALYSIS") from exc
+    if any(line + b"\n" != expected for line, expected in zip(lines, canonical)):
+        raise e.ContractError("NONCANONICAL_ANALYSIS")
     if any(
         not isinstance(row.get("run_id"), str)
         or not e.CASE_ID.fullmatch(row["run_id"])
@@ -78,6 +141,8 @@ def read_rows(path: Path) -> list[dict[str, Any]]:
             raise e.ContractError("INVALID_ANALYSIS_STATUS_FIELDS")
         if status == "NOT_RUN" and row.get("error_code") is not None:
             raise e.ContractError("INVALID_ANALYSIS_STATUS_FIELDS")
+        if row.get("raw_sha256") is None and row.get("raw_locator") is not None:
+            raise e.ContractError("INVALID_RAW_LOCATOR_STATE")
     return rows
 
 
@@ -110,7 +175,15 @@ def metadata_gaps(manifest: dict[str, Any]) -> list[dict[str, str]]:
     try:
         policy = e.read_object(e.TOPIC / "local-store-policy.json")
         store = manifest["store"]
-        if not isinstance(store, dict):
+        if not isinstance(store, dict) or set(store) != {
+            "approved_by",
+            "store_id",
+            "agent_access",
+            "storage_mode",
+            "versioned_immutable",
+            "backup_verified",
+            "retention_until",
+        }:
             raise ValueError
         if any(
             store.get(name) != policy.get(name)
@@ -135,6 +208,23 @@ def metadata_gaps(manifest: dict[str, Any]) -> list[dict[str, str]]:
     except (OSError, KeyError, ValueError, e.ContractError):
         return [{"reason": "STORE_POLICY_MISMATCH"}]
     return []
+
+
+def manifest_identity_gap(manifest: dict[str, Any], *, published: bool) -> bool:
+    try:
+        created = datetime.fromisoformat(manifest["created_utc"])
+    except (KeyError, TypeError, ValueError):
+        return True
+    return (
+        created.tzinfo is None
+        or manifest.get("publication")
+        != (
+            "owner-reviewed"
+            if published
+            else "local-unbacked-until-reviewed-git-export"
+        )
+        or (not published and manifest.get("store_root") != str(e.LOCAL_STORE_ROOT))
+    )
 
 
 def summary_identity_gap(summary: dict[str, Any], run_id: str) -> bool:
@@ -206,6 +296,8 @@ def inventory_gaps(
     try:
         freeze = manifest["freeze_hashes"]
         v0 = manifest["v0_hashes"]
+        if set(freeze) != set(e.V1_FILES) or set(v0) != set(e.V0_HASHES):
+            raise e.ContractError("CASE_VERSION_MISMATCH")
         for name in e.V1_FILES:
             if freeze[name] != e.sha((e.ORACLE / "versions/v1" / name).read_bytes()):
                 raise e.ContractError("CASE_VERSION_MISMATCH")
@@ -306,6 +398,8 @@ def response_gap(
             and body["model"] != row.get("model")
         ):
             return "RAW_ANALYSIS_MISMATCH"
+    else:
+        return "UNEXPECTED_CAPTURED_BODY"
     return None
 
 
@@ -329,6 +423,12 @@ def request_gap(
 def verify_local_run(run_dir: Path) -> dict[str, Any]:
     """Verify current local bytes; this does not establish backup or immutability."""
     manifest = e.read_object(run_dir / "manifest.json")
+    if not set(manifest).issubset(LOCAL_MANIFEST_KEYS):
+        raise e.ContractError("UNREVIEWED_MANIFEST_FIELD")
+    if not LOCAL_REQUIRED_KEYS.issubset(manifest):
+        raise e.ContractError("INVALID_LOCAL_MANIFEST")
+    if manifest_identity_gap(manifest, published=False):
+        raise e.ContractError("INVALID_LOCAL_MANIFEST")
     run_id = manifest.get("run_id")
     store = manifest.get("store")
     if (
@@ -397,7 +497,7 @@ def verify_local_run(run_dir: Path) -> dict[str, Any]:
                         "reason": f"{field.upper()}_MISMATCH",
                     }
                 )
-            elif field == "raw_sha256" and row.get("status") in ("VALID", "INVALID"):
+            elif field == "raw_sha256":
                 case = cases.get((group, case_id))
                 mismatch = (
                     response_gap(row, body, case, question)
@@ -463,6 +563,12 @@ def publish_reviewed(run_dir: Path, approval_path: Path, evidence_root: Path) ->
     review = {}
     for decision in decisions:
         if not isinstance(decision, dict):
+            raise e.ContractError("INVALID_PUBLICATION_REVIEW")
+        if (
+            decision.get("group") not in e.GROUPS
+            or not isinstance(decision.get("case_id"), str)
+            or not e.CASE_ID.fullmatch(decision["case_id"])
+        ):
             raise e.ContractError("INVALID_PUBLICATION_REVIEW")
         key = (decision.get("group"), decision.get("case_id"))
         if (
@@ -605,7 +711,9 @@ def _write_publication(
             }
         )
     public_manifest = {
-        key: value for key, value in manifest.items() if key != "store_root"
+        key: manifest[key]
+        for key in LOCAL_MANIFEST_KEYS - {"store_root"}
+        if key in manifest
     }
     public_manifest.update(
         {
@@ -637,6 +745,12 @@ def verify_evidence(
 ) -> dict[str, Any]:
     """Check exact objects and recompute statistics from a clean checkout."""
     manifest = e.read_object(evidence_run / "manifest.json")
+    if evidence_run.name != manifest.get("run_id"):
+        raise e.ContractError("EVIDENCE_RUN_MISMATCH")
+    if not set(manifest).issubset(PUBLIC_MANIFEST_KEYS):
+        raise e.ContractError("UNREVIEWED_MANIFEST_FIELD")
+    if manifest_identity_gap(manifest, published=True):
+        raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
     rows = read_rows(evidence_run / "analysis.jsonl")
     if any(row["run_id"] != manifest.get("run_id") for row in rows):
         raise e.ContractError("RUN_ID_MISMATCH")
