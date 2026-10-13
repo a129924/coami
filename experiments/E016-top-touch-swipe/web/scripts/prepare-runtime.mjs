@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto'
 import { copyFile, mkdir, readFile, rm, access, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { ensureToolchain, writeConfigAtomically } from './toolchain-cache.mjs'
+import { ensureToolchain, normalizeToolchainSource, writeConfigAtomically } from './toolchain-cache.mjs'
 const web = fileURLToPath(new URL('../', import.meta.url))
 const experiment = path.resolve(web, '..')
 const repo = path.resolve(experiment, '../..')
@@ -20,9 +20,8 @@ if (fullBuild) {
   await rm(path.join(generated,'public'),{recursive:true,force:true})
   await rm(path.join(generated,'stage-hash'),{force:true})
 }
-const previous = process.env.E016_TOOLCHAIN_SOURCE
+const previous = fullBuild ? normalizeToolchainSource(process.env.E016_TOOLCHAIN_SOURCE) : undefined
 if (fullBuild) {
-  if (!previous || !path.isAbsolute(previous)) throw new Error('Set E016_TOOLCHAIN_SOURCE to an absolute path containing the pinned macOS moddable, emsdk and fontbm toolchain; see README prerequisites.')
   for (const name of ['moddable/tools/VERSION','emsdk/.emscripten','fontbm/build/fontbm']) {
     try { await access(path.join(previous,name)) } catch { throw new Error(`Incomplete E016_TOOLCHAIN_SOURCE: missing ${name}; see README prerequisites.`) }
   }

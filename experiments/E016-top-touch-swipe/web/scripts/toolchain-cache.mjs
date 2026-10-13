@@ -1,6 +1,11 @@
 import { mkdir, mkdtemp, rename, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
+export function normalizeToolchainSource(source) {
+  if (!source || !path.isAbsolute(source)) throw new Error('Set E016_TOOLCHAIN_SOURCE to an absolute path containing the pinned macOS moddable, emsdk and fontbm toolchain; see README prerequisites.')
+  return path.resolve(source)
+}
+
 /** Only publish a complete validated copy; interrupted staging can be retried. */
 export async function ensureToolchain({ source, destination, validate, copy }) {
   try {

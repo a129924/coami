@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
-import { ensureToolchain, writeConfigAtomically } from './toolchain-cache.mjs'
+import { ensureToolchain, normalizeToolchainSource, writeConfigAtomically } from './toolchain-cache.mjs'
 
 const components = ['moddable', 'emsdk', 'fontbm']
 async function fixture(t) {
@@ -82,4 +82,19 @@ test('interrupted configuration write preserves published config and retry succe
   assert.deepEqual((await readdir(f.root)).sort(), ['.emscripten', 'source'])
   await writeConfigAtomically(config, 'relocated complete config')
   assert.equal(await readFile(config, 'utf8'), 'relocated complete config')
+})
+
+test('toolchain source normalization rejects relative paths and strips trailing separators', () => {
+  assert.throws(() => normalizeToolchainSource(undefined), /absolute path/)
+  assert.throws(() => normalizeToolchainSource('relative/toolchain'), /absolute path/)
+  assert.equal(normalizeToolchainSource('/tools/e016/'), '/tools/e016')
+  assert.equal(normalizeToolchainSource('/tools/e016/./'), '/tools/e016')
+})
+
+test('trailing separator source relocates config without joining directory names', async t => {
+  const f = await fixture(t)
+  const config = path.join(f.root, '.emscripten')
+  const contents = "LLVM_ROOT = '/tools/e016/emsdk/upstream/bin'\n"
+  await writeConfigAtomically(config, contents.replaceAll(normalizeToolchainSource('/tools/e016/'), f.destination))
+  assert.equal(await readFile(config, 'utf8'), `LLVM_ROOT = '${f.destination}/emsdk/upstream/bin'\n`)
 })
