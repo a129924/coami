@@ -23,7 +23,8 @@ Out-Of-Scope: E016 modification/reuse, Robot Action, server, hardware, new gestu
 ReadOnly: original vendor, E010, E015 tool sources, E016, existing governance/skills/tool config. Scratch SDK and tool copies only under E017 ignored generated/. No existing source deletion; no SDK/API schema changes. User explicitly authorizes in-scope topic commits, push and Draft PR; stop before human review, merge or release. No PR Lens upload/publication; Draft PR creation uses GitHub separately.
 
 ## Status / Allowed Transitions
-Current: publish-in-progress.
+Current: pr-open.
+Draft PR: https://github.com/a129924/coami/pull/17 (base dev). Stop: human review; no merge/release authorization exercised.
 Routing evidence: all three engineering steps passed the implementation-only tracker; independent bounded code review approved after two provenance fixes. TC-HUMAN remains unexecuted; this run publishes a Draft PR, not complete experiment acceptance.
 Allowed: planned→creator-in-progress; creator-in-progress→review-ready; review-ready→reviewer-in-progress; reviewer-in-progress→approved|needs-rework; needs-rework→creator-in-progress; approved→creator-in-progress|publish-in-progress; publish-in-progress→pr-open|merged; pr-open→needs-rework|merged; merged→terminal.
 This run ends at pr-open/human-review. Missing human cases remain explicitly unexecuted and do not become completed verification steps.
