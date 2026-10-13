@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E017 頂部 Swipe Event</title></head>
+<body><main>
+<header><p class="eyebrow">COAMI · E017 · SIMULATOR EXPERIMENT</p><h1>頂部 Swipe Event</h1><p>沿觸控帶滑動，核對 SDK → MOD 的方向與次數。</p></header>
+<section class="controls"><div><span id="state" role="status">initializing</span><p id="reason">等待固定 runtime 與 MOD</p></div><button id="restart">重新啟動</button><button id="export">匯出本次 trace</button></section>
+<section class="touch-card"><div class="directions"><span>← backwardSwipe</span><span>forwardSwipe →</span></div><div id="touch" role="group" aria-label="頂部滑動輸入區"><span>左</span><span>單一滑鼠或觸控指標<br>按住，從觸控帶 20% 拖到 80% 再放開</span><span>右</span></div><p>位置軸 −100 → +100；Swipe 位移需大於 60（帶寬 30%）。三區強度為模擬資料。移出、取消或離開頁面會清理輸入。</p></section>
+<section class="results"><div><small>MOD 收到的 Swipe</small><strong id="count">0</strong></div><div><small>最近 SDK 方向</small><strong id="direction">—</strong></div><div><small>Session / operation</small><strong id="operation">—</strong></div></section>
+<section class="simulator"><canvas id="viewport" aria-label="Stack-chan 模擬器"></canvas><canvas id="screen" width="240" height="320" aria-label="Robot 畫面"></canvas></section>
+<details><summary>Runtime 來源與證據限制</summary><pre id="provenance">尚未核對</pre><p>自動操作與純測試不算真人驗證；此頁不執行 Robot Action。</p></details>
+<section><h2>操作紀錄</h2><ol id="events"></ol></section>
+</main><script type="module" src="/src/main.ts"></script></body></html>

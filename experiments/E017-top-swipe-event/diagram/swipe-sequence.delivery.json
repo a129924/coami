@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "sequence",
+  "input": "/private/tmp/coami-e017-top-swipe-event/experiments/E017-top-swipe-event/diagram/swipe-sequence.json",
+  "output": "/private/tmp/coami-e017-top-swipe-event/experiments/E017-top-swipe-event/diagram/swipe-sequence.html",
+  "specification": {
+    "sha256": "775f3c0f8b86045a0e1ca3ee6def3b1a29fae461b13e3781375ff254a7d2b70d",
+    "bytes": 2675
+  },
+  "artifact": {
+    "sha256": "3f330042dfb0e8bad04fbf3017a44e8362e8d1bced29fbd5c1a35d3b9a6d5a30",
+    "bytes": 703518
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}

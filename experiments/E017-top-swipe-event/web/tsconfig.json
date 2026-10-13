@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "types": [
+      "vite/client",
+      "node"
+    ],
+    "paths": {
+      "imu-motion": [
+        "../../../vendor/stack-chan/firmware/host/modules/input/imu-motion.ts"
+      ],
+      "touch-panel-gesture": [
+        "../../../vendor/stack-chan/firmware/host/modules/input/touch-panel-gesture.ts"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "vite.config.ts"
+  ]
+}

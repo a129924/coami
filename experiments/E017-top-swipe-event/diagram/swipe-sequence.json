@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "E017 頂部滑動與清理順序",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      520
+    ],
+    "column_fit": "spread"
+  },
+  "participants": [
+    {
+      "id": "pointer",
+      "type": "frontend",
+      "label": "Pointer",
+      "sublabel": "頂部水平觸控帶"
+    },
+    {
+      "id": "fifo",
+      "type": "messagebus",
+      "label": "Raw FIFO",
+      "sublabel": "session / sample"
+    },
+    {
+      "id": "xs",
+      "type": "backend",
+      "label": "XS driver",
+      "sublabel": "原子 sample / ticks"
+    },
+    {
+      "id": "sdk",
+      "type": "backend",
+      "label": "SDK",
+      "sublabel": "原有 recognizer"
+    },
+    {
+      "id": "mod",
+      "type": "backend",
+      "label": "MOD",
+      "sublabel": "原始事件與計數"
+    },
+    {
+      "id": "ui",
+      "type": "frontend",
+      "label": "回饋畫面",
+      "sublabel": "方向 / 次數"
+    }
+  ],
+  "messages": [
+    {
+      "from": "mod",
+      "to": "fifo",
+      "y": 160,
+      "label": "MOD ready 後排初始 zero",
+      "variant": "dashed"
+    },
+    {
+      "from": "pointer",
+      "to": "fifo",
+      "y": 186,
+      "label": "down / move 原始位置",
+      "variant": "emphasis"
+    },
+    {
+      "from": "fifo",
+      "to": "xs",
+      "y": 212,
+      "label": "取出 sample 與 metadata"
+    },
+    {
+      "from": "xs",
+      "to": "sdk",
+      "y": 238,
+      "label": "同筆 sample / ticks"
+    },
+    {
+      "from": "sdk",
+      "to": "mod",
+      "y": 264,
+      "label": "同步派送 SDK Event",
+      "variant": "emphasis"
+    },
+    {
+      "from": "mod",
+      "to": "ui",
+      "y": 290,
+      "label": "snapshot / Swipe 計數",
+      "variant": "emphasis"
+    },
+    {
+      "from": "pointer",
+      "to": "fifo",
+      "y": 316,
+      "label": "up 保留 FIFO；cancel 丟 move"
+    },
+    {
+      "from": "fifo",
+      "to": "sdk",
+      "y": 342,
+      "label": "經 XS 送出 terminal zero"
+    },
+    {
+      "from": "sdk",
+      "to": "mod",
+      "y": 368,
+      "label": "先派送 release"
+    },
+    {
+      "from": "sdk",
+      "to": "fifo",
+      "y": 394,
+      "label": "派送後 consumed ack",
+      "variant": "return"
+    },
+    {
+      "from": "fifo",
+      "to": "pointer",
+      "y": 420,
+      "label": "匹配 zero ack 才開下一次",
+      "variant": "return"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "證據邊界",
+      "items": [
+        "方向與次數只取自 MOD；不得直接注入 Swipe",
+        "真人驗證另行記錄；圖表不代表 runtime 通過"
+      ]
+    }
+  ]
+}

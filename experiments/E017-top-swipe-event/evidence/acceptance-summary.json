@@ -1,0 +1,54 @@
+{
+  "experiment": "E017",
+  "humanOperator": "conversation owner",
+  "scope": "pinned browser simulator only",
+  "webFixCommit": "b408039",
+  "evidence": [
+    {
+      "file": "human-acceptance-session-1.json",
+      "inputDownload": "e017-swipe-trace (4).json",
+      "sha256": "2d0cfc9ca369751ab9a21dde1ca31614062f8ecc17c63dfc7477725ed33f2527",
+      "kind": "human"
+    },
+    {
+      "file": "human-acceptance-restart-session-2.json",
+      "inputDownload": "e017-swipe-trace (5).json",
+      "sha256": "098b86107fe9ccf5ba3d82a6d3ad34a095775f78665a78a96860d9e2145eaaa3",
+      "kind": "human"
+    },
+    {
+      "file": "runtime-init-failure-automated.json",
+      "inputDownload": "e017-swipe-trace (6).json",
+      "sha256": "ae6ba88f7df8c33307785faa2e1e12e008d8cb3b1a3c6db0f067c35480331061",
+      "kind": "automated"
+    },
+    {
+      "file": "runtime-init-recovery-automated.json",
+      "inputDownload": "e017-swipe-trace (7).json",
+      "sha256": "d9b87e44515ea1b0996c20dc0026c275a178a8242b87b8c25216c7a928c43eaf",
+      "kind": "automated"
+    },
+    {
+      "file": "human-acceptance-page-leave-session-2.json",
+      "inputDownload": "e017-swipe-trace (9).json",
+      "sha256": "42d7a71bc1a99c8d1e189ca55fd90367cd691c89aab5efc3a56cd8e51532fcf5",
+      "kind": "human"
+    }
+  ],
+  "checks": {
+    "noDrops": true,
+    "humanNoInputErrors": true,
+    "modCountsConsistent": true,
+    "modTicksMatchMetadata": true,
+    "modSamplesHaveConsumption": true,
+    "runtimeProvenanceMatches": true,
+    "initializationFailureNoModEvents": true
+  },
+  "limitations": [
+    "one Chrome/macOS environment; exact browser/OS versions not recorded",
+    "restart while an input is active was not separately demonstrated; normal restart plus source/session guards covered",
+    "provider-missing unavailable branch not separately injected; actual initialization failure and recovery demonstrated",
+    "initialization failure message is superseded by the existing 5-second timeout; both remain error and accept no input",
+    "no hardware or production adoption evidence"
+  ]
+}

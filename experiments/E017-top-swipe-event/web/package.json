@@ -1,0 +1,14 @@
+{
+  "name":"coami-e017-web","version":"0.1.0","private":true,"type":"module",
+  "engines":{"node":">=24 <27"},
+  "scripts":{
+    "stage:host":"node scripts/stage-host.mjs",
+    "test":"node --test src/input.test.ts src/runtime.test.ts src/page-lifecycle.test.ts scripts/pin.test.mjs ../mod/observer.test.ts",
+    "typecheck":"tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json",
+    "runtime":"node scripts/prepare-runtime.mjs","mod":"node scripts/build-mod.mjs",
+    "prepare:poc":"npm run runtime && npm run mod",
+    "build":"npm run typecheck && vite build","dev":"vite --host 127.0.0.1"
+  },
+  "dependencies":{"three":"0.185.1"},
+  "devDependencies":{"@types/node":"26.1.2","@types/three":"0.185.4","typescript":"7.0.2","vite":"8.2.1"}
+}

@@ -1,0 +1,965 @@
+{
+  "experiment": "E017",
+  "capturedAt": "2026-10-13T06:27:23.748Z",
+  "provenance": {
+    "experiment": "E017",
+    "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+    "patchSha256": "3cbcea5285fe6a67645e0424d55a5a8e1ea9fdf6e16b44fe1fb13a0508651435",
+    "tools": {
+      "moddableVersion": "9.5.0",
+      "sourceCommits": {
+        "moddable": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",
+        "emsdk": "14c18b569f55138fe4963924162244251f454fb0",
+        "fontbm": "7677b908523e909679f67cd5c170396bb9def1aa"
+      },
+      "emccVersion": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 5.0.1 (8c5f43157a3f069ade75876e23061330521eabde)",
+      "emccSha256": "498eba9b6aacffca1c358ba340fc7b37015d7867cb211c7f2d45784ee9310f03",
+      "fontbmSha256": "2389a3daae8b9af5c3747cb2fbfd34db3fcd786ccec885878addd22bbcd07012",
+      "mcconfigSha256": "2abb06a6305abbe09d6ed0eb4df23f08c2f474910692f4146d5c826627d23ba4",
+      "xscSha256": "a2a6b24b2de6c88d0cdd9adcdd8819dafb0a922e478160df7f3617bef9b1383c"
+    },
+    "sha256": {
+      "mc.js": "dff08550f14e49a3005268847d4aa52ee220791fee64496a4c9815a53a438755",
+      "mc.wasm": "dc954440342c349f8b1997ed17ec19e056c5c36e0a5736bfea6702fc73918c2d"
+    },
+    "commands": [
+      "npm ci --ignore-scripts --no-audit --no-fund",
+      "npm run build:wasm"
+    ],
+    "scope": "simulator-only; isolated copies of pinned tool sources, including existing local compiler cache; no hardware evidence",
+    "mod": {
+      "sha256": "3fe9a8922d7e67af60cf99befb28ca5518af9a7d91eb678598cefcf706d9c701",
+      "sourceSha256": {
+        "mod.ts": "cbabffedcea545be0d3168f52ea01d27aea04560950a9369118430980b35bce5",
+        "observer.ts": "648015478568ed8be0f9c5afae89eef5c2fd64afd29d9f0c69ac68c5b473d0fb"
+      }
+    }
+  },
+  "evidenceKind": "operator must identify human versus automated input",
+  "dropped": 0,
+  "records": [
+    {
+      "source": "MOD",
+      "kind": "ready"
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        0,
+        0
+      ],
+      "phase": "zero",
+      "meta": {
+        "session": 1,
+        "operation": 0,
+        "sampleId": 1,
+        "ticks": 782,
+        "terminal": true,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        0,
+        0,
+        0
+      ],
+      "meta": {
+        "session": 1,
+        "operation": 0,
+        "sampleId": 1,
+        "ticks": 782,
+        "terminal": true,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 1,
+      "operation": 0,
+      "sampleId": 1,
+      "ticks": 782,
+      "terminal": true,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        60,
+        40,
+        0
+      ],
+      "phase": "press",
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 2,
+        "ticks": 24787,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        60,
+        40,
+        0
+      ],
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 2,
+        "ticks": 24787,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "MOD",
+      "kind": "event",
+      "event": {
+        "kind": "touch-panel",
+        "gesture": "press",
+        "position": -60,
+        "intensity": 60,
+        "ticks": 24787
+      },
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 2,
+        "ticks": 24787,
+        "terminal": false,
+        "queued": true
+      },
+      "count": 0
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 1,
+      "operation": 1,
+      "sampleId": 2,
+      "ticks": 24787,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        45,
+        55,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 3,
+        "ticks": 24825,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 1,
+      "sampleId": 3,
+      "replacementSampleId": 4
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        30,
+        70,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 4,
+        "ticks": 24833,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 1,
+      "sampleId": 4,
+      "replacementSampleId": 5
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        15,
+        85,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 5,
+        "ticks": 24842,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 1,
+      "sampleId": 5,
+      "replacementSampleId": 6
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        100,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 6,
+        "ticks": 24850,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 1,
+      "sampleId": 6,
+      "replacementSampleId": 7
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        85,
+        15
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 7,
+        "ticks": 24858,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        0,
+        85,
+        15
+      ],
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 7,
+        "ticks": 24858,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "MOD",
+      "kind": "event",
+      "event": {
+        "kind": "touch-panel",
+        "gesture": "forwardSwipe",
+        "position": 15,
+        "intensity": 85,
+        "ticks": 24858
+      },
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 7,
+        "ticks": 24858,
+        "terminal": false,
+        "queued": true
+      },
+      "count": 1
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 1,
+      "operation": 1,
+      "sampleId": 7,
+      "ticks": 24858,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        71,
+        29
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 8,
+        "ticks": 24899,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 1,
+      "sampleId": 8,
+      "replacementSampleId": 9
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        56,
+        44
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 9,
+        "ticks": 24911,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 1,
+      "sampleId": 9,
+      "replacementSampleId": 10
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        41,
+        59
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 10,
+        "ticks": 24917,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 1,
+      "sampleId": 10,
+      "replacementSampleId": 11
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        41,
+        59
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 11,
+        "ticks": 24923,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        0,
+        0
+      ],
+      "phase": "zero",
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 12,
+        "ticks": 24923,
+        "terminal": true,
+        "queued": true
+      }
+    },
+    {
+      "source": "pointer",
+      "kind": "capture-loss",
+      "pointerId": 1,
+      "state": "cleaning",
+      "target": "DIV",
+      "stillCaptured": false
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        0,
+        41,
+        59
+      ],
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 11,
+        "ticks": 24923,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 1,
+      "operation": 1,
+      "sampleId": 11,
+      "ticks": 24923,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        0,
+        0,
+        0
+      ],
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 12,
+        "ticks": 24923,
+        "terminal": true,
+        "queued": false
+      }
+    },
+    {
+      "source": "MOD",
+      "kind": "event",
+      "event": {
+        "kind": "touch-panel",
+        "gesture": "release",
+        "position": 0,
+        "intensity": 0,
+        "ticks": 24923
+      },
+      "meta": {
+        "session": 1,
+        "operation": 1,
+        "sampleId": 12,
+        "ticks": 24923,
+        "terminal": true,
+        "queued": true
+      },
+      "count": 1
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 1,
+      "operation": 1,
+      "sampleId": 12,
+      "ticks": 24923,
+      "terminal": true,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        41,
+        59
+      ],
+      "phase": "press",
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 13,
+        "ticks": 34813,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        0,
+        41,
+        59
+      ],
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 13,
+        "ticks": 34813,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "MOD",
+      "kind": "event",
+      "event": {
+        "kind": "touch-panel",
+        "gesture": "press",
+        "position": 59,
+        "intensity": 59,
+        "ticks": 34813
+      },
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 13,
+        "ticks": 34813,
+        "terminal": false,
+        "queued": true
+      },
+      "count": 1
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 1,
+      "operation": 2,
+      "sampleId": 13,
+      "ticks": 34813,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        56,
+        44
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 14,
+        "ticks": 34855,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 1,
+      "sampleId": 14,
+      "replacementSampleId": 15
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        71,
+        29
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 15,
+        "ticks": 34870,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 1,
+      "sampleId": 15,
+      "replacementSampleId": 16
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        85,
+        15
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 16,
+        "ticks": 34879,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 1,
+      "sampleId": 16,
+      "replacementSampleId": 17
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        100,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 17,
+        "ticks": 34884,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        0,
+        100,
+        0
+      ],
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 17,
+        "ticks": 34884,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 1,
+      "operation": 2,
+      "sampleId": 17,
+      "ticks": 34884,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        15,
+        85,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 18,
+        "ticks": 34950,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 1,
+      "sampleId": 18,
+      "replacementSampleId": 19
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        30,
+        70,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 19,
+        "ticks": 35065,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 1,
+      "sampleId": 19,
+      "replacementSampleId": 20
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        45,
+        55,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 20,
+        "ticks": 35075,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        45,
+        55,
+        0
+      ],
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 20,
+        "ticks": 35075,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "MOD",
+      "kind": "event",
+      "event": {
+        "kind": "touch-panel",
+        "gesture": "backwardSwipe",
+        "position": -45,
+        "intensity": 55,
+        "ticks": 35075
+      },
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 20,
+        "ticks": 35075,
+        "terminal": false,
+        "queued": true
+      },
+      "count": 2
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 1,
+      "operation": 2,
+      "sampleId": 20,
+      "ticks": 35075,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        60,
+        40,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 21,
+        "ticks": 35084,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 1,
+      "sampleId": 21,
+      "replacementSampleId": 22
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        60,
+        40,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 22,
+        "ticks": 35093,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        0,
+        0
+      ],
+      "phase": "zero",
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 23,
+        "ticks": 35093,
+        "terminal": true,
+        "queued": true
+      }
+    },
+    {
+      "source": "pointer",
+      "kind": "capture-loss",
+      "pointerId": 1,
+      "state": "cleaning",
+      "target": "DIV",
+      "stillCaptured": false
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        60,
+        40,
+        0
+      ],
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 22,
+        "ticks": 35093,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 1,
+      "operation": 2,
+      "sampleId": 22,
+      "ticks": 35093,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        0,
+        0,
+        0
+      ],
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 23,
+        "ticks": 35093,
+        "terminal": true,
+        "queued": false
+      }
+    },
+    {
+      "source": "MOD",
+      "kind": "event",
+      "event": {
+        "kind": "touch-panel",
+        "gesture": "release",
+        "position": 0,
+        "intensity": 0,
+        "ticks": 35093
+      },
+      "meta": {
+        "session": 1,
+        "operation": 2,
+        "sampleId": 23,
+        "ticks": 35093,
+        "terminal": true,
+        "queued": true
+      },
+      "count": 2
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 1,
+      "operation": 2,
+      "sampleId": 23,
+      "ticks": 35093,
+      "terminal": true,
+      "queued": true
+    },
+    {
+      "source": "pointer",
+      "kind": "cancel",
+      "reason": "outside",
+      "pointerId": 1,
+      "x": 1213.66796875,
+      "y": 225.6875
+    }
+  ]
+}
