@@ -6,6 +6,28 @@ export function normalizeToolchainSource(source) {
   return path.resolve(source)
 }
 
+export function renderEmscriptenConfig() {
+  return `import os
+emsdk_path = os.path.dirname(os.path.abspath(os.environ['EM_CONFIG']))
+NODE_JS = os.path.join(emsdk_path, 'node', '22.16.0_64bit', 'bin', 'node')
+PYTHON = os.path.join(emsdk_path, 'python', '3.13.3_64bit', 'bin', 'python3')
+LLVM_ROOT = os.path.join(emsdk_path, 'upstream', 'bin')
+BINARYEN_ROOT = os.path.join(emsdk_path, 'upstream')
+EMSCRIPTEN_ROOT = os.path.join(emsdk_path, 'upstream', 'emscripten')
+`
+}
+
+export function pythonLauncher(python) {
+  const quoted = `'${python.replaceAll("'", "'\\''")}'`
+  return `#!/bin/sh\nexec ${quoted} -B "$@"\n`
+}
+
+export function pinnedCompilerEnvironment(parent, emsdk, launcher) {
+  const env = { ...parent }
+  for (const key of Object.keys(env)) if (key.startsWith('EM_') || key.startsWith('EMSDK_') || key === '_EMCC_CCACHE') delete env[key]
+  return { ...env, EMSDK_PYTHON: launcher, EMSDK_NODE: path.join(emsdk, 'node/22.16.0_64bit/bin/node') }
+}
+
 /** Only publish a complete validated copy; interrupted staging can be retried. */
 export async function ensureToolchain({ source, destination, validate, copy }) {
   try {
