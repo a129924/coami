@@ -22,9 +22,9 @@ No IMU/TTS/gaze/video feature/K151/Robot Action/server/WebSocket/formal event co
 
 ## Status / Allowed Transitions
 
-Current: approved
-Next actor: Main Agent
-Stage-local action: Publish authorized topic commits, push and Draft PR; stop for human review.
+Current: pr-open
+Next actor: Human
+Stage-local action: Review Draft PR #16 and perform human simulator acceptance; no automatic merge.
 
 planned→creator-in-progress; creator-in-progress→review-ready; review-ready→reviewer-in-progress; reviewer-in-progress→approved|needs-rework; needs-rework→creator-in-progress; approved→creator-in-progress|publish-in-progress; publish-in-progress→pr-open|merged; pr-open→needs-rework|merged; merged→terminal.
 
@@ -94,3 +94,5 @@ No release/VERSION/deployment/production adoption. Stop at Draft PR human review
 ## Open Questions / Unresolved Items
 
 No owner scope question. New ABI/build/runtime automated operations are verified in evidence/runtime-provenance.json and evidence/verification.json. Human ACs remain pending until owner operation. Existing Graphify graph absent: source-search fallback, no extraction. Tool failure reports limitation without changing core gate.
+
+Human review handoff: https://github.com/a129924/coami/pull/16; Draft=true; base=dev; head=feat/andrew/e016-top-touch-swipe. Implementation approved, human AC pending.

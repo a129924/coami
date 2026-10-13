@@ -10,7 +10,7 @@ created: 2026-10-13
 
 | Current status | Allowed next transitions | Next actor |
 | --- | --- | --- |
-| approved | publish-in-progress | Main Agent |
+| pr-open | needs-rework or merged | Human |
 
 ## Actionable Steps
 
@@ -35,11 +35,11 @@ created: 2026-10-13
 
 - [X] Validate Written set and perform bounded staging.
 - [X] Owner explicitly authorized topic commits, push and Draft PR on 2026-10-13; this supersedes further per-message confirmation for this topic.
-- [ ] Commit bounded topic changes.
-- [ ] Push topic branch.
-- [ ] Open Draft PR.
-- [ ] Observe PR checks and route actionable feedback.
-- [ ] Hand off for human review/merge and stop.
+- [X] Commit bounded topic changes.
+- [X] Push topic branch.
+- [X] Open Draft PR.
+- [X] Observe PR checks and route actionable feedback.
+- [X] Hand off for human review/merge and stop. — Draft PR #16; remaining work is owner acceptance/merge.
 - [ ] Record human merge evidence after new execution.
 - [ ] Require explicit resume for post-merge work.
 - [ ] Verify PR merged.
@@ -136,3 +136,5 @@ created: 2026-10-13
 - check_impl_steps_succeeded covers Implementation Steps only; whole-file includes pending human/post-merge stages.
 
 Actual completion evidence: experiments/E016-top-touch-swipe/evidence/verification.json; evidence/runtime-provenance.json; plan/E016-top-touch-swipe/review-log.md. Human/post-merge lifecycle rows remain pending.
+
+PR evidence: https://github.com/a129924/coami/pull/16; gh pr view confirmed OPEN/Draft/target dev and MERGEABLE on 2026-10-13. CI server/device/e001-server/e001-web/e003-server/e003-web succeeded on docs head1df823d. New handoff-doc commit retains identical implementation; subsequent checks observed via PR. No human operation or merge claimed.

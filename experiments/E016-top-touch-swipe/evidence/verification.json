@@ -430,7 +430,17 @@
     "base": "9155139",
     "branch": "feat/andrew/e016-top-touch-swipe",
     "worktree": "/private/tmp/coami-e016-top-touch-swipe",
-    "devWorktreeModified": false
+    "devWorktreeModified": false,
+    "prUrl": "https://github.com/a129924/coami/pull/16",
+    "prNumber": 16,
+    "prState": "OPEN",
+    "isDraft": true,
+    "baseRef": "dev",
+    "nextActor": "Human",
+    "humanAcceptance": "未執行",
+    "mergeAuthorized": false,
+    "checksObservedAtCommit": "1df823d10de9ae0e48b9fb6111b09847ab80d06e",
+    "checksObserved": "All returned CI check runs SUCCESS; see PR for later documentation-head runs."
   },
   "review": {
     "verdict": "approved-with-human-acceptance-pending",
