@@ -48,6 +48,7 @@ GROUPS = ("research", "holdout", "v0")
 CHOICES = ("SUFFICIENT", "INSUFFICIENT")
 TOPIC = Path(__file__).resolve().parent
 ROOT = TOPIC.parents[1]
+EXECUTED_RUNNER_SOURCE: bytes | None = globals().get("_E013_EXECUTED_SOURCE")
 ORACLE = ROOT / "evaluation/context_sufficiency"
 POLICY_HASH = "96709ed6e7f8026dabf825b5eef84a88fe74bd1fdec8b571777bbdcd223ca87f"
 V0_HASHES = {
@@ -212,9 +213,14 @@ def seal_run(run_dir: Path) -> None:
     os.chmod(run_dir, 0o500)
 
 
-def load_freeze(attestation: Path, root: Path = ROOT) -> dict[str, str]:
+def load_freeze(
+    attestation: Path, root: Path = ROOT, *, snapshot: bytes | None = None
+) -> dict[str, str]:
     """Match a separately accepted freeze record to exact on-disk bytes."""
-    document = read_gate_document(attestation, "INVALID_FREEZE_ATTESTATION")
+    document = parse_gate_document(
+        attestation.read_bytes() if snapshot is None else snapshot,
+        "INVALID_FREEZE_ATTESTATION",
+    )
     if (
         set(document) != V1_FREEZE_KEYS
         or document.get("snapshot_id") != "v1-draft-004"
@@ -317,6 +323,7 @@ def load_live_authorization(
     store_policy: Path,
     root: Path = ROOT,
     runner_path: Path | None = None,
+    freeze_snapshot: bytes | None = None,
 ) -> tuple[str, str]:
     """Require a committed, run-specific Owner record before any network call.
 
@@ -346,7 +353,12 @@ def load_live_authorization(
                 capture_output=True,
                 check=True,
             ).stdout
-            if committed != dependency.read_bytes():
+            actual = dependency.read_bytes()
+            if committed != actual or (
+                dependency == attestation
+                and freeze_snapshot is not None
+                and actual != freeze_snapshot
+            ):
                 raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         if set(document) != {
             "run_id",
@@ -367,7 +379,9 @@ def load_live_authorization(
             or document.get("scope") != "one E013 75-case Context Sufficiency run"
             or document.get("model") != MODEL
             or document.get("freeze_attestation_sha256")
-            != sha(attestation.read_bytes())
+            != sha(
+                attestation.read_bytes() if freeze_snapshot is None else freeze_snapshot
+            )
             or document.get("store_policy_sha256") != sha(store_policy.read_bytes())
             or document.get("runner_sha256") != sha(runner.read_bytes())
             or document.get("uv_lock_sha256")
@@ -606,6 +620,18 @@ def verify_sdk_imports(lock_bytes: bytes) -> None:
         UnicodeDecodeError,
     ) as exc:
         raise ContractError("SDK_IMPORT_MISMATCH") from exc
+
+
+def checked_executed_source(authorized_hash: str) -> bytes:
+    """Use only the byte snapshot compiled by the live launcher."""
+    source = EXECUTED_RUNNER_SOURCE
+    if (
+        source is None
+        or Path(__file__).read_bytes() != source
+        or sha(source) != authorized_hash
+    ):
+        raise ContractError("RUNNER_SOURCE_UNVERIFIED")
+    return source
 
 
 def parse_answer(raw: bytes) -> dict[str, Any]:
@@ -848,12 +874,17 @@ def run_live(
     try:
         if sys.version_info[:2] != (3, 12):
             raise ContractError("PYTHON_VERSION_MISMATCH")
-        freeze_hashes = load_freeze(attestation, root)
+        attestation_bytes = attestation.read_bytes()
+        freeze_hashes = load_freeze(attestation, root, snapshot=attestation_bytes)
         policy_metadata = load_store_policy(store_policy, store, root)
         if authorization is None:
             raise ContractError("MISSING_LIVE_AUTHORIZATION")
         run_id, authorization_sha256 = load_live_authorization(
-            authorization, attestation, store_policy, root
+            authorization,
+            attestation,
+            store_policy,
+            root,
+            freeze_snapshot=attestation_bytes,
         )
         authorization_bytes = authorization.read_bytes()
         if sha(authorization_bytes) != authorization_sha256:
@@ -905,13 +936,10 @@ def run_live(
         validate_oracles(root, freeze_hashes, case_sources)
         cases = load_cases(root, case_sources)
         question = load_question(root)
-        runner_source = Path(__file__).read_bytes()
+        runner_source = checked_executed_source(
+            parse_live_authorization(authorization_bytes)["runner_sha256"]
+        )
         runner_hash = sha(runner_source)
-        if (
-            runner_hash
-            != parse_live_authorization(authorization_bytes)["runner_sha256"]
-        ):
-            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         store_policy_bytes = store_policy.read_bytes()
         if (
             sha(store_policy_bytes)

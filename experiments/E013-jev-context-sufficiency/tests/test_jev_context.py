@@ -558,6 +558,16 @@ source = { registry = "https://pypi.org/simple" }
                 ):
                     evidence.read_rows(path)
 
+    def test_runner_source_must_be_the_launched_snapshot(self) -> None:
+        source = Path(e.__file__).read_bytes()
+        with patch.object(e, "EXECUTED_RUNNER_SOURCE", None):
+            with self.assertRaisesRegex(e.ContractError, "RUNNER_SOURCE_UNVERIFIED"):
+                e.checked_executed_source(e.sha(source))
+        with patch.object(e, "EXECUTED_RUNNER_SOURCE", source):
+            self.assertEqual(e.checked_executed_source(e.sha(source)), source)
+            with self.assertRaisesRegex(e.ContractError, "RUNNER_SOURCE_UNVERIFIED"):
+                e.checked_executed_source("0" * 64)
+
     def test_missing_key_preflight_never_constructs_sdk(self) -> None:
         with TemporaryDirectory() as temporary:
             auth = Path(temporary) / "auth.json"
@@ -633,6 +643,18 @@ source = { registry = "https://pypi.org/simple" }
                     e.load_live_authorization(auth, freeze, policy, root, runner)[0],
                     "run-unique",
                 )
+                self.assertEqual(
+                    e.load_live_authorization(
+                        auth, freeze, policy, root, runner, freeze_snapshot=b"freeze"
+                    )[0],
+                    "run-unique",
+                )
+                with self.assertRaisesRegex(
+                    e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
+                ):
+                    e.load_live_authorization(
+                        auth, freeze, policy, root, runner, freeze_snapshot=b"other"
+                    )
                 alternate = root / "alternate-freeze.json"
                 alternate.write_bytes(freeze.read_bytes())
                 with self.assertRaisesRegex(
@@ -925,19 +947,25 @@ source = { registry = "https://pypi.org/simple" }
                     else e.load_freeze(
                         e.ORACLE / "versions/v1/freeze-attestation.json"
                     ),
-                    "status": "VALID" if body else "NOT_RUN",
+                    "status": "VALID"
+                    if body
+                    else "UNKNOWN"
+                    if index == 2
+                    else "NOT_RUN",
                     "choice": "SUFFICIENT" if body else None,
                     "probabilities": {"SUFFICIENT": 0.8, "INSUFFICIENT": 0.2}
                     if body
                     else None,
                     "confidence": 0.7 if body else None,
-                    "error_code": None,
+                    "error_code": "CAPTURE_OR_RUNTIME_FAILED" if index == 2 else None,
                     "request_sha256": e.sha(request) if body else None,
                     "raw_sha256": e.sha(body) if body else None,
                     "raw_locator": locator,
-                    "started_utc": f"2026-10-08T00:00:0{index}+00:00" if body else None,
+                    "started_utc": f"2026-10-08T00:00:0{index}+00:00"
+                    if index < 3
+                    else None,
                     "ended_utc": f"2026-10-08T00:00:0{index + 1}+00:00"
-                    if body
+                    if index < 3
                     else None,
                 }
                 rows.append(row)
@@ -1095,6 +1123,42 @@ source = { registry = "https://pypi.org/simple" }
             public_manifest = (output / "manifest.json").read_bytes()
             summary_bytes = (output / "summary.json").read_bytes()
             restricted_rows = (restricted / "analysis.jsonl").read_bytes()
+            sequence = [json.loads(line) for line in restricted_rows.splitlines()]
+            sequence[2]["status"] = "NOT_RUN"
+            sequence[2]["error_code"] = None
+            sequence[2]["started_utc"] = None
+            sequence[2]["ended_utc"] = None
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in sequence)
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_ANALYSIS_SEQUENCE"):
+                evidence.read_rows(restricted / "analysis.jsonl")
+            (restricted / "analysis.jsonl").write_bytes(restricted_rows)
+            captured_unknown = deepcopy(sequence[2])
+            captured_unknown.update(
+                status="UNKNOWN",
+                error_code="CAPTURE_OR_RUNTIME_FAILED",
+                started_utc="2026-10-08T00:00:02+00:00",
+                ended_utc="2026-10-08T00:00:03+00:00",
+                request_sha256=e.sha(
+                    evidence.emitted_request(self.cases[2], self.question)
+                ),
+                raw_sha256=e.sha(raw),
+                raw_locator=f"responses/{self.cases[2]['group']}/{self.cases[2]['case_id']}.body",
+            )
+            sequence[2] = captured_unknown
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in sequence)
+            )
+            self.assertEqual(
+                evidence.read_rows(restricted / "analysis.jsonl")[2], captured_unknown
+            )
+            self.assertIsNone(
+                evidence.response_gap(
+                    captured_unknown, raw, self.cases[2], self.question
+                )
+            )
+            (restricted / "analysis.jsonl").write_bytes(restricted_rows)
             extra_file = output / ".env"
             extra_file.write_bytes(b"unreviewed local secret")
             self.assertIn(
@@ -1235,6 +1299,24 @@ source = { registry = "https://pypi.org/simple" }
             (output / "manifest.json").write_bytes(e.json_bytes(altered_revision))
             self.assertIn(
                 "RUNNER_REVISION_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "manifest.json").write_bytes(public_manifest)
+            historical = e.read_object(
+                e.TOPIC / "evidence/runs/20261008T035450Z-010364d7/manifest.json"
+            )
+            self.assertEqual(
+                historical["runner_revision"],
+                evidence.PRE_RECORD_RUNNER_REVISION,
+            )
+            altered = e.read_object(output / "manifest.json")
+            del altered["restricted_store_id"]
+            (output / "manifest.json").write_bytes(e.json_bytes(altered))
+            self.assertIn(
+                "STORE_POLICY_MISMATCH",
                 {
                     gap["reason"]
                     for gap in evidence.verify_evidence(output, restricted)["gaps"]
@@ -1564,6 +1646,17 @@ source = { registry = "https://pypi.org/simple" }
 
             altered = e.read_object(output / "manifest.json")
             altered["conditions"]["retries"] = 1
+            (output / "manifest.json").write_bytes(e.json_bytes(altered))
+            self.assertIn(
+                "RUN_CONTRACT_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "manifest.json").write_bytes(public_manifest)
+            altered = e.read_object(output / "manifest.json")
+            altered["conditions"]["retries"] = False
             (output / "manifest.json").write_bytes(e.json_bytes(altered))
             self.assertIn(
                 "RUN_CONTRACT_MISMATCH",

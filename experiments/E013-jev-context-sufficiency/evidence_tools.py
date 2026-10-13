@@ -27,6 +27,7 @@ ERROR_CODES = {
 }
 UNKNOWN_CODES = {"CAPTURE_OR_RUNTIME_FAILED"}
 PRE_RECORD_RUN_ID = "20261008T035450Z-010364d7"
+PRE_RECORD_RUNNER_REVISION = "ad4e692d72ee9661c02697594cfd4aa93cf380a6"
 PRE_RECORD_POLICY_HASH = (
     "ec532b9bf729a59074b63d57ce22cc4cbf04ffe6be8dcf52527f6b00b492a2ea"
 )
@@ -287,6 +288,8 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
     if len(set(keys)) != 75:
         raise e.ContractError("DUPLICATE_ANALYSIS_KEY")
     previous_end: datetime | None = None
+    previous_row: dict[str, Any] | None = None
+    not_run_started = False
     for row in rows:
         if row.get("analysis_restricted") is True and allow_stubs:
             if set(row) != PUBLIC_STUB_KEYS:
@@ -296,6 +299,25 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
         status = row.get("status")
         if not isinstance(status, str) or status not in STATUSES:
             raise e.ContractError("INVALID_ANALYSIS_STATUS")
+        if status == "NOT_RUN":
+            if previous_row is None or (
+                not_run_started is False
+                and not (
+                    previous_row["status"] == "UNKNOWN"
+                    or (
+                        previous_row["status"] == "ERROR"
+                        and (
+                            previous_row.get("error_code") == "INTERNAL_ERROR"
+                            or previous_row.get("analysis_restricted") is True
+                        )
+                    )
+                )
+            ):
+                raise e.ContractError("INVALID_ANALYSIS_SEQUENCE")
+            not_run_started = True
+        elif not_run_started:
+            raise e.ContractError("INVALID_ANALYSIS_SEQUENCE")
+        previous_row = row
         if row.get("analysis_restricted") is not None and not allow_stubs:
             raise e.ContractError("INVALID_RESTRICTED_ANALYSIS")
         if row.get("analysis_restricted") is True:
@@ -430,7 +452,9 @@ def policy_snapshot(root: Path, manifest: dict[str, Any]) -> bytes:
     raise e.ContractError("STORE_POLICY_MISMATCH")
 
 
-def metadata_gaps(root: Path, manifest: dict[str, Any]) -> list[dict[str, str]]:
+def metadata_gaps(
+    root: Path, manifest: dict[str, Any], *, published: bool = False
+) -> list[dict[str, str]]:
     """Check local-store claims against the run's retained approval policy."""
     try:
         policy = e.parse_gate_document(
@@ -456,6 +480,12 @@ def metadata_gaps(root: Path, manifest: dict[str, Any]) -> list[dict[str, str]]:
             raise ValueError
         if any(
             (
+                published
+                and not {
+                    "restricted_store_id",
+                    "restricted_access",
+                    "restricted_retention_until",
+                }.issubset(manifest),
                 policy.get("root") != str(e.LOCAL_STORE_ROOT),
                 store.get("storage_mode") != "local_staging",
                 store.get("versioned_immutable") is not False,
@@ -583,8 +613,10 @@ def inventory_gaps(
         manifest.get("model") != e.MODEL
         or manifest.get("rubric_sha256") != e.POLICY_HASH
         or manifest.get("sdk_version") != e.SDK_VERSION
-        or manifest.get("conditions")
-        != {"timeout_seconds": 30, "retries": 0, "order": list(e.GROUPS)}
+        or not same_json_value(
+            manifest.get("conditions"),
+            {"timeout_seconds": 30, "retries": 0, "order": list(e.GROUPS)},
+        )
     ):
         return [{"reason": "RUN_CONTRACT_MISMATCH"}]
     try:
@@ -692,6 +724,9 @@ def response_gap(
             and body["model"] != row.get("model")
         ):
             return "RAW_ANALYSIS_MISMATCH"
+    elif row["status"] == "UNKNOWN" and row.get("raw_sha256") is not None:
+        if row.get("request_sha256") is None:
+            return "REQUEST_BODY_MISSING"
     else:
         return "UNEXPECTED_CAPTURED_BODY"
     return None
@@ -785,6 +820,14 @@ def verify_local_run(
         group, case_id = row["group"], row["case_id"]
         if (
             row.get("status") in ("VALID", "INVALID")
+            and row.get("request_sha256") is None
+        ):
+            gaps.append(
+                {"group": group, "case_id": case_id, "reason": "REQUEST_BODY_MISSING"}
+            )
+        if (
+            row.get("status") == "UNKNOWN"
+            and row.get("raw_sha256") is not None
             and row.get("request_sha256") is None
         ):
             gaps.append(
@@ -1182,7 +1225,7 @@ def verify_evidence(
         (row["group"], row["case_id"]) for row in rows
     }:
         raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
-    gaps = metadata_gaps(evidence_run, manifest)
+    gaps = metadata_gaps(evidence_run, manifest, published=True)
     allowed_files = PUBLIC_EVIDENCE_FILES | {
         item["raw_public_path"]
         for item in locators
@@ -1216,6 +1259,11 @@ def verify_evidence(
         if e.sha(runner) != manifest.get("runner_sha256"):
             gaps.append({"reason": "RUNNER_SOURCE_MISMATCH"})
         revision = manifest.get("runner_revision")
+        if (
+            manifest.get("run_id") == PRE_RECORD_RUN_ID
+            and revision != PRE_RECORD_RUNNER_REVISION
+        ):
+            gaps.append({"reason": "RUNNER_REVISION_MISMATCH"})
         if revision is not None:
             if not isinstance(revision, str) or not REVISION.fullmatch(revision):
                 gaps.append({"reason": "RUNNER_REVISION_MISMATCH"})
@@ -1371,6 +1419,15 @@ def verify_evidence(
             continue
         if (
             full.get("status") in ("VALID", "INVALID")
+            and full.get("request_sha256") is None
+        ):
+            gaps.append(
+                {"group": key[0], "case_id": key[1], "reason": "REQUEST_BODY_MISSING"}
+            )
+            continue
+        if (
+            full.get("status") == "UNKNOWN"
+            and full.get("raw_sha256") is not None
             and full.get("request_sha256") is None
         ):
             gaps.append(
