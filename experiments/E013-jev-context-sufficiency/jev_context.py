@@ -7,7 +7,11 @@ import base64
 from collections import Counter
 from datetime import datetime, timezone
 import hashlib
-from importlib.machinery import SourceFileLoader
+from importlib.machinery import (
+    EXTENSION_SUFFIXES,
+    ExtensionFileLoader,
+    SourceFileLoader,
+)
 from importlib.metadata import PackageNotFoundError, distribution, version
 import json
 import logging
@@ -18,6 +22,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import tomllib
 from typing import Any
 
 import httpx2
@@ -291,6 +296,21 @@ def load_store_policy(path: Path, store: Path, root: Path = ROOT) -> dict[str, A
     }
 
 
+def ensure_live_store_boundary(store: Path) -> None:
+    """Reject redirected evidence and authorization directories before use."""
+    for name in ("runs", "authorization-uses"):
+        directory = store / name
+        if directory.is_symlink():
+            raise ContractError("STORE_BOUNDARY_MISMATCH")
+        directory.mkdir(mode=0o700, exist_ok=True)
+        if (
+            directory.is_symlink()
+            or not directory.is_dir()
+            or directory.resolve().parent != store.resolve()
+        ):
+            raise ContractError("STORE_BOUNDARY_MISMATCH")
+
+
 def load_live_authorization(
     path: Path,
     attestation: Path,
@@ -506,22 +526,42 @@ def validate_oracles(
                 raise ContractError("ORACLE_VALIDATION_FAILED")
 
 
-def verify_sdk_imports() -> None:
-    """Bind loaded SDK modules to hashed wheel files inside this project venv."""
+def verify_sdk_imports(lock_bytes: bytes) -> None:
+    """Bind loaded SDK dependency modules to locked, hashed venv files."""
     environment = (TOPIC / ".venv").resolve()
     if Path(sys.prefix).resolve() != environment or os.environ.get("PYTHONPATH"):
         raise ContractError("SDK_IMPORT_MISMATCH")
-    for package, module_prefix, expected_version in (
-        ("typesafe-sdk", "typesafe_sdk", SDK_VERSION),
-        ("httpx2", "httpx2", HTTPX2_VERSION),
-    ):
-        try:
+    try:
+        locked = {
+            item["name"]: item["version"]
+            for item in tomllib.loads(lock_bytes.decode("utf-8"))["package"]
+            if "registry" in item["source"]
+        }
+        if (
+            locked.get("typesafe-sdk") != SDK_VERSION
+            or locked.get("httpx2") != HTTPX2_VERSION
+        ):
+            raise ContractError("SDK_IMPORT_MISMATCH")
+        module_files: dict[str, set[Path]] = {}
+        for package, expected_version in locked.items():
+            if package == "httpx2-jsfetch" and sys.platform != "emscripten":
+                continue
             installed = distribution(package)
             if installed.version != expected_version or installed.files is None:
                 raise ContractError("SDK_IMPORT_MISMATCH")
-            expected_files: set[Path] = set()
+            found_code = False
             for entry in installed.files:
-                if not (entry.parts[0] == module_prefix and entry.suffix == ".py"):
+                if not (
+                    entry.suffix == ".py"
+                    or any(str(entry).endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+                ):
+                    continue
+                top_level = (
+                    Path(entry.parts[0]).stem
+                    if len(entry.parts) == 1
+                    else entry.parts[0]
+                )
+                if top_level.endswith(".dist-info"):
                     continue
                 record_hash = entry.hash
                 location = Path(installed.locate_file(entry)).resolve()
@@ -537,29 +577,35 @@ def verify_sdk_imports() -> None:
                     != record_hash.value
                 ):
                     raise ContractError("SDK_IMPORT_MISMATCH")
-                expected_files.add(location)
-            if not expected_files:
+                module_files.setdefault(top_level, set()).add(location)
+                found_code = True
+            if not found_code:
                 raise ContractError("SDK_IMPORT_MISMATCH")
-            loaded = [
-                module
-                for name, module in sys.modules.items()
-                if name == module_prefix or name.startswith(module_prefix + ".")
-            ]
-            if not loaded or any(
-                not isinstance(getattr(module, "__loader__", None), SourceFileLoader)
+        if not {"typesafe_sdk", "httpx2"}.issubset(sys.modules):
+            raise ContractError("SDK_IMPORT_MISMATCH")
+        for name, module in sys.modules.items():
+            expected_files = module_files.get(name.split(".")[0])
+            if expected_files is None:
+                continue
+            if (
+                not isinstance(
+                    getattr(module, "__loader__", None),
+                    (SourceFileLoader, ExtensionFileLoader),
+                )
                 or Path(getattr(module.__spec__, "origin", "")).resolve()
                 not in expected_files
-                for module in loaded
             ):
                 raise ContractError("SDK_IMPORT_MISMATCH")
-        except (
-            PackageNotFoundError,
-            OSError,
-            TypeError,
-            ValueError,
-            AttributeError,
-        ) as exc:
-            raise ContractError("SDK_IMPORT_MISMATCH") from exc
+    except (
+        PackageNotFoundError,
+        OSError,
+        TypeError,
+        ValueError,
+        AttributeError,
+        KeyError,
+        UnicodeDecodeError,
+    ) as exc:
+        raise ContractError("SDK_IMPORT_MISMATCH") from exc
 
 
 def parse_answer(raw: bytes) -> dict[str, Any]:
@@ -848,7 +894,13 @@ def run_live(
             raise ContractError("MISSING_KEY")
         if version("typesafe-sdk") != SDK_VERSION:
             raise ContractError("SDK_VERSION_MISMATCH")
-        verify_sdk_imports()
+        lock_bytes = (root / LOCK_RELATIVE).read_bytes()
+        if (
+            sha(lock_bytes)
+            != parse_live_authorization(authorization_bytes)["uv_lock_sha256"]
+        ):
+            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+        verify_sdk_imports(lock_bytes)
         case_sources = read_frozen_case_sources(root, freeze_hashes)
         validate_oracles(root, freeze_hashes, case_sources)
         cases = load_cases(root, case_sources)
@@ -866,13 +918,8 @@ def run_live(
             != parse_live_authorization(authorization_bytes)["store_policy_sha256"]
         ):
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
-        lock_bytes = (root / LOCK_RELATIVE).read_bytes()
-        if (
-            sha(lock_bytes)
-            != parse_live_authorization(authorization_bytes)["uv_lock_sha256"]
-        ):
-            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         policy_hash = POLICY_HASH
+        ensure_live_store_boundary(store)
     except (ContractError, OSError, ValueError) as exc:
         code = exc.code if isinstance(exc, ContractError) else "PREFLIGHT_FAILED"
         print(f"E013 BLOCKED {code}", flush=True)

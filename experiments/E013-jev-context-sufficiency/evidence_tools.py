@@ -494,6 +494,21 @@ def summary_identity_gap(summary: dict[str, Any], run_id: str) -> bool:
     )
 
 
+def same_json_value(recorded: Any, recalculated: Any) -> bool:
+    """Compare summary values without Python's bool/int numeric equivalence."""
+    if type(recorded) is not type(recalculated):
+        return False
+    if isinstance(recorded, dict):
+        return set(recorded) == set(recalculated) and all(
+            same_json_value(recorded[key], recalculated[key]) for key in recorded
+        )
+    if isinstance(recorded, list):
+        return len(recorded) == len(recalculated) and all(
+            same_json_value(left, right) for left, right in zip(recorded, recalculated)
+        )
+    return recorded == recalculated
+
+
 def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
     """The pre-record-gate historical run has no authorization snapshot."""
     expected_hash = manifest.get("live_authorization_sha256")
@@ -831,8 +846,8 @@ def verify_local_run(
         recorded = {}
     recalculated = e.summarize(rows)
     if (
-        recorded.get("groups") != recalculated["groups"]
-        or recorded.get("complete") != recalculated["complete"]
+        not same_json_value(recorded.get("groups"), recalculated["groups"])
+        or not same_json_value(recorded.get("complete"), recalculated["complete"])
         or summary_identity_gap(recorded, run_id)
     ):
         gaps.append({"reason": "SUMMARY_MISMATCH"})
@@ -1446,8 +1461,10 @@ def verify_evidence(
             recorded = e.read_object(evidence_run / "summary.json")
             recalculated = e.summarize(full_rows)
             if (
-                recorded.get("groups") != recalculated["groups"]
-                or recorded.get("complete") != recalculated["complete"]
+                not same_json_value(recorded.get("groups"), recalculated["groups"])
+                or not same_json_value(
+                    recorded.get("complete"), recalculated["complete"]
+                )
                 or summary_identity_gap(recorded, manifest.get("run_id"))
             ):
                 gaps.append({"reason": "SUMMARY_MISMATCH"})

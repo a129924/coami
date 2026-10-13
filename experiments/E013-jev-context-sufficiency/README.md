@@ -44,6 +44,8 @@ env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u RUST_LOG \
 
 For a separately authorized future run, use the committed one-run record and let `uv run --locked` synchronize the full project environment **before** Python can consume its authorization marker. Clear `UV_NO_SYNC` and `PYTHONPATH` so inherited settings cannot skip synchronization or shadow the imported SDK:
 
+Preflight checks imported SDK and transitive dependency code against the authorized lockfile's versions, installed RECORD hashes and module origins. It also verifies that `runs/` and `authorization-uses/` beneath the approved local store are real directories before consuming the one-use authorization. These are point-in-time checks; the local store remains unbacked staging until reviewed evidence is committed and pushed.
+
 ```sh
 env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u PYTHONPATH -u RUST_LOG \
   uv run --quiet --locked --project experiments/E013-jev-context-sufficiency \

@@ -137,9 +137,41 @@ class E013Tests(unittest.TestCase):
                 client.assert_not_called()
             self.assertFalse((store / "authorization-uses").exists())
 
+    def test_live_store_rejects_redirected_subdirectories(self) -> None:
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            store = root / "approved"
+            outside = root / "outside"
+            store.mkdir()
+            outside.mkdir()
+            (store / "runs").symlink_to(outside, target_is_directory=True)
+            with self.assertRaisesRegex(e.ContractError, "STORE_BOUNDARY_MISMATCH"):
+                e.ensure_live_store_boundary(store)
+            self.assertFalse((store / "authorization-uses").exists())
+            (store / "runs").unlink()
+            e.ensure_live_store_boundary(store)
+            self.assertTrue((store / "runs").is_dir())
+            self.assertTrue((store / "authorization-uses").is_dir())
+
+    def test_summary_comparison_rejects_bool_integer_aliases(self) -> None:
+        expected = e.summarize([])
+        altered = deepcopy(expected)
+        altered["complete"] = int(expected["complete"])
+        self.assertFalse(evidence.same_json_value(altered, expected))
+        altered = deepcopy(expected)
+        altered["groups"]["research"]["valid"] = False
+        self.assertFalse(evidence.same_json_value(altered, expected))
+        self.assertTrue(evidence.same_json_value(expected, deepcopy(expected)))
+
     def test_validator_executes_frozen_source_and_rejects_replacement(self) -> None:
-        freeze = e.load_freeze(e.ORACLE / "versions/v1/freeze-attestation.json")
-        sources = e.read_frozen_case_sources(e.ROOT, freeze)
+        v1 = e.ORACLE / "versions/v1"
+        freeze = {
+            "validate_dataset.py": e.sha((v1 / "validate_dataset.py").read_bytes())
+        }
+        sources = {
+            "research": (v1 / "context_sufficiency_v1.jsonl").read_bytes(),
+            "v0": (e.ORACLE / "dataset/context_sufficiency_v0.jsonl").read_bytes(),
+        }
         e.validate_oracles(e.ROOT, freeze, sources)
         with TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -156,9 +188,22 @@ class E013Tests(unittest.TestCase):
                 e.validate_oracles(root, freeze, sources)
 
     def test_sdk_preflight_rejects_shadowed_import_environment(self) -> None:
+        lock = b"""[[package]]
+name = "typesafe-sdk"
+version = "0.7.2"
+source = { registry = "https://pypi.org/simple" }
+[[package]]
+name = "httpx2"
+version = "2.13.1"
+source = { registry = "https://pypi.org/simple" }
+[[package]]
+name = "pydantic"
+version = "2.13.5"
+source = { registry = "https://pypi.org/simple" }
+"""
         with patch.dict(os.environ, {"PYTHONPATH": "/unreviewed"}):
             with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
-                e.verify_sdk_imports()
+                e.verify_sdk_imports(lock)
         with TemporaryDirectory() as temporary:
             topic = Path(temporary)
             environment = topic / ".venv"
@@ -168,6 +213,7 @@ class E013Tests(unittest.TestCase):
             for name, prefix, expected_version in (
                 ("typesafe-sdk", "typesafe_sdk", e.SDK_VERSION),
                 ("httpx2", "httpx2", e.HTTPX2_VERSION),
+                ("pydantic", "pydantic", "2.13.5"),
             ):
                 location = site / prefix / "__init__.py"
                 location.parent.mkdir(parents=True)
@@ -200,21 +246,35 @@ class E013Tests(unittest.TestCase):
                 patch.object(e.sys, "modules", loaded),
                 patch.dict(os.environ, {"PYTHONPATH": ""}),
             ):
-                e.verify_sdk_imports()
+                e.verify_sdk_imports(lock)
                 (site / "httpx2/__init__.py").write_bytes(b"modified source\n")
                 with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
-                    e.verify_sdk_imports()
+                    e.verify_sdk_imports(lock)
+                (site / "httpx2/__init__.py").write_bytes(b"verified source\n")
+                loaded["pydantic"].__spec__.origin = str(topic / "pydantic.py")
+                with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
+                    e.verify_sdk_imports(lock)
 
     def test_historical_review_and_authorization_shapes_cannot_be_erased(self) -> None:
-        run = e.TOPIC / "evidence/runs/20261008T035450Z-010364d7"
-        manifest = e.read_object(run / "manifest.json")
+        manifest = {"run_id": e.HISTORICAL_RUN_ID}
         with TemporaryDirectory() as temporary:
-            review = e.read_object(run / "review.json")
+            review = {
+                "run_id": e.HISTORICAL_RUN_ID,
+                "approved_by": "Owner",
+                "summary_public": True,
+                "summary_safety_checked": True,
+                "summary_sha256": "0" * 64,
+                "cases": [],
+                "method": evidence.HISTORICAL_REVIEW_METHOD,
+                "reviewed_utc": "2026-10-08T04:00:00+00:00",
+            }
+            path = Path(temporary) / "review.json"
+            path.write_bytes(e.json_bytes(review))
+            self.assertEqual(evidence.read_review(path), review)
             del review["method"]
             del review["reviewed_utc"]
             for decision in review["cases"]:
                 del decision["checks"]
-            path = Path(temporary) / "review.json"
             path.write_bytes(e.json_bytes(review))
             with self.assertRaisesRegex(e.ContractError, "INVALID_PUBLICATION_REVIEW"):
                 evidence.read_review(path)
@@ -228,7 +288,8 @@ class E013Tests(unittest.TestCase):
             altered[field] = value
             with self.subTest(field=field):
                 self.assertEqual(
-                    evidence.authorization_gap(run, altered), "AUTHORIZATION_MISMATCH"
+                    evidence.authorization_gap(Path(temporary), altered),
+                    "AUTHORIZATION_MISMATCH",
                 )
 
     def test_live_cases_use_validated_source_bytes(self) -> None:
