@@ -7,6 +7,9 @@ const runtime=get('runtime'), selected=get('selected'), coordinate=get('coordina
 const operator=get<HTMLInputElement>('operator'), stable=get<HTMLInputElement>('stable')
 const next=get<HTMLButtonElement>('next'), apply=get<HTMLButtonElement>('apply'), away=get<HTMLButtonElement>('away')
 const results=Array.from(document.querySelectorAll<HTMLButtonElement>('[data-result]'))
+// Local observation-only surface from the pinned simulator; no robot/driver rotation writes.
+type InspectionScene = { camera: { position: { set(x:number,y:number,z:number):void } };
+ controls: { target: { set(x:number,y:number,z:number):void }; update():void }; setViewportControlsEnabled(enabled:boolean):void }
 const ledger=new Ledger(), runId=`E019-${new Date().toISOString().replace(/[:.]/g,'-')}`
 const records: {at:string;elapsedMs:number;seq:number|null;message:string}[]=[]
 let engine: SimulatorEngine | undefined, ready=false, modReady=false, runtimeReady=false, pending=false, selection=0
@@ -70,6 +73,9 @@ async function start():Promise<void>{
     if(installationStatus!=='prepared'&&installationStatus!=='installed'){fatal(Error(`MOD install ${installationStatus}`));return}
     runtimeReady=true;ready=modReady&&runtimeReady;runtime.textContent='Pinned runtime 已核對；MOD 已載入';render()
    },onError:fatal})
+  const scene=(engine as SimulatorEngine & {scene:InspectionScene}).scene
+  scene.camera.position.set(0,0,200);scene.controls.target.set(0,0,0);scene.controls.update();scene.setViewportControlsEnabled(false)
+  log('observation view=v2-front-eye-level camera=[0,0,200] target=[0,0,0]; robot rotation unchanged')
   const timeout=setTimeout(()=>{if(!ready)fatal(Error('30 秒內未取得 runtime + E019 MOD ready'))},30000)
   await engine.start();if(ledger.blocked)clearTimeout(timeout)
  }catch(error){fatal(error)}

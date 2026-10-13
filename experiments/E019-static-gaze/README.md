@@ -59,6 +59,8 @@ npm run build
 npm run dev -- --port 5199
 ```
 
+目前觀察條件為v2正面同高鏡頭（camera=[0,0,200]、target=[0,0,0]），模型區固定高度，方便同時看頭部與腳座。既有自動證據使用v1預設斜上方鏡頭，不回改舊結果。真人初次起始不符合與視角修訂見 `evidence/human-run.md`。
+
 1. 開啟 localhost，待 pinned runtime 與 E019 MOD ready，填觀察者姓名。固定頁面視角；viewport 不接收旋轉輸入。
 2. 按「選下一個目標／起始準備」，循環 Robot左、Robot右、上、下、起始準備。
 3. 選起始準備，核對穩定後勾選起始條件並執行。此操作明確呼叫 lookAway→setPose(零旋轉)，與正式注視分列。
