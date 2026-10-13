@@ -25,3 +25,7 @@ Before updating: record browser/version, webcam/device condition, timestamp, exa
 - Main experiment: **未執行**; feasibility-validation task complete: **no**.
 - Required next evidence: attested full runtime and owner-operated motion/time/cancel/restart observations.
 - Draft PR is an engineering handoff only, not adoption or hypothesis approval.
+
+## Engineering publication
+
+Code delivery is available in Draft PR https://github.com/a129924/coami/pull/15. Local PR Lens validate/render passed using actual diff provenance; this is a review aid, not correctness or recording proof. No usable Graphify graph existed, so targeted source fallback was used without building one. Archify structural showcase passed but desktop visual containment failed; its artifact is partial. Git hook runner lefthook was unavailable; explicit checks were run separately.

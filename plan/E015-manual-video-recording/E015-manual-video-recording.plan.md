@@ -39,9 +39,9 @@ All tracked writes remain in the selected feature worktree and exact paths below
 
 ## Status / Allowed Transitions
 
-- **Current**: `publish-in-progress`.
-- **Next actor**: Main Agent.
-- **Stage-local action**: Inspect the bounded staged set, commit the reviewed topic, push and open a Draft PR for human review.
+- **Current**: `pr-open`.
+- **Next actor**: Owner / Human Reviewer.
+- **Stage-local action**: Review Draft PR https://github.com/a129924/coami/pull/15 and the documented pending live cases. Automation stops; no merge is authorized.
 - **Execution model**: formal planning review/readiness, bounded creator pass, independent code/check review, topic commit -> push -> Draft PR -> human review/merge stop. Latest owner direction explicitly authorizes commit/push/Draft PR and supersedes the older per-message commit-confirmation requirement. Do not ask again. No merge authorization.
 - **Allowed transitions**: planned -> creator-in-progress; creator-in-progress -> review-ready; review-ready -> reviewer-in-progress; reviewer-in-progress -> approved or needs-rework; needs-rework -> creator-in-progress; approved -> creator-in-progress or publish-in-progress; publish-in-progress -> pr-open or merged; pr-open -> needs-rework or merged; merged -> terminal.
 - TC1–TC4 and physical TC5 are owner/Tester responsibilities after program delivery, not creator-pass completion gates. Mark live experiment 未執行 before a live attempt or 無法判定 for an insufficient attempted run. They may remain pending in the Draft PR; never mark them complete or claim technical success to unblock delivery. Runtime/toolchain blockers are reported separately while other code work continues.

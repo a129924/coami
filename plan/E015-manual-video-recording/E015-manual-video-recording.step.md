@@ -11,7 +11,7 @@ created: 2026-10-13
 
 | Current status | Allowed next transitions | Next actor |
 | --- | --- | --- |
-| publish-in-progress | publish-in-progress -> pr-open or merged | Main Agent |
+| pr-open | pr-open -> needs-rework or merged | Owner / Human Reviewer |
 
 ## Actionable Steps
 
@@ -35,11 +35,11 @@ created: 2026-10-13
 
 - [X] **Actor:** Main Agent — **Action:** Validate the approved Written set and perform bounded staging only.
 - [X] **Actor:** Main Agent — **Action:** Obtain explicit human approval at STOP POINT 1 before commit, push, or PR creation.
-- [ ] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
-- [ ] **Actor:** Main Agent — **Action:** Push the topic branch.
-- [ ] **Actor:** Main Agent — **Action:** Open the pull request.
-- [ ] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
-- [ ] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
+- [X] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
+- [X] **Actor:** Main Agent — **Action:** Push the topic branch.
+- [X] **Actor:** Main Agent — **Action:** Open the pull request.
+- [X] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
+- [X] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
 - [ ] **Actor:** Main Agent — **Action:** Record exact human merge evidence after a new execution begins.
 - [ ] **Actor:** Main Agent — **Action:** Require a new explicit human resume before post-merge work.
 - [ ] **Actor:** Main Agent — **Action:** Verify the pull request is merged.
@@ -68,3 +68,11 @@ created: 2026-10-13
 - Tracker semantics: check_all_succeeded covers rendered head/contextual/Implementation/tail checkboxes; check_impl_steps_succeeded covers only Implementation Steps.
 - Owner-only updates: only the action owner may update after exact evidence; step-creator never updates an existing output.
 - Retention default: remote-retained pending; policy/human follow-up required before deletion. Initial cleanup rows remain pending and no worktree removal is authorized.
+
+## Draft handoff evidence
+
+- Code commit: fab0dc2b1fd321b77b9e038cbe222b5159687b0f; pushed to origin/feat/andrew/e015-manual-video-recording.
+- Draft PR: https://github.com/a129924/coami/pull/15 ; verified OPEN, isDraft=true, base dev, correct feature head. No human verdict yet.
+- Owner review and live TC1–TC5 remain pending. Merge/release/cleanup rows remain pending; no approval or closure is inferred.
+- PR Lens local graph/render validated against actual commit diff; Graphify used no-graph source fallback. Archify showcase passed but desktop visual containment failed (partial auxiliary delivery).
+- Git warned lefthook was absent; no hook execution is claimed. Explicit E015 checks and independent review evidence are recorded separately.

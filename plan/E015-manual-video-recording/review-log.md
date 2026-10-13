@@ -21,3 +21,12 @@ Verdict: **approved for bounded code delivery to Draft PR**. No remaining implem
 ## Publication authorization and routing
 
 Owner explicitly accepted the plan and directed: create feature worktree, implement there (not dev), commit by topic, push, open Draft PR, stop for human review. That latest direction authorizes the topic commits/publication without another message-confirmation prompt. No merge, release or worktree removal is authorized.
+
+## Draft PR handoff
+
+- Feature implementation commit: fab0dc2b1fd321b77b9e038cbe222b5159687b0f, pushed to origin.
+- Draft PR [#15](https://github.com/a129924/coami/pull/15), base dev, verified OPEN and isDraft=true.
+- Local PR Lens graph validated/rendered with real commit provenance and unchanged E008/vendor neighbors. Graphify: no graph, targeted source fallback, no extraction. Archify structural showcase9 passed; desktop visual containment failed and remains a separate auxiliary gap.
+- Narrow independent dependency follow-up approved: only topic name and source-map-js 1.2.1→1.2.2 lockfile entries differ from E008; direct pins unchanged.
+- Git reported lefthook unavailable. Explicit tests/typecheck/MOD/web build succeeded independently; hook completion is not claimed.
+- Human review and manual recording cases are pending. No merge, release or worktree cleanup is performed.
