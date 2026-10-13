@@ -1,0 +1,1590 @@
+{
+  "experiment": "E017",
+  "capturedAt": "2026-10-13T06:46:53.164Z",
+  "provenance": {
+    "experiment": "E017",
+    "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+    "patchSha256": "3cbcea5285fe6a67645e0424d55a5a8e1ea9fdf6e16b44fe1fb13a0508651435",
+    "tools": {
+      "moddableVersion": "9.5.0",
+      "sourceCommits": {
+        "moddable": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",
+        "emsdk": "14c18b569f55138fe4963924162244251f454fb0",
+        "fontbm": "7677b908523e909679f67cd5c170396bb9def1aa"
+      },
+      "emccVersion": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 5.0.1 (8c5f43157a3f069ade75876e23061330521eabde)",
+      "emccSha256": "498eba9b6aacffca1c358ba340fc7b37015d7867cb211c7f2d45784ee9310f03",
+      "fontbmSha256": "2389a3daae8b9af5c3747cb2fbfd34db3fcd786ccec885878addd22bbcd07012",
+      "mcconfigSha256": "2abb06a6305abbe09d6ed0eb4df23f08c2f474910692f4146d5c826627d23ba4",
+      "xscSha256": "a2a6b24b2de6c88d0cdd9adcdd8819dafb0a922e478160df7f3617bef9b1383c"
+    },
+    "sha256": {
+      "mc.js": "dff08550f14e49a3005268847d4aa52ee220791fee64496a4c9815a53a438755",
+      "mc.wasm": "dc954440342c349f8b1997ed17ec19e056c5c36e0a5736bfea6702fc73918c2d"
+    },
+    "commands": [
+      "npm ci --ignore-scripts --no-audit --no-fund",
+      "npm run build:wasm"
+    ],
+    "scope": "simulator-only; isolated copies of pinned tool sources, including existing local compiler cache; no hardware evidence",
+    "mod": {
+      "sha256": "3fe9a8922d7e67af60cf99befb28ca5518af9a7d91eb678598cefcf706d9c701",
+      "sourceSha256": {
+        "mod.ts": "cbabffedcea545be0d3168f52ea01d27aea04560950a9369118430980b35bce5",
+        "observer.ts": "648015478568ed8be0f9c5afae89eef5c2fd64afd29d9f0c69ac68c5b473d0fb"
+      }
+    }
+  },
+  "evidenceKind": "operator must identify human versus automated input",
+  "dropped": 0,
+  "records": [
+    {
+      "source": "MOD",
+      "kind": "ready"
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        0,
+        0
+      ],
+      "phase": "zero",
+      "meta": {
+        "session": 2,
+        "operation": 0,
+        "sampleId": 1,
+        "ticks": 373,
+        "terminal": true,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        0,
+        0,
+        0
+      ],
+      "meta": {
+        "session": 2,
+        "operation": 0,
+        "sampleId": 1,
+        "ticks": 373,
+        "terminal": true,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 2,
+      "operation": 0,
+      "sampleId": 1,
+      "ticks": 373,
+      "terminal": true,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        62,
+        38,
+        0
+      ],
+      "phase": "press",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 2,
+        "ticks": 11959,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        62,
+        38,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 3,
+        "ticks": 11965,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        62,
+        38,
+        0
+      ],
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 2,
+        "ticks": 11959,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "MOD",
+      "kind": "event",
+      "event": {
+        "kind": "touch-panel",
+        "gesture": "press",
+        "position": -62,
+        "intensity": 62,
+        "ticks": 11959
+      },
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 2,
+        "ticks": 11959,
+        "terminal": false,
+        "queued": true
+      },
+      "count": 0
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 2,
+      "operation": 1,
+      "sampleId": 2,
+      "ticks": 11959,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        62,
+        38,
+        0
+      ],
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 3,
+        "ticks": 11965,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 2,
+      "operation": 1,
+      "sampleId": 3,
+      "ticks": 11965,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        62,
+        38,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 4,
+        "ticks": 12319,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 4,
+      "replacementSampleId": 5
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        62,
+        38,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 5,
+        "ticks": 12328,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 5,
+      "replacementSampleId": 6
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        62,
+        38,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 6,
+        "ticks": 12335,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 6,
+      "replacementSampleId": 7
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        61,
+        39,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 7,
+        "ticks": 12345,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 7,
+      "replacementSampleId": 8
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        61,
+        39,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 8,
+        "ticks": 12353,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 8,
+      "replacementSampleId": 9
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        60,
+        40,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 9,
+        "ticks": 12361,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        60,
+        40,
+        0
+      ],
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 9,
+        "ticks": 12361,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 2,
+      "operation": 1,
+      "sampleId": 9,
+      "ticks": 12361,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        59,
+        41,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 10,
+        "ticks": 12370,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 10,
+      "replacementSampleId": 11
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        58,
+        42,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 11,
+        "ticks": 12378,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 11,
+      "replacementSampleId": 12
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        57,
+        43,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 12,
+        "ticks": 12386,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 12,
+      "replacementSampleId": 13
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        55,
+        45,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 13,
+        "ticks": 12395,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 13,
+      "replacementSampleId": 14
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        54,
+        46,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 14,
+        "ticks": 12403,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 14,
+      "replacementSampleId": 15
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        52,
+        48,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 15,
+        "ticks": 12411,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        52,
+        48,
+        0
+      ],
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 15,
+        "ticks": 12411,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 2,
+      "operation": 1,
+      "sampleId": 15,
+      "ticks": 12411,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        51,
+        49,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 16,
+        "ticks": 12420,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 16,
+      "replacementSampleId": 17
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        50,
+        50,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 17,
+        "ticks": 12427,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 17,
+      "replacementSampleId": 18
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        47,
+        53,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 18,
+        "ticks": 12444,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 18,
+      "replacementSampleId": 19
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        45,
+        55,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 19,
+        "ticks": 12452,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        45,
+        55,
+        0
+      ],
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 19,
+        "ticks": 12452,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 2,
+      "operation": 1,
+      "sampleId": 19,
+      "ticks": 12452,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        41,
+        59,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 20,
+        "ticks": 12475,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 20,
+      "replacementSampleId": 21
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        39,
+        61,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 21,
+        "ticks": 12486,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 21,
+      "replacementSampleId": 22
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        34,
+        66,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 22,
+        "ticks": 12502,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 22,
+      "replacementSampleId": 23
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        31,
+        69,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 23,
+        "ticks": 12511,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 23,
+      "replacementSampleId": 24
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        28,
+        72,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 24,
+        "ticks": 12519,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        28,
+        72,
+        0
+      ],
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 24,
+        "ticks": 12519,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 2,
+      "operation": 1,
+      "sampleId": 24,
+      "ticks": 12519,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        25,
+        75,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 25,
+        "ticks": 12527,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 25,
+      "replacementSampleId": 26
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        23,
+        77,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 26,
+        "ticks": 12535,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 26,
+      "replacementSampleId": 27
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        21,
+        79,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 27,
+        "ticks": 12545,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 27,
+      "replacementSampleId": 28
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        19,
+        81,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 28,
+        "ticks": 12552,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 28,
+      "replacementSampleId": 29
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        16,
+        84,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 29,
+        "ticks": 12561,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 29,
+      "replacementSampleId": 30
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        14,
+        86,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 30,
+        "ticks": 12569,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        14,
+        86,
+        0
+      ],
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 30,
+        "ticks": 12569,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 2,
+      "operation": 1,
+      "sampleId": 30,
+      "ticks": 12569,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        11,
+        89,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 31,
+        "ticks": 12578,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 31,
+      "replacementSampleId": 32
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        9,
+        91,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 32,
+        "ticks": 12586,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 32,
+      "replacementSampleId": 33
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        6,
+        94,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 33,
+        "ticks": 12594,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 33,
+      "replacementSampleId": 34
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        4,
+        96,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 34,
+        "ticks": 12603,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 34,
+      "replacementSampleId": 35
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        1,
+        99,
+        0
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 35,
+        "ticks": 12611,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 35,
+      "replacementSampleId": 36
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        99,
+        1
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 36,
+        "ticks": 12619,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        0,
+        99,
+        1
+      ],
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 36,
+        "ticks": 12619,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "MOD",
+      "kind": "event",
+      "event": {
+        "kind": "touch-panel",
+        "gesture": "forwardSwipe",
+        "position": 1,
+        "intensity": 99,
+        "ticks": 12619
+      },
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 36,
+        "ticks": 12619,
+        "terminal": false,
+        "queued": true
+      },
+      "count": 1
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 2,
+      "operation": 1,
+      "sampleId": 36,
+      "ticks": 12619,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        96,
+        4
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 37,
+        "ticks": 12628,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 37,
+      "replacementSampleId": 38
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        92,
+        8
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 38,
+        "ticks": 12636,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 38,
+      "replacementSampleId": 39
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        90,
+        10
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 39,
+        "ticks": 12645,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 39,
+      "replacementSampleId": 40
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        87,
+        13
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 40,
+        "ticks": 12653,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 40,
+      "replacementSampleId": 41
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        84,
+        16
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 41,
+        "ticks": 12661,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 41,
+      "replacementSampleId": 42
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        81,
+        19
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 42,
+        "ticks": 12670,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        0,
+        81,
+        19
+      ],
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 42,
+        "ticks": 12670,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 2,
+      "operation": 1,
+      "sampleId": 42,
+      "ticks": 12670,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        79,
+        21
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 43,
+        "ticks": 12677,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 43,
+      "replacementSampleId": 44
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        77,
+        23
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 44,
+        "ticks": 12685,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 44,
+      "replacementSampleId": 45
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        75,
+        25
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 45,
+        "ticks": 12694,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "coalesced",
+      "session": 2,
+      "sampleId": 45,
+      "replacementSampleId": 46
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        73,
+        27
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 46,
+        "ticks": 12702,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        0,
+        73,
+        27
+      ],
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 46,
+        "ticks": 12702,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 2,
+      "operation": 1,
+      "sampleId": 46,
+      "ticks": 12702,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        73,
+        27
+      ],
+      "phase": "move",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 47,
+        "ticks": 13590,
+        "terminal": false,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        0,
+        0
+      ],
+      "phase": "zero",
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 48,
+        "ticks": 13590,
+        "terminal": true,
+        "queued": true
+      }
+    },
+    {
+      "source": "pointer",
+      "kind": "capture-loss",
+      "pointerId": 1,
+      "state": "cleaning",
+      "target": "DIV",
+      "stillCaptured": false
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        0,
+        73,
+        27
+      ],
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 47,
+        "ticks": 13590,
+        "terminal": false,
+        "queued": false
+      }
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 2,
+      "operation": 1,
+      "sampleId": 47,
+      "ticks": 13590,
+      "terminal": false,
+      "queued": true
+    },
+    {
+      "source": "host",
+      "kind": "consuming",
+      "sample": [
+        0,
+        0,
+        0
+      ],
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 48,
+        "ticks": 13590,
+        "terminal": true,
+        "queued": false
+      }
+    },
+    {
+      "source": "MOD",
+      "kind": "event",
+      "event": {
+        "kind": "touch-panel",
+        "gesture": "release",
+        "position": 0,
+        "intensity": 0,
+        "ticks": 13590
+      },
+      "meta": {
+        "session": 2,
+        "operation": 1,
+        "sampleId": 48,
+        "ticks": 13590,
+        "terminal": true,
+        "queued": true
+      },
+      "count": 1
+    },
+    {
+      "source": "host",
+      "kind": "consumed",
+      "session": 2,
+      "operation": 1,
+      "sampleId": 48,
+      "ticks": 13590,
+      "terminal": true,
+      "queued": true
+    },
+    {
+      "source": "pointer",
+      "kind": "cancel",
+      "reason": "outside",
+      "pointerId": 1,
+      "x": 1093.55859375,
+      "y": 289.39453125
+    },
+    {
+      "source": "pointer",
+      "kind": "cancel",
+      "reason": "outside",
+      "pointerId": 1,
+      "x": 1244.30859375,
+      "y": 126.0546875
+    }
+  ]
+}

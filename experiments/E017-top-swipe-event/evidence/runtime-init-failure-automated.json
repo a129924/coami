@@ -1,0 +1,64 @@
+{
+  "experiment": "E017",
+  "capturedAt": "2026-10-13T06:48:56.993Z",
+  "evidenceKind": "operator must identify human versus automated input",
+  "dropped": 0,
+  "records": [
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        0,
+        0
+      ],
+      "phase": "zero",
+      "meta": {
+        "session": 1,
+        "operation": 0,
+        "sampleId": 1,
+        "ticks": 72,
+        "terminal": true,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "input-error",
+      "session": 1,
+      "reason": "Error: runtime provenance missing; run npm run prepare:poc"
+    },
+    {
+      "source": "host",
+      "kind": "raw",
+      "sample": [
+        0,
+        0,
+        0
+      ],
+      "phase": "zero",
+      "meta": {
+        "session": 1,
+        "operation": 0,
+        "sampleId": 2,
+        "ticks": 5000,
+        "terminal": true,
+        "queued": true
+      }
+    },
+    {
+      "source": "host",
+      "kind": "input-error",
+      "session": 1,
+      "reason": "initialization exceeded 5 seconds"
+    },
+    {
+      "source": "pointer",
+      "kind": "cancel",
+      "reason": "outside",
+      "pointerId": 1,
+      "x": 1213.66796875,
+      "y": 225.6875
+    }
+  ]
+}

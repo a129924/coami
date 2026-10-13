@@ -69,9 +69,9 @@ CHROME_EXE／E017_URL 可指定既有 Chrome 與 localhost URL。測試不注入
 
 ## 是否成功
 
-- 整體實驗狀態：**無法判定**，真人有效位移已暴露 FIFO overflow；修正後真人雙向各一次成功，完整案例仍未完成，不能宣稱完整假設成立。
-- 本輪 bounded code review 已通過；工程交付與 human review 準備狀態以 step、validation 與 PR handoff 為準；與整體假設是否成功分開。
-- 純測試／mock-native SDK ordering 已執行；C/WASM browser 自動操作17案例全部PASS、12次Swipe；結果見 runtime-automated.json。真人首次失敗與修正後待重測詳見 swipe-run.md。修正後23項 source tests、strict build 與 CUA 自動雙向操作通過；後者見 runtime-coalesced-automated.json。
+- 整體實驗狀態：**成功（本次 pinned browser simulator 範圍）**。真人各方向三次、持續操作、無效輸入、取消／恢復、切分頁及普通重啟隔離已核對；獨立自動初始化故障與恢復通過。
+- 初版 bounded code review 已通過；該審查早於 b408039 高頻輸入修正，不宣稱涵蓋修正。最新實作與證據留在 Draft PR 等待 human review。
+- 純測試／mock-native SDK ordering 已執行；C/WASM browser 自動操作17案例全部PASS、12次Swipe；結果見 runtime-automated.json。真人首次失敗與修正後完整操作證據詳見 swipe-run.md。修正後23項 source tests、strict build 與 CUA 自動雙向操作通過；後者見 runtime-coalesced-automated.json。
 
 ## 結果與證據
 
@@ -84,8 +84,10 @@ CHROME_EXE／E017_URL 可指定既有 Chrome 與 localhost URL。測試不注入
 
 ## 結論與限制
 
-本輪保留原 SDK recognizer，建立 raw input、同筆 XS metadata、MOD-only count 與 zero consumed barrier。工程證據支持已執行的測試條件；真人、硬體、跨瀏覽器品質與 production 採用均無通過結論。
+本輪保留原 SDK recognizer，建立 raw input、同筆 XS metadata、MOD-only count 與 zero consumed barrier。真人與工程證據支持本次 pinned browser simulator 的已執行條件；硬體、跨瀏覽器品質與 production 採用均無通過結論。
 
 所有新增檔案限 E017 與其 topic plan；PR Lens 產物在外部本機目錄。停止於 Draft PR／human review，不 merge、不 release。
 
 高頻 pointer 修正：輸入佇列保留 press、轉折與最新單方向端點，合併尚未消費的中間 move，避免 120Hz pointer 堵塞 20Hz SDK；coalesced trace 明列 replacement sampleId。不調整 SDK 手勢門檻。
+
+2026-10-13驗證任務完成：是（本次simulator-only判準）。owner真人trace與agent自動故障注入分開保存；acceptance-summary.json記錄關聯與限制。單一Chrome/macOS、實機與production未驗證，active操作途中重啟未另做人測，provider-missing分支未另注入。實驗結果支持本次輸入能力，Draft PR仍待human review。

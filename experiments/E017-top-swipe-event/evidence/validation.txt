@@ -206,3 +206,5 @@ Strict typecheck and Vite build PASS; existing large chunk warning remains.
 CUA actual browser raw pointer: forwardSwipe count1, backwardSwipe count2, ready after release; runtime-coalesced-automated.json.
 Historical automated 17-case suite not rerun; new result is the two CUA directions and 23 source/SDK tests only.
 Human original failure retained; post-fix human acceptance pending. Original SDK/runtime/MOD unchanged.
+
+2026-10-13 operator acceptance: both directions3, hold/reversal/release, independent strokes, tap/small movement/long hold, pre/post-threshold outside cleanup/recovery, page-leave/recovery and normal restart PASS. See swipe-run.md for exact operations and limits. Agent isolated real UI initialization failure/recovery PASS, separate from human evidence. Offline trace checks: no drops/errors in successful sessions, MOD counts/ticks/sample consumption consistent, provenance equal. No source/runtime changes this round; no repeated test/build required.
