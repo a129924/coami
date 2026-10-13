@@ -63,8 +63,8 @@ E018 注入自己的 WebAudio bridge；原版 duration+250ms fallback 沒有使�
 
 - Pure: 17 tests、strict typecheck、build PASS；含真正 MOD guard 與 pinned newline-free print regression。
 - Actual runtime: fresh 未修改 pin、served bytes 核對；自動 A→B→A、busy、播放失敗、再次執行 PASS。這是 browser/WASM/WebAudio lifecycle，不是人耳證據。
-- Human listening: 未執行，human-check。尚不能宣稱正確可聽 TTS PASS。
-- 程式可交付 Draft PR 供 human review；不決定 production adoption。
+- Human listening: PASS，Andrew／耳機／有音量；2026-10-13 以 A→B→A→B→A 五筆確認內容全部相符，程式結果與 natural ended／SDK success 關聯核對通過。詳見 tts-run.md。
+- 本次 pinned simulator＋E018 strict bridge 的日文 TTS 假設獲支持；Draft PR 仍供 human code review，不決定 production adoption。
 - 詳見 [validation](evidence/validation.txt)、[runtime provenance](evidence/runtime-provenance.json)、[run records](evidence/tts-run.md)、[trace](evidence/tts-trace.jsonl)、[auxiliary](evidence/auxiliary.md)。
 
 Archify/PR Lens/Graphify 為本地輔助；不安裝、不發布、不改工具設定。輔助工具品質與 TTS 結果分開。移除獨立實驗即可撤回行為；本次保留 worktree/branch 等待 human review。

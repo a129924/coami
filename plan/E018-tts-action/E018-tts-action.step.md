@@ -81,9 +81,9 @@ created: 2026-10-13
 | Written | Source plan Scope/Written; bounded to step 1. | web/package.json, tsconfig.json, scripts/prepare-assets.mjs, scripts/build-mod.mjs; evidence/runtime-provenance.json |
 | Deleted | none | none |
 | Modify | Source plan Scope/Modify; bounded to step 1. | Only newly created E018 files, plus declared external tool outputs. |
-| Goal | 建立 E018 MOD／web、strict TS／build 設定、fresh pinned runtime／MOD scripts 與 provenance 檢核。 | Engineering behavior/evidence delivered; human listening remains unexecuted. |
+| Goal | 建立 E018 MOD／web、strict TS／build 設定、fresh pinned runtime／MOD scripts 與 provenance 檢核。 | Engineering behavior/evidence delivered; human listening PASS (Andrew/headphones; see evidence/tts-run.md). |
 | Non-Goal | Source plan Scope/Non-Goal; bounded to step 1. | No audible-content/Chinese/hardware/production PASS claim. |
-| TestCase | TC-TTS | TC-TTS: 17 pure tests + actual browser 6 cases; human 未執行. |
+| TestCase | TC-TTS | TC-TTS: 17 pure tests + actual browser 6 cases; human5/5 PASS; see evidence/tts-run.md. |
 
 ### Step 2
 
@@ -95,9 +95,9 @@ created: 2026-10-13
 | Written | Source plan Scope/Written; bounded to step 2. | mod/mod.ts; web/src/tts-session.ts |
 | Deleted | none | none |
 | Modify | Source plan Scope/Modify; bounded to step 2. | Only newly created E018 files, plus declared external tool outputs. |
-| Goal | 實作 button transport、accepted sequence、engine session、文字驗證、immutable token 及雙層 busy guard。 | Engineering behavior/evidence delivered; human listening remains unexecuted. |
+| Goal | 實作 button transport、accepted sequence、engine session、文字驗證、immutable token 及雙層 busy guard。 | Engineering behavior/evidence delivered; human listening PASS (Andrew/headphones; see evidence/tts-run.md). |
 | Non-Goal | Source plan Scope/Non-Goal; bounded to step 2. | No audible-content/Chinese/hardware/production PASS claim. |
-| TestCase | TC-TTS | TC-TTS: 17 pure tests + actual browser 6 cases; human 未執行. |
+| TestCase | TC-TTS | TC-TTS: 17 pure tests + actual browser 6 cases; human5/5 PASS; see evidence/tts-run.md. |
 
 ### Step 3
 
@@ -109,9 +109,9 @@ created: 2026-10-13
 | Written | Source plan Scope/Written; bounded to step 3. | web/src/strict-audio-bridge.ts; web/src/tts-session.ts |
 | Deleted | none | none |
 | Modify | Source plan Scope/Modify; bounded to step 3. | Only newly created E018 files, plus declared external tool outputs. |
-| Goal | 實作 strict bridge、SDK 判定、唯一終態、30 秒 watchdog、zero-sample 無 play 及 reload 鎖定。 | Engineering behavior/evidence delivered; human listening remains unexecuted. |
+| Goal | 實作 strict bridge、SDK 判定、唯一終態、30 秒 watchdog、zero-sample 無 play 及 reload 鎖定。 | Engineering behavior/evidence delivered; human listening PASS (Andrew/headphones; see evidence/tts-run.md). |
 | Non-Goal | Source plan Scope/Non-Goal; bounded to step 3. | No audible-content/Chinese/hardware/production PASS claim. |
-| TestCase | TC-TTS | TC-TTS: 17 pure tests + actual browser 6 cases; human 未執行. |
+| TestCase | TC-TTS | TC-TTS: 17 pure tests + actual browser 6 cases; human5/5 PASS; see evidence/tts-run.md. |
 
 ### Step 4
 
@@ -123,9 +123,9 @@ created: 2026-10-13
 | Written | Source plan Scope/Written; bounded to step 4. | web/src/browser-runtime.ts, main.ts, style.css; web/index.html |
 | Deleted | none | none |
 | Modify | Source plan Scope/Modify; bounded to step 4. | Only newly created E018 files, plus declared external tool outputs. |
-| Goal | 串接音訊解鎖、文字／結果／trace，加入明示下一次播放失敗測試注入。 | Engineering behavior/evidence delivered; human listening remains unexecuted. |
+| Goal | 串接音訊解鎖、文字／結果／trace，加入明示下一次播放失敗測試注入。 | Engineering behavior/evidence delivered; human listening PASS (Andrew/headphones; see evidence/tts-run.md). |
 | Non-Goal | Source plan Scope/Non-Goal; bounded to step 4. | No audible-content/Chinese/hardware/production PASS claim. |
-| TestCase | TC-TTS | TC-TTS: 17 pure tests + actual browser 6 cases; human 未執行. |
+| TestCase | TC-TTS | TC-TTS: 17 pure tests + actual browser 6 cases; human5/5 PASS; see evidence/tts-run.md. |
 
 ### Step 5
 
@@ -137,9 +137,9 @@ created: 2026-10-13
 | Written | Source plan Scope/Written; bounded to step 5. | web/src/tts-session.test.ts; web/src/strict-audio-bridge.test.ts; evidence/validation.txt |
 | Deleted | none | none |
 | Modify | Source plan Scope/Modify; bounded to step 5. | Only newly created E018 files, plus declared external tool outputs. |
-| Goal | 完成 TC-TTS pure tests、typecheck、MOD／web build，記錄結果與 blockers。 | Engineering behavior/evidence delivered; human listening remains unexecuted. |
+| Goal | 完成 TC-TTS pure tests、typecheck、MOD／web build，記錄結果與 blockers。 | Engineering behavior/evidence delivered; human listening PASS (Andrew/headphones; see evidence/tts-run.md). |
 | Non-Goal | Source plan Scope/Non-Goal; bounded to step 5. | No audible-content/Chinese/hardware/production PASS claim. |
-| TestCase | TC-TTS | TC-TTS: 17 pure tests + actual browser 6 cases; human 未執行. |
+| TestCase | TC-TTS | TC-TTS: 17 pure tests + actual browser 6 cases; human5/5 PASS; see evidence/tts-run.md. |
 
 ### Step 6
 
@@ -151,9 +151,9 @@ created: 2026-10-13
 | Written | Source plan Scope/Written; bounded to step 6. | README.md; evidence/tts-run.md, tts-trace.jsonl, runtime-provenance.json |
 | Deleted | none | none |
 | Modify | Source plan Scope/Modify; bounded to step 6. | Only newly created E018 files, plus declared external tool outputs. |
-| Goal | 完成可重現程序、served bytes provenance 與分層真人／模擬器證據表。 | Engineering behavior/evidence delivered; human listening remains unexecuted. |
+| Goal | 完成可重現程序、served bytes provenance 與分層真人／模擬器證據表。 | Engineering behavior/evidence delivered; human listening PASS (Andrew/headphones; see evidence/tts-run.md). |
 | Non-Goal | Source plan Scope/Non-Goal; bounded to step 6. | No audible-content/Chinese/hardware/production PASS claim. |
-| TestCase | TC-TTS | TC-TTS: 17 pure tests + actual browser 6 cases; human 未執行. |
+| TestCase | TC-TTS | TC-TTS: 17 pure tests + actual browser 6 cases; human5/5 PASS; see evidence/tts-run.md. |
 
 ### Step 7
 
@@ -171,4 +171,6 @@ created: 2026-10-13
 
 ## Human Review Handoff
 
-Draft PR #18: https://github.com/a129924/coami/pull/18. Source implementation commit83803f9; branch pushed, PR Draft verified. Reviewer/Tester code gates PASS, human listening unexecuted. Main Agent stops before merge; all post-merge/resume/cleanup rows intentionally pending. No human merge/close evidence exists.
+Draft PR #18: https://github.com/a129924/coami/pull/18. Source implementation commit83803f9; branch pushed, PR Draft verified. Reviewer/Tester code gates PASS, human listening5/5 PASS; see evidence/tts-run.md. Main Agent stops before merge; all post-merge/resume/cleanup rows intentionally pending. No human merge/close evidence exists.
+
+Human listening evidence update: Andrew confirmed five matching utterances in session 50377760-1108-46ae-a2cb-940bc1513778 (headphones, 有音量). Main A→B→A acceptance satisfied. No code changes, merge or cleanup.

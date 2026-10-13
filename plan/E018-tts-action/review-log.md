@@ -40,3 +40,7 @@ Canonical progression: creator-in-progress -> review-ready -> reviewer-in-progre
 - PR Lens real commit diff validate/render PASS; Graphify source fallback; Archify visual partial retained honestly.
 - Main Agent hands off for human review. Listening remains unexecuted. No merge, release, branch/worktree deletion or production adoption.
 - Canonical publish-in-progress -> pr-open; feature worktree retained. Documentation-only handoff commit records these completed actions.
+
+## Human listening evidence — 2026-10-13
+
+Andrew manually ran A→B→A→B→A in session 50377760-1108-46ae-a2cb-940bc1513778; reported 「五次都有聽到，且內容全部相符」 and 「Andrew / 耳機 有音量」. Browser trace captured via app download; each5 accepted request has one completed result after same-token natural ended and matching SDK success. Source/runtime/MOD hashes match pinned evidence. Listening PASS for bounded environment; no stock bridge/Chinese/hardware/adoption claim. Existing automated busy/failure and pure unknown-path evidence remain distinct. Draft PR retained for human code review, no merge/cleanup.

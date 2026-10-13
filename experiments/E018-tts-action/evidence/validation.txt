@@ -23,3 +23,6 @@ Auxiliary status is separate: see auxiliary.md.
 Independent Tester reran17tests/typecheck/build and implementation tracker gate: PASS. Audited trace/provenance/served hashes and dev/vendor cleanliness: PASS. Compiler/import failure archive guard statically reviewed; no deliberate failed-build injection performed.
 
 Publication: topic commit83803f9 pushed to origin/feat/andrew/e018-tts-action; Draft PR https://github.com/a129924/coami/pull/18 (base dev, isDraft true). Initial read: no comments/reviews; observed CI jobs succeeded or still running, no failure claimed. Git commit succeeded with existing hook warning "Can't find lefthook in PATH"; no hook bypass/config mutation, explicit validation ran independently.
+
+Human listening update — 2026-10-13:
+Tester Andrew; headphones; qualitative volume 有音量. Operator confirmed all5 heard content matches A-B-A-B-A. Session 50377760-1108-46ae-a2cb-940bc1513778. Original trace preserved, accepted5/completed5/unique terminal5 audited; matching natural ended and SDK result precede completion for each. Runtime/MOD served hashes match existing pinned provenance. Listening PASS limited to tested environment; automated fault coverage remains separately labeled.
