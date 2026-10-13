@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { CapturePump } from './capture-pump.ts'
+import { CapturePump, RuntimeSignals } from './capture-pump.ts'
 import type { HostCapture, CameraFrame } from '../../../E008-camera-input/web/src/camera-observer.ts'
 import type { ModFrame } from '../../../E008-camera-input/web/src/capture-ledger.ts'
 
@@ -66,4 +66,41 @@ test('frame timeout clears pending and stops further requests', async () => {
   await assert.rejects(pending, /timeout/i)
   assert.equal(f.pump.busy, false)
   await assert.rejects(f.pump.next())
+})
+
+
+test('8-second pinned splash can finish before startup deadline; frame-independent waits stay 5 seconds', async () => {
+  let now = 0, serial = 0
+  const timers = new Map<number, { at: number; fire(): void }>()
+  const signals = new RuntimeSignals({ schedule: (fire, ms) => {
+    const id = ++serial; timers.set(id, { at: now + ms, fire }); return () => { timers.delete(id) }
+  } })
+  const advance = (ms: number) => {
+    now += ms
+    for (const [id, timer] of [...timers]) if (timer.at <= now) { timers.delete(id); timer.fire() }
+  }
+  let settled = false
+  const installed = signals.wait('installed').finally(() => { settled = true })
+  void installed.catch(() => {})
+  advance(5000); await Promise.resolve(); assert.equal(settled, false)
+  advance(3000); signals.deliver('installed'); await installed
+  assert.equal(settled, true)
+  const probe = signals.wait('probe'); advance(5000)
+  await assert.rejects(probe, /probe timeout \(5 秒\)/)
+  assert.equal(timers.size, 0)
+})
+
+test('stalled startup is bounded at 30 seconds; close rejects and isolates late events', async () => {
+  const timers: { ms: number; fire(): void; cancelled: boolean }[] = []
+  const signals = new RuntimeSignals({ schedule: (fire, ms) => {
+    const timer = { fire, ms, cancelled: false }; timers.push(timer); return () => { timer.cancelled = true }
+  } })
+  const installed = signals.wait('installed')
+  assert.equal(timers[0]!.ms, 30000); timers[0]!.fire()
+  await assert.rejects(installed, /installed timeout \(30 秒\)/)
+  const pending = signals.wait('camera-started'); signals.close(Error('run cancelled'))
+  await assert.rejects(pending, /run cancelled/)
+  signals.deliver('camera-started')
+  await assert.rejects(signals.wait('camera-started'), /run cancelled/)
+  assert.equal(timers[1]!.cancelled, true)
 })

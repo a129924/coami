@@ -23,7 +23,7 @@
 ## 環境與前置條件
 
 - 本次工程環境：macOS arm64、Node 26.10.0、npm 11.19.1。直接依賴版本沿用E008，E015 lockfile 的 source-map-js 已修補至1.2.2，MOD使用vendor內建WASM compiler；web與MOD strict TypeScript。
-- 完整 runtime build 需要 pinned Moddable 9.5.0 source `b6e06ba70506a7381ffb28e09e3175bf4e99f305`、emsdk 5.0.1 `14c18b569f55138fe4963924162244251f454fb0`、fontbm `7677b908523e909679f67cd5c170396bb9def1aa`。請依 E008 README 的相同工具鏈設定 MODDABLE、EMSDK、FONTBM、FONTBM_SOURCE 和 PATH。本次工具鏈未配置，`npm run assets` 實際停止於 `BLOCKED: MODDABLE 9.5.0 is not configured`，尚未建出 attested mc.js／mc.wasm。
+- 完整 runtime build 需要 pinned Moddable 9.5.0 source `b6e06ba70506a7381ffb28e09e3175bf4e99f305`、emsdk 5.0.1 `14c18b569f55138fe4963924162244251f454fb0`、fontbm `7677b908523e909679f67cd5c170396bb9def1aa`。請依 E008 README 的相同工具鏈設定 MODDABLE、EMSDK、FONTBM、FONTBM_SOURCE 和 PATH。初次交付時工具鏈未配置，`npm run assets` 曾停止於 `BLOCKED: MODDABLE 9.5.0 is not configured`。2026-10-13 owner 授權後已於本 feature worktree 的 ignored `web/generated/toolchain-verified/` 安裝 pinned sources、完成 `npm run prepare:poc` 並核對 HTTP 與 provenance 雜湊；真人錄影仍未開始。
 - 必須在 localhost、支援 MediaRecorder／canvas.captureStream 的瀏覽器，給予 webcam 權限。驗證執行前頁面核對 served runtime provenance 與mc.js/mc.wasm SHA-256；缺失時不要求相機、不使用舊二進位替代。
 - 影格為96×96 RGB565LE。錄製source是MOD已確認的host副本，不是MOD encoder。純測試用fake recorder／run／clock，明確屬模擬，不含真人相機證據。
 
@@ -54,8 +54,8 @@ npm run dev
 
 ## 是否成功
 
-- 真人錄影執行日期：無（尚未執行）。
-- **實驗狀態：未執行。** 原因：完整 pinned runtime／webcam／人工動態回放證據未建立；純測試與MOD/web build不替代主假設。
+- 真人驗證嘗試日期：2026-10-13（Start 在 runtime installed 等待逾時，未取得相機權限／影格）。
+- **實驗狀態：無法判定。** 原因：已嘗試 Start，但 runtime readiness 在要求相機權限前逾時，webcam／人工動態回放證據未建立；完整 pinned runtime 已重建並核對，正在完成一次有界啟動修正。純測試與MOD/web build不替代主假設。
 - **本輪可行性驗證任務完成：否。** 工程程式與局部驗證可交Draft PR；TC1–TC4及實際TC5仍待owner。兩種完成語意分開。
 
 ## 結果與證據
@@ -67,6 +67,6 @@ npm run dev
 
 ## 結論與限制
 
-目前只支持程式交付與局部生命週期驗證；尚無足夠證據判斷主要錄影假設。下一個必要證據是配置完整pinned runtime後由owner執行TC1–TC4與實際TC5。
+目前只支持程式交付與局部生命週期驗證；尚無足夠證據判斷主要錄影假設。完整pinned runtime已準備好，下一個必要證據是owner執行TC1–TC4與實際TC5。
 
 此為無聲、低解析度、指定simulator／browser的有限實驗；不保證fps、跨瀏覽器、真機或正式採用。Draft PR停在人類審查，不merge、不release。

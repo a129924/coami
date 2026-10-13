@@ -1,7 +1,7 @@
 import { SimulatorEngine } from '../../../../vendor/stack-chan/web/src/services/simulator/simulator-engine.mjs'
 import { createObservedCameraBridge, digestBytes, type ObservedBridge } from '../../../E008-camera-input/web/src/camera-observer.ts'
 import type { ModFrame } from '../../../E008-camera-input/web/src/capture-ledger.ts'
-import { CapturePump, asError } from './capture-pump.ts'
+import { CapturePump, RuntimeSignals, asError } from './capture-pump.ts'
 import { guardRecorderCreation, type RecorderEvents, type RecorderPort, type Run, type Playback } from './recording-session.ts'
 
 type Elements = { viewport: HTMLCanvasElement; screen: HTMLCanvasElement; canvas: HTMLCanvasElement;
@@ -35,16 +35,7 @@ export class BrowserRuntime {
     let closed = false, pairs = 0
     let cleanupFailure: Error | null = null
     const digests = new Set<string>()
-    const waits = new Map<string, { resolve(): void; reject(error: Error): void; timer: ReturnType<typeof setTimeout> }>()
-    const reached = new Set<string>()
-    const wait = (kind: string) => reached.has(kind) ? Promise.resolve() : new Promise<void>((resolve, reject) => {
-      const timer = setTimeout(() => { waits.delete(kind); reject(Error(`${kind} timeout (5 秒)`)) }, 5000)
-      waits.set(kind, { resolve, reject, timer })
-    })
-    const deliver = (kind: string) => {
-      reached.add(kind); const pending = waits.get(kind)
-      if (pending) { clearTimeout(pending.timer); waits.delete(kind); pending.resolve() }
-    }
+    const readiness = new RuntimeSignals()
     const observer = createObservedCameraBridge({ videoElement: video, canvasElement: sourceCanvas,
       onCapture: (record) => pump.host(record) })
     const pump = new CapturePump({ capture: (options) => observer.bridge.capture(options),
@@ -59,8 +50,7 @@ export class BrowserRuntime {
       if (closed) { if (cleanupFailure) throw cleanupFailure; return }
       closed = true; pump.invalidate()
       signal.removeEventListener('abort', onAbort)
-      for (const pending of waits.values()) { clearTimeout(pending.timer); pending.reject(Error('run cancelled')) }
-      waits.clear()
+      readiness.close(Error('run cancelled'))
       const errors: string[] = []
       for (const action of [() => observer.bridge.stop(), () => engine?.dispose()]) {
         try { action() } catch (error) { errors.push(asError(error).message) }
@@ -77,18 +67,18 @@ export class BrowserRuntime {
     signal.addEventListener('abort', onAbort, { once: true })
     const fatal = (error: Error) => {
       if (closed) return
-      for (const pending of waits.values()) { clearTimeout(pending.timer); pending.reject(error) }
-      waits.clear(); failed(error)
+      readiness.close(error); failed(error)
     }
     try {
       signal.throwIfAborted()
       engine = new SimulatorEngine({ viewport, screen, runtimeBaseUrl: new URL('/simulator/', location.href).href,
         modStorage: { async loadInstalledMod() { return installed }, async clearInstalledMod() {},
           async saveInstalledMod(mod: { name: string; bytes: Uint8Array }) { return { ...mod, size: mod.bytes.length, storage: 'memory' as const } } },
+        onModStatus: ({ status }) => { if (!closed) this.elements.evidence(`MOD 安裝狀態：${status}`) },
         onReady: ({ installationStatus }) => {
           if (closed) return
           if (installationStatus !== 'prepared' && installationStatus !== 'installed') fatal(Error(`MOD install: ${installationStatus}`))
-          else deliver('installed')
+          else { this.elements.evidence(`runtime ready：${installationStatus}`); readiness.deliver('installed') }
         },
         onTrace: (message) => {
           if (closed) return
@@ -103,8 +93,8 @@ export class BrowserRuntime {
                 || record.zero !== digestBytes(new Uint8Array([0])) || record.length !== 8 || record.first !== 0 || record.last !== 99) {
                 fatal(Error('cross-runtime digest probe mismatch')); return
               }
-              deliver('probe')
-            } else if (record.kind === 'started') deliver('camera-started')
+              this.elements.evidence('固定 digest 探針一致'); readiness.deliver('probe')
+            } else if (record.kind === 'started') readiness.deliver('camera-started')
             else if (record.kind === 'frame') {
               if (!isFrame(record)) { fatal(Error('invalid MOD frame trace')); return }
               pump.receive(record)
@@ -117,14 +107,14 @@ export class BrowserRuntime {
       const injectable = engine as SimulatorEngine & { cameraBridge: ObservedBridge; hostBridge: { Camera: ObservedBridge } }
       injectable.cameraBridge = bridge; injectable.hostBridge.Camera = bridge
       await engine.start(); signal.throwIfAborted()
-      await wait('installed'); await wait('probe')
+      await readiness.wait('installed'); await readiness.wait('probe')
       await bridge.start({ ...FRAME, useBrowserCamera: true }); signal.throwIfAborted()
       if (!bridge.isBrowserCameraStarted()) throw Error(`webcam unavailable: ${observer.lastErrorName() ?? 'no usable device'}`)
       const stream = video.srcObject as MediaStream | null
       for (const track of stream?.getTracks() ?? []) {
         track.addEventListener('ended', () => { if (!closed) fatal(Error('camera track ended')) }, { once: true })
       }
-      engine.pushButton('a'); await wait('camera-started')
+      engine.pushButton('a'); await readiness.wait('camera-started')
       const capture = async () => {
         const confirmed = await pump.next()
         signal.throwIfAborted()

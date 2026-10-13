@@ -30,3 +30,9 @@ Owner explicitly accepted the plan and directed: create feature worktree, implem
 - Narrow independent dependency follow-up approved: only topic name and source-map-js 1.2.1→1.2.2 lockfile entries differ from E008; direct pins unchanged.
 - Git reported lefthook unavailable. Explicit tests/typecheck/MOD/web build succeeded independently; hook completion is not claimed.
 - Human review and manual recording cases are pending. No merge, release or worktree cleanup is performed.
+
+## Live-start correction review — 2026-10-13
+
+Owner's two Start attempts timed out before camera permission. Pinned WASM default splash is 8000ms; E015 previously bounded installed readiness at 5000ms. The isolated adapter correction uses the engine's existing 30000ms startup bound, preserves early/late signal isolation and leaves frame/probe/camera-start/finalization 5000ms criteria unchanged. Vendor/old topics are unchanged.
+
+Independent Reviewer (`/root/code_reviewer`) reread source and adapter wiring, repeated **20/20 pure tests**, and returned **approved, no new blocker**. Tests first reproduced early settlement at 5s and 5000!=30000, then passed. Owner rerun is still required; current live classification is 無法判定. This is the single bounded correction for the current live attempt.

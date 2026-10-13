@@ -30,7 +30,7 @@ Deliver a bounded simulator webcam recording experiment with manually controlled
 - MOD-confirmed 96x96 RGB565LE host frame -> separate canvas -> MediaRecorder. Never record direct webcam stream or add raw-frame return transport. Read-only E008 observer/ledger; vendor b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322.
 - Pump creates pending/expected sequence/buffer slot and ledger.begin before pushButton(c). Same runtime/run, expected sequence and unique webcam match are mandatory; metadata and synchronous returned buffer share ownership. One capture, completion+100ms pacing. Invalid frames abort/discard.
 - First paired frame precedes recorder; start event sets recorderStartedAt. Capture and finalization tokens are distinct. Normal end retains final chunks while cleaning capture/track/runtime state; readiness includes cleanup and loadeddata within stopRequestedAt+5s. Late events never publish. Frame timeout 5s; single-segment ceiling 60s.
-- 90-minute recording budget, including ~15-minute owner operation, at most one identified-problem correction/rerun. Auxiliary tools neither consume/extend this budget nor add recording/adoption gates. No large SDK downloads.
+- 90-minute recording budget, including ~15-minute owner operation, at most one identified-problem correction/rerun. Auxiliary tools neither consume/extend this budget nor add recording/adoption gates. Owner authorized pinned SDK downloads and feature-local rebuild on 2026-10-13 for live validation; the 90-minute attempt limit remains.
 - No stable-library surfaces or release actions. Remote branch retention is unknown: retain by default; no worktree deletion authorized.
 
 ## Boundaries / Exclusions
@@ -110,4 +110,4 @@ Stop for human review/merge. No release, version bump, tag or production adoptio
 
 ## Open Questions / Unresolved Items
 
-No unresolved design decision. Formal planning and bounded code reviews approved; see review-log.md. Full simulator runtime preparation is currently blocked by missing MODDABLE/EMSDK/fontbm; verify and record exact failure, without substituting stale binaries or downloading large SDKs. Physical camera/time/playback evidence remains pending and does not block honest Draft PR code delivery.
+No unresolved design decision. Formal planning and bounded code reviews approved; see review-log.md. Following owner authorization on 2026-10-13, feature-local pinned runtime preparation and served-asset hash checks passed; original missing-toolchain failure remains historical evidence. Do not substitute stale binaries. Physical camera/time/playback evidence remains pending and does not block honest Draft PR code delivery.

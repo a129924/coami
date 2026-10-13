@@ -6,7 +6,7 @@ This is the execution source of truth; requirements guard intent. The accepted d
 
 Documentation: https://w3c.github.io/mediacapture-fromelement/ and https://www.w3.org/TR/2026/WD-mediastream-recording-20260316/ specify canvas streams and MediaRecorder; actual support, time behavior and playback need experiment evidence. E008 source proves the available host capture and metadata path, not E015 recording success.
 
-Current environment reported by dispatcher: Node 26.10, npm 11.19.1; feature-local vendor checkout and MOD compiler tools available. MODDABLE, EMSDK and fontbm are missing, so full pinned simulator runtime preparation is currently blocked. Record the exact prerequisite failure; do not download a large SDK or use stale/different runtime binaries to claim simulator success. Keep E008 source/toolchain provenance requirements in E015-owned build scripts and generated assets.
+Current environment reported by dispatcher: Node 26.10, npm 11.19.1; feature-local vendor checkout and MOD compiler tools available. At initial code delivery MODDABLE, EMSDK and fontbm were missing. Following owner authorization on 2026-10-13, the pinned tools were installed feature-locally and npm run prepare:poc plus HTTP/provenance hash checks passed; owner-operated webcam recordings remain pending. Record the exact prerequisite failure; do not use stale/different runtime binaries to claim simulator success. On 2026-10-13 the owner explicitly authorized downloading the three pinned toolchains into ignored feature-local generated/toolchain-verified and rebuilding within the existing 90-minute limit; this supersedes the earlier no-large-SDK-download limit. Keep E008 source/toolchain provenance requirements in E015-owned build scripts and generated assets.
 
 ## ts-implementation
 
@@ -53,3 +53,7 @@ PR Lens: only after actual code diff exists, use real base/head or a bounded wor
 ### Cleanup failure containment
 
 A cleanup failure discards the result and enters a non-startable `blocked` UI state until page reload; it must never claim Idle or allow a new run while resource release is unproved. This conservatively enforces the existing `Idle only after cleanup` contract. Best-effort cleanup attempts every recorder/track/runtime/result action even if one fails.
+
+### Bounded startup correction — 2026-10-13
+
+Owner live attempt stopped before camera permission with installed timeout (5 秒), zero pairs/captures/tracks. Pinned firmware host/app/default-behavior/wasm/on-launch.ts deliberately shows an 8000ms splash; simulator-engine.mjs already permits firmware-ready for 30 seconds. E015 runtime-installed readiness now uses the same 30-second bound, while probe/camera-start/frame waits and recording finalization remain 5 seconds. Preserve early readiness signals and invalidate pending signals on close. This is an adapter startup correction, not relaxed recording acceptance.

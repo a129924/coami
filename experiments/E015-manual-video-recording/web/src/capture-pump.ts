@@ -73,3 +73,38 @@ export class CapturePump {
   }
 }
 export function asError(value: unknown): Error { return value instanceof Error ? value : Error(String(value)) }
+
+type StartupStage = 'installed' | 'probe' | 'camera-started'
+/** Per-runtime readiness signals; camera/frame/finalization timing is separate. */
+export class RuntimeSignals {
+  private readonly reached = new Set<StartupStage>()
+  private readonly waits = new Map<StartupStage, { cancel(): void; resolve(): void; reject(error: Error): void }>()
+  private closed: Error | null = null
+  private readonly schedule: (fire: () => void, ms: number) => () => void
+  constructor(ports?: { schedule(fire: () => void, ms: number): () => void }) {
+    this.schedule = ports?.schedule ?? ((fire, ms) => { const timer = setTimeout(fire, ms); return () => clearTimeout(timer) })
+  }
+  wait(kind: StartupStage): Promise<void> {
+    if (this.closed) return Promise.reject(this.closed)
+    if (this.reached.has(kind)) return Promise.resolve()
+    if (this.waits.has(kind)) return Promise.reject(Error(`duplicate ${kind} wait`))
+    // Pinned WASM onLaunch shows its splash for 8000ms; vendor readiness is bounded at 30s.
+    const ms = kind === 'installed' ? 30000 : 5000
+    return new Promise((resolve, reject) => {
+      const cancel = this.schedule(() => { this.waits.delete(kind); reject(Error(`${kind} timeout (${ms / 1000} 秒)`)) }, ms)
+      this.waits.set(kind, { cancel, resolve, reject })
+    })
+  }
+  deliver(kind: StartupStage): void {
+    if (this.closed) return
+    this.reached.add(kind)
+    const pending = this.waits.get(kind)
+    if (pending) { pending.cancel(); this.waits.delete(kind); pending.resolve() }
+  }
+  close(error: Error): void {
+    if (this.closed) return
+    this.closed = error; this.reached.clear()
+    for (const pending of this.waits.values()) { pending.cancel(); pending.reject(error) }
+    this.waits.clear()
+  }
+}

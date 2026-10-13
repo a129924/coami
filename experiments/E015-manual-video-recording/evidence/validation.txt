@@ -164,3 +164,10 @@ dist/assets/index-DFB6j7tr.js   633.24 kB │ gzip: 165.27 kB
 - Using dynamic import() to code-split the application
 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+LIVE STARTUP CORRECTION — 2026-10-13
+Owner observed installed timeout at 5 seconds before permission, captures=0/tracks=none.
+Pinned source: host/app/default-behavior/wasm/on-launch.ts SPLASH_VISIBLE_MS=8000; simulator engine firmware-ready timer=30000.
+Regression RED: fake 8-second startup settled early at 5 seconds (true!==false); timeout was 5000 rather than 30000.
+GREEN: 20/20 pure tests PASS, independently rerun. Strict typecheck and web build PASS.
+Installed readiness now 30 seconds; probe/camera-start/frame/finalization remain 5 seconds. No vendor change or runtime rebuild needed for this host-only correction. Owner rerun pending; recording feasibility not established.
