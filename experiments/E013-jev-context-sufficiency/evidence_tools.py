@@ -286,6 +286,7 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
     keys = [(row["run_id"], row["group"], row["case_id"]) for row in rows]
     if len(set(keys)) != 75:
         raise e.ContractError("DUPLICATE_ANALYSIS_KEY")
+    previous_end: datetime | None = None
     for row in rows:
         if row.get("analysis_restricted") is True and allow_stubs:
             if set(row) != PUBLIC_STUB_KEYS:
@@ -293,12 +294,14 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
         elif set(row) != FULL_ANALYSIS_KEYS:
             raise e.ContractError("UNREVIEWED_ANALYSIS_FIELD")
         status = row.get("status")
-        if status not in STATUSES:
+        if not isinstance(status, str) or status not in STATUSES:
             raise e.ContractError("INVALID_ANALYSIS_STATUS")
         if row.get("analysis_restricted") is not None and not allow_stubs:
             raise e.ContractError("INVALID_RESTRICTED_ANALYSIS")
         if row.get("analysis_restricted") is True:
             continue
+        if type(row.get("ordinal")) is not int or row["ordinal"] < 1:
+            raise e.ContractError("INVALID_ANALYSIS_ORDINAL")
         started = row.get("started_utc")
         ended = row.get("ended_utc")
         if status == "NOT_RUN":
@@ -314,10 +317,12 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
                     started_at.tzinfo is None
                     or ended_at.tzinfo is None
                     or ended_at < started_at
+                    or (previous_end is not None and started_at < previous_end)
                 ):
                     raise ValueError
             except ValueError as exc:
                 raise e.ContractError("INVALID_ANALYSIS_TIME") from exc
+            previous_end = ended_at
         if any(
             row.get(field) is not None
             and (not isinstance(row[field], str) or not HASH.fullmatch(row[field]))

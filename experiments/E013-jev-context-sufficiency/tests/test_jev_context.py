@@ -935,8 +935,10 @@ source = { registry = "https://pypi.org/simple" }
                     "request_sha256": e.sha(request) if body else None,
                     "raw_sha256": e.sha(body) if body else None,
                     "raw_locator": locator,
-                    "started_utc": "2026-10-08T00:00:00+00:00" if body else None,
-                    "ended_utc": "2026-10-08T00:00:01+00:00" if body else None,
+                    "started_utc": f"2026-10-08T00:00:0{index}+00:00" if body else None,
+                    "ended_utc": f"2026-10-08T00:00:0{index + 1}+00:00"
+                    if body
+                    else None,
                 }
                 rows.append(row)
                 decisions.append(
@@ -1197,6 +1199,14 @@ source = { registry = "https://pypi.org/simple" }
             with self.assertRaisesRegex(e.ContractError, "INVALID_ANALYSIS_TIME"):
                 evidence.verify_local_run(restricted)
             malformed_time[0] = json.loads(restricted_rows.splitlines()[0])
+            malformed_time[1]["started_utc"] = "2026-10-08T00:00:00+00:00"
+            malformed_time[1]["ended_utc"] = "2026-10-08T00:00:01+00:00"
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in malformed_time)
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_ANALYSIS_TIME"):
+                evidence.verify_local_run(restricted)
+            malformed_time[1] = json.loads(restricted_rows.splitlines()[1])
             malformed_time[2]["started_utc"] = "2026-10-08T00:00:00+00:00"
             (restricted / "analysis.jsonl").write_bytes(
                 b"".join(e.json_bytes(row) for row in malformed_time)
@@ -1526,6 +1536,21 @@ source = { registry = "https://pypi.org/simple" }
                 b"".join(e.json_bytes(row) for row in unknown)
             )
             with self.assertRaisesRegex(e.ContractError, "INVALID_ANALYSIS_STATUS"):
+                evidence.verify_evidence(output, restricted)
+            for malformed_status in ({"unexpected": True}, ["VALID"]):
+                unknown[0]["status"] = malformed_status
+                (output / "analysis.jsonl").write_bytes(
+                    b"".join(e.json_bytes(row) for row in unknown)
+                )
+                with self.assertRaisesRegex(e.ContractError, "INVALID_ANALYSIS_STATUS"):
+                    evidence.verify_evidence(output, restricted)
+            (output / "analysis.jsonl").write_bytes(public_rows)
+            wrong_ordinal = [json.loads(line) for line in public_rows.splitlines()]
+            wrong_ordinal[0]["ordinal"] = True
+            (output / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in wrong_ordinal)
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_ANALYSIS_ORDINAL"):
                 evidence.verify_evidence(output, restricted)
             (output / "analysis.jsonl").write_bytes(public_rows)
             malformed = [json.loads(line) for line in public_rows.splitlines()]
