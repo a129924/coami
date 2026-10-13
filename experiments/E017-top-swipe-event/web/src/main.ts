@@ -23,6 +23,7 @@ let provenance: unknown
 let records: Record<string, unknown>[] = []
 let dropped = 0
 let timeout: ReturnType<typeof setTimeout> | undefined
+let startupAbort: AbortController | undefined
 
 function render(): void {
   if (!input) return
@@ -74,13 +75,13 @@ function ingest(message: string, session: number): void {
   if (traceBuffer.length > 32768) { traceBuffer = ''; input.fail('runtime trace line exceeded limit') }
   render()
 }
-async function verifyRuntime(session: number): Promise<void> {
-  const response = await fetch('/runtime-provenance.json', { cache: 'no-store' })
+async function verifyRuntime(session: number, signal: AbortSignal): Promise<void> {
+  const response = await fetch('/runtime-provenance.json', { cache: 'no-store', signal })
   if (!response.ok) throw new Error('runtime provenance missing; run npm run prepare:poc')
   const value = await response.json() as { sourceCommit?: string; patchSha256?: string; sha256?: Record<string,string>; mod?: { sha256?: string } }
   if (value.sourceCommit !== 'b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322' || !value.patchSha256 || !value.sha256 || !value.mod?.sha256) throw new Error('runtime provenance invalid')
   for (const file of ['mc.js','mc.wasm']) {
-    const asset = await fetch(`/simulator/${file}`, { cache: 'no-store' })
+    const asset = await fetch(`/simulator/${file}`, { cache: 'no-store', signal })
     if (!asset.ok) throw new Error(`missing ${file}`)
     const digest = await crypto.subtle.digest('SHA-256', await asset.arrayBuffer())
     const hex = [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2,'0')).join('')
@@ -97,10 +98,14 @@ async function verifyRuntime(session: number): Promise<void> {
 async function start(): Promise<void> {
   const session = ++epoch
   restart.disabled = true
+  startupAbort?.abort()
+  const controller = new AbortController()
+  startupAbort = controller
   if (timeout) clearTimeout(timeout)
   engine?.dispose(); engine = undefined
   started = false; traceBuffer = ''; count = 0; lastDirection = '—'; lastOperation = '—'
-  records = []; dropped = 0; provenance = undefined
+  records = []; dropped = 0; provenance = undefined; expectedModSha = ''
+  element('provenance').textContent = '尚未核對（本次 Session）'
   element('events').replaceChildren()
   const birth = performance.now()
   input = new TopSwipeInput(session, () => performance.now()-birth, value => {
@@ -109,13 +114,20 @@ async function start(): Promise<void> {
     queueMicrotask(() => { if (session === epoch) render() })
   })
   timeout = setTimeout(() => {
-    if (session === epoch && (input?.state !== 'ready' || !started)) { input?.fail('initialization exceeded 5 seconds'); render() }
+    if (session !== epoch || input?.state === 'ready' && started) return
+    input?.fail('initialization exceeded 5 seconds')
+    // Release the UI even when fetch/start ignores abort and never settles.
+    epoch++
+    controller.abort()
+    engine?.dispose(); engine = undefined
+    started = false; timeout = undefined; restart.disabled = false
+    render()
   },5000)
   render()
   try {
-    await verifyRuntime(session)
+    await verifyRuntime(session, controller.signal)
     if (session !== epoch) return
-    const response = await fetch('/coami-mod.xsa', { cache: 'no-store' })
+    const response = await fetch('/coami-mod.xsa', { cache: 'no-store', signal: controller.signal })
     if (!response.ok) throw new Error('MOD archive missing')
     const bytes = new Uint8Array(await response.arrayBuffer())
     if (session !== epoch) return
@@ -135,7 +147,13 @@ async function start(): Promise<void> {
     await created.start()
     if (session !== epoch) { created.dispose(); return }
     started = true
-  } catch (error) { if (session === epoch) input?.fail(String(error)) }
+  } catch (error) {
+    if (session === epoch) {
+      if (timeout) clearTimeout(timeout)
+      timeout = undefined
+      input?.fail(String(error))
+    }
+  }
   finally { if (session === epoch) { restart.disabled = false; render() } }
 }
 function position(event: PointerEvent): number {
@@ -178,7 +196,17 @@ surface.addEventListener('lostpointercapture',event => {
 surface.addEventListener('pointerleave',event => { if (!inside(event)) { record({source:'pointer',kind:'cancel',reason:'outside',pointerId:event.pointerId,x:event.clientX,y:event.clientY}); input?.cancel(event.pointerId) }; render() })
 window.addEventListener('blur',() => { record({source:'pointer',kind:'cancel',reason:'blur',state:input?.state}); input?.cancel(); render() })
 document.addEventListener('visibilitychange',() => { if (document.hidden) { input?.cancel(); render() } })
-window.addEventListener('pagehide',() => { input?.cancel(); engine?.dispose(); epoch++ })
+window.addEventListener('pagehide',() => {
+  input?.cancel()
+  epoch++
+  startupAbort?.abort()
+  if (timeout) clearTimeout(timeout)
+  timeout = undefined
+  engine?.dispose(); engine = undefined
+  started = false
+  render()
+})
+window.addEventListener('pageshow',event => { if (event.persisted) void start() })
 restart.addEventListener('click',() => { void start() })
 element('export').addEventListener('click',() => {
   const url = URL.createObjectURL(new Blob([JSON.stringify({ experiment:'E017', capturedAt:new Date().toISOString(), provenance,
