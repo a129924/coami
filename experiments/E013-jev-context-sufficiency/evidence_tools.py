@@ -59,6 +59,8 @@ LOCAL_MANIFEST_KEYS = {
     "store_policy_path",
     "uv_lock_sha256",
     "uv_lock_path",
+    "sdk_code_digests_sha256",
+    "sdk_code_digests_path",
 }
 LOCAL_REQUIRED_KEYS = LOCAL_MANIFEST_KEYS - {
     "runner_source_path",
@@ -68,6 +70,8 @@ LOCAL_REQUIRED_KEYS = LOCAL_MANIFEST_KEYS - {
     "store_policy_path",
     "uv_lock_sha256",
     "uv_lock_path",
+    "sdk_code_digests_sha256",
+    "sdk_code_digests_path",
 }
 PUBLIC_MANIFEST_KEYS = (LOCAL_MANIFEST_KEYS - {"store_root"}) | {
     "cases",
@@ -642,6 +646,8 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
                 "live_authorization_path",
                 "uv_lock_sha256",
                 "uv_lock_path",
+                "sdk_code_digests_sha256",
+                "sdk_code_digests_path",
             )
         ):
             return "AUTHORIZATION_MISMATCH"
@@ -683,6 +689,9 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
                 manifest.get("uv_lock_sha256")
                 != e.sha((root / "uv.lock").read_bytes()),
                 document["uv_lock_sha256"] != manifest.get("uv_lock_sha256"),
+                manifest.get("sdk_code_digests_path") != "sdk-code-digests.json",
+                manifest.get("sdk_code_digests_sha256")
+                != e.sha((root / "sdk-code-digests.json").read_bytes()),
             )
         ):
             return "AUTHORIZATION_MISMATCH"
@@ -779,9 +788,29 @@ def sdk_rejects(raw: bytes, case: dict[str, Any], question: dict[str, Any]) -> b
     return False
 
 
-def verify_replay_sdk() -> None:
-    """Authenticate the installed replay code before using its classifications."""
-    e.verify_sdk_imports((e.ROOT / e.LOCK_RELATIVE).read_bytes())
+def verify_replay_sdk(run_dir: Path, manifest: dict[str, Any]) -> None:
+    """Authenticate replay code against the run's retained dependency inventory."""
+    if manifest.get("run_id") == PRE_RECORD_RUN_ID:
+        lock = e.checked_git(
+            e.ROOT,
+            ["show", f"{PRE_RECORD_RUNNER_REVISION}:{e.LOCK_RELATIVE.as_posix()}"],
+        )
+        baseline = (
+            None  # This run predates a retained baseline; current pin must agree.
+        )
+    else:
+        if (
+            manifest.get("uv_lock_path") != "uv.lock"
+            or manifest.get("sdk_code_digests_path") != "sdk-code-digests.json"
+        ):
+            raise e.ContractError("SDK_REPLAY_INVENTORY_MISSING")
+        lock = bounded_path(run_dir, "uv.lock").read_bytes()
+        baseline = bounded_path(run_dir, "sdk-code-digests.json").read_bytes()
+        if e.sha(lock) != manifest.get("uv_lock_sha256") or e.sha(
+            baseline
+        ) != manifest.get("sdk_code_digests_sha256"):
+            raise e.ContractError("SDK_REPLAY_INVENTORY_MISMATCH")
+    e.verify_sdk_imports(lock, baseline)
 
 
 def response_gap(
@@ -882,9 +911,9 @@ def verify_local_run(
     run_dir: Path, manifest: dict[str, Any] | None = None
 ) -> dict[str, Any]:
     """Verify current local bytes; this does not establish backup or immutability."""
-    verify_replay_sdk()
     if manifest is None:
         manifest = read_manifest(run_dir / "manifest.json")
+    verify_replay_sdk(run_dir, manifest)
     if not set(manifest).issubset(LOCAL_MANIFEST_KEYS):
         raise e.ContractError("UNREVIEWED_MANIFEST_FIELD")
     if not LOCAL_REQUIRED_KEYS.issubset(manifest):
@@ -1014,8 +1043,27 @@ def verify_local_run(
 
 def publish_reviewed(run_dir: Path, approval_path: Path, evidence_root: Path) -> Path:
     """Export only reviewed rows and byte-identical approved raw bodies."""
+    require_approved_publish_source(run_dir)
     with snapshot_run(run_dir) as snapshot:
         return _publish_snapshot(snapshot, approval_path, evidence_root)
+
+
+def require_approved_publish_source(run_dir: Path) -> None:
+    """Keep the reviewed source and private snapshot in the approved local store."""
+    manifest = read_manifest(run_dir / "manifest.json")
+    run_id = manifest.get("run_id")
+    if not isinstance(run_id, str) or not e.CASE_ID.fullmatch(run_id):
+        raise e.ContractError("PUBLICATION_SOURCE_UNAPPROVED")
+    expected = e.LOCAL_STORE_ROOT / "runs" / run_id
+    if (
+        run_dir.absolute() != expected.absolute()
+        or run_dir.resolve() != expected.resolve()
+        or e.LOCAL_STORE_ROOT.is_symlink()
+        or expected.parent.is_symlink()
+        or expected.is_symlink()
+        or manifest.get("store_root") != str(e.LOCAL_STORE_ROOT)
+    ):
+        raise e.ContractError("PUBLICATION_SOURCE_UNAPPROVED")
 
 
 @contextmanager
@@ -1035,6 +1083,7 @@ def snapshot_run(run_dir: Path):
             "authorization.json",
             "store-policy.json",
             "uv.lock",
+            "sdk-code-digests.json",
         ]
         for case in e.load_cases():
             for kind in ("requests", "responses"):
@@ -1152,6 +1201,10 @@ def _write_publication(
     e.write_exclusive(output / "store-policy.json", policy_snapshot(run_dir, manifest))
     if manifest.get("live_authorization_sha256") is not None:
         e.write_exclusive(output / "uv.lock", (run_dir / "uv.lock").read_bytes())
+        e.write_exclusive(
+            output / "sdk-code-digests.json",
+            (run_dir / "sdk-code-digests.json").read_bytes(),
+        )
     public_review = {
         "run_id": run_id,
         "approved_by": approval["approved_by"],
@@ -1267,8 +1320,8 @@ def verify_evidence(
     candidate_threshold: float | None = None,
 ) -> dict[str, Any]:
     """Check exact objects and recompute statistics from a clean checkout."""
-    verify_replay_sdk()
     manifest = read_manifest(evidence_run / "manifest.json")
+    verify_replay_sdk(evidence_run, manifest)
     if evidence_run.name != manifest.get("run_id"):
         raise e.ContractError("EVIDENCE_RUN_MISMATCH")
     if not set(manifest).issubset(PUBLIC_MANIFEST_KEYS):
@@ -1345,7 +1398,12 @@ def verify_evidence(
         if item["raw_public_path"] is not None
     }
     if manifest.get("live_authorization_sha256") is not None:
-        allowed_files |= {"authorization.json", "uv.lock", "events.jsonl"}
+        allowed_files |= {
+            "authorization.json",
+            "uv.lock",
+            "sdk-code-digests.json",
+            "events.jsonl",
+        }
     for path in evidence_run.rglob("*"):
         if path.is_symlink() or (
             path.is_file()

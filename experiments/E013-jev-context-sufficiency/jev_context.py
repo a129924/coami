@@ -25,8 +25,81 @@ import tempfile
 import tomllib
 from typing import Any
 
-import httpx2
-from typesafe_sdk import (
+
+def _verify_dependency_sources_before_import() -> None:
+    """Reject changed third-party source before executing its import code."""
+    if not any(
+        flag in sys.argv
+        for flag in (
+            "--live",
+            "--verify-evidence",
+            "--verify-local-run",
+            "--publish-reviewed",
+        )
+    ):
+        return
+    try:
+        topic = Path(__file__).resolve().parent
+        environment = (topic / ".venv").resolve()
+        if Path(sys.prefix).resolve() != environment:
+            raise ValueError
+        lock = (topic / "uv.lock").read_bytes()
+        baseline = (topic / "sdk-code-digests.json").read_bytes()
+        if hashlib.sha256(baseline).hexdigest() != (
+            "1cdbcc1ebd328cb07511b75dca90c3395e42f1349d4c819e8a9b03dd1c197206"
+        ):
+            raise ValueError
+        digests = json.loads(baseline)
+        if digests["lock_sha256"] != hashlib.sha256(lock).hexdigest():
+            raise ValueError
+        locked = {
+            item["name"]: item["version"]
+            for item in tomllib.loads(lock.decode("utf-8"))["package"]
+            if "registry" in item["source"]
+        }
+        if set(digests["files"]) != set(locked) - {"httpx2-jsfetch"}:
+            raise ValueError
+        for package, expected in digests["files"].items():
+            installed = distribution(package)
+            if installed.version != locked[package] or installed.files is None:
+                raise ValueError
+            code = {
+                str(entry): entry
+                for entry in installed.files
+                if entry.suffix == ".py"
+                or any(str(entry).endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+            }
+            code = {
+                name: entry
+                for name, entry in code.items()
+                if not name.split("/", 1)[0].endswith(".dist-info")
+            }
+            if set(code) != set(expected):
+                raise ValueError
+            for name, entry in code.items():
+                location = Path(installed.locate_file(entry)).resolve()
+                if (
+                    not location.is_relative_to(environment)
+                    or hashlib.sha256(location.read_bytes()).hexdigest()
+                    != expected[name]
+                ):
+                    raise ValueError
+    except (
+        KeyError,
+        OSError,
+        TypeError,
+        ValueError,
+        UnicodeDecodeError,
+        PackageNotFoundError,
+    ):
+        print("E013 BLOCKED SDK_IMPORT_MISMATCH", flush=True)
+        raise SystemExit(2) from None
+
+
+_verify_dependency_sources_before_import()
+
+import httpx2  # noqa: E402 - source bytes must be checked before import
+from typesafe_sdk import (  # noqa: E402 - source bytes must be checked before import
     Choice,
     RetryPolicy,
     TypeSafeAPIConnectionError,
@@ -1018,12 +1091,13 @@ def run_live(
         if version("typesafe-sdk") != SDK_VERSION:
             raise ContractError("SDK_VERSION_MISMATCH")
         lock_bytes = (root / LOCK_RELATIVE).read_bytes()
+        digest_bytes = (root / SDK_DIGESTS_RELATIVE).read_bytes()
         if (
             sha(lock_bytes)
             != parse_live_authorization(authorization_bytes)["uv_lock_sha256"]
         ):
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
-        verify_sdk_imports(lock_bytes)
+        verify_sdk_imports(lock_bytes, digest_bytes)
         case_sources = read_frozen_case_sources(root, freeze_hashes)
         validate_oracles(root, freeze_hashes, case_sources)
         cases = load_cases(root, case_sources)
@@ -1073,6 +1147,8 @@ def run_live(
         "store_policy_path": "store-policy.json",
         "uv_lock_sha256": sha(lock_bytes),
         "uv_lock_path": "uv.lock",
+        "sdk_code_digests_sha256": sha(digest_bytes),
+        "sdk_code_digests_path": "sdk-code-digests.json",
         "store": policy_metadata,
         "store_root": str(store.resolve()),
         "conditions": {"timeout_seconds": 30, "retries": 0, "order": list(GROUPS)},
@@ -1083,6 +1159,7 @@ def run_live(
     write_exclusive(run_dir / "authorization.json", authorization_bytes)
     write_exclusive(run_dir / "store-policy.json", store_policy_bytes)
     write_exclusive(run_dir / "uv.lock", lock_bytes)
+    write_exclusive(run_dir / "sdk-code-digests.json", digest_bytes)
     rows: list[dict[str, Any]] = []
     stopped = False
     for index, case in enumerate(cases):

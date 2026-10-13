@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import py_compile
+import shutil
 import subprocess
 import sys
 from tempfile import TemporaryDirectory
@@ -313,6 +314,8 @@ source = { registry = "https://pypi.org/simple" }
             ("live_authorization_path", "authorization.json"),
             ("uv_lock_path", "uv.lock"),
             ("uv_lock_sha256", "0" * 64),
+            ("sdk_code_digests_path", "sdk-code-digests.json"),
+            ("sdk_code_digests_sha256", "0" * 64),
         ):
             altered = deepcopy(manifest)
             altered[field] = value
@@ -723,14 +726,108 @@ source = { registry = "https://pypi.org/simple" }
             self.assertNotIn(str(site), result.stdout)
             self.assertFalse(marker.exists())
 
+    def test_dependency_wrapper_is_rejected_before_its_import(self) -> None:
+        with TemporaryDirectory() as temporary:
+            topic = Path(temporary) / "experiments/E013-jev-context-sufficiency"
+            topic.mkdir(parents=True)
+            for name in ("jev_context.py", "uv.lock", "sdk-code-digests.json"):
+                shutil.copy2(e.TOPIC / name, topic / name)
+            shutil.copytree(e.TOPIC / ".venv", topic / ".venv", symlinks=True)
+            site = topic / ".venv/lib/python3.12/site-packages"
+            target = site / "httpx2/__init__.py"
+            marker = Path(temporary) / "wrapper-ran"
+            original = target.read_bytes()
+            target.write_text(
+                "from pathlib import Path\n"
+                f"Path({str(marker)!r}).write_text('executed')\n"
+                f"Path({str(target)!r}).write_bytes({original!r})\n"
+            )
+            script = (
+                "import sys; from pathlib import Path; "
+                "p=Path(sys.argv[1]); v=p.parent/'.venv'; "
+                "sys.prefix=sys.exec_prefix=str(v); "
+                "sys.path.append(str(v/'lib/python3.12/site-packages')); "
+                "sys.argv=[str(p),'--verify-evidence']; "
+                "s=p.read_bytes(); exec(compile(s,str(p),'exec'),"
+                "{'__name__':'__main__','__file__':str(p),'_E013_EXECUTED_SOURCE':s})"
+            )
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "-I",
+                    "-S",
+                    "-B",
+                    "-c",
+                    script,
+                    str(topic / "jev_context.py"),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("E013 BLOCKED SDK_IMPORT_MISMATCH", result.stdout)
+            self.assertFalse(marker.exists())
+
     def test_replay_rejects_unverified_sdk_before_reading_evidence(self) -> None:
         with patch.object(
-            e, "verify_sdk_imports", side_effect=e.ContractError("SDK_IMPORT_MISMATCH")
+            evidence,
+            "verify_replay_sdk",
+            side_effect=e.ContractError("SDK_IMPORT_MISMATCH"),
         ):
-            with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
-                evidence.verify_evidence(Path("missing"))
-            with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
-                evidence.verify_local_run(Path("missing"))
+            with TemporaryDirectory() as temporary:
+                directory = Path(temporary)
+                (directory / "manifest.json").write_bytes(
+                    e.json_bytes({"run_id": "run-1"})
+                )
+                with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
+                    evidence.verify_evidence(directory)
+                with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
+                    evidence.verify_local_run(directory)
+
+    def test_replay_requires_retained_lock_and_digest_baseline(self) -> None:
+        with TemporaryDirectory() as temporary:
+            run_dir = Path(temporary)
+            lock = (e.ROOT / e.LOCK_RELATIVE).read_bytes()
+            baseline = (e.ROOT / e.SDK_DIGESTS_RELATIVE).read_bytes()
+            manifest = {
+                "run_id": "run-1",
+                "uv_lock_path": "uv.lock",
+                "uv_lock_sha256": e.sha(lock),
+                "sdk_code_digests_path": "sdk-code-digests.json",
+                "sdk_code_digests_sha256": e.sha(baseline),
+            }
+            (run_dir / "uv.lock").write_bytes(lock)
+            (run_dir / "sdk-code-digests.json").write_bytes(baseline)
+            with patch.object(e, "verify_sdk_imports") as verify:
+                evidence.verify_replay_sdk(run_dir, manifest)
+                verify.assert_called_once_with(lock, baseline)
+            with self.assertRaisesRegex(
+                e.ContractError, "SDK_REPLAY_INVENTORY_MISMATCH"
+            ):
+                evidence.verify_replay_sdk(
+                    run_dir, {**manifest, "uv_lock_sha256": "0" * 64}
+                )
+
+    def test_publication_requires_approved_store_source(self) -> None:
+        with TemporaryDirectory() as temporary:
+            approved = Path(temporary) / "approved"
+            source = approved / "runs" / "run-1"
+            source.mkdir(parents=True)
+            (source / "manifest.json").write_bytes(
+                e.json_bytes({"run_id": "run-1", "store_root": str(approved)})
+            )
+            copy = Path(temporary) / "copy" / "run-1"
+            copy.mkdir(parents=True)
+            (copy / "manifest.json").write_bytes(
+                (source / "manifest.json").read_bytes()
+            )
+            with patch.object(e, "LOCAL_STORE_ROOT", approved):
+                evidence.require_approved_publish_source(source)
+                with self.assertRaisesRegex(
+                    e.ContractError, "PUBLICATION_SOURCE_UNAPPROVED"
+                ):
+                    evidence.require_approved_publish_source(copy)
 
     def test_committed_git_bytes_ignore_inherited_repository_overrides(self) -> None:
         with TemporaryDirectory() as temporary:
@@ -1077,6 +1174,9 @@ source = { registry = "https://pypi.org/simple" }
                     )
 
     def test_reviewed_export_and_clean_checkout_show_restricted_gap(self) -> None:
+        source_patch = patch.object(evidence, "require_approved_publish_source")
+        source_patch.start()  # Synthetic fixture lives outside the Owner's local store.
+        self.addCleanup(source_patch.stop)
         with TemporaryDirectory() as temporary:
             root = Path(temporary)
             restricted = root / "restricted" / "runs" / "run-1"
@@ -1087,6 +1187,8 @@ source = { registry = "https://pypi.org/simple" }
             e.write_exclusive(restricted / "store-policy.json", store_policy_bytes)
             uv_lock_bytes = (e.TOPIC / "uv.lock").read_bytes()
             e.write_exclusive(restricted / "uv.lock", uv_lock_bytes)
+            digest_bytes = (e.TOPIC / "sdk-code-digests.json").read_bytes()
+            e.write_exclusive(restricted / "sdk-code-digests.json", digest_bytes)
             authorization = e.json_bytes(
                 {
                     "run_id": "run-1",
@@ -1123,6 +1225,8 @@ source = { registry = "https://pypi.org/simple" }
                         "store_policy_path": "store-policy.json",
                         "uv_lock_sha256": e.sha(uv_lock_bytes),
                         "uv_lock_path": "uv.lock",
+                        "sdk_code_digests_sha256": e.sha(digest_bytes),
+                        "sdk_code_digests_path": "sdk-code-digests.json",
                         "sdk_version": e.SDK_VERSION,
                         "conditions": {
                             "timeout_seconds": 30,
@@ -1340,14 +1444,18 @@ source = { registry = "https://pypi.org/simple" }
             self.assertEqual(with_access["gaps"], [])
             published_lock = (output / "uv.lock").read_bytes()
             (output / "uv.lock").write_bytes(published_lock + b"\n")
-            self.assertIn(
-                "AUTHORIZATION_MISMATCH",
-                {
-                    gap["reason"]
-                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
-                },
-            )
+            with self.assertRaisesRegex(
+                e.ContractError, "SDK_REPLAY_INVENTORY_MISMATCH"
+            ):
+                evidence.verify_evidence(output, restricted)
             (output / "uv.lock").write_bytes(published_lock)
+            published_baseline = (output / "sdk-code-digests.json").read_bytes()
+            (output / "sdk-code-digests.json").write_bytes(published_baseline + b"\n")
+            with self.assertRaisesRegex(
+                e.ContractError, "SDK_REPLAY_INVENTORY_MISMATCH"
+            ):
+                evidence.verify_evidence(output, restricted)
+            (output / "sdk-code-digests.json").write_bytes(published_baseline)
             self.assertEqual(
                 with_access["candidate_threshold_errors"]["research"]["eligible"], 2
             )
