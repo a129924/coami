@@ -1,0 +1,11 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E019 靜態注視實驗</title><body><main>
+<header><p>COAMI · E019 · SIMULATOR</p><h1>指定位置，觀察注視方向</h1><p>Robot 視角：+X 向前、+Y 向左、+Z 向上。座標單位：公尺。</p></header>
+<section class="layout"><div class="stage"><canvas id="viewport"></canvas><canvas id="screen" hidden></canvas></div><div class="panel">
+<p id="operation"></p><p id="runtime">核對 runtime 與 MOD 中…</p><label>觀察者姓名 <input id="operator" autocomplete="name" placeholder="填寫人工判定者"></label>
+<h2 id="selected">等待 MOD</h2><p id="coordinate"></p><button id="next" disabled>選下一個目標／起始準備</button>
+<label class="check"><input id="stable" type="checkbox">我已核對畫面穩定與本次起始條件</label>
+<div class="actions"><button id="apply" disabled>設定注視</button><button id="away" disabled>解除目標</button></div>
+<p id="status" role="status">尚未操作</p><p class="note">5 秒是觀察窗口。呼叫返回不代表動作完成；解除不保證立即停止或回正。準備起始姿勢是獨立操作。</p>
+<fieldset><legend>本次人工方向判定（窗口結束後填寫）</legend><button data-result="符合" disabled>方向符合</button><button data-result="不符合" disabled>方向不符合</button><button data-result="未確認" disabled>未確認／解除僅記錄</button></fieldset>
+<button id="download">下載本次證據 JSON</button><p>以系統截圖保存起始與反應畫面，檔名使用下方 run ID 與操作序號。每方向需從正面重做兩次。</p>
+</div></section><section><h2>同次操作證據</h2><p id="run"></p><pre id="events"></pre></section></main><script type="module" src="/src/main.ts"></script></body></html>
