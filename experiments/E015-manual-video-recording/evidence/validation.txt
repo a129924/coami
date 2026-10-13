@@ -1,0 +1,166 @@
+node:internal/modules/esm/resolve:241
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/coami-e015-manual-video-recording/experiments/E015-manual-video-recording/web/src/capture-pump.ts' imported from /private/tmp/coami-e015-manual-video-recording/experiments/E015-manual-video-recording/web/src/capture-pump.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:241:11)
+    at moduleResolve (node:internal/modules/esm/resolve:846:10)
+    at defaultResolve (node:internal/modules/esm/resolve:973:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:766:56)
+    at #resolve (node:internal/modules/esm/loader:690:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:610:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:277:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:389:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/coami-e015-manual-video-recording/experiments/E015-manual-video-recording/web/src/capture-pump.ts'
+}
+
+Node.js v26.10.0
+✖ experiments/E015-manual-video-recording/web/src/capture-pump.test.ts (108.530791ms)
+node:internal/modules/esm/resolve:241
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/coami-e015-manual-video-recording/experiments/E015-manual-video-recording/web/src/recording-session.ts' imported from /private/tmp/coami-e015-manual-video-recording/experiments/E015-manual-video-recording/web/src/recording-session.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:241:11)
+    at moduleResolve (node:internal/modules/esm/resolve:846:10)
+    at defaultResolve (node:internal/modules/esm/resolve:973:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:766:56)
+    at #resolve (node:internal/modules/esm/loader:690:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:610:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:277:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:389:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/coami-e015-manual-video-recording/experiments/E015-manual-video-recording/web/src/recording-session.ts'
+}
+
+Node.js v26.10.0
+✖ experiments/E015-manual-video-recording/web/src/recording-session.test.ts (104.01125ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 120.102458
+
+✖ failing tests:
+
+test at experiments/E015-manual-video-recording/web/src/capture-pump.test.ts:1:1
+✖ experiments/E015-manual-video-recording/web/src/capture-pump.test.ts (108.530791ms)
+  'test failed'
+
+test at experiments/E015-manual-video-recording/web/src/recording-session.test.ts:1:1
+✖ experiments/E015-manual-video-recording/web/src/recording-session.test.ts (104.01125ms)
+  'test failed'
+
+> coami-e015-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ pending/ledger exists before synchronous request; confirmed frame owns a copied buffer (2.59375ms)
+✔ rejects sequence without accepting a frame (0.885708ms)
+✔ rejects duplicate-host without accepting a frame (0.241583ms)
+✔ rejects mismatch without accepting a frame (0.111167ms)
+✔ rejects synthetic without accepting a frame (0.090375ms)
+✔ rejects invalid-buffer without accepting a frame (0.584458ms)
+✔ invalidate rejects pending and ignores old frames; a new run is independent (0.397291ms)
+✔ duplicate MOD trace between requests is fatal, not paired with the next slot (0.41475ms)
+✔ frame timeout clears pending and stops further requests (5.227708ms)
+✔ start event starts the clock; stop retains final chunk and waits for loaded player (3.678458ms)
+✔ cancel discards chunks and late callbacks, then permits a fresh recording (0.967541ms)
+✔ Starting cancellation releases a late authorized run (0.160041ms)
+✔ finalization timeout ignores late stop/chunk and disposes late player result (0.262333ms)
+✔ finalizing buttons are no-ops; cleanup failure cannot publish a result (0.331917ms)
+✔ recorder error and 60 second cap discard rather than publish partial output (0.162792ms)
+✔ player load error discards instead of treating a URL as playable (0.366875ms)
+✔ recorder construction failure stops every newly created canvas track (1.670542ms)
+✔ constructor cleanup failure blocks the next run even without a recorder port (0.392792ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 167.786791
+
+> coami-e015-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+
+FINAL ENGINEERING CHECKS — 2026-10-13
+- npm test: PASS 18/18, independently repeated by Reviewer. Pure fakes; no live recording.
+- Cleanup regression RED: actual idle !== expected blocked; fixed then GREEN, no second run opened.
+- Recorder-constructor cleanup RED: missing guardRecorderCreation; fixed then GREEN.
+- npm run typecheck: PASS web and MOD strict TypeScript.
+- npm run build: PASS Vite 8.2.1; nonblocking ~633kB chunk warning (pinned simulator/Three.js).
+- npm run mod: PASS 3,945-byte XS archive from pinned vendor tools.js/tools.wasm.
+- npm run assets: BLOCKED: MODDABLE 9.5.0 is not configured; EMSDK/fontbm likewise unconfigured. No full runtime/live attempt.
+- node --check scripts/prepare-assets.mjs and build-mod.mjs: PASS.
+- check_impl_steps_succeeded E015-manual-video-recording: PASS 4 creator steps; excludes pending human cases/publication/merge.
+- npm install audit exposed source-map-js 1.2.1 advisory GHSA-68fv-2mgg-jv7q; new E015 lockfile patched transitively to 1.2.2 via npm update source-map-js --package-lock-only --ignore-scripts. Direct pins and E008 unchanged; update audit reports zero vulnerabilities.
+- Graphify: no usable graph found; targeted rg/source fallback; no extract/provider/refresh.
+- Archify: static lifecycle delivered, showcase 9/9, composition zero errors/warnings. Visual desktop containment FAILED (scrollHeight exceeds viewport); screenshots inspected and overflow confirmed. Two focused geometry corrections exhausted; auxiliary artifact remains partial, not accepted as polished. Authored Traditional Chinese; Viewer UI/html lang English fallback.
+experiments/E008-camera-input/web/src/camera-observer.ts SHA-256 cdaaa27acaa34a184598e1fdbf8fbd5f6744a21a225c17c3e2015be5afa9847f
+experiments/E008-camera-input/web/src/capture-ledger.ts SHA-256 21c8429ae948e306c0841d70eaa3c25263ad2b0bb4aa9eaadac8db08b6719d11
+experiments/E015-manual-video-recording/web/generated/public/coami-mod.xsa SHA-256 8410ff275e2495028c2ccb9d2069cd43554790bbc21ff60cd8a84a1702e6e4f6
+Archify specification SHA-256 1e2081e229e6d64c1a3baa2b51195a8ef666209d65ef18d66a187b90c1707b26 bytes=2834
+Archify artifact SHA-256 939b34db258be10c88f60119c644e1888889db64faf7b4350726a62938759ac6 bytes=701826
+
+> coami-e015-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ pending/ledger exists before synchronous request; confirmed frame owns a copied buffer (1.368ms)
+✔ rejects sequence without accepting a frame (0.201708ms)
+✔ rejects duplicate-host without accepting a frame (0.079833ms)
+✔ rejects mismatch without accepting a frame (0.073917ms)
+✔ rejects synthetic without accepting a frame (0.33475ms)
+✔ rejects invalid-buffer without accepting a frame (0.066292ms)
+✔ invalidate rejects pending and ignores old frames; a new run is independent (0.193459ms)
+✔ duplicate MOD trace between requests is fatal, not paired with the next slot (0.088041ms)
+✔ frame timeout clears pending and stops further requests (5.565583ms)
+✔ start event starts the clock; stop retains final chunk and waits for loaded player (1.267625ms)
+✔ cancel discards chunks and late callbacks, then permits a fresh recording (0.556542ms)
+✔ Starting cancellation releases a late authorized run (0.120541ms)
+✔ finalization timeout ignores late stop/chunk and disposes late player result (0.20625ms)
+✔ finalizing buttons are no-ops; cleanup failure cannot publish a result (0.248333ms)
+✔ recorder error and 60 second cap discard rather than publish partial output (0.141792ms)
+✔ player load error discards instead of treating a URL as playable (0.1315ms)
+✔ recorder construction failure stops every newly created canvas track (0.524834ms)
+✔ constructor cleanup failure blocks the next run even without a recorder port (0.096167ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 143.422709
+
+> coami-e015-web@0.1.0 build
+> npm run typecheck && vite build
+
+
+> coami-e015-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+vite v8.2.1 building client environment for production...
+transforming...
+✓ 20 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.38 kB │ gzip:   0.88 kB
+dist/assets/index-BU-XL2Ud.css    1.41 kB │ gzip:   0.70 kB
+dist/assets/index-DFB6j7tr.js   633.24 kB │ gzip: 165.27 kB
+
+✓ built in 403ms
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.

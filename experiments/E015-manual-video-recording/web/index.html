@@ -1,0 +1,7 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E015 手動錄影驗證</title></head>
+<body><main><header><span class="eyebrow">COAMI · E015</span><h1>手動錄影驗證</h1><p>開始、結束輸出，或取消這一段。</p></header>
+<section class="controls"><button id="start">開始錄影</button><button id="stop" disabled>結束並輸出</button><button id="cancel" disabled>取消錄影</button><p id="status" role="status" aria-live="polite"></p><small>無聲 · 最長 60 秒 · 僅留在本機記憶體。請使用無人入鏡的移動物體。</small></section>
+<div class="panels"><section><h2>相機畫面</h2><canvas id="recording" width="96" height="96"></canvas></section><section><h2>錄製結果</h2><p id="result"></p><video id="player" controls playsinline preload="auto" hidden></video></section></div>
+<details><summary>驗證資訊</summary><p>此實驗驗證模擬器的相機取像與瀏覽器編碼。播放完畢後會記錄時間差。</p><div class="simulator"><canvas id="viewport"></canvas><canvas id="screen" width="240" height="240" hidden></canvas></div><ol id="events"></ol></details>
+</main><script type="module" src="/src/main.ts"></script></body></html>
