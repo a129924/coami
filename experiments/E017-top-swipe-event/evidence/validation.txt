@@ -1,0 +1,200 @@
+node:internal/modules/esm/resolve:241
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/coami-e017-top-swipe-event/experiments/E017-top-swipe-event/web/src/input.ts' imported from /private/tmp/coami-e017-top-swipe-event/experiments/E017-top-swipe-event/web/src/input.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:241:11)
+    at moduleResolve (node:internal/modules/esm/resolve:846:10)
+    at defaultResolve (node:internal/modules/esm/resolve:973:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:766:56)
+    at #resolve (node:internal/modules/esm/loader:690:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:610:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:277:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:389:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/coami-e017-top-swipe-event/experiments/E017-top-swipe-event/web/src/input.ts'
+}
+
+Node.js v26.10.0
+✖ experiments/E017-top-swipe-event/web/src/input.test.ts (104.807291ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.849959
+
+✖ failing tests:
+
+test at experiments/E017-top-swipe-event/web/src/input.test.ts:1:1
+✖ experiments/E017-top-swipe-event/web/src/input.test.ts (104.807291ms)
+  'test failed'
+✔ continuous weighted positions round-trip through pinned recognizer (1.168625ms)
+✔ SDK strict threshold -61 (0.919417ms)
+✔ SDK strict threshold -60 (0.0925ms)
+✔ SDK strict threshold 60 (0.10775ms)
+✔ SDK strict threshold 61 (0.066666ms)
+✔ one swipe per hold, including reversal; zero separates independent strokes (0.094417ms)
+✔ tap and small movement do not swipe; idle clock advances long press duration (0.1215ms)
+✔ readiness requires new zero after MOD ready, not an idle ack (0.064083ms)
+✔ normal up then lost capture retains FIFO and blocks new pointer until zero ack (0.08525ms)
+✔ cancel removes queued moves and recovers (press consumed=false) (0.132167ms)
+✔ cancel removes queued moves and recovers (press consumed=true) (0.068333ms)
+✔ cancel keeps an already recognized swipe without adding one (0.059333ms)
+✔ wrong pointer and additional pointers cannot mutate active operation (0.040583ms)
+✔ atomic sample metadata and FIFO timestamps; duplicate millisecond ticks are valid (0.065166ms)
+✔ stale or pre-consumption zero acknowledgement cannot open the barrier (0.052375ms)
+✔ overflow supplies zero but remains error; runtime failure stays disabled (0.113291ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 116.947875
+node:internal/modules/esm/resolve:241
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/coami-e017-top-swipe-event/experiments/E017-top-swipe-event/mod/observer.ts' imported from /private/tmp/coami-e017-top-swipe-event/experiments/E017-top-swipe-event/mod/observer.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:241:11)
+    at moduleResolve (node:internal/modules/esm/resolve:846:10)
+    at defaultResolve (node:internal/modules/esm/resolve:973:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:766:56)
+    at #resolve (node:internal/modules/esm/loader:690:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:610:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:277:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:389:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/coami-e017-top-swipe-event/experiments/E017-top-swipe-event/mod/observer.ts'
+}
+
+Node.js v26.10.0
+✖ experiments/E017-top-swipe-event/mod/observer.test.ts (85.655458ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 89.459958
+
+✖ failing tests:
+
+test at experiments/E017-top-swipe-event/mod/observer.test.ts:1:1
+✖ experiments/E017-top-swipe-event/mod/observer.test.ts (85.655458ms)
+  'test failed'
+✔ MOD records original events and counts only SDK Swipe callbacks (0.663583ms)
+✔ missing metadata, tick mismatch and stale session are rejected (0.136875ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 91.644458
+
+NEGATIVE MOD rebuild: intentionally invalid E017 source; compiler failed and archive absent: PASS
+
+> coami-e017-web@0.1.0 mod
+> node scripts/build-mod.mjs
+
+../mod/mod.ts(26,7): error TS1134: Variable declaration expected.
+node:internal/errors:999
+  const err = new Error(message);
+              ^
+
+Error: Command failed: /private/tmp/coami-e017-top-swipe-event/experiments/E017-top-swipe-event/web/node_modules/.bin/tsc -p /private/tmp/coami-e017-top-swipe-event/experiments/E017-top-swipe-event/mod/tsconfig.json --noEmit false --outDir /private/tmp/coami-e017-top-swipe-event/experiments/E017-top-swipe-event/web/generated/mod
+    at genericNodeError (node:internal/errors:999:15)
+    at wrappedFn (node:internal/errors:544:14)
+    at checkExecSyncError (node:child_process:943:11)
+    at execFileSync (node:child_process:979:15)
+    at file:///private/tmp/coami-e017-top-swipe-event/experiments/E017-top-swipe-event/web/scripts/build-mod.mjs:21:1 {
+  status: 2,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 84541,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v26.10.0
+
+FINAL source/bridge tests (npm test):
+
+> coami-e017-web@0.1.0 test
+> node --test src/input.test.ts src/runtime.test.ts ../mod/observer.test.ts
+
+✔ MOD records original events and counts only SDK Swipe callbacks (1.144625ms)
+✔ missing metadata, tick mismatch and stale session are rejected (0.186625ms)
+✔ continuous weighted positions round-trip through pinned recognizer (0.609833ms)
+✔ SDK strict threshold -61 (0.978125ms)
+✔ SDK strict threshold -60 (0.074ms)
+✔ SDK strict threshold 60 (0.081667ms)
+✔ SDK strict threshold 61 (0.06ms)
+✔ one swipe per hold, including reversal; zero separates independent strokes (0.08075ms)
+✔ tap and small movement do not swipe; idle clock advances long press duration (0.114583ms)
+✔ readiness requires new zero after MOD ready, not an idle ack (0.063417ms)
+✔ normal up then lost capture retains FIFO and blocks new pointer until zero ack (0.085958ms)
+✔ cancel removes queued moves and recovers (press consumed=false) (0.124791ms)
+✔ cancel removes queued moves and recovers (press consumed=true) (0.063333ms)
+✔ cancel keeps an already recognized swipe without adding one (0.057166ms)
+✔ wrong pointer and additional pointers cannot mutate active operation (0.040208ms)
+✔ atomic sample metadata and FIFO timestamps; duplicate millisecond ticks are valid (0.064458ms)
+✔ stale or pre-consumption zero acknowledgement cannot open the barrier (0.041ms)
+✔ overflow supplies zero but remains error; runtime failure stays disabled (0.113208ms)
+(node:69085) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual patched SDK dispatches original MOD event before terminal acknowledgement (4.339583ms)
+✔ runtime patch leaves recognizer unchanged and has no gesture injection hook (0.550625ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 111.465083
+
+FINAL strict build (npm run build):
+
+> coami-e017-web@0.1.0 build
+> npm run typecheck && vite build
+
+
+> coami-e017-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+vite v8.2.1 building client environment for production...
+transforming...
+✓ 16 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.88 kB │ gzip:   1.14 kB
+dist/assets/index-QTCX2qnl.css    2.37 kB │ gzip:   1.01 kB
+dist/assets/index-DbzCuFm8.js   624.72 kB │ gzip: 162.25 kB
+
+✓ built in 148ms
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+RUNTIME: initial native C EM_ASM comma syntax failure, fixed without recognizer change; two corrective final builds successful. Final patch SHA matches provenance.
+Startup finding: upstream WASM onLaunch waits 8000ms. E017 overrides existing hook, keeping 5000ms initialization limit. SDK print callbacks are complete lines without trailing newline.
+CDP finding: drag mouseMoved must carry left button while held; none caused genuine lostcapture and safe cancellation. Corrected smoke driver; no recognizer relaxation.
+FINAL automated C/WASM pointer smoke: 17 cases PASS, 12 Swipe callbacks across 2 sessions; human unexecuted.
+Independent Reviewer: two P2 provenance findings resolved; final bounded code review approved, human pending. Reviewer read-only; did not rerun tests.
+
+Git staged whitespace check: source files PASS; unified .patch context blank lines contain required leading space, excluded from outer diff --check. git apply --check passed on clean pinned scratch during final build.
+Commit hook: lefthook not on PATH, hook validation not claimed; no hook/tool installation or bypass configuration.

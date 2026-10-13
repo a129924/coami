@@ -1,0 +1,34 @@
+{
+  "experiment": "E017",
+  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "patchSha256": "3cbcea5285fe6a67645e0424d55a5a8e1ea9fdf6e16b44fe1fb13a0508651435",
+  "tools": {
+    "moddableVersion": "9.5.0",
+    "sourceCommits": {
+      "moddable": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",
+      "emsdk": "14c18b569f55138fe4963924162244251f454fb0",
+      "fontbm": "7677b908523e909679f67cd5c170396bb9def1aa"
+    },
+    "emccVersion": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 5.0.1 (8c5f43157a3f069ade75876e23061330521eabde)",
+    "emccSha256": "498eba9b6aacffca1c358ba340fc7b37015d7867cb211c7f2d45784ee9310f03",
+    "fontbmSha256": "2389a3daae8b9af5c3747cb2fbfd34db3fcd786ccec885878addd22bbcd07012",
+    "mcconfigSha256": "2abb06a6305abbe09d6ed0eb4df23f08c2f474910692f4146d5c826627d23ba4",
+    "xscSha256": "a2a6b24b2de6c88d0cdd9adcdd8819dafb0a922e478160df7f3617bef9b1383c"
+  },
+  "sha256": {
+    "mc.js": "dff08550f14e49a3005268847d4aa52ee220791fee64496a4c9815a53a438755",
+    "mc.wasm": "dc954440342c349f8b1997ed17ec19e056c5c36e0a5736bfea6702fc73918c2d"
+  },
+  "commands": [
+    "npm ci --ignore-scripts --no-audit --no-fund",
+    "npm run build:wasm"
+  ],
+  "scope": "simulator-only; isolated copies of pinned tool sources, including existing local compiler cache; no hardware evidence",
+  "mod": {
+    "sha256": "3fe9a8922d7e67af60cf99befb28ca5518af9a7d91eb678598cefcf706d9c701",
+    "sourceSha256": {
+      "mod.ts": "cbabffedcea545be0d3168f52ea01d27aea04560950a9369118430980b35bce5",
+      "observer.ts": "648015478568ed8be0f9c5afae89eef5c2fd64afd29d9f0c69ac68c5b473d0fb"
+    }
+  }
+}
