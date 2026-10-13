@@ -63,7 +63,7 @@ created: 2026-10-13
 - Completion evidence inputs: review-log.md, experiments/E015-manual-video-recording/evidence/validation.txt and recording-run.md; actual isolated worktree/branch attached at dev9155139. Creator pass complete; publication/merge/cleanup pending. Latest owner direction supplies STOP POINT 1 authorization. Release sentinels follow explicit source no-release declaration.
 - STOP POINT 1 fixed shell is retained verbatim; the source plan records latest owner explicit commit/push/Draft PR authorization, so no repeated permission request is needed. Main Agent must record that authorization when updating the row.
 - TC1–TC4 and physical TC5 belong to owner/Tester later. They are not creator Implementation Steps, may remain pending in a Draft PR, and cannot be treated as recording success. Live experiment state and code delivery state are separate.
-- Formal independent Plan-Reviewer and bounded code Reviewer approved. Verdicts are recorded in review-log.md; actual live experiment remains unexecuted.
+- Formal independent Plan-Reviewer and bounded code Reviewer approved. Verdicts are recorded in review-log.md; live execution was unexecuted at that engineering review, with later owner evidence recorded below.
 - Marker semantics: [X] exact one-to-one evidence; [ ] pending/planned/unproved; lowercase source [x] is pending and warns.
 - Tracker semantics: check_all_succeeded covers rendered head/contextual/Implementation/tail checkboxes; check_impl_steps_succeeded covers only Implementation Steps.
 - Owner-only updates: only the action owner may update after exact evidence; step-creator never updates an existing output.
@@ -73,6 +73,10 @@ created: 2026-10-13
 
 - Code commit: fab0dc2b1fd321b77b9e038cbe222b5159687b0f; pushed to origin/feat/andrew/e015-manual-video-recording.
 - Draft PR: https://github.com/a129924/coami/pull/15 ; verified OPEN, isDraft=true, base dev, correct feature head. No human verdict yet.
-- Owner review and live TC1–TC5 remain pending. Merge/release/cleanup rows remain pending; no approval or closure is inferred.
+- Owner PR review remains pending. Live TC1–TC5 operations were subsequently exercised; see the 2026-10-13 update below. Merge/release/cleanup rows remain pending; no approval or closure is inferred.
 - PR Lens local graph/render validated against actual commit diff; Graphify used no-graph source fallback. Archify showcase passed but desktop visual containment failed (partial auxiliary delivery).
 - Git warned lefthook was absent; no hook execution is claimed. Explicit E015 checks and independent review evidence are recorded separately.
+
+## Owner live validation update — 2026-10-13
+
+Owner exercised short/long end and replay, cancel/restart, Starting cancellation, repeated Start/Cancel, blocked permission and active permission revocation. Metadata and owner motion/isolation/no-output confirmations are preserved in experiments/E015-manual-video-recording/evidence/recording-run.md. This bounded validation/reporting round is complete; the full fixed hypothesis remains 無法判定 because the long segment's original zero-audio event was truncated. This updates live evidence only, not workflow gate approval, merge authorization or checkbox completion. Draft PR remains open for human review.

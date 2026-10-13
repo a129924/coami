@@ -16,14 +16,18 @@
 | TC2 longer segment (nominal ~8s; requested ~10–12s; actual ~29.5s) | 29.473s (page recording clock) | 29.316s (ended event) | 185 pairs / 185 distinct | owner confirms motion/content correctness and no old/cancelled content | webcam/canvas ended, captures stationary at 185; ready ~50ms | observed timing/motion/cleanup criteria met; original audio event unavailable |
 | TC3 ~3s cancel | ~2.790s from displayed recording/cancel transitions | owner confirms no cancelled output | 19 pairs / 19 distinct | not applicable | webcam/canvas ended, captures stationary at 19; returned idle | observed cancellation/no-output/cleanup criteria met |
 | TC4 restart (nominal ~3s; actual ~5.95s) | 5.950s (ended event recording clock) | 5.888015s (DOM ended=true) | 38 pairs / 38 distinct | owner confirms motion/content correctness and no old/cancelled content | webcam/canvas ended, captures stationary at 38; ready ~16ms | observed restart/playback/timing/isolation/cleanup criteria met |
-| TC5 physical errors | pending | not applicable | pending | pending | pending | 未執行 |
+| TC5 Starting cancel | cancelled after ~1.628s | no source/result (DOM) | 0 pairs / 0 distinct | owner performed Start → Cancel | tracks none, captures stationary at 0; idle / Start enabled | observed criteria met |
+| TC5 repeated Start/Cancel | one observable recording lifecycle | no source/result (DOM) | 11 pairs / 11 distinct | owner confirms instructed repeated presses completed | webcam/canvas ended, captures stationary at 11; idle / Start enabled | observed criteria met for reported manual procedure |
+| TC5 permission denial | runtime ready then NotAllowedError | no source/result (DOM) | 0 pairs / 0 distinct | owner blocked site permission and started | tracks none, captures stationary at 0; idle / Start enabled | observed criteria met |
+| TC5 camera interruption | recording → idle on camera track ended | no source/result (DOM) | 14 pairs / 14 distinct | owner revoked site permission during recording | webcam/canvas ended, captures stationary at 14; idle / Start enabled | observed criteria met for permission revocation; no physical unplug claim |
 
 Before updating: record browser/version, webcam/device condition, timestamp, exact operation, actual metadata and named owner observation. Check motion/end-time/cleanup criteria in README. No success may be inferred from simulated tests or a nonempty Blob.
 
 ## Status / decision
 
-- Current main experiment: **無法判定** for the full hypothesis: both shorter/longer recording clocks and ended playback, cancellation cleanup, and restart output are observed. Restart ended timing is now observed; applicable physical error cases remain pending; owner has confirmed motion/isolation/no-cancelled-output observations. Original long-segment audio event remains unavailable. Feasibility-validation task complete: **no**. Preserve the earlier startup timeout as historical evidence.
-- Required next evidence: applicable physical error observations; restarted ended timing has now been recovered. Do not repeat the already observed length comparison or request reconfirmation of the supplied motion/isolation/no-output observations.
+- Current main experiment: **無法判定** for the complete fixed hypothesis: all planned human operations have now been exercised and observed behavior meets their recorded criteria, but the original long-segment zero-audio event was truncated and is not recoverable. No full all-criteria success or production adoption is claimed. Preserve the startup timeout and evidence gap.
+- This bounded feasibility-validation task is **complete**: procedure, measured results, owner observations, classification, missing evidence and decision limits are recorded. Task completion does not mean the full hypothesis is proven. No further human operation is requested in this round; a reviewer requiring complete long-segment audio attestation must request a bounded repeat with that metadata retained.
+- Decision supported: the tested simulator/browser path supports manually controlled segment lengths, end/playback, cancel/discard/restart and the tested error lifecycles. Decision withheld: universal correctness, hardware unplug behavior, complete fixed-hypothesis approval and production adoption. Human PR review remains pending.
 - Draft PR is an engineering handoff only, not adoption or hypothesis approval.
 
 ## Engineering publication
@@ -216,3 +220,90 @@ Owner says “播完了”. Agent read the existing DOM without altering playbac
 Player currentTime=duration=5.888015s, ended=true, paused=true, readyState=4, error=null; result=錄製 5.95 秒 · 83019 bytes. Combined with 38 distinct webcam/MOD pairs, zero audio tracks, stop-to-ready ~16ms, released tracks/stationary count and owner's prior motion/isolation confirmation, this supports the tested cancel→restart→end→complete playback path. The ≤1s timing criterion is met (0.062s). No further normal/restart recording is required for these observations.
 
 TC5 permission denial, Starting cancellation, repeated operations and camera interruption remain unexecuted physically; retain the overall incomplete verdict. The long clip's original zero-audio event was truncated and cannot be reconstructed from another clip. Documentation-only evidence update; git diff --check passed; no application code changed or additional code tests required.
+
+### Starting cancellation — 2026-10-13
+
+Owner reports human action Start → Cancel and provides:
+
+```text
+26439 ms · 停止後 250ms：captures=0, stationary=true
+26188 ms · starting → idle · 本段已取消
+26188 ms · 停止取像：pairs=0, distinct=0, tracks=none, captures=0
+24773 ms · MOD 安裝狀態：prepared
+24736 ms · MOD 安裝狀態：saved
+24560 ms · idle → starting
+468 ms · initial → idle
+```
+
+Observed cancellation ~1.628s after entering Starting, during MOD preparation and before camera tracks/captures existed. Capture count remains zero at the delayed check. Follow-up agent DOM read: status=本段已取消, result empty, player hasSource=false, readyState=0, currentTime=0, error=null. Start enabled; End/Cancel disabled. The event list still contains only the supplied preparation/cancellation events; no later recording or frame event appeared at that observation. This supports Starting cancellation/no-output/return-to-idle for this tested point, not cancellation at every async boundary. Zero frames are expected here, not a recording failure.
+
+Remaining physical TC5 cases: permission denial, rapid repeated operations and camera interruption. No application code changed; documentation diff check only.
+
+### Rapid repeated Start / Cancel — 2026-10-13
+
+Owner was instructed to press Start 2–3 times, wait for Recording, then press Cancel 2–3 times, and reports “已經 完成動作”. Agent read the current page without manipulating recording. Metadata shows one idle→starting transition, one starting→recording transition and one recording→idle cancellation:
+
+```text
+12392 ms · 停止後 250ms：captures=11, stationary=true
+12142 ms · recording → idle · 本段已取消
+12142 ms · canvas tracks=ended
+12141 ms · 停止取像：pairs=11, distinct=11, tracks=ended, captures=11
+10579 ms · starting → recording
+10570 ms · recorder mime=video/webm;codecs=vp8, audioTracks=0
+8953 ms · runtime ready：prepared
+8953 ms · MOD 安裝狀態：installed
+8943 ms · 固定 digest 探針一致
+910 ms · MOD 安裝狀態：prepared
+885 ms · MOD 安裝狀態：saved
+851 ms · idle → starting
+49 ms · initial → idle
+```
+
+DOM: status=本段已取消, empty result, no player source, readyState=0, currentTime=0, error=null; Start enabled, End/Cancel disabled. Webcam/canvas tracks ended and 11 captures remained stationary at the delayed check. The owner's repeated-click procedure produced a single observable session lifecycle, no published result and return to an operable idle UI. Individual disabled clicks are not logged, so this establishes UI behavior under the reported manual procedure, not a count of accepted click events or all possible races. Permission denial and camera interruption remain pending.
+
+### Camera permission denial — 2026-10-13
+
+Owner followed the instruction to block this localhost site's camera permission, reload and Start, then reports completion. Agent DOM inspection observed:
+
+```text
+17324 ms · 停止後 250ms：captures=0, stationary=true
+17072 ms · starting → idle · webcam unavailable: NotAllowedError
+17072 ms · 停止取像：pairs=0, distinct=0, tracks=none, captures=0
+17050 ms · runtime ready：prepared
+17049 ms · MOD 安裝狀態：installed
+17038 ms · 固定 digest 探針一致
+8994 ms · MOD 安裝狀態：prepared
+8940 ms · MOD 安裝狀態：saved
+8858 ms · idle → starting
+273 ms · initial → idle
+```
+
+Status=webcam unavailable: NotAllowedError, empty result, player hasSource=false/readyState=0/currentTime=0/error=null; Start enabled, End/Cancel disabled. Runtime/probe completed before permission failure, no webcam tracks or frames were acquired, capture count stayed at zero. This supports permission-denial error reporting, no output and return to idle under the owner's blocked-permission procedure; no successful recording is claimed for this case.
+
+Owner identifies the camera as built-in, not disconnectable. For the remaining interruption case, use a real browser permission revocation during active recording, without reloading the page. W3C Media Capture and Streams defines the device permission revocation algorithm as ending live tracks: https://www.w3.org/TR/mediacapture-streams/ . Chrome supports changing per-site camera permissions: https://support.google.com/chrome/answer/2693767 . This is a browser permission-revocation test, not physical unplug evidence.
+
+Prospective procedure: restore this site's permission to Allow, reload before the run, Start and wait for Recording, then block this site's camera permission without manually reloading, ending or cancelling. Observe camera track termination/error, discarded segment, released webcam/canvas tracks and capture count stationary after cleanup; the idle UI should allow retry. If the browser reloads or does not terminate the active track, this procedure does not establish the interruption handler; record that limitation rather than claiming success/failure from an unrelated reload. No global OS camera changes or synthetic ended event required.
+
+### Active camera permission revocation — 2026-10-13
+
+For the owner's built-in camera, the predeclared procedure was restore Allow/reload before starting, wait for Recording, then block this site's camera without pressing End/Cancel or manually reloading. Owner reports completion. Agent reads the same run's recording/error transitions:
+
+```text
+17730 ms · 停止後 250ms：captures=14, stationary=true
+17480 ms · recording → idle · camera track ended
+17480 ms · canvas tracks=ended
+17478 ms · 停止取像：pairs=14, distinct=14, tracks=ended, captures=14
+15456 ms · starting → recording
+15432 ms · recorder mime=video/webm;codecs=vp8, audioTracks=0
+13759 ms · runtime ready：prepared
+13759 ms · MOD 安裝狀態：installed
+13749 ms · 固定 digest 探針一致
+5695 ms · MOD 安裝狀態：prepared
+5648 ms · MOD 安裝狀態：saved
+5563 ms · idle → starting
+371 ms · initial → idle
+```
+
+DOM: status=camera track ended, empty result, player hasSource=false/readyState=0/currentTime=0/error=null; Start enabled, End/Cancel disabled. The track-ended handler ran during an established recording, discarded the segment, ended webcam/canvas tracks and stopped captures at 14. Same-run transitions remain visible; this is not a reload-only observation. This supports actual browser permission-revocation interruption, not physical unplug or every device failure.
+
+All planned owner operations in this round are exercised. The original long-segment audio/start event was truncated, so full-hypothesis status stays 無法判定 solely for that attestation gap; the bounded investigation/reporting task is complete. No media persisted. Pending: human PR review and any explicitly requested follow-up addressing the missing attestation. Remind the owner to restore this site's camera permission after the test. Documentation-only changes; diff checks suffice, prior 20-test/code-check results remain historical engineering evidence.
