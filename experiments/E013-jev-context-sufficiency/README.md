@@ -48,7 +48,7 @@ Preflight checks imported SDK and transitive dependency code against the authori
 
 Before the first third-party import, the runner also checks every locked dependency source byte against the pinned digest baseline. A changed import wrapper therefore blocks before it can execute. Future runs retain `uv.lock` and `sdk-code-digests.json` with separate hashes; evidence replay checks those run-bound bytes against the installed environment and fails closed if the current environment cannot reproduce that run. The historical run predates these snapshots and uses the lock from its fixed Git runner revision, which must agree with the current pinned baseline.
 
-The `-c` bootstrap uses only the standard library until it has compared the exact runner and one-run authorization bytes with this checkout's committed `HEAD` and checked the authorization's runner hash. It does not execute a locally edited runner before those checks. After that comparison it appends the synchronized dependency path and executes the verified runner snapshot.
+The `-c` bootstrap uses only the standard library until it has compared the exact runner (and, for evidence operations, `evidence_tools.py`) with this checkout's committed `HEAD`. A live run also compares the one-run authorization bytes and its runner hash. It does not execute locally edited evidence code before those checks. After that comparison it appends the synchronized dependency path and executes the verified runner snapshot. Git replacement objects are disabled for these reads.
 
 ```sh
 env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u PYTHONPATH -u RUST_LOG \
@@ -64,12 +64,20 @@ try:
     root = Path.cwd().resolve()
     runner = root / "experiments/E013-jev-context-sufficiency/jev_context.py"
     args = sys.argv[1:]
-    if args.count("--live") != 1 or args.count("--live-authorization") != 1:
+    modes = ("--live", "--verify-local-run", "--publish-reviewed", "--verify-evidence")
+    selected = [mode for mode in modes if args.count(mode) == 1]
+    if len(selected) != 1:
         blocked()
-    auth = Path(args[args.index("--live-authorization") + 1]).resolve()
-    if not auth.is_relative_to(root):
-        blocked()
+    live = selected[0] == "--live"
+    auth = None
+    if live:
+        if args.count("--live-authorization") != 1:
+            blocked()
+        auth = Path(args[args.index("--live-authorization") + 1]).resolve()
+        if not auth.is_relative_to(root):
+            blocked()
     env = {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
+    env["GIT_NO_REPLACE_OBJECTS"] = "1"
     probe = subprocess.run(["git", "-C", str(root), "rev-parse", "--show-toplevel", "--absolute-git-dir"], env=env, capture_output=True, check=True).stdout.decode().splitlines()
     marker = root / ".git"
     if len(probe) != 2 or Path(probe[0]).resolve() != root or marker.is_symlink():
@@ -90,12 +98,19 @@ try:
         relative = path.relative_to(root).as_posix()
         return subprocess.run(["git", "--git-dir", str(git_dir), "--work-tree", str(root), "show", f"HEAD:{relative}"], env=env, capture_output=True, check=True).stdout
     source = runner.read_bytes()
-    authorization = auth.read_bytes()
-    if source != committed(runner) or authorization != committed(auth):
+    if source != committed(runner):
         blocked()
-    document = json.loads(authorization)
-    if hashlib.sha256(source).hexdigest() != document.get("runner_sha256"):
-        blocked()
+    if live:
+        authorization = auth.read_bytes()
+        if authorization != committed(auth):
+            blocked()
+        document = json.loads(authorization)
+        if hashlib.sha256(source).hexdigest() != document.get("runner_sha256"):
+            blocked()
+    else:
+        evidence_tools = runner.with_name("evidence_tools.py")
+        if evidence_tools.read_bytes() != committed(evidence_tools):
+            blocked()
 except (OSError, ValueError, TypeError, KeyError, UnicodeDecodeError, subprocess.CalledProcessError):
     blocked()
 venv = runner.parent / ".venv"
@@ -110,6 +125,8 @@ exec(compile(source, str(runner), "exec"), {"__name__": "__main__", "__file__": 
   --store-root /Users/andrew/coami-evidence/E013 \
   --live-authorization <committed-one-run-authorization.json>
 ```
+
+For `--verify-local-run`, `--publish-reviewed`, and `--verify-evidence`, use the same authenticated `python -I -S -B -c` bootstrap above, omit `--env-file` and the live-only arguments, and supply the selected evidence mode and its documented paths. Do not execute `jev_context.py` directly for evidence operations: normal Python startup can run `.pth` or `sitecustomize` code before the verifier starts. The bootstrap requires the runner and evidence tool files to match committed `HEAD`; commit reviewed tool changes before using it. These commands make no Jev call.
 
 `.env` is an Owner-maintained, Git-ignored local credential file. Never print, hash, or commit it. The freeze attestation path above is tracked and verified; the local store path is approved for staging, not backed-up archival storage. Any later live run needs a new explicit Owner instruction. Before such a run, commit a dedicated JSON authorization record and pass its path as `--live-authorization`. It must contain `run_id` (a new unique ID), `authorized_by: "Owner"`, `scope: "one E013 75-case Context Sufficiency run"`, `model: "jev-1.13.0"`, `freeze_attestation_sha256`, `store_policy_sha256`, `runner_sha256`, and `uv_lock_sha256`. The runner checks that its exact bytes and the synchronized lockfile are committed at HEAD and match this authorization, then consumes that run ID by exclusively creating `authorization-uses/<run_id>.json` in the approved store **before** creating `runs/<run_id>/` or calling Jev. The marker remains if the run directory is deleted; a failed run still consumes its authorization. This marker is outside the mutable run directory but remains owner-mutable local state without independent backup or tamper resistance. The manifest retains the authorization SHA-256. A committed record is auditable but does not cryptographically prove who approved it. The Owner's separate instruction and commit review establish that human decision. The completed historical run predates this record requirement; no retrospective pre-run authorization is asserted for it. The runner, freeze attestation, store policy, and `uv.lock` must each match their canonical committed `HEAD` bytes. Freeze attestation and store policy are each read once; validation, authorization and the manifest use those same byte snapshots. The historical run ID and IDs already present in tracked evidence are reserved.
 

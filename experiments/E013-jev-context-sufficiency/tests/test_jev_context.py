@@ -187,6 +187,13 @@ class E013Tests(unittest.TestCase):
             "REQUEST_CONTENT_MISMATCH",
         )
 
+    def test_deep_analysis_json_reports_contract_failure(self) -> None:
+        with TemporaryDirectory() as temporary:
+            analysis = Path(temporary) / "analysis.jsonl"
+            analysis.write_bytes(b"[" * 10000 + b"0" + b"]" * 10000 + b"\n")
+            with self.assertRaisesRegex(e.ContractError, "ANALYSIS_UNAVAILABLE"):
+                evidence.read_rows(analysis)
+
     def test_live_store_rejects_redirected_subdirectories(self) -> None:
         with TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -850,6 +857,57 @@ source = { registry = "https://pypi.org/simple" }
             self.assertEqual(accepted.returncode, 0)
             self.assertIn("trusted", accepted.stdout)
 
+    def test_documented_bootstrap_authenticates_evidence_tool(self) -> None:
+        documentation = (e.TOPIC / "README.md").read_text()
+        bootstrap = documentation.split("python -I -S -B -c '\n", 1)[1].split(
+            "\n' --live", 1
+        )[0]
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            runner = root / e.RUNNER_RELATIVE
+            runner.parent.mkdir(parents=True)
+            runner.write_bytes(b"print('trusted evidence')\n")
+            evidence_tool = runner.with_name("evidence_tools.py")
+            evidence_tool.write_bytes(b"# reviewed\n")
+            subprocess.run(["git", "-C", str(root), "add", "."], check=True)
+            subprocess.run(
+                [
+                    "git",
+                    "-C",
+                    str(root),
+                    "-c",
+                    "user.name=Test",
+                    "-c",
+                    "user.email=test@example.invalid",
+                    "commit",
+                    "-qm",
+                    "trusted",
+                ],
+                check=True,
+            )
+            marker = root / "unreviewed-ran"
+            evidence_tool.write_text(
+                f"from pathlib import Path; Path({str(marker)!r}).write_text('ran')\n"
+            )
+            argv = [
+                sys.executable,
+                "-I",
+                "-S",
+                "-B",
+                "-c",
+                bootstrap,
+                "--verify-evidence",
+            ]
+            blocked = subprocess.run(argv, cwd=root, capture_output=True, text=True)
+            self.assertEqual(blocked.returncode, 2)
+            self.assertIn("RUNNER_SOURCE_UNVERIFIED", blocked.stdout)
+            self.assertFalse(marker.exists())
+            evidence_tool.write_bytes(b"# reviewed\n")
+            accepted = subprocess.run(argv, cwd=root, capture_output=True, text=True)
+            self.assertEqual(accepted.returncode, 0)
+            self.assertIn("trusted evidence", accepted.stdout)
+
     def test_dependency_wrapper_is_rejected_before_its_import(self) -> None:
         with TemporaryDirectory() as temporary:
             topic = Path(temporary) / "experiments/E013-jev-context-sufficiency"
@@ -1043,6 +1101,46 @@ source = { registry = "https://pypi.org/simple" }
                 )
                 self.assertTrue(e.published_run_id_seen(root, "run-archived"))
                 self.assertFalse(e.published_run_id_seen(root, "run-new"))
+            original = subprocess.run(
+                ["git", "-C", str(root), "rev-parse", "HEAD"],
+                capture_output=True,
+                text=True,
+                check=True,
+            ).stdout.strip()
+            (root / "record.txt").write_bytes(b"forged replacement")
+            subprocess.run(["git", "-C", str(root), "add", "record.txt"], check=True)
+            subprocess.run(
+                [
+                    "git",
+                    "-C",
+                    str(root),
+                    "-c",
+                    "user.name=Test",
+                    "-c",
+                    "user.email=test@example.invalid",
+                    "commit",
+                    "-qm",
+                    "forged",
+                ],
+                check=True,
+            )
+            replacement = subprocess.run(
+                ["git", "-C", str(root), "rev-parse", "HEAD"],
+                capture_output=True,
+                text=True,
+                check=True,
+            ).stdout.strip()
+            subprocess.run(
+                ["git", "-C", str(root), "reset", "--hard", original],
+                capture_output=True,
+                check=True,
+            )
+            subprocess.run(
+                ["git", "-C", str(root), "replace", original, replacement], check=True
+            )
+            self.assertEqual(
+                e.committed_git_bytes(root, Path("record.txt")), b"approved"
+            )
 
     def test_missing_key_preflight_never_constructs_sdk(self) -> None:
         with TemporaryDirectory() as temporary:
@@ -1615,7 +1713,10 @@ source = { registry = "https://pypi.org/simple" }
             output = evidence.publish_reviewed(
                 restricted, approval, root / "checkout-evidence"
             )
-            self.assertEqual(evidence.verify_local_run(restricted)["gaps"], [])
+            with patch.object(e, "load_cases", wraps=e.load_cases) as loaded:
+                self.assertEqual(evidence.verify_local_run(restricted)["gaps"], [])
+                self.assertEqual(loaded.call_count, 1)
+                self.assertIsNotNone(loaded.call_args.kwargs["source_bytes"])
             public_manifest = e.read_object(output / "manifest.json")
             self.assertNotIn("store_root", public_manifest)
             self.assertEqual(
@@ -1640,7 +1741,10 @@ source = { registry = "https://pypi.org/simple" }
                 {"ANALYSIS_ACCESS_REQUIRED", "SUMMARY_HASH_MISMATCH"},
             )
             (output / "summary.json").write_bytes(public_summary)
-            with_access = evidence.verify_evidence(output, restricted, 0.8)
+            with patch.object(e, "load_cases", wraps=e.load_cases) as loaded:
+                with_access = evidence.verify_evidence(output, restricted, 0.8)
+                self.assertEqual(loaded.call_count, 1)
+                self.assertIsNotNone(loaded.call_args.kwargs["source_bytes"])
             self.assertEqual(with_access["verified_cases"], 75)
             self.assertEqual(with_access["gaps"], [])
             published_lock = (output / "uv.lock").read_bytes()
@@ -2510,6 +2614,47 @@ source = { registry = "https://pypi.org/simple" }
             )
             (output / "analysis.jsonl").write_bytes(public_rows)
             (output / "manifest.json").write_bytes(public_manifest)
+            # Public raw bytes remain verifiable when the analysis row is private.
+            public_review = (output / "review.json").read_bytes()
+            restricted_manifest = e.read_object(output / "manifest.json")
+            restricted_manifest["cases"][0]["analysis_restricted"] = True
+            restricted_review = e.read_object(output / "review.json")
+            restricted_review["cases"][0]["analysis_public"] = False
+            (output / "review.json").write_bytes(e.json_bytes(restricted_review))
+            restricted_manifest["review_sha256"] = e.sha(
+                (output / "review.json").read_bytes()
+            )
+            (output / "manifest.json").write_bytes(e.json_bytes(restricted_manifest))
+            stubbed = [json.loads(line) for line in public_rows.splitlines()]
+            stubbed[0] = {
+                "run_id": stubbed[0]["run_id"],
+                "group": stubbed[0]["group"],
+                "case_id": stubbed[0]["case_id"],
+                "status": stubbed[0]["status"],
+                "raw_sha256": stubbed[0]["raw_sha256"],
+                "analysis_restricted": True,
+                "analysis_sha256": restricted_manifest["cases"][0]["analysis_sha256"],
+            }
+            (output / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in stubbed)
+            )
+            public_body = (
+                output
+                / "raw"
+                / self.cases[0]["group"]
+                / f"{self.cases[0]['case_id']}.body"
+            )
+            original_body = public_body.read_bytes()
+            public_body.write_bytes(b"tampered")
+            reasons = {
+                gap["reason"] for gap in evidence.verify_evidence(output)["gaps"]
+            }
+            self.assertIn("ANALYSIS_ACCESS_REQUIRED", reasons)
+            self.assertIn("RAW_HASH_MISMATCH", reasons)
+            public_body.write_bytes(original_body)
+            (output / "review.json").write_bytes(public_review)
+            (output / "manifest.json").write_bytes(public_manifest)
+            (output / "analysis.jsonl").write_bytes(public_rows)
             (
                 output
                 / "raw"

@@ -277,13 +277,13 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
         ]
     except e.ContractError:
         raise
-    except (OSError, ValueError) as exc:
+    except (OSError, ValueError, RecursionError) as exc:
         raise e.ContractError("ANALYSIS_UNAVAILABLE") from exc
     if len(rows) != 75 or any(not isinstance(row, dict) for row in rows):
         raise e.ContractError("INVALID_ANALYSIS")
     try:
         canonical = [e.json_bytes(row) for row in rows]
-    except (TypeError, ValueError) as exc:
+    except (TypeError, ValueError, RecursionError) as exc:
         raise e.ContractError("INVALID_ANALYSIS") from exc
     if data != b"".join(canonical):
         raise e.ContractError("NONCANONICAL_ANALYSIS")
@@ -701,7 +701,9 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
 
 
 def inventory_gaps(
-    manifest: dict[str, Any], rows: list[dict[str, Any]]
+    manifest: dict[str, Any],
+    rows: list[dict[str, Any]],
+    cases: list[dict[str, Any]] | None = None,
 ) -> list[dict[str, str]]:
     """Bind public observations to the frozen repository oracle and run contract."""
     gaps: list[dict[str, str]] = []
@@ -736,7 +738,9 @@ def inventory_gaps(
                 (e.ORACLE / name).read_bytes()
             ):
                 raise e.ContractError("CASE_VERSION_MISMATCH")
-        cases = e.load_cases()
+        if cases is None:
+            sources = e.read_frozen_case_sources(e.ROOT, freeze)
+            cases = e.load_cases(source_bytes=sources)
     except (KeyError, TypeError, OSError, e.ContractError):
         return [{"reason": "CASE_VERSION_MISMATCH"}]
     if len(rows) != len(cases):
@@ -933,14 +937,19 @@ def verify_local_run(
         raise e.ContractError("LOCAL_ANALYSIS_RESTRICTED")
     if any(row["run_id"] != run_id for row in rows):
         raise e.ContractError("RUN_ID_MISMATCH")
-    gaps = inventory_gaps(manifest, rows) + metadata_gaps(run_dir, manifest)
+    try:
+        sources = e.read_frozen_case_sources(e.ROOT, manifest["freeze_hashes"])
+        case_rows = e.load_cases(source_bytes=sources)
+    except (KeyError, TypeError, OSError, ValueError, e.ContractError):
+        case_rows = []
+    gaps = inventory_gaps(manifest, rows, case_rows) + metadata_gaps(run_dir, manifest)
     if manifest_chronology_gap(manifest, rows):
         gaps.append({"reason": "MANIFEST_CHRONOLOGY_MISMATCH"})
     if run_id != PRE_RECORD_RUN_ID and event_log_gap(run_dir, rows, None):
         gaps.append({"reason": "EVENT_LOG_MISMATCH"})
     if issue := authorization_gap(run_dir, manifest):
         gaps.append({"reason": issue})
-    cases = {(case["group"], case["case_id"]): case for case in e.load_cases()}
+    cases = {(case["group"], case["case_id"]): case for case in case_rows}
     question = e.load_question()
     source_locator = manifest.get("runner_source_path")
     if source_locator is not None:
@@ -1439,13 +1448,14 @@ def verify_evidence(
             if not isinstance(revision, str) or not REVISION.fullmatch(revision):
                 gaps.append({"reason": "RUNNER_REVISION_MISMATCH"})
             else:
-                committed = subprocess.run(
-                    ["git", "show", f"{revision}:{e.RUNNER_RELATIVE.as_posix()}"],
-                    cwd=e.ROOT,
-                    capture_output=True,
-                    check=False,
-                )
-                if committed.returncode != 0 or committed.stdout != runner:
+                try:
+                    committed = e.checked_git(
+                        e.ROOT,
+                        ["show", f"{revision}:{e.RUNNER_RELATIVE.as_posix()}"],
+                    )
+                except (OSError, subprocess.CalledProcessError, e.ContractError):
+                    committed = None
+                if committed != runner:
                     gaps.append({"reason": "RUNNER_REVISION_MISMATCH"})
     except (KeyError, OSError, TypeError, e.ContractError):
         gaps.append({"reason": "RUNNER_SOURCE_MISSING"})
@@ -1495,7 +1505,12 @@ def verify_evidence(
     except (OSError, e.ContractError):
         gaps.append({"reason": "REVIEW_MISSING"})
     full_rows = []
-    cases = {(case["group"], case["case_id"]): case for case in e.load_cases()}
+    try:
+        sources = e.read_frozen_case_sources(e.ROOT, manifest["freeze_hashes"])
+        case_rows = e.load_cases(source_bytes=sources)
+    except (KeyError, TypeError, OSError, ValueError, e.ContractError):
+        case_rows = []
+    cases = {(case["group"], case["case_id"]): case for case in case_rows}
     question = e.load_question()
     restricted = None
     if restricted_run is not None:
@@ -1510,6 +1525,19 @@ def verify_evidence(
     for row in rows:
         key = (row["group"], row["case_id"])
         item = by_key[key]
+        public_raw_mismatch = False
+        if item["raw_public_path"] is not None:
+            try:
+                public_raw = bounded_path(
+                    evidence_run, item["raw_public_path"]
+                ).read_bytes()
+                public_raw_mismatch = e.sha(public_raw) != item["raw_sha256"]
+            except (OSError, e.ContractError):
+                public_raw_mismatch = True
+            if public_raw_mismatch:
+                gaps.append(
+                    {"group": key[0], "case_id": key[1], "reason": "RAW_HASH_MISMATCH"}
+                )
         restricted_analysis = item["analysis_restricted"]
         if restricted_analysis:
             if (
@@ -1638,6 +1666,8 @@ def verify_evidence(
                     )
                     continue
         raw_hash = item["raw_sha256"]
+        if public_raw_mismatch:
+            continue
         if full.get("raw_sha256") != raw_hash or row.get("raw_sha256") != raw_hash:
             gaps.append(
                 {
@@ -1682,7 +1712,7 @@ def verify_evidence(
                 continue
         full_rows.append(full)
     if len(full_rows) == 75:
-        gaps.extend(inventory_gaps(manifest, full_rows))
+        gaps.extend(inventory_gaps(manifest, full_rows, case_rows))
         if manifest_chronology_gap(manifest, full_rows):
             gaps.append({"reason": "MANIFEST_CHRONOLOGY_MISMATCH"})
         if manifest.get("run_id") == PRE_RECORD_RUN_ID:

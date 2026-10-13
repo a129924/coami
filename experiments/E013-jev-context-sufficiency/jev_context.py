@@ -425,6 +425,7 @@ def checked_git(root: Path, arguments: list[str]) -> bytes:
     environment = {
         key: value for key, value in os.environ.items() if not key.startswith("GIT_")
     }
+    environment["GIT_NO_REPLACE_OBJECTS"] = "1"
     probe = (
         subprocess.run(
             [
@@ -1328,6 +1329,14 @@ def main() -> int:
     parser.add_argument("--candidate-threshold", type=float)
     args = parser.parse_args()
     if args.publish_reviewed or args.verify_evidence or args.verify_local_run:
+        if (
+            not sys.flags.isolated
+            or not sys.flags.no_site
+            or not sys.flags.dont_write_bytecode
+            or EXECUTED_RUNNER_SOURCE is None
+        ):
+            print("E013 BLOCKED RUNNER_SOURCE_UNVERIFIED", flush=True)
+            return 2
         from evidence_tools import publish_reviewed, verify_evidence, verify_local_run
 
         try:
