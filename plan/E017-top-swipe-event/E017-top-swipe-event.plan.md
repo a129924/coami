@@ -36,7 +36,7 @@ All experiment paths below are relative to experiments/E017-top-swipe-event/:
 - Implementer: web/src/input.ts, web/src/input.test.ts, web/src/main.ts, web/src/style.css, web/src/runtime.d.ts, web/src/runtime.test.ts.
 - Implementer: web/scripts/stage-host.mjs, web/scripts/prepare-runtime.mjs, web/scripts/build-mod.mjs, web/scripts/runtime-smoke.mjs.
 - Implementer: mod/mod.ts, mod/observer.ts, mod/observer.test.ts, mod/tsconfig.json, mod/host.d.ts; runtime/wasm-top-touch.patch.
-- Evidence: README.md, evidence/validation.txt, evidence/swipe-run.md, evidence/runtime-provenance.json, evidence/auxiliary.md, evidence/runtime-automated.json, evidence/runtime-automated.png.
+- Evidence: README.md, evidence/validation.txt, evidence/swipe-run.md, evidence/runtime-provenance.json, evidence/auxiliary.md, evidence/runtime-automated.json, evidence/runtime-automated.png, evidence/human-session-6.json (operator trace; below-threshold attempts).
 - Archify: diagram/swipe-sequence.json, diagram/swipe-sequence.html and generated same-directory deliver/visual-check receipts, snapshots and screenshots.
 - Local-only PR Lens: /private/tmp/coami-e017/pr-lens/graph.json and rendered/ manifest and SVGs (outside repository).
 - Ignored outputs: web/generated/ (isolated SDK/toolchain/cache/public assets), web/node_modules/, web/dist/.
@@ -77,3 +77,7 @@ No release action required. This run does not merge; human owns review and any l
 
 ## Open Questions / Unresolved Items
 No product/identity questions. Human verification remains unexecuted until actual owner observations. Runtime build and tool outputs remain unexecuted at authoring time. Remote E017 refs/history checked before worktree creation; no occupancy found.
+
+## Human-discovered bounded correction — 2026-10-13
+
+Within existing continuous-input/lifecycle scope: fix high-rate pointer FIFO overflow using monotonic pending-move compression, preserving turning points/press/zero and trace replacement links. No SDK threshold/contract or E016 changes. Additional Written artifacts: evidence/human-session-6.json, evidence/human-session-6-overflow.json, evidence/runtime-coalesced-automated.json. Modify: web/src/input.ts, input.test.ts, web/index.html, README, validation.txt, swipe-run.md and topic plan/step. Source tests 23 PASS, strict build PASS, actual runtime CUA two-direction automated check PASS. Human effective displacement exposed a failure; post-fix human repeat pending. Previous engineering review predates this correction; do not imply it reviewed this diff.

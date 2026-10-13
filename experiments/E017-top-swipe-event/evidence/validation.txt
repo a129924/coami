@@ -198,3 +198,11 @@ Independent Reviewer: two P2 provenance findings resolved; final bounded code re
 
 Git staged whitespace check: source files PASS; unified .patch context blank lines contain required leading space, excluded from outer diff --check. git apply --check passed on clean pinned scratch during final build.
 Commit hook: lefthook not on PATH, hook validation not claimed; no hook/tool installation or bypass configuration.
+
+2026-10-13 human-discovered FIFO fix (feature worktree only)
+RED: added high-rate slow drag + retained-extremum cases; 20 pass / 2 fail on old input.
+GREEN: 23 tests pass, including operator operation 7 raw trajectory replay (automated regression, not human PASS).
+Strict typecheck and Vite build PASS; existing large chunk warning remains.
+CUA actual browser raw pointer: forwardSwipe count1, backwardSwipe count2, ready after release; runtime-coalesced-automated.json.
+Historical automated 17-case suite not rerun; new result is the two CUA directions and 23 source/SDK tests only.
+Human original failure retained; post-fix human acceptance pending. Original SDK/runtime/MOD unchanged.

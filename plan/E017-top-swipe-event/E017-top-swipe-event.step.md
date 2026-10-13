@@ -44,3 +44,7 @@ No observer-filled human PASS. Overall experimental hypothesis: cannot determine
 
 ## Human handoff
 Draft PR #17: https://github.com/a129924/coami/pull/17. Feature branch pushed; dev worktree clean. Stop at human review. TC-HUMAN remains unexecuted; no merge or release.
+
+## Bounded correction after human operation 7
+
+In-Scope: existing high-rate continuous input and evidence. Out-Of-Scope / ReadOnly / Deleted / Non-Goal: baseline. Written: human-session-6.json, human-session-6-overflow.json, runtime-coalesced-automated.json. Modify: input.ts/input.test.ts/index.html, README/validation/swipe-run, topic plan/step. Goal: preserve SDK displacement recognition without monotonic input backlog. TestCase: red 20/22 → green 23/23, strict build, original operator trajectory automatic regression, CUA automated forward/backward MOD counts1/2; post-fix human pending. Original reviewer approval predates correction and does not cover this diff.

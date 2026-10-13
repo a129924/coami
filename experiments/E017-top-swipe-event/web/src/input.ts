@@ -37,9 +37,14 @@ export class TopSwipeInput {
     this.lastTicks = Math.max(this.lastTicks, Math.floor(this.clock()))
     return this.lastTicks
   }
-  private enqueue(sample: number[], phase: Entry['phase']): Entry {
+  private enqueue(sample: number[], phase: Entry['phase'], replaceTail = false): Entry {
     const entry: Entry = { sample, phase, meta: { session: this.session, operation: this.operation,
       sampleId: ++this.sequence, ticks: this.ticks(), terminal: phase === 'zero', queued: true } }
+    if (replaceTail) {
+      const replaced = this.queue.pop()!
+      this.emit({ kind: 'coalesced', session: this.session, sampleId: replaced.meta.sampleId,
+        replacementSampleId: entry.meta.sampleId })
+    }
     this.queue.push(entry)
     this.emit({ kind: 'raw', ...entry })
     return entry
@@ -60,8 +65,16 @@ export class TopSwipeInput {
   }
   move(pointerId: number, position: number): void {
     if (this.state !== 'active' || pointerId !== this.pointer) return
-    if (this.queue.length >= 128) { this.fail('input FIFO exceeded 128 entries'); return }
-    this.enqueue(positionSample(position), 'move')
+    const sample = positionSample(position)
+    const tail = this.queue.at(-1)
+    const previous = this.queue.at(-2) ?? this.current
+    const axis = (value: number[]) => value[2]! - value[0]!
+    // Keep press, every turning point, and the latest endpoint. Intermediate
+    // monotonic positions cannot change this SDK's displacement-based decision.
+    const replaceTail = tail?.phase === 'move'
+      && (axis(tail.sample) - axis(previous.sample)) * (axis(sample) - axis(tail.sample)) >= 0
+    if (!replaceTail && this.queue.length >= 128) { this.fail('input FIFO exceeded 128 entries'); return }
+    this.enqueue(sample, 'move', replaceTail)
   }
   end(pointerId: number): void {
     if (this.state !== 'active' || pointerId !== this.pointer) return

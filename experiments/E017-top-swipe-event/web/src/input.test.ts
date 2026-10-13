@@ -1,4 +1,5 @@
 import { test } from 'node:test'
+import { readFileSync } from 'node:fs'
 import assert from 'node:assert/strict'
 import { GestureRecognizer } from '../../../../vendor/stack-chan/firmware/host/modules/input/touch-panel-gesture.ts'
 import { TopSwipeInput, positionSample, type Tuple } from './input.ts'
@@ -111,14 +112,15 @@ test('wrong pointer and additional pointers cannot mutate active operation', () 
   assert.equal(r.input.pending, 1)
   assert.equal(r.input.state, 'active')
 })
-test('atomic sample metadata and FIFO timestamps; duplicate millisecond ticks are valid', () => {
+test('atomic metadata retains press, latest monotonic endpoint and terminal ordering', () => {
   const r = rig()
   r.input.begin(1, -100); r.time(12); r.input.move(1, 0); r.input.move(1, 100)
+  r.input.end(1)
   const a = r.poll(), b = r.poll(), c = r.poll()
   assert.deepEqual([a.meta.ticks,b.meta.ticks,c.meta.ticks], [0,12,12])
   assert.equal(a.meta.operation, c.meta.operation)
   assert.equal(new Set([a.meta.sampleId,b.meta.sampleId,c.meta.sampleId]).size, 3)
-  assert.deepEqual([a.sample,b.sample,c.sample], [[100,0,0],[0,100,0],[0,0,100]])
+  assert.deepEqual([a.sample,b.sample,c.sample], [[100,0,0],[0,0,100],[0,0,0]])
 })
 test('stale or pre-consumption zero acknowledgement cannot open the barrier', () => {
   const r = rig()
@@ -136,11 +138,60 @@ test('stale or pre-consumption zero acknowledgement cannot open the barrier', ()
 test('overflow supplies zero but remains error; runtime failure stays disabled', () => {
   const r = rig()
   r.input.begin(1, 0)
-  for (let i=0;i<128;i++) r.input.move(1, i%20)
+  for (let i=0;i<128;i++) r.input.move(1, i%2 === 0 ? 20 : -20)
   assert.equal(r.input.state, 'error')
   while (r.input.pending) r.poll()
   assert.equal(r.input.state, 'error')
   assert.equal(r.input.begin(2, 0), false)
   r.input.fail('runtime stopped')
   assert.equal(r.input.state, 'error')
+})
+
+test('120 Hz slow drag with 20 Hz SDK polling stays bounded and recognizes once', () => {
+  const r = rig()
+  r.input.begin(1, -60); r.poll()
+  for (let i = 1; i <= 600; i++) {
+    r.time(i * 8)
+    r.input.move(1, -60 + i / 5)
+    if (i % 6 === 0) r.poll()
+    assert.ok(r.input.pending <= 2)
+    assert.equal(r.input.state, 'active')
+  }
+  r.input.end(1)
+  while (r.input.pending) r.poll()
+  assert.equal(r.input.state, 'ready')
+  assert.deepEqual(r.events.map(e => e.gesture), ['press', 'forwardSwipe', 'release'])
+})
+
+test('compression retains reversal extrema and the SDK strict threshold', () => {
+  const r = rig()
+  r.input.begin(1, 0)
+  for (let p = 1; p <= 61; p++) r.input.move(1, p)
+  for (let p = 60; p >= -20; p--) r.input.move(1, p)
+  r.input.end(1)
+  while (r.input.pending) r.poll()
+  assert.deepEqual(r.events.map(e => e.gesture), ['press', 'forwardSwipe', 'release'])
+})
+
+// Automated regression using the operator's raw trajectory; not new human evidence.
+test('human operation 7 raw trajectory survives SDK cadence without overflow', () => {
+  const trace = JSON.parse(readFileSync(new URL('../../evidence/human-session-6-overflow.json', import.meta.url), 'utf8')) as {
+    records: { kind: string; sample?: number[]; meta?: { operation: number; ticks: number; terminal: boolean } }[]
+  }
+  const records = trace.records.filter(record => record.kind === 'raw' && record.meta?.operation === 7)
+  const r = rig()
+  let nextPoll = records[0]!.meta!.ticks + 50
+  let first = true
+  for (const record of records) {
+    const meta = record.meta!, sample = record.sample!
+    while (nextPoll <= meta.ticks) { r.time(nextPoll); r.poll(); nextPoll += 50 }
+    r.time(meta.ticks)
+    const position = sample[2]! - sample[0]!
+    if (first) { r.input.begin(1, position); first = false }
+    else if (meta.terminal) r.input.end(1)
+    else r.input.move(1, position)
+  }
+  while (r.input.pending) r.poll()
+  assert.equal(r.input.state, 'ready')
+  assert.deepEqual(r.events.map(event => event.gesture), ['press', 'forwardSwipe', 'release'])
 })

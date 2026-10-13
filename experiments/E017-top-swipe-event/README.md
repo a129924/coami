@@ -53,7 +53,7 @@ npm run dev -- --port 5187
 人工程序（全部結果填 evidence/swipe-run.md）：
 
 1. 打開 localhost，等待 ready。確認方向提示、runtime來源與 count=0；MOD ready 之後新 zero acknowledgement 才允許輸入。
-2. 左→右3次、右→左3次；每次等 ready 再操作。逐筆核對 MOD gesture、session/operation/sample、UI direction/count。
+2. 在觸控帶內從 20% 拖至 80%（反向為 80% → 20%）；Swipe 需位移嚴格大於 60，即帶寬 30%。左→右3次、右→左3次；每次等 ready 再操作。逐筆核對 MOD gesture、session/operation/sample、UI direction/count。
 3. 一次滑動後持續按住，來回移動並放開；仍只有一次 Swipe。再做兩次獨立滑動，各增一次。
 4. 輕點、少量移動（例如10px）與長按不移動；沒有 Swipe。press/release 不算誤報。
 5. 門檻前取消／移出，不增 Swipe；已辨識後取消保留一次。取消後重做有效滑動，確認無殘留事件。
@@ -69,9 +69,9 @@ CHROME_EXE／E017_URL 可指定既有 Chrome 與 localhost URL。測試不注入
 
 ## 是否成功
 
-- 整體實驗狀態：**無法判定**，真人案例尚未執行；不能宣稱完整假設成立。
+- 整體實驗狀態：**無法判定**，真人有效位移已暴露 FIFO overflow；修正後真人重測未完成，不能宣稱完整假設成立。
 - 本輪 bounded code review 已通過；工程交付與 human review 準備狀態以 step、validation 與 PR handoff 為準；與整體假設是否成功分開。
-- 純測試／mock-native SDK ordering 已執行；C/WASM browser 自動操作17案例全部PASS、12次Swipe；結果見 runtime-automated.json。真人項目一律保持未執行。
+- 純測試／mock-native SDK ordering 已執行；C/WASM browser 自動操作17案例全部PASS、12次Swipe；結果見 runtime-automated.json。真人首次失敗與修正後待重測詳見 swipe-run.md。修正後23項 source tests、strict build 與 CUA 自動雙向操作通過；後者見 runtime-coalesced-automated.json。
 
 ## 結果與證據
 
@@ -87,3 +87,5 @@ CHROME_EXE／E017_URL 可指定既有 Chrome 與 localhost URL。測試不注入
 本輪保留原 SDK recognizer，建立 raw input、同筆 XS metadata、MOD-only count 與 zero consumed barrier。工程證據支持已執行的測試條件；真人、硬體、跨瀏覽器品質與 production 採用均無通過結論。
 
 所有新增檔案限 E017 與其 topic plan；PR Lens 產物在外部本機目錄。停止於 Draft PR／human review，不 merge、不 release。
+
+高頻 pointer 修正：輸入佇列保留 press、轉折與最新單方向端點，合併尚未消費的中間 move，避免 120Hz pointer 堵塞 20Hz SDK；coalesced trace 明列 replacement sampleId。不調整 SDK 手勢門檻。
