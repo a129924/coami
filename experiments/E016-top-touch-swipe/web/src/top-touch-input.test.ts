@@ -24,10 +24,14 @@ test('TC04 raw mapping endpoint/midpoint, clamp and SDK exact boundaries', () =>
   assert.deepEqual(positionSample(.5), [0, 100, 0])
   assert.deepEqual(positionSample(1), [0, 0, 100])
   assert.deepEqual(positionSample(-2), [100, 0, 0])
-  for (const end of [.3, .7]) {
+  for (const end of [.2, .8]) {
+    const channels = positionSample(end)
+    assert.equal(Math.abs(channels[2]! - channels[0]!), 60, 'fixture must reach exactly ±60 from center')
     const r = new GestureRecognizer()
     r.update(positionSample(.5), 0)
     assert.equal(r.update(positionSample(end), 10), undefined)
+    const beyond = end < .5 ? .19 : .81
+    assert.equal(r.update(positionSample(beyond), 20)?.type, end < .5 ? 'backwardSwipe' : 'forwardSwipe')
   }
 })
 
@@ -88,7 +92,7 @@ test('TC05/07 idle holds sample, metadata is atomic through complete ack', () =>
   h.input.beginSample(); assert.equal(h.input.ticks(), 26); h.input.completeSample()
 })
 
-test('TC05 unavailable/initializing, extra pointer, overflow and ack timeout are explicit', () => {
+test('TC05 initializing, extra pointer, overflow and ack timeout are explicit', () => {
   const input = new TopTouchInput(1, 2)
   assert.equal(input.down(1, true, 0, 0), false)
   input.setReady()
