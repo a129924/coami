@@ -57,3 +57,11 @@ A cleanup failure discards the result and enters a non-startable `blocked` UI st
 ### Bounded startup correction — 2026-10-13
 
 Owner live attempt stopped before camera permission with installed timeout (5 秒), zero pairs/captures/tracks. Pinned firmware host/app/default-behavior/wasm/on-launch.ts deliberately shows an 8000ms splash; simulator-engine.mjs already permits firmware-ready for 30 seconds. E015 runtime-installed readiness now uses the same 30-second bound, while probe/camera-start/frame waits and recording finalization remain 5 seconds. Preserve early readiness signals and invalidate pending signals on close. This is an adapter startup correction, not relaxed recording acceptance.
+
+### PR comment correction — pending setup cleanup
+
+PR #15 review threads discussion_r4255232408 (P1) and discussion_r4255232413 (P2) expose violations of the existing Idle-only-after-cleanup contract. Cancelling while openRun/getUserMedia is unresolved invalidates publication immediately but enters a non-startable Cancelling state. Start/End/Cancel are disabled while the old open settles. A late Run is cleaned before returning Idle; a clean rejected open may return Idle, while any late cleanup failure becomes sticky Blocked until reload. Repeated cancel/dispose cannot bypass that pending-open barrier or reset Blocked. There is no safe timeout that would permit overlapping camera acquisition while permission remains unresolved.
+
+Initialization failure followed by cleanup failure must cross the browser-runtime/session boundary as CleanupFailure, preserving both error messages even when no Run was returned. E015 also retains acquired MediaStream references independently of the vendor fallback path and attempts/verifies every acquired track's release, including late streams after cancellation. E008/vendor source and recording acceptance criteria are unchanged.
+
+Pure regression evidence covers pending cancellation/restart, late resolve/reject, late cleanup failure, sticky blocking, setup cleanup classification and track release. Prior owner recordings are historical evidence from commit 1114059, not live validation of these subsequent fixes.

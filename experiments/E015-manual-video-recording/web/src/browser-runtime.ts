@@ -2,7 +2,7 @@ import { SimulatorEngine } from '../../../../vendor/stack-chan/web/src/services/
 import { createObservedCameraBridge, digestBytes, type ObservedBridge } from '../../../E008-camera-input/web/src/camera-observer.ts'
 import type { ModFrame } from '../../../E008-camera-input/web/src/capture-ledger.ts'
 import { CapturePump, RuntimeSignals, asError } from './capture-pump.ts'
-import { guardRecorderCreation, type RecorderEvents, type RecorderPort, type Run, type Playback } from './recording-session.ts'
+import { CleanupFailure, guardRecorderCreation, releaseCameraStream, rethrowAfterSetupCleanup, type RecorderEvents, type RecorderPort, type Run, type Playback } from './recording-session.ts'
 
 type Elements = { viewport: HTMLCanvasElement; screen: HTMLCanvasElement; canvas: HTMLCanvasElement;
   player: HTMLVideoElement; evidence(message: string): void }
@@ -35,16 +35,30 @@ export class BrowserRuntime {
     let closed = false, pairs = 0
     let cleanupFailure: Error | null = null
     const digests = new Set<string>()
+    const cameraStreams = new Set<MediaStream>()
     const readiness = new RuntimeSignals()
     const observer = createObservedCameraBridge({ videoElement: video, canvasElement: sourceCanvas,
+      navigatorObj: { mediaDevices: { getUserMedia: async (constraints: MediaStreamConstraints) => {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints)
+        cameraStreams.add(stream)
+        return stream
+      } } },
       onCapture: (record) => pump.host(record) })
     const pump = new CapturePump({ capture: (options) => observer.bridge.capture(options),
       request: () => engine!.pushButton('c'), onFailure: failed })
+    const releaseCamera = () => {
+      const errors: string[] = []
+      for (const action of [() => observer.bridge.stop(), ...Array.from(cameraStreams,
+        (stream) => () => releaseCameraStream(stream))]) {
+        try { action() } catch (error) { errors.push(asError(error).message) }
+      }
+      if (errors.length) throw new CleanupFailure(errors.join('; '))
+    }
     const bridge: ObservedBridge = { ...observer.bridge,
       start: async (options) => {
         if (closed) throw Error('camera run cancelled')
         await observer.bridge.start(options)
-        if (closed) observer.bridge.stop()
+        if (closed) rethrowAfterSetupCleanup(Error('camera run cancelled'), releaseCamera)
       }, capture: (options) => pump.capture(options) }
     const cleanup = () => {
       if (closed) { if (cleanupFailure) throw cleanupFailure; return }
@@ -52,7 +66,7 @@ export class BrowserRuntime {
       signal.removeEventListener('abort', onAbort)
       readiness.close(Error('run cancelled'))
       const errors: string[] = []
-      for (const action of [() => observer.bridge.stop(), () => engine?.dispose()]) {
+      for (const action of [releaseCamera, () => engine?.dispose()]) {
         try { action() } catch (error) { errors.push(asError(error).message) }
       }
       const states = observer.trackStates()
@@ -61,7 +75,7 @@ export class BrowserRuntime {
       // No frames/pixels are retained in the evidence transcript.
       setTimeout(() => this.elements.evidence(`停止後 250ms：captures=${observer.captureCount()}, stationary=${count === observer.captureCount()}`), 250)
       if (states.some((state) => state !== 'ended')) errors.push('webcam track not ended')
-      if (errors.length) { cleanupFailure = Error(errors.join('; ')); throw cleanupFailure }
+      if (errors.length) { cleanupFailure = new CleanupFailure(errors.join('; ')); throw cleanupFailure }
     }
     const onAbort = () => { try { cleanup() } catch (error) { cleanupFailure = asError(error) } }
     signal.addEventListener('abort', onAbort, { once: true })
@@ -124,8 +138,7 @@ export class BrowserRuntime {
       }
       return { first: capture, next: capture, cleanup }
     } catch (error) {
-      try { cleanup() } catch (cleanupError) { throw Error(`${asError(error).message}; ${asError(cleanupError).message}`) }
-      throw error
+      rethrowAfterSetupCleanup(error, cleanup)
     }
   }
 

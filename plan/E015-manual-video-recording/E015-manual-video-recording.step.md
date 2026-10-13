@@ -80,3 +80,7 @@ created: 2026-10-13
 ## Owner live validation update — 2026-10-13
 
 Owner exercised short/long end and replay, cancel/restart, Starting cancellation, repeated Start/Cancel, blocked permission and active permission revocation. Metadata and owner motion/isolation/no-output confirmations are preserved in experiments/E015-manual-video-recording/evidence/recording-run.md. This bounded validation/reporting round is complete; the full fixed hypothesis remains 無法判定 because the long segment's original zero-audio event was truncated. This updates live evidence only, not workflow gate approval, merge authorization or checkbox completion. Draft PR remains open for human review.
+
+## PR comment review and fix update — 2026-10-13
+
+Owner authorized Ready for review, then pr-comment-review-and-fix → commit → push → resolve threads. Two Codex findings were accepted as necessary cleanup lifecycle fixes; decisions and verification are in review-log.md. This is an in-scope post-review correction, not workflow gate approval or merge permission. PR remains Ready for human review, with the long-segment audio evidence limitation preserved.

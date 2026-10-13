@@ -171,3 +171,15 @@ Pinned source: host/app/default-behavior/wasm/on-launch.ts SPLASH_VISIBLE_MS=800
 Regression RED: fake 8-second startup settled early at 5 seconds (true!==false); timeout was 5000 rather than 30000.
 GREEN: 20/20 pure tests PASS, independently rerun. Strict typecheck and web build PASS.
 Installed readiness now 30 seconds; probe/camera-start/frame/finalization remain 5 seconds. No vendor change or runtime rebuild needed for this host-only correction. Owner rerun pending; recording feasibility not established.
+
+2026-10-13 PR #15 comment review and fix (feature worktree only)
+Reviewed head: 1114059139e6389d928c31f386e62a9894853cef
+Threads: PRRT_kwDOUk-3EM6ruoJz (P1), PRRT_kwDOUk-3EM6ruoJ3 (P2)
+RED npm test: 25 tests, 19 pass / 6 fail. Pending cancellation prematurely Idle; late cleanup failures not Blocked; setup-cleanup guard absent.
+Intermediate GREEN npm test: 25/25.
+Additional RED npm test: 27 tests, 24 pass / 3 fail. dispose reset Blocked and independent acquired-track cleanup missing.
+Final GREEN npm test: 27/27, no skips/cancellations.
+npm run build: PASS; includes strict web and MOD tsc checks, then Vite build.
+Vite: existing >500kB chunk warning only; no build failure.
+git diff --check: PASS.
+No new human capture, image/video persistence, vendor/E008 changes or SDK/runtime rebuild.

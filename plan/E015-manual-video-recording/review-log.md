@@ -36,3 +36,12 @@ Owner explicitly accepted the plan and directed: create feature worktree, implem
 Owner's two Start attempts timed out before camera permission. Pinned WASM default splash is 8000ms; E015 previously bounded installed readiness at 5000ms. The isolated adapter correction uses the engine's existing 30000ms startup bound, preserves early/late signal isolation and leaves frame/probe/camera-start/finalization 5000ms criteria unchanged. Vendor/old topics are unchanged.
 
 Independent Reviewer (`/root/code_reviewer`) reread source and adapter wiring, repeated **20/20 pure tests**, and returned **approved, no new blocker**. Tests first reproduced early settlement at 5s and 5000!=30000, then passed. Owner rerun is still required; current live classification is 無法判定. This is the single bounded correction for the current live attempt.
+
+## PR comment review and fix — 2026-10-13
+
+Owner explicitly requested this step plus commit, push, replies and thread resolution; no per-message commit approval needed. PR #15 is OPEN and Ready for review, head 1114059 at intake. All review threads/comments were retrieved (pagination complete); Copilot reported quota exhaustion, not a code finding. Two unresolved Codex findings are necessary fixes:
+
+- P1 https://github.com/a129924/coami/pull/15#discussion_r4255232408 : accepted. Starting cancellation must retain a non-startable pending-open barrier, clean a late Run and block on late cleanup failure. Adds Cancelling UI state under the existing Idle-only-after-cleanup contract; repeated actions/dispose cannot bypass it.
+- P2 https://github.com/a129924/coami/pull/15#discussion_r4255232413 : accepted. Setup cleanup failures cross the boundary as CleanupFailure with initialization and cleanup messages retained, even before any Run is assigned. Acquired streams are owned/verified by E015 to avoid vendor fallback swallowing late stop failures.
+
+Main Agent performed bounded implementation and self-verification, not an independent approval. TDD first reproduced failures, then final 27/27 pure tests passed. Strict web/MOD typecheck, Vite build and diff checks passed; existing chunk warning persists. Only E015 code/docs modified. Prior human runs are from 1114059 and were not repeated for the new revision. Full hypothesis remains inconclusive due the preserved long-segment audio attestation gap. Both threads will receive the pushed fix commit and validation details before resolution; no nonessential code suggestion was found. Human review/merge remains a separate stop.

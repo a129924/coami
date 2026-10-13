@@ -47,7 +47,7 @@ npm run dev
 2. TC1：開始後等待「錄影中」，移動測試物，約3秒按結束；播放到底，記動作順序、配對digests、錄製時間與ended時間。
 3. TC2：換順序錄約8秒，確認只有新段內容，記同樣資料與長度差。開始新段會清前段結果。
 4. TC3：錄約3秒取消，確認無影片、tracks ended、250ms計數靜止；TC4：重開約3秒結束回放，沒有取消段。
-5. TC5：權限拒絕、Starting取消、快速重複按鈕、camera track中斷，記原因與清理。Finalizing三按鈕停用；「暫停」語意是結束，不支援pause/resume。
+5. TC5：權限拒絕、Starting取消、快速重複按鈕、camera track中斷，記原因與清理。Starting取消若仍等待開啟／權限結果，會顯示正在取消並停用按鈕，待原開啟settle且清理成功才回idle；清理失敗維持blocked直到reload。Finalizing三按鈕停用；「暫停」語意是結束，不支援pause/resume。
 6. 在 `evidence/recording-run.md` 逐案寫實際環境、時間、metadata、具名人工觀察及限制；未做項保持pending。不要保存影片、截圖或raw pixels。
 
 工程局部驗證、實際約5.9秒與29.5秒的錄製／完整回放、取消清理及取消後重開輸出已有證據；實際命令見 `evidence/validation.txt`，owner transcript見 `evidence/recording-run.md`。Starting取消及快速重複開始／取消也已觀測；權限拒絕也已觀測（NotAllowedError、無輸出、回idle）；錄影中撤銷本站權限已觸發camera track ended、丟棄片段並清理；owner已確認動作一致、無舊段／取消段內容，以及取消無輸出。
@@ -71,4 +71,6 @@ npm run dev
 
 本輪操作與報告完成，下一步是human review。長段原始零音軌事件已截斷，不能憑其他片段補造，完整假設仍無法判定；不因此核准正式採用。保留原始操作範例與實際輸入偏差，不事後改判準。測試後請將本站相機權限恢復原設定。
 
-此為無聲、低解析度、指定simulator／browser的有限實驗；不保證fps、跨瀏覽器、真機或正式採用。Draft PR停在人類審查，不merge、不release。
+此為無聲、低解析度、指定simulator／browser的有限實驗；不保證fps、跨瀏覽器、真機或正式採用。PR已Ready for review，停在人類審查，不merge、不release。
+
+PR review follow-up：人工紀錄屬1114059版本；其後P1/P2清理競態修正已以27項pure tests、strict web/MOD typecheck及Vite build驗證，未宣稱重新執行真人錄影。詳見technical-spec的pending setup cleanup段落與review-log。

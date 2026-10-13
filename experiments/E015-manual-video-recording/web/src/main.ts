@@ -12,7 +12,7 @@ function evidence(message: string): void {
 }
 const runtime = new BrowserRuntime({ viewport: $<HTMLCanvasElement>('#viewport'), screen: $<HTMLCanvasElement>('#screen'),
   canvas: $<HTMLCanvasElement>('#recording'), player, evidence })
-const labels = { idle: '準備開始', starting: '正在準備相機（啟動約需 8 秒）…', recording: '錄影中', finalizing: '正在產生影片…', ready: '影片已就緒', blocked: '資源清理未完成，請重新整理頁面' }
+const labels = { idle: '準備開始', starting: '正在準備相機（啟動約需 8 秒）…', cancelling: '正在取消，等待相機開啟與清理完成…', recording: '錄影中', finalizing: '正在產生影片…', ready: '影片已就緒', blocked: '資源清理未完成，請重新整理頁面' }
 let previous = ''
 const session = new RecordingSession({ now: () => performance.now(),
   schedule: (callback, ms) => window.setTimeout(callback, ms), unschedule: (id) => window.clearTimeout(id),
@@ -22,7 +22,7 @@ function refresh(): void {
   start.disabled = session.state !== 'idle' && session.state !== 'ready'
   stop.disabled = session.state !== 'recording'
   cancel.disabled = session.state !== 'starting' && session.state !== 'recording'
-  status.textContent = session.error || labels[session.state]
+  status.textContent = session.state === 'cancelling' ? labels.cancelling : session.error || labels[session.state]
   player.hidden = session.state !== 'ready'
   result.textContent = session.state === 'ready' ? `錄製 ${(session.durationMs / 1000).toFixed(2)} 秒 · ${session.bytes} bytes` : ''
   if (previous !== session.state) {

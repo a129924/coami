@@ -1,4 +1,4 @@
-export type State = 'idle' | 'starting' | 'recording' | 'finalizing' | 'ready' | 'blocked'
+export type State = 'idle' | 'starting' | 'cancelling' | 'recording' | 'finalizing' | 'ready' | 'blocked'
 export type Run = { first(): Promise<void>; next(): Promise<void>; cleanup(): void }
 export type Playback = { dispose(): void }
 export type RecorderEvents = { started(): void; data(blob: Blob): void; stopped(): void; error(error: Error): void }
@@ -14,7 +14,7 @@ export type SessionPorts = {
   changed(): void
 }
 type Session = { capture: AbortController; final: AbortController; run?: Run; recorder?: RecorderPort;
-  chunks: Blob[]; timers: Set<number>; cleaned: boolean; stopped: boolean; loading: boolean; playback?: Playback }
+  chunks: Blob[]; timers: Set<number>; opening: boolean; cleaned: boolean; stopped: boolean; loading: boolean; playback?: Playback }
 
 export class RecordingSession {
   state: State = 'idle'
@@ -23,6 +23,7 @@ export class RecordingSession {
   bytes = 0
   private startedAt = 0
   private current: Session | null = null
+  private pendingDiscard: { session: Session; cleanupFailed: boolean } | null = null
   private readonly ports: SessionPorts
   constructor(ports: SessionPorts) { this.ports = ports }
 
@@ -34,7 +35,7 @@ export class RecordingSession {
     this.ports.clear()
     this.error = ''; this.durationMs = 0; this.bytes = 0
     const s: Session = { capture: new AbortController(), final: new AbortController(), chunks: [],
-      timers: new Set(), cleaned: false, stopped: false, loading: false }
+      timers: new Set(), opening: true, cleaned: false, stopped: false, loading: false }
     this.current = s; this.setState('starting')
     void this.prepare(s)
   }
@@ -42,7 +43,13 @@ export class RecordingSession {
   private async prepare(s: Session): Promise<void> {
     try {
       const run = await this.ports.openRun(s.capture.signal, (error) => this.fail(s, error))
-      if (!this.is(s) || s.capture.signal.aborted) { run.cleanup(); return }
+      s.opening = false
+      if (!this.is(s) || s.capture.signal.aborted) {
+        let cleanupError: Error | undefined
+        try { run.cleanup() } catch (error) { cleanupError = asError(error) }
+        this.finishPendingDiscard(s, cleanupError)
+        return
+      }
       s.run = run
       await run.first()
       if (!this.is(s) || s.capture.signal.aborted) return
@@ -64,7 +71,12 @@ export class RecordingSession {
       s.recorder.start()
       // A recorder that never emits start must not leave the page stuck in Starting.
       this.timer(s, 5000, () => { if (this.state === 'starting') this.fail(s, Error('recorder start timeout')) })
-    } catch (error) { this.fail(s, asError(error)) }
+    } catch (error) {
+      s.opening = false
+      if (this.pendingDiscard?.session === s) {
+        this.finishPendingDiscard(s, error instanceof CleanupFailure ? error : undefined)
+      } else this.fail(s, asError(error))
+    }
   }
 
   private pump(s: Session): void {
@@ -115,6 +127,8 @@ export class RecordingSession {
     if (this.is(s) && this.state !== 'ready') this.discard(error.message, error instanceof CleanupFailure)
   }
   private discard(message: string, cleanupFailed = false): void {
+    if (this.pendingDiscard) return // Repeated cancel/dispose cannot release the pending-open barrier.
+    cleanupFailed ||= this.state === 'blocked'
     const s = this.current
     this.current = null // Invalidate before stop can synchronously call back.
     this.error = message
@@ -123,6 +137,21 @@ export class RecordingSession {
     }
     try { this.ports.clear() } catch (error) { cleanupFailed = true; this.error += `; ${asError(error).message}` }
     this.bytes = 0
+    if (s?.opening) {
+      this.pendingDiscard = { session: s, cleanupFailed }
+      this.setState('cancelling')
+      return
+    }
+    this.completeDiscard(cleanupFailed)
+  }
+  private finishPendingDiscard(s: Session, error?: Error): void {
+    const pending = this.pendingDiscard
+    if (pending?.session !== s) return
+    this.pendingDiscard = null
+    if (error) this.error += `; ${error.message}`
+    this.completeDiscard(pending.cleanupFailed || !!error)
+  }
+  private completeDiscard(cleanupFailed: boolean): void {
     if (cleanupFailed) this.error += '；資源清理未完成，請重新整理頁面'
     this.setState(cleanupFailed ? 'blocked' : 'idle')
   }
@@ -152,6 +181,24 @@ export class RecordingSession {
 function asError(value: unknown): Error { return value instanceof Error ? value : Error(String(value)) }
 
 export class CleanupFailure extends Error {}
+
+/** Own acquired streams independently of the vendor's fallback/error handling. */
+export function releaseCameraStream(stream: { getTracks(): { stop(): void; readyState: string }[] }): void {
+  const errors: string[] = []
+  const tracks = stream.getTracks()
+  for (const track of tracks) {
+    try { track.stop() } catch (error) { errors.push(asError(error).message) }
+  }
+  if (tracks.some((track) => track.readyState !== 'ended')) errors.push('webcam track not ended')
+  if (errors.length) throw new CleanupFailure(errors.join('; '))
+}
+
+/** Preserve unproved resource release even when setup failed before returning a Run. */
+export function rethrowAfterSetupCleanup(error: unknown, cleanup: () => void): never {
+  try { cleanup() }
+  catch (cleanupError) { throw new CleanupFailure(`${asError(error).message}; cleanup: ${asError(cleanupError).message}`) }
+  throw error
+}
 
 /** Constructor failure owns a stream even though no recorder port exists yet. */
 export function guardRecorderCreation<T>(stream: { getTracks(): { stop(): void }[] }, create: () => T): T {
