@@ -11,7 +11,7 @@ created: 2026-10-13
 
 | Current status | Allowed next transitions | Next actor |
 | --- | --- | --- |
-| publish-in-progress | pr-open | Main Agent |
+| pr-open | needs-rework or merged | Human Reviewer |
 
 ## Actionable Steps
 
@@ -38,11 +38,11 @@ created: 2026-10-13
 
 - [X] **Actor:** Main Agent — **Action:** Validate the approved Written set and perform bounded staging only.
 - [X] **Actor:** Main Agent — **Action:** Obtain explicit human approval at STOP POINT 1 before commit, push, or PR creation.
-- [ ] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
-- [ ] **Actor:** Main Agent — **Action:** Push the topic branch.
-- [ ] **Actor:** Main Agent — **Action:** Open the pull request.
-- [ ] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
-- [ ] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
+- [X] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
+- [X] **Actor:** Main Agent — **Action:** Push the topic branch.
+- [X] **Actor:** Main Agent — **Action:** Open the pull request.
+- [X] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
+- [X] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
 - [ ] **Actor:** Main Agent — **Action:** Record exact human merge evidence after a new execution begins.
 - [ ] **Actor:** Main Agent — **Action:** Require a new explicit human resume before post-merge work.
 - [ ] **Actor:** Main Agent — **Action:** Verify the pull request is merged.
@@ -168,3 +168,7 @@ created: 2026-10-13
 | Goal | 完成 bounded navigation、Archify、實際 diff PR Lens 與 TC-AUX 紀錄；未成功明記 auxiliary incomplete。 | Bounded aids attempted; Archify visual partial, PR Lens PASS, Graphify source fallback. |
 | Non-Goal | Source plan Scope/Non-Goal; bounded to step 7. | No audible-content/Chinese/hardware/production PASS claim. |
 | TestCase | TC-AUX | TC-AUX: auxiliary.md; partial Archify explicitly recorded. |
+
+## Human Review Handoff
+
+Draft PR #18: https://github.com/a129924/coami/pull/18. Source implementation commit83803f9; branch pushed, PR Draft verified. Reviewer/Tester code gates PASS, human listening unexecuted. Main Agent stops before merge; all post-merge/resume/cleanup rows intentionally pending. No human merge/close evidence exists.

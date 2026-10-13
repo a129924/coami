@@ -52,9 +52,9 @@ SDK 合成、bridge 觀察、session 結果、真人聽辨，各層證據不互�
 
 ## Status / Allowed Transitions
 
-- **Current**: `publish-in-progress`
-- **Next actor**: `Main Agent`
-- **Stage-local action**: 依 owner 授權 commit、push、建立 Draft PR，停於 human review，不 merge。
+- **Current**: `pr-open`
+- **Next actor**: `Human Reviewer`
+- **Stage-local action**: Review Draft PR #18；依 README 進行真人聽辨並回報 evidence。Agent 停止，不 merge。
 - **Execution model**: Plan review -> preflight -> Implementer -> Tester -> independent Reviewer -> topic commit/push/Draft PR -> human review；不 merge。
 - **Allowed transitions**: planned -> creator-in-progress; creator-in-progress -> review-ready; review-ready -> reviewer-in-progress; reviewer-in-progress -> approved | needs-rework; needs-rework -> creator-in-progress; approved -> creator-in-progress | publish-in-progress; publish-in-progress -> pr-open | merged; pr-open -> needs-rework | merged; merged -> terminal。
 - Review readiness 只涵蓋程式交付。真人未驗證維持 human-check；runtime/provenance 不成立記 blocked，不猜測成功。Aux failure 不覆寫 TTS 判定。

@@ -31,3 +31,12 @@ Tester noted dynamic vendor imports preceded MOD invalidation. Bounded script fi
 Reviewer approved bounded code/evidence publishing as Draft PR; no remaining blocker. Verified27 scoped paths, truthful human-check, partial Archify, staged PR Lens provenance and permitted Graphify fallback. Minor archive guard moved before dynamic imports after Tester observation; real MOD rebuild PASS, no source/runtime behavior changed.
 
 Canonical progression: creator-in-progress -> review-ready -> reviewer-in-progress -> approved -> publish-in-progress. Explicit owner request authorizes topic commit/push/Draft PR without another message approval; stop at human review, no merge or cleanup. Bounded staged diff inspected under git-commit-convention.
+
+## Draft PR handoff
+
+- Feature commit83803f9ed2b47897efe51291ba3b39ff91b2334a; push origin/feat/andrew/e018-tts-action succeeded.
+- PR https://github.com/a129924/coami/pull/18; base dev, head feat/andrew/e018-tts-action, OPEN, isDraft=true confirmed via gh pr view.
+- Initial comments/reviews empty; CI checked, no failures observed (some runs still in progress at read time).
+- PR Lens real commit diff validate/render PASS; Graphify source fallback; Archify visual partial retained honestly.
+- Main Agent hands off for human review. Listening remains unexecuted. No merge, release, branch/worktree deletion or production adoption.
+- Canonical publish-in-progress -> pr-open; feature worktree retained. Documentation-only handoff commit records these completed actions.

@@ -21,3 +21,5 @@ No claim of correct audible content, Chinese support, hardware or production ado
 Auxiliary status is separate: see auxiliary.md.
 
 Independent Tester reran17tests/typecheck/build and implementation tracker gate: PASS. Audited trace/provenance/served hashes and dev/vendor cleanliness: PASS. Compiler/import failure archive guard statically reviewed; no deliberate failed-build injection performed.
+
+Publication: topic commit83803f9 pushed to origin/feat/andrew/e018-tts-action; Draft PR https://github.com/a129924/coami/pull/18 (base dev, isDraft true). Initial read: no comments/reviews; observed CI jobs succeeded or still running, no failure claimed. Git commit succeeded with existing hook warning "Can't find lefthook in PATH"; no hook bypass/config mutation, explicit validation ran independently.

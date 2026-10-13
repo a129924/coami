@@ -52,3 +52,7 @@ Manifest (actual output paths):
 }
 
 ```
+
+## Committed PR Lens snapshot
+
+Actual base d3eee648351837e391422e73c299cdae8d03a875 -> head83803f9ed2b47897efe51291ba3b39ff91b2334a. Actual git diff read; validate/render PASS. Graph SHA-256: d146266cfba8c7488925fc47f939057006f35202606faa8983fc26b566f0f321. SVG path read from manifest: tts-overview-light-33c12e82d8a46165c4fadde1f9d2ad66.svg. The earlier staged snapshot above is historical; final external graph may be refreshed to the documentation-only handoff commit without changing its code relationships. No assets uploaded.
