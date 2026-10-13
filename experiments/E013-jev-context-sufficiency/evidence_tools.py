@@ -297,6 +297,7 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
     previous_end: datetime | None = None
     previous_row: dict[str, Any] | None = None
     not_run_started = False
+    stopped = False
     for row in rows:
         if row.get("analysis_restricted") is True and allow_stubs:
             if set(row) != PUBLIC_STUB_KEYS:
@@ -306,6 +307,8 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
         status = row.get("status")
         if not isinstance(status, str) or status not in STATUSES:
             raise e.ContractError("INVALID_ANALYSIS_STATUS")
+        if stopped and status != "NOT_RUN":
+            raise e.ContractError("INVALID_ANALYSIS_SEQUENCE")
         if row.get("analysis_restricted") is not True and (
             not isinstance(row.get("expected"), str) or row["expected"] not in e.CHOICES
         ):
@@ -329,6 +332,12 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
         elif not_run_started:
             raise e.ContractError("INVALID_ANALYSIS_SEQUENCE")
         previous_row = row
+        if status == "UNKNOWN" or (
+            status == "ERROR"
+            and row.get("error_code") == "INTERNAL_ERROR"
+            and row.get("analysis_restricted") is not True
+        ):
+            stopped = True
         if row.get("analysis_restricted") is not None and not allow_stubs:
             raise e.ContractError("INVALID_RESTRICTED_ANALYSIS")
         if row.get("analysis_restricted") is True:
@@ -365,6 +374,11 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
         if status == "VALID" and (
             row.get("choice") not in e.CHOICES
             or not isinstance(row.get("probabilities"), dict)
+            or set(row["probabilities"]) != set(e.CHOICES)
+            or any(
+                type(value) not in (int, float)
+                for value in row["probabilities"].values()
+            )
             or type(row.get("confidence")) not in (int, float)
             or row.get("error_code") is not None
         ):
@@ -490,6 +504,11 @@ def metadata_gaps(
         ):
             raise ValueError
         if any(
+            not isinstance(policy.get(name), str) or not policy[name].strip()
+            for name in ("approved_by", "store_id", "agent_access")
+        ):
+            raise ValueError
+        if any(
             (
                 published
                 and not {
@@ -532,7 +551,20 @@ def manifest_identity_gap(manifest: dict[str, Any], *, published: bool) -> bool:
     )
 
 
-def summary_identity_gap(summary: dict[str, Any], run_id: str) -> bool:
+def summary_identity_gap(
+    summary: dict[str, Any], run_id: str, rows: list[dict[str, Any]]
+) -> bool:
+    try:
+        generated = datetime.fromisoformat(summary["generated_utc"])
+        last_end = max(
+            datetime.fromisoformat(row["ended_utc"])
+            for row in rows
+            if row.get("ended_utc") is not None
+        )
+        if generated < last_end:
+            return True
+    except (KeyError, TypeError, ValueError):
+        return True
     return (
         summary.get("run_id") != run_id
         or summary.get("evidence_status") != "local-unbacked-until-reviewed-git-export"
@@ -705,11 +737,10 @@ def response_gap(
             for field in (
                 "status",
                 "choice",
-                "probabilities",
                 "confidence",
                 "error_code",
             )
-        ):
+        ) or not same_json_value(row.get("probabilities"), parsed["probabilities"]):
             return "RAW_ANALYSIS_MISMATCH"
     elif row["status"] == "INVALID":
         if any(
@@ -908,7 +939,7 @@ def verify_local_run(
     if (
         not same_json_value(recorded.get("groups"), recalculated["groups"])
         or not same_json_value(recorded.get("complete"), recalculated["complete"])
-        or summary_identity_gap(recorded, run_id)
+        or summary_identity_gap(recorded, run_id, rows)
     ):
         gaps.append({"reason": "SUMMARY_MISMATCH"})
     return {
@@ -1539,7 +1570,7 @@ def verify_evidence(
                 or not same_json_value(
                     recorded.get("complete"), recalculated["complete"]
                 )
-                or summary_identity_gap(recorded, manifest.get("run_id"))
+                or summary_identity_gap(recorded, manifest.get("run_id"), full_rows)
             ):
                 gaps.append({"reason": "SUMMARY_MISMATCH"})
     result = {

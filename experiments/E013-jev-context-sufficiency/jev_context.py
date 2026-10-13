@@ -73,6 +73,8 @@ LOCAL_STORE_ROOT = Path("/Users/andrew/coami-evidence/E013")
 HISTORICAL_RUN_ID = "20261008T035450Z-010364d7"
 RUNNER_RELATIVE = Path("experiments/E013-jev-context-sufficiency/jev_context.py")
 LOCK_RELATIVE = RUNNER_RELATIVE.parent / "uv.lock"
+SDK_DIGESTS_RELATIVE = RUNNER_RELATIVE.parent / "sdk-code-digests.json"
+SDK_DIGESTS_SHA256 = "1cdbcc1ebd328cb07511b75dca90c3395e42f1349d4c819e8a9b03dd1c197206"
 POLICY_RELATIVE = Path(
     "experiments/E013-jev-context-sufficiency/local-store-policy.json"
 )
@@ -556,12 +558,28 @@ def validate_oracles(
                 raise ContractError("ORACLE_VALIDATION_FAILED")
 
 
-def verify_sdk_imports(lock_bytes: bytes) -> None:
-    """Bind loaded SDK dependency modules to locked, hashed venv files."""
+def verify_sdk_imports(lock_bytes: bytes, digest_snapshot: bytes | None = None) -> None:
+    """Bind loaded dependency files to independent, runner-pinned digests."""
     environment = (TOPIC / ".venv").resolve()
     if Path(sys.prefix).resolve() != environment or os.environ.get("PYTHONPATH"):
         raise ContractError("SDK_IMPORT_MISMATCH")
     try:
+        digest_bytes = (
+            (ROOT / SDK_DIGESTS_RELATIVE).read_bytes()
+            if digest_snapshot is None
+            else digest_snapshot
+        )
+        if sha(digest_bytes) != SDK_DIGESTS_SHA256:
+            raise ContractError("SDK_IMPORT_MISMATCH")
+        digests = json.loads(digest_bytes)
+        if (
+            not isinstance(digests, dict)
+            or set(digests) != {"lock_sha256", "files"}
+            or digests["lock_sha256"] != sha(lock_bytes)
+            or not isinstance(digests["files"], dict)
+            or json_bytes(digests) != digest_bytes
+        ):
+            raise ContractError("SDK_IMPORT_MISMATCH")
         locked = {
             item["name"]: item["version"]
             for item in tomllib.loads(lock_bytes.decode("utf-8"))["package"]
@@ -570,16 +588,21 @@ def verify_sdk_imports(lock_bytes: bytes) -> None:
         if (
             locked.get("typesafe-sdk") != SDK_VERSION
             or locked.get("httpx2") != HTTPX2_VERSION
+            or set(digests["files"]) != set(locked) - {"httpx2-jsfetch"}
         ):
             raise ContractError("SDK_IMPORT_MISMATCH")
         module_files: dict[str, set[Path]] = {}
         for package, expected_version in locked.items():
             if package == "httpx2-jsfetch" and sys.platform != "emscripten":
                 continue
+            expected_digests = digests["files"].get(package)
+            if not isinstance(expected_digests, dict) or not expected_digests:
+                raise ContractError("SDK_IMPORT_MISMATCH")
             installed = distribution(package)
             if installed.version != expected_version or installed.files is None:
                 raise ContractError("SDK_IMPORT_MISMATCH")
             found_code = False
+            seen: set[str] = set()
             for entry in installed.files:
                 if not (
                     entry.suffix == ".py"
@@ -595,21 +618,22 @@ def verify_sdk_imports(lock_bytes: bytes) -> None:
                     continue
                 record_hash = entry.hash
                 location = Path(installed.locate_file(entry)).resolve()
+                actual_sha = sha(location.read_bytes())
                 if (
                     record_hash is None
                     or record_hash.mode != "sha256"
                     or not location.is_relative_to(environment)
-                    or base64.urlsafe_b64encode(
-                        hashlib.sha256(location.read_bytes()).digest()
-                    )
+                    or base64.urlsafe_b64encode(bytes.fromhex(actual_sha))
                     .rstrip(b"=")
                     .decode("ascii")
                     != record_hash.value
+                    or expected_digests.get(str(entry)) != actual_sha
                 ):
                     raise ContractError("SDK_IMPORT_MISMATCH")
                 module_files.setdefault(top_level, set()).add(location)
+                seen.add(str(entry))
                 found_code = True
-            if not found_code:
+            if not found_code or seen != set(expected_digests):
                 raise ContractError("SDK_IMPORT_MISMATCH")
         if not {"typesafe_sdk", "httpx2"}.issubset(sys.modules):
             raise ContractError("SDK_IMPORT_MISMATCH")
@@ -639,7 +663,7 @@ def verify_sdk_imports(lock_bytes: bytes) -> None:
 
 
 def checked_executed_source(authorized_hash: str) -> bytes:
-    """Use only the byte snapshot compiled by the live launcher."""
+    """Use only the byte snapshot compiled by the isolated Python entry point."""
     source = EXECUTED_RUNNER_SOURCE
     if (
         source is None

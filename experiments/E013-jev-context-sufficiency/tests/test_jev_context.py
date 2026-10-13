@@ -210,6 +210,12 @@ source = { registry = "https://pypi.org/simple" }
             site = environment / "lib/python3.12/site-packages"
             packages = {}
             loaded = {}
+            digests: dict[str, dict[str, str]] = {}
+
+            class FakeEntry(SimpleNamespace):
+                def __str__(self) -> str:
+                    return "/".join(self.parts)
+
             for name, prefix, expected_version in (
                 ("typesafe-sdk", "typesafe_sdk", e.SDK_VERSION),
                 ("httpx2", "httpx2", e.HTTPX2_VERSION),
@@ -225,11 +231,12 @@ source = { registry = "https://pypi.org/simple" }
                     .rstrip(b"=")
                     .decode("ascii")
                 )
-                entry = SimpleNamespace(
+                entry = FakeEntry(
                     parts=(prefix, "__init__.py"),
                     suffix=".py",
                     hash=SimpleNamespace(mode="sha256", value=digest),
                 )
+                digests[name] = {str(entry): e.sha(location.read_bytes())}
                 packages[name] = SimpleNamespace(
                     version=expected_version,
                     files=[entry],
@@ -239,21 +246,43 @@ source = { registry = "https://pypi.org/simple" }
                 module.__loader__ = SourceFileLoader(prefix, str(location))
                 module.__spec__ = SimpleNamespace(origin=str(location))
                 loaded[prefix] = module
+            digest_bytes = e.json_bytes({"lock_sha256": e.sha(lock), "files": digests})
             with (
                 patch.object(e, "TOPIC", topic),
+                patch.object(e, "SDK_DIGESTS_SHA256", e.sha(digest_bytes)),
                 patch.object(e.sys, "prefix", str(environment)),
                 patch.object(e, "distribution", side_effect=packages.__getitem__),
                 patch.object(e.sys, "modules", loaded),
                 patch.dict(os.environ, {"PYTHONPATH": ""}),
             ):
-                e.verify_sdk_imports(lock)
+                e.verify_sdk_imports(lock, digest_bytes)
                 (site / "httpx2/__init__.py").write_bytes(b"modified source\n")
                 with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
-                    e.verify_sdk_imports(lock)
+                    e.verify_sdk_imports(lock, digest_bytes)
+
+                packages["httpx2"].files[0].hash.value = (
+                    base64.urlsafe_b64encode(
+                        hashlib.sha256(b"modified source\n").digest()
+                    )
+                    .rstrip(b"=")
+                    .decode("ascii")
+                )
+                with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
+                    e.verify_sdk_imports(lock, digest_bytes)
                 (site / "httpx2/__init__.py").write_bytes(b"verified source\n")
+                packages["httpx2"].files[0].hash.value = digest
                 loaded["pydantic"].__spec__.origin = str(topic / "pydantic.py")
                 with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
-                    e.verify_sdk_imports(lock)
+                    e.verify_sdk_imports(lock, digest_bytes)
+
+    def test_sdk_digest_baseline_is_runner_pinned(self) -> None:
+        data = (e.ROOT / e.SDK_DIGESTS_RELATIVE).read_bytes()
+        document = json.loads(data)
+        self.assertEqual(e.sha(data), e.SDK_DIGESTS_SHA256)
+        self.assertEqual(
+            document["lock_sha256"], e.sha((e.ROOT / e.LOCK_RELATIVE).read_bytes())
+        )
+        self.assertEqual(sum(map(len, document["files"].values())), 287)
 
     def test_historical_review_and_authorization_shapes_cannot_be_erased(self) -> None:
         manifest = {"run_id": e.HISTORICAL_RUN_ID}
@@ -498,6 +527,32 @@ source = { registry = "https://pypi.org/simple" }
         self.assertIs(policy["backup_verified"], False)
         self.assertIsNone(policy["retention_until"])
 
+    def test_retained_policy_identity_requires_nonempty_strings(self) -> None:
+        original = e.read_object(e.TOPIC / "local-store-policy.json")
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for field in ("approved_by", "store_id", "agent_access"):
+                for value in ("", False, [], {}):
+                    policy = deepcopy(original)
+                    policy[field] = value
+                    data = (
+                        json.dumps(policy, ensure_ascii=False, indent=2) + "\n"
+                    ).encode()
+                    (root / "store-policy.json").write_bytes(data)
+                    store = {key: policy[key] for key in policy if key != "root"}
+                    manifest = {
+                        "store_policy_path": "store-policy.json",
+                        "store_policy_sha256": e.sha(data),
+                        "store": store,
+                        "restricted_store_id": policy["store_id"],
+                        "restricted_access": policy["agent_access"],
+                        "restricted_retention_until": None,
+                    }
+                    self.assertEqual(
+                        evidence.metadata_gaps(root, manifest, published=True),
+                        [{"reason": "STORE_POLICY_MISMATCH"}],
+                    )
+
     def test_store_policy_gate_rejects_duplicate_and_noncanonical_json(self) -> None:
         original = (e.TOPIC / "local-store-policy.json").read_bytes()
         with TemporaryDirectory() as temporary:
@@ -565,6 +620,18 @@ source = { registry = "https://pypi.org/simple" }
         changed = response().replace(b'"usage":{', b'"ignored":NaN,"usage":{')
         self.assertEqual(e.parse_answer(changed)["status"], "INVALID")
         self.assertEqual(e.parse_answer(changed)["error_code"], "INVALID_RESPONSE")
+
+    def test_summary_time_follows_attempted_rows(self) -> None:
+        rows = [{"ended_utc": "2026-10-08T00:00:03+00:00"}]
+        summary = {
+            "run_id": "run-1",
+            "evidence_status": "local-unbacked-until-reviewed-git-export",
+            "threshold_selected": False,
+            "generated_utc": "2026-10-08T00:00:02+00:00",
+        }
+        self.assertTrue(evidence.summary_identity_gap(summary, "run-1", rows))
+        summary["generated_utc"] = "2026-10-08T00:00:03+00:00"
+        self.assertFalse(evidence.summary_identity_gap(summary, "run-1", rows))
 
     def test_parser_failure_requires_sdk_acceptance(self) -> None:
         case = self.cases[0]
@@ -1028,7 +1095,7 @@ source = { registry = "https://pypi.org/simple" }
             summary.update(
                 {
                     "run_id": "run-1",
-                    "generated_utc": "2026-10-08T00:00:00Z",
+                    "generated_utc": "2026-10-08T00:00:03Z",
                     "evidence_status": "local-unbacked-until-reviewed-git-export",
                 }
             )
@@ -1198,6 +1265,31 @@ source = { registry = "https://pypi.org/simple" }
             )
             (restricted / "analysis.jsonl").write_bytes(restricted_rows)
             sequence = [json.loads(line) for line in restricted_rows.splitlines()]
+            sequence[0].update(
+                status="UNKNOWN",
+                choice=None,
+                probabilities=None,
+                confidence=None,
+                error_code="CAPTURE_OR_RUNTIME_FAILED",
+            )
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in sequence)
+            )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_ANALYSIS_SEQUENCE"):
+                evidence.read_rows(restricted / "analysis.jsonl")
+            sequence[0] = json.loads(restricted_rows.splitlines()[0])
+            sequence[0]["probabilities"] = {
+                "SUFFICIENT": True,
+                "INSUFFICIENT": False,
+            }
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in sequence)
+            )
+            with self.assertRaisesRegex(
+                e.ContractError, "INVALID_ANALYSIS_STATUS_FIELDS"
+            ):
+                evidence.read_rows(restricted / "analysis.jsonl")
+            sequence[0] = json.loads(restricted_rows.splitlines()[0])
             sequence[2]["status"] = "NOT_RUN"
             sequence[2]["error_code"] = None
             sequence[2]["started_utc"] = None
@@ -1557,7 +1649,7 @@ source = { registry = "https://pypi.org/simple" }
                     "choice": None,
                     "probabilities": None,
                     "confidence": None,
-                    "error_code": "INTERNAL_ERROR",
+                    "error_code": "HTTP_FAILED",
                 }
             )
             (restricted / "analysis.jsonl").write_bytes(
