@@ -77,7 +77,7 @@ async function initialize(): Promise<void> {
         },50)
       })
     }
-  } catch (error) { input.fail(`初始化失敗：${String(error)}`); runtimeStatus.textContent = '初始化失敗' }
+  } catch (error) { input.initializationFailed(`初始化失敗：${String(error)}`); runtimeStatus.textContent = '初始化失敗' }
   finally { starting=false;reset.disabled=false;refresh() }
 }
 function normalized(event: PointerEvent): number {
@@ -112,5 +112,6 @@ element('#export').addEventListener('click',()=>{
   const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='e016-mod-observations.json';a.click();URL.revokeObjectURL(url)
 })
 setInterval(()=>{input.checkHealth(input.now());refresh()},250)
-window.addEventListener('pagehide',()=>engine?.dispose())
+// Persisted page hides freeze this document; keep its engine for bfcache restore.
+window.addEventListener('pagehide',event=>{if(!event.persisted)engine?.dispose()})
 void initialize()

@@ -29,6 +29,9 @@ export class TopTouchInput {
   setReady(): void { if (this.state === 'initializing') this.state = 'ready' }
   fail(reason: string): void { this.state = 'fault'; this.error = reason; this.active = null; this.queue = [] }
   unavailable(reason: string): void { this.fail(reason); this.state = 'unavailable' }
+  initializationFailed(reason: string): void {
+    if (this.state !== 'unavailable' && this.state !== 'fault') this.fail(reason)
+  }
   private enqueue(channels: number[], time: number, operation: number, kind: RawSample['kind']): void {
     if (!Number.isFinite(time) || time < 0 || time > 0x7fffffff) { this.fail('invalid session timestamp'); return }
     if (this.queue.length >= this.limit) { this.fail('raw input FIFO overflow; reset required'); return }

@@ -109,3 +109,22 @@ test('TC05 initializing, extra pointer, overflow and ack timeout are explicit', 
   h.input.checkHealth(4000)
   assert.equal(h.input.state, 'fault')
 })
+
+test('initialization rejection preserves MOD unavailable and earlier fault classifications', () => {
+  const unavailable = new TopTouchInput(1)
+  unavailable.unavailable('MOD touchPanel unavailable')
+  unavailable.initializationFailed('readiness promise rejected')
+  assert.equal(unavailable.state, 'unavailable')
+  assert.equal(unavailable.error, 'MOD touchPanel unavailable')
+  assert.equal(unavailable.down(1, true, .5, 1), false)
+
+  const fault = new TopTouchInput(2)
+  fault.fail('original runtime error')
+  fault.initializationFailed('readiness promise rejected')
+  assert.equal(fault.error, 'original runtime error')
+
+  const initializing = new TopTouchInput(3)
+  initializing.initializationFailed('archive fetch failed')
+  assert.equal(initializing.state, 'fault')
+  assert.equal(initializing.error, 'archive fetch failed')
+})
