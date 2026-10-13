@@ -69,3 +69,13 @@ Independent round3 review: approved, no blockers. Reviewer independently ran14te
 ADDRESS4256154628/4638/4647: normalize toolchain root, preserve unavailable/fault through initialization catch, retainengine on persistedpagehide. All3new regression tests firstfailed (trailing slash, cacheemsdk, unavailable→fault); final17tests and strict web/MOD checks/Vitebuild/syntaxPASS. No fullruntime unavailable/reset test or livebfcache cycle claimed; those evidence gaps remain. Existingpaths only, E016only; independent review pending.
 
 Independent round4 review: approved, no blockers. Reviewer independently ran17testsPASS and checked normalization/catch classification/persisted-pagehide guard. Full initialization/reset and actualBFCache evidence gaps correctly retained; no WASM rebuild or E019 interaction.
+
+## PR comment review round5 — 2026-10-13
+
+ADDRESS4256325949/5956/5962. Sourcecommits/versions alone do not attestinstalled bytes, nor does snapshot siblinglock prove its contents. Require externally reviewed digestmanifest for5tooltrees and tracked-cleansource; snapshot requires reviewedtreeSHA before/aftercopy. Per-run provenance records actual tool/dependencytree digests and manifesthash; mutableEM_CACHE isolated and bytecodewrites disabled. Portableconfig regenerated from EM_CONFIG avoidsmovedcache paths. Fiveattestation regressions andmovedconfig fixture; final23tests/typecheck/build/syntaxPASS. Actuallocaltrees read-only traversed; measuredhashesnot independenttrustbaseline.
+
+Historicaloriginal runtime provenance unchanged; originalcontentattestation absent, TC07completePASS withdrawn to not-run. NofullWASM rebuild undernewcontract or otherexperiments touched. Newhelper/testpaths declared; independentreviewpending.
+
+Initial independent round5 verdict needs-rework: emcc shell wrapper usesEMSDK_PYTHON/PATH and-E, soconfigPYTHON plusPYTHONDONTWRITEBYTECODEalone insufficient. Corrected with experiment-local launcher bound to isolatedpinnedPython,-B flag, explicitEMSDK_PYTHON and sanitized inheritedEM_*/EMSDK_* /_EMCC_CCACHE. Launcherhash recorded. Added2regressions; final25tests/typecheckPASS. Actualpinnedemcc5.0.1 --version probe succeeded, PythonreportedTruebytecode-disabled andupstreamdigest unchanged. No fullWASMbuild. Re-reviewpending.
+
+Independent round5 re-review: approved; Python bootstrap blocker resolved. Reviewer independently ran25testsPASS, including pinnedinterpreter/quotedpath/-Bunder-E/overrideclearing. OriginalTC05/TC07 remainincomplete; nofullWASMbuild orotherexperiment changes.

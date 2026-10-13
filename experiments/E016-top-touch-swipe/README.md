@@ -51,7 +51,13 @@ export STACK_CHAN_SOURCE=/absolute/path/stack-chan
 export E016_TOOLCHAIN_SOURCE=/absolute/path/pinned-macos-toolchain
 ```
 
-缺少來源變數或必要檔案時會明確失敗；腳本核對三個git revision、Moddable與emcc版本，並將工具／cache隔離複製到本實驗generated。每次使用cache前核對三個元件的git revision、必要工具檔與Moddable版本。缺失／不匹配時從顯式來源複製到獨立staging目錄，全部驗證後才替換cache；複製失敗保留舊cache並清理本次staging，下次可直接重試。來源 `.emscripten` 應指向提供的來源目錄，複製後會替換為隔離路徑。這是顯式外部建置前置需求，不是 fresh clone 自動供應的工具。
+缺少來源變數或必要檔案時會明確失敗；腳本核對三個git revision、Moddable與emcc版本，並將工具／cache隔離複製到本實驗generated。每次使用cache前核對三個元件的git revision、必要工具檔與Moddable版本。缺失／不匹配時從顯式來源複製到獨立staging目錄，全部驗證後才替換cache；複製失敗保留舊cache並清理本次staging，下次可直接重試。`.emscripten`每次由固定template原子重建，依EM_CONFIG所在目錄解析工具，避免來源／cache搬移留下舊路徑；需要emsdk內的Node22.16.0與Python3.13.3。這是顯式外部建置前置需求，不是 fresh clone 自動供應的工具。
+
+另需設定 `E016_TOOLCHAIN_ATTESTATION=/absolute/path/reviewed-tool-trees.json`，檔案放在被hash的目錄之外。Manifest包含以下五個key，每個值為已獨立核對的64位小寫SHA-256：`moddableTools`（moddable/build/bin/mac/release）、`emsdkUpstream`（emsdk/upstream）、`emsdkNode`（emsdk/node）、`emsdkPython`（emsdk/python）、`fontbmBuild`（fontbm/build）。來源／cache／staging都須符合manifest，且三個source repo的tracked tree須乾淨；任一不符停止。
+
+Digest格式為scripts/artifact-attestation.mjs的E016-tree-v1：固定排序的相對路徑、型別、可執行bits及檔案內容SHA-256，包含空目錄／symlink目標字串，忽略.git與mtime；拒絕連到attested tree外的symlink。可在**已獨立核對的來源**用hashTree取得manifest值；對未知來源自行計算hash，只建立指紋，不建立可信來源。Manifest基準由操作者提供／核對，本實驗不把它宣稱為官方binary校驗。
+
+Build時EM_CACHE移至generated/em-cache；EMSDK_PYTHON固定到本實驗launcher，再exec已attest的Python並傳入-B（能抵抗emcc wrapper的-E），清除繼承的EM_*／EMSDK_*覆寫與_EMCC_CCACHE後指定必要值，避免繞過工具。Launcher自身hash也記入provenance；完成前再次核對工具與dependency內容未變。
 
 ## 重現步驟
 
@@ -70,10 +76,10 @@ npm run dev
 本輪offline依賴重現方式：
 
 ```sh
-E016_FIRMWARE_NODE_MODULES=/absolute/path/lock-matched-firmware/node_modules npm run prepare:poc
+E016_FIRMWARE_NODE_MODULES=/absolute/path/verified-firmware/node_modules E016_FIRMWARE_NODE_MODULES_SHA256=REVIEWED_64_HEX_TREE_DIGEST npm run prepare:poc
 ```
 
-腳本會核對snapshot父目錄package-lock與pinned firmware lock一致。一般環境未設定此變數時執行npm ci，不安裝或升級圖形工具。
+Snapshot須有事先核對的E016-tree-v1 SHA256，複製前後比對實際tree，另核對父目錄package-lock；僅有相同lockfile不代表內容正確。無已核對的snapshot digest時，省略snapshot變數，使用npm ci。新provenance分開記錄dependencyTreeSha256、toolchainTrees、manifest hash與來源方式；符合指定baseline不等同由lockfile推導的內容驗證。一般環境執行npm ci，不安裝或升級圖形工具。
 
 重現建置只寫入ignored `web/generated/runtime-provenance.json` 及public副本；MOD建置補上modArchiveSha256與publicHashes（磁碟檔案雜湊，不等同HTTP servedHashes）。已提交的 `evidence/runtime-provenance.json` 是原驗證run的歷史證據，不會被重現覆寫。新run若要宣稱served bytes，須另行取得HTTP回應核對並保存獨立驗證紀錄。
 
@@ -92,8 +98,8 @@ E016_FIRMWARE_NODE_MODULES=/absolute/path/lock-matched-firmware/node_modules npm
 
 ## 是否成功
 
-- 實驗整體狀態：**無法判定（TC05 reset／初始化不可用分支未執行）**。已執行的真人滑動與移出恢復判準通過，原操作證據保留；不將局部通過當作完整驗收。
-- 本輪工程驗證與真人滑動操作紀錄已完成；完整TC05驗證尚缺上述分支。PR已轉Ready，review／合併仍待owner。
+- 實驗整體狀態：**無法判定（TC05未執行分支及TC07歷史內容attestation缺口）**。已執行的真人滑動與移出恢復判準通過，原操作證據保留；不將局部通過當作完整驗收。
+- 本輪工程驗證與真人滑動操作紀錄已完成；完整TC05驗證尚缺上述分支，TC07歷史工具／dependency內容attestation亦不齊備。PR已轉Ready，review／合併仍待owner。
 - 結論只適用本實驗模擬器的已執行行為；不外推實機或production。PR維持Ready供human review，不自動合併。
 
 ## 結果與證據
@@ -116,7 +122,7 @@ E016_FIRMWARE_NODE_MODULES=/absolute/path/lock-matched-firmware/node_modules npm
 | TC04 tap／短移無swipe | PASS | quick tap12為124ms；短移13保留delta2，唯讀頁面核對 |
 | TC05 移出／故障恢復 | 未執行（部分通過） | 真人leave／恢復PASS：14/18及有效17/19，pending0；overflow／ack timeout有unit覆蓋；完整initialize/reset與初始化不可用分支未執行 |
 | TC06 MOD／畫面一致 | PASS | 最終forward6／backward4，19release；由owner輸出與agent唯讀觀測交叉核對 |
-| TC07 SDK來源路徑 | PASS | pinned recognizer未改、WASM／MOD／served hashes及原始樣本接線；不是新增真人動作 |
+| TC07 SDK來源／建置內容 | 未執行（部分證據） | recognizer／原始樣本接線及artifact hashes有證據；原run未保存installed tool／dependency tree hashes，不能追補為完整attestation |
 | TC08 逐項證據與限制 | PASS | verification.json逐項結果，保留原始humanVerified:false與操作者確認；agent automation分列 |
 
 完整owner匯出至operation17存於 `evidence/operator-session-1-through-operation-17.json`（42筆）；18/19五筆owner事件與19release的agent唯讀觀測分別存於verification.json。合計48筆（19press、19release、6forward、4backward），不把補充觀測冒充owner原始匯出。
@@ -146,3 +152,11 @@ Comment4256008289採用：`.emscripten` 路徑重定位改為同目錄暫存檔�
 三項建議採用：4256154628將顯式工具鏈根目錄正規化後統一用於前置檢查、copy及config替換，避免尾端斜線造成toolchainemsdk錯接；4256154638初始化catch保留既有unavailable／fault分類與原因；4256154647在persisted pagehide保留engine供bfcache返回，非persisted才dispose。三項新regression assertions首次全部FAIL，修正後整套17tests、strict typecheck／Vitebuild／script syntaxPASS。
 
 新增unavailable測試僅驗證TopTouchInput狀態處理，不等同完整初始化callback時序、缺能力runtime或reset驗證；完整TC05未執行分支保持不變。bfcache修正經code inspection，未執行實際瀏覽器bfcache往返，也未重跑完整WASM build或新增真人證據。
+
+### 第五輪 review：實際建置內容與搬移後設定
+
+ADDRESS4256325949/5956/5962：snapshot必須指定核對過的tree SHA256，複製前後均比對；工具source必須tracked-clean，工具／安裝payload依外部核對manifest比對並記入provenance；config每次依EM_CONFIG當前位置產生。新增5項內容attestation與1項搬移設定測試，最終25tests及typecheck/build/syntaxPASS。實際本機工具tree已唯讀量測，可用於確認hash實作可讀取，但不當作獨立可信baseline，也不追補舊run。
+
+**歷史證據限制修正：** 原run只有來源commit、版本、artifact hashes與snapshot相鄰lockfile匹配，未記錄當時工具／installed dependency內容hash。原runtime-provenance.json保持原樣，TC07完整PASS撤回；真人觀測仍保留，但不能用今天量測的tree倒推原建置內容。新attestation流程尚未完整重建WASM；原TC05、bfcache等未執行項不變。
+
+獨立審查先發現Python bootstrap仍可能由PATH選取且-E忽略bytecode環境設定，已補experiment-local-B launcher與環境清理。兩項新測試確認實際interpreter、dont_write_bytecode=True及拒絕環境覆寫；亦以本機pinned emcc --version執行相同launcher，5.0.1啟動成功且upstream tree hash不變，沒有執行完整WASM build。

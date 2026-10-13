@@ -212,3 +212,17 @@ Prior human-acceptance summary is superseded for complete TC05: leave/recovery P
 | Goal | correct edge-case behavior | slash preserved in relocated config; terminal state not overwritten; retained engine forpersisted hide |
 | Non-Goal | fullinit/reset/bfcache/human proof | no such claims |
 | TestCase | regression + affected checks | 3RED→17PASS;typecheck/build/syntaxPASS;bfcache inspection only; independent review approved/17PASS |
+
+## PR review round5 — build-content evidence
+
+| Field | planned | actual |
+| --- | --- | --- |
+| In-Scope | comments4256325949/5956/5962 | snapshot/tool content digests, tracked-clean source, movedconfig regeneration |
+| Out-Of-Scope | SDK/production/platform/merge | none changed |
+| ReadOnly | historical runtime/export and pinned tools | no retroactive attestation; current tree measurement read-only |
+| Written | bounded E016 scripts/tests/docs | artifact-attestation.mjs/test, toolchain-cache.mjs/test, prepare-runtime.mjs, README/verification/plan/step/review-log |
+| Deleted | none tracked | temporary test fixtures only |
+| Modify | preparation/provenance contract | explicit reviewed baseline inputs; tree hashes; portableconfig |
+| Goal | attest actual used bytes | snapshot copiedtree verified; tool trees manifestmatched with cleantracked source |
+| Non-Goal | self-hash implies trust/originalrun repair | historicalTC07 incomplete; no newfullWASM/humanclaim |
+| TestCase | digest/dirty/binary/movedconfig regressions | 25PASS,typecheck/build/syntaxPASS; realtrees read-only traversed; pinnedcompilerlauncher probePASS; independentreviewapproved/25PASS |

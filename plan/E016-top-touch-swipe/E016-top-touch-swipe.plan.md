@@ -53,6 +53,8 @@ Implementer/Tester, exact paths relative to experiments/E016-top-touch-swipe/:
 - `web/scripts/prepare-runtime.mjs`
 - `web/scripts/toolchain-cache.mjs`
 - `web/scripts/toolchain-cache.test.mjs`
+- `web/scripts/artifact-attestation.mjs`
+- `web/scripts/artifact-attestation.test.mjs`
 - `web/scripts/build-mod.mjs`
 - `mod/main.ts`
 - `mod/host.d.ts`
@@ -117,3 +119,7 @@ ADDRESS4256008289. Write relocated .emscripten to a unique temporary directory b
 ### PR review round4 — path and runtime lifecycle boundaries
 
 ADDRESS4256154628/4638/4647. Normalize explicit toolchain root before validation/copy/config rewrite. Initialization catch preserves terminal input classifications. Persisted pagehide retainsengine for bfcache; actual page exit stilldisposes. Existing helper/class/main/tests/docs paths only; no SDK/ABI/production changes. Input-state unit coverage does not close full initialize/reset/unavailable runtime gaps; livebfcache cycle not-run.
+
+### PR review round5 — build-content attestation
+
+ADDRESS4256325949/5956/5962. Require externally reviewed tool-tree digest manifest plus tracked-clean source; hash snapshot tree against supplied reviewed baseline before/after copy. Record actual tool/dependency digests and manifest identity, recheck beforepublication, separate mutable cache. Generate portable config from currentEM_CONFIG, not prior absolute paths. Experiment-local helper/test paths above; no SDK/production/new host changes. Originalrun tool/dependency attestation absent, completeTC07 withdrawn to not-run; newfullWASM build not claimed.

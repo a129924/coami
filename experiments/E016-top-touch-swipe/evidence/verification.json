@@ -2,7 +2,7 @@
   "experiment": "E016",
   "date": "2026-10-13",
   "experimentState": "無法判定",
-  "reason": "Human swipe and leave/recovery observations passed; full TC05 includes initialize/reset and unavailable initialization branches without execution evidence. Earlier complete PASS/success conclusion is superseded; historical evidence preserved.",
+  "reason": "Full acceptance inconclusive: TC05 initialize/reset/unavailable runtime gaps remain; TC07 original run lacks installed tool/dependency tree attestations. Existing observed swipe/leave behavior and original artifact/source hashes preserved.",
   "verificationTaskCompleted": true,
   "completionScope": "Implementation and executed human simulator behaviors documented; full acceptance incomplete because reset and unavailable initialization remain not-run.",
   "tdd": {
@@ -334,9 +334,9 @@
     },
     {
       "testCase": "TC07",
-      "status": "PASS",
+      "status": "未執行",
       "evidenceType": "source/provenance audit with human-simulator-operation",
-      "reason": "Unmodified pinned SDK recognizer consumes raw samples via dedicated WASM ABI; MOD subscribes to SDK TouchPanelInputEvent and UI parses only MOD traces. Runtime-provenance records source/patch/served runtime/MOD hashes. Human swipe deltas62 match recognizer direction; no named-event injection.",
+      "reason": "Partial source/SDK/artifact linkage evidence exists, but original installed tool and dependency tree bytes were not attested; lockfile sibling match is insufficient. No retroactive attestation from current local bytes.",
       "evidenceReference": [
         "runtime-provenance.json",
         "human-recovery-success-17",
@@ -391,8 +391,9 @@
     },
     {
       "testCase": "TC07",
-      "status": "PASS",
-      "evidenceType": "unit and/or real WASM UI automation"
+      "status": "未執行",
+      "evidenceType": "unit and/or real WASM UI automation",
+      "reason": "Partial source/SDK/artifact linkage evidence exists, but original installed tool and dependency tree bytes were not attested; lockfile sibling match is insufficient. No retroactive attestation from current local bytes."
     },
     {
       "testCase": "TC08",
@@ -454,7 +455,8 @@
     "Git hook reported lefthook unavailable in PATH; explicit tests/typecheck/build and independent review were performed.",
     "Human event exports omit raw pointer trajectories and cancellation cause; explicit owner attestations supplement hold/reverse and leave procedures.",
     "Recovery attempt15 did not emit swipe; its retained delta0 and diagnostic16 delta14 do not establish maximum motion or root cause. Subsequent valid17/19 passed without reset.",
-    "Exact threshold (corrected during PR review), overflow and ack timeout have unit evidence. Full initialize/reset and unavailable initialization branches are not-run, not automated PASS."
+    "Exact threshold (corrected during PR review), overflow and ack timeout have unit evidence. Full initialize/reset and unavailable initialization branches are not-run, not automated PASS.",
+    "Original runtime build recorded commits/versions and neighboring snapshot lockfile, but no installed tool or dependency tree attestation. Historical runtime provenance is preserved and not retroactively validated by current tree measurements."
   ],
   "workflow": {
     "base": "9155139",
@@ -467,7 +469,7 @@
     "isDraft": false,
     "baseRef": "dev",
     "nextActor": "Human",
-    "humanAcceptance": "Executed human swipe/leave cases complete; overall TC05 incomplete: initialize/reset and unavailable initialization not-run; PR Ready for review.",
+    "humanAcceptance": "Executed human swipe/leave cases complete; overall TC05 incomplete: initialize/reset and unavailable initialization not-run; PR Ready for review. TC07 original tool/dependency content attestation incomplete.",
     "mergeAuthorized": false,
     "checksObservedAtCommit": "1df823d10de9ae0e48b9fb6111b09847ab80d06e",
     "checksObserved": "All returned CI check runs SUCCESS; see PR for later documentation-head runs."
@@ -1673,5 +1675,40 @@
     },
     "scope": "E016 source root normalization and initialization/lifecycle guards; no SDK/native change or human operation.",
     "review": "approved; independent Reviewer17testsPASS, no blockers; full initialization/reset and livebfcache evidence gaps retained"
+  },
+  "prCommentReviewRound5": {
+    "reviewedHead": "652ef641d9f2545f1fd0146ab292a64f8a3079d1",
+    "triage": {
+      "ADDRESS": [
+        4256325949,
+        4256325956,
+        4256325962
+      ],
+      "DISCUSS": [],
+      "SKIP": []
+    },
+    "red": "3 initial attestation tests FAIL (missing digest/change rejection/external-link check); moved config test FAIL with stale old-worktree LLVM_ROOT.",
+    "green": {
+      "tests": 25,
+      "passed": 25,
+      "failed": 0
+    },
+    "validation": {
+      "typecheck": "strict web/MOD PASS",
+      "frontendBuild": "PASS; existing bundle warning",
+      "scriptSyntax": "PASS",
+      "actualToolTrees": "Read-only current local trees traversed and source tracked-clean checked; measurements are NOT independently trusted baselines or original-run attestation.",
+      "fullWasmRebuild": "not executed with new required reviewed baseline inputs",
+      "bootstrap": "Actual local pinned emcc5.0.1 launched through explicit attested-location Python launcher with-B; sys.dont_write_bytecode=True under-E and upstream digest unchanged. No fullWASM build."
+    },
+    "currentLocalMeasurements": {
+      "moddableTools": "c9b6c6bc7febb248822d1e61917275c97d90cee05dfc850ca05cd4ad3e5f2920",
+      "emsdkUpstream": "aa8f4b53b12f90697fa643656105ba22588a394fd6af138c985f9385ea9114e1",
+      "emsdkNode": "c9beb94b0b527cf456c814abe94d3fbe50d07e79ffacae27720dcd940521062d",
+      "emsdkPython": "c705977559789124166cfd32c5501a652d8826486f1b9aaf92de416dd4ae9d0a",
+      "fontbmBuild": "e0f32fb78c6c8f486c21b713db0c40c986bf064eee41b46d7bf1eaa305af7d45"
+    },
+    "historicalEvidenceCorrection": "TC07 complete PASS withdrawn; original tool/dependency bytes not attested. Keep original provenance/export bytes unchanged.",
+    "review": "approved after Python launcher/environment correction; independent Reviewer25testsPASS; original TC05/TC07 evidence gaps retained"
   }
 }
