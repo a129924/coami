@@ -1,10 +1,10 @@
 {
   "experiment": "E016",
   "date": "2026-10-13",
-  "experimentState": "成功",
-  "reason": "Pinned simulator criteria met by owner operations plus source/provenance audit: human TC01–06 PASS, TC07 source/runtime evidence PASS, TC08 evidence accounting PASS. Historical unsuccessful recovery attempt15 remains recorded with unresolved cause; valid17 and19 demonstrate recovery without reset.",
+  "experimentState": "無法判定",
+  "reason": "Human swipe and leave/recovery observations passed; full TC05 includes initialize/reset and unavailable initialization branches without execution evidence. Earlier complete PASS/success conclusion is superseded; historical evidence preserved.",
   "verificationTaskCompleted": true,
-  "completionScope": "Engineering implementation and bounded simulator acceptance, with operator exports/attestations separated from agent UI automation and read-only observations; no physical-device or merge claim.",
+  "completionScope": "Implementation and executed human simulator behaviors documented; full acceptance incomplete because reset and unavailable initialization remain not-run.",
   "tdd": {
     "initialRed": {
       "tests": 8,
@@ -314,10 +314,16 @@
     },
     {
       "testCase": "TC05",
-      "status": "PASS",
+      "status": "未執行",
       "evidenceType": "human-simulator-operation",
-      "reason": "Owner confirmed vertical leave before recognition14 and after visible forward6 in18. No swipe14; valid recovery17; one forward18 then release; one backward19 then release, pending0/counts6/4. Historical failed attempt15 preserved without attributing cause.",
-      "evidenceReference": "human-cancel-recovery-confirmed-18-19"
+      "reason": "Partial coverage: human pre/post-recognition leave and later valid recovery PASS; unit cancellation/overflow/ack timeout PASS. Full initialize/reset and unavailable initialization branches not executed.",
+      "evidenceReference": "human-cancel-recovery-confirmed-18-19",
+      "subcases": {
+        "leaveAndRecovery": "PASS",
+        "overflowAndAckTimeout": "PASS (unit)",
+        "initializeReset": "未執行",
+        "unavailableInitialization": "未執行"
+      }
     },
     {
       "testCase": "TC06",
@@ -368,8 +374,15 @@
     },
     {
       "testCase": "TC05",
-      "status": "PASS",
-      "evidenceType": "unit and/or real WASM UI automation"
+      "status": "未執行",
+      "evidenceType": "unit and/or real WASM UI automation",
+      "reason": "Partial coverage: human pre/post-recognition leave and later valid recovery PASS; unit cancellation/overflow/ack timeout PASS. Full initialize/reset and unavailable initialization branches not executed.",
+      "subcases": {
+        "leaveAndRecovery": "PASS",
+        "overflowAndAckTimeout": "PASS (unit)",
+        "initializeReset": "未執行",
+        "unavailableInitialization": "未執行"
+      }
     },
     {
       "testCase": "TC06",
@@ -441,7 +454,7 @@
     "Git hook reported lefthook unavailable in PATH; explicit tests/typecheck/build and independent review were performed.",
     "Human event exports omit raw pointer trajectories and cancellation cause; explicit owner attestations supplement hold/reverse and leave procedures.",
     "Recovery attempt15 did not emit swipe; its retained delta0 and diagnostic16 delta14 do not establish maximum motion or root cause. Subsequent valid17/19 passed without reset.",
-    "Exact threshold, overflow/fault/reset and unavailable initialization coverage remains automated; human session1 did not exercise every fault or reset branch."
+    "Exact threshold (corrected during PR review), overflow and ack timeout have unit evidence. Full initialize/reset and unavailable initialization branches are not-run, not automated PASS."
   ],
   "workflow": {
     "base": "9155139",
@@ -451,10 +464,10 @@
     "prUrl": "https://github.com/a129924/coami/pull/16",
     "prNumber": 16,
     "prState": "OPEN",
-    "isDraft": true,
+    "isDraft": false,
     "baseRef": "dev",
     "nextActor": "Human",
-    "humanAcceptance": "completed: TC01–06 human operation; TC07 source/provenance and TC08 evidence audit; final counts6/4, pending0; Draft PR review still pending",
+    "humanAcceptance": "Executed human swipe/leave cases complete; overall TC05 incomplete: initialize/reset and unavailable initialization not-run; PR Ready for review.",
     "mergeAuthorized": false,
     "checksObservedAtCommit": "1df823d10de9ae0e48b9fb6111b09847ab80d06e",
     "checksObserved": "All returned CI check runs SUCCESS; see PR for later documentation-head runs."
@@ -1535,6 +1548,41 @@
     "scope": "Current human evidence/docs only; no code rebuild or operator input.",
     "recordCounts": "48:19press/19release/6forward/4backward; raw42 plus separately attributed supplemental6.",
     "correction": "nonSwipeAttemptsObserved corrected from first-batch1 to complete-session9; operations listed explicitly.",
-    "limitations": "Attempt15 FAIL/root cause unknown retained; successful17/19 do not establish every attempt passed or rule out intermittent behavior."
+    "limitations": "Attempt15 FAIL/root cause unknown retained; successful17/19 do not establish every attempt passed or rule out intermittent behavior.",
+    "supersededScope": "Original approval was limited to submitted evidence; later PR review identified unsupported reset/unavailable coverage and incorrect exact-threshold fixtures. Overall TC05/success verdict corrected below."
+  },
+  "prCommentReview": {
+    "reviewedHead": "7a40ed6b7f6b477334a511a74bb51add1a169f13",
+    "triage": {
+      "ADDRESS": [
+        4255715535,
+        4255715542,
+        4255715547,
+        4255715553,
+        4255715559,
+        4255715563
+      ],
+      "DISCUSS": [],
+      "SKIP": []
+    },
+    "boundaryRed": "Fixture-position assertion fails: actual40 != expected60 with old endpoints .3/.7.",
+    "boundaryGreen": "Endpoints .2/.8 assert exact±60: no swipe; .19/.81 produce±62: expected SDK direction.",
+    "runtimeBehaviorChanged": false,
+    "unexecutedBranches": [
+      "full initialize/reset path",
+      "unavailable initialization path"
+    ],
+    "historicalProvenancePolicy": "Reproduction writes ignored generated/public metadata only; original finalized evidence remains unchanged.",
+    "validation": {
+      "unitTests": "8 PASS; stage-only PASS",
+      "typecheck": "web/MOD strict PASS",
+      "frontendBuild": "PASS; existing >500KB warning",
+      "scriptSyntax": "PASS",
+      "toolchainPreflight": "Actual CLI isolated fixture: missing, relative and incomplete absolute source paths rejected clearly. Linux guard inspected, not executed on Linux.",
+      "modProvenance": "Actual MOD archive rebuild PASS; generated/public metadata hashes match artifacts; finalized runtime-provenance SHA256 remains78d7db1bb1346fa0bff7eb16efed49bb7c2f8b10db44ea7f075dd51e4bfcd896.",
+      "fullWasmRebuild": "Not repeated: SDK/native patch/runtime unchanged; preparation guard/path changes checked without replacing original runtime.",
+      "renderedStatus": "Temporary Chrome preview AX confirms updated footer distinguishes human swipe/leave PASS from reset/unavailable not-run. No pointer/reset input; temporary tab/server closed afterward."
+    },
+    "independentReview": "approved-with-one-documentation-correction; stale Draft=true corrected tofalse; reviewer8testsPASS; no other blocker"
   }
 }

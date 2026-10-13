@@ -27,6 +27,32 @@ Pinned Stack-chan `b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322` 的 `firmware/host/
 - firmware offline npm ci遇ENOTCACHED；改用與相同package-lock SHA-256核對一致的本機dependency snapshot，複製到本實驗。此為依賴來源，不是runtime重用。
 - SDK recognizer 未修改，只有scratch平台輸入橋接與poll wrapper。真實K151感測品質不在證據範圍。
 
+## 建置前置需求（必要）
+
+完整 WASM 建置僅支援 **macOS／APFS**，工具鏈須與主機 CPU 架構相容；Linux／Windows 會在複製或建置前明確拒絕。`npm run stage`／unit tests 不使用 macOS 複製或 native 工具，但完整建置尚未驗證其他主機。
+
+Fresh clone 不含 Stack-chan checkout 或已建置工具鏈。先另行準備 pinned checkout（唯讀來源）：
+
+```sh
+git clone https://github.com/stack-chan/stack-chan.git /absolute/path/stack-chan
+git -C /absolute/path/stack-chan checkout --detach b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322
+export STACK_CHAN_SOURCE=/absolute/path/stack-chan
+```
+
+另須提供一份**已安裝完成**的 pinned macOS 工具鏈；本實驗不下載或建置工具鏈，沒有 E015 私人目錄預設。設定 `E016_TOOLCHAIN_SOURCE` 為以下三個目錄的共同父目錄（絕對路徑）：
+
+| 必要來源 | 固定版本／內容 |
+| --- | --- |
+| `moddable/` | git HEAD `b6e06ba70506a7381ffb28e09e3175bf4e99f305`，tools/VERSION 為9.5.0；已建置 build/bin/mac/release 工具 |
+| `emsdk/` | git HEAD `14c18b569f55138fe4963924162244251f454fb0`；已安裝／啟用 Emscripten5.0.1，有 .emscripten、upstream/emscripten/emcc 與工具／cache |
+| `fontbm/` | git HEAD `7677b908523e909679f67cd5c170396bb9def1aa`；已建置 build/fontbm |
+
+```sh
+export E016_TOOLCHAIN_SOURCE=/absolute/path/pinned-macos-toolchain
+```
+
+缺少來源變數或必要檔案時會明確失敗；腳本核對三個git revision、Moddable與emcc版本，並將工具／cache隔離複製到本實驗generated。來源 `.emscripten` 應指向提供的來源目錄，複製後會替換為隔離路徑。這是顯式外部建置前置需求，不是 fresh clone 自動供應的工具。
+
 ## 重現步驟
 
 在 feature worktree 的 `experiments/E016-top-touch-swipe/web`：
@@ -39,15 +65,17 @@ npm run build
 npm run dev
 ```
 
-`npm run stage` 只建立pinned scratch source；完整prepare會重新建立scratch並編譯。工具鏈預設從本機 E015 的 `web/generated/toolchain-verified/` 隔離複製；其他位置可設定 `E016_TOOLCHAIN_SOURCE`，版本必須匹配。
+`npm run stage` 只建立pinned scratch source；完整prepare會重新建立scratch並編譯。工具鏈只從必要的 `E016_TOOLCHAIN_SOURCE` 隔離複製，沒有私人路徑 fallback，版本必須匹配。
 
 本輪offline依賴重現方式：
 
 ```sh
-E016_FIRMWARE_NODE_MODULES=/private/tmp/coami-e015-manual-video-recording/experiments/E015-manual-video-recording/web/generated/pinned-stack-chan/firmware/node_modules npm run prepare:poc
+E016_FIRMWARE_NODE_MODULES=/absolute/path/lock-matched-firmware/node_modules npm run prepare:poc
 ```
 
 腳本會核對snapshot父目錄package-lock與pinned firmware lock一致。一般環境未設定此變數時執行npm ci，不安裝或升級圖形工具。
+
+重現建置只寫入ignored `web/generated/runtime-provenance.json` 及public副本；MOD建置補上modArchiveSha256與publicHashes（磁碟檔案雜湊，不等同HTTP servedHashes）。已提交的 `evidence/runtime-provenance.json` 是原驗證run的歷史證據，不會被重現覆寫。新run若要宣稱served bytes，須另行取得HTTP回應核對並保存獨立驗證紀錄。
 
 開啟 http://127.0.0.1:5176/ ，等待「可操作」：
 
@@ -64,9 +92,9 @@ E016_FIRMWARE_NODE_MODULES=/private/tmp/coami-e015-manual-video-recording/experi
 
 ## 是否成功
 
-- 實驗狀態：**成功（限定 pinned 瀏覽器模擬器與已執行判準）**。真人操作、操作者確認與唯讀畫面觀測已分開記錄。
-- 本輪工程驗證／紀錄任務及真人操作驗收已完成；Draft PR human review／合併仍待 owner。
-- 結論只適用本實驗模擬器；不外推實機或 production。Draft PR依owner授權交human review。
+- 實驗整體狀態：**無法判定（TC05 reset／初始化不可用分支未執行）**。已執行的真人滑動與移出恢復判準通過，原操作證據保留；不將局部通過當作完整驗收。
+- 本輪工程驗證與真人滑動操作紀錄已完成；完整TC05驗證尚缺上述分支。PR已轉Ready，review／合併仍待owner。
+- 結論只適用本實驗模擬器的已執行行為；不外推實機或production。PR維持Ready供human review，不自動合併。
 
 ## 結果與證據
 
@@ -86,7 +114,7 @@ E016_FIRMWARE_NODE_MODULES=/private/tmp/coami-e015-manual-video-recording/experi
 | TC02 持續按住／反向／放開不追加 | PASS | operation8；owner確認按住至少2秒後反向拖回左側再放開 |
 | TC03 連續獨立操作 | PASS | operations3/4分別辨識，不宣稱重疊FIFO時序 |
 | TC04 tap／短移無swipe | PASS | quick tap12為124ms；短移13保留delta2，唯讀頁面核對 |
-| TC05 移出清理與恢復 | PASS | owner確認14門檻前移出、18看到forward6後移出；有效17與19恢復；最終pending0 |
+| TC05 移出／故障恢復 | 未執行（部分通過） | 真人leave／恢復PASS：14/18及有效17/19，pending0；overflow／ack timeout有unit覆蓋；完整initialize/reset與初始化不可用分支未執行 |
 | TC06 MOD／畫面一致 | PASS | 最終forward6／backward4，19release；由owner輸出與agent唯讀觀測交叉核對 |
 | TC07 SDK來源路徑 | PASS | pinned recognizer未改、WASM／MOD／served hashes及原始樣本接線；不是新增真人動作 |
 | TC08 逐項證據與限制 | PASS | verification.json逐項結果，保留原始humanVerified:false與操作者確認；agent automation分列 |
@@ -97,6 +125,10 @@ operation15曾依指示操作但未新增swipe，當次FAIL紀錄保留；16保�
 
 ## 結論與限制
 
-原始樣本→新增native ABI→原SDK→MOD的路徑有真實runtime、自動測試及真人操作支持。TC01–06真人行為通過；TC07採source／provenance核對，TC08採逐項證據稽核。精準門檻、overflow／fault／reset與不可用初始化仍屬自動化證據，真人session1未操作所有失敗分支。不能外推實機感測品質。
+原始樣本→新增native ABI→原SDK→MOD的路徑有真實runtime、自動測試及真人操作支持。TC01–04、TC06與TC05真人leave子案例通過；TC07採source／provenance核對，TC08採逐項證據稽核。原exact±60 fixture誤用了±40，本次改為±60 equality及±62越門檻後通過；overflow／ack timeout有unit覆蓋，完整initialize/reset與初始化不可用分支沒有執行證據，改列未執行。不能外推實機感測品質。
 
 所有實作、文件與generated輸出都在feature worktree；dev worktree未修改。無正式契約、production、其他Event／Action或SDK門檻變更。合併及後續採用由human決定，不自動merge／release／清理branch。
+
+## PR comment review 修正 — 2026-10-13
+
+六項建議均採用：顯式工具鏈來源、macOS主機限制、頁面驗收狀態、真正±60 fixture、重現provenance與歷史證據分離，以及撤回未執行reset／不可用初始化的覆蓋宣稱。舊run與真人軌跡證據不變；完整驗收改為無法判定，避免把既有局部PASS擴為未測分支。測試與建置結果見verification.json的prCommentReview。

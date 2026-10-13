@@ -154,3 +154,19 @@ PR evidence: https://github.com/a129924/coami/pull/16; gh pr view confirmed OPEN
 | TestCase | TC01–08 | human01–06 PASS; source/audit07–08 PASS; independent evidence review approved with count correction applied |
 
 No production change, dev-worktree write, release, merge or cleanup. Original implementation check results retained; no unnecessary rebuild for evidence-only update.
+
+## PR comment review-and-fix — current correction
+
+Prior human-acceptance summary is superseded for complete TC05: leave/recovery PASS, but full initialize/reset and unavailable initialization are not-run. Overall acceptance inconclusive; PR Ready, no merge authorized.
+
+| Field | planned | actual |
+| --- | --- | --- |
+| In-Scope | six PR comments | tool source/host guard, status, boundary fixture, provenance, coverage correction |
+| Out-Of-Scope | production/new host support/merge | none added |
+| ReadOnly | SDK/vendor/historical provenance/exports | original runtime and human records preserved |
+| Written | existing E016 files | scripts/prepare-runtime.mjs, scripts/build-mod.mjs, top-touch-input.test.ts, index.html, README, verification, plan/step/review-log |
+| Deleted | none | none |
+| Modify | bounded E016 source/docs | no gesture/runtime ABI changes |
+| Goal | correct reproducibility and evidence | explicit prerequisites and unsupported host error; per-run generated provenance; uncovered branches marked not-run |
+| Non-Goal | fresh tool installation/all-branch PASS | no installs or fabricated coverage |
+| TestCase | affected verification | ±60 fixtureRED40!=60→GREEN±60/±62;8tests;typecheck/build;CLI preflight;MOD hash/evidence preservation |

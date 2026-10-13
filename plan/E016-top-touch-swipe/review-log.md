@@ -43,3 +43,11 @@ Independent human-evidence review: approved-with-nonblocking-evidence-correction
 ```json
 {"verdict":"approved-with-nonblocking-evidence-correction","blocking_issues":[],"correction_applied":"complete-session non-swipe contacts = 9"}
 ```
+
+## PR comment review-and-fix — 2026-10-13 (supersedes prior complete PASS)
+
+PR Ready per owner. Six Codex review suggestions all ADDRESS; Copilot review unavailable because quota reached, not a code verdict. Pinned boundary fixture was±40, corrected to±60 equality and±62 recognition after RED assertion40!=60. Explicit toolchain source replaces private default; macOS-only guard and prerequisites avoid unsupported Linux invocation. Per-run provenance stays ignored undergenerated, MOD finalization adds actual hashes and clears stale served claims; finalized evidence unchanged.
+
+Reset/initialize and unavailable initialization were not exercised; prior automated-coverage claim and complete TC05PASS are withdrawn. TC05leave/recovery human subcase staysPASS; complete TC05not-run and experiment inconclusive. Index/README/evidence reflect this distinction. Eight tests, strict web/MOD typecheck, Vitebuild, isolated CLI prerequisite failures and actual MOD/provenance preservation checksPASS. No repeat WASM build, source/native change or human operation. Bounded independent review pending.
+
+Independent bounded review: approved-with-one-documentation-correction. Reviewer reran8unit testsPASS, accepted six corrections and evidence downgrade, confirmed historical provenance/exports unchanged. Corrected stale Draft=true toDraft=false in plan. No other blocking issue. Browser read-only status check on temporary preview confirmed corrected footer; no pointer/reset tests performed.

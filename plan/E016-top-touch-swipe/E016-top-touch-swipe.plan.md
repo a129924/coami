@@ -24,7 +24,7 @@ No IMU/TTS/gaze/video feature/K151/Robot Action/server/WebSocket/formal event co
 
 Current: pr-open
 Next actor: Human
-Stage-local action: Review Draft PR #16 with completed bounded simulator acceptance; no automatic merge.
+Stage-local action: Address PR review comments, commit/push and resolve threads per owner instruction; PR Ready, no automatic merge.
 
 planned→creator-in-progress; creator-in-progress→review-ready; review-ready→reviewer-in-progress; reviewer-in-progress→approved|needs-rework; needs-rework→creator-in-progress; approved→creator-in-progress|publish-in-progress; publish-in-progress→pr-open|merged; pr-open→needs-rework|merged; merged→terminal.
 
@@ -94,6 +94,12 @@ No release/VERSION/deployment/production adoption. Stop at Draft PR human review
 
 ## Open Questions / Unresolved Items
 
-No owner scope question. New ABI/build/runtime automated operations are verified in evidence/runtime-provenance.json and evidence/verification.json. Owner completed human TC01–06; TC07 source/provenance and TC08 evidence audit recorded. Historical failed attempt15 retained; later valid17/19 passed. Human PR review remains pending. Existing Graphify graph absent: source-search fallback, no extraction. Tool failure reports limitation without changing core gate.
+No owner scope question. New ABI/build/runtime automated operations are verified in evidence/runtime-provenance.json and evidence/verification.json. Owner completed executed human swipe/leave cases; overall TC05 initialize/reset and unavailable initialization lack execution evidence and are not-run. TC07 source/provenance and TC08 evidence audit recorded. Historical failed attempt15 retained; later valid17/19 passed. Human PR review remains pending. Existing Graphify graph absent: source-search fallback, no extraction. Tool failure reports limitation without changing core gate.
 
-Human review handoff: https://github.com/a129924/coami/pull/16; Draft=true; base=dev; head=feat/andrew/e016-top-touch-swipe. Implementation approved; bounded simulator acceptance complete, final counts6/4/pending0. Human PR review/merge pending.
+Human review handoff: https://github.com/a129924/coami/pull/16; Draft=false; base=dev; head=feat/andrew/e016-top-touch-swipe. PR Ready after owner instruction; executed human swipe/leave results6/4/pending0 preserved. Overall acceptance inconclusive pending unexecuted TC05 reset/unavailable branches; review/merge pending.
+
+## PR comment review-and-fix — 2026-10-13
+
+Owner authorizes bounded fixes, topic commit/push, replies and thread resolution. ADDRESS all six review comments4255715535/5542/5547/5553/5559/5563. No architecture/SDK/runtime ABI change. Toolchain prerequisites now explicit; full preparation is macOS-only. Build provenance goes to ignored generated paths, preserving original evidence. Correct ±60/±62 fixtures and retract unsupported initialize/reset/unavailable coverage; these branches remain not-run. Current PR state is Ready, not Draft.
+
+In-Scope=the six comments; Out-Of-Scope=production/new platform support/merge; ReadOnly=SDK/vendor/finalized runtime provenance/human event exports; Written=existing E016 scripts/test/index/README/verification and plan/step/review-log; Deleted=none; Modify=bounded E016 files; Goal=accurate reproduction and evidence; Non-Goal=claim uncovered failure branches; TestCase=boundary RED→GREEN,8tests,typecheck/build,CLI preflight and MOD provenance preservation.
