@@ -142,3 +142,19 @@
 - 中間匯出快照經records與observations前綴逐項比對，均完整包含於human-final.json；中間檔移至ignored web/generated/human-partial-archive，保留最終完整原始匯出供review，未丟失事件。
 
 - 最終原始匯出：1881 records、24 observations；SHA-256 `9a8908578f2d3207f07abc590fe879cbba58da2a29a60635b85e9fb79f5fdbd7`。資料核對確認每個四方向樣本前有獨立prepare且真人符合，#19/#23解除僅記錄，#20符合，#24不符合且無rotation。
+
+## Owner要求單次重測（尚未執行）
+
+- Owner要求針對「上→解除→下仍抬頭」再測一次；限定同一v2條件的一次獨立重測，不改目標、SDK或判準。
+- 重測前已核對同一run目前停在#24、selected=down、原真人結果不符合。
+- 預定：先獨立prepare→上，確認向上後解除，再直接下；上與下之間不插入prepare/setPose。實際序號與結果待取得，不預先寫成通過或失敗。
+- 原#22→#23→#24失敗及human-final.json保留，不以重測覆蓋。
+
+## Owner要求的單次重測結果：仍失敗
+
+- 同一v2 run；#25 prepare，2954434ms真人符合；#26 look/up，p=-π/4，2967875ms真人符合；#27 away，2977439ms返回、2984180ms記未確認；#28 look/down [0.5,0,-0.5]，2993577ms begin、2993578ms returned、2998587ms window-ended，3000437ms真人不符合。
+- Owner回覆「仍抬頭」，並詢問解法。human-retry.json保存完整重測原始匯出；#28無任何applyRotation。
+- #26→#27→#28之間無prepare/setPose；原#24失敗及human-final.json保留。此次重測仍FAIL，不以反覆重試改判。
+
+- Owner指定下載檔 `/Users/andrew/Downloads/E019-2026-10-13T07-53-36-719Z (4).json` 與 human-retry.json 位元組完全一致；28 observations，最後#28不符合；SHA256 0705fcae03c5f96f0ec012874b7728c02329a987bf2549e9317f3e29b57b1299。
+- 後續離線候選修正診斷見pitch-diagnostic/README.md；原版相關測試3失敗／1通過，記憶體中修正pitch符號後4通過。未修改vendor或WASM，不將診斷成功當成E019已修復。
