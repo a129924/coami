@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E018 · 日文 TTS</title></head>
+<body><main>
+  <header><span class="eyebrow">COAMI · EXPERIMENT 018</span><h1>讓 Robot 說一句話</h1><p>離線日文語音實驗。程式完成仍需真人核對聽到的內容。</p></header>
+  <section class="workspace"><div class="robot"><canvas id="viewport" aria-label="Stack-chan 模擬器"></canvas><canvas id="screen" hidden></canvas></div>
+  <div class="controls"><button id="start">啟動模擬器並解鎖聲音</button><p id="status" role="status">尚未就緒</p>
+  <p id="notice" role="status"></p><div class="sentences"><button id="say-a" disabled>A · こんにちは。</button><button id="say-b" disabled>B · おやすみなさい。</button></div>
+  <p class="note">依 A → B → A 操作，逐次確認內容。執行中再次點擊會拒絕；結果未確認時請重新載入。</p>
+  <ol id="history" aria-label="請求結果"></ol></div></section>
+  <details><summary>驗證工具與事件紀錄</summary><p>故障注入僅用於驗證失敗回報，不會播放聲音。</p><button id="failure" disabled>下一筆播放失敗（測試）</button><button id="download">下載本次 trace</button><pre id="trace"></pre></details>
+</main><script type="module" src="/src/main.ts"></script></body></html>
