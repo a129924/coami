@@ -23,7 +23,7 @@
 ## 環境與前置條件
 
 - 本次工程環境：macOS arm64、Node 26.10.0、npm 11.19.1。直接依賴版本沿用E008，E015 lockfile 的 source-map-js 已修補至1.2.2，MOD使用vendor內建WASM compiler；web與MOD strict TypeScript。
-- 完整 runtime build 需要 pinned Moddable 9.5.0 source `b6e06ba70506a7381ffb28e09e3175bf4e99f305`、emsdk 5.0.1 `14c18b569f55138fe4963924162244251f454fb0`、fontbm `7677b908523e909679f67cd5c170396bb9def1aa`。請依 E008 README 的相同工具鏈設定 MODDABLE、EMSDK、FONTBM、FONTBM_SOURCE 和 PATH。初次交付時工具鏈未配置，`npm run assets` 曾停止於 `BLOCKED: MODDABLE 9.5.0 is not configured`。2026-10-13 owner 授權後已於本 feature worktree 的 ignored `web/generated/toolchain-verified/` 安裝 pinned sources、完成 `npm run prepare:poc` 並核對 HTTP 與 provenance 雜湊；真人錄影仍未開始。
+- 完整 runtime build 需要 pinned Moddable 9.5.0 source `b6e06ba70506a7381ffb28e09e3175bf4e99f305`、emsdk 5.0.1 `14c18b569f55138fe4963924162244251f454fb0`、fontbm `7677b908523e909679f67cd5c170396bb9def1aa`。請依 E008 README 的相同工具鏈設定 MODDABLE、EMSDK、FONTBM、FONTBM_SOURCE 和 PATH。初次交付時工具鏈未配置，`npm run assets` 曾停止於 `BLOCKED: MODDABLE 9.5.0 is not configured`。2026-10-13 owner 授權後已於本 feature worktree 的 ignored `web/generated/toolchain-verified/` 安裝 pinned sources、完成 `npm run prepare:poc` 並核對 HTTP 與 provenance 雜湊；其後真人操作結果見下節及 evidence。
 - 必須在 localhost、支援 MediaRecorder／canvas.captureStream 的瀏覽器，給予 webcam 權限。驗證執行前頁面核對 served runtime provenance 與mc.js/mc.wasm SHA-256；缺失時不要求相機、不使用舊二進位替代。
 - 影格為96×96 RGB565LE。錄製source是MOD已確認的host副本，不是MOD encoder。純測試用fake recorder／run／clock，明確屬模擬，不含真人相機證據。
 
@@ -50,23 +50,23 @@ npm run dev
 5. TC5：權限拒絕、Starting取消、快速重複按鈕、camera track中斷，記原因與清理。Finalizing三按鈕停用；「暫停」語意是結束，不支援pause/resume。
 6. 在 `evidence/recording-run.md` 逐案寫實際環境、時間、metadata、具名人工觀察及限制；未做項保持pending。不要保存影片、截圖或raw pixels。
 
-本次只完成工程局部驗證；實際命令見 `evidence/validation.txt`。尚未執行TC1–TC4真人webcam流程。
+工程局部驗證、實際約5.9秒與29.5秒的錄製／完整回放、取消清理及取消後重開輸出已有證據；實際命令見 `evidence/validation.txt`，owner transcript見 `evidence/recording-run.md`。實際異常案例仍待補證；owner已確認動作一致、無舊段／取消段內容，以及取消無輸出。
 
 ## 是否成功
 
-- 真人驗證嘗試日期：2026-10-13（Start 在 runtime installed 等待逾時，未取得相機權限／影格）。
-- **實驗狀態：無法判定。** 原因：已嘗試 Start，但 runtime readiness 在要求相機權限前逾時，webcam／人工動態回放證據未建立；完整 pinned runtime 已重建並核對，正在完成一次有界啟動修正。純測試與MOD/web build不替代主假設。
-- **本輪可行性驗證任務完成：否。** 工程程式與局部驗證可交Draft PR；TC1–TC4及實際TC5仍待owner。兩種完成語意分開。
+- 真人驗證日期：2026-10-13；啟動逾時修正後已有短段39、長段185、取消段19及重開段38個不同有效配對。
+- **實驗狀態：無法判定（整體假設尚缺完整案例）。** 短段錄製5.911秒、播放5.754秒、差0.157秒；長段錄製29.473秒、播放29.316秒、頁面誤差0.156秒。回放長度差約23.562秒，符合至少3秒。兩段停止後均在5秒內ready，tracks ended且計數靜止。取消回到idle、tracks ended且計數靜止；重開錄製5.950秒、完整回放5.888015秒、差0.062秒，loaded/error-free且ended=true。owner已確認動作一致、無舊段／取消段及取消無輸出；實際異常仍需補證。
+- **本輪可行性驗證任務完成：否。** 工程程式與局部驗證可交Draft PR；實際TC5尚未執行；長段原始零音軌事件已截斷，保留此證據缺口。兩種完成語意分開。
 
 ## 結果與證據
 
 - `evidence/validation.txt`：初始red缺少目標實作、局部green tests、strict checks、MOD/web build、runtime前置失敗；工具鏈缺失不是假設失敗。
-- `evidence/recording-run.md`：環境、source hashes、未執行人工案例與owner記錄欄位。
+- `evidence/recording-run.md`：環境、source hashes、owner實測紀錄、人工觀察缺口與待執行案例。
 - 頁面驗證資訊只顯示monotonic時間、狀態、配對digest/luma/count、MIME、bytes、track state與回放時間差。影片只在記憶體，開始新段／取消／離頁清除。
 - Archify與PR Lens是外部理解工件；Graphify無可用graph時採targeted-source fallback。任何工具PASS都不支持錄影成功。
 
 ## 結論與限制
 
-目前只支持程式交付與局部生命週期驗證；尚無足夠證據判斷主要錄影假設。完整pinned runtime已準備好，下一個必要證據是owner執行TC1–TC4與實際TC5。
+目前支持指定simulator上手動長短錄製、結束、完整回放與清理的已測量部分，以及取消清理與重開輸出；尚不足判斷全部假設。owner已確認動作順序一致、沒有舊段／取消段內容，以及取消當下無輸出。取消後重開段已完整回放，差0.062秒，符合時間判準。下一步是實際TC5；長段原始零音軌事件已截斷，不能憑其他片段補造。保留原始操作範例與實際輸入偏差，不事後改判準。
 
 此為無聲、低解析度、指定simulator／browser的有限實驗；不保證fps、跨瀏覽器、真機或正式採用。Draft PR停在人類審查，不merge、不release。
