@@ -194,6 +194,13 @@ class E013Tests(unittest.TestCase):
             with self.assertRaisesRegex(e.ContractError, "ANALYSIS_UNAVAILABLE"):
                 evidence.read_rows(analysis)
 
+    def test_deep_manifest_json_reports_contract_failure(self) -> None:
+        with TemporaryDirectory() as temporary:
+            manifest = Path(temporary) / "manifest.json"
+            manifest.write_bytes(b"[" * 10000 + b"0" + b"]" * 10000 + b"\n")
+            with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_MANIFEST"):
+                evidence.read_manifest(manifest)
+
     def test_live_store_rejects_redirected_subdirectories(self) -> None:
         with TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -1502,6 +1509,25 @@ source = { registry = "https://pypi.org/simple" }
                 }
             )
             e.write_exclusive(restricted / "authorization.json", authorization)
+            authorization_repo_path = (e.AUTHORIZATION_DIR / "run-1.json").as_posix()
+            authorization_revision = "a" * 40
+            actual_checked_git = e.checked_git
+
+            def checked_git_with_synthetic_authorization(
+                checkout: Path, arguments: list[str]
+            ) -> bytes:
+                if arguments == [
+                    "show",
+                    f"{authorization_revision}:{authorization_repo_path}",
+                ]:
+                    return authorization
+                return actual_checked_git(checkout, arguments)
+
+            git_patch = patch.object(
+                e, "checked_git", side_effect=checked_git_with_synthetic_authorization
+            )
+            git_patch.start()
+            self.addCleanup(git_patch.stop)
             e.write_exclusive(
                 restricted / "manifest.json",
                 e.json_bytes(
@@ -1519,6 +1545,8 @@ source = { registry = "https://pypi.org/simple" }
                         "runner_source_path": "runner.py",
                         "live_authorization_sha256": e.sha(authorization),
                         "live_authorization_path": "authorization.json",
+                        "authorization_repo_path": authorization_repo_path,
+                        "authorization_revision": authorization_revision,
                         "store_policy_sha256": e.sha(store_policy_bytes),
                         "store_policy_path": "store-policy.json",
                         "uv_lock_sha256": e.sha(uv_lock_bytes),
@@ -1740,6 +1768,13 @@ source = { registry = "https://pypi.org/simple" }
                 {gap["reason"] for gap in without_access["gaps"]},
                 {"ANALYSIS_ACCESS_REQUIRED"},
             )
+            public_events = (output / "events.jsonl").read_bytes()
+            (output / "events.jsonl").write_bytes(b"tampered")
+            self.assertEqual(
+                {gap["reason"] for gap in evidence.verify_evidence(output)["gaps"]},
+                {"ANALYSIS_ACCESS_REQUIRED", "EVENT_LOG_MISMATCH"},
+            )
+            (output / "events.jsonl").write_bytes(public_events)
             public_summary = (output / "summary.json").read_bytes()
             (output / "summary.json").write_bytes(b"broken")
             self.assertEqual(
@@ -1753,6 +1788,32 @@ source = { registry = "https://pypi.org/simple" }
                 self.assertIsNotNone(loaded.call_args.kwargs["source_bytes"])
             self.assertEqual(with_access["verified_cases"], 75)
             self.assertEqual(with_access["gaps"], [])
+            committed_freeze = e.committed_git_bytes
+
+            def changed_freeze(checkout: Path, relative: Path) -> bytes:
+                if relative == e.FREEZE_RELATIVE:
+                    return b"uncommitted freeze"
+                return committed_freeze(checkout, relative)
+
+            with patch.object(e, "committed_git_bytes", side_effect=changed_freeze):
+                self.assertIn(
+                    "FREEZE_SOURCE_UNCOMMITTED",
+                    {
+                        gap["reason"]
+                        for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                    },
+                )
+            changed_manifest = e.read_object(output / "manifest.json")
+            changed_manifest["authorization_revision"] = "0" * 40
+            (output / "manifest.json").write_bytes(e.json_bytes(changed_manifest))
+            self.assertIn(
+                "AUTHORIZATION_COMMIT_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "manifest.json").write_bytes(e.json_bytes(public_manifest))
             published_lock = (output / "uv.lock").read_bytes()
             (output / "uv.lock").write_bytes(published_lock + b"\n")
             with self.assertRaisesRegex(
@@ -2449,12 +2510,14 @@ source = { registry = "https://pypi.org/simple" }
             )
             (output / "review.json").write_bytes(review_bytes + b" ")
             self.assertIn(
-                "REVIEW_HASH_MISMATCH",
+                "REVIEW_MISSING",
                 {
                     gap["reason"]
                     for gap in evidence.verify_evidence(output, restricted)["gaps"]
                 },
             )
+            with self.assertRaisesRegex(e.ContractError, "INVALID_PUBLICATION_REVIEW"):
+                evidence.read_review(output / "review.json")
             (output / "review.json").write_bytes(review_bytes)
             self.assertEqual(evidence.verify_evidence(output, restricted)["gaps"], [])
 

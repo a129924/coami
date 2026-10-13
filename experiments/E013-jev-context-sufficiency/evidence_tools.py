@@ -55,6 +55,8 @@ LOCAL_MANIFEST_KEYS = {
     "runner_source_path",
     "live_authorization_sha256",
     "live_authorization_path",
+    "authorization_repo_path",
+    "authorization_revision",
     "store_policy_sha256",
     "store_policy_path",
     "uv_lock_sha256",
@@ -66,6 +68,8 @@ LOCAL_REQUIRED_KEYS = LOCAL_MANIFEST_KEYS - {
     "runner_source_path",
     "live_authorization_sha256",
     "live_authorization_path",
+    "authorization_repo_path",
+    "authorization_revision",
     "store_policy_sha256",
     "store_policy_path",
     "uv_lock_sha256",
@@ -192,12 +196,15 @@ def read_review(path: Path) -> dict[str, Any]:
         raise e.ContractError("INVALID_PUBLICATION_REVIEW")
 
     try:
+        data = path.read_bytes()
         review = json.loads(
-            path.read_bytes(),
+            data,
             object_pairs_hook=unique,
             parse_constant=invalid_number,
         )
-    except (OSError, ValueError, UnicodeDecodeError) as exc:
+        if e.json_bytes(review) != data:
+            raise e.ContractError("INVALID_PUBLICATION_REVIEW")
+    except (OSError, ValueError, TypeError, UnicodeDecodeError, RecursionError) as exc:
         if isinstance(exc, e.ContractError):
             raise
         raise e.ContractError("INVALID_PUBLICATION_REVIEW") from exc
@@ -246,7 +253,7 @@ def read_manifest(path: Path) -> dict[str, Any]:
         manifest = json.loads(data, object_pairs_hook=unique)
         if not isinstance(manifest, dict) or e.json_bytes(manifest) != data:
             raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
-    except (OSError, ValueError, TypeError, UnicodeDecodeError) as exc:
+    except (OSError, ValueError, TypeError, UnicodeDecodeError, RecursionError) as exc:
         if isinstance(exc, e.ContractError):
             raise
         raise e.ContractError("INVALID_EVIDENCE_MANIFEST") from exc
@@ -644,6 +651,8 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
             for field in (
                 "live_authorization_sha256",
                 "live_authorization_path",
+                "authorization_repo_path",
+                "authorization_revision",
                 "uv_lock_sha256",
                 "uv_lock_path",
                 "sdk_code_digests_sha256",
@@ -656,10 +665,24 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
         return "AUTHORIZATION_MISSING"
     if manifest.get("live_authorization_path") != "authorization.json":
         return "AUTHORIZATION_MISSING"
+    repo_path = manifest.get("authorization_repo_path")
+    revision = manifest.get("authorization_revision")
+    if (
+        repo_path != (e.AUTHORIZATION_DIR / f"{manifest.get('run_id')}.json").as_posix()
+        or not isinstance(revision, str)
+        or not REVISION.fullmatch(revision)
+    ):
+        return "AUTHORIZATION_COMMIT_MISMATCH"
     try:
         data = (root / "authorization.json").read_bytes()
         if e.sha(data) != expected_hash:
             return "AUTHORIZATION_HASH_MISMATCH"
+        try:
+            committed = e.checked_git(e.ROOT, ["show", f"{revision}:{repo_path}"])
+        except (OSError, subprocess.CalledProcessError, e.ContractError):
+            return "AUTHORIZATION_COMMIT_MISMATCH"
+        if committed != data:
+            return "AUTHORIZATION_COMMIT_MISMATCH"
         document = e.parse_live_authorization(data)
         if not isinstance(document, dict) or set(document) != {
             "run_id",
@@ -697,6 +720,28 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
             return "AUTHORIZATION_MISMATCH"
     except (OSError, ValueError, UnicodeDecodeError):
         return "AUTHORIZATION_MISSING"
+    return None
+
+
+def frozen_source_commit_gap() -> str | None:
+    """Require the accepted freeze and every case source to match this HEAD."""
+    paths = [
+        e.FREEZE_RELATIVE,
+        Path("evaluation/context_sufficiency/versions/v1/review.md"),
+        *(
+            Path("evaluation/context_sufficiency/versions/v1") / name
+            for name in e.V1_FILES
+        ),
+        *(Path("evaluation/context_sufficiency") / name for name in e.V0_HASHES),
+    ]
+    try:
+        if any(
+            (e.ROOT / path).read_bytes() != e.committed_git_bytes(e.ROOT, path)
+            for path in paths
+        ):
+            return "FREEZE_SOURCE_UNCOMMITTED"
+    except (OSError, subprocess.CalledProcessError, e.ContractError):
+        return "FREEZE_SOURCE_UNCOMMITTED"
     return None
 
 
@@ -943,6 +988,8 @@ def verify_local_run(
     except (KeyError, TypeError, OSError, ValueError, e.ContractError):
         case_rows = []
     gaps = inventory_gaps(manifest, rows, case_rows) + metadata_gaps(run_dir, manifest)
+    if issue := frozen_source_commit_gap():
+        gaps.append({"reason": issue})
     if manifest_chronology_gap(manifest, rows):
         gaps.append({"reason": "MANIFEST_CHRONOLOGY_MISMATCH"})
     if run_id != PRE_RECORD_RUN_ID and event_log_gap(run_dir, rows, None):
@@ -1401,6 +1448,8 @@ def verify_evidence(
     }:
         raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
     gaps = metadata_gaps(evidence_run, manifest, published=True)
+    if issue := frozen_source_commit_gap():
+        gaps.append({"reason": issue})
     allowed_files = PUBLIC_EVIDENCE_FILES | {
         item["raw_public_path"]
         for item in locators
@@ -1711,17 +1760,31 @@ def verify_evidence(
                 gaps.append({"group": key[0], "case_id": key[1], "reason": mismatch})
                 continue
         full_rows.append(full)
+    historical = manifest.get("run_id") == PRE_RECORD_RUN_ID
+    event_hash_bad = False
+    if historical:
+        event_hash_bad = manifest.get("events_sha256") is not None
+    else:
+        expected_event_hash = manifest.get("events_sha256")
+        try:
+            event_hash_bad = (
+                not isinstance(expected_event_hash, str)
+                or not HASH.fullmatch(expected_event_hash)
+                or e.sha((evidence_run / "events.jsonl").read_bytes())
+                != expected_event_hash
+            )
+        except OSError:
+            event_hash_bad = True
+    if event_hash_bad:
+        gaps.append({"reason": "EVENT_LOG_MISMATCH"})
     if len(full_rows) == 75:
         gaps.extend(inventory_gaps(manifest, full_rows, case_rows))
         if manifest_chronology_gap(manifest, full_rows):
             gaps.append({"reason": "MANIFEST_CHRONOLOGY_MISMATCH"})
-        if manifest.get("run_id") == PRE_RECORD_RUN_ID:
-            if manifest.get("events_sha256") is not None:
-                gaps.append({"reason": "EVENT_LOG_MISMATCH"})
-        elif (
-            not isinstance(manifest.get("events_sha256"), str)
-            or not HASH.fullmatch(manifest["events_sha256"])
-            or event_log_gap(evidence_run, full_rows, manifest["events_sha256"])
+        if (
+            not historical
+            and not event_hash_bad
+            and event_log_gap(evidence_run, full_rows, expected_event_hash)
         ):
             gaps.append({"reason": "EVENT_LOG_MISMATCH"})
     try:

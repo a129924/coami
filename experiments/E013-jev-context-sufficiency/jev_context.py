@@ -165,6 +165,7 @@ V1_FREEZE_KEYS = {
 LOCAL_STORE_ROOT = Path("/Users/andrew/coami-evidence/E013")
 HISTORICAL_RUN_ID = "20261008T035450Z-010364d7"
 RUNNER_RELATIVE = Path("experiments/E013-jev-context-sufficiency/jev_context.py")
+AUTHORIZATION_DIR = RUNNER_RELATIVE.parent / "authorizations"
 LOCK_RELATIVE = RUNNER_RELATIVE.parent / "uv.lock"
 SDK_DIGESTS_RELATIVE = RUNNER_RELATIVE.parent / "sdk-code-digests.json"
 SDK_DIGESTS_SHA256 = "1cdbcc1ebd328cb07511b75dca90c3395e42f1349d4c819e8a9b03dd1c197206"
@@ -1124,6 +1125,25 @@ def run_live(
         )
         if sha(authorization_bytes) != authorization_sha256:
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+        authorization_relative = authorization.resolve().relative_to(root.resolve())
+        if authorization_relative != AUTHORIZATION_DIR / f"{run_id}.json":
+            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+        authorization_revision = (
+            checked_git(root, ["rev-parse", "HEAD^{commit}"]).decode("ascii").strip()
+        )
+        if not re.fullmatch(r"[0-9a-f]{40}", authorization_revision):
+            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+        if (
+            checked_git(
+                root,
+                [
+                    "show",
+                    f"{authorization_revision}:{authorization_relative.as_posix()}",
+                ],
+            )
+            != authorization_bytes
+        ):
+            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         use_marker = store / "authorization-uses" / f"{run_id}.json"
         published = (
             root / "experiments/E013-jev-context-sufficiency/evidence/runs" / run_id
@@ -1198,6 +1218,8 @@ def run_live(
         "runner_source_path": "runner.py",
         "live_authorization_sha256": authorization_sha256,
         "live_authorization_path": "authorization.json",
+        "authorization_repo_path": authorization_relative.as_posix(),
+        "authorization_revision": authorization_revision,
         "store_policy_sha256": sha(store_policy_bytes),
         "store_policy_path": "store-policy.json",
         "uv_lock_sha256": sha(lock_bytes),
