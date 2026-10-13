@@ -208,3 +208,14 @@ Historical automated 17-case suite not rerun; new result is the two CUA directio
 Human original failure retained; post-fix human acceptance pending. Original SDK/runtime/MOD unchanged.
 
 2026-10-13 operator acceptance: both directions3, hold/reversal/release, independent strokes, tap/small movement/long hold, pre/post-threshold outside cleanup/recovery, page-leave/recovery and normal restart PASS. See swipe-run.md for exact operations and limits. Agent isolated real UI initialization failure/recovery PASS, separate from human evidence. Offline trace checks: no drops/errors in successful sessions, MOD counts/ticks/sample consumption consistent, provenance equal. No source/runtime changes this round; no repeated test/build required.
+
+2026-10-13 PR #17 review fixes (reviewed head e4ef845)
+Four main.ts VM/DOM-boundary regression tests RED on original lifecycle, then GREEN:
+- persisted pageshow restarts disposed engine/session and accepts input
+- pending fetch timeout immediately unlocks restart; late old completion cannot replace fresh session
+- pending engine.start timeout disposes engine/unlocks restart; late old completion cannot affect fresh session
+- new startup clears displayed provenance before verification settles
+Git guard fixture: clean pin accepted; tracked dirty source, moved checkout and mismatched repository gitlink rejected. Fixtures are shared local clones; original vendor untouched. Actual standalone build-mod entrypoint also rejects all three and mismatched runtime provenance before import, with seeded stale archive removed on each failure.
+Final: npm test 28/28 PASS; npm run build strict web/MOD typecheck + Vite PASS (existing chunk warning); npm run mod PASS (2203 bytes, hashes unchanged).
+TOOLCHAIN.md shell blocks bash -n PASS; pinned upstream makefiles, CMake and emsdk release map inspected. Fresh network acquisition/cold runtime build not executed; documentation states the limit.
+Historical human acceptance predates lifecycle review fixes; no new human PASS claimed. Runtime/MOD and gesture recognizer unchanged.

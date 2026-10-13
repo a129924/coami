@@ -32,7 +32,7 @@
 
 ## 重現步驟
 
-從本實驗 `web/`，先準備上述 pinned 工具的 **E017 隔離副本**：
+新 checkout 請先依 [pinned 工具鏈完整建立程序](runtime/TOOLCHAIN.md) 取得三個指定 commit、建置 Moddable／fontbm 並安裝 emsdk 5.0.1；該程序不依賴 E015 或舊 cache。以下命令適用於已完成該程序、仍使用 Node24–26 的同一個 shell，從本實驗 `web/` 執行：
 
 ```sh
 npm ci
@@ -48,7 +48,7 @@ npm run build
 npm run dev -- --port 5187
 ```
 
-`prepare:poc` 依序重建 runtime 與 MOD，不能並行。runtime 先清舊 public/provenance；單獨 `npm run mod` 也在編譯前移除舊 archive。頁面啟動核對實際 mc.js／mc.wasm／MOD SHA-256。同頁若偵測 runtime 已改變，須完整 reload，避免舊 dynamic-import module cache。stage:host 可獨立準備測試所需 scratch，但不產生 WASM。
+`prepare:poc` 依序重建 runtime 與 MOD，不能並行。runtime 先清舊 public/provenance；單獨 `npm run mod` 也先移除舊 archive，再驗證 vendor gitlink、checkout pin、包含 untracked 檔的 cleanliness 與 runtime provenance source pin；全部符合才載入 MOD builder。頁面啟動核對實際 mc.js／mc.wasm／MOD SHA-256。同頁若偵測 runtime 已改變，須完整 reload，避免舊 dynamic-import module cache。stage:host 可獨立準備測試所需 scratch，但不產生 WASM。
 
 人工程序（全部結果填 evidence/swipe-run.md）：
 
@@ -70,7 +70,7 @@ CHROME_EXE／E017_URL 可指定既有 Chrome 與 localhost URL。測試不注入
 ## 是否成功
 
 - 整體實驗狀態：**成功（本次 pinned browser simulator 範圍）**。真人各方向三次、持續操作、無效輸入、取消／恢復、切分頁及普通重啟隔離已核對；獨立自動初始化故障與恢復通過。
-- 初版 bounded code review 已通過；該審查早於 b408039 高頻輸入修正，不宣稱涵蓋修正。最新實作與證據留在 Draft PR 等待 human review。
+- 初版 bounded code review 已通過；該審查早於 b408039 高頻輸入修正，不宣稱涵蓋修正。最新實作與證據留在 PR #17（Ready for review）等待 human review。
 - 純測試／mock-native SDK ordering 已執行；C/WASM browser 自動操作17案例全部PASS、12次Swipe；結果見 runtime-automated.json。真人首次失敗與修正後完整操作證據詳見 swipe-run.md。修正後23項 source tests、strict build 與 CUA 自動雙向操作通過；後者見 runtime-coalesced-automated.json。
 
 ## 結果與證據
@@ -90,4 +90,6 @@ CHROME_EXE／E017_URL 可指定既有 Chrome 與 localhost URL。測試不注入
 
 高頻 pointer 修正：輸入佇列保留 press、轉折與最新單方向端點，合併尚未消費的中間 move，避免 120Hz pointer 堵塞 20Hz SDK；coalesced trace 明列 replacement sampleId。不調整 SDK 手勢門檻。
 
-2026-10-13驗證任務完成：是（本次simulator-only判準）。owner真人trace與agent自動故障注入分開保存；acceptance-summary.json記錄關聯與限制。單一Chrome/macOS、實機與production未驗證，active操作途中重啟未另做人測，provider-missing分支未另注入。實驗結果支持本次輸入能力，Draft PR仍待human review。
+2026-10-13驗證任務完成：是（本次simulator-only判準）。owner真人trace與agent自動故障注入分開保存；acceptance-summary.json記錄關聯與限制。單一Chrome/macOS、實機與production未驗證，active操作途中重啟未另做人測，provider-missing分支未另注入。實驗結果支持本次輸入能力，PR #17已Ready for review；review修正與證據見 evidence/pr-review-fixes.md。
+
+PR review修正：persisted pageshow重新啟動session；初始化逾時abort/dispose並立即解鎖重啟、隔離晚到結果；新session先清除畫面provenance。28項source／SDK／生命週期／pin回歸測試、strict build與standalone MOD build通過。新增生命周期證據屬自動mock-boundary回歸，不重標既有真人trace為新版本人測。
