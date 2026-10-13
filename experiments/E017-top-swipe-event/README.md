@@ -69,7 +69,7 @@ CHROME_EXE／E017_URL 可指定既有 Chrome 與 localhost URL。測試不注入
 
 ## 是否成功
 
-- 整體實驗狀態：**無法判定**，真人有效位移已暴露 FIFO overflow；修正後真人重測未完成，不能宣稱完整假設成立。
+- 整體實驗狀態：**無法判定**，真人有效位移已暴露 FIFO overflow；修正後真人雙向各一次成功，完整案例仍未完成，不能宣稱完整假設成立。
 - 本輪 bounded code review 已通過；工程交付與 human review 準備狀態以 step、validation 與 PR handoff 為準；與整體假設是否成功分開。
 - 純測試／mock-native SDK ordering 已執行；C/WASM browser 自動操作17案例全部PASS、12次Swipe；結果見 runtime-automated.json。真人首次失敗與修正後待重測詳見 swipe-run.md。修正後23項 source tests、strict build 與 CUA 自動雙向操作通過；後者見 runtime-coalesced-automated.json。
 
