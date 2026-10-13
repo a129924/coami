@@ -136,3 +136,7 @@ operation15曾依指示操作但未新增swipe，當次FAIL紀錄保留；16保�
 ### 第二輪 review：不完整工具鏈 cache
 
 Comment4255853165採用：不再只以moddable/tools/VERSION判定cache完整，改為驗證所有元件並以staging完成後替換。新增四項temporary-filesystem測試：完整cache重用、部分cache重建、中斷複製保留舊cache並重試成功、不合格元件不得發布。首次RED為2項恢復行為失敗；最終整套12項PASS、strict typecheck及script syntax PASS。沒有執行完整WASM重建，既有真人／runtime歷史證據與未執行的reset／初始化分支狀態保持不變。
+
+### 第三輪 review：設定檔中斷寫入
+
+Comment4256008289採用：`.emscripten` 路徑重定位改為同目錄暫存檔完整寫入後rename替換，不直接截斷已發布設定。中斷寫入測試先重現原設定變成truncated的FAIL；修正後原設定保持完整、retry成功。兩項新測試加上既有案例共14項PASS，strict typecheck／script syntaxPASS。這是防止後續寫入中斷的修正，不宣稱修復先前已損毀的設定，也未重跑完整WASM build。

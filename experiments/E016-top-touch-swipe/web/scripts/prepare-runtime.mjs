@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto'
 import { copyFile, mkdir, readFile, rm, access, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { ensureToolchain } from './toolchain-cache.mjs'
+import { ensureToolchain, writeConfigAtomically } from './toolchain-cache.mjs'
 const web = fileURLToPath(new URL('../', import.meta.url))
 const experiment = path.resolve(web, '..')
 const repo = path.resolve(experiment, '../..')
@@ -62,7 +62,7 @@ const moddable = path.join(toolchain,'moddable')
 const emsdk = path.join(toolchain,'emsdk')
 const fontbm = path.join(toolchain,'fontbm/build/fontbm')
 const config = path.join(emsdk,'.emscripten')
-await writeFile(config,(await readFile(config,'utf8')).replaceAll(previous,toolchain))
+await writeConfigAtomically(config,(await readFile(config,'utf8')).replaceAll(previous,toolchain))
 const env = {...process.env,MODDABLE:moddable,EMSDK:emsdk,EM_CONFIG:config,EM_CACHE:path.join(emsdk,'upstream/emscripten/cache'),FONTBM:fontbm,CI:'1',LEFTHOOK:'0',PATH:[path.join(moddable,'build/bin/mac/release'),path.join(emsdk,'upstream/emscripten'),path.join(emsdk,'upstream/bin'),process.env.PATH].join(path.delimiter)}
 if ((await readFile(path.join(moddable,'tools/VERSION'),'utf8')).trim()!=='9.5.0') throw new Error('Moddable 9.5.0 required')
 const emccVersion=execFileSync('emcc',['--version'],{env,encoding:'utf8'}).split('\n')[0]

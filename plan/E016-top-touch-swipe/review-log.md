@@ -57,3 +57,9 @@ Independent bounded review: approved-with-one-documentation-correction. Reviewer
 New comment4255853165 on reviewed head3d78385: incomplete cache wrongly accepted by singleModdable sentinel. ADDRESS via experiment-local ensureToolchain helper: all-component validation; isolated staging copy; validate before replacement; cleanup on error with oldcache preserved. Four temporary-filesystem cases cover reuse/partial recovery/interruption retry/invalid component. Initial1PASS2FAIL; final12testsPASS and strict typecheck/script syntaxPASS. No fullWASM build or human/reset action. New helper/test paths declared in plan; independent review pending.
 
 Independent round2 review: approved, no blocking issues. Reviewer independently ran all12testsPASS, verified3-component validation before reuse/afterstaging, failed staging preserves oldcache and cleans temporary directories, and new artifact paths declared. Native xsa check removed as unnecessary; required paths checked against actual pinned cache. FullWASM build not repeated; historical evidence and unexecuted acceptance branches unchanged.
+
+## PR comment review round3 — 2026-10-13
+
+ADDRESS4256008289: published .emscripten was directly rewritten, risking truncated config on interruption. Unique same-parent staging file now fully written before rename; failure cleans temporary directory and preserves published config. New interrupted-write regression RED (originalbecame truncated), final14testsPASS and strict typecheck/syntaxPASS. Existing paths only. No claim about repair of preexisting corrupted config or fullWASM/runtime/human/reset verification. Independent review pending.
+
+Independent round3 review: approved, no blockers. Reviewer independently ran14testsPASS, checked same-filesystem temporary write/rename and preservation of original configuration on write failure. No fullWASM rebuild, operator page or E019 interaction.

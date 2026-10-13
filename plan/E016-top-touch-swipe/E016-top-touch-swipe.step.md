@@ -184,3 +184,17 @@ Prior human-acceptance summary is superseded for complete TC05: leave/recovery P
 | Goal | recover interrupted preparation | partial cache repaired; failed staging preserves old cache; next retry succeeds |
 | Non-Goal | fullWASM/reset evidence | neither inferred nor repeated |
 | TestCase | cache regression and existing tests | first1PASS/2FAIL→final12PASS, typecheck/syntaxPASS; independent review approved/12PASS |
+
+## PR review round3 — config write interruption
+
+| Field | planned | actual |
+| --- | --- | --- |
+| In-Scope | comment4256008289 | atomic .emscripten update |
+| Out-Of-Scope | SDK/runtime/production/merge | none changed |
+| ReadOnly | tool source and historical evidence | existing pinned cache, source/runtime/operator records unchanged |
+| Written | existing E016 helper/tests/docs | toolchain-cache.mjs, toolchain-cache.test.mjs, prepare-runtime.mjs, README/verification/plan/step/review-log |
+| Deleted | none tracked | test-owned config staging cleaned |
+| Modify | preparation config publication | complete temporary write then same-filesystem rename |
+| Goal | preserve published config during interrupted writes | failed temp write leaves original intact, retry succeeds |
+| Non-Goal | repair preexisting corruption/fullWASM/reset evidence | no such claims |
+| TestCase | interrupted write regression | cache5PASS1FAIL→full14PASS; typecheck/syntaxPASS; independent review approved/14PASS |

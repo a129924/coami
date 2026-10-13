@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, rename, rm } from 'node:fs/promises'
+import { mkdir, mkdtemp, rename, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
 /** Only publish a complete validated copy; interrupted staging can be retried. */
@@ -18,6 +18,17 @@ export async function ensureToolchain({ source, destination, validate, copy }) {
     await validate(staged)
     await rm(destination, { recursive: true, force: true })
     await rename(staged, destination)
+  } finally {
+    await rm(staged, { recursive: true, force: true })
+  }
+}
+
+export async function writeConfigAtomically(file, contents, write = writeFile) {
+  const staged = await mkdtemp(path.join(path.dirname(file), '.config-staging-'))
+  try {
+    const replacement = path.join(staged, 'config')
+    await write(replacement, contents)
+    await rename(replacement, file)
   } finally {
     await rm(staged, { recursive: true, force: true })
   }

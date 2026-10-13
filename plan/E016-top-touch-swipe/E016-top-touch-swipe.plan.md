@@ -109,3 +109,7 @@ In-Scope=the six comments; Out-Of-Scope=production/new platform support/merge; R
 ### PR review round2 — incomplete toolchain cache
 
 ADDRESS4255853165. Revalidate every cached component; stage a complete source copy, validate then replace. Failed copy/validation leaves previous cache intact and cleans current staging; retry needs no manual cache deletion. New helper/test remain experiment-local; package test command includes cache tests. No SDK/ABI/production/new host changes. Historical runtime provenance/operator exports read-only.
+
+### PR review round3 — atomic cached configuration
+
+ADDRESS4256008289. Write relocated .emscripten to a unique temporary directory beside the published file; rename after complete write, cleanup current temporary directory on failure. Existing helper/test paths only. Prior cache recovery and unavailable/reset evidence states unchanged; no fullWASM rebuild.
