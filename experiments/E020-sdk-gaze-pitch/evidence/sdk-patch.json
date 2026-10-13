@@ -1,0 +1,7 @@
+{
+  "baseCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "file": "firmware/host/modules/util/stackchan-util.ts",
+  "patchSha256": "af4d44e0582ca323d882d1cf0073d5f270c573d38c6c61b2d0dac01b8fec3d4d",
+  "originalSha256": "d28ad77de7fa759d82167062d67da17f07db422e94b45c8fedc7b6a4b724a141",
+  "patchedSha256": "2b09d340448405d261736e740e98fcd82cbe8de4cae7f2e80dc28cf839024916"
+}
