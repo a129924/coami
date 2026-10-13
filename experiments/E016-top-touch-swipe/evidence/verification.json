@@ -1,10 +1,10 @@
 {
   "experiment": "E016",
   "date": "2026-10-13",
-  "experimentState": "無法判定",
-  "reason": "Actual WASM/MOD automated observations passed; required human operation has not been performed.",
+  "experimentState": "成功",
+  "reason": "Pinned simulator criteria met by owner operations plus source/provenance audit: human TC01–06 PASS, TC07 source/runtime evidence PASS, TC08 evidence accounting PASS. Historical unsuccessful recovery attempt15 remains recorded with unresolved cause; valid17 and19 demonstrate recovery without reset.",
   "verificationTaskCompleted": true,
-  "completionScope": "Engineering implementation/automated evidence and explicit human-evidence limitation; not human acceptance.",
+  "completionScope": "Engineering implementation and bounded simulator acceptance, with operator exports/attestations separated from agent UI automation and read-only observations; no physical-device or merge claim.",
   "tdd": {
     "initialRed": {
       "tests": 8,
@@ -283,51 +283,66 @@
   "humanAcceptance": [
     {
       "testCase": "TC01",
-      "status": "未執行",
+      "status": "PASS",
       "evidenceType": "human-simulator-operation",
-      "reason": "Awaiting owner procedure"
+      "reason": "Owner completed three independent forward contacts (1,3,4) and backward contacts (2,5,7), each press/one expected swipe/release. Operation6 not counted as valid swipe.",
+      "evidenceReference": "human-direction-batch-01"
     },
     {
       "testCase": "TC02",
-      "status": "未執行",
+      "status": "PASS",
       "evidenceType": "human-simulator-operation",
-      "reason": "Awaiting owner procedure"
+      "reason": "Owner explicitly confirmed instructed hold and reverse-to-left procedure. Operation8 contains press/one forwardSwipe/release; UI remains forward4/backward3.",
+      "evidenceReference": "human-hold-reverse-01"
     },
     {
       "testCase": "TC03",
-      "status": "未執行",
+      "status": "PASS",
       "evidenceType": "human-simulator-operation",
-      "reason": "Awaiting owner procedure"
+      "reason": "Consecutive independent forward operations3 and4 each accepted and separately emitted press/swipe/release; no merge or omission. No overlapping-queue timing claim.",
+      "evidenceReference": "human-direction-batch-01"
     },
     {
       "testCase": "TC04",
-      "status": "未執行",
+      "status": "PASS",
       "evidenceType": "human-simulator-operation",
-      "reason": "Awaiting owner procedure"
+      "reason": "Quick tap operation12 (124ms) and short move operation13 (retained delta2 confirmed by read-only operator-page inspection) each emitted press/release without swipe; UI stayed4/3. Exact threshold boundary is covered separately by automated tests.",
+      "evidenceReference": [
+        "human-quick-tap-01",
+        "human-short-move-01"
+      ]
     },
     {
       "testCase": "TC05",
-      "status": "未執行",
+      "status": "PASS",
       "evidenceType": "human-simulator-operation",
-      "reason": "Awaiting owner procedure"
+      "reason": "Owner confirmed vertical leave before recognition14 and after visible forward6 in18. No swipe14; valid recovery17; one forward18 then release; one backward19 then release, pending0/counts6/4. Historical failed attempt15 preserved without attributing cause.",
+      "evidenceReference": "human-cancel-recovery-confirmed-18-19"
     },
     {
       "testCase": "TC06",
-      "status": "未執行",
+      "status": "PASS",
       "evidenceType": "human-simulator-operation",
-      "reason": "Awaiting owner procedure"
+      "reason": "Operator counts6/4 and subsequent read-only UI pending0/latest19release agree with MOD events through19.",
+      "evidenceReference": "human-cancel-recovery-confirmed-18-19"
     },
     {
       "testCase": "TC07",
-      "status": "未執行",
-      "evidenceType": "human-simulator-operation",
-      "reason": "Awaiting owner procedure"
+      "status": "PASS",
+      "evidenceType": "source/provenance audit with human-simulator-operation",
+      "reason": "Unmodified pinned SDK recognizer consumes raw samples via dedicated WASM ABI; MOD subscribes to SDK TouchPanelInputEvent and UI parses only MOD traces. Runtime-provenance records source/patch/served runtime/MOD hashes. Human swipe deltas62 match recognizer direction; no named-event injection.",
+      "evidenceReference": [
+        "runtime-provenance.json",
+        "human-recovery-success-17",
+        "human-cancel-recovery-confirmed-18-19"
+      ]
     },
     {
       "testCase": "TC08",
-      "status": "未執行",
-      "evidenceType": "human-simulator-operation",
-      "reason": "Awaiting owner procedure"
+      "status": "PASS",
+      "evidenceType": "evidence-accounting audit",
+      "reason": "TC01–08 statuses and evidence types recorded. Operator-export flags remain false; owner attestations and agent read-only observations identified separately. Failed15, diagnostic16, unknown procedure9 and unclassified10/11 retained; no automated input described as human.",
+      "evidenceReference": "humanTrials"
     }
   ],
   "automaticChecks": [
@@ -421,10 +436,12 @@
   },
   "limitations": [
     "No physical K151 evidence",
-    "No human acceptance evidence",
     "Browser download wait timed out, but the actual exported JSON file was saved and ingested",
     "No Graphify graph; source-search fallback used",
-    "Git hook reported lefthook unavailable in PATH; explicit tests/typecheck/build and independent review were performed."
+    "Git hook reported lefthook unavailable in PATH; explicit tests/typecheck/build and independent review were performed.",
+    "Human event exports omit raw pointer trajectories and cancellation cause; explicit owner attestations supplement hold/reverse and leave procedures.",
+    "Recovery attempt15 did not emit swipe; its retained delta0 and diagnostic16 delta14 do not establish maximum motion or root cause. Subsequent valid17/19 passed without reset.",
+    "Exact threshold, overflow/fault/reset and unavailable initialization coverage remains automated; human session1 did not exercise every fault or reset branch."
   ],
   "workflow": {
     "base": "9155139",
@@ -437,7 +454,7 @@
     "isDraft": true,
     "baseRef": "dev",
     "nextActor": "Human",
-    "humanAcceptance": "未執行",
+    "humanAcceptance": "completed: TC01–06 human operation; TC07 source/provenance and TC08 evidence audit; final counts6/4, pending0; Draft PR review still pending",
     "mergeAuthorized": false,
     "checksObservedAtCommit": "1df823d10de9ae0e48b9fb6111b09847ab80d06e",
     "checksObserved": "All returned CI check runs SUCCESS; see PR for later documentation-head runs."
@@ -450,6 +467,1074 @@
     },
     "provenanceHashes": "independently matched",
     "fullRebuildRepeated": false,
-    "humanOperationPerformed": false
+    "humanOperationPerformed": false,
+    "note": "Original independent implementation review preceded human trials. Human evidence audit pending; humanOperationPerformed:false describes reviewer, not owner."
+  },
+  "humanTrials": [
+    {
+      "id": "human-forward-01",
+      "source": "Owner explicitly reported completing the instructed left-to-right action and supplied this export in chat.",
+      "operatorAttested": true,
+      "originalExport": {
+        "experiment": "E016",
+        "evidenceType": "operator-export",
+        "humanVerified": false,
+        "session": 1,
+        "records": [
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 1,
+            "sample": 1,
+            "gesture": "press",
+            "ticks": 58439,
+            "position": -82
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 1,
+            "sample": 59,
+            "gesture": "forwardSwipe",
+            "ticks": 59352,
+            "position": -20
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 1,
+            "sample": 239,
+            "gesture": "release",
+            "ticks": 63691,
+            "position": 0
+          }
+        ]
+      },
+      "assessment": {
+        "status": "PASS",
+        "scope": "One independent forward contact: correct direction and exactly one swipe, followed by release.",
+        "positionDeltaAtRecognition": 62,
+        "gestures": [
+          "press",
+          "forwardSwipe",
+          "release"
+        ],
+        "forwardCount": 1,
+        "backwardCount": 0,
+        "uiCountsVerified": true,
+        "uiAgreementEvidence": "human-backward-01.operatorUiObservation: cumulative forward1/backward1"
+      },
+      "remaining": "TC01 still requires two forward and three backward trials; full TC02 and UI agreement remain pending."
+    },
+    {
+      "id": "human-backward-01",
+      "source": "Owner reported completing the instructed right-to-left action and supplied the cumulative export in chat.",
+      "operatorAttested": true,
+      "originalExport": {
+        "experiment": "E016",
+        "evidenceType": "operator-export",
+        "humanVerified": false,
+        "session": 1,
+        "records": [
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 1,
+            "sample": 1,
+            "gesture": "press",
+            "ticks": 58439,
+            "position": -82
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 1,
+            "sample": 59,
+            "gesture": "forwardSwipe",
+            "ticks": 59352,
+            "position": -20
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 1,
+            "sample": 239,
+            "gesture": "release",
+            "ticks": 63691,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 2,
+            "sample": 240,
+            "gesture": "press",
+            "ticks": 240612,
+            "position": 88
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 2,
+            "sample": 289,
+            "gesture": "backwardSwipe",
+            "ticks": 241269,
+            "position": 26
+          }
+        ]
+      },
+      "assessment": {
+        "recognitionStatus": "PASS",
+        "contactCompletionVerified": true,
+        "scope": "Export proves correct once-only backward recognition; later owner-reported MOD-derived UI confirms operation2 release and matching cumulative counts.",
+        "positionDeltaAtRecognition": -62,
+        "gestures": [
+          "press",
+          "backwardSwipe",
+          "release"
+        ],
+        "forwardCount": 0,
+        "backwardCount": 1,
+        "uiCountsVerified": true,
+        "status": "PASS",
+        "releaseEvidenceSource": "operatorUiObservation; raw release sample/ticks not supplied and not invented",
+        "releaseRawEvidenceReference": "human-direction-batch-01: operation2 sample573 ticks245298"
+      },
+      "remaining": "Full acceptance still requires remaining direction trials and edge-case scenarios.",
+      "operatorUiObservation": {
+        "source": "Owner supplied rendered UI text after the earlier export.",
+        "text": "Runtime 已啟動 · prepared\n可操作 · session 1 · 等待樣本 0\nforwardSwipe\n1\nbackwardSwipe\n1\nsession 1 / operation 2: release · 本次 forward 0, backward 1",
+        "session": 1,
+        "operation": 2,
+        "latestGesture": "release",
+        "pendingSamples": 0,
+        "cumulativeForward": 1,
+        "cumulativeBackward": 1
+      }
+    },
+    {
+      "id": "human-direction-batch-01",
+      "source": "Owner supplied cumulative operator export, reported one deviating attempt, and confirmed rendered counts forward3/backward3 with pending samples0.",
+      "operatorAttested": true,
+      "operatorNote": "我中間有偏掉一次",
+      "originalExport": {
+        "experiment": "E016",
+        "evidenceType": "operator-export",
+        "humanVerified": false,
+        "session": 1,
+        "records": [
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 1,
+            "sample": 1,
+            "gesture": "press",
+            "ticks": 58439,
+            "position": -82
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 1,
+            "sample": 59,
+            "gesture": "forwardSwipe",
+            "ticks": 59352,
+            "position": -20
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 1,
+            "sample": 239,
+            "gesture": "release",
+            "ticks": 63691,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 2,
+            "sample": 240,
+            "gesture": "press",
+            "ticks": 240612,
+            "position": 88
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 2,
+            "sample": 289,
+            "gesture": "backwardSwipe",
+            "ticks": 241269,
+            "position": 26
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 2,
+            "sample": 573,
+            "gesture": "release",
+            "ticks": 245298,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 3,
+            "sample": 574,
+            "gesture": "press",
+            "ticks": 513284,
+            "position": -84
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 3,
+            "sample": 621,
+            "gesture": "forwardSwipe",
+            "ticks": 516135,
+            "position": -22
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 3,
+            "sample": 725,
+            "gesture": "release",
+            "ticks": 517547,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 4,
+            "sample": 726,
+            "gesture": "press",
+            "ticks": 519164,
+            "position": -74
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 4,
+            "sample": 753,
+            "gesture": "forwardSwipe",
+            "ticks": 519667,
+            "position": -12
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 4,
+            "sample": 868,
+            "gesture": "release",
+            "ticks": 520872,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 5,
+            "sample": 869,
+            "gesture": "press",
+            "ticks": 522472,
+            "position": 88
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 5,
+            "sample": 886,
+            "gesture": "backwardSwipe",
+            "ticks": 522876,
+            "position": 22
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 5,
+            "sample": 959,
+            "gesture": "release",
+            "ticks": 523730,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 6,
+            "sample": 960,
+            "gesture": "press",
+            "ticks": 525122,
+            "position": 90
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 6,
+            "sample": 973,
+            "gesture": "release",
+            "ticks": 525443,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 7,
+            "sample": 974,
+            "gesture": "press",
+            "ticks": 568805,
+            "position": 82
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 7,
+            "sample": 991,
+            "gesture": "backwardSwipe",
+            "ticks": 569192,
+            "position": 16
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 7,
+            "sample": 1077,
+            "gesture": "release",
+            "ticks": 570030,
+            "position": 0
+          }
+        ]
+      },
+      "operatorUiObservation": {
+        "runtime": "Runtime 已啟動 · prepared",
+        "input": "可操作 · session 1 · 等待樣本 0",
+        "forward": 3,
+        "backward": 3
+      },
+      "assessment": {
+        "status": "PASS",
+        "scope": "TC01 independent direction trials and aggregate UI agreement",
+        "validForwardOperations": [
+          1,
+          3,
+          4
+        ],
+        "validBackwardOperations": [
+          2,
+          5,
+          7
+        ],
+        "eachValidContactPattern": "press → exactly one expected swipe → release",
+        "nonSwipeOperations": [
+          6
+        ],
+        "nonSwipeNote": "Operation6 has press/release only. Owner reported a deviating attempt; raw pointer path/cancellation cause is not established by this export. Not counted as a valid completed swipe or as verified cancellation behavior.",
+        "uiCountsVerified": true,
+        "sequentialContactsVerified": [
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "id": "human-hold-reverse-01",
+      "source": "Owner responded to the requested hold/reverse scenario with pasted export text and rendered UI text.",
+      "parseNote": "Full pasted JSON contains a duplicated nested export and is malformed. Only the three unambiguous operation8 records at its end are extracted; no raw movement path or malformed surrounding object is reconstructed.",
+      "exportFragment": {
+        "experiment": "E016",
+        "evidenceType": "operator-export-fragment",
+        "humanVerified": false,
+        "session": 1,
+        "records": [
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 8,
+            "sample": 1078,
+            "gesture": "press",
+            "ticks": 741237,
+            "position": -82
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 8,
+            "sample": 1243,
+            "gesture": "forwardSwipe",
+            "ticks": 743771,
+            "position": -20
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 8,
+            "sample": 1821,
+            "gesture": "release",
+            "ticks": 756508,
+            "position": 0
+          }
+        ]
+      },
+      "operatorUiObservation": {
+        "runtime": "Runtime 已啟動 · prepared",
+        "input": "可操作 · session 1 · 等待樣本 0",
+        "forward": 4,
+        "backward": 3,
+        "latest": "session 1 / operation 8: release · 本次 forward 1, backward 0"
+      },
+      "assessment": {
+        "singleContactEventPattern": "PASS",
+        "uiCountsVerified": true,
+        "gestures": [
+          "press",
+          "forwardSwipe",
+          "release"
+        ],
+        "forwardCount": 1,
+        "backwardCount": 0,
+        "positionDeltaAtRecognition": 62,
+        "capturedSwipeToReleaseMs": 12737,
+        "contactCompletionVerified": true,
+        "holdReverseProcedureConfirmed": true,
+        "remaining": "none for TC02; other acceptance criteria still pending.",
+        "status": "PASS"
+      },
+      "operatorProcedureConfirmation": {
+        "source": "Owner explicitly answered the hold/reverse confirmation question in chat.",
+        "verbatim": "對的 我拖回到左側 快底",
+        "confirmedProcedure": "After visible forward4, hold at least2 seconds, keep contact while dragging back near the left edge, then release."
+      },
+      "validCumulativeExportReference": "human-nonswipe-01.originalExport corroborates all three operation8 records; earlier malformed paste retained as historical evidence."
+    },
+    {
+      "id": "human-nonswipe-01",
+      "source": "Owner supplied valid cumulative operator export and rendered UI text in response to requested tap and short-move trials.",
+      "originalExport": {
+        "experiment": "E016",
+        "evidenceType": "operator-export",
+        "humanVerified": false,
+        "session": 1,
+        "records": [
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 1,
+            "sample": 1,
+            "gesture": "press",
+            "ticks": 58439,
+            "position": -82
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 1,
+            "sample": 59,
+            "gesture": "forwardSwipe",
+            "ticks": 59352,
+            "position": -20
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 1,
+            "sample": 239,
+            "gesture": "release",
+            "ticks": 63691,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 2,
+            "sample": 240,
+            "gesture": "press",
+            "ticks": 240612,
+            "position": 88
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 2,
+            "sample": 289,
+            "gesture": "backwardSwipe",
+            "ticks": 241269,
+            "position": 26
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 2,
+            "sample": 573,
+            "gesture": "release",
+            "ticks": 245298,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 3,
+            "sample": 574,
+            "gesture": "press",
+            "ticks": 513284,
+            "position": -84
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 3,
+            "sample": 621,
+            "gesture": "forwardSwipe",
+            "ticks": 516135,
+            "position": -22
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 3,
+            "sample": 725,
+            "gesture": "release",
+            "ticks": 517547,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 4,
+            "sample": 726,
+            "gesture": "press",
+            "ticks": 519164,
+            "position": -74
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 4,
+            "sample": 753,
+            "gesture": "forwardSwipe",
+            "ticks": 519667,
+            "position": -12
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 4,
+            "sample": 868,
+            "gesture": "release",
+            "ticks": 520872,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 5,
+            "sample": 869,
+            "gesture": "press",
+            "ticks": 522472,
+            "position": 88
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 5,
+            "sample": 886,
+            "gesture": "backwardSwipe",
+            "ticks": 522876,
+            "position": 22
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 5,
+            "sample": 959,
+            "gesture": "release",
+            "ticks": 523730,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 6,
+            "sample": 960,
+            "gesture": "press",
+            "ticks": 525122,
+            "position": 90
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 6,
+            "sample": 973,
+            "gesture": "release",
+            "ticks": 525443,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 7,
+            "sample": 974,
+            "gesture": "press",
+            "ticks": 568805,
+            "position": 82
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 7,
+            "sample": 991,
+            "gesture": "backwardSwipe",
+            "ticks": 569192,
+            "position": 16
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 7,
+            "sample": 1077,
+            "gesture": "release",
+            "ticks": 570030,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 8,
+            "sample": 1078,
+            "gesture": "press",
+            "ticks": 741237,
+            "position": -82
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 8,
+            "sample": 1243,
+            "gesture": "forwardSwipe",
+            "ticks": 743771,
+            "position": -20
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 8,
+            "sample": 1821,
+            "gesture": "release",
+            "ticks": 756508,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 9,
+            "sample": 1822,
+            "gesture": "press",
+            "ticks": 970616,
+            "position": -4
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 9,
+            "sample": 1857,
+            "gesture": "release",
+            "ticks": 972037,
+            "position": 0
+          }
+        ]
+      },
+      "operatorUiObservation": {
+        "runtime": "Runtime 已啟動 · prepared",
+        "input": "可操作 · session 1 · 等待樣本 0",
+        "forward": 4,
+        "backward": 3,
+        "latest": "session 1 / operation 9: release · 本次 forward 0, backward 0"
+      },
+      "assessment": {
+        "nonSwipeContactStatus": "PASS",
+        "contactCompletionVerified": true,
+        "uiCountsVerified": true,
+        "gestures": [
+          "press",
+          "release"
+        ],
+        "forwardCount": 0,
+        "backwardCount": 0,
+        "captureDurationMs": 1421,
+        "procedureKindConfirmed": false,
+        "remaining": "Only one new contact observed; clarify whether operation9 was the short move and whether |delta|<=20 was observed. A separate quick tap is still needed; this contact duration exceeds SDK tapMaxDuration300ms."
+      }
+    },
+    {
+      "id": "human-quick-tap-01",
+      "source": "Owner supplied rendered MOD event lines and UI counts in response to the instructed quick central tap without drag/hold.",
+      "exportFragment": {
+        "experiment": "E016",
+        "evidenceType": "operator-ui-event-fragment",
+        "session": 1,
+        "records": [
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 12,
+            "sample": 1864,
+            "gesture": "press",
+            "ticks": 1164691,
+            "position": 2
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 12,
+            "sample": 1866,
+            "gesture": "release",
+            "ticks": 1164815,
+            "position": 0
+          }
+        ]
+      },
+      "operatorUiObservation": {
+        "runtime": "Runtime 已啟動 · prepared",
+        "input": "可操作 · session 1 · 等待樣本 0",
+        "forward": 4,
+        "backward": 3,
+        "latest": "session 1 / operation 12: release · 本次 forward 0, backward 0"
+      },
+      "assessment": {
+        "status": "PASS",
+        "scope": "Quick central tap, no swipe; capture duration124ms is within SDK tapMaxDuration300ms.",
+        "gestures": [
+          "press",
+          "release"
+        ],
+        "captureDurationMs": 124,
+        "forwardCount": 0,
+        "backwardCount": 0,
+        "uiCountsVerified": true
+      },
+      "limitations": "Raw tap metadata/movement path is not exported; owner supplied results for the instructed no-drag tap. Operations10–11 were not supplied and are not classified."
+    },
+    {
+      "id": "human-short-move-01",
+      "source": "Owner supplied MOD event lines and UI counts after instructed short move; agent read-only inspection of the same operator page confirmed retained position/delta. No automated pointer input was performed.",
+      "exportFragment": {
+        "experiment": "E016",
+        "evidenceType": "operator-ui-event-fragment",
+        "session": 1,
+        "records": [
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 13,
+            "sample": 1867,
+            "gesture": "press",
+            "ticks": 1265743,
+            "position": 0
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 13,
+            "sample": 1911,
+            "gesture": "release",
+            "ticks": 1270582,
+            "position": 0
+          }
+        ]
+      },
+      "operatorUiObservation": {
+        "runtime": "Runtime 已啟動 · prepared",
+        "input": "可操作 · session 1 · 等待樣本 0",
+        "forward": 4,
+        "backward": 3,
+        "latest": "session 1 / operation 13: release · 本次 forward 0, backward 0"
+      },
+      "agentReadOnlyUiObservation": {
+        "url": "http://127.0.0.1:5176/",
+        "tabId": "287644534",
+        "operationText": "operation 13 · 起點 0 · 目前 2 · delta 2",
+        "method": "Existing operator tab accessibility state; no click, drag, reload, or injected events."
+      },
+      "assessment": {
+        "status": "PASS",
+        "scope": "Deliberate short move with retained delta2; press/release without swipe and unchanged cumulative counts.",
+        "captureDurationMs": 4839,
+        "forwardCount": 0,
+        "backwardCount": 0,
+        "uiCountsVerified": true
+      },
+      "limitations": "Event export contains no raw movement trajectory. Supplementary read-only UI observation confirms retained start/current/delta; exact SDK threshold boundary remains automated-test evidence."
+    },
+    {
+      "id": "human-cancel-recovery-pending-01",
+      "source": "Owner supplied operation15 UI/event fragment and reported that the expected third-step recovery result was absent. Meaning of absent and first-operation leave procedure await clarification.",
+      "exportFragment": {
+        "experiment": "E016",
+        "evidenceType": "operator-ui-event-fragment",
+        "session": 1,
+        "records": [
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 15,
+            "sample": 1960,
+            "gesture": "press",
+            "ticks": 1703342,
+            "position": 2
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 15,
+            "sample": 1975,
+            "gesture": "release",
+            "ticks": 1703910,
+            "position": 0
+          }
+        ]
+      },
+      "operatorUiObservation": {
+        "forward": 4,
+        "backward": 3,
+        "pending": 0,
+        "latest": "session 1 / operation 15: release · 本次 forward 0, backward 0"
+      },
+      "agentReadOnlyUiObservation": {
+        "url": "http://127.0.0.1:5176/",
+        "tabId": "287644534",
+        "operationText": "operation 15 · 起點 2 · 目前 2 · delta 0",
+        "additionalVisibleEvents": [
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 14,
+            "sample": 1912,
+            "gesture": "press",
+            "ticks": 1684228,
+            "position": 2
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 14,
+            "sample": 1959,
+            "gesture": "release",
+            "ticks": 1685614,
+            "position": 0
+          }
+        ],
+        "method": "Read-only accessibility observation; no automated input or reload."
+      },
+      "assessment": {
+        "status": "FAIL",
+        "scope": "Owner confirms performing instructed left-to-right recovery swipe but observed no additional swipe. Recovery acceptance failed on this attempt; root cause unresolved."
+      },
+      "limitations": "Raw pointer trajectory/cancellation reason not exported. Retained initial/current position2 and delta0 do not identify whether move events were received before cancellation. First vertical-leave procedure has not been explicitly confirmed.",
+      "operatorClarification": "是有做這個行為 但沒有動作"
+    },
+    {
+      "id": "human-recovery-diagnostic-16",
+      "source": "Owner supplied operation16 event fragment after instructed recovery diagnostic; agent inspected existing page read-only.",
+      "exportFragment": {
+        "experiment": "E016",
+        "evidenceType": "operator-ui-event-fragment",
+        "session": 1,
+        "records": [
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 16,
+            "sample": 1976,
+            "gesture": "press",
+            "ticks": 1963340,
+            "position": -4
+          },
+          {
+            "kind": "touch",
+            "session": 1,
+            "operation": 16,
+            "sample": 2118,
+            "gesture": "release",
+            "ticks": 1975046,
+            "position": 0
+          }
+        ]
+      },
+      "agentReadOnlyUiObservation": {
+        "url": "http://127.0.0.1:5176/",
+        "tabId": "287644534",
+        "operationText": "operation 16 · 起點 -4 · 目前 10 · delta 14",
+        "forward": 4,
+        "backward": 3,
+        "pending": 0,
+        "method": "Accessibility state and screenshot; no automated pointer input or reload."
+      },
+      "assessment": {
+        "status": "未執行",
+        "scope": "Position changed, so some pointer movement was accepted after prior cancellation. Valid recovery swipe remains unproven: start was near center and retained displacement14, without a swipe.",
+        "captureDurationMs": 11706
+      },
+      "limitations": "Retained final delta is not maximum displacement. No raw trajectory or cancellation reason; cannot attribute missing swipe to SDK recognition or input cleanup."
+    },
+    {
+      "id": "human-recovery-success-17",
+      "source": "Owner supplied complete operator export through operation17 and prior UI position observation.",
+      "evidenceFile": "operator-session-1-through-operation-17.json",
+      "operatorUiObservation": {
+        "operationText": "operation 17 · 起點 -80 · 目前 90 · delta 170",
+        "forward": 5,
+        "backward": null,
+        "note": "Prior UI paste omitted backward numeric value; complete export confirms backward3."
+      },
+      "assessment": {
+        "status": "PASS",
+        "scope": "Valid swipe can be recognized after earlier failed recovery attempts without reset: operation17 press/one forwardSwipe/release, recognition delta62. This alone does not confirm the earlier leave trajectory.",
+        "gestures": [
+          "press",
+          "forwardSwipe",
+          "release"
+        ],
+        "recognitionDelta": 62,
+        "cumulativeForward": 5,
+        "cumulativeBackward": 3
+      },
+      "limitations": "Cancellation procedure14 still awaits explicit owner attestation; post-recognition leave and subsequent recovery remain pending. Failed attempt15 retained; no inferred root cause. Raw humanVerified flag remains false."
+    },
+    {
+      "id": "human-cancel-recovery-confirmed-18-19",
+      "source": "Owner supplied first five MOD lines and counts while pending76; subsequent agent read-only observation of same operator tab confirmed operation19 release and pending0. Owner explicitly confirmed pre-recognition leave14 and post-recognition leave18 procedures.",
+      "operatorFragmentRecords": [
+        {
+          "kind": "touch",
+          "session": 1,
+          "operation": 18,
+          "sample": 2864,
+          "gesture": "press",
+          "ticks": 3252414,
+          "position": -66
+        },
+        {
+          "kind": "touch",
+          "session": 1,
+          "operation": 18,
+          "sample": 2984,
+          "gesture": "forwardSwipe",
+          "ticks": 3253933,
+          "position": -4
+        },
+        {
+          "kind": "touch",
+          "session": 1,
+          "operation": 18,
+          "sample": 3288,
+          "gesture": "release",
+          "ticks": 3263963,
+          "position": 0
+        },
+        {
+          "kind": "touch",
+          "session": 1,
+          "operation": 19,
+          "sample": 3289,
+          "gesture": "press",
+          "ticks": 3276341,
+          "position": 96
+        },
+        {
+          "kind": "touch",
+          "session": 1,
+          "operation": 19,
+          "sample": 3439,
+          "gesture": "backwardSwipe",
+          "ticks": 3278975,
+          "position": 34
+        }
+      ],
+      "agentReadOnlyUiObservation": {
+        "url": "http://127.0.0.1:5176/",
+        "tabId": "287644534",
+        "additionalRecord": {
+          "kind": "touch",
+          "session": 1,
+          "operation": 19,
+          "sample": 3776,
+          "gesture": "release",
+          "ticks": 3285238,
+          "position": 0
+        },
+        "operationText": "operation 19 · 起點 96 · 目前 -80 · delta -176",
+        "forward": 6,
+        "backward": 4,
+        "pending": 0,
+        "latest": "session 1 / operation 19: release · 本次 forward 0, backward 1",
+        "method": "Accessibility state only; no automated pointer input."
+      },
+      "operatorAttestation": {
+        "answer": "兩次都是如此",
+        "question": "operation14: before swipe, hold and leave vertically then release outside; operation18: wait forward6, remain held and leave vertically then release outside."
+      },
+      "assessment": {
+        "status": "PASS",
+        "scope": "Pre-recognition leave14 emitted press/release without swipe; subsequent valid17 succeeded. Post-recognition leave18 preserved exactly one forward event without residual extra swipe; next independent backward19 succeeded and released. Pending queue cleared to0 with counts6/4. Failed attempt15 retained as historical observation; cause not inferred."
+      },
+      "limitations": "Raw trajectories and native cancellation cause are not exported; human procedure evidence comes from explicit owner attestation. Original operator-export humanVerified:false remains preserved."
+    }
+  ],
+  "humanProgress": {
+    "forwardIndependentTrialsPassed": 3,
+    "backwardIndependentTrialsPassed": 3,
+    "requiredPerDirection": 3,
+    "uiCountsVerified": true,
+    "backwardRecognitionVerified": 3,
+    "cumulativeForwardObserved": 6,
+    "cumulativeBackwardObserved": 4,
+    "nonSwipeAttemptsObserved": 9,
+    "validForwardOperations": [
+      1,
+      3,
+      4
+    ],
+    "validBackwardOperations": [
+      2,
+      5,
+      7
+    ],
+    "holdReverseEventPatternVerified": true,
+    "holdReverseProcedureConfirmed": true,
+    "latestCompletedOperation": 19,
+    "tapVerified": true,
+    "shortMoveVerified": true,
+    "tapOperation": 12,
+    "shortMoveOperation": 13,
+    "recoveryAttemptPassed": false,
+    "recoverySuccessOperation": 17,
+    "preRecognitionLeaveConfirmed": true,
+    "postRecognitionLeaveConfirmed": true,
+    "cancellationRecoveryVerified": true,
+    "unclassifiedProcedureOperations": [
+      9,
+      10,
+      11
+    ],
+    "recoveryAttemptPassedMeaning": "Historical attempt15 failed; later valid recovery17 and19 passed.",
+    "finalPendingSamples": 0,
+    "nonSwipeOperations": [
+      6,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  "humanEvidenceReview": {
+    "verdict": "approved-with-nonblocking-evidence-correction",
+    "reviewer": "Independent Plan-Reviewer",
+    "scope": "Current human evidence/docs only; no code rebuild or operator input.",
+    "recordCounts": "48:19press/19release/6forward/4backward; raw42 plus separately attributed supplemental6.",
+    "correction": "nonSwipeAttemptsObserved corrected from first-batch1 to complete-session9; operations listed explicitly.",
+    "limitations": "Attempt15 FAIL/root cause unknown retained; successful17/19 do not establish every attempt passed or rule out intermittent behavior."
   }
 }

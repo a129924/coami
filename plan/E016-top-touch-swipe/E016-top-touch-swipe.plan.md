@@ -24,7 +24,7 @@ No IMU/TTS/gaze/video feature/K151/Robot Action/server/WebSocket/formal event co
 
 Current: pr-open
 Next actor: Human
-Stage-local action: Review Draft PR #16 and perform human simulator acceptance; no automatic merge.
+Stage-local action: Review Draft PR #16 with completed bounded simulator acceptance; no automatic merge.
 
 planned→creator-in-progress; creator-in-progress→review-ready; review-ready→reviewer-in-progress; reviewer-in-progress→approved|needs-rework; needs-rework→creator-in-progress; approved→creator-in-progress|publish-in-progress; publish-in-progress→pr-open|merged; pr-open→needs-rework|merged; merged→terminal.
 
@@ -60,6 +60,7 @@ Implementer/Tester, exact paths relative to experiments/E016-top-touch-swipe/:
 - `scripts/build-runtime.sh`
 - `evidence/runtime-provenance.json`
 - `evidence/verification.json`
+- `evidence/operator-session-1-through-operation-17.json` — owner提供完整42筆JSON；其餘18/19片段與唯讀補充觀測留在verification.json。
 
 Manual screenshots evidence/manual-forward.png and evidence/manual-backward.png only after real human operation; never fabricate them. Generated runtime/cache/scratch under web/generated/ ignored. External review artifact root /private/tmp/coami-e016-review-artifacts/: archify/sequence.json, archify/sequence.html and renderer sidecars; pr-lens/graph.json and pr-lens/rendered/ outputs. Paths/limitations recorded in E016 evidence. No root README/VERSION/.github/copilot-instructions.md changes. Additional paths require plan update/review.
 
@@ -93,6 +94,6 @@ No release/VERSION/deployment/production adoption. Stop at Draft PR human review
 
 ## Open Questions / Unresolved Items
 
-No owner scope question. New ABI/build/runtime automated operations are verified in evidence/runtime-provenance.json and evidence/verification.json. Human ACs remain pending until owner operation. Existing Graphify graph absent: source-search fallback, no extraction. Tool failure reports limitation without changing core gate.
+No owner scope question. New ABI/build/runtime automated operations are verified in evidence/runtime-provenance.json and evidence/verification.json. Owner completed human TC01–06; TC07 source/provenance and TC08 evidence audit recorded. Historical failed attempt15 retained; later valid17/19 passed. Human PR review remains pending. Existing Graphify graph absent: source-search fallback, no extraction. Tool failure reports limitation without changing core gate.
 
-Human review handoff: https://github.com/a129924/coami/pull/16; Draft=true; base=dev; head=feat/andrew/e016-top-touch-swipe. Implementation approved, human AC pending.
+Human review handoff: https://github.com/a129924/coami/pull/16; Draft=true; base=dev; head=feat/andrew/e016-top-touch-swipe. Implementation approved; bounded simulator acceptance complete, final counts6/4/pending0. Human PR review/merge pending.

@@ -64,9 +64,9 @@ E016_FIRMWARE_NODE_MODULES=/private/tmp/coami-e015-manual-video-recording/experi
 
 ## 是否成功
 
-- 實驗狀態：**無法判定**（已執行真實runtime自動化，真人判準尚缺）。
-- 本輪工程驗證／紀錄任務完成：是；人工作業驗收：未完成。
-- 不宣稱完整實驗成功、實機適用或production採用。Draft PR依owner授權交human review。
+- 實驗狀態：**成功（限定 pinned 瀏覽器模擬器與已執行判準）**。真人操作、操作者確認與唯讀畫面觀測已分開記錄。
+- 本輪工程驗證／紀錄任務及真人操作驗收已完成；Draft PR human review／合併仍待 owner。
+- 結論只適用本實驗模擬器；不外推實機或 production。Draft PR依owner授權交human review。
 
 ## 結果與證據
 
@@ -78,8 +78,25 @@ E016_FIRMWARE_NODE_MODULES=/private/tmp/coami-e015-manual-video-recording/experi
 - Archify外部sequence已9/9 showcase、四desktop尺寸containment通過；已目視light/dark輸出。繁中內容，固定Viewer UI與HTML lang為英文fallback。外部圖不作真人/E2E證據。
 - PR Lens已依實際committed implementation diff（base9155139→head531135a）建立並通過本地validate/render（1張SVG）；後續文件／handoff不在此bounded圖範圍；Graphify0.9.73已確認CLI版本，但沒有既有graph，採rg→source fallback，沒有建圖或上傳。
 
+### 真人操作結果 — 2026-10-13
+
+| 判準 | 結果 | 證據 |
+| --- | --- | --- |
+| TC01 雙向各三次 | PASS | forward operations1/3/4；backward2/5/7，各press→一次swipe→release |
+| TC02 持續按住／反向／放開不追加 | PASS | operation8；owner確認按住至少2秒後反向拖回左側再放開 |
+| TC03 連續獨立操作 | PASS | operations3/4分別辨識，不宣稱重疊FIFO時序 |
+| TC04 tap／短移無swipe | PASS | quick tap12為124ms；短移13保留delta2，唯讀頁面核對 |
+| TC05 移出清理與恢復 | PASS | owner確認14門檻前移出、18看到forward6後移出；有效17與19恢復；最終pending0 |
+| TC06 MOD／畫面一致 | PASS | 最終forward6／backward4，19release；由owner輸出與agent唯讀觀測交叉核對 |
+| TC07 SDK來源路徑 | PASS | pinned recognizer未改、WASM／MOD／served hashes及原始樣本接線；不是新增真人動作 |
+| TC08 逐項證據與限制 | PASS | verification.json逐項結果，保留原始humanVerified:false與操作者確認；agent automation分列 |
+
+完整owner匯出至operation17存於 `evidence/operator-session-1-through-operation-17.json`（42筆）；18/19五筆owner事件與19release的agent唯讀觀測分別存於verification.json。合計48筆（19press、19release、6forward、4backward），不把補充觀測冒充owner原始匯出。
+
+operation15曾依指示操作但未新增swipe，當次FAIL紀錄保留；16保留delta14，17以起點−80／終點90成功，19再次成功。沒有raw軌跡，不能斷言15失敗原因或最大位移，也沒有為此修改SDK／輸入程式。operation9程序未確認、10/11未分類；6為owner提及偏掉的非有效swipe。原始匯出旗標不改為true，真人證據由操作程序、owner明確確認與畫面核對共同構成。獨立證據審查接受上述限定結論；不宣稱已排除間歇性問題。
+
 ## 結論與限制
 
-原始樣本→新增native ABI→原SDK→MOD的路徑已有真實runtime自動化支持，方向／contact區分與取消後恢復符合本輪輸入。不能外推完整真人驗收或實機感測品質。真人AC保持未執行，下一必要證據為owner照程序操作、匯出紀錄並補逐項結果。
+原始樣本→新增native ABI→原SDK→MOD的路徑有真實runtime、自動測試及真人操作支持。TC01–06真人行為通過；TC07採source／provenance核對，TC08採逐項證據稽核。精準門檻、overflow／fault／reset與不可用初始化仍屬自動化證據，真人session1未操作所有失敗分支。不能外推實機感測品質。
 
 所有實作、文件與generated輸出都在feature worktree；dev worktree未修改。無正式契約、production、其他Event／Action或SDK門檻變更。合併及後續採用由human決定，不自動merge／release／清理branch。

@@ -132,9 +132,25 @@ created: 2026-10-13
 - Shared lifecycle shell: .codex/skills/step-creator/templates/shared-lifecycle-shell.md
 - Managed selector: topic=E016-top-touch-swipe; branch=feat/andrew/e016-top-touch-swipe; managed-path-intent=/private/tmp/coami-e016-top-touch-swipe; primary-worktree=false
 - Worktree creation evidence: git worktree add output and git worktree inventory, 2026-10-13.
-- Completion markers require exact evidence; no human operation recorded yet.
+- Completion markers require exact evidence; owner simulator operations1–19 and separate attestations/read-only observations now recorded in verification.json.
 - check_impl_steps_succeeded covers Implementation Steps only; whole-file includes pending human/post-merge stages.
 
-Actual completion evidence: experiments/E016-top-touch-swipe/evidence/verification.json; evidence/runtime-provenance.json; plan/E016-top-touch-swipe/review-log.md. Human/post-merge lifecycle rows remain pending.
+Actual completion evidence: experiments/E016-top-touch-swipe/evidence/verification.json; evidence/runtime-provenance.json; plan/E016-top-touch-swipe/review-log.md. Human simulator acceptance completed; PR review/post-merge lifecycle rows remain pending.
 
-PR evidence: https://github.com/a129924/coami/pull/16; gh pr view confirmed OPEN/Draft/target dev and MERGEABLE on 2026-10-13. CI server/device/e001-server/e001-web/e003-server/e003-web succeeded on docs head1df823d. New handoff-doc commit retains identical implementation; subsequent checks observed via PR. No human operation or merge claimed.
+PR evidence: https://github.com/a129924/coami/pull/16; gh pr view confirmed OPEN/Draft/target dev and MERGEABLE on 2026-10-13. CI server/device/e001-server/e001-web/e003-server/e003-web succeeded on docs head1df823d. New handoff-doc commit retains identical implementation; subsequent checks observed via PR. Owner simulator operation now recorded separately below; no merge claimed.
+
+## Human acceptance evidence follow-up — 2026-10-13
+
+| Field | planned | actual |
+| --- | --- | --- |
+| In-Scope | owner simulator acceptance/evidence | TC01–06 human operations; TC07 source/provenance; TC08 accounting |
+| Out-Of-Scope | production/hardware/merge | no source behavior changes or merge |
+| ReadOnly | current operator page and implementation | operator page accessibility/screenshot; SDK/runtime evidence |
+| Written | E016 evidence and status documents | README; verification.json; operator-session-1-through-operation-17.json; plan/step/review-log |
+| Deleted | none | none |
+| Modify | E016 evidence/docs only | recorded owner exports/attestations separately from agent automation |
+| Goal | traceable acceptance | bounded simulator PASS; final counts6/4 and pending0 |
+| Non-Goal | infer missing trajectories or causes | failed15 retained; no root-cause claim; export flag unchanged |
+| TestCase | TC01–08 | human01–06 PASS; source/audit07–08 PASS; independent evidence review approved with count correction applied |
+
+No production change, dev-worktree write, release, merge or cleanup. Original implementation check results retained; no unnecessary rebuild for evidence-only update.

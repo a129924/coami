@@ -31,3 +31,15 @@ Publication: owner-authorized build9fdbb27 and feature531135a committed. Hook re
 https://github.com/a129924/coami/pull/16; OPEN, Draft=true, target dev, branch feat/andrew/e016-top-touch-swipe. Three initial topic commits pushed: build9fdbb27, feature531135a, docs1df823d. GitHub reported MERGEABLE and all12 returned CI runs SUCCESS (push/PR pairs of server, device, e001-server, e001-web, e003-server, e003-web) at1df823d.
 
 This documentation-only handoff commit records pr-open state and preserves implementation bytes reviewed by the independent Reviewer. Human simulator acceptance remains unexecuted, overall experiment inconclusive. No merge, release, branch/worktree deletion or dev-worktree modification.
+
+## Owner simulator acceptance follow-up — 2026-10-13
+
+Owner completed operations1–19 in session1. TC01–06 behavioral criteria PASS; TC07 source/provenance and TC08 accounting audit recorded. Final counts6forward/4backward, all19contacts released, pending0. Operator raw export through17 retains humanVerified:false. Hold/reverse8 and pre/post-recognition leave14/18 have explicit owner attestations;19release/pending0 confirmed by agent read-only observation of the same operator tab, never automated input.
+
+Attempt15 emitted no swipe despite owner reporting recovery action; FAIL retained with unresolved cause. Diagnostic16 retained delta14; valid17(delta170) and19(delta−176) succeeded without reset. No root-cause inference or implementation modification. Exact threshold/fault/reset/unavailable coverage remains automatic. New operator export artifact path added to plan; bounded human evidence review pending. Draft PR remains human review boundary.
+
+Independent human-evidence review: approved-with-nonblocking-evidence-correction. Reviewer independently checked42raw+6supplemental records, count/order consistency, attestations and evidence attribution. TC01–08 and bounded simulator success accepted. Corrected humanProgress.nonSwipeAttemptsObserved from first-batch1 to full-session9 (6,9–16), with explicit operation list. Historical15FAIL/cause unknown remains; no claim that intermittent behavior was ruled out. No code change/rebuild required.
+
+```json
+{"verdict":"approved-with-nonblocking-evidence-correction","blocking_issues":[],"correction_applied":"complete-session non-swipe contacts = 9"}
+```
