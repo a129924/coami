@@ -11,10 +11,20 @@ const source = path.join(generated, 'pinned-stack-chan')
 const patch = path.join(experiment, 'runtime/wasm-top-touch.patch')
 const base = 'b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322'
 const fullBuild = !process.argv.includes('--stage-only')
+if (fullBuild && process.platform !== 'darwin') {
+  throw new Error('E016 WASM preparation supports macOS only (APFS clone copy and Moddable mac tools); use a macOS host. --stage-only remains portable.')
+}
 // Invalidate served artifacts before source/tool validation, including failed retries.
 if (fullBuild) {
   await rm(path.join(generated,'public'),{recursive:true,force:true})
   await rm(path.join(generated,'stage-hash'),{force:true})
+}
+const previous = process.env.E016_TOOLCHAIN_SOURCE
+if (fullBuild) {
+  if (!previous || !path.isAbsolute(previous)) throw new Error('Set E016_TOOLCHAIN_SOURCE to an absolute path containing the pinned macOS moddable, emsdk and fontbm toolchain; see README prerequisites.')
+  for (const name of ['moddable/tools/VERSION','emsdk/.emscripten','fontbm/build/fontbm']) {
+    try { await access(path.join(previous,name)) } catch { throw new Error(`Incomplete E016_TOOLCHAIN_SOURCE: missing ${name}; see README prerequisites.`) }
+  }
 }
 const capture = (cmd,args,cwd=repo) => execFileSync(cmd,args,{cwd,encoding:'utf8'}).trim()
 const run = (cmd,args,cwd=repo,env=process.env) => execFileSync(cmd,args,{cwd,env,stdio:'inherit'})
@@ -38,11 +48,10 @@ const enginePath = path.join(source,'web/src/services/simulator/simulator-engine
 await copyFile(path.join(web,'runtime-types/simulator-engine.d.mts'),enginePath)
 if (process.argv.includes('--stage-only')) process.exit(0)
 const publicRoot = path.join(generated,'public')
-const previous = process.env.E016_TOOLCHAIN_SOURCE ?? '/private/tmp/coami-e015-manual-video-recording/experiments/E015-manual-video-recording/web/generated/toolchain-verified'
 const toolchain = path.join(generated,'toolchain')
 try { await access(path.join(toolchain,'moddable/tools/VERSION')) } catch {
   await mkdir(toolchain,{recursive:true})
-  // APFS copy-on-write copy isolates all tool/cache writes from E015.
+  // Supported macOS APFS copy-on-write copy isolates tool/cache writes from the supplied source.
   for (const name of ['moddable','emsdk','fontbm']) run('cp',['-cR',path.join(previous,name),path.join(toolchain,name)])
 }
 const moddable = path.join(toolchain,'moddable')
@@ -76,6 +85,8 @@ await copyFile(path.join(source,'web/simulator/assets/case/v1/shell.stl'),path.j
 const hostHashes={}
 for(const name of ['web/simulator/bridge.mjs','web/simulator/geometry.mjs','web/simulator/mod-storage.mjs','web/src/services/simulator/simulator-engine.mjs','firmware/host/modules/input/touch-panel-gesture.ts','firmware/host/modules/input/touch-panel.ts','firmware/host/modules/input/wasm/touch-panel-bridge.js','firmware/host/modules/input/wasm/touch-panel-bridge.c']) hostHashes[name]=await hash(path.join(source,name))
 const provenance={experiment:'E016',sourceCommit:base,patchSha256:patchHash,moddableCommit:capture('git',['rev-parse','HEAD'],moddable),moddableVersion:'9.5.0',emsdkCommit:capture('git',['rev-parse','HEAD'],emsdk),emccVersion,fontbmCommit:capture('git',['rev-parse','HEAD'],path.join(toolchain,'fontbm')),hostHashes,runtimeHashes,createdAt:new Date().toISOString(),servedHashes:null,buildCommand:'npm run prepare:poc',toolchainIsolated:true,firmwareLockSha256:await hash(path.join(firmware,'package-lock.json')),dependencySource:dependencySnapshot?'lock-matched local snapshot':'npm ci'}
-await writeFile(path.join(experiment,'evidence/runtime-provenance.json'),JSON.stringify(provenance,null,2)+'\n')
+// Finalized evidence/runtime-provenance.json is immutable historical evidence.
+// Reproduction output belongs to this ignored build directory.
+await writeFile(path.join(generated,'runtime-provenance.json'),JSON.stringify(provenance,null,2)+'\n')
 await writeFile(path.join(publicRoot,'runtime-provenance.json'),JSON.stringify(provenance,null,2)+'\n')
 console.log(JSON.stringify(provenance,null,2))
