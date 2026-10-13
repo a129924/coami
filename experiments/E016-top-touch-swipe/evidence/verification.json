@@ -1,0 +1,445 @@
+{
+  "experiment": "E016",
+  "date": "2026-10-13",
+  "experimentState": "無法判定",
+  "reason": "Actual WASM/MOD automated observations passed; required human operation has not been performed.",
+  "verificationTaskCompleted": true,
+  "completionScope": "Engineering implementation/automated evidence and explicit human-evidence limitation; not human acceptance.",
+  "tdd": {
+    "initialRed": {
+      "tests": 8,
+      "passed": 0,
+      "failed": 8,
+      "reason": "raw mapping returned zero and input/feedback behavior unimplemented"
+    },
+    "auditRed": {
+      "tests": 1,
+      "failed": 1,
+      "reason": "duplicate MOD reports were incorrectly hidden"
+    },
+    "green": {
+      "tests": 8,
+      "passed": 8,
+      "failed": 0
+    },
+    "typecheck": "PASS",
+    "productionBuild": "PASS",
+    "buildWarnings": [
+      "Upstream freetype false macro redefinition",
+      "Vite main bundle >500kB; Three.js simulator dependency"
+    ]
+  },
+  "runtimeAutomation": {
+    "experiment": "E016",
+    "evidenceType": "agent-ui-automation-real-wasm-mod",
+    "humanVerified": false,
+    "session": 1,
+    "records": [
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 1,
+        "sample": 1,
+        "gesture": "press",
+        "ticks": 40425,
+        "position": -88
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 1,
+        "sample": 4,
+        "gesture": "forwardSwipe",
+        "ticks": 40463,
+        "position": -22
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 1,
+        "sample": 11,
+        "gesture": "release",
+        "ticks": 40514,
+        "position": 0
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 2,
+        "sample": 12,
+        "gesture": "press",
+        "ticks": 40545,
+        "position": -88
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 2,
+        "sample": 15,
+        "gesture": "forwardSwipe",
+        "ticks": 40567,
+        "position": -22
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 2,
+        "sample": 22,
+        "gesture": "release",
+        "ticks": 40679,
+        "position": 0
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 3,
+        "sample": 23,
+        "gesture": "press",
+        "ticks": 40704,
+        "position": -88
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 3,
+        "sample": 26,
+        "gesture": "forwardSwipe",
+        "ticks": 40733,
+        "position": -22
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 3,
+        "sample": 33,
+        "gesture": "release",
+        "ticks": 41078,
+        "position": 0
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 4,
+        "sample": 34,
+        "gesture": "press",
+        "ticks": 41131,
+        "position": 86
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 4,
+        "sample": 37,
+        "gesture": "backwardSwipe",
+        "ticks": 41167,
+        "position": 22
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 4,
+        "sample": 44,
+        "gesture": "release",
+        "ticks": 41210,
+        "position": 0
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 5,
+        "sample": 45,
+        "gesture": "press",
+        "ticks": 41236,
+        "position": 86
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 5,
+        "sample": 48,
+        "gesture": "backwardSwipe",
+        "ticks": 41261,
+        "position": 22
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 5,
+        "sample": 55,
+        "gesture": "release",
+        "ticks": 41319,
+        "position": 0
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 6,
+        "sample": 56,
+        "gesture": "press",
+        "ticks": 41343,
+        "position": 86
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 6,
+        "sample": 59,
+        "gesture": "backwardSwipe",
+        "ticks": 41366,
+        "position": 22
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 6,
+        "sample": 66,
+        "gesture": "release",
+        "ticks": 41410,
+        "position": 0
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 7,
+        "sample": 67,
+        "gesture": "press",
+        "ticks": 142670,
+        "position": 0
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 7,
+        "sample": 69,
+        "gesture": "release",
+        "ticks": 142675,
+        "position": 0
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 8,
+        "sample": 70,
+        "gesture": "press",
+        "ticks": 142724,
+        "position": 0
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 8,
+        "sample": 80,
+        "gesture": "release",
+        "ticks": 142809,
+        "position": 0
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 9,
+        "sample": 81,
+        "gesture": "press",
+        "ticks": 142848,
+        "position": -88
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 9,
+        "sample": 85,
+        "gesture": "release",
+        "ticks": 142887,
+        "position": 0
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 10,
+        "sample": 86,
+        "gesture": "press",
+        "ticks": 142966,
+        "position": -88
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 10,
+        "sample": 89,
+        "gesture": "forwardSwipe",
+        "ticks": 143006,
+        "position": -22
+      },
+      {
+        "kind": "touch",
+        "session": 1,
+        "operation": 10,
+        "sample": 96,
+        "gesture": "release",
+        "ticks": 143052,
+        "position": 0
+      }
+    ]
+  },
+  "humanAcceptance": [
+    {
+      "testCase": "TC01",
+      "status": "未執行",
+      "evidenceType": "human-simulator-operation",
+      "reason": "Awaiting owner procedure"
+    },
+    {
+      "testCase": "TC02",
+      "status": "未執行",
+      "evidenceType": "human-simulator-operation",
+      "reason": "Awaiting owner procedure"
+    },
+    {
+      "testCase": "TC03",
+      "status": "未執行",
+      "evidenceType": "human-simulator-operation",
+      "reason": "Awaiting owner procedure"
+    },
+    {
+      "testCase": "TC04",
+      "status": "未執行",
+      "evidenceType": "human-simulator-operation",
+      "reason": "Awaiting owner procedure"
+    },
+    {
+      "testCase": "TC05",
+      "status": "未執行",
+      "evidenceType": "human-simulator-operation",
+      "reason": "Awaiting owner procedure"
+    },
+    {
+      "testCase": "TC06",
+      "status": "未執行",
+      "evidenceType": "human-simulator-operation",
+      "reason": "Awaiting owner procedure"
+    },
+    {
+      "testCase": "TC07",
+      "status": "未執行",
+      "evidenceType": "human-simulator-operation",
+      "reason": "Awaiting owner procedure"
+    },
+    {
+      "testCase": "TC08",
+      "status": "未執行",
+      "evidenceType": "human-simulator-operation",
+      "reason": "Awaiting owner procedure"
+    }
+  ],
+  "automaticChecks": [
+    {
+      "testCase": "TC01",
+      "status": "PASS",
+      "evidenceType": "unit and/or real WASM UI automation"
+    },
+    {
+      "testCase": "TC02",
+      "status": "PASS",
+      "evidenceType": "unit and/or real WASM UI automation"
+    },
+    {
+      "testCase": "TC03",
+      "status": "PASS",
+      "evidenceType": "unit and/or real WASM UI automation"
+    },
+    {
+      "testCase": "TC04",
+      "status": "PASS",
+      "evidenceType": "unit and/or real WASM UI automation"
+    },
+    {
+      "testCase": "TC05",
+      "status": "PASS",
+      "evidenceType": "unit and/or real WASM UI automation"
+    },
+    {
+      "testCase": "TC06",
+      "status": "PASS",
+      "evidenceType": "unit and/or real WASM UI automation"
+    },
+    {
+      "testCase": "TC07",
+      "status": "PASS",
+      "evidenceType": "unit and/or real WASM UI automation"
+    },
+    {
+      "testCase": "TC08",
+      "status": "PASS",
+      "evidenceType": "unit and/or real WASM UI automation"
+    }
+  ],
+  "auxiliary": {
+    "archify": {
+      "status": "PASS",
+      "diagramType": "sequence",
+      "root": "/private/tmp/coami-e016-review-artifacts/archify/",
+      "artifactSha256": "ba918b8d9e3c7de5824f911d0f90e0efeae5fa62845066fff028bb75a6cdd64c",
+      "specificationSha256": "9be8f9ea852fb19ad567a36f2c674c5efe10851c25d13ded89c45d8670e6283b",
+      "checksPassed": 9,
+      "errors": 0,
+      "warnings": 0,
+      "containment": "pass",
+      "visualReview": "passed: inspected 1440x900 light and 2048x1320 dark screenshots",
+      "correctionRounds": 1,
+      "viewerLocale": "Authored Traditional Chinese; fixed viewer UI and html lang fall back to English"
+    },
+    "graphify": {
+      "version": "0.9.73",
+      "command": "GRAPHIFY_NO_AUTO_REFRESH=1 /Users/andrew/.local/bin/graphify --version",
+      "status": "fallback",
+      "reason": "No existing usable graph/revision metadata found in bounded repository search; targeted rg and pinned source reads used. No graph built."
+    },
+    "prLens": {
+      "version": "0.11.0",
+      "status": "PASS",
+      "root": "/private/tmp/coami-e016-review-artifacts/pr-lens/",
+      "reason": "Generate against actual committed bounded diff before Draft PR handoff.",
+      "command": "pr-lens validate graph.json; pr-lens render graph.json --theme light --no-config --out rendered",
+      "manifest": "/private/tmp/coami-e016-review-artifacts/pr-lens/rendered/manifest.json",
+      "viewCount": 1,
+      "unchangedNeighbors": [
+        "SDK GestureRecognizer",
+        "SimulatorEngine"
+      ],
+      "correctnessVerdict": false,
+      "baseCommit": "9155139d34ad94379a246c5d31c29e86fed52ed1",
+      "boundedImplementationHead": "531135a11055c627555775ba87a4ebf250f8addc",
+      "diffSha256": "0b92eb8d2a9f7847a2fe39cfd31f00a95b184439361fa0fb7cbfa64a26d74839",
+      "scopePaths": [
+        "experiments/E016-top-touch-swipe/web",
+        "experiments/E016-top-touch-swipe/mod",
+        "experiments/E016-top-touch-swipe/runtime",
+        "experiments/E016-top-touch-swipe/scripts",
+        "experiments/E016-top-touch-swipe/.gitignore"
+      ],
+      "note": "Map covers the committed implementation diff; later documentation/handoff commits do not change this implementation snapshot."
+    }
+  },
+  "limitations": [
+    "No physical K151 evidence",
+    "No human acceptance evidence",
+    "Browser download wait timed out, but the actual exported JSON file was saved and ingested",
+    "No Graphify graph; source-search fallback used",
+    "Git hook reported lefthook unavailable in PATH; explicit tests/typecheck/build and independent review were performed."
+  ],
+  "workflow": {
+    "base": "9155139",
+    "branch": "feat/andrew/e016-top-touch-swipe",
+    "worktree": "/private/tmp/coami-e016-top-touch-swipe",
+    "devWorktreeModified": false
+  },
+  "review": {
+    "verdict": "approved-with-human-acceptance-pending",
+    "unitTests": {
+      "passed": 8,
+      "failed": 0
+    },
+    "provenanceHashes": "independently matched",
+    "fullRebuildRepeated": false,
+    "humanOperationPerformed": false
+  }
+}
