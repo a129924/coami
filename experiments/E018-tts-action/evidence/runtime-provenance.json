@@ -1,0 +1,90 @@
+{
+  "experiment": "E018",
+  "buildPolicy": "fresh unmodified pinned runtime; isolated pinned tool source copies with existing compiler cache; actual installed-tree hash attested, not pristine-package equivalence",
+  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "moddableVersion": "9.5.0",
+  "emccVersion": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 5.0.1 (8c5f43157a3f069ade75876e23061330521eabde)",
+  "moddable": {
+    "path": "/private/tmp/coami-e018-tts-action/experiments/E018-tts-action/web/generated/toolchain/moddable",
+    "sourceCommit": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",
+    "tools": {
+      "mcconfig": {
+        "path": "/private/tmp/coami-e018-tts-action/experiments/E018-tts-action/web/generated/toolchain/moddable/build/bin/mac/release/mcconfig",
+        "sha256": "2abb06a6305abbe09d6ed0eb4df23f08c2f474910692f4146d5c826627d23ba4"
+      },
+      "xsc": {
+        "path": "/private/tmp/coami-e018-tts-action/experiments/E018-tts-action/web/generated/toolchain/moddable/build/bin/mac/release/xsc",
+        "sha256": "a2a6b24b2de6c88d0cdd9adcdd8819dafb0a922e478160df7f3617bef9b1383c"
+      }
+    }
+  },
+  "emscripten": {
+    "emsdkPath": "/private/tmp/coami-e018-tts-action/experiments/E018-tts-action/web/generated/toolchain/emsdk",
+    "emsdkCommit": "14c18b569f55138fe4963924162244251f454fb0",
+    "release": "bf32ae8b61ac8efeb7eca01b54c8307f992724f7",
+    "upstreamCommit": "8c5f43157a3f069ade75876e23061330521eabde",
+    "installedTreeSha256": "7bf9bd77be812b164864de4b74f01b8e6a0c9473511074ae143336886cdf1809",
+    "emccPath": "/private/tmp/coami-e018-tts-action/experiments/E018-tts-action/web/generated/toolchain/emsdk/upstream/emscripten/emcc",
+    "emccSha256": "498eba9b6aacffca1c358ba340fc7b37015d7867cb211c7f2d45784ee9310f03"
+  },
+  "fontbm": {
+    "path": "/private/tmp/coami-e018-tts-action/experiments/E018-tts-action/web/generated/toolchain/fontbm/build/fontbm",
+    "sourceCommit": "7677b908523e909679f67cd5c170396bb9def1aa",
+    "sha256": "2389a3daae8b9af5c3747cb2fbfd34db3fcd786ccec885878addd22bbcd07012"
+  },
+  "sha256": {
+    "mc.js": "25fc9d33f6d9166fe0ec72d839d0dd738cc0794ccdecc2a2ebc361f24e4fb01b",
+    "mc.wasm": "27b47be11497a680773d51ccf6143ae3a7615f4dd133ef4a2034d96fcab72e0f"
+  },
+  "mod": {
+    "sha256": "4235748d13e0d2888e784ec3e72c343b9d4892f8b259a815c76f60c8a2f0b20c",
+    "sourceSha256": "67d34b89d7c4e4a6a41f0da0a8fd38ce3b015d53de63733dc4e2edca5630734b"
+  },
+  "host": {
+    "bridgeSourceSha256": "8da63dae00b04a9350f6330bf31db0bb661e91dabaa0b77b154d950f7c0ae7dc"
+  },
+  "servedEvidence": {
+    "capturedAt": "2026-10-13T07:23:59.713Z",
+    "browser": "Chrome/155.0.8059.40",
+    "assets": [
+      {
+        "kind": "served-asset",
+        "url": "/simulator/mc.js",
+        "bytes": 73325,
+        "sha256": "25fc9d33f6d9166fe0ec72d839d0dd738cc0794ccdecc2a2ebc361f24e4fb01b",
+        "sessionId": "55ccfa34-9cb5-4940-a42f-92c055e204ca",
+        "at": "2026-10-13T07:23:41.805Z",
+        "monotonicMs": 981
+      },
+      {
+        "kind": "served-asset",
+        "url": "/simulator/mc.wasm",
+        "bytes": 5099264,
+        "sha256": "27b47be11497a680773d51ccf6143ae3a7615f4dd133ef4a2034d96fcab72e0f",
+        "sessionId": "55ccfa34-9cb5-4940-a42f-92c055e204ca",
+        "at": "2026-10-13T07:23:41.827Z",
+        "monotonicMs": 1004
+      },
+      {
+        "kind": "served-asset",
+        "url": "/coami-mod.xsa",
+        "bytes": 2002,
+        "sha256": "4235748d13e0d2888e784ec3e72c343b9d4892f8b259a815c76f60c8a2f0b20c",
+        "sessionId": "55ccfa34-9cb5-4940-a42f-92c055e204ca",
+        "at": "2026-10-13T07:23:41.829Z",
+        "monotonicMs": 1005
+      },
+      {
+        "url": "/src/strict-audio-bridge.ts",
+        "bytes": 13919,
+        "sha256": "b2f21c985e824897938cb0ac1a6ac1d5ceeaaa39806d4b10967671c8cb31c73a"
+      },
+      {
+        "url": "/src/browser-runtime.ts",
+        "bytes": 19246,
+        "sha256": "f68cf1c4342c7eb368a8adcb4bd4b1f0e970b8e407ebcb58e8569b2dfd4a6a43"
+      }
+    ],
+    "kind": "automated actual browser; not human listening"
+  }
+}

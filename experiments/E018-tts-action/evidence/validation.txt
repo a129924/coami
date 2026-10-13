@@ -1,0 +1,23 @@
+E018 / feature-only / 2026-10-13
+Base d3eee648351837e391422e73c299cdae8d03a875
+Vendor b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322 (unmodified)
+
+TDD RED: initial tests failed because target modules were absent (ERR_MODULE_NOT_FOUND).
+TDD GREEN: first implementation 16/16 tests PASS.
+Independent review P1: Emscripten Module.print removes newline; old parser waited for it.
+Regression RED: parseModTrace stub produced [] vs expected [{kind:ready}], 1 failure / 10 pass.
+Regression GREEN: 17/17 tests PASS, including newline-free ready/started/SDK records.
+
+npm ci --ignore-scripts --no-audit --no-fund --cache /private/tmp/coami-e018-npm-cache: PASS after network sandbox escalation (28 locked packages).
+npm run prepare:poc: PASS, fresh unmodified pinned WASM built from isolated sources/toolchain; existing compiler cache explicitly attested, not pristine equivalence.
+npm run mod: PASS, XS archive verified.
+npm test: PASS 17 tests.
+npm run typecheck: PASS web + MOD strict TS.
+npm run build: PASS; nonblocking Vite >500kB chunk warning (upstream Three/simulator).
+Actual runtime CDP smoke: PASS 6 cases / 5 accepted requests / no runtime exceptions.
+Evidence: tts-trace.jsonl, runtime-provenance.json, tts-run.md; generated/runtime-smoke.json is local ignored diagnostic.
+Human listening: 未執行 / human-check.
+No claim of correct audible content, Chinese support, hardware or production adoption.
+Auxiliary status is separate: see auxiliary.md.
+
+Independent Tester reran17tests/typecheck/build and implementation tracker gate: PASS. Audited trace/provenance/served hashes and dev/vendor cleanliness: PASS. Compiler/import failure archive guard statically reviewed; no deliberate failed-build injection performed.
