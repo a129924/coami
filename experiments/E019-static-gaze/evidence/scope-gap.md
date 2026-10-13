@@ -19,5 +19,9 @@
 - 固定再次指定判準被否定，實驗狀態記「失敗」。
 - Owner已選「保留失敗結論，完成commit／push／Draft PR，交human review」。
 - 不插入額外setPose讓「解除→再次指定」改判成功；setPose仍只用在獨立起始準備。
-- 八次人工方向核對仍未執行；保留缺口，不補造PASS。
+- 後續v2真人四方向各兩次判定已完成且8/8符合；真人上→解除→下也重現失敗。原始同次真人畫面檔未完整保存，保留證據限制，不聲稱全部Acceptance Criteria通過。
 - SDK修正不在E019範圍，交owner另立工作或接受此限制；此PR不merge、不production升級。
+
+## 真人重現
+
+Andrew於v2 run E019-2026-10-13T07-53-36-719Z完成#22上、#23解除、#24下；#24 begin/returned/window-ended完整但無applyRotation，2154339ms判定不符合，口頭回報「仍抬頭」。詳見human-final.json與human-run.md。原SDK失敗結論維持。

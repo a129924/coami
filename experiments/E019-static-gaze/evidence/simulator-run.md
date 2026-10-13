@@ -15,7 +15,7 @@
 | 自動四方向各兩次 | PASS（driver角度） | 8個樣本從獨立正面準備開始；automated-方向-次數.png含run ID/seq；不是人工PASS |
 | 左→解除→右 | PASS（driver路徑） | #18左、#19解除、#20右；人工視覺未執行 |
 | 上→解除→下 | FAIL | #22上、#23解除、#24下；#24接受目標但無新driver rotation；automated-final.png仍向上 |
-| Robot左／右／上／下各兩次人工判定 | 未執行 | 所有自動觀察標未確認；不冒充真人核對 |
+| v1自動run的人工欄位 | 未執行 | 所有自動觀察維持未確認；不回改成真人PASS |
 
 ## 執行與重現
 
@@ -24,6 +24,21 @@
 3. `node scripts/runtime-smoke.mjs`：預期驗收判準實際失敗，exit 1；完整輸出見runtime-smoke.txt。最終report `status=FAIL`，唯一記錄failure為seq24/down/no driver rotation。
 4. Browser為隔離headless Chrome（版本見JSON），使用真實UI與WASM；8個四方向樣本及2組解除／再次指定，共24項MOD操作。未使用直接網頁模型旋轉或注視替代setPose。
 5. 首輪亦重現seq24失敗，保留runtime-first-transcript.json與runtime-first-failure.txt。第二輪只補畫面run/seq標示及完整失敗report保存，不修改SDK或固定判準。
+
+## v2 真人驗證（完成）
+
+觀察者Andrew；實作commit `5ef0fcf`；run ID `E019-2026-10-13T07-53-36-719Z`。僅改E019鏡頭及顯示區，不改SDK、目標或驗收判準。詳細逐案紀錄見human-run.md，完整原始匯出見human-final.json。
+
+| 真人案例 | 方向判定／結果 | 操作序號與限制 |
+|---|---|---|
+| Robot左兩次 | 符合 2/2 | #2、#4，各有獨立零姿勢準備與SDK trace |
+| Robot右兩次 | 符合 2/2 | #6、#8，同上 |
+| 上兩次 | 符合 2/2 | #10、#12，同上；窗口後仍重複發送同一向上rotation |
+| 下兩次 | 符合 2/2 | #14、#16，同上；窗口後仍重複發送同一向下rotation |
+| 左→解除→右 | 符合 | #18→#19→#20，中間無prepare/setPose；解除只記返回 |
+| 上→解除→下 | FAIL | #22→#23→#24，中間無prepare/setPose；#24正常返回但無applyRotation，Andrew回報仍抬頭 |
+
+真人操作與判定完成，整體實驗仍失敗。8個原始同次真人畫面檔未完整保存，不能宣稱全部證據驗收完成；此缺口不改變由真實trace與真人判定共同支持的垂直再指定失敗。本輪不要求重做已否定的實驗，SDK修正交另行scope決策。
 
 ## 判讀與停點
 

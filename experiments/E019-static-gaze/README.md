@@ -72,7 +72,7 @@ npm run dev -- --port 5199
 
 ## 是否成功
 
-- **實驗狀態：失敗**。環境與 pinned runtime 已成立；「上 → 解除 → 下」違反既定再次指定判準。八次從正面開始的自動方向操作均取得預期角度，但人工視覺判定仍未執行。
+- **實驗狀態：失敗**。環境與 pinned runtime 已成立；「上 → 解除 → 下」違反既定再次指定判準。八次從正面開始的自動方向操作均取得預期角度；v2真人四方向各兩次共8次判定符合，左→解除→右符合，上→解除→下仍抬頭且無新rotation。真人同次畫面檔未完整保存，列為證據限制。
 - **本輪可行性驗證任務完成：是**。已取得足以否定主要假設的真實 WASM 操作與 pinned controller 重現證據，並明列人工證據缺口。這不表示所有驗收項完成或假設成立。
 - 工程交付進入 Draft PR human review；不因純測試／契約測試通過改判 simulator 失敗。若要修 SDK，須另行決定 scope。
 
@@ -81,6 +81,7 @@ npm run dev -- --port 5199
 - `evidence/red.txt`、`ledger-red.txt`：新增測試先於對應實作，缺少目標 module 的 red 結果。
 - `evidence/validation.txt`：11項純測試、4項真實 pinned controller 契約／限制characterization測試、strict checks與build。
 - `evidence/simulator-run.md`：實際 simulator smoke、人工八次方向與再次指定的狀態；未執行項維持未執行。
+- `evidence/human-run.md` 與 `human-final.json`：Andrew在v2正面同高視角下的真人判定、24項操作完整匯出與最終垂直再次指定失敗。原始同次真人畫面檔未完整保存，不聲稱全部Acceptance Criteria通過。
 - `web/generated/`：ignored runtime、MOD、工具鏈與完整建置 log；不提交二進位。
 
 ## 結論與限制
