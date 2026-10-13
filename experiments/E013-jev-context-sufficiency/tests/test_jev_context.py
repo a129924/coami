@@ -855,6 +855,42 @@ source = { registry = "https://pypi.org/simple" }
                     ],
                     check=True,
                 )
+            old_manifest = (
+                root
+                / "experiments/E013-jev-context-sufficiency/evidence/runs"
+                / "run-archived/manifest.json"
+            )
+            old_manifest.parent.mkdir(parents=True)
+            old_manifest.write_bytes(b"published\n")
+            subprocess.run(
+                [
+                    "git",
+                    "-C",
+                    str(root),
+                    "add",
+                    old_manifest.relative_to(root).as_posix(),
+                ],
+                check=True,
+            )
+            for action in ("publish", "delete"):
+                if action == "delete":
+                    old_manifest.unlink()
+                    subprocess.run(["git", "-C", str(root), "add", "-u"], check=True)
+                subprocess.run(
+                    [
+                        "git",
+                        "-C",
+                        str(root),
+                        "-c",
+                        "user.name=Test",
+                        "-c",
+                        "user.email=test@example.invalid",
+                        "commit",
+                        "-qm",
+                        action,
+                    ],
+                    check=True,
+                )
             with patch.dict(
                 os.environ,
                 {"GIT_DIR": str(other / ".git"), "GIT_WORK_TREE": str(other)},
@@ -862,6 +898,8 @@ source = { registry = "https://pypi.org/simple" }
                 self.assertEqual(
                     e.committed_git_bytes(root, Path("record.txt")), b"approved"
                 )
+                self.assertTrue(e.published_run_id_seen(root, "run-archived"))
+                self.assertFalse(e.published_run_id_seen(root, "run-new"))
 
     def test_missing_key_preflight_never_constructs_sdk(self) -> None:
         with TemporaryDirectory() as temporary:
@@ -1106,7 +1144,13 @@ source = { registry = "https://pypi.org/simple" }
                     "load_live_authorization",
                     return_value=("run-git-only", e.sha(auth.read_bytes())),
                 ),
-                patch.object(e, "checked_git", return_value=b"tracked manifest\n"),
+                patch.object(
+                    e,
+                    "checked_git",
+                    side_effect=lambda unused, args: b"false\n"
+                    if args[0] == "rev-parse"
+                    else b"tracked manifest\n",
+                ),
                 patch.object(e, "TypeSafeClient") as client,
             ):
                 self.assertEqual(e.run_live(freeze, policy, root, auth, root), 2)

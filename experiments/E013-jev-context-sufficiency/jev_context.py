@@ -445,6 +445,26 @@ def committed_git_bytes(root: Path, relative: Path) -> bytes:
     return checked_git(root, ["show", f"HEAD:{relative.as_posix()}"])
 
 
+def published_run_id_seen(root: Path, run_id: str) -> bool:
+    """Reserve IDs that appeared in any locally reachable evidence history."""
+    if checked_git(root, ["rev-parse", "--is-shallow-repository"]).strip() != b"false":
+        raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+    manifest = RUNNER_RELATIVE.parent / "evidence/runs" / run_id / "manifest.json"
+    return bool(
+        checked_git(
+            root,
+            [
+                "log",
+                "--all",
+                "--full-history",
+                "--format=%H",
+                "--",
+                manifest.as_posix(),
+            ],
+        ).strip()
+    )
+
+
 def load_live_authorization(
     path: Path,
     attestation: Path,
@@ -1074,17 +1094,11 @@ def run_live(
             or (store / "runs" / run_id).exists()
         ):
             raise ContractError("LIVE_AUTHORIZATION_ALREADY_USED")
-        tracked_manifest = (
-            RUNNER_RELATIVE.parent / "evidence/runs" / run_id / "manifest.json"
-        )
         try:
-            tracked = checked_git(
-                root,
-                ["ls-tree", "--name-only", "HEAD", "--", tracked_manifest.as_posix()],
-            )
+            previously_published = published_run_id_seen(root, run_id)
         except subprocess.CalledProcessError as exc:
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED") from exc
-        if tracked.strip():
+        if previously_published:
             raise ContractError("LIVE_AUTHORIZATION_ALREADY_USED")
         if not os.environ.get("TYPESAFE_API_KEY", "").strip():
             raise ContractError("MISSING_KEY")
