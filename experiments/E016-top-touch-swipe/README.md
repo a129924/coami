@@ -51,7 +51,7 @@ export STACK_CHAN_SOURCE=/absolute/path/stack-chan
 export E016_TOOLCHAIN_SOURCE=/absolute/path/pinned-macos-toolchain
 ```
 
-缺少來源變數或必要檔案時會明確失敗；腳本核對三個git revision、Moddable與emcc版本，並將工具／cache隔離複製到本實驗generated。來源 `.emscripten` 應指向提供的來源目錄，複製後會替換為隔離路徑。這是顯式外部建置前置需求，不是 fresh clone 自動供應的工具。
+缺少來源變數或必要檔案時會明確失敗；腳本核對三個git revision、Moddable與emcc版本，並將工具／cache隔離複製到本實驗generated。每次使用cache前核對三個元件的git revision、必要工具檔與Moddable版本。缺失／不匹配時從顯式來源複製到獨立staging目錄，全部驗證後才替換cache；複製失敗保留舊cache並清理本次staging，下次可直接重試。來源 `.emscripten` 應指向提供的來源目錄，複製後會替換為隔離路徑。這是顯式外部建置前置需求，不是 fresh clone 自動供應的工具。
 
 ## 重現步驟
 
@@ -132,3 +132,7 @@ operation15曾依指示操作但未新增swipe，當次FAIL紀錄保留；16保�
 ## PR comment review 修正 — 2026-10-13
 
 六項建議均採用：顯式工具鏈來源、macOS主機限制、頁面驗收狀態、真正±60 fixture、重現provenance與歷史證據分離，以及撤回未執行reset／不可用初始化的覆蓋宣稱。舊run與真人軌跡證據不變；完整驗收改為無法判定，避免把既有局部PASS擴為未測分支。測試與建置結果見verification.json的prCommentReview。
+
+### 第二輪 review：不完整工具鏈 cache
+
+Comment4255853165採用：不再只以moddable/tools/VERSION判定cache完整，改為驗證所有元件並以staging完成後替換。新增四項temporary-filesystem測試：完整cache重用、部分cache重建、中斷複製保留舊cache並重試成功、不合格元件不得發布。首次RED為2項恢復行為失敗；最終整套12項PASS、strict typecheck及script syntax PASS。沒有執行完整WASM重建，既有真人／runtime歷史證據與未執行的reset／初始化分支狀態保持不變。

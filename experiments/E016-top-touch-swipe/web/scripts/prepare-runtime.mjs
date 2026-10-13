@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto'
 import { copyFile, mkdir, readFile, rm, access, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { ensureToolchain } from './toolchain-cache.mjs'
 const web = fileURLToPath(new URL('../', import.meta.url))
 const experiment = path.resolve(web, '..')
 const repo = path.resolve(experiment, '../..')
@@ -49,17 +50,17 @@ await copyFile(path.join(web,'runtime-types/simulator-engine.d.mts'),enginePath)
 if (process.argv.includes('--stage-only')) process.exit(0)
 const publicRoot = path.join(generated,'public')
 const toolchain = path.join(generated,'toolchain')
-try { await access(path.join(toolchain,'moddable/tools/VERSION')) } catch {
-  await mkdir(toolchain,{recursive:true})
-  // Supported macOS APFS copy-on-write copy isolates tool/cache writes from the supplied source.
-  for (const name of ['moddable','emsdk','fontbm']) run('cp',['-cR',path.join(previous,name),path.join(toolchain,name)])
+const validateToolchain = async folder => {
+  for (const [name,revision] of [['moddable','b6e06ba70506a7381ffb28e09e3175bf4e99f305'],['emsdk','14c18b569f55138fe4963924162244251f454fb0'],['fontbm','7677b908523e909679f67cd5c170396bb9def1aa']]) {
+    if (capture('git',['rev-parse','HEAD'],path.join(folder,name))!==revision) throw new Error(`Tool revision mismatch: ${name}`)
+  }
+  for (const file of ['moddable/tools/VERSION','moddable/build/bin/mac/release/mcconfig','moddable/build/bin/mac/release/xsc','emsdk/.emscripten','emsdk/upstream/emscripten/emcc','emsdk/upstream/bin/clang','emsdk/upstream/bin/wasm-ld','fontbm/build/fontbm']) await access(path.join(folder,file))
+  if ((await readFile(path.join(folder,'moddable/tools/VERSION'),'utf8')).trim()!=='9.5.0') throw new Error('Moddable 9.5.0 required')
 }
+await ensureToolchain({source:previous,destination:toolchain,validate:validateToolchain,copy:(from,to)=>run('cp',['-cR',from,to])})
 const moddable = path.join(toolchain,'moddable')
 const emsdk = path.join(toolchain,'emsdk')
 const fontbm = path.join(toolchain,'fontbm/build/fontbm')
-for (const [folder,revision] of [[moddable,'b6e06ba70506a7381ffb28e09e3175bf4e99f305'],[emsdk,'14c18b569f55138fe4963924162244251f454fb0'],[path.join(toolchain,'fontbm'),'7677b908523e909679f67cd5c170396bb9def1aa']]) {
-  if (capture('git',['rev-parse','HEAD'],folder)!==revision) throw new Error(`Tool revision mismatch: ${folder}`)
-}
 const config = path.join(emsdk,'.emscripten')
 await writeFile(config,(await readFile(config,'utf8')).replaceAll(previous,toolchain))
 const env = {...process.env,MODDABLE:moddable,EMSDK:emsdk,EM_CONFIG:config,EM_CACHE:path.join(emsdk,'upstream/emscripten/cache'),FONTBM:fontbm,CI:'1',LEFTHOOK:'0',PATH:[path.join(moddable,'build/bin/mac/release'),path.join(emsdk,'upstream/emscripten'),path.join(emsdk,'upstream/bin'),process.env.PATH].join(path.delimiter)}

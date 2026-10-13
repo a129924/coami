@@ -170,3 +170,17 @@ Prior human-acceptance summary is superseded for complete TC05: leave/recovery P
 | Goal | correct reproducibility and evidence | explicit prerequisites and unsupported host error; per-run generated provenance; uncovered branches marked not-run |
 | Non-Goal | fresh tool installation/all-branch PASS | no installs or fabricated coverage |
 | TestCase | affected verification | ±60 fixtureRED40!=60→GREEN±60/±62;8tests;typecheck/build;CLI preflight;MOD hash/evidence preservation |
+
+## PR review round2 — cache recovery
+
+| Field | planned | actual |
+| --- | --- | --- |
+| In-Scope | comment4255853165 | complete validation/staging/retry for toolchain cache |
+| Out-Of-Scope | runtime/SDK/platform/merge | none changed |
+| ReadOnly | pinned source/historical evidence | original vendor, tool source, provenance and human exports unchanged |
+| Written | bounded E016 helper/tests/docs | scripts/toolchain-cache.mjs, toolchain-cache.test.mjs, prepare-runtime.mjs, package.json, README/verification/plan/step/review-log |
+| Deleted | none tracked | own temporary test/staging directories cleaned |
+| Modify | E016 preparation only | tests registered in npm test; no dependency changes |
+| Goal | recover interrupted preparation | partial cache repaired; failed staging preserves old cache; next retry succeeds |
+| Non-Goal | fullWASM/reset evidence | neither inferred nor repeated |
+| TestCase | cache regression and existing tests | first1PASS/2FAIL→final12PASS, typecheck/syntaxPASS; independent review approved/12PASS |

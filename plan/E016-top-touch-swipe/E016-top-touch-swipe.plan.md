@@ -51,6 +51,8 @@ Implementer/Tester, exact paths relative to experiments/E016-top-touch-swipe/:
 - `web/src/runtime-contract.test.ts`
 - `web/runtime-types/simulator-engine.d.mts`
 - `web/scripts/prepare-runtime.mjs`
+- `web/scripts/toolchain-cache.mjs`
+- `web/scripts/toolchain-cache.test.mjs`
 - `web/scripts/build-mod.mjs`
 - `mod/main.ts`
 - `mod/host.d.ts`
@@ -103,3 +105,7 @@ Human review handoff: https://github.com/a129924/coami/pull/16; Draft=false; bas
 Owner authorizes bounded fixes, topic commit/push, replies and thread resolution. ADDRESS all six review comments4255715535/5542/5547/5553/5559/5563. No architecture/SDK/runtime ABI change. Toolchain prerequisites now explicit; full preparation is macOS-only. Build provenance goes to ignored generated paths, preserving original evidence. Correct ±60/±62 fixtures and retract unsupported initialize/reset/unavailable coverage; these branches remain not-run. Current PR state is Ready, not Draft.
 
 In-Scope=the six comments; Out-Of-Scope=production/new platform support/merge; ReadOnly=SDK/vendor/finalized runtime provenance/human event exports; Written=existing E016 scripts/test/index/README/verification and plan/step/review-log; Deleted=none; Modify=bounded E016 files; Goal=accurate reproduction and evidence; Non-Goal=claim uncovered failure branches; TestCase=boundary RED→GREEN,8tests,typecheck/build,CLI preflight and MOD provenance preservation.
+
+### PR review round2 — incomplete toolchain cache
+
+ADDRESS4255853165. Revalidate every cached component; stage a complete source copy, validate then replace. Failed copy/validation leaves previous cache intact and cleans current staging; retry needs no manual cache deletion. New helper/test remain experiment-local; package test command includes cache tests. No SDK/ABI/production/new host changes. Historical runtime provenance/operator exports read-only.

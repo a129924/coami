@@ -7,7 +7,7 @@
     "node": ">=24 <27"
   },
   "scripts": {
-    "test": "npm run stage && node --test src/*.test.ts",
+    "test": "npm run stage && node --test src/*.test.ts scripts/*.test.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json",
     "prepare:poc": "node scripts/prepare-runtime.mjs && node scripts/build-mod.mjs",
     "dev": "vite --host 127.0.0.1",
