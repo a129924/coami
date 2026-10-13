@@ -48,11 +48,63 @@ Preflight checks imported SDK and transitive dependency code against the authori
 
 Before the first third-party import, the runner also checks every locked dependency source byte against the pinned digest baseline. A changed import wrapper therefore blocks before it can execute. Future runs retain `uv.lock` and `sdk-code-digests.json` with separate hashes; evidence replay checks those run-bound bytes against the installed environment and fails closed if the current environment cannot reproduce that run. The historical run predates these snapshots and uses the lock from its fixed Git runner revision, which must agree with the current pinned baseline.
 
+The `-c` bootstrap uses only the standard library until it has compared the exact runner and one-run authorization bytes with this checkout's committed `HEAD` and checked the authorization's runner hash. It does not execute a locally edited runner before those checks. After that comparison it appends the synchronized dependency path and executes the verified runner snapshot.
+
 ```sh
 env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u PYTHONPATH -u RUST_LOG \
   uv run --quiet --locked --project experiments/E013-jev-context-sufficiency \
   --env-file /Users/andrew/code/python/coami/experiments/E012-jev-text-policy/.env \
-  python -I -S -B -c 'import sys,tempfile; from pathlib import Path; p=Path("experiments/E013-jev-context-sufficiency/jev_context.py").resolve(); v=p.parent/".venv"; sys.prefix=sys.exec_prefix=str(v); sys.path.append(str(v/"lib"/"python3.12"/"site-packages")); sys.pycache_prefix=tempfile.mkdtemp(prefix="e013-empty-pycache-"); s=p.read_bytes(); sys.argv[0]=str(p); exec(compile(s,str(p),"exec"),{"__name__":"__main__","__file__":str(p),"_E013_EXECUTED_SOURCE":s})' --live \
+  python -I -S -B -c '
+import hashlib, json, os, subprocess, sys, tempfile
+from pathlib import Path
+def blocked():
+    print("E013 BLOCKED RUNNER_SOURCE_UNVERIFIED", flush=True)
+    raise SystemExit(2)
+try:
+    root = Path.cwd().resolve()
+    runner = root / "experiments/E013-jev-context-sufficiency/jev_context.py"
+    args = sys.argv[1:]
+    if args.count("--live") != 1 or args.count("--live-authorization") != 1:
+        blocked()
+    auth = Path(args[args.index("--live-authorization") + 1]).resolve()
+    if not auth.is_relative_to(root):
+        blocked()
+    env = {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
+    probe = subprocess.run(["git", "-C", str(root), "rev-parse", "--show-toplevel", "--absolute-git-dir"], env=env, capture_output=True, check=True).stdout.decode().splitlines()
+    marker = root / ".git"
+    if len(probe) != 2 or Path(probe[0]).resolve() != root or marker.is_symlink():
+        blocked()
+    if marker.is_dir():
+        expected_git_dir = marker.resolve()
+    elif marker.is_file():
+        pointer = marker.read_text().strip()
+        if not pointer.startswith("gitdir: "):
+            blocked()
+        expected_git_dir = (root / pointer.removeprefix("gitdir: ")).resolve()
+    else:
+        blocked()
+    git_dir = Path(probe[1]).resolve()
+    if git_dir != expected_git_dir or not git_dir.is_dir():
+        blocked()
+    def committed(path):
+        relative = path.relative_to(root).as_posix()
+        return subprocess.run(["git", "--git-dir", str(git_dir), "--work-tree", str(root), "show", f"HEAD:{relative}"], env=env, capture_output=True, check=True).stdout
+    source = runner.read_bytes()
+    authorization = auth.read_bytes()
+    if source != committed(runner) or authorization != committed(auth):
+        blocked()
+    document = json.loads(authorization)
+    if hashlib.sha256(source).hexdigest() != document.get("runner_sha256"):
+        blocked()
+except (OSError, ValueError, TypeError, KeyError, UnicodeDecodeError, subprocess.CalledProcessError):
+    blocked()
+venv = runner.parent / ".venv"
+sys.prefix = sys.exec_prefix = str(venv)
+sys.path.append(str(venv / "lib/python3.12/site-packages"))
+sys.pycache_prefix = tempfile.mkdtemp(prefix="e013-empty-pycache-")
+sys.argv[0] = str(runner)
+exec(compile(source, str(runner), "exec"), {"__name__": "__main__", "__file__": str(runner), "_E013_EXECUTED_SOURCE": source})
+' --live \
   --freeze-attestation evaluation/context_sufficiency/versions/v1/freeze-attestation.json \
   --store-policy experiments/E013-jev-context-sufficiency/local-store-policy.json \
   --store-root /Users/andrew/coami-evidence/E013 \

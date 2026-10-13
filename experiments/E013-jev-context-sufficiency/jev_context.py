@@ -59,6 +59,11 @@ def _verify_dependency_sources_before_import() -> None:
         }
         if set(digests["files"]) != set(locked) - {"httpx2-jsfetch"}:
             raise ValueError
+        site = environment / "lib/python3.12/site-packages"
+        expected_importables = {
+            site
+            / "_virtualenv.py": "6cf30c56faf2a55228914dbbd17f8088ed371ebb08f5e7fa6fd931f913fcaf1d"
+        }
         for package, expected in digests["files"].items():
             installed = distribution(package)
             if installed.version != locked[package] or installed.files is None:
@@ -84,6 +89,21 @@ def _verify_dependency_sources_before_import() -> None:
                     != expected[name]
                 ):
                     raise ValueError
+                expected_importables[site / name] = expected[name]
+        on_disk = set()
+        for path in site.rglob("*"):
+            if path.is_symlink():
+                raise ValueError
+            if path.is_file() and (
+                path.suffix == ".py"
+                or any(str(path).endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+            ):
+                on_disk.add(path)
+        if on_disk != set(expected_importables):
+            raise ValueError
+        for path, expected in expected_importables.items():
+            if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+                raise ValueError
     except (
         KeyError,
         OSError,
@@ -289,7 +309,11 @@ def seal_run(run_dir: Path) -> None:
 
 
 def load_freeze(
-    attestation: Path, root: Path = ROOT, *, snapshot: bytes | None = None
+    attestation: Path,
+    root: Path = ROOT,
+    *,
+    snapshot: bytes | None = None,
+    review_snapshot: bytes | None = None,
 ) -> dict[str, str]:
     """Match a separately accepted freeze record to exact on-disk bytes."""
     document = parse_gate_document(
@@ -311,7 +335,7 @@ def load_freeze(
     ):
         raise ContractError("V1_NOT_FROZEN")
     review = root / "evaluation/context_sufficiency/versions/v1/review.md"
-    review_bytes = review.read_bytes()
+    review_bytes = review.read_bytes() if review_snapshot is None else review_snapshot
     current_status = b"\n".join(review_bytes.splitlines()[:3])
     if (
         document.get("review_sha256") != sha(review_bytes)
@@ -686,6 +710,8 @@ def validate_oracles(
                 [
                     sys.executable,
                     "-I",
+                    "-S",
+                    "-B",
                     "-c",
                     bootstrap,
                     str(root / relative),
@@ -693,6 +719,11 @@ def validate_oracles(
                 ],
                 input=script,
                 cwd=root,
+                env={
+                    key: value
+                    for key, value in os.environ.items()
+                    if key != "TYPESAFE_API_KEY"
+                },
                 capture_output=True,
                 check=False,
             )
@@ -873,7 +904,7 @@ def parse_answer(raw: bytes) -> dict[str, Any]:
             "confidence": confidence,
             "error_code": None,
         }
-    except (ValueError, TypeError, KeyError, UnicodeDecodeError) as exc:
+    except (ValueError, TypeError, KeyError, UnicodeDecodeError, RecursionError) as exc:
         if isinstance(exc, ContractError):
             code = exc.code
         else:
@@ -1064,7 +1095,16 @@ def run_live(
         if sys.version_info[:2] != (3, 12):
             raise ContractError("PYTHON_VERSION_MISMATCH")
         attestation_bytes = attestation.read_bytes()
-        freeze_hashes = load_freeze(attestation, root, snapshot=attestation_bytes)
+        review_path = root / "evaluation/context_sufficiency/versions/v1/review.md"
+        review_bytes = review_path.read_bytes()
+        if committed_git_bytes(root, review_path.relative_to(root)) != review_bytes:
+            raise ContractError("V1_NOT_FROZEN")
+        freeze_hashes = load_freeze(
+            attestation,
+            root,
+            snapshot=attestation_bytes,
+            review_snapshot=review_bytes,
+        )
         store_policy_bytes = store_policy.read_bytes()
         policy_metadata = load_store_policy(
             store_policy, store, root, snapshot=store_policy_bytes
@@ -1127,7 +1167,7 @@ def run_live(
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         policy_hash = POLICY_HASH
         ensure_live_store_boundary(store)
-    except (ContractError, OSError, ValueError) as exc:
+    except (ContractError, OSError, ValueError, subprocess.CalledProcessError) as exc:
         code = exc.code if isinstance(exc, ContractError) else "PREFLIGHT_FAILED"
         print(f"E013 BLOCKED {code}", flush=True)
         return 2

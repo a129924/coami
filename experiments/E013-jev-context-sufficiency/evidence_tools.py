@@ -783,7 +783,7 @@ def sdk_rejects(raw: bytes, case: dict[str, Any], question: dict[str, Any]) -> b
                 state=case["state"],
                 questions={"context_sufficiency": e.Choice(**question)},
             )
-    except e.TypeSafeError:
+    except (e.TypeSafeError, RecursionError):
         return True
     return False
 
@@ -845,7 +845,7 @@ def response_gap(
             return "RAW_ANALYSIS_MISMATCH"
         try:
             body = json.loads(raw)
-        except (ValueError, UnicodeDecodeError):
+        except (ValueError, UnicodeDecodeError, RecursionError):
             body = None
         if (
             isinstance(body, dict)
@@ -866,7 +866,7 @@ def request_gap(
 ) -> str | None:
     try:
         actual = json.loads(body)
-    except (ValueError, UnicodeDecodeError):
+    except (ValueError, UnicodeDecodeError, RecursionError):
         return "REQUEST_CONTENT_MISMATCH"
     expected = {
         "model": e.MODEL,
@@ -1694,24 +1694,21 @@ def verify_evidence(
             or event_log_gap(evidence_run, full_rows, manifest["events_sha256"])
         ):
             gaps.append({"reason": "EVENT_LOG_MISMATCH"})
-    if not gaps:
-        try:
-            summary = summary_bytes(evidence_run)
-        except (OSError, e.ContractError):
-            summary = b""
-        if e.sha(summary) != manifest.get("summary_sha256"):
-            gaps.append({"reason": "SUMMARY_HASH_MISMATCH"})
-        if summary:
-            recorded = e.read_object(evidence_run / "summary.json")
-            recalculated = e.summarize(full_rows)
-            if (
-                not same_json_value(recorded.get("groups"), recalculated["groups"])
-                or not same_json_value(
-                    recorded.get("complete"), recalculated["complete"]
-                )
-                or summary_identity_gap(recorded, manifest.get("run_id"), full_rows)
-            ):
-                gaps.append({"reason": "SUMMARY_MISMATCH"})
+    try:
+        summary = summary_bytes(evidence_run)
+    except (OSError, e.ContractError):
+        summary = b""
+    if e.sha(summary) != manifest.get("summary_sha256"):
+        gaps.append({"reason": "SUMMARY_HASH_MISMATCH"})
+    if summary and len(full_rows) == 75:
+        recorded = e.read_object(evidence_run / "summary.json")
+        recalculated = e.summarize(full_rows)
+        if (
+            not same_json_value(recorded.get("groups"), recalculated["groups"])
+            or not same_json_value(recorded.get("complete"), recalculated["complete"])
+            or summary_identity_gap(recorded, manifest.get("run_id"), full_rows)
+        ):
+            gaps.append({"reason": "SUMMARY_MISMATCH"})
     result = {
         "run_id": manifest.get("run_id"),
         "verified_cases": len(full_rows),

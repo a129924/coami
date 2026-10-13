@@ -139,6 +139,54 @@ class E013Tests(unittest.TestCase):
                 client.assert_not_called()
             self.assertFalse((store / "authorization-uses").exists())
 
+    def test_live_rejects_review_bytes_that_differ_from_head(self) -> None:
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            attestation = root / e.FREEZE_RELATIVE
+            review = root / "evaluation/context_sufficiency/versions/v1/review.md"
+            attestation.parent.mkdir(parents=True)
+            attestation.write_bytes(b"attestation")
+            review.write_bytes(b"temporarily accepted")
+            with (
+                patch.object(e, "committed_git_bytes", return_value=b"revoked"),
+                patch.object(e, "load_freeze") as load_freeze,
+                patch.object(e, "TypeSafeClient") as client,
+            ):
+                self.assertEqual(
+                    e.run_live(attestation, root / e.POLICY_RELATIVE, root, root=root),
+                    2,
+                )
+                load_freeze.assert_not_called()
+                client.assert_not_called()
+
+    def test_frozen_validators_have_no_site_hooks_or_api_key(self) -> None:
+        freeze = e.load_freeze(e.ORACLE / "versions/v1/freeze-attestation.json")
+        sources = e.read_frozen_case_sources(e.ROOT, freeze)
+        with (
+            patch.dict(os.environ, {"TYPESAFE_API_KEY": "secret"}),
+            patch.object(
+                e.subprocess,
+                "run",
+                return_value=subprocess.CompletedProcess([], 0, b""),
+            ) as run,
+        ):
+            e.validate_oracles(e.ROOT, freeze, sources)
+        self.assertEqual(run.call_count, 2)
+        for call in run.call_args_list:
+            self.assertEqual(call.args[0][1:4], ["-I", "-S", "-B"])
+            self.assertNotIn("TYPESAFE_API_KEY", call.kwargs["env"])
+
+    def test_deep_json_response_is_a_fixed_invalid_result(self) -> None:
+        raw = b"[" * 10000 + b"0" + b"]" * 10000
+        parsed = e.parse_answer(raw)
+        self.assertEqual(parsed["status"], "INVALID")
+        self.assertEqual(parsed["error_code"], "INVALID_RESPONSE")
+        self.assertTrue(evidence.sdk_rejects(raw, self.cases[0], self.question))
+        self.assertEqual(
+            evidence.request_gap(raw, self.cases[0], self.question),
+            "REQUEST_CONTENT_MISMATCH",
+        )
+
     def test_live_store_rejects_redirected_subdirectories(self) -> None:
         with TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -726,6 +774,82 @@ source = { registry = "https://pypi.org/simple" }
             self.assertNotIn(str(site), result.stdout)
             self.assertFalse(marker.exists())
 
+    def test_documented_bootstrap_rejects_edited_runner_before_execution(self) -> None:
+        documentation = (e.TOPIC / "README.md").read_text()
+        bootstrap = documentation.split("python -I -S -B -c '\n", 1)[1].split(
+            "\n' --live", 1
+        )[0]
+        self.assertNotIn("'", bootstrap)
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            runner = root / e.RUNNER_RELATIVE
+            runner.parent.mkdir(parents=True)
+            trusted = b"print('trusted')\n"
+            runner.write_bytes(trusted)
+            auth = root / "authorization.json"
+            auth.write_bytes(e.json_bytes({"runner_sha256": e.sha(trusted)}))
+            subprocess.run(["git", "-C", str(root), "add", "."], check=True)
+            subprocess.run(
+                [
+                    "git",
+                    "-C",
+                    str(root),
+                    "-c",
+                    "user.name=Test",
+                    "-c",
+                    "user.email=test@example.invalid",
+                    "commit",
+                    "-qm",
+                    "trusted",
+                ],
+                check=True,
+            )
+            marker = root / "malicious-ran"
+            runner.write_text(
+                f"from pathlib import Path; Path({str(marker)!r}).write_text('ran')\n"
+            )
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "-I",
+                    "-S",
+                    "-B",
+                    "-c",
+                    bootstrap,
+                    "--live",
+                    "--live-authorization",
+                    "authorization.json",
+                ],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("E013 BLOCKED RUNNER_SOURCE_UNVERIFIED", result.stdout)
+            self.assertFalse(marker.exists())
+            runner.write_bytes(trusted)
+            accepted = subprocess.run(
+                [
+                    sys.executable,
+                    "-I",
+                    "-S",
+                    "-B",
+                    "-c",
+                    bootstrap,
+                    "--live",
+                    "--live-authorization",
+                    "authorization.json",
+                ],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(accepted.returncode, 0)
+            self.assertIn("trusted", accepted.stdout)
+
     def test_dependency_wrapper_is_rejected_before_its_import(self) -> None:
         with TemporaryDirectory() as temporary:
             topic = Path(temporary) / "experiments/E013-jev-context-sufficiency"
@@ -768,6 +892,25 @@ source = { registry = "https://pypi.org/simple" }
             self.assertEqual(result.returncode, 2)
             self.assertIn("E013 BLOCKED SDK_IMPORT_MISMATCH", result.stdout)
             self.assertFalse(marker.exists())
+            target.write_bytes(original)
+            shadow = site / "typesafe_sdk" / f"__init__{e.EXTENSION_SUFFIXES[0]}"
+            shadow.write_bytes(b"untracked extension")
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "-I",
+                    "-S",
+                    "-B",
+                    "-c",
+                    script,
+                    str(topic / "jev_context.py"),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("E013 BLOCKED SDK_IMPORT_MISMATCH", result.stdout)
 
     def test_replay_rejects_unverified_sdk_before_reading_evidence(self) -> None:
         with patch.object(
@@ -1088,6 +1231,13 @@ source = { registry = "https://pypi.org/simple" }
             (root / "authorization-uses").mkdir()
             (root / "authorization-uses" / "run-unique.json").write_bytes(b"used")
             (root / "runs" / "run-unique").rmdir()
+            review = root / "evaluation/context_sufficiency/versions/v1/review.md"
+            review.write_bytes(b"review")
+            review_patch = patch.object(
+                e, "committed_git_bytes", return_value=b"review"
+            )
+            review_patch.start()
+            self.addCleanup(review_patch.stop)
             with (
                 patch.object(e, "load_freeze", return_value={}),
                 patch.object(e, "load_store_policy", return_value={}),
@@ -1098,7 +1248,7 @@ source = { registry = "https://pypi.org/simple" }
                 ),
                 patch.object(e, "TypeSafeClient") as client,
             ):
-                self.assertEqual(e.run_live(freeze, policy, root, auth), 2)
+                self.assertEqual(e.run_live(freeze, policy, root, auth, root), 2)
                 client.assert_not_called()
             with (
                 patch.object(e, "load_freeze", return_value={}),
@@ -1110,7 +1260,7 @@ source = { registry = "https://pypi.org/simple" }
                 ),
                 patch.object(e, "TypeSafeClient") as client,
             ):
-                self.assertEqual(e.run_live(freeze, policy, root, auth), 2)
+                self.assertEqual(e.run_live(freeze, policy, root, auth, root), 2)
                 self.assertFalse(
                     (
                         root / "authorization-uses" / f"{e.HISTORICAL_RUN_ID}.json"
@@ -1483,6 +1633,13 @@ source = { registry = "https://pypi.org/simple" }
                 {gap["reason"] for gap in without_access["gaps"]},
                 {"ANALYSIS_ACCESS_REQUIRED"},
             )
+            public_summary = (output / "summary.json").read_bytes()
+            (output / "summary.json").write_bytes(b"broken")
+            self.assertEqual(
+                {gap["reason"] for gap in evidence.verify_evidence(output)["gaps"]},
+                {"ANALYSIS_ACCESS_REQUIRED", "SUMMARY_HASH_MISMATCH"},
+            )
+            (output / "summary.json").write_bytes(public_summary)
             with_access = evidence.verify_evidence(output, restricted, 0.8)
             self.assertEqual(with_access["verified_cases"], 75)
             self.assertEqual(with_access["gaps"], [])
