@@ -1,0 +1,165 @@
+diff --git a/firmware/host/app/main.ts b/firmware/host/app/main.ts
+index 67a85b4..e6f287d 100644
+--- a/firmware/host/app/main.ts
++++ b/firmware/host/app/main.ts
+@@ -28,6 +28,10 @@ const globalEnv = globalThis as typeof globalThis & GlobalEnvironment
+ const noopButtonHandler = () => undefined
+ 
+ function installPlatformInputBridge(): void {
++  if (Modules.has('wasm-touch-panel-bridge')) {
++    const touch = Modules.importNow('wasm-touch-panel-bridge') as { installWasmTouchPanel: () => void }
++    touch.installWasmTouchPanel()
++  }
+   if (!Modules.has('wasm-button-bridge')) return
+   const bridge = Modules.importNow('wasm-button-bridge') as { installWasmButtons?: () => void }
+   bridge.installWasmButtons?.()
+diff --git a/firmware/host/modules/input/manifest_wasm.json b/firmware/host/modules/input/manifest_wasm.json
+index a098062..1e3b6fe 100644
+--- a/firmware/host/modules/input/manifest_wasm.json
++++ b/firmware/host/modules/input/manifest_wasm.json
+@@ -1,6 +1,7 @@
+ {
+   "include": ["./manifest.json"],
+   "modules": {
+-    "wasm-button-bridge": "./wasm/button-bridge"
++    "wasm-button-bridge": "./wasm/button-bridge",
++    "wasm-touch-panel-bridge": "./wasm/touch-panel-bridge"
+   }
+ }
+diff --git a/firmware/host/modules/input/touch-panel.ts b/firmware/host/modules/input/touch-panel.ts
+index 0d3dd78..1be6d46 100644
+--- a/firmware/host/modules/input/touch-panel.ts
++++ b/firmware/host/modules/input/touch-panel.ts
+@@ -14,6 +14,8 @@ type TouchPanelDriver = {
+   sample: () => TouchPanelSample
+   configure?: (options: unknown) => void
+   close?: () => void
++  ticks?: () => number
++  consumed?: () => void
+ }
+ 
+ type TouchPanelConstructor = new (options: unknown) => TouchPanelDriver
+@@ -76,7 +78,6 @@ export default class TouchPanel {
+     if (this.#timer) return
+     trace(`[TouchPanel] start interval=${this.#interval}ms\n`)
+     this.#timer = Timer.repeat(() => {
+-      const ticks = Time.ticks
+       let sample: TouchPanelSample
+       try {
+         sample = this.#sample()
+@@ -89,6 +90,7 @@ export default class TouchPanel {
+         return
+       }
+ 
++      const ticks = this.#driver.ticks?.() ?? Time.ticks
+       const gesture = this.#recognizer.update(sample, ticks)
+       if (gesture) {
+         const intensity = Math.max(sample[0] ?? 0, sample[1] ?? 0, sample[2] ?? 0)
+@@ -96,6 +98,7 @@ export default class TouchPanel {
+           createTouchPanelInputEvent(gesture.type, this.#recognizer.getPosition(sample), intensity, ticks, gesture.tap),
+         )
+       }
++      this.#driver.consumed?.()
+     }, this.#interval)
+   }
+ 
+diff --git a/firmware/host/modules/input/wasm/touch-panel-bridge.c b/firmware/host/modules/input/wasm/touch-panel-bridge.c
+new file mode 100644
+index 0000000..e58f47b
+--- /dev/null
++++ b/firmware/host/modules/input/wasm/touch-panel-bridge.c
+@@ -0,0 +1,35 @@
++#include "xs.h"
++#include "xsmc.h"
++#include <emscripten.h>
++
++/* One native call latches the browser tuple. No latest-pointer lookup. */
++void xs_stackchan_e017_take(xsMachine* the)
++{
++    int available = EM_ASM_INT({
++        const panel = stackchanRuntime.host && stackchanRuntime.host.TopTouchPanel;
++        if (!panel || !panel.take) return 0;
++        const t = panel.take();
++        const m = t.meta;
++        stackchanRuntime.e017Sample = Array.of(t.sample[0], t.sample[1], t.sample[2],
++            m.session, m.operation, m.sampleId, m.ticks, +m.terminal, +m.queued);
++        return 1;
++    });
++    if (!available) xsUnknownError("E017 raw TouchPanel provider unavailable");
++    xsmcVars(1);
++    xsmcSetNewArray(xsResult, 9);
++    for (int i = 0; i < 9; i++) {
++        double value = EM_ASM_DOUBLE({ return stackchanRuntime.e017Sample[$0]; }, i);
++        xsmcSetNumber(xsVar(0), value);
++        xsmcSetIndex(xsResult, i, xsVar(0));
++    }
++}
++
++void xs_stackchan_e017_consumed(xsMachine* the)
++{
++    int session = xsmcToInteger(xsArg(0));
++    int sample = xsmcToInteger(xsArg(1));
++    EM_ASM({
++        const panel = stackchanRuntime.host && stackchanRuntime.host.TopTouchPanel;
++        if (panel && panel.consumed) panel.consumed($0, $1);
++    }, session, sample);
++}
+diff --git a/firmware/host/modules/input/wasm/touch-panel-bridge.js b/firmware/host/modules/input/wasm/touch-panel-bridge.js
+new file mode 100644
+index 0000000..613bd3e
+--- /dev/null
++++ b/firmware/host/modules/input/wasm/touch-panel-bridge.js
+@@ -0,0 +1,21 @@
++const take = native('xs_stackchan_e017_take')
++const acknowledge = native('xs_stackchan_e017_consumed')
++
++class WasmTouchPanel {
++  sample() {
++    const t = take()
++    globalThis.__coami17 = { session: t[3], operation: t[4], sampleId: t[5],
++      ticks: t[6], terminal: Boolean(t[7]), queued: Boolean(t[8]) }
++    this.current = globalThis.__coami17
++    return [t[0], t[1], t[2]]
++  }
++  ticks() { return this.current.ticks }
++  consumed() {
++    if (this.current.queued) acknowledge(this.current.session, this.current.sampleId)
++  }
++}
++export function installWasmTouchPanel() {
++  globalThis.device ??= {}
++  globalThis.device.sensor ??= {}
++  globalThis.device.sensor.TouchPanel = WasmTouchPanel
++}
+diff --git a/web/src/services/simulator/simulator-engine.d.mts b/web/src/services/simulator/simulator-engine.d.mts
+index d2c0b1a..9ad2b94 100644
+--- a/web/src/services/simulator/simulator-engine.d.mts
++++ b/web/src/services/simulator/simulator-engine.d.mts
+@@ -44,6 +44,7 @@ export class SimulatorEngine {
+     viewport: HTMLCanvasElement
+     screen: HTMLCanvasElement
+     runtimeBaseUrl?: string
++    topTouchBridge?: { take(): { sample: number[]; meta: { session: number; operation: number; sampleId: number; ticks: number; terminal: boolean; queued: boolean } }; consumed(session: number, sampleId: number): void }
+     modStorage?: SimulatorModStorage
+     onStatus?: (status: SimulatorStatus) => void
+     onTrace?: (message: string) => void
+diff --git a/web/src/services/simulator/simulator-engine.mjs b/web/src/services/simulator/simulator-engine.mjs
+index 4b30b3e..8a73ee4 100644
+--- a/web/src/services/simulator/simulator-engine.mjs
++++ b/web/src/services/simulator/simulator-engine.mjs
+@@ -751,6 +751,7 @@ export class SimulatorEngine {
+     onCameraStatus = () => {},
+     onReady = () => {},
+     onError = () => {},
++    topTouchBridge,
+     modStorage = createModStorage(),
+     runtimeBaseUrl = new URL('../simulator/', document.baseURI).href,
+   }) {
+@@ -773,6 +774,7 @@ export class SimulatorEngine {
+       onTorque: (torque) => this.scene.setTorqueEnabled(torque),
+     })
+     this.hostBridge = {
++      TopTouchPanel: topTouchBridge,
+       Button: this.buttonBridge.Button,
+       AudioOut: this.audioOutBridge,
+       AudioIn: this.audioInBridge,
