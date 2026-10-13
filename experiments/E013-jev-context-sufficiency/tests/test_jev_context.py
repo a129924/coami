@@ -697,6 +697,75 @@ source = { registry = "https://pypi.org/simple" }
             self.assertEqual(result.stdout.strip(), "source")
             self.assertFalse(marker.exists())
 
+    def test_isolated_entry_keeps_standard_library_ahead_of_packages(self) -> None:
+        with TemporaryDirectory() as temporary:
+            site = Path(temporary) / "site-packages"
+            site.mkdir()
+            marker = Path(temporary) / "shadow-ran"
+            (site / "tomllib.py").write_text(
+                f"from pathlib import Path; Path({str(marker)!r}).write_text('shadow')\n"
+            )
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "-I",
+                    "-S",
+                    "-B",
+                    "-c",
+                    "import sys; sys.path.append(sys.argv[1]); import tomllib; "
+                    "print(tomllib.__file__)",
+                    str(site),
+                ],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            self.assertNotIn(str(site), result.stdout)
+            self.assertFalse(marker.exists())
+
+    def test_replay_rejects_unverified_sdk_before_reading_evidence(self) -> None:
+        with patch.object(
+            e, "verify_sdk_imports", side_effect=e.ContractError("SDK_IMPORT_MISMATCH")
+        ):
+            with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
+                evidence.verify_evidence(Path("missing"))
+            with self.assertRaisesRegex(e.ContractError, "SDK_IMPORT_MISMATCH"):
+                evidence.verify_local_run(Path("missing"))
+
+    def test_committed_git_bytes_ignore_inherited_repository_overrides(self) -> None:
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary) / "coami"
+            other = Path(temporary) / "other"
+            for repo, payload in ((root, b"approved"), (other, b"forged")):
+                repo.mkdir()
+                subprocess.run(["git", "init", "-q", str(repo)], check=True)
+                (repo / "record.txt").write_bytes(payload)
+                subprocess.run(
+                    ["git", "-C", str(repo), "add", "record.txt"], check=True
+                )
+                subprocess.run(
+                    [
+                        "git",
+                        "-C",
+                        str(repo),
+                        "-c",
+                        "user.name=Test",
+                        "-c",
+                        "user.email=test@example.invalid",
+                        "commit",
+                        "-qm",
+                        "record",
+                    ],
+                    check=True,
+                )
+            with patch.dict(
+                os.environ,
+                {"GIT_DIR": str(other / ".git"), "GIT_WORK_TREE": str(other)},
+            ):
+                self.assertEqual(
+                    e.committed_git_bytes(root, Path("record.txt")), b"approved"
+                )
+
     def test_missing_key_preflight_never_constructs_sdk(self) -> None:
         with TemporaryDirectory() as temporary:
             auth = Path(temporary) / "auth.json"
@@ -720,6 +789,7 @@ source = { registry = "https://pypi.org/simple" }
     def test_live_authorization_is_committed_specific_and_one_use(self) -> None:
         with TemporaryDirectory() as temporary:
             root = Path(temporary)
+            (root / ".git").mkdir()
             auth = root / "live.json"
             freeze = (
                 root
@@ -759,6 +829,10 @@ source = { registry = "https://pypi.org/simple" }
             def git_show(
                 args: list[str], **kwargs: object
             ) -> subprocess.CompletedProcess[bytes]:
+                if "rev-parse" in args:
+                    return subprocess.CompletedProcess(
+                        args, 0, f"{root}\n{root / '.git'}\n".encode()
+                    )
                 return subprocess.CompletedProcess(
                     args, 0, committed[args[-1].split(":", 1)[1]]
                 )
@@ -935,13 +1009,7 @@ source = { registry = "https://pypi.org/simple" }
                     "load_live_authorization",
                     return_value=("run-git-only", e.sha(auth.read_bytes())),
                 ),
-                patch.object(
-                    e.subprocess,
-                    "run",
-                    return_value=subprocess.CompletedProcess(
-                        [], 0, b"tracked manifest\n"
-                    ),
-                ),
+                patch.object(e, "checked_git", return_value=b"tracked manifest\n"),
                 patch.object(e, "TypeSafeClient") as client,
             ):
                 self.assertEqual(e.run_live(freeze, policy, root, auth, root), 2)
@@ -1516,7 +1584,10 @@ source = { registry = "https://pypi.org/simple" }
                 },
             )
             (restricted / "analysis.jsonl").write_bytes(restricted_rows)
-            with patch.object(e, "TOPIC", root / "changed-policy-location"):
+            with (
+                patch.object(e, "TOPIC", root / "changed-policy-location"),
+                patch.object(evidence, "verify_replay_sdk"),
+            ):
                 self.assertEqual(
                     evidence.verify_evidence(output, restricted)["gaps"], []
                 )

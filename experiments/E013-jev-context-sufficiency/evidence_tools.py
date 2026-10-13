@@ -779,6 +779,11 @@ def sdk_rejects(raw: bytes, case: dict[str, Any], question: dict[str, Any]) -> b
     return False
 
 
+def verify_replay_sdk() -> None:
+    """Authenticate the installed replay code before using its classifications."""
+    e.verify_sdk_imports((e.ROOT / e.LOCK_RELATIVE).read_bytes())
+
+
 def response_gap(
     row: dict[str, Any], raw: bytes, case: dict[str, Any], question: dict[str, Any]
 ) -> str | None:
@@ -877,6 +882,7 @@ def verify_local_run(
     run_dir: Path, manifest: dict[str, Any] | None = None
 ) -> dict[str, Any]:
     """Verify current local bytes; this does not establish backup or immutability."""
+    verify_replay_sdk()
     if manifest is None:
         manifest = read_manifest(run_dir / "manifest.json")
     if not set(manifest).issubset(LOCAL_MANIFEST_KEYS):
@@ -1261,6 +1267,7 @@ def verify_evidence(
     candidate_threshold: float | None = None,
 ) -> dict[str, Any]:
     """Check exact objects and recompute statistics from a clean checkout."""
+    verify_replay_sdk()
     manifest = read_manifest(evidence_run / "manifest.json")
     if evidence_run.name != manifest.get("run_id"):
         raise e.ContractError("EVIDENCE_RUN_MISMATCH")

@@ -323,6 +323,55 @@ def ensure_live_store_boundary(store: Path) -> None:
             raise ContractError("STORE_BOUNDARY_MISMATCH")
 
 
+def checked_git(root: Path, arguments: list[str]) -> bytes:
+    """Read this checkout's Git data without inherited repository overrides."""
+    environment = {
+        key: value for key, value in os.environ.items() if not key.startswith("GIT_")
+    }
+    probe = (
+        subprocess.run(
+            [
+                "git",
+                "-C",
+                str(root),
+                "rev-parse",
+                "--show-toplevel",
+                "--absolute-git-dir",
+            ],
+            env=environment,
+            capture_output=True,
+            check=True,
+        )
+        .stdout.decode("utf-8")
+        .splitlines()
+    )
+    marker = root / ".git"
+    if len(probe) != 2 or Path(probe[0]).resolve() != root.resolve():
+        raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+    if marker.is_dir():
+        expected_git_dir = marker.resolve()
+    elif marker.is_file():
+        pointer = marker.read_text(encoding="utf-8").strip()
+        if not pointer.startswith("gitdir: "):
+            raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+        expected_git_dir = (root / pointer.removeprefix("gitdir: ")).resolve()
+    else:
+        raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+    git_dir = Path(probe[1]).resolve()
+    if git_dir != expected_git_dir or not git_dir.is_dir():
+        raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
+    return subprocess.run(
+        ["git", "--git-dir", str(git_dir), "--work-tree", str(root), *arguments],
+        env=environment,
+        capture_output=True,
+        check=True,
+    ).stdout
+
+
+def committed_git_bytes(root: Path, relative: Path) -> bytes:
+    return checked_git(root, ["show", f"HEAD:{relative.as_posix()}"])
+
+
 def load_live_authorization(
     path: Path,
     attestation: Path,
@@ -359,12 +408,7 @@ def load_live_authorization(
             root / LOCK_RELATIVE,
         ):
             dependency_relative = dependency.resolve().relative_to(root.resolve())
-            committed = subprocess.run(
-                ["git", "show", f"HEAD:{dependency_relative.as_posix()}"],
-                cwd=root,
-                capture_output=True,
-                check=True,
-            ).stdout
+            committed = committed_git_bytes(root, dependency_relative)
             actual = current if dependency == path else dependency.read_bytes()
             if (
                 committed != actual
@@ -961,19 +1005,10 @@ def run_live(
             RUNNER_RELATIVE.parent / "evidence/runs" / run_id / "manifest.json"
         )
         try:
-            tracked = subprocess.run(
-                [
-                    "git",
-                    "ls-tree",
-                    "--name-only",
-                    "HEAD",
-                    "--",
-                    tracked_manifest.as_posix(),
-                ],
-                cwd=root,
-                capture_output=True,
-                check=True,
-            ).stdout
+            tracked = checked_git(
+                root,
+                ["ls-tree", "--name-only", "HEAD", "--", tracked_manifest.as_posix()],
+            )
         except subprocess.CalledProcessError as exc:
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED") from exc
         if tracked.strip():
