@@ -79,6 +79,7 @@ PUBLIC_MANIFEST_KEYS = (LOCAL_MANIFEST_KEYS - {"store_root"}) | {
     "review_sha256",
     "runner_public_path",
     "runner_revision",
+    "events_sha256",
 }
 LOCATOR_KEYS = {
     "group",
@@ -551,6 +552,21 @@ def manifest_identity_gap(manifest: dict[str, Any], *, published: bool) -> bool:
     )
 
 
+def manifest_chronology_gap(
+    manifest: dict[str, Any], rows: list[dict[str, Any]]
+) -> bool:
+    try:
+        created = datetime.fromisoformat(manifest["created_utc"])
+        first_start = min(
+            datetime.fromisoformat(row["started_utc"])
+            for row in rows
+            if row.get("started_utc") is not None
+        )
+        return created > first_start
+    except (KeyError, TypeError, ValueError):
+        return True
+
+
 def summary_identity_gap(
     summary: dict[str, Any], run_id: str, rows: list[dict[str, Any]]
 ) -> bool:
@@ -569,6 +585,34 @@ def summary_identity_gap(
         summary.get("run_id") != run_id
         or summary.get("evidence_status") != "local-unbacked-until-reviewed-git-export"
         or summary.get("threshold_selected") is not False
+    )
+
+
+def event_log_bytes(rows: list[dict[str, Any]]) -> bytes:
+    return b"".join(
+        e.json_bytes(
+            {
+                "run_id": row["run_id"],
+                "group": row["group"],
+                "case_id": row["case_id"],
+                "event": "START",
+                "utc": row["started_utc"],
+            }
+        )
+        for row in rows
+        if row["status"] != "NOT_RUN"
+    )
+
+
+def event_log_gap(
+    root: Path, rows: list[dict[str, Any]], expected_hash: str | None
+) -> bool:
+    try:
+        actual = (root / "events.jsonl").read_bytes()
+    except OSError:
+        return True
+    return actual != event_log_bytes(rows) or (
+        expected_hash is not None and e.sha(actual) != expected_hash
     )
 
 
@@ -665,6 +709,14 @@ def inventory_gaps(
     try:
         freeze = manifest["freeze_hashes"]
         v0 = manifest["v0_hashes"]
+        try:
+            accepted_freeze = e.load_freeze(
+                e.ORACLE / "versions/v1/freeze-attestation.json"
+            )
+        except (OSError, ValueError, e.ContractError):
+            return [{"reason": "FREEZE_DECISION_MISMATCH"}]
+        if not same_json_value(freeze, accepted_freeze):
+            return [{"reason": "FREEZE_DECISION_MISMATCH"}]
         if set(freeze) != set(e.V1_FILES) or set(v0) != set(e.V0_HASHES):
             raise e.ContractError("CASE_VERSION_MISMATCH")
         for name in e.V1_FILES:
@@ -847,6 +899,10 @@ def verify_local_run(
     if any(row["run_id"] != run_id for row in rows):
         raise e.ContractError("RUN_ID_MISMATCH")
     gaps = inventory_gaps(manifest, rows) + metadata_gaps(run_dir, manifest)
+    if manifest_chronology_gap(manifest, rows):
+        gaps.append({"reason": "MANIFEST_CHRONOLOGY_MISMATCH"})
+    if run_id != PRE_RECORD_RUN_ID and event_log_gap(run_dir, rows, None):
+        gaps.append({"reason": "EVENT_LOG_MISMATCH"})
     if issue := authorization_gap(run_dir, manifest):
         gaps.append({"reason": issue})
     cases = {(case["group"], case["case_id"]): case for case in e.load_cases()}
@@ -968,6 +1024,7 @@ def snapshot_run(run_dir: Path):
             "manifest.json",
             "analysis.jsonl",
             "summary.json",
+            "events.jsonl",
             "runner.py",
             "authorization.json",
             "store-policy.json",
@@ -1182,6 +1239,12 @@ def _write_publication(
             "runner_public_path": "runner.py",
         }
     )
+    if run_id != PRE_RECORD_RUN_ID:
+        events = (run_dir / "events.jsonl").read_bytes()
+        if events != event_log_bytes(rows):
+            raise e.ContractError("EVENT_LOG_MISMATCH")
+        e.write_exclusive(output / "events.jsonl", events)
+        public_manifest["events_sha256"] = e.sha(events)
     e.write_exclusive(output / "manifest.json", e.json_bytes(public_manifest))
     e.write_exclusive(
         output / "analysis.jsonl", b"".join(e.json_bytes(row) for row in public_rows)
@@ -1275,7 +1338,7 @@ def verify_evidence(
         if item["raw_public_path"] is not None
     }
     if manifest.get("live_authorization_sha256") is not None:
-        allowed_files |= {"authorization.json", "uv.lock"}
+        allowed_files |= {"authorization.json", "uv.lock", "events.jsonl"}
     for path in evidence_run.rglob("*"):
         if path.is_symlink() or (
             path.is_file()
@@ -1555,6 +1618,17 @@ def verify_evidence(
         full_rows.append(full)
     if len(full_rows) == 75:
         gaps.extend(inventory_gaps(manifest, full_rows))
+        if manifest_chronology_gap(manifest, full_rows):
+            gaps.append({"reason": "MANIFEST_CHRONOLOGY_MISMATCH"})
+        if manifest.get("run_id") == PRE_RECORD_RUN_ID:
+            if manifest.get("events_sha256") is not None:
+                gaps.append({"reason": "EVENT_LOG_MISMATCH"})
+        elif (
+            not isinstance(manifest.get("events_sha256"), str)
+            or not HASH.fullmatch(manifest["events_sha256"])
+            or event_log_gap(evidence_run, full_rows, manifest["events_sha256"])
+        ):
+            gaps.append({"reason": "EVENT_LOG_MISMATCH"})
     if not gaps:
         try:
             summary = summary_bytes(evidence_run)

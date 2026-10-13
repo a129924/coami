@@ -9,6 +9,7 @@ from importlib.machinery import SourceFileLoader
 import json
 import os
 from pathlib import Path
+import py_compile
 import subprocess
 import sys
 from tempfile import TemporaryDirectory
@@ -413,6 +414,7 @@ source = { registry = "https://pypi.org/simple" }
                         lambda request: httpx2.Response(status, content=raw)
                     ),
                 )
+                self.assertIs(capture._trust_env, False)
                 with TypeSafeClient(
                     api_key="test-key",
                     model=e.MODEL,
@@ -660,6 +662,41 @@ source = { registry = "https://pypi.org/simple" }
             with self.assertRaisesRegex(e.ContractError, "RUNNER_SOURCE_UNVERIFIED"):
                 e.checked_executed_source("0" * 64)
 
+    def test_isolated_entry_skips_site_hooks_and_cached_bytecode(self) -> None:
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            site = root / "site-packages"
+            site.mkdir()
+            marker = root / "hook-ran"
+            (site / "sitecustomize.py").write_text(
+                f"from pathlib import Path; Path({str(marker)!r}).write_text('site')\n"
+            )
+            (site / "startup.pth").write_text(
+                f"import pathlib; pathlib.Path({str(marker)!r}).write_text('pth')\n"
+            )
+            module = site / "candidate.py"
+            module.write_text("VALUE = 'malicious'\n")
+            py_compile.compile(
+                str(module),
+                invalidation_mode=py_compile.PycInvalidationMode.UNCHECKED_HASH,
+                doraise=True,
+            )
+            module.write_text("VALUE = 'source'\n")
+            script = (
+                "import sys,tempfile; from pathlib import Path; "
+                "sys.path.insert(0,sys.argv[1]); "
+                "sys.pycache_prefix=tempfile.mkdtemp(prefix='e013-empty-pycache-'); "
+                "import candidate; print(candidate.VALUE)"
+            )
+            result = subprocess.run(
+                [sys.executable, "-I", "-S", "-B", "-c", script, str(site)],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            self.assertEqual(result.stdout.strip(), "source")
+            self.assertFalse(marker.exists())
+
     def test_missing_key_preflight_never_constructs_sdk(self) -> None:
         with TemporaryDirectory() as temporary:
             auth = Path(temporary) / "auth.json"
@@ -759,6 +796,29 @@ source = { registry = "https://pypi.org/simple" }
                     e.load_live_authorization(
                         auth, freeze, policy, root, runner, store_snapshot=b"other"
                     )
+                rogue = e.json_bytes({**document, "run_id": "rogue-run"})
+                with self.assertRaisesRegex(
+                    e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
+                ):
+                    e.load_live_authorization(
+                        auth,
+                        freeze,
+                        policy,
+                        root,
+                        runner,
+                        authorization_snapshot=rogue,
+                    )
+                self.assertEqual(
+                    e.load_live_authorization(
+                        auth,
+                        freeze,
+                        policy,
+                        root,
+                        runner,
+                        authorization_snapshot=committed["live.json"],
+                    )[0],
+                    "run-unique",
+                )
                 alternate = root / "alternate-freeze.json"
                 alternate.write_bytes(freeze.read_bytes())
                 with self.assertRaisesRegex(
@@ -1089,6 +1149,9 @@ source = { registry = "https://pypi.org/simple" }
                 b"".join(e.json_bytes(row) for row in rows),
             )
             e.write_exclusive(
+                restricted / "events.jsonl", evidence.event_log_bytes(rows)
+            )
+            e.write_exclusive(
                 restricted / "summary.json", e.json_bytes(e.summarize(rows))
             )
             summary = e.read_object(restricted / "summary.json")
@@ -1227,6 +1290,51 @@ source = { registry = "https://pypi.org/simple" }
             public_manifest = (output / "manifest.json").read_bytes()
             summary_bytes = (output / "summary.json").read_bytes()
             restricted_rows = (restricted / "analysis.jsonl").read_bytes()
+            local_manifest_bytes = (restricted / "manifest.json").read_bytes()
+            late_manifest = e.read_object(restricted / "manifest.json")
+            late_manifest["created_utc"] = "2026-10-08T00:00:09Z"
+            (restricted / "manifest.json").write_bytes(e.json_bytes(late_manifest))
+            self.assertIn(
+                "MANIFEST_CHRONOLOGY_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_local_run(restricted)["gaps"]
+                },
+            )
+            (restricted / "manifest.json").write_bytes(local_manifest_bytes)
+            event_bytes = (restricted / "events.jsonl").read_bytes()
+            (restricted / "events.jsonl").unlink()
+            self.assertIn(
+                "EVENT_LOG_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_local_run(restricted)["gaps"]
+                },
+            )
+            (restricted / "events.jsonl").write_bytes(event_bytes)
+            public_event_bytes = (output / "events.jsonl").read_bytes()
+            (output / "events.jsonl").write_bytes(public_event_bytes + b" ")
+            self.assertIn(
+                "EVENT_LOG_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (output / "events.jsonl").write_bytes(public_event_bytes)
+            review_path = e.ORACLE / "versions/v1/review.md"
+            review_bytes = review_path.read_bytes()
+            review_path.write_bytes(b"NOT FROZEN\n" + review_bytes)
+            try:
+                self.assertIn(
+                    "FREEZE_DECISION_MISMATCH",
+                    {
+                        gap["reason"]
+                        for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                    },
+                )
+            finally:
+                review_path.write_bytes(review_bytes)
             invalid_expected = [
                 json.loads(line) for line in restricted_rows.splitlines()
             ]

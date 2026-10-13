@@ -331,6 +331,7 @@ def load_live_authorization(
     runner_path: Path | None = None,
     freeze_snapshot: bytes | None = None,
     store_snapshot: bytes | None = None,
+    authorization_snapshot: bytes | None = None,
 ) -> tuple[str, str]:
     """Require a committed, run-specific Owner record before any network call.
 
@@ -344,7 +345,11 @@ def load_live_authorization(
             or runner.resolve() != (root / RUNNER_RELATIVE).resolve()
         ):
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
-        current = path.read_bytes()
+        current = (
+            path.read_bytes()
+            if authorization_snapshot is None
+            else authorization_snapshot
+        )
         document = parse_live_authorization(current)
         for dependency in (
             path,
@@ -360,7 +365,7 @@ def load_live_authorization(
                 capture_output=True,
                 check=True,
             ).stdout
-            actual = dependency.read_bytes()
+            actual = current if dependency == path else dependency.read_bytes()
             if (
                 committed != actual
                 or (
@@ -755,6 +760,7 @@ class CaptureClient(httpx2.Client):
         question: dict[str, Any],
         **kwargs: Any,
     ) -> None:
+        kwargs["trust_env"] = False
         super().__init__(**kwargs)
         self.run_dir = run_dir
         self.case = case
@@ -928,6 +934,7 @@ def run_live(
         )
         if authorization is None:
             raise ContractError("MISSING_LIVE_AUTHORIZATION")
+        authorization_bytes = authorization.read_bytes()
         run_id, authorization_sha256 = load_live_authorization(
             authorization,
             attestation,
@@ -935,8 +942,8 @@ def run_live(
             root,
             freeze_snapshot=attestation_bytes,
             store_snapshot=store_policy_bytes,
+            authorization_snapshot=authorization_bytes,
         )
-        authorization_bytes = authorization.read_bytes()
         if sha(authorization_bytes) != authorization_sha256:
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         use_marker = store / "authorization-uses" / f"{run_id}.json"
