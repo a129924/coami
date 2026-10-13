@@ -441,7 +441,10 @@ source = { registry = "https://pypi.org/simple" }
             evidence.response_gap(forged, response(), case, self.question),
             "RAW_ANALYSIS_MISMATCH",
         )
-        self.assertIsNone(evidence.response_gap(forged, b"{bad", case, self.question))
+        self.assertEqual(
+            evidence.response_gap(forged, b"{bad", case, self.question),
+            "RAW_ANALYSIS_MISMATCH",
+        )
         forged["error_code"] = "SDK_RESPONSE_INVALID"
         self.assertIsNone(evidence.response_gap(forged, b"{bad", case, self.question))
         for status in ("ERROR", "UNKNOWN"):
@@ -558,6 +561,28 @@ source = { registry = "https://pypi.org/simple" }
                 ):
                     evidence.read_rows(path)
 
+    def test_response_parser_rejects_non_json_constants(self) -> None:
+        changed = response().replace(b'"usage":{', b'"ignored":NaN,"usage":{')
+        self.assertEqual(e.parse_answer(changed)["status"], "INVALID")
+        self.assertEqual(e.parse_answer(changed)["error_code"], "INVALID_RESPONSE")
+
+    def test_parser_failure_requires_sdk_acceptance(self) -> None:
+        case = self.cases[0]
+        raw = b"{bad-json"
+        self.assertTrue(evidence.sdk_rejects(raw, case, self.question))
+        row = {
+            "status": "INVALID",
+            "choice": None,
+            "probabilities": None,
+            "confidence": None,
+            "error_code": "INVALID_RESPONSE",
+            "model": e.MODEL,
+        }
+        self.assertEqual(
+            evidence.response_gap(row, raw, case, self.question),
+            "RAW_ANALYSIS_MISMATCH",
+        )
+
     def test_runner_source_must_be_the_launched_snapshot(self) -> None:
         source = Path(e.__file__).read_bytes()
         with patch.object(e, "EXECUTED_RUNNER_SOURCE", None):
@@ -654,6 +679,18 @@ source = { registry = "https://pypi.org/simple" }
                 ):
                     e.load_live_authorization(
                         auth, freeze, policy, root, runner, freeze_snapshot=b"other"
+                    )
+                self.assertEqual(
+                    e.load_live_authorization(
+                        auth, freeze, policy, root, runner, store_snapshot=b"policy"
+                    )[0],
+                    "run-unique",
+                )
+                with self.assertRaisesRegex(
+                    e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"
+                ):
+                    e.load_live_authorization(
+                        auth, freeze, policy, root, runner, store_snapshot=b"other"
                     )
                 alternate = root / "alternate-freeze.json"
                 alternate.write_bytes(freeze.read_bytes())
@@ -1123,6 +1160,43 @@ source = { registry = "https://pypi.org/simple" }
             public_manifest = (output / "manifest.json").read_bytes()
             summary_bytes = (output / "summary.json").read_bytes()
             restricted_rows = (restricted / "analysis.jsonl").read_bytes()
+            invalid_expected = [
+                json.loads(line) for line in restricted_rows.splitlines()
+            ]
+            for value in ("UNKNOWN_LABEL", []):
+                invalid_expected[0]["expected"] = value
+                (restricted / "analysis.jsonl").write_bytes(
+                    b"".join(e.json_bytes(row) for row in invalid_expected)
+                )
+                with self.assertRaisesRegex(
+                    e.ContractError, "INVALID_ANALYSIS_EXPECTED"
+                ):
+                    evidence.verify_local_run(restricted)
+            (restricted / "analysis.jsonl").write_bytes(restricted_rows)
+            missing_transport_request = [
+                json.loads(line) for line in restricted_rows.splitlines()
+            ]
+            missing_transport_request[0].update(
+                status="ERROR",
+                choice=None,
+                probabilities=None,
+                confidence=None,
+                error_code="IO_TIMEOUT",
+                request_sha256=None,
+                raw_sha256=None,
+                raw_locator=None,
+            )
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in missing_transport_request)
+            )
+            self.assertIn(
+                "REQUEST_BODY_MISSING",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_local_run(restricted)["gaps"]
+                },
+            )
+            (restricted / "analysis.jsonl").write_bytes(restricted_rows)
             sequence = [json.loads(line) for line in restricted_rows.splitlines()]
             sequence[2]["status"] = "NOT_RUN"
             sequence[2]["error_code"] = None

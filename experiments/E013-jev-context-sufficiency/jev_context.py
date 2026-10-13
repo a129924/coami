@@ -261,8 +261,12 @@ def load_freeze(
     return {str(name): str(value) for name, value in hashes.items()}
 
 
-def load_store_policy(path: Path, store: Path, root: Path = ROOT) -> dict[str, Any]:
-    policy = read_gate_document(path, "STORE_APPROVAL_MISMATCH")
+def load_store_policy(
+    path: Path, store: Path, root: Path = ROOT, *, snapshot: bytes | None = None
+) -> dict[str, Any]:
+    policy = parse_gate_document(
+        path.read_bytes() if snapshot is None else snapshot, "STORE_APPROVAL_MISMATCH"
+    )
     if set(policy) != STORE_POLICY_KEYS:
         raise ContractError("STORE_APPROVAL_MISMATCH")
     required = ("approved_by", "store_id", "agent_access")
@@ -324,6 +328,7 @@ def load_live_authorization(
     root: Path = ROOT,
     runner_path: Path | None = None,
     freeze_snapshot: bytes | None = None,
+    store_snapshot: bytes | None = None,
 ) -> tuple[str, str]:
     """Require a committed, run-specific Owner record before any network call.
 
@@ -354,10 +359,18 @@ def load_live_authorization(
                 check=True,
             ).stdout
             actual = dependency.read_bytes()
-            if committed != actual or (
-                dependency == attestation
-                and freeze_snapshot is not None
-                and actual != freeze_snapshot
+            if (
+                committed != actual
+                or (
+                    dependency == attestation
+                    and freeze_snapshot is not None
+                    and actual != freeze_snapshot
+                )
+                or (
+                    dependency == store_policy
+                    and store_snapshot is not None
+                    and actual != store_snapshot
+                )
             ):
                 raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
         if set(document) != {
@@ -382,7 +395,10 @@ def load_live_authorization(
             != sha(
                 attestation.read_bytes() if freeze_snapshot is None else freeze_snapshot
             )
-            or document.get("store_policy_sha256") != sha(store_policy.read_bytes())
+            or document.get("store_policy_sha256")
+            != sha(
+                store_policy.read_bytes() if store_snapshot is None else store_snapshot
+            )
             or document.get("runner_sha256") != sha(runner.read_bytes())
             or document.get("uv_lock_sha256")
             != sha((root / LOCK_RELATIVE).read_bytes())
@@ -644,7 +660,13 @@ def parse_answer(raw: bytes) -> dict[str, Any]:
         return result
 
     try:
-        value = json.loads(raw, object_pairs_hook=unique)
+
+        def reject_constant(value: str) -> None:
+            raise ValueError(f"Invalid JSON constant: {value}")
+
+        value = json.loads(
+            raw, object_pairs_hook=unique, parse_constant=reject_constant
+        )
         if not isinstance(value, dict) or value.get("model") != MODEL:
             raise ContractError("INVALID_MODEL")
         answers = value.get("answers")
@@ -876,7 +898,10 @@ def run_live(
             raise ContractError("PYTHON_VERSION_MISMATCH")
         attestation_bytes = attestation.read_bytes()
         freeze_hashes = load_freeze(attestation, root, snapshot=attestation_bytes)
-        policy_metadata = load_store_policy(store_policy, store, root)
+        store_policy_bytes = store_policy.read_bytes()
+        policy_metadata = load_store_policy(
+            store_policy, store, root, snapshot=store_policy_bytes
+        )
         if authorization is None:
             raise ContractError("MISSING_LIVE_AUTHORIZATION")
         run_id, authorization_sha256 = load_live_authorization(
@@ -885,6 +910,7 @@ def run_live(
             store_policy,
             root,
             freeze_snapshot=attestation_bytes,
+            store_snapshot=store_policy_bytes,
         )
         authorization_bytes = authorization.read_bytes()
         if sha(authorization_bytes) != authorization_sha256:
@@ -940,7 +966,6 @@ def run_live(
             parse_live_authorization(authorization_bytes)["runner_sha256"]
         )
         runner_hash = sha(runner_source)
-        store_policy_bytes = store_policy.read_bytes()
         if (
             sha(store_policy_bytes)
             != parse_live_authorization(authorization_bytes)["store_policy_sha256"]

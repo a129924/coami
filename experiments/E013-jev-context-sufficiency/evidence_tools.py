@@ -26,6 +26,13 @@ ERROR_CODES = {
     "INTERNAL_ERROR",
 }
 UNKNOWN_CODES = {"CAPTURE_OR_RUNTIME_FAILED"}
+TRANSPORT_ERROR_CODES = {
+    "IO_TIMEOUT",
+    "AUTH_FAILED",
+    "ACCESS_DENIED",
+    "CONNECTION_FAILED",
+    "HTTP_FAILED",
+}
 PRE_RECORD_RUN_ID = "20261008T035450Z-010364d7"
 PRE_RECORD_RUNNER_REVISION = "ad4e692d72ee9661c02697594cfd4aa93cf380a6"
 PRE_RECORD_POLICY_HASH = (
@@ -299,6 +306,10 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
         status = row.get("status")
         if not isinstance(status, str) or status not in STATUSES:
             raise e.ContractError("INVALID_ANALYSIS_STATUS")
+        if row.get("analysis_restricted") is not True and (
+            not isinstance(row.get("expected"), str) or row["expected"] not in e.CHOICES
+        ):
+            raise e.ContractError("INVALID_ANALYSIS_EXPECTED")
         if status == "NOT_RUN":
             if previous_row is None or (
                 not_run_started is False
@@ -712,6 +723,7 @@ def response_gap(
         elif (
             parsed["status"] != "INVALID"
             or row.get("error_code") != parsed["error_code"]
+            or sdk_rejects(raw, case, question)
         ):
             return "RAW_ANALYSIS_MISMATCH"
         try:
@@ -820,8 +832,8 @@ def verify_local_run(
         group, case_id = row["group"], row["case_id"]
         if (
             row.get("status") in ("VALID", "INVALID")
-            and row.get("request_sha256") is None
-        ):
+            or row.get("error_code") in TRANSPORT_ERROR_CODES
+        ) and row.get("request_sha256") is None:
             gaps.append(
                 {"group": group, "case_id": case_id, "reason": "REQUEST_BODY_MISSING"}
             )
@@ -1419,8 +1431,8 @@ def verify_evidence(
             continue
         if (
             full.get("status") in ("VALID", "INVALID")
-            and full.get("request_sha256") is None
-        ):
+            or full.get("error_code") in TRANSPORT_ERROR_CODES
+        ) and full.get("request_sha256") is None:
             gaps.append(
                 {"group": key[0], "case_id": key[1], "reason": "REQUEST_BODY_MISSING"}
             )
