@@ -3,8 +3,9 @@ import { execFileSync } from 'node:child_process'
 import { mkdir, readFile, writeFile, rm } from 'node:fs/promises'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import path from 'node:path'
-import { verifyVendor, base } from './stage-host.mjs'
+import { verifyVendor, base, patch } from './stage-host.mjs'
 
+const sha256 = bytes => createHash('sha256').update(bytes).digest('hex')
 const webRoot = fileURLToPath(new URL('../', import.meta.url))
 const experimentRoot = path.resolve(webRoot, '..')
 const repositoryRoot = path.resolve(experimentRoot, '../..')
@@ -19,6 +20,7 @@ verifyVendor()
 const provenancePath = path.join(outputDirectory, 'runtime-provenance.json')
 const provenance = JSON.parse(await readFile(provenancePath, 'utf8'))
 if (provenance.sourceCommit !== base) throw new Error('runtime provenance SDK pin mismatch')
+if (provenance.patchSha256 !== sha256(await readFile(patch))) throw new Error('runtime patch mismatch; run npm run runtime before npm run mod')
 const { buildModArchive, isXsArchive } = await import(pathToFileURL(path.join(upstreamEditor, 'mod-builder.mjs')).href)
 const { default: createTools } = await import(pathToFileURL(path.join(upstreamEditor, 'vendor/tools.js')).href)
 execFileSync(path.join(webRoot, 'node_modules/.bin/tsc'), ['-p', path.join(experimentRoot, 'mod/tsconfig.json'), '--noEmit', 'false', '--outDir', emittedDirectory], { stdio: 'inherit' })
@@ -37,7 +39,6 @@ const archive = await buildModArchive(createTools, {
 if (!isXsArchive(archive)) throw new Error('MOD compiler did not produce an XS archive')
 await mkdir(outputDirectory, { recursive: true })
 await writeFile(archivePath, archive)
-const sha256 = bytes => createHash('sha256').update(bytes).digest('hex')
 provenance.mod = { sha256: sha256(archive), sourceSha256: {} }
 for (const file of ['mod.ts', 'observer.ts']) provenance.mod.sourceSha256[file] = sha256(await readFile(path.join(experimentRoot, 'mod', file)))
 const provenanceBytes = `${JSON.stringify(provenance, null, 2)}\n`
