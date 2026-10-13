@@ -73,7 +73,7 @@ npm run build
 npm run dev -- --port 5187
 ```
 
-`prepare:poc` stages the pinned SDK plus the E017 patch, builds WASM, then builds the MOD. Do not run these stages concurrently. On another shell, re-export the variables above and source `emsdk_env.sh` before building; restore the Node 24–26 PATH precedence afterward.
+`prepare:poc` stages the pinned SDK plus the E017 patch, builds WASM, then builds the MOD. Do not run these stages concurrently. A standalone `npm run mod` checks the current `runtime/wasm-top-touch.patch` SHA-256 against the runtime provenance as well as the vendor pin. On `runtime patch mismatch`, rerun `npm run runtime` before `npm run mod` (or run `prepare:poc`); an old archive is removed before rejection. When an already open page sees changed runtime hashes or patch SHA-256, reload the whole page to replace its cached browser engine module. On another shell, re-export the variables above and source `emsdk_env.sh` before building; restore the Node 24–26 PATH precedence afterward.
 
 To run source tests on a fresh checkout without building WASM, use `npm run stage:host` before `npm test`. The runtime boundary tests read the actual patched staging source. `stage:host` creates no WASM artifact.
 

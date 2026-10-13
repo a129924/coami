@@ -13,3 +13,15 @@ Date: 2026-10-13. Reviewed head: e4ef84551dd1034b0bcb75c2625d6227867d90bd. Workt
 Validation: 28 tests PASS, strict web/MOD TypeScript + Vite build PASS (existing chunk-size warning), standalone MOD build PASS (2203-byte XS archive). Existing runtime/MOD provenance remains unchanged. No SDK gesture algorithm/threshold, original vendor, E016 or production modifications. No extra human verification or cold toolchain rebuild is claimed. Original successful operator traces remain historical and untouched.
 
 Delivery is by topic commits: startup/lifecycle, MOD provenance guard, then reproduction/review evidence. Replies will reference pushed commits before resolving corresponding threads. Resolution acknowledges addressed comments; it is not reviewer approval or merge authorization.
+
+## Second review pass — reviewed head 32b411b
+
+All three new P2 findings accepted; first five threads remained resolved.
+
+| Thread | Fix | Evidence |
+|---|---|---|
+| [4255863401](https://github.com/a129924/coami/pull/17#discussion_r4255863401) | Include patchSha256 in the live-page runtime cache key, alongside mc.js/mc.wasm | Same WASM hashes + changed browser patch rejects restart, leaves new provenance undisplayed and creates no new engine; a fresh page can start. Regression RED→GREEN |
+| [4255863417](https://github.com/a129924/coami/pull/17#discussion_r4255863417) | Terminal error/unavailable clears the initialization timer and unlocks restart; queued timeout also ignores terminal states | MOD unavailable and runtime onError during deferred startup preserve exact state/reason/count0, ignore captured old timeout, and permit a new retry before late old startup completion. Two regressions RED→GREEN |
+| [4255863428](https://github.com/a129924/coami/pull/17#discussion_r4255863428) | Standalone MOD build compares recorded runtime patch SHA-256 with the current patch before compiler imports | Actual build entrypoint in isolated Git fixture rejects stale patch and removes seeded archive. Before fix it reached compiler instead of rejecting stale patch; after fix targeted rejection PASS. Valid standalone build succeeds |
+
+Final second-pass validation: 31/31 tests PASS, strict web/MOD TypeScript + Vite build PASS (existing chunk warning), standalone MOD build PASS (2203 bytes, runtime/MOD provenance unchanged). No runtime patch, recognizer, threshold, original vendor, E016 or historical human trace changed. This is source/VM/build-entrypoint regression evidence; no new native-browser or human run claimed.

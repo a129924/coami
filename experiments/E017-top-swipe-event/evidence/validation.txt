@@ -219,3 +219,11 @@ Git guard fixture: clean pin accepted; tracked dirty source, moved checkout and 
 Final: npm test 28/28 PASS; npm run build strict web/MOD typecheck + Vite PASS (existing chunk warning); npm run mod PASS (2203 bytes, hashes unchanged).
 TOOLCHAIN.md shell blocks bash -n PASS; pinned upstream makefiles, CMake and emsdk release map inspected. Fresh network acquisition/cold runtime build not executed; documentation states the limit.
 Historical human acceptance predates lifecycle review fixes; no new human PASS claimed. Runtime/MOD and gesture recognizer unchanged.
+
+2026-10-13 PR #17 second review (head 32b411b): 3 new P2 accepted.
+RED targeted 8 tests: 4 existing pass / 4 fail (patch cache key, MOD unavailable, runtime onError, standalone stale patch rejection).
+GREEN full suite31/31, strict web/MOD typecheck + Vite build, standalone MOD build PASS. Existing chunk-size warning unchanged.
+Cache regression keeps WASM hashes fixed and changes only patchSha256; restart refuses new provenance and fresh module/page succeeds.
+Terminal-state tests capture the prior timeout callback, report unavailable/onError while start remains pending, verify timer removal/retry enabled and unchanged specific reason, then retry before releasing old start.
+Real build-mod entrypoint fixture rejects recorded patch hash mismatch before compilation and removes stale archive. Matching current patch standalone build succeeds; runtime/MOD hashes remain unchanged.
+No new human/native browser run, no original SDK/E016/production changes.

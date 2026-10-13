@@ -48,7 +48,7 @@ npm run build
 npm run dev -- --port 5187
 ```
 
-`prepare:poc` 依序重建 runtime 與 MOD，不能並行。runtime 先清舊 public/provenance；單獨 `npm run mod` 也先移除舊 archive，再驗證 vendor gitlink、checkout pin、包含 untracked 檔的 cleanliness 與 runtime provenance source pin；全部符合才載入 MOD builder。頁面啟動核對實際 mc.js／mc.wasm／MOD SHA-256。同頁若偵測 runtime 已改變，須完整 reload，避免舊 dynamic-import module cache。stage:host 可獨立準備測試所需 scratch，但不產生 WASM。
+`prepare:poc` 依序重建 runtime 與 MOD，不能並行。runtime 先清舊 public/provenance；單獨 `npm run mod` 也先移除舊 archive，再驗證 vendor gitlink、checkout pin、包含 untracked 檔的 cleanliness、runtime provenance source pin 與目前 patch SHA-256；全部符合才載入 MOD builder。頁面啟動核對實際 mc.js／mc.wasm／MOD SHA-256。同頁若偵測 runtime 或 browser/runtime patch 已改變，須完整 reload，避免舊 dynamic-import module cache。stage:host 可獨立準備測試所需 scratch，但不產生 WASM。
 
 人工程序（全部結果填 evidence/swipe-run.md）：
 
@@ -93,3 +93,5 @@ CHROME_EXE／E017_URL 可指定既有 Chrome 與 localhost URL。測試不注入
 2026-10-13驗證任務完成：是（本次simulator-only判準）。owner真人trace與agent自動故障注入分開保存；acceptance-summary.json記錄關聯與限制。單一Chrome/macOS、實機與production未驗證，active操作途中重啟未另做人測，provider-missing分支未另注入。實驗結果支持本次輸入能力，PR #17已Ready for review；review修正與證據見 evidence/pr-review-fixes.md。
 
 PR review修正：persisted pageshow重新啟動session；初始化逾時abort/dispose並立即解鎖重啟、隔離晚到結果；新session先清除畫面provenance。28項source／SDK／生命週期／pin回歸測試、strict build與standalone MOD build通過。新增生命周期證據屬自動mock-boundary回歸，不重標既有真人trace為新版本人測。
+
+第二輪 PR review：browser patch SHA-256納入重啟快取key；standalone MOD build拒絕與目前patch不符的runtime provenance。初始化error/unavailable取消timeout並立即開放重試，已排入事件佇列的timeout也不覆蓋原始原因。31/31測試、strict build、standalone MOD build通過；新增案例為自動回歸，歷史真人trace不變。
