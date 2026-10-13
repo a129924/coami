@@ -3,21 +3,24 @@ import { execFileSync } from 'node:child_process'
 import { mkdir, readFile, writeFile, rm } from 'node:fs/promises'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import path from 'node:path'
+import { verifyVendor, base } from './stage-host.mjs'
 
 const webRoot = fileURLToPath(new URL('../', import.meta.url))
 const experimentRoot = path.resolve(webRoot, '..')
 const repositoryRoot = path.resolve(experimentRoot, '../..')
 const upstreamEditor = path.join(repositoryRoot, 'vendor/stack-chan/web/editor')
-const { buildModArchive, isXsArchive } = await import(pathToFileURL(path.join(upstreamEditor, 'mod-builder.mjs')).href)
-const { default: createTools } = await import(pathToFileURL(path.join(upstreamEditor, 'vendor/tools.js')).href)
 const emittedDirectory = path.join(webRoot, 'generated/mod')
 export const archiveModulePaths = ['observer.js']
 const outputDirectory = path.join(webRoot, 'generated/public')
 const archivePath = path.join(outputDirectory, 'coami-mod.xsa')
 // Remove before compilation: a failed repeat cannot serve a stale MOD.
 await rm(archivePath, { force: true })
+verifyVendor()
 const provenancePath = path.join(outputDirectory, 'runtime-provenance.json')
 const provenance = JSON.parse(await readFile(provenancePath, 'utf8'))
+if (provenance.sourceCommit !== base) throw new Error('runtime provenance SDK pin mismatch')
+const { buildModArchive, isXsArchive } = await import(pathToFileURL(path.join(upstreamEditor, 'mod-builder.mjs')).href)
+const { default: createTools } = await import(pathToFileURL(path.join(upstreamEditor, 'vendor/tools.js')).href)
 execFileSync(path.join(webRoot, 'node_modules/.bin/tsc'), ['-p', path.join(experimentRoot, 'mod/tsconfig.json'), '--noEmit', 'false', '--outDir', emittedDirectory], { stdio: 'inherit' })
 const modJs = await readFile(path.join(emittedDirectory, 'mod.js'), 'utf8')
 const files = await Promise.all(archiveModulePaths.map(async (modulePath) => ({

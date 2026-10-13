@@ -3,7 +3,7 @@
   "engines":{"node":">=24 <27"},
   "scripts":{
     "stage:host":"node scripts/stage-host.mjs",
-    "test":"node --test src/input.test.ts src/runtime.test.ts src/page-lifecycle.test.ts ../mod/observer.test.ts",
+    "test":"node --test src/input.test.ts src/runtime.test.ts src/page-lifecycle.test.ts scripts/pin.test.mjs ../mod/observer.test.ts",
     "typecheck":"tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json",
     "runtime":"node scripts/prepare-runtime.mjs","mod":"node scripts/build-mod.mjs",
     "prepare:poc":"npm run runtime && npm run mod",

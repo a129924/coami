@@ -12,11 +12,15 @@ export const patch = path.join(experiment, 'runtime/wasm-top-touch.patch')
 export const run = (cmd, args, cwd = source, env = process.env) => execFileSync(cmd, args, { cwd, env, stdio: 'inherit' })
 export const capture = (cmd, args, cwd) => execFileSync(cmd, args, { cwd, encoding: 'utf8' }).trim()
 
-export async function stageHost() {
-  const vendor = path.join(repo, 'vendor/stack-chan')
-  if (capture('git', ['rev-parse','HEAD'], vendor) !== base || capture('git', ['rev-parse','HEAD:vendor/stack-chan'], repo) !== base)
+export function verifyVendor(vendor = path.join(repo, 'vendor/stack-chan'), repository = repo) {
+  if (capture('git', ['rev-parse','HEAD'], vendor) !== base || capture('git', ['rev-parse','HEAD:vendor/stack-chan'], repository) !== base)
     throw new Error('pinned SDK mismatch')
   if (capture('git', ['status','--porcelain','--untracked-files=all'], vendor)) throw new Error('vendor is not clean')
+}
+
+export async function stageHost() {
+  const vendor = path.join(repo, 'vendor/stack-chan')
+  verifyVendor(vendor)
   await mkdir(path.dirname(source), { recursive: true })
   await rm(source, { recursive: true, force: true })
   run('git', ['clone','--shared','--no-checkout',vendor,source], repo)
