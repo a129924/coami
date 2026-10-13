@@ -1637,5 +1637,41 @@
     },
     "scope": "Atomic cached .emscripten updates only; historical evidence and unexecuted acceptance branches unchanged. Does not claim to repair preexisting truncated configurations.",
     "review": "approved; independent Reviewer14testsPASS; no blockers; no fullWASM rebuild or E019 interaction"
+  },
+  "prCommentReviewRound4": {
+    "reviewedHead": "d87735283fbb395b009bfa119456f0d50087713a",
+    "triage": {
+      "ADDRESS": [
+        4256154628,
+        4256154638,
+        4256154647
+      ],
+      "DISCUSS": [],
+      "SKIP": []
+    },
+    "red": {
+      "tests": 3,
+      "failed": 3,
+      "reasons": [
+        "source retains trailing separator",
+        "relocation produces cacheemsdk without slash",
+        "initialization rejection overwrites unavailable with fault"
+      ]
+    },
+    "green": {
+      "totalTests": 17,
+      "passed": 17,
+      "failed": 0
+    },
+    "validation": {
+      "typecheck": "strict web/MOD PASS",
+      "frontendBuild": "PASS; existing bundle warning",
+      "scriptSyntax": "PASS",
+      "bfcache": "Code inspection only: persisted pagehide retains engine; nonpersisted disposes. Actual browser back-forward cache cycle not-run.",
+      "fullInitialization": "New input-state method is unit tested; full initialize/callback ordering, runtime unavailable and reset remain not-run.",
+      "fullWasmRebuild": "not repeated"
+    },
+    "scope": "E016 source root normalization and initialization/lifecycle guards; no SDK/native change or human operation.",
+    "review": "approved; independent Reviewer17testsPASS, no blockers; full initialization/reset and livebfcache evidence gaps retained"
   }
 }

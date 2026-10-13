@@ -113,3 +113,7 @@ ADDRESS4255853165. Revalidate every cached component; stage a complete source co
 ### PR review round3 — atomic cached configuration
 
 ADDRESS4256008289. Write relocated .emscripten to a unique temporary directory beside the published file; rename after complete write, cleanup current temporary directory on failure. Existing helper/test paths only. Prior cache recovery and unavailable/reset evidence states unchanged; no fullWASM rebuild.
+
+### PR review round4 — path and runtime lifecycle boundaries
+
+ADDRESS4256154628/4638/4647. Normalize explicit toolchain root before validation/copy/config rewrite. Initialization catch preserves terminal input classifications. Persisted pagehide retainsengine for bfcache; actual page exit stilldisposes. Existing helper/class/main/tests/docs paths only; no SDK/ABI/production changes. Input-state unit coverage does not close full initialize/reset/unavailable runtime gaps; livebfcache cycle not-run.

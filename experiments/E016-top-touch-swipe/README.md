@@ -140,3 +140,9 @@ Comment4255853165採用：不再只以moddable/tools/VERSION判定cache完整，
 ### 第三輪 review：設定檔中斷寫入
 
 Comment4256008289採用：`.emscripten` 路徑重定位改為同目錄暫存檔完整寫入後rename替換，不直接截斷已發布設定。中斷寫入測試先重現原設定變成truncated的FAIL；修正後原設定保持完整、retry成功。兩項新測試加上既有案例共14項PASS，strict typecheck／script syntaxPASS。這是防止後續寫入中斷的修正，不宣稱修復先前已損毀的設定，也未重跑完整WASM build。
+
+### 第四輪 review：路徑與runtime狀態邊界
+
+三項建議採用：4256154628將顯式工具鏈根目錄正規化後統一用於前置檢查、copy及config替換，避免尾端斜線造成toolchainemsdk錯接；4256154638初始化catch保留既有unavailable／fault分類與原因；4256154647在persisted pagehide保留engine供bfcache返回，非persisted才dispose。三項新regression assertions首次全部FAIL，修正後整套17tests、strict typecheck／Vitebuild／script syntaxPASS。
+
+新增unavailable測試僅驗證TopTouchInput狀態處理，不等同完整初始化callback時序、缺能力runtime或reset驗證；完整TC05未執行分支保持不變。bfcache修正經code inspection，未執行實際瀏覽器bfcache往返，也未重跑完整WASM build或新增真人證據。

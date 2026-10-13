@@ -63,3 +63,9 @@ Independent round2 review: approved, no blocking issues. Reviewer independently 
 ADDRESS4256008289: published .emscripten was directly rewritten, risking truncated config on interruption. Unique same-parent staging file now fully written before rename; failure cleans temporary directory and preserves published config. New interrupted-write regression RED (originalbecame truncated), final14testsPASS and strict typecheck/syntaxPASS. Existing paths only. No claim about repair of preexisting corrupted config or fullWASM/runtime/human/reset verification. Independent review pending.
 
 Independent round3 review: approved, no blockers. Reviewer independently ran14testsPASS, checked same-filesystem temporary write/rename and preservation of original configuration on write failure. No fullWASM rebuild, operator page or E019 interaction.
+
+## PR comment review round4 — 2026-10-13
+
+ADDRESS4256154628/4638/4647: normalize toolchain root, preserve unavailable/fault through initialization catch, retainengine on persistedpagehide. All3new regression tests firstfailed (trailing slash, cacheemsdk, unavailable→fault); final17tests and strict web/MOD checks/Vitebuild/syntaxPASS. No fullruntime unavailable/reset test or livebfcache cycle claimed; those evidence gaps remain. Existingpaths only, E016only; independent review pending.
+
+Independent round4 review: approved, no blockers. Reviewer independently ran17testsPASS and checked normalization/catch classification/persisted-pagehide guard. Full initialization/reset and actualBFCache evidence gaps correctly retained; no WASM rebuild or E019 interaction.

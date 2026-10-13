@@ -198,3 +198,17 @@ Prior human-acceptance summary is superseded for complete TC05: leave/recovery P
 | Goal | preserve published config during interrupted writes | failed temp write leaves original intact, retry succeeds |
 | Non-Goal | repair preexisting corruption/fullWASM/reset evidence | no such claims |
 | TestCase | interrupted write regression | cache5PASS1FAIL→full14PASS; typecheck/syntaxPASS; independent review approved/14PASS |
+
+## PR review round4 — path/runtime boundaries
+
+| Field | planned | actual |
+| --- | --- | --- |
+| In-Scope | comments4256154628/4638/4647 | normalized source, preserved terminal status, persisted-pagehide guard |
+| Out-Of-Scope | other experiments/SDK/production/merge | none touched |
+| ReadOnly | historical evidence/pinned source | runtime provenance/operator exports unchanged |
+| Written | existing E016 source/tests/docs | toolchain-cache.mjs/test, prepare-runtime.mjs, top-touch-input.ts/test, main.ts, README/verification/plan/step/review-log |
+| Deleted | none | none tracked |
+| Modify | bounded preparation/init/lifecycle | no SDK/native patch changes |
+| Goal | correct edge-case behavior | slash preserved in relocated config; terminal state not overwritten; retained engine forpersisted hide |
+| Non-Goal | fullinit/reset/bfcache/human proof | no such claims |
+| TestCase | regression + affected checks | 3RED→17PASS;typecheck/build/syntaxPASS;bfcache inspection only; independent review approved/17PASS |
