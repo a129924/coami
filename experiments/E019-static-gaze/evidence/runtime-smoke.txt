@@ -1,0 +1,19 @@
+{"status":"FAIL","failures":[{"seq":24,"target":"down","reason":"no driver rotation for accepted target"}],"directionSamples":8,"cases":10,"human":"unexecuted"}
+node:internal/modules/run_main:111
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: fixed acceptance criteria failed; evidence retained
+
+1 !== 0
+
+    at file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/runtime-smoke.mjs:66:9 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v26.10.0
