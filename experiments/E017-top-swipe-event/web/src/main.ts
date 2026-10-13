@@ -34,7 +34,9 @@ function render(): void {
   element('operation').textContent = lastOperation
   surface.dataset.disabled = String(input.state !== 'ready' && input.state !== 'active' || !started)
   surface.dataset.active = String(input.state === 'active')
-  if (input.state === 'ready' && started && timeout) { clearTimeout(timeout); timeout = undefined }
+  const terminal = input.state === 'error' || input.state === 'unavailable'
+  if ((terminal || input.state === 'ready' && started) && timeout) { clearTimeout(timeout); timeout = undefined }
+  if (terminal) restart.disabled = false
 }
 function record(value: Record<string, unknown>): void {
   records.push(value)
@@ -88,7 +90,7 @@ async function verifyRuntime(session: number, signal: AbortSignal): Promise<void
     if (hex !== value.sha256[file]) throw new Error(`served ${file} hash mismatch`)
   }
   if (session !== epoch) return
-  const runtimeKey = `${value.sha256['mc.js']}:${value.sha256['mc.wasm']}`
+  const runtimeKey = `${value.patchSha256}:${value.sha256['mc.js']}:${value.sha256['mc.wasm']}`
   if (loadedRuntimeSha && loadedRuntimeSha !== runtimeKey) throw new Error('runtime changed; reload the whole page before restart')
   loadedRuntimeSha = runtimeKey
   expectedModSha = value.mod.sha256
@@ -114,7 +116,7 @@ async function start(): Promise<void> {
     queueMicrotask(() => { if (session === epoch) render() })
   })
   timeout = setTimeout(() => {
-    if (session !== epoch || input?.state === 'ready' && started) return
+    if (session !== epoch || input?.state === 'error' || input?.state === 'unavailable' || input?.state === 'ready' && started) return
     input?.fail('initialization exceeded 5 seconds')
     // Release the UI even when fetch/start ignores abort and never settles.
     epoch++

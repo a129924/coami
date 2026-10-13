@@ -7,7 +7,7 @@ import { TopSwipeInput } from './input.ts'
 
 type Handler = (event: { persisted?: boolean }) => void
 type Bridge = TopSwipeInput
-type Options = { topTouchBridge: Bridge; onTrace(message: string): void }
+type Options = { topTouchBridge: Bridge; onTrace(message: string): void; onError(error: unknown): void }
 function deferred() {
   let resolve!: () => void
   const promise = new Promise<void>(done => { resolve = done })
@@ -28,6 +28,7 @@ function page() {
   const timers = new Map<number, () => void>()
   let sequence = 0
   let hangingFetch = false
+  let patchSha256 = 'patch'
   const fetchGate = deferred()
   let startGate: ReturnType<typeof deferred> | undefined
   const engines: { disposed: boolean; options: Options }[] = []
@@ -48,7 +49,7 @@ function page() {
     crypto: { subtle: { digest: async () => new Uint8Array([0]).buffer } },
     fetch: async (url: string) => {
       if (hangingFetch) await fetchGate.promise // Deliberately ignores abort to test stale completions.
-      return { ok: true, json: async () => ({ sourceCommit: 'b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322', patchSha256: 'patch', sha256: { 'mc.js': '00', 'mc.wasm': '00' }, mod: { sha256: '00' } }), arrayBuffer: async () => new Uint8Array([0]).buffer }
+      return { ok: true, json: async () => ({ sourceCommit: 'b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322', patchSha256, sha256: { 'mc.js': '00', 'mc.wasm': '00' }, mod: { sha256: '00' } }), arrayBuffer: async () => new Uint8Array([0]).buffer }
     },
     setTimeout: (fn: () => void) => { timers.set(++sequence, fn); return sequence }, clearTimeout: (id: number) => timers.delete(id),
     document: { getElementById: element, createElement: () => ({ textContent: '' }), addEventListener() {} },
@@ -57,7 +58,7 @@ function page() {
   })
   const source = readFileSync(new URL('./main.ts', import.meta.url), 'utf8').replace(/^import .*\n/gm, '')
   runInContext(stripTypeScriptTypes(source) + '\nglobalThis.restartSession = start;', context)
-  return { element, engines, listeners, flush, timers, restart: () => (context.restartSession as () => Promise<void>)(),
+  return { element, engines, listeners, flush, timers, setPatch: (value: string) => { patchSha256 = value }, restart: () => (context.restartSession as () => Promise<void>)(),
     hangFetch: () => { hangingFetch = true }, allowFetch: () => { hangingFetch = false }, releaseFetch: () => { hangingFetch = false; fetchGate.resolve() },
     hangStart: () => { startGate = deferred(); return startGate }, allowStart: () => { startGate = undefined } }
 }
@@ -105,3 +106,41 @@ test('restart removes previous displayed provenance before new verification sett
   assert.doesNotMatch(p.element('provenance').textContent, /sourceCommit/)
   p.releaseFetch(); await pending
 })
+
+test('browser-only patch changes require a full reload even with unchanged WASM hashes', async () => {
+  const p = page(); await p.flush()
+  assert.equal(p.element('state').textContent, 'ready')
+  p.setPatch('browser-patch-v2')
+  await p.restart(); await p.flush()
+  assert.equal(p.element('state').textContent, 'error')
+  assert.match(p.element('reason').textContent, /reload the whole page/)
+  assert.doesNotMatch(p.element('provenance').textContent, /browser-patch-v2/)
+  assert.equal(p.engines.length, 1)
+  const fresh = page(); fresh.setPatch('browser-patch-v2'); await fresh.flush()
+  assert.equal(fresh.element('state').textContent, 'ready')
+})
+for (const source of ['mod', 'runtime'] as const) {
+  test(`terminal ${source} initialization failure survives the queued timeout and allows retry`, async () => {
+    const p = page(); await p.flush()
+    const pendingStart = p.hangStart()
+    const pending = p.restart(); await p.flush()
+    const timer = [...p.timers.values()][0]!
+    const options = p.engines.at(-1)!.options
+    if (source === 'mod') options.onTrace('COAMI17|{"kind":"unavailable","reason":"TouchPanel provider missing"}')
+    else options.onError(new Error('runtime initialization failed'))
+    const state = source === 'mod' ? 'unavailable' : 'error'
+    const reason = p.element('reason').textContent
+    assert.equal(p.element('state').textContent, state)
+    assert.equal(p.element('restart').disabled, false)
+    assert.equal(p.timers.size, 0)
+    timer() // A callback already queued must not replace the specific failure.
+    assert.equal(p.element('state').textContent, state)
+    assert.equal(p.element('reason').textContent, reason)
+    assert.equal(p.element('count').textContent, '0')
+    p.allowStart(); await p.restart(); await p.flush()
+    const current = p.engines.at(-1)!
+    pendingStart.resolve(); await pending; await p.flush()
+    assert.equal(p.element('state').textContent, 'ready')
+    assert.equal(current.disposed, false)
+  })
+}
