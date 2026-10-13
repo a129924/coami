@@ -109,7 +109,8 @@ try:
             blocked()
     else:
         evidence_tools = runner.with_name("evidence_tools.py")
-        if evidence_tools.read_bytes() != committed(evidence_tools):
+        evidence_source = evidence_tools.read_bytes()
+        if evidence_source != committed(evidence_tools):
             blocked()
 except (OSError, ValueError, TypeError, KeyError, UnicodeDecodeError, subprocess.CalledProcessError):
     blocked()
@@ -118,7 +119,20 @@ sys.prefix = sys.exec_prefix = str(venv)
 sys.path.append(str(venv / "lib/python3.12/site-packages"))
 sys.pycache_prefix = tempfile.mkdtemp(prefix="e013-empty-pycache-")
 sys.argv[0] = str(runner)
-exec(compile(source, str(runner), "exec"), {"__name__": "__main__", "__file__": str(runner), "_E013_EXECUTED_SOURCE": source})
+if live:
+    exec(compile(source, str(runner), "exec"), {"__name__": "__main__", "__file__": str(runner), "_E013_EXECUTED_SOURCE": source})
+else:
+    import types
+    runner_module = types.ModuleType("jev_context")
+    runner_module.__file__ = str(runner)
+    runner_module._E013_EXECUTED_SOURCE = source
+    sys.modules["jev_context"] = runner_module
+    exec(compile(source, str(runner), "exec"), runner_module.__dict__)
+    evidence_module = types.ModuleType("evidence_tools")
+    evidence_module.__file__ = str(evidence_tools)
+    sys.modules["evidence_tools"] = evidence_module
+    exec(compile(evidence_source, str(evidence_tools), "exec"), evidence_module.__dict__)
+    raise SystemExit(runner_module.main())
 ' --live \
   --freeze-attestation evaluation/context_sufficiency/versions/v1/freeze-attestation.json \
   --store-policy experiments/E013-jev-context-sufficiency/local-store-policy.json \
@@ -126,7 +140,7 @@ exec(compile(source, str(runner), "exec"), {"__name__": "__main__", "__file__": 
   --live-authorization <committed-one-run-authorization.json>
 ```
 
-For `--verify-local-run`, `--publish-reviewed`, and `--verify-evidence`, use the same authenticated `python -I -S -B -c` bootstrap above, omit `--env-file` and the live-only arguments, and supply the selected evidence mode and its documented paths. Do not execute `jev_context.py` directly for evidence operations: normal Python startup can run `.pth` or `sitecustomize` code before the verifier starts. The bootstrap requires the runner and evidence tool files to match committed `HEAD`; commit reviewed tool changes before using it. These commands make no Jev call.
+For `--verify-local-run`, `--publish-reviewed`, and `--verify-evidence`, use the same authenticated `python -I -S -B -c` bootstrap above, omit `--env-file` and the live-only arguments, and supply the selected evidence mode and its documented paths. The bootstrap installs both checked byte snapshots as Python modules before calling the runner's evidence entry point. Do not execute `jev_context.py` directly for evidence operations: normal Python startup can run `.pth` or `sitecustomize` code before the verifier starts. The bootstrap requires the runner and evidence tool files to match committed `HEAD`; commit reviewed tool changes before using it. These commands make no Jev call.
 
 `.env` is an Owner-maintained, Git-ignored local credential file. Never print, hash, or commit it. The freeze attestation path above is tracked and verified; the local store path is approved for staging, not backed-up archival storage. Any later live run needs a new explicit Owner instruction. Before such a run, commit a dedicated JSON authorization record and pass its path as `--live-authorization`. It must contain `run_id` (a new unique ID), `authorized_by: "Owner"`, `scope: "one E013 75-case Context Sufficiency run"`, `model: "jev-1.13.0"`, `freeze_attestation_sha256`, `store_policy_sha256`, `runner_sha256`, and `uv_lock_sha256`. The runner checks that its exact bytes and the synchronized lockfile are committed at HEAD and match this authorization, then consumes that run ID by exclusively creating `authorization-uses/<run_id>.json` in the approved store **before** creating `runs/<run_id>/` or calling Jev. The marker remains if the run directory is deleted; a failed run still consumes its authorization. This marker is outside the mutable run directory but remains owner-mutable local state without independent backup or tamper resistance. The manifest retains the authorization SHA-256. A committed record is auditable but does not cryptographically prove who approved it. The Owner's separate instruction and commit review establish that human decision. The completed historical run predates this record requirement; no retrospective pre-run authorization is asserted for it. The runner, freeze attestation, store policy, and `uv.lock` must each match their canonical committed `HEAD` bytes. Freeze attestation and store policy are each read once; validation, authorization and the manifest use those same byte snapshots. The historical run ID and IDs already present in tracked evidence are reserved.
 

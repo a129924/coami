@@ -867,9 +867,15 @@ source = { registry = "https://pypi.org/simple" }
             subprocess.run(["git", "init", "-q", str(root)], check=True)
             runner = root / e.RUNNER_RELATIVE
             runner.parent.mkdir(parents=True)
-            runner.write_bytes(b"print('trusted evidence')\n")
+            runner.write_bytes(
+                b"def main():\n    import evidence_tools\n    return evidence_tools.check()\n"
+            )
             evidence_tool = runner.with_name("evidence_tools.py")
-            evidence_tool.write_bytes(b"# reviewed\n")
+            trusted_tool = (
+                b"import jev_context as runner\n"
+                b"def check():\n    print('trusted evidence', runner.__name__)\n    return 0\n"
+            )
+            evidence_tool.write_bytes(trusted_tool)
             subprocess.run(["git", "-C", str(root), "add", "."], check=True)
             subprocess.run(
                 [
@@ -903,7 +909,7 @@ source = { registry = "https://pypi.org/simple" }
             self.assertEqual(blocked.returncode, 2)
             self.assertIn("RUNNER_SOURCE_UNVERIFIED", blocked.stdout)
             self.assertFalse(marker.exists())
-            evidence_tool.write_bytes(b"# reviewed\n")
+            evidence_tool.write_bytes(trusted_tool)
             accepted = subprocess.run(argv, cwd=root, capture_output=True, text=True)
             self.assertEqual(accepted.returncode, 0)
             self.assertIn("trusted evidence", accepted.stdout)
