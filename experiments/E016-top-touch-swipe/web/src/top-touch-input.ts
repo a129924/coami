@@ -20,6 +20,15 @@ export class TopTouchInput {
   private lastTicks = 0
   private lastAck = 0
   private pendingSince: number | null = null
+  private healthPausedAt: number | null = null
+  private healthPauseTotal = 0
+  pauseHealth(now: number): void { if (this.healthPausedAt === null) this.healthPausedAt = now }
+  resumeHealth(now: number): void {
+    if (this.healthPausedAt === null) return
+    this.healthPauseTotal += Math.max(0, now - this.healthPausedAt)
+    this.healthPausedAt = null
+  }
+  private healthTime(now: number): number { return (this.healthPausedAt ?? now) - this.healthPauseTotal }
   readonly session: number
   private readonly limit: number
   private readonly epoch = performance.now()
@@ -36,7 +45,7 @@ export class TopTouchInput {
     if (!Number.isFinite(time) || time < 0 || time > 0x7fffffff) { this.fail('invalid session timestamp'); return }
     if (this.queue.length >= this.limit) { this.fail('raw input FIFO overflow; reset required'); return }
     this.lastTicks = Math.max(this.lastTicks, Math.floor(time))
-    if (!this.queue.length) this.pendingSince = this.lastTicks
+    if (!this.queue.length) this.pendingSince = this.healthTime(this.lastTicks)
     this.queue.push({ channels, ticks: this.lastTicks, operation, sample: ++this.serial, kind })
   }
   down(pointer: number, primary: boolean, x: number, time: number): boolean {
@@ -81,11 +90,11 @@ export class TopTouchInput {
   completeSample(): void {
     if (!this.locked) return
     this.locked = false
-    this.lastAck = this.now()
+    this.lastAck = this.healthTime(this.now())
     if (!this.queue.length) this.pendingSince = null
   }
   checkHealth(now: number): void {
-    if (this.state !== 'ready' || this.pendingSince === null) return
-    if (now - Math.max(this.lastAck, this.pendingSince) > 2500) this.fail('raw input ack timeout; reset required')
+    if (this.state !== 'ready' || this.pendingSince === null || this.healthPausedAt !== null) return
+    if (this.healthTime(now) - Math.max(this.lastAck, this.pendingSince) > 2500) this.fail('raw input ack timeout; reset required')
   }
 }

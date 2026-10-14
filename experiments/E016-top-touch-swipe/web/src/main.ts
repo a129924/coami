@@ -113,5 +113,6 @@ element('#export').addEventListener('click',()=>{
 })
 setInterval(()=>{input.checkHealth(input.now());refresh()},250)
 // Persisted page hides freeze this document; keep its engine for bfcache restore.
-window.addEventListener('pagehide',event=>{if(!event.persisted)engine?.dispose()})
+window.addEventListener('pagehide',event=>{if(event.persisted)input.pauseHealth(input.now());else engine?.dispose()})
+window.addEventListener('pageshow',event=>{if(event.persisted)input.resumeHealth(input.now())})
 void initialize()
