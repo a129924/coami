@@ -7,7 +7,7 @@
 
 ## 為什麼
 - Owner 已明確選擇「另開 SDK 修正 topic」，允許獨立 feature worktree 的隔離 runtime patch 與重跑 WASM／真人驗證。
-- 原失敗證據保存在 [E019 Draft PR #19](https://github.com/a129924/coami/pull/19)，包括 commit 2af26dc 的 human-retry.json 與 pitch-diagnostic。
+- 原失敗證據保存在 [E019 PR #19](https://github.com/a129924/coami/pull/19)，包括 commit 2af26dc 的 human-retry.json 與 pitch-diagnostic。
 - SDK pin：b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322。來源：`firmware/host/modules/util/stackchan-util.ts:202–227`、`modules/motion/motion-controller.ts`、`app/runtime-ui.ts:157`。
 - 唯讀與離線診斷可定位換算錯誤，但不能證明實際 WASM 及可見效果，故建立獨立實驗。通過後仍交 human review 決定採用，不更新 vendor pin 或正式裝置程式。
 
@@ -51,3 +51,10 @@
 - 原版 red、修正版 green、實際 WASM 與真人觀察共同支持：隔離 pitch 符號修正恢復已驗證的上下解除後重新指定。雙向各兩次達到事前判準。
 - lookAt 同步返回不代表完成；lookAway 清目標，不承諾回正／急停。SDK 門檻與運動策略維持原樣。
 - 未測實機、roll、動態追蹤或 production。E019 失敗證據與 vendor checkout 保持不變；正式採用交 human review。
+
+## Topic 交付與審查狀態（2026-10-14）
+
+- [PR #19](https://github.com/a129924/coami/pull/19) 保存原版 SDK 的失敗重現、追加重測與診斷；[PR #20](https://github.com/a129924/coami/pull/20) 保存隔離修正與成功驗證。兩份結論各自適用原 runtime，不互相覆寫。
+- E020 純測試、共享 runtime-ui 回歸、strict typecheck、MOD／WASM／web build、自動 WASM 與真人雙向各兩次均已記錄。僅最後真人畫面有截圖，完整逐步動畫未保存，限制見 `evidence/human-run.md`。
+- 兩個 PR 都以 dev 為 base，E020 已複用所需操作器，沒有程式上的合併先後依賴；建議先審 #19 問題證據，再審 #20 修正與回歸。
+- 本 topic 的實作與驗證完成，兩個 PR 送 Ready for review。Ready 不等於 reviewer 核准、合併或正式採用；仍待 human review／owner 決策，不自動修改 vendor pin、production、硬體或執行 release。
