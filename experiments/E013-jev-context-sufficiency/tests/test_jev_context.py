@@ -716,6 +716,38 @@ source = { registry = "https://pypi.org/simple" }
                         [{"reason": "STORE_POLICY_MISMATCH"}],
                     )
 
+    def test_retained_policy_state_matches_live_gate(self) -> None:
+        original = e.read_object(e.TOPIC / "local-store-policy.json")
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for field, value in (
+                ("storage_mode", "remote"),
+                ("versioned_immutable", True),
+                ("backup_verified", True),
+                ("retention_until", "2099-01-01"),
+            ):
+                with self.subTest(field=field):
+                    policy = deepcopy(original)
+                    policy[field] = value
+                    data = (
+                        json.dumps(policy, ensure_ascii=False, indent=2) + "\n"
+                    ).encode()
+                    (root / "store-policy.json").write_bytes(data)
+                    manifest = {
+                        "store_policy_path": "store-policy.json",
+                        "store_policy_sha256": e.sha(data),
+                        "store": {
+                            key: original[key] for key in original if key != "root"
+                        },
+                        "restricted_store_id": original["store_id"],
+                        "restricted_access": original["agent_access"],
+                        "restricted_retention_until": None,
+                    }
+                    self.assertEqual(
+                        evidence.metadata_gaps(root, manifest, published=True),
+                        [{"reason": "STORE_POLICY_MISMATCH"}],
+                    )
+
     def test_store_policy_gate_rejects_duplicate_and_noncanonical_json(self) -> None:
         original = (e.TOPIC / "local-store-policy.json").read_bytes()
         with TemporaryDirectory() as temporary:
@@ -2099,9 +2131,14 @@ source = { registry = "https://pypi.org/simple" }
             authorization_checks = []
 
             def replace_authorization_after_review(
-                run_dir: Path, record: dict[str, object], revision: str = "HEAD"
+                run_dir: Path,
+                record: dict[str, object],
+                revision: str = "HEAD",
+                freeze_snapshot: bytes | None = None,
             ) -> str | None:
-                result = verified_authorization(run_dir, record, revision)
+                result = verified_authorization(
+                    run_dir, record, revision, freeze_snapshot
+                )
                 authorization_checks.append(run_dir)
                 if len(authorization_checks) == 2:
                     (run_dir / "authorization.json").write_bytes(
@@ -2146,6 +2183,11 @@ source = { registry = "https://pypi.org/simple" }
                     for gap in evidence.verify_local_run(restricted)["gaps"]
                 },
             )
+            with self.assertRaisesRegex(e.ContractError, "LOCAL_EVIDENCE_UNVERIFIED"):
+                evidence.publish_reviewed(
+                    restricted, approval, root / "orphaned-capture-evidence"
+                )
+            self.assertFalse((root / "orphaned-capture-evidence/runs/run-1").exists())
             orphan.unlink()
             local_manifest = e.read_object(restricted / "manifest.json")
             missing_locator = dict(local_manifest)
@@ -2164,6 +2206,12 @@ source = { registry = "https://pypi.org/simple" }
             self.assertEqual(
                 evidence.authorization_gap(restricted, changed_runner_hash),
                 "AUTHORIZATION_MISMATCH",
+            )
+            self.assertEqual(
+                evidence.authorization_gap(
+                    restricted, local_manifest, freeze_snapshot=b"different freeze"
+                ),
+                "AUTHORIZATION_COMMIT_MISMATCH",
             )
             checked_before_unreachable = e.checked_git
 

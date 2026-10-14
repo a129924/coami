@@ -546,7 +546,15 @@ def metadata_gaps(
             raise ValueError
         if any(
             store.get(name) != policy.get(name)
-            for name in ("approved_by", "store_id", "agent_access")
+            for name in (
+                "approved_by",
+                "store_id",
+                "agent_access",
+                "storage_mode",
+                "versioned_immutable",
+                "backup_verified",
+                "retention_until",
+            )
         ):
             raise ValueError
         if any(
@@ -563,6 +571,10 @@ def metadata_gaps(
                     "restricted_retention_until",
                 }.issubset(manifest),
                 policy.get("root") != str(e.LOCAL_STORE_ROOT),
+                policy.get("storage_mode") != "local_staging",
+                policy.get("versioned_immutable") is not False,
+                policy.get("backup_verified") is not False,
+                policy.get("retention_until") is not None,
                 store.get("storage_mode") != "local_staging",
                 store.get("versioned_immutable") is not False,
                 store.get("backup_verified") is not False,
@@ -677,7 +689,10 @@ def same_json_value(recorded: Any, recalculated: Any) -> bool:
 
 
 def authorization_gap(
-    root: Path, manifest: dict[str, Any], evidence_revision: str = "HEAD"
+    root: Path,
+    manifest: dict[str, Any],
+    evidence_revision: str = "HEAD",
+    freeze_snapshot: bytes | None = None,
 ) -> str | None:
     """The pre-record-gate historical run has no authorization snapshot."""
     expected_hash = manifest.get("live_authorization_sha256")
@@ -709,6 +724,11 @@ def authorization_gap(
         or not REVISION.fullmatch(revision)
     ):
         return "AUTHORIZATION_COMMIT_MISMATCH"
+    if freeze_snapshot is None:
+        try:
+            freeze_snapshot = committed_freeze_sources()[e.FREEZE_RELATIVE]
+        except (KeyError, e.ContractError):
+            return "FREEZE_SOURCE_UNCOMMITTED"
     try:
         try:
             e.checked_git(
@@ -729,10 +749,7 @@ def authorization_gap(
             (
                 (e.RUNNER_RELATIVE, (root / "runner.py").read_bytes()),
                 (e.LOCK_RELATIVE, (root / "uv.lock").read_bytes()),
-                (
-                    e.FREEZE_RELATIVE,
-                    (e.ROOT / e.FREEZE_RELATIVE).read_bytes(),
-                ),
+                (e.FREEZE_RELATIVE, freeze_snapshot),
                 (e.POLICY_RELATIVE, policy_snapshot(root, manifest)),
             )
         )
@@ -1106,7 +1123,13 @@ def verify_local_run(
         gaps.append({"reason": "MANIFEST_CHRONOLOGY_MISMATCH"})
     if run_id != PRE_RECORD_RUN_ID and event_log_gap(run_dir, rows, None):
         gaps.append({"reason": "EVENT_LOG_MISMATCH"})
-    if issue := authorization_gap(run_dir, manifest):
+    if issue := authorization_gap(
+        run_dir,
+        manifest,
+        freeze_snapshot=source_snapshots[e.FREEZE_RELATIVE]
+        if source_snapshots is not None
+        else None,
+    ):
         gaps.append({"reason": issue})
     cases = {(case["group"], case["case_id"]): case for case in case_rows}
     question = e.load_question()
@@ -1245,7 +1268,7 @@ def snapshot_run(run_dir: Path):
     ) as temp:
         snapshot = Path(temp) / run_dir.name
         snapshot.mkdir(mode=0o700)
-        files = [
+        metadata = {
             "manifest.json",
             "analysis.jsonl",
             "summary.json",
@@ -1255,17 +1278,21 @@ def snapshot_run(run_dir: Path):
             "store-policy.json",
             "uv.lock",
             "sdk-code-digests.json",
-        ]
-        for case in e.load_cases():
-            for kind in ("requests", "responses"):
-                files.append(f"{kind}/{case['group']}/{case['case_id']}.body")
+        }
+        files = sorted(
+            path.relative_to(run_dir).as_posix()
+            for path in run_dir.rglob("*")
+            if path.is_file()
+        )
+        if any(
+            locator not in metadata
+            and not locator.startswith(("requests/", "responses/"))
+            for locator in files
+        ):
+            raise e.ContractError("UNREVIEWED_LOCAL_FILE")
         for locator in files:
             source = bounded_path(run_dir, locator)
-            try:
-                data = source.read_bytes()
-            except FileNotFoundError:
-                continue
-            e.write_exclusive(snapshot / locator, data)
+            e.write_exclusive(snapshot / locator, regular_bytes(source))
         yield snapshot
 
 
@@ -1649,7 +1676,14 @@ def verify_evidence(
                     "path": path.relative_to(evidence_run).as_posix(),
                 }
             )
-    if issue := authorization_gap(evidence_run, manifest, evidence_revision):
+    if issue := authorization_gap(
+        evidence_run,
+        manifest,
+        evidence_revision,
+        freeze_snapshot=source_snapshots[e.FREEZE_RELATIVE]
+        if source_snapshots is not None
+        else None,
+    ):
         gaps.append({"reason": issue})
     source_path = manifest.get("runner_source_path")
     historical_without_source = (
