@@ -134,7 +134,7 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 **TC-PIN／TC-RUNTIME：前置與真實 runtime**
 
 - 驗 SDK gitlink／vendor HEAD／cleanliness、patch、受保護 source；scratch／executable 均在 E021 isolated copies。Clock compatibility 僅在 E021 patch 的 manifest alias wrapper；驗 manifest wildcard 排除／time 與 private alias 實際選取、build 前 pinned-base bytes.equals guard。Provenance 明記 pinned WASM stub／preload descriptor／wildcard 限制、alias-wrapper 選擇、emscripten_get_now 真實單調毫秒來源、patch hash、originalTimeJsSha256 與 originalWasmTimeCSha256；原 Moddable source／工具 pin、IMU／recognizer／Event 不變。Prepare 失敗不留 stale runnable assets，實際 HTTP served runtime／MOD 與 provenance hash 相符才啟用。
-- 工具 pins：Moddable 9.5.0 `b6e06ba70506a7381ffb28e09e3175bf4e99f305`；emsdk 5.0.1 `14c18b569f55138fe4963924162244251f454fb0`，Emscripten source `8c5f43157a3f069ade75876e23061330521eabde`；fontbm `7677b908523e909679f67cd5c170396bb9def1aa`。保存 commit／version／SHA-256。E021 copies／build 尚未驗證，其他實驗 local tools 存在不等於本題 preflight 通過。
+- 工具 pins：Moddable 9.5.0 `b6e06ba70506a7381ffb28e09e3175bf4e99f305`；emsdk 5.0.1 `14c18b569f55138fe4963924162244251f454fb0`，Emscripten source `8c5f43157a3f069ade75876e23061330521eabde`；fontbm `7677b908523e909679f67cd5c170396bb9def1aa`。保存 commit／version／SHA-256。本輪 E021 isolated copies／build 已實際驗證，詳 runtime-provenance 與 validation；沒有執行 fresh cold bootstrap。其他實驗結果不替代本題證據。
 - MOD ready timeout 5 秒；active case 1 秒無新 raw 消費即中斷。缺工具、provider 或完整 runtime 路徑時停於該階段，保留 blocker，不補 Event。
 
 | Case ID | 操作與判準 |
@@ -183,4 +183,4 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 
 - 無待 owner 決定的 IMU scope／contract 問題；raw provider、units／clock、fresh runtime 與全案例要求維持鎖定共識，另包含本次 owner 明確授權的 scratch clock compatibility。
 - Managed worktree／attached branch 與 SDK pin 已確認；S1／S2 source tests／build 及原 readiness 證據見 review-log，但初次 browser 路徑因 pinned clock stub 失敗。Owner 已授權 compatibility，scope choice 不再阻擋；修正後 automated runtime53/53 PASS/browserErrors=[]，包含頁面生命週期；required 人工仍 NOT_EXECUTED/fullVerification=false。
-- 完整 automated matrix／真實證據與 required 人工交接已備齊，Planner completion gate exit0後交獨立 Reviewer 核對工程交付；人工實際操作於 Draft PR 後 STOP POINT 2 仍 required／NOT_EXECUTED。Optional analysis warning 保持。
+- 完整 automated matrix／真實證據與 required 人工交接已備齊，Planner completion gate exit0後獨立 Reviewer 已核准工程交付；人工實際操作於 Draft PR 後 STOP POINT 2 仍 required／NOT_EXECUTED。Optional analysis warning 保持。

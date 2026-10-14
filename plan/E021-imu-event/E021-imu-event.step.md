@@ -91,7 +91,7 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 
 - [X] **Actor:** Main Agent — **Action:** Validate the approved Written set and perform bounded staging only.
 - [X] **Actor:** Main Agent — **Action:** Obtain explicit human approval at STOP POINT 1 before commit, push, or PR creation.
-- [ ] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
+- [X] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
 - [ ] **Actor:** Main Agent — **Action:** Push the topic branch.
 - [ ] **Actor:** Main Agent — **Action:** Open the pull request.
 - [ ] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
@@ -126,3 +126,5 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 
 - Topic-local STOP POINT 2 responsibility: after Draft PR, owner/human reviewer performs the required human simulator operations and records actual evidence. Pending human matrix is NOT_EXECUTED, fullVerification=false; PR must expose this and the exact remaining checklist. This is a human-review/acceptance handoff, not merge authorization.
 - S3 engineering delivery classification (Planner): full automated runtime matrix/evidence plus executable human procedure and NOT_EXECUTED matrix may be independently reviewed for this creator pass. It does not complete full verification. Frozen head/tail, independent review gates and original all-cases-executed/all-PASS acceptance requirements remain unchanged.
+
+- PR Lens follow-up Actual: normal commits53e38d6/cb635af/f0eec2b; real map snapshot base34fd88c/headf0eec2b local validate/render PASS and independent Reviewer APPROVED. Later docs commits do not change that snapshot.
