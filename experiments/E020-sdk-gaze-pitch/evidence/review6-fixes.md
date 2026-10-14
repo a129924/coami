@@ -15,3 +15,7 @@
 ## 限制
 
 本輪不重跑真人方向驗收，不更改 SDK patch／vendor pin／runtime／MOD。舊真人紀錄缺少同次 host/harness attestation，完整驗收仍為「無法判定」，不能由新 gate 回溯補證。最終檢查與 evidence 檔案見後續同 topic 證據提交。
+
+## 建置證據
+
+19 項純測試、10 項 scripts、6 項 patched controller 契約測試、strict checks 通過。clean `facb569` build 通過，production-bundle-pin.json 記錄其 sourceCommit 與 JS/CSS/HTML digest；review6-harness-provenance.json 保存實際 build manifest。原始 SDK/runtime/MOD 不變。

@@ -1,0 +1,22 @@
+
+> coami-e020-web@0.1.0 test:scripts
+> node --test scripts/build-safety.test.mjs scripts/tool-inputs.test.mjs scripts/public-inputs.test.mjs scripts/harness-inputs.test.mjs
+
+✔ restoring verified cache removes extra stale libraries (5.263917ms)
+✔ a failed rebuild cannot leave a matching stale MOD pair or compiled modules (3.997416ms)
+✔ vendor gate rejects wrong checkout, gitlink or dirty files (0.155042ms)
+✔ Moddable rebuilding removes old executables and objects before invoking make (2.6695ms)
+✔ source edits with recomputed harness pins cannot bypass clean Git anchor (187.968542ms)
+✔ modified dist plus recomputed provenance fails committed production pin (178.143167ms)
+✔ current source edits, forged provenance and modified served mesh are rejected (50.827708ms)
+✔ controlled compiler config ignores hostile config and tool overrides (3338.123542ms)
+✔ fontbm clean rebuild discards the binary and CMake cache before configure (2.089875ms)
+✔ staged simulator host is authenticated without reading the live vendor (7.215875ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3431.376334
