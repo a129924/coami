@@ -1,7 +1,7 @@
 # E020：SDK 注視俯仰座標換算修正
 
 ## 驗證什麼
-- 編號 E020；建立前查詢目前 experiments 與所有本地分支歷史，未發現占用。設計／執行日期：2026-10-13。
+- 編號 E020；建立前查詢目前 experiments 與所有本地分支歷史，未發現占用。設計／自動驗證日期：2026-10-13；真人驗證日期：2026-10-14。
 - 問題：E019「上 → 解除 → 下」目標已設定，但頭部仍抬頭，修正 body-relative 俯仰換算能否恢復重新指定？
 - 假設：SDK 負 pitch 表示抬頭；既有逆轉換再取負號，使已抬頭的 Robot 把向下目標視為零俯仰誤差。一行符號修正可恢復上下重新指定，且不改變 lookAway 語意。
 
@@ -33,8 +33,8 @@
 6. 記錄 automation、真人判定各自的結果；不得把操作者寫為真人或代填真人 PASS。
 
 ## 是否成功
-- 實驗狀態：無法判定。
-- 本輪驗證任務完成：否；已完成原版 red／patched green，WASM 已重建，實際 runtime 雙向切換已驗證；真人驗證尚待執行。
+- 實驗狀態：成功（限 pinned simulator 與本實驗靜態上下目標）。
+- 本輪驗證任務完成：是；原版 red／patched green、fresh WASM、真人雙向各兩次均完成。正式採用與合併仍交 human review。
 
 ## 結果與證據
 - `evidence/red.txt`：原版 6 測試中 4 fail／2 pass；`evidence/green.txt`：實際 patched source 6 pass。
@@ -45,9 +45,9 @@
 - 文字執行 log 僅移除行尾空白與檔尾空行，未改結果。
 - `evidence/runtime-automated.json`：真 WASM #1 上 −45°、#2 解除無轉動、#3 下 +45°、#4 解除無轉動、#5 上 −45°；每次窗口內一條旋轉。所有 automation 觀察標未確認；不是人類判定。
 - 首次頁面操作因說明文字更新而 reload，未匯出完整 JSON；最終保存的是重跑 run E020-2026-10-13T08-59-09-576Z，三張 wasm 畫面皆屬此 run。
-- 真人判定仍未取得；不外推純測試。
+- 2026-10-14 Andrew 完成真人驗證，run `E020-2026-10-14T02-19-22-568Z`。`evidence/human-final.json` 保存原始匯出，`evidence/human-run.md` 關聯逐項判定；`evidence/human-final.png` 是 #10 最終畫面。
 
 ## 結論與限制
-- 原版與修正版差異支持俯仰換算是根因，但完整成功結論需 patched WASM 與真人證據。
+- 原版 red、修正版 green、實際 WASM 與真人觀察共同支持：隔離 pitch 符號修正恢復已驗證的上下解除後重新指定。雙向各兩次達到事前判準。
 - lookAt 同步返回不代表完成；lookAway 清目標，不承諾回正／急停。SDK 門檻與運動策略維持原樣。
 - 未測實機、roll、動態追蹤或 production。E019 失敗證據與 vendor checkout 保持不變；正式採用交 human review。

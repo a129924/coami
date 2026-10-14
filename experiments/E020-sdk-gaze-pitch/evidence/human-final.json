@@ -1,0 +1,1502 @@
+{
+  "runId": "E020-2026-10-14T02-19-22-568Z",
+  "operator": "Andrew",
+  "provenance": {
+    "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+    "sdkPatch": {
+      "baseCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+      "file": "firmware/host/modules/util/stackchan-util.ts",
+      "patchSha256": "af4d44e0582ca323d882d1cf0073d5f270c573d38c6c61b2d0dac01b8fec3d4d",
+      "originalSha256": "d28ad77de7fa759d82167062d67da17f07db422e94b45c8fedc7b6a4b724a141",
+      "patchedSha256": "2b09d340448405d261736e740e98fcd82cbe8de4cae7f2e80dc28cf839024916"
+    },
+    "moddableVersion": "9.5.0",
+    "emccVersion": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 5.0.1 (8c5f43157a3f069ade75876e23061330521eabde)",
+    "moddable": {
+      "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable",
+      "sourceCommit": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",
+      "tools": {
+        "mcconfig": {
+          "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/build/bin/mac/release/mcconfig",
+          "sha256": "2abb06a6305abbe09d6ed0eb4df23f08c2f474910692f4146d5c826627d23ba4"
+        },
+        "xsc": {
+          "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/build/bin/mac/release/xsc",
+          "sha256": "a2a6b24b2de6c88d0cdd9adcdd8819dafb0a922e478160df7f3617bef9b1383c"
+        }
+      }
+    },
+    "emscripten": {
+      "emsdkPath": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/emsdk",
+      "emsdkCommit": "14c18b569f55138fe4963924162244251f454fb0",
+      "release": "bf32ae8b61ac8efeb7eca01b54c8307f992724f7",
+      "upstreamCommit": "8c5f43157a3f069ade75876e23061330521eabde",
+      "installedTreeSha256": "42ce84c65e00be2818a7733704b9f0217f4c3ee9c7f2bb3366293f60c8e47295",
+      "emccPath": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/emsdk/upstream/emscripten/emcc",
+      "emccSha256": "498eba9b6aacffca1c358ba340fc7b37015d7867cb211c7f2d45784ee9310f03"
+    },
+    "fontbm": {
+      "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/fontbm/build/fontbm",
+      "sourceCommit": "7677b908523e909679f67cd5c170396bb9def1aa",
+      "sha256": "2389a3daae8b9af5c3747cb2fbfd34db3fcd786ccec885878addd22bbcd07012"
+    },
+    "sha256": {
+      "mc.js": "20ce522b60a9e99d445b9ffaf622ab20438982c31b86e435901c9fc3d2fcc862",
+      "mc.wasm": "9d32453b68ad0a4d04fbae788a319fd333ce9787b76460624cc7b6274be884d3"
+    }
+  },
+  "modProvenance": {
+    "experiment": "E020",
+    "sha256": "57303cae1ac19b4c5a6d558319176a75bc2661ade2defb8698cd79f764887fa9",
+    "sources": {
+      "mod.ts": "3b903e1e1546f803ee350e4eb2001f2007a3ff59813a3dc0b12c2f73a2dc5675",
+      "gaze-control.ts": "ab6f6e715599c8a26903a983b5be84c8f94db1f5127c005b9fca6678fd539dfc"
+    }
+  },
+  "records": [
+    {
+      "at": "2026-10-14T02:19:22.718Z",
+      "elapsedMs": 394.09999990463257,
+      "seq": null,
+      "message": "verified runtime b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322; MOD 57303cae1ac19b4c5a6d558319176a75bc2661ade2defb8698cd79f764887fa9"
+    },
+    {
+      "at": "2026-10-14T02:19:22.753Z",
+      "elapsedMs": 429,
+      "seq": null,
+      "message": "observation view=v2-front-eye-level camera=[0,0,200] target=[0,0,0]; robot rotation unchanged"
+    },
+    {
+      "at": "2026-10-14T02:19:22.820Z",
+      "elapsedMs": 495.7999997138977,
+      "seq": null,
+      "message": "[main] start"
+    },
+    {
+      "at": "2026-10-14T02:19:22.821Z",
+      "elapsedMs": 496.5,
+      "seq": null,
+      "message": "[main] installed WASM button bridge"
+    },
+    {
+      "at": "2026-10-14T02:19:22.822Z",
+      "elapsedMs": 497.59999990463257,
+      "seq": null,
+      "message": "[main] loading app behaviors"
+    },
+    {
+      "at": "2026-10-14T02:19:22.822Z",
+      "elapsedMs": 497.8999996185303,
+      "seq": null,
+      "message": "[main] checking mod override"
+    },
+    {
+      "at": "2026-10-14T02:19:30.830Z",
+      "elapsedMs": 8505.599999904633,
+      "seq": null,
+      "message": "[main] onLaunch shouldCreateContext=true"
+    },
+    {
+      "at": "2026-10-14T02:19:30.833Z",
+      "elapsedMs": 8508.5,
+      "seq": null,
+      "message": "No Wi-Fi SSID"
+    },
+    {
+      "at": "2026-10-14T02:19:30.840Z",
+      "elapsedMs": 8515.599999904633,
+      "seq": null,
+      "message": "[main] network ready: skipped"
+    },
+    {
+      "at": "2026-10-14T02:19:30.842Z",
+      "elapsedMs": 8517.599999904633,
+      "seq": null,
+      "message": "[main] TTS engine: stackchan-voice"
+    },
+    {
+      "at": "2026-10-14T02:19:30.871Z",
+      "elapsedMs": 8546.5,
+      "seq": null,
+      "message": "[main] app context created"
+    },
+    {
+      "at": "2026-10-14T02:19:30.873Z",
+      "elapsedMs": 8548.199999809265,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"ready\",\"experiment\":\"E020\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:30.873Z",
+      "elapsedMs": 8548.89999961853,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:30.890Z",
+      "elapsedMs": 8565.299999713898,
+      "seq": null,
+      "message": "[main] app behaviors ready"
+    },
+    {
+      "at": "2026-10-14T02:19:33.158Z",
+      "elapsedMs": 10834,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:33.159Z",
+      "elapsedMs": 10834.39999961853,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:33.171Z",
+      "elapsedMs": 10846.89999961853,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:34.250Z",
+      "elapsedMs": 11925.39999961853,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:34.252Z",
+      "elapsedMs": 11927.099999904633,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:34.259Z",
+      "elapsedMs": 11934.39999961853,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:34.908Z",
+      "elapsedMs": 12583.5,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:34.908Z",
+      "elapsedMs": 12583.799999713898,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:34.914Z",
+      "elapsedMs": 12589.89999961853,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:35.166Z",
+      "elapsedMs": 12841.89999961853,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:35.167Z",
+      "elapsedMs": 12843,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:35.172Z",
+      "elapsedMs": 12847.89999961853,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:35.408Z",
+      "elapsedMs": 13083.5,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:35.408Z",
+      "elapsedMs": 13084,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:35.415Z",
+      "elapsedMs": 13090.599999904633,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:35.650Z",
+      "elapsedMs": 13325.199999809265,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:35.650Z",
+      "elapsedMs": 13325.599999904633,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:35.658Z",
+      "elapsedMs": 13333.199999809265,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:35.833Z",
+      "elapsedMs": 13508.699999809265,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:35.834Z",
+      "elapsedMs": 13509.39999961853,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:35.846Z",
+      "elapsedMs": 13522,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:36.033Z",
+      "elapsedMs": 13708.5,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:36.033Z",
+      "elapsedMs": 13708.89999961853,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:36.048Z",
+      "elapsedMs": 13723.39999961853,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:36.225Z",
+      "elapsedMs": 13900.199999809265,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:36.225Z",
+      "elapsedMs": 13900.5,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:36.238Z",
+      "elapsedMs": 13913.199999809265,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:36.414Z",
+      "elapsedMs": 14090,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:36.415Z",
+      "elapsedMs": 14090.5,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:36.422Z",
+      "elapsedMs": 14098,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:36.616Z",
+      "elapsedMs": 14291.799999713898,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:36.617Z",
+      "elapsedMs": 14292.599999904633,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:36.624Z",
+      "elapsedMs": 14299.89999961853,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:36.827Z",
+      "elapsedMs": 14502.5,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:36.827Z",
+      "elapsedMs": 14503,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:36.830Z",
+      "elapsedMs": 14505.599999904633,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:37.041Z",
+      "elapsedMs": 14716.89999961853,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:37.042Z",
+      "elapsedMs": 14717.39999961853,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:37.047Z",
+      "elapsedMs": 14722.799999713898,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:37.241Z",
+      "elapsedMs": 14916.89999961853,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:37.242Z",
+      "elapsedMs": 14917.299999713898,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:37.253Z",
+      "elapsedMs": 14928.799999713898,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:37.433Z",
+      "elapsedMs": 15108.699999809265,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:37.434Z",
+      "elapsedMs": 15109.199999809265,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:37.439Z",
+      "elapsedMs": 15114.199999809265,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:37.650Z",
+      "elapsedMs": 15325.199999809265,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:37.650Z",
+      "elapsedMs": 15325.799999713898,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:37.657Z",
+      "elapsedMs": 15332.299999713898,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:37.866Z",
+      "elapsedMs": 15541.799999713898,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:37.867Z",
+      "elapsedMs": 15542.199999809265,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:37.875Z",
+      "elapsedMs": 15550.39999961853,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:38.091Z",
+      "elapsedMs": 15767,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:38.092Z",
+      "elapsedMs": 15767.39999961853,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:38.098Z",
+      "elapsedMs": 15773.5,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:38.324Z",
+      "elapsedMs": 16000.099999904633,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:38.325Z",
+      "elapsedMs": 16000.5,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:38.332Z",
+      "elapsedMs": 16007.199999809265,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:38.550Z",
+      "elapsedMs": 16225.199999809265,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:38.550Z",
+      "elapsedMs": 16225.699999809265,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:38.557Z",
+      "elapsedMs": 16232.39999961853,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:38.899Z",
+      "elapsedMs": 16575.099999904633,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:38.900Z",
+      "elapsedMs": 16575.599999904633,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:38.913Z",
+      "elapsedMs": 16588.299999713898,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:39.124Z",
+      "elapsedMs": 16800.099999904633,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:39.125Z",
+      "elapsedMs": 16800.599999904633,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:39.134Z",
+      "elapsedMs": 16809.199999809265,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:39.361Z",
+      "elapsedMs": 17036.299999713898,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:39.361Z",
+      "elapsedMs": 17036.799999713898,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:39.374Z",
+      "elapsedMs": 17049.199999809265,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:39.758Z",
+      "elapsedMs": 17433.5,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:39.758Z",
+      "elapsedMs": 17434,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:39.765Z",
+      "elapsedMs": 17440.799999713898,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:40.036Z",
+      "elapsedMs": 17711.199999809265,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:40.036Z",
+      "elapsedMs": 17711.599999904633,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:40.038Z",
+      "elapsedMs": 17713.599999904633,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:40.366Z",
+      "elapsedMs": 18041.799999713898,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:40.367Z",
+      "elapsedMs": 18042.299999713898,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:40.372Z",
+      "elapsedMs": 18047.299999713898,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:40.583Z",
+      "elapsedMs": 18258.39999961853,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:40.583Z",
+      "elapsedMs": 18259,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:40.590Z",
+      "elapsedMs": 18266,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:40.808Z",
+      "elapsedMs": 18483.5,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:40.808Z",
+      "elapsedMs": 18483.89999961853,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:40.814Z",
+      "elapsedMs": 18489.699999809265,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:41.241Z",
+      "elapsedMs": 18916.699999809265,
+      "seq": null,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:19:41.242Z",
+      "elapsedMs": 18917.299999713898,
+      "seq": null,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:41.254Z",
+      "elapsedMs": 18929.89999961853,
+      "seq": null,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:53.699Z",
+      "elapsedMs": 31375.099999904633,
+      "seq": null,
+      "message": "operator=Andrew send=b stable=true"
+    },
+    {
+      "at": "2026-10-14T02:19:53.700Z",
+      "elapsedMs": 31375.89999961853,
+      "seq": null,
+      "message": "[bridge] Host.Button.b pushed"
+    },
+    {
+      "at": "2026-10-14T02:19:53.714Z",
+      "elapsedMs": 31390,
+      "seq": 1,
+      "message": "COAMI20|{\"seq\":1,\"kind\":\"prepare\",\"phase\":\"begin\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:53.718Z",
+      "elapsedMs": 31393.699999809265,
+      "seq": 1,
+      "message": "[WasmDriver] applyRotation y=0 p=0 r=0 time=0.5"
+    },
+    {
+      "at": "2026-10-14T02:19:53.733Z",
+      "elapsedMs": 31408.599999904633,
+      "seq": 1,
+      "message": "COAMI20|{\"seq\":1,\"kind\":\"prepare\",\"phase\":\"returned\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:58.735Z",
+      "elapsedMs": 36410.5,
+      "seq": 1,
+      "message": "COAMI20|{\"seq\":1,\"kind\":\"prepare\",\"phase\":\"window-ended\"}"
+    },
+    {
+      "at": "2026-10-14T02:19:59.383Z",
+      "elapsedMs": 37058.5,
+      "seq": 1,
+      "message": "人工判定 operator=Andrew result=符合"
+    },
+    {
+      "at": "2026-10-14T02:20:21.495Z",
+      "elapsedMs": 59171,
+      "seq": 1,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:20:21.497Z",
+      "elapsedMs": 59172.2999997139,
+      "seq": 1,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:20:21.501Z",
+      "elapsedMs": 59176.09999990463,
+      "seq": 1,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+    },
+    {
+      "at": "2026-10-14T02:20:21.937Z",
+      "elapsedMs": 59612.5,
+      "seq": 1,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:20:21.938Z",
+      "elapsedMs": 59613,
+      "seq": 1,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:20:21.942Z",
+      "elapsedMs": 59617.89999961853,
+      "seq": 1,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+    },
+    {
+      "at": "2026-10-14T02:20:22.229Z",
+      "elapsedMs": 59904.199999809265,
+      "seq": 1,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:20:22.229Z",
+      "elapsedMs": 59905,
+      "seq": 1,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:20:22.243Z",
+      "elapsedMs": 59918.199999809265,
+      "seq": 1,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+    },
+    {
+      "at": "2026-10-14T02:20:28.495Z",
+      "elapsedMs": 66170.7999997139,
+      "seq": 1,
+      "message": "operator=Andrew send=b stable=true"
+    },
+    {
+      "at": "2026-10-14T02:20:28.496Z",
+      "elapsedMs": 66171.69999980927,
+      "seq": 1,
+      "message": "[bridge] Host.Button.b pushed"
+    },
+    {
+      "at": "2026-10-14T02:20:28.506Z",
+      "elapsedMs": 66181.19999980927,
+      "seq": 2,
+      "message": "COAMI20|{\"seq\":2,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"begin\"}"
+    },
+    {
+      "at": "2026-10-14T02:20:28.509Z",
+      "elapsedMs": 66184.09999990463,
+      "seq": 2,
+      "message": "[WasmDriver] setTorque torque=1"
+    },
+    {
+      "at": "2026-10-14T02:20:28.509Z",
+      "elapsedMs": 66184.7999997139,
+      "seq": 2,
+      "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.5094773718200053"
+    },
+    {
+      "at": "2026-10-14T02:20:28.510Z",
+      "elapsedMs": 66185.5,
+      "seq": 2,
+      "message": "COAMI20|{\"seq\":2,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"returned\"}"
+    },
+    {
+      "at": "2026-10-14T02:20:29.069Z",
+      "elapsedMs": 66744.89999961853,
+      "seq": 2,
+      "message": "[WasmDriver] setTorque torque=0"
+    },
+    {
+      "at": "2026-10-14T02:20:33.514Z",
+      "elapsedMs": 71189.39999961853,
+      "seq": 2,
+      "message": "COAMI20|{\"seq\":2,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"window-ended\"}"
+    },
+    {
+      "at": "2026-10-14T02:20:34.241Z",
+      "elapsedMs": 71916.59999990463,
+      "seq": 2,
+      "message": "人工判定 operator=Andrew result=符合"
+    },
+    {
+      "at": "2026-10-14T02:21:05.070Z",
+      "elapsedMs": 102745.89999961853,
+      "seq": 2,
+      "message": "operator=Andrew send=c stable=true"
+    },
+    {
+      "at": "2026-10-14T02:21:05.071Z",
+      "elapsedMs": 102746.89999961853,
+      "seq": 2,
+      "message": "[bridge] Host.Button.c pushed"
+    },
+    {
+      "at": "2026-10-14T02:21:05.088Z",
+      "elapsedMs": 102763.39999961853,
+      "seq": 3,
+      "message": "COAMI20|{\"seq\":3,\"kind\":\"away\",\"phase\":\"begin\"}"
+    },
+    {
+      "at": "2026-10-14T02:21:05.089Z",
+      "elapsedMs": 102764.89999961853,
+      "seq": 3,
+      "message": "COAMI20|{\"seq\":3,\"kind\":\"away\",\"phase\":\"returned\"}"
+    },
+    {
+      "at": "2026-10-14T02:21:10.097Z",
+      "elapsedMs": 107772.19999980927,
+      "seq": 3,
+      "message": "COAMI20|{\"seq\":3,\"kind\":\"away\",\"phase\":\"window-ended\"}"
+    },
+    {
+      "at": "2026-10-14T02:21:10.750Z",
+      "elapsedMs": 108425,
+      "seq": 3,
+      "message": "人工判定 operator=Andrew result=未確認"
+    },
+    {
+      "at": "2026-10-14T02:21:19.020Z",
+      "elapsedMs": 116695.89999961853,
+      "seq": 3,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:21:19.022Z",
+      "elapsedMs": 116697.09999990463,
+      "seq": 3,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:21:19.028Z",
+      "elapsedMs": 116703.19999980927,
+      "seq": 3,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+    },
+    {
+      "at": "2026-10-14T02:21:26.516Z",
+      "elapsedMs": 124191.89999961853,
+      "seq": 3,
+      "message": "operator=Andrew send=b stable=true"
+    },
+    {
+      "at": "2026-10-14T02:21:26.518Z",
+      "elapsedMs": 124193.09999990463,
+      "seq": 3,
+      "message": "[bridge] Host.Button.b pushed"
+    },
+    {
+      "at": "2026-10-14T02:21:26.523Z",
+      "elapsedMs": 124198.2999997139,
+      "seq": 4,
+      "message": "COAMI20|{\"seq\":4,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"begin\"}"
+    },
+    {
+      "at": "2026-10-14T02:21:26.524Z",
+      "elapsedMs": 124199.09999990463,
+      "seq": 4,
+      "message": "[WasmDriver] setTorque torque=1"
+    },
+    {
+      "at": "2026-10-14T02:21:26.524Z",
+      "elapsedMs": 124199.69999980927,
+      "seq": 4,
+      "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.7437086183315649"
+    },
+    {
+      "at": "2026-10-14T02:21:26.525Z",
+      "elapsedMs": 124200.2999997139,
+      "seq": 4,
+      "message": "COAMI20|{\"seq\":4,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"returned\"}"
+    },
+    {
+      "at": "2026-10-14T02:21:27.320Z",
+      "elapsedMs": 124995.2999997139,
+      "seq": 4,
+      "message": "[WasmDriver] setTorque torque=0"
+    },
+    {
+      "at": "2026-10-14T02:21:31.528Z",
+      "elapsedMs": 129203.2999997139,
+      "seq": 4,
+      "message": "COAMI20|{\"seq\":4,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"window-ended\"}"
+    },
+    {
+      "at": "2026-10-14T02:21:51.704Z",
+      "elapsedMs": 149379.2999997139,
+      "seq": 4,
+      "message": "人工判定 operator=Andrew result=符合"
+    },
+    {
+      "at": "2026-10-14T02:21:59.479Z",
+      "elapsedMs": 157154.69999980927,
+      "seq": 4,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:21:59.480Z",
+      "elapsedMs": 157155.89999961853,
+      "seq": 4,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:21:59.490Z",
+      "elapsedMs": 157165,
+      "seq": 4,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+    },
+    {
+      "at": "2026-10-14T02:21:59.733Z",
+      "elapsedMs": 157408.2999997139,
+      "seq": 4,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:21:59.734Z",
+      "elapsedMs": 157409.39999961853,
+      "seq": 4,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:21:59.741Z",
+      "elapsedMs": 157416.09999990463,
+      "seq": 4,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:00.041Z",
+      "elapsedMs": 157716.39999961853,
+      "seq": 4,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:22:00.042Z",
+      "elapsedMs": 157717,
+      "seq": 4,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:22:00.046Z",
+      "elapsedMs": 157721.69999980927,
+      "seq": 4,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:00.549Z",
+      "elapsedMs": 158224.69999980927,
+      "seq": 4,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:22:00.550Z",
+      "elapsedMs": 158225.2999997139,
+      "seq": 4,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:22:00.554Z",
+      "elapsedMs": 158229.7999997139,
+      "seq": 4,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:07.849Z",
+      "elapsedMs": 165524.7999997139,
+      "seq": 4,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:22:07.850Z",
+      "elapsedMs": 165525.69999980927,
+      "seq": 4,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:22:07.863Z",
+      "elapsedMs": 165537.89999961853,
+      "seq": 4,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:19.104Z",
+      "elapsedMs": 176779.69999980927,
+      "seq": 4,
+      "message": "operator=Andrew send=c stable=true"
+    },
+    {
+      "at": "2026-10-14T02:22:19.106Z",
+      "elapsedMs": 176781.19999980927,
+      "seq": 4,
+      "message": "[bridge] Host.Button.c pushed"
+    },
+    {
+      "at": "2026-10-14T02:22:19.115Z",
+      "elapsedMs": 176790.19999980927,
+      "seq": 5,
+      "message": "COAMI20|{\"seq\":5,\"kind\":\"away\",\"phase\":\"begin\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:19.116Z",
+      "elapsedMs": 176791.09999990463,
+      "seq": 5,
+      "message": "COAMI20|{\"seq\":5,\"kind\":\"away\",\"phase\":\"returned\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:24.121Z",
+      "elapsedMs": 181796.59999990463,
+      "seq": 5,
+      "message": "COAMI20|{\"seq\":5,\"kind\":\"away\",\"phase\":\"window-ended\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:24.970Z",
+      "elapsedMs": 182645.69999980927,
+      "seq": 5,
+      "message": "人工判定 operator=Andrew result=未確認"
+    },
+    {
+      "at": "2026-10-14T02:22:29.871Z",
+      "elapsedMs": 187545.89999961853,
+      "seq": 5,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:22:29.872Z",
+      "elapsedMs": 187547.19999980927,
+      "seq": 5,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:22:29.885Z",
+      "elapsedMs": 187560.39999961853,
+      "seq": 5,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:30.103Z",
+      "elapsedMs": 187778.7999997139,
+      "seq": 5,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:22:30.104Z",
+      "elapsedMs": 187779.39999961853,
+      "seq": 5,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:22:30.109Z",
+      "elapsedMs": 187784.09999990463,
+      "seq": 5,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:30.354Z",
+      "elapsedMs": 188028.7999997139,
+      "seq": 5,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:22:30.354Z",
+      "elapsedMs": 188029.5,
+      "seq": 5,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:22:30.359Z",
+      "elapsedMs": 188034.39999961853,
+      "seq": 5,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:30.654Z",
+      "elapsedMs": 188328.89999961853,
+      "seq": 5,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:22:30.654Z",
+      "elapsedMs": 188329.39999961853,
+      "seq": 5,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:22:30.659Z",
+      "elapsedMs": 188334.5,
+      "seq": 5,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:37.172Z",
+      "elapsedMs": 194847.09999990463,
+      "seq": 5,
+      "message": "operator=Andrew send=b stable=true"
+    },
+    {
+      "at": "2026-10-14T02:22:37.174Z",
+      "elapsedMs": 194849.59999990463,
+      "seq": 5,
+      "message": "[bridge] Host.Button.b pushed"
+    },
+    {
+      "at": "2026-10-14T02:22:37.178Z",
+      "elapsedMs": 194852.7999997139,
+      "seq": 6,
+      "message": "COAMI20|{\"seq\":6,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"begin\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:37.178Z",
+      "elapsedMs": 194853.7999997139,
+      "seq": 6,
+      "message": "[WasmDriver] setTorque torque=1"
+    },
+    {
+      "at": "2026-10-14T02:22:37.179Z",
+      "elapsedMs": 194854.2999997139,
+      "seq": 6,
+      "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.9636287416627765"
+    },
+    {
+      "at": "2026-10-14T02:22:37.180Z",
+      "elapsedMs": 194855,
+      "seq": 6,
+      "message": "COAMI20|{\"seq\":6,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"returned\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:38.193Z",
+      "elapsedMs": 195868,
+      "seq": 6,
+      "message": "[WasmDriver] setTorque torque=0"
+    },
+    {
+      "at": "2026-10-14T02:22:42.181Z",
+      "elapsedMs": 199856.2999997139,
+      "seq": 6,
+      "message": "COAMI20|{\"seq\":6,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"window-ended\"}"
+    },
+    {
+      "at": "2026-10-14T02:22:43.770Z",
+      "elapsedMs": 201445.5,
+      "seq": 6,
+      "message": "人工判定 operator=Andrew result=符合"
+    },
+    {
+      "at": "2026-10-14T02:23:14.728Z",
+      "elapsedMs": 232403.59999990463,
+      "seq": 6,
+      "message": "operator=Andrew send=c stable=true"
+    },
+    {
+      "at": "2026-10-14T02:23:14.729Z",
+      "elapsedMs": 232404.39999961853,
+      "seq": 6,
+      "message": "[bridge] Host.Button.c pushed"
+    },
+    {
+      "at": "2026-10-14T02:23:14.733Z",
+      "elapsedMs": 232408.5,
+      "seq": 7,
+      "message": "COAMI20|{\"seq\":7,\"kind\":\"away\",\"phase\":\"begin\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:14.734Z",
+      "elapsedMs": 232409.19999980927,
+      "seq": 7,
+      "message": "COAMI20|{\"seq\":7,\"kind\":\"away\",\"phase\":\"returned\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:19.744Z",
+      "elapsedMs": 237418.89999961853,
+      "seq": 7,
+      "message": "COAMI20|{\"seq\":7,\"kind\":\"away\",\"phase\":\"window-ended\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:21.548Z",
+      "elapsedMs": 239222.7999997139,
+      "seq": 7,
+      "message": "人工判定 operator=Andrew result=未確認"
+    },
+    {
+      "at": "2026-10-14T02:23:22.725Z",
+      "elapsedMs": 240400.19999980927,
+      "seq": 7,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:23:22.726Z",
+      "elapsedMs": 240401.09999990463,
+      "seq": 7,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:23:22.735Z",
+      "elapsedMs": 240410.09999990463,
+      "seq": 7,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:26.037Z",
+      "elapsedMs": 243712,
+      "seq": 7,
+      "message": "operator=Andrew send=b stable=true"
+    },
+    {
+      "at": "2026-10-14T02:23:26.038Z",
+      "elapsedMs": 243712.89999961853,
+      "seq": 7,
+      "message": "[bridge] Host.Button.b pushed"
+    },
+    {
+      "at": "2026-10-14T02:23:26.045Z",
+      "elapsedMs": 243719.7999997139,
+      "seq": 8,
+      "message": "COAMI20|{\"seq\":8,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"begin\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:26.045Z",
+      "elapsedMs": 243720.5,
+      "seq": 8,
+      "message": "[WasmDriver] setTorque torque=1"
+    },
+    {
+      "at": "2026-10-14T02:23:26.046Z",
+      "elapsedMs": 243721.2999997139,
+      "seq": 8,
+      "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.6018998313704039"
+    },
+    {
+      "at": "2026-10-14T02:23:26.047Z",
+      "elapsedMs": 243721.7999997139,
+      "seq": 8,
+      "message": "COAMI20|{\"seq\":8,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"returned\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:26.703Z",
+      "elapsedMs": 244378.5,
+      "seq": 8,
+      "message": "[WasmDriver] setTorque torque=0"
+    },
+    {
+      "at": "2026-10-14T02:23:31.052Z",
+      "elapsedMs": 248726.7999997139,
+      "seq": 8,
+      "message": "COAMI20|{\"seq\":8,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"window-ended\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:33.404Z",
+      "elapsedMs": 251078.7999997139,
+      "seq": 8,
+      "message": "人工判定 operator=Andrew result=符合"
+    },
+    {
+      "at": "2026-10-14T02:23:36.337Z",
+      "elapsedMs": 254011.89999961853,
+      "seq": 8,
+      "message": "operator=Andrew send=c stable=true"
+    },
+    {
+      "at": "2026-10-14T02:23:36.338Z",
+      "elapsedMs": 254012.69999980927,
+      "seq": 8,
+      "message": "[bridge] Host.Button.c pushed"
+    },
+    {
+      "at": "2026-10-14T02:23:36.350Z",
+      "elapsedMs": 254025.2999997139,
+      "seq": 9,
+      "message": "COAMI20|{\"seq\":9,\"kind\":\"away\",\"phase\":\"begin\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:36.351Z",
+      "elapsedMs": 254026.19999980927,
+      "seq": 9,
+      "message": "COAMI20|{\"seq\":9,\"kind\":\"away\",\"phase\":\"returned\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:41.360Z",
+      "elapsedMs": 259035.09999990463,
+      "seq": 9,
+      "message": "COAMI20|{\"seq\":9,\"kind\":\"away\",\"phase\":\"window-ended\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:42.004Z",
+      "elapsedMs": 259679.39999961853,
+      "seq": 9,
+      "message": "人工判定 operator=Andrew result=未確認"
+    },
+    {
+      "at": "2026-10-14T02:23:50.395Z",
+      "elapsedMs": 268070.19999980927,
+      "seq": 9,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:23:50.396Z",
+      "elapsedMs": 268071.09999990463,
+      "seq": 9,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:23:50.401Z",
+      "elapsedMs": 268076.19999980927,
+      "seq": 9,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:50.670Z",
+      "elapsedMs": 268345.2999997139,
+      "seq": 9,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:23:50.671Z",
+      "elapsedMs": 268346,
+      "seq": 9,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:23:50.675Z",
+      "elapsedMs": 268350.5,
+      "seq": 9,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:51.296Z",
+      "elapsedMs": 268970.69999980927,
+      "seq": 9,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:23:51.297Z",
+      "elapsedMs": 268971.59999990463,
+      "seq": 9,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:23:51.300Z",
+      "elapsedMs": 268975.09999990463,
+      "seq": 9,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:51.603Z",
+      "elapsedMs": 269278.5,
+      "seq": 9,
+      "message": "operator=Andrew send=a stable=false"
+    },
+    {
+      "at": "2026-10-14T02:23:51.604Z",
+      "elapsedMs": 269279.39999961853,
+      "seq": 9,
+      "message": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "at": "2026-10-14T02:23:51.617Z",
+      "elapsedMs": 269292.09999990463,
+      "seq": 9,
+      "message": "COAMI20|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:54.445Z",
+      "elapsedMs": 272120.19999980927,
+      "seq": 9,
+      "message": "operator=Andrew send=b stable=true"
+    },
+    {
+      "at": "2026-10-14T02:23:54.446Z",
+      "elapsedMs": 272121.09999990463,
+      "seq": 9,
+      "message": "[bridge] Host.Button.b pushed"
+    },
+    {
+      "at": "2026-10-14T02:23:54.451Z",
+      "elapsedMs": 272126.19999980927,
+      "seq": 10,
+      "message": "COAMI20|{\"seq\":10,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"begin\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:54.453Z",
+      "elapsedMs": 272128.5,
+      "seq": 10,
+      "message": "[WasmDriver] setTorque torque=1"
+    },
+    {
+      "at": "2026-10-14T02:23:54.456Z",
+      "elapsedMs": 272131.19999980927,
+      "seq": 10,
+      "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.6521197616365364"
+    },
+    {
+      "at": "2026-10-14T02:23:54.458Z",
+      "elapsedMs": 272133.39999961853,
+      "seq": 10,
+      "message": "COAMI20|{\"seq\":10,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"returned\"}"
+    },
+    {
+      "at": "2026-10-14T02:23:55.162Z",
+      "elapsedMs": 272836.59999990463,
+      "seq": 10,
+      "message": "[WasmDriver] setTorque torque=0"
+    },
+    {
+      "at": "2026-10-14T02:23:59.461Z",
+      "elapsedMs": 277135.69999980927,
+      "seq": 10,
+      "message": "COAMI20|{\"seq\":10,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"window-ended\"}"
+    },
+    {
+      "at": "2026-10-14T02:24:00.253Z",
+      "elapsedMs": 277928.59999990463,
+      "seq": 10,
+      "message": "人工判定 operator=Andrew result=符合"
+    }
+  ],
+  "observations": [
+    {
+      "seq": 1,
+      "kind": "prepare",
+      "result": "符合"
+    },
+    {
+      "seq": 2,
+      "kind": "look",
+      "target": "up",
+      "result": "符合"
+    },
+    {
+      "seq": 3,
+      "kind": "away",
+      "result": "未確認"
+    },
+    {
+      "seq": 4,
+      "kind": "look",
+      "target": "down",
+      "result": "符合"
+    },
+    {
+      "seq": 5,
+      "kind": "away",
+      "result": "未確認"
+    },
+    {
+      "seq": 6,
+      "kind": "look",
+      "target": "up",
+      "result": "符合"
+    },
+    {
+      "seq": 7,
+      "kind": "away",
+      "result": "未確認"
+    },
+    {
+      "seq": 8,
+      "kind": "look",
+      "target": "down",
+      "result": "符合"
+    },
+    {
+      "seq": 9,
+      "kind": "away",
+      "result": "未確認"
+    },
+    {
+      "seq": 10,
+      "kind": "look",
+      "target": "up",
+      "result": "符合"
+    }
+  ],
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
+}
