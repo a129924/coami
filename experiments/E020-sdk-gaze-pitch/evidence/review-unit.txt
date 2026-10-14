@@ -1,0 +1,26 @@
+
+> coami-e020-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ each preset uses lookAt with its actual coordinate, never setPose (1.308458ms)
+✔ invalid coordinates and unknown target never reach SDK (0.522833ms)
+✔ window prevents overlap; away and subsequent target get new sequence (0.515875ms)
+✔ synchronous failure is failed, never returned; window still isolates late traces (0.363791ms)
+✔ prepare calls lookAway then setPose, with separate preparation kind (0.26725ms)
+✔ call return and window end never imply direction or clear-state confirmation (1.236917ms)
+✔ driver error after return overrides call-only state and blocks visual PASS (0.320334ms)
+✔ stale and malformed records cannot end an active window (0.212792ms)
+✔ observation is explicit, scoped, and separate from call state (0.179042ms)
+✔ runtime errors without an active operation block commands until reload (0.988125ms)
+✔ a call with no driver evidence stays unconfirmed even after its window (0.203583ms)
+✔ startup rejection cancels watchdog and preserves the original failure (1.224375ms)
+✔ watchdog does not add a second error after another path blocks the ledger (0.171541ms)
+✔ a pending non-ready startup still reports its timeout (0.104209ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 204.9315

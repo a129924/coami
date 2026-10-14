@@ -1,0 +1,9 @@
+{
+  "experiment": "E020",
+  "vendorCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "sha256": "57303cae1ac19b4c5a6d558319176a75bc2661ade2defb8698cd79f764887fa9",
+  "sources": {
+    "mod.ts": "3b903e1e1546f803ee350e4eb2001f2007a3ff59813a3dc0b12c2f73a2dc5675",
+    "gaze-control.ts": "ab6f6e715599c8a26903a983b5be84c8f94db1f5127c005b9fca6678fd539dfc"
+  }
+}

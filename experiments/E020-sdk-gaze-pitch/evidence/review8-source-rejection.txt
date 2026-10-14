@@ -1,0 +1,7 @@
+error when starting preview server:
+Error: Reviewed production build source mismatch
+    at verifyProductionBundle (file:///private/tmp/e020%20relocated%20review8%20v1aq2z33/experiments/E020-sdk-gaze-pitch/web/node_modules/.vite-temp/vite.config.ts.timestamp-1791961809755-3798f418735e7.mjs:121:144)
+    at async createPreviewSnapshot (file:///private/tmp/e020%20relocated%20review8%20v1aq2z33/experiments/E020-sdk-gaze-pitch/web/node_modules/.vite-temp/vite.config.ts.timestamp-1791961809755-3798f418735e7.mjs:128:14)
+    at async BasicMinimalPluginContext.configurePreviewServer (file:///private/tmp/e020%20relocated%20review8%20v1aq2z33/experiments/E020-sdk-gaze-pitch/web/node_modules/.vite-temp/vite.config.ts.timestamp-1791961809755-3798f418735e7.mjs:198:18)
+    at async preview (file:///private/tmp/e020%20relocated%20review8%20v1aq2z33/experiments/E020-sdk-gaze-pitch/web/node_modules/vite/dist/node/chunks/node.js:35751:91)
+    at async CAC.<anonymous> (file:///private/tmp/e020%20relocated%20review8%20v1aq2z33/experiments/E020-sdk-gaze-pitch/web/node_modules/vite/dist/node/cli.js:807:18)

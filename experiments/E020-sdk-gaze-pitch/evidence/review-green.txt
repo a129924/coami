@@ -1,0 +1,15 @@
+✔ restoring verified cache removes extra stale libraries (11.560167ms)
+✔ a failed rebuild cannot leave a matching stale MOD pair or compiled modules (8.055291ms)
+✔ vendor gate rejects wrong checkout, gitlink or dirty files (0.240291ms)
+✔ Moddable rebuilding removes old executables and objects before invoking make (8.917125ms)
+✔ startup rejection cancels watchdog and preserves the original failure (0.578167ms)
+✔ watchdog does not add a second error after another path blocks the ledger (0.0895ms)
+✔ a pending non-ready startup still reports its timeout (0.134375ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 110.418875

@@ -1,0 +1,9 @@
+{
+  "sourceCommit": "b97f3bd1b3599ef160d010f87667abf3d01f4d90",
+  "sourceManifestSha256": "85d581ba9e02b3597641a0673d1f03f19f5d9935355ccdeb59970c19f7751028",
+  "bundleSha256": {
+    "assets/index-B3fMoZbm.js": "571cb07db81b6e818e447fb0d9c9fa5abe4e70d002cdb6798611771b6a2d80a2",
+    "assets/index-BP1MvSws.css": "5ba0e030a61bdcd4f33bcbbfd0b9c93f0bb3619b504a129b4135139871417d50",
+    "index.html": "045bafd24f7f73743621fdab9a538eb7b3466f466abb64a8cda887cf5f349260"
+  }
+}

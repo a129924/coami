@@ -1,0 +1,47 @@
+
+> coami-e020-web@0.1.0 test:scripts
+> node --test scripts/build-safety.test.mjs scripts/tool-inputs.test.mjs scripts/public-inputs.test.mjs scripts/harness-inputs.test.mjs
+
+✔ restoring verified cache removes extra stale libraries (5.583583ms)
+✔ a failed rebuild cannot leave a matching stale MOD pair or compiled modules (2.681125ms)
+✔ vendor gate rejects wrong checkout, gitlink or dirty files (0.158208ms)
+✔ Moddable rebuilding removes old executables and objects before invoking make (3.029083ms)
+✔ source edits with recomputed harness pins cannot bypass clean Git anchor (207.865541ms)
+✔ modified dist plus recomputed provenance fails committed production pin (303.328584ms)
+✔ preview middleware serves verified buffers rather than subsequent mutable bytes (0.409792ms)
+fatal: Not a valid object name 968b72ff58178170b612abd5062b460ab6abbe82^{commit}
+✖ squashed checkout rebuild preserves reviewed source reference and verifies content identity (183.286542ms)
+✔ current source edits, forged provenance and modified served mesh are rejected (61.241083ms)
+✔ controlled compiler config ignores hostile config and tool overrides (6560.176708ms)
+✔ fontbm clean rebuild discards the binary and CMake cache before configure (2.380333ms)
+✔ staged simulator host is authenticated without reading the live vendor (10.481333ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6661.005041
+
+✖ failing tests:
+
+test at scripts/harness-inputs.test.mjs:57:1
+✖ squashed checkout rebuild preserves reviewed source reference and verifies content identity (183.286542ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + '92dca45c961c8633f72edbdeac432c92b0b1e795'
+  - '968b72ff58178170b612abd5062b460ab6abbe82'
+
+      at file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/scripts/harness-inputs.test.mjs:70:10
+      at async fixture (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/scripts/harness-inputs.test.mjs:28:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '92dca45c961c8633f72edbdeac432c92b0b1e795',
+    expected: '968b72ff58178170b612abd5062b460ab6abbe82',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

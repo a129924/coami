@@ -1,0 +1,32 @@
+{
+  "name": "coami-e020-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <27"
+  },
+  "scripts": {
+    "source": "node scripts/prepare-source.mjs",
+    "test:patched": "SDK_SOURCE=../generated/pinned-stack-chan/ node --test scripts/pitch-regression.test.mjs",
+    "assets": "node scripts/prepare-assets.mjs",
+    "mod": "node scripts/build-mod.mjs",
+    "prepare:poc": "npm run assets && npm run mod",
+    "dev": "vite --host 127.0.0.1",
+    "test": "node --test src/*.test.ts",
+    "test:scripts": "node --test scripts/build-safety.test.mjs scripts/tool-inputs.test.mjs scripts/public-inputs.test.mjs scripts/harness-inputs.test.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json",
+    "build": "npm run typecheck && vite build",
+    "test:original": "node --test scripts/pitch-regression.test.mjs",
+    "test:contract": "npm run test:patched"
+  },
+  "dependencies": {
+    "three": "0.185.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.1.2",
+    "@types/three": "0.185.4",
+    "typescript": "7.0.2",
+    "vite": "8.2.1"
+  }
+}

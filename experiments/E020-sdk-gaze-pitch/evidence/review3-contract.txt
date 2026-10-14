@@ -1,0 +1,23 @@
+
+> coami-e020-web@0.1.0 test:contract
+> npm run test:patched
+
+
+> coami-e020-web@0.1.0 test:patched
+> SDK_SOURCE=../generated/pinned-stack-chan/ node --test scripts/pitch-regression.test.mjs
+
+{"source":"file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/pinned-stack-chan/","sourceSha256":"2b09d340448405d261736e740e98fcd82cbe8de4cae7f2e80dc28cf839024916","realWasm":false}
+✔ a target already aligned with body yaw/pitch becomes body-forward (1.399625ms)
+✔ up-clear-down and down-clear-up issue the opposite pitch command (0.771458ms)
+✔ a settled matching pitch target does not keep issuing identical rotations (1.248042ms)
+✔ horizontal reassignment and the existing small-angle threshold remain intact (0.542084ms)
+✔ real runtime UI: aligned world target stays aligned for tilted body and offset eyes (0.846ms)
+✔ lookAway clears target without recentering or cancelling existing motion (0.200333ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 167.534875

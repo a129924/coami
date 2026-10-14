@@ -1,0 +1,40 @@
+
+> coami-e020-web@0.1.0 test:scripts
+> node --test scripts/build-safety.test.mjs scripts/tool-inputs.test.mjs scripts/public-inputs.test.mjs scripts/harness-inputs.test.mjs
+
+✔ restoring verified cache removes extra stale libraries (5.131666ms)
+✔ a failed rebuild cannot leave a matching stale MOD pair or compiled modules (2.430667ms)
+✔ vendor gate rejects wrong checkout, gitlink or dirty files (0.155417ms)
+✔ Moddable rebuilding removes old executables and objects before invoking make (2.42775ms)
+✔ source edits with recomputed harness pins cannot bypass clean Git anchor (197.27075ms)
+✖ modified dist plus recomputed provenance fails committed production pin (210.912542ms)
+✔ preview middleware serves verified buffers rather than subsequent mutable bytes (0.464625ms)
+✔ current source edits, forged provenance and modified served mesh are rejected (51.004166ms)
+✔ controlled compiler config ignores hostile config and tool overrides (3338.749375ms)
+✔ fontbm clean rebuild discards the binary and CMake cache before configure (2.198375ms)
+✔ staged simulator host is authenticated without reading the live vendor (7.503375ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 10
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3425.725083
+
+✖ failing tests:
+
+test at scripts/harness-inputs.test.mjs:37:1
+✖ modified dist plus recomputed provenance fails committed production pin (210.912542ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/scripts/harness-inputs.test.mjs:40:2
+      at async fixture (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/scripts/harness-inputs.test.mjs:28:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /production build source mismatch/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

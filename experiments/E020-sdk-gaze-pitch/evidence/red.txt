@@ -1,0 +1,99 @@
+{"source":"file:///private/tmp/coami-e020-sdk-gaze-pitch/vendor/stack-chan/","sourceSha256":"d28ad77de7fa759d82167062d67da17f07db422e94b45c8fedc7b6a4b724a141","realWasm":false}
+✖ a target already aligned with body yaw/pitch becomes body-forward (3.368792ms)
+✖ up-clear-down and down-clear-up issue the opposite pitch command (0.679792ms)
+✖ a settled matching pitch target does not keep issuing identical rotations (0.148292ms)
+✔ horizontal reassignment and the existing small-angle threshold remain intact (0.255166ms)
+✖ real runtime UI: aligned world target stays aligned for tilted body and offset eyes (0.483ms)
+✔ lookAway clears target without recentering or cancelling existing motion (0.092875ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 2
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 129.921292
+
+✖ failing tests:
+
+test at scripts/pitch-regression.test.mjs:30:1
+✖ a target already aligned with body yaw/pitch becomes body-forward (3.368792ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+    assert.ok(Math.abs(relative[0]-1)<1e-9)
+
+      at TestContext.<anonymous> (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/scripts/pitch-regression.test.mjs:34:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/pitch-regression.test.mjs:37:1
+✖ up-clear-down and down-clear-up issue the opposite pitch command (0.679792ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 2
+
+      at TestContext.<anonymous> (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/scripts/pitch-regression.test.mjs:41:43)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/pitch-regression.test.mjs:46:1
+✖ a settled matching pitch target does not keep issuing identical rotations (0.148292ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  2 !== 1
+
+      at TestContext.<anonymous> (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/scripts/pitch-regression.test.mjs:48:99)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/pitch-regression.test.mjs:61:1
+✖ real runtime UI: aligned world target stays aligned for tilted body and offset eyes (0.483ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+    assert.ok(Math.abs(state.eyes[key].gazeY-1)<1e-9)
+
+      at TestContext.<anonymous> (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/scripts/pitch-regression.test.mjs:71:11)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

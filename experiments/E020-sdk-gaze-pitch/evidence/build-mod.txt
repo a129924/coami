@@ -1,0 +1,12 @@
+
+> coami-e020-web@0.1.0 mod
+> node scripts/build-mod.mjs
+
+> mcrun -d -p wasm -o /build /mod/coami-e020/manifest.json
+### -p wasm
+> xsc -d -e /mod/coami-e020/mod.js -o /build/tmp/wasm/debug/coami-e020/files -r mod
+> xsc -d -e /mod/coami-e020/gaze-control.js -o /build/tmp/wasm/debug/coami-e020/files -r gaze-control
+> xsc -d -e /build/tmp/wasm/debug/coami-e020/check.js -o /build/tmp/wasm/debug/coami-e020/files -r check
+> xsa -b /build/tmp/wasm/debug/coami-e020/files -n tech.moddable.coami-e020 -o /build/bin/wasm/debug/coami-e020 /build/tmp/wasm/debug/coami-e020/files/mod.xsb /build/tmp/wasm/debug/coami-e020/files/gaze-control.xsb /build/tmp/wasm/debug/coami-e020/files/check.xsb
+archive: /build/bin/wasm/debug/coami-e020/mc.xsa
+E020 MOD: 4360 bytes, sha256=57303cae1ac19b4c5a6d558319176a75bc2661ade2defb8698cd79f764887fa9

@@ -1,0 +1,11 @@
+{
+  "reviewedHead": "83c8d991e14424f067db331c0960f987345f70a1",
+  "manifestInputRevision": "b565e7e41d24cde1e3fcca5df5c688821abbc6d5",
+  "pinnedSourceCommit": "b565e7e41d24cde1e3fcca5df5c688821abbc6d5",
+  "builtSourceCommit": "b565e7e41d24cde1e3fcca5df5c688821abbc6d5",
+  "sourceIsAncestor": true,
+  "bundleHashesMatch": true,
+  "actualPreviewHttp": "PASS",
+  "reported3745bfd": "not present locally; GitHub commit API returns 422 No commit found",
+  "kind": "actual clean checkout web build and HTTP preview; no browser UI or human direction validation"
+}

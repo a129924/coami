@@ -1,0 +1,1231 @@
+
+> coami-e020-web@0.1.0 prepare:poc
+> npm run assets && npm run mod
+
+
+> coami-e020-web@0.1.0 assets
+> node scripts/prepare-assets.mjs
+
+# xsc release : cc xsBigInt.c
+# xsc release : cc xsCommon.c
+# xsc release : cc xsCode.c
+# xsc release : cc xsdtoa.c
+# xsc release : cc xsre.c
+# xsc release : cc xsLexical.c
+# xsc release : cc xsScope.c
+# xsc release : cc xsScript.c
+# xsc release : cc xsSourceMap.c
+# xsc release : cc xsSyntaxical.c
+# xsc release : cc xsTree.c
+# xsc release : cc xsc.c
+# xsc release : cc xsc
+# xsid release : cc xsdtoa.c
+# xsid release : cc xsre.c
+# xsid release : cc xsCommon.c
+# xsid release : cc xsid.c
+# xsid release : cc xsid
+# xsl release : cc xsArguments.c
+# xsl release : cc xsAPI.c
+# xsl release : cc xsAll.c
+# xsl release : cc xsArray.c
+# xsl release : cc xsAtomics.c
+# xsl release : cc xsBoolean.c
+# xsl release : cc xsDataView.c
+# xsl release : cc xsBigInt.c
+# xsl release : cc xsCode.c
+# xsl release : cc xsCommon.c
+# xsl release : cc xsDate.c
+# xsl release : cc xsDebug.c
+# xsl release : cc xsDefaults.c
+# xsl release : cc xsGenerator.c
+# xsl release : cc xsError.c
+# xsl release : cc xsFunction.c
+# xsl release : cc xsGlobal.c
+# xsl release : cc xsJSON.c
+# xsl release : cc xsLexical.c
+# xsl release : cc xsMapSet.c
+# xsl release : cc xsMarshall.c
+# xsl release : cc xsMath.c
+# xsl release : cc xsModule.c
+# xsl release : cc xsMemory.c
+# xsl release : cc xsNumber.c
+# xsl release : cc xsObject.c
+# xsl release : cc xsPlatforms.c
+# xsl release : cc xsPromise.c
+# xsl release : cc xsProperty.c
+# xsl release : cc xsProxy.c
+# xsl release : cc xsRun.c
+# xsl release : cc xsRegExp.c
+# xsl release : cc xsScope.c
+# xsl release : cc xsScript.c
+# xsl release : cc xsSourceMap.c
+# xsl release : cc xsString.c
+# xsl release : cc xsSymbol.c
+# xsl release : cc xsSyntaxical.c
+# xsl release : cc xsTree.c
+# xsl release : cc xsType.c
+# xsl release : cc xsdtoa.c
+# xsl release : cc xsre.c
+# xsl release : cc xslBase.c
+# xsl release : cc xslOpt.c
+# xsl release : cc xslSlot.c
+# xsl release : cc xslStrip.c
+# xsl release : cc xsl.c
+# xsl release : cc xsl
+# tools release : cc mac_xs.c
+# tools release : cc xsAll.c
+# tools release : cc xsAPI.c
+# tools release : cc xsArguments.c
+# tools release : cc xsArray.c
+# tools release : cc xsAtomics.c
+# tools release : cc xsBigInt.c
+# tools release : cc xsBoolean.c
+# tools release : cc xsCode.c
+# tools release : cc xsCommon.c
+# tools release : cc xsDataView.c
+# tools release : cc xsDate.c
+# tools release : cc xsDebug.c
+# tools release : cc xsError.c
+# tools release : cc xsFunction.c
+# tools release : cc xsGenerator.c
+# tools release : cc xsGlobal.c
+# tools release : cc xsJSON.c
+# tools release : cc xsLexical.c
+# tools release : cc xsMapSet.c
+# tools release : cc xsMarshall.c
+# tools release : cc xsMath.c
+# tools release : cc xsMemory.c
+# tools release : cc xsModule.c
+# tools release : cc xsNumber.c
+# tools release : cc xsObject.c
+# tools release : cc xsPlatforms.c
+# tools release : cc xsProfile.c
+# tools release : cc xsPromise.c
+# tools release : cc xsProperty.c
+# tools release : cc xsProxy.c
+# tools release : cc xsRegExp.c
+# tools release : cc xsRun.c
+# tools release : cc xsScope.c
+# tools release : cc xsScript.c
+# tools release : cc xsSourceMap.c
+# tools release : cc xsString.c
+# tools release : cc xsSymbol.c
+# tools release : cc xsSyntaxical.c
+# tools release : cc xsTree.c
+# tools release : cc xsType.c
+# tools release : cc xsdtoa.c
+# tools release : cc xsmc.c
+# tools release : cc xsre.c
+# tools release : cc xsa.c
+# tools release : cc xsc.c
+# tools release : cc xslBase.c
+# tools release : xsc commodettoBMPOut.js
+# tools release : xsc commodettoBitmap.js
+# tools release : xsc commodettoBufferOut.js
+# tools release : xsc commodettoColorCellOut.js
+# tools release : xsc commodettoConvert.js
+# tools release : xsc commodettoParseBMF.js
+# tools release : xsc commodettoParseBMP.js
+# tools release : xsc commodettoPoco.js
+# tools release : xsc commodettoPixelsOut.js
+# tools release : xsc commodettoReadJPEG.js
+# tools release : xsc commodettoPocoCore.js
+# tools release : xsc commodettoReadPNG.js
+# tools release : xsc commodettoRLE4Out.js
+# tools release : xsc wavreader.js
+# tools release : xsc base64.js
+# tools release : xsc crypt.js
+# tools release : xsc ber.js
+# tools release : xsc curve.js
+# tools release : xsc ec.js
+# tools release : xsc ecp.js
+# tools release : xsc x509.js
+# tools release : xsc modular.js
+# tools release : xsc ffi.js
+# tools release : xsc buildclut.js
+# tools release : xsc file.js
+# tools release : xsc colorcellencode.js
+# tools release : xsc cdv.js
+# tools release : xsc compileDataView.js
+# tools release : xsc image2cs.js
+# tools release : xsc compressbmf.js
+# tools release : xsc mcbundle.js
+# tools release : xsc mcconfig.js
+# tools release : xsc mchex.js
+# tools release : xsc mclocal.js
+# tools release : xsc mcmanifest.js
+# tools release : xsc mcprintski.js
+# tools release : xsc mcpack.js
+# tools release : xsc mcrez.js
+# tools release : xsc mcdevicetree.js
+# tools release : xsc nodered2mcu.js
+# tools release : xsc resampler.js
+# tools release : xsc png2bmp.js
+# tools release : xsc tool.js
+# tools release : xsc transform.js
+# tools release : xsc rle4encode.js
+# tools release : xsc wav2maud.js
+# tools release : xsc unicode-ranges.js
+# tools release : xsc bles2gatt.js
+# tools release : xsc url.js
+# tools release : xsid modBase64.c
+# tools release : xsid commodettoBitmap.c
+# tools release : xsid commodettoColorCellOut.c
+# tools release : xsid commodettoParseBMF.c
+# tools release : xsid commodettoBufferOut.c
+# tools release : xsid commodettoConvert.c
+# tools release : xsid commodettoParseBMP.c
+# tools release : xsid commodettoPocoCore.c
+# tools release : xsid commodettoPocoBlit.c
+# tools release : xsid commodettoReadJPEG.c
+# tools release : xsid cfeBMF.c
+# tools release : xsid commodettoReadPNG.c
+# tools release : xsid xsBigIntEx.c
+# tools release : xsid image2cs.c
+# tools release : xsid miniz.c
+# tools release : xsid ec.c
+# tools release : xsid modInstrumentation.c
+# tools release : xsid modCrypt.c
+/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/modules/commodetto/commodettoBufferOut.js:31: warning: cannot optimize native!
+# tools release : xsid x509.c
+# tools release : xsc mcrun.js
+# tools release : xsid modular.c
+# tools release : xsid mont.c
+# tools release : xsid tool.c
+# tools release : xsid url.c
+# tools release : cdv
+# tools release : buildclut
+# tools release : colorcellencode
+# tools release : compressbmf
+# tools release : mcbundle
+# tools release : image2cs
+# tools release : mcconfig
+# tools release : mchex
+# tools release : mclocal
+# tools release : mcpack
+# tools release : mcprintski
+# tools release : mcrez
+# tools release : png2bmp
+# tools release : nodered2mcu
+# tools release : mcdevicetree
+# tools release : rle4encode
+# tools release : wav2maud
+# tools release : bles2gatt
+# tools release : mcrun
+# tools release : xsl modules
+### 2162 instances, 2536 keys, 69 colors, 0 holes
+### warning: mcmanifest: FormatFile.prototype.generate() formatValues: no const
+### warning: mcmanifest: FormatFile.prototype.generate() formatValues: not frozen
+### warning: mcmanifest: Tool() formatNames: no const
+### warning: mcmanifest: Tool() formatNames: not frozen
+### warning: mcmanifest: Tool.prototype.run() ResourcesRule.prototype.appendSource() moduleExtensions: no const
+### warning: mcmanifest: Tool.prototype.run() ResourcesRule.prototype.appendSource() moduleExtensions: not frozen
+# tools release : cc adpcm-lib.c
+# tools release : cc adpcm-dns.c
+# tools release : cc modBase64.c
+# tools release : cc commodettoBitmap.c
+# tools release : cc commodettoBufferOut.c
+# tools release : cc commodettoColorCellOut.c
+# tools release : cc commodettoConvert.c
+# tools release : cc commodettoParseBMF.c
+# tools release : cc commodettoParseBMP.c
+# tools release : cc commodettoPocoCore.c
+# tools release : cc commodettoPocoBlit.c
+# tools release : cc commodettoReadJPEG.c
+# tools release : cc commodettoReadPNG.c
+# tools release : cc cfeBMF.c
+# tools release : cc xsBigIntEx.c
+# tools release : cc ec.c
+# tools release : cc image2cs.c
+# tools release : cc mcpack.c
+# tools release : cc miniz.c
+# tools release : cc modCrypt.c
+# tools release : cc modInstrumentation.c
+# tools release : cc modular.c
+# tools release : cc mont.c
+# tools release : cc tool.c
+# tools release : cc wav2maud.c
+# tools release : cc x509.c
+# tools release : cc chacha.c
+# tools release : cc fips46.c
+# tools release : cc fips180.c
+# tools release : cc fips197.c
+# tools release : cc ghash.c
+# tools release : cc rc.c
+# tools release : cc rfc1321.c
+# tools release : cc url.c
+# tools release : cc mc.xs.c
+# tools release : cc tools
+patching file 'firmware/host/modules/util/stackchan-util.ts'
+patching file 'firmware/host/modules/util/stackchan-util.ts'
+{"baseCommit":"b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322","file":"firmware/host/modules/util/stackchan-util.ts","patchSha256":"af4d44e0582ca323d882d1cf0073d5f270c573d38c6c61b2d0dac01b8fec3d4d","originalSha256":"d28ad77de7fa759d82167062d67da17f07db422e94b45c8fedc7b6a4b724a141","patchedSha256":"2b09d340448405d261736e740e98fcd82cbe8de4cae7f2e80dc28cf839024916"}
+npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+npm warn deprecated scijs-window-functions@2.0.2: This package has been renamed 'window-function'. The API is otherwise the same. Please switch.
+
+added 331 packages in 3s
+
+> stack-chan@1.1.0 build:wasm
+> bash scripts/build-wasm.sh
+
+# cc xsAPI.c
+# cc wasm_xs.c
+# cc xsArguments.c
+# cc xsAtomics.c
+# cc xsAll.c
+# cc xsArray.c
+# cc xsBigInt.c
+# cc xsCode.c
+# cc xsCommon.c
+# cc xsDataView.c
+# cc xsBoolean.c
+# cc xsJSON.c
+# cc xsDebug.c
+# cc xsError.c
+# cc xsGlobal.c
+# cc xsLexical.c
+# cc xsDate.c
+# cc xsGenerator.c
+# cc xsFunction.c
+# cc xsMath.c
+# cc xsMapSet.c
+# cc xsObject.c
+# cc xsModule.c
+# cc xsNumber.c
+# cc xsMemory.c
+# cc xsMarshall.c
+# cc xsPlatforms.c
+# cc xsPromise.c
+# cc xsProperty.c
+# cc xsProxy.c
+# cc xsRegExp.c
+# cc xsType.c
+# cc xsTree.c
+# cc xsScope.c
+# cc xsSyntaxical.c
+# cc xsRun.c
+# cc xsScript.c
+# cc xsSourceMap.c
+# cc xsSymbol.c
+# cc xsString.c
+# cc xsre.c
+# cc xsmc.c
+# cc xsdtoa.c
+# xsc Resource.xsb
+# xsc screen.xsb
+# xsc time.xsb
+# xsc timer.xsb
+# xsc modules.xsb
+# xsc crc.xsb
+# xsc easing.xsb
+# xsc keyboard.xsb
+# xsc pocoqrcode.xsb
+# xsc qrcode.xsb
+# xsc structuredClone.xsb
+# xsc deepEqual.xsb
+# xsc piu/All.xsb
+# xsc piu/Timeline.xsb
+# xsc commodetto/Bitmap.xsb
+# xsc commodetto/parseBMP.xsb
+# xsc commodetto/parseRLE.xsb
+# xsc commodetto/PocoCore.xsb
+# xsc piu/CombTransition.xsb
+# xsc piu/MC.xsb
+/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/modules/piu/MC/piuMC.js:39: warning: cannot optimize native!
+# xsc piu/WipeTransition.xsb
+# xsc common/keyboard.xsb
+# xsc commodetto/outline.xsb
+# xsc commodetto/pocoOutline.xsb
+# xsc piu/shape.xsb
+# xsc piu/QRCode.xsb
+# xsc stackchanvoice.xsb
+# xsc wasm-audio-bridge.xsb
+# xsc wasm-camera-bridge.xsb
+# xsc runtime-bitmap-port.xsb
+# xsc wasm-button-bridge.xsb
+# xsc mc/config.xsb
+# tsc main.ts
+# tsc app-behavior.ts
+# tsc app-behavior-resolver.ts
+# tsc app-launch.ts
+# tsc boot-network-recovery.ts
+# tsc boot-services.ts
+# tsc compose.ts
+# tsc capabilities.ts
+# tsc dock.ts
+# tsc experimental-mini-app-loader.ts
+# tsc experimental-mini-app-piu.ts
+# tsc experimental-mini-app-registration.ts
+# tsc setup-mode.ts
+# tsc settings-status.ts
+# tsc volume-preview.ts
+# tsc runtime-audio.ts
+# tsc runtime-camera.ts
+# tsc runtime-context.ts
+# tsc runtime-input.ts
+# tsc runtime-lighting.ts
+# tsc runtime-ui.ts
+# tsc jitome-face.ts
+# tsc mac-address.ts
+# tsc stackchan-util.ts
+# tsc owned-resources.ts
+# tsc theme.ts
+# tsc localization-core.ts
+# tsc localization.ts
+# tsc mini-app-launcher.ts
+# tsc face-view.ts
+# tsc chat-status-bar.ts
+# tsc settings-view.ts
+# tsc mini-app.ts
+# tsc geometry.ts
+# tsc settings-network-list.ts
+# tsc app-controller.ts
+# tsc controls.ts
+# tsc common-view.ts
+# tsc settings-status-model.ts
+# tsc timezone-model.ts
+# tsc volume-model.ts
+# tsc face-state.ts
+# tsc face-skin.ts
+# tsc hand-sprites.ts
+# tsc hands.ts
+# tsc template.ts
+# tsc blink.ts
+# tsc breath.ts
+# tsc saccade.ts
+# tsc types.ts
+# tsc drawer.ts
+# tsc speech-balloon.ts
+# tsc multirow-balloon.ts
+# tsc emoticon-pulse.ts
+# tsc emoticon.ts
+# tsc music-notes.ts
+# tsc atlas.ts
+# tsc eye-sprite.ts
+# tsc eyelid-sprite.ts
+# tsc image-avatar-face.ts
+# tsc image-avatar-pack.ts
+# tsc image-avatar-state.ts
+# tsc iris-sprite.ts
+# tsc mouth-sprite.ts
+# tsc eyebrow.ts
+# tsc mouth.ts
+# tsc nose.ts
+# tsc eye.ts
+# tsc mouth.ts
+# tsc relaxed-eye.ts
+# tsc relaxed-mouth.ts
+# tsc shape-cache.ts
+# tsc shape-utils.ts
+# tsc face.ts
+# tsc splash-view.ts
+# tsc camera-preview-utils.ts
+# tsc audio-buffer.ts
+# tsc audio-bridge-contract.ts
+# tsc speaker.ts
+# tsc microphone.ts
+# tsc audio-in.ts
+# tsc tts-types.ts
+# tsc tts-local.ts
+# tsc tts-remote.ts
+# tsc tts-voicevox.ts
+# tsc tts-voicevox-web.ts
+# tsc tts-elevenlabs.ts
+# tsc tts-openai.ts
+# tsc tts-stackchan-voice.ts
+# tsc stackchan-voice-wav.ts
+# tsc tts-stub.ts
+# tsc motion-controller.ts
+# tsc wasm-driver.ts
+# tsc dynamixel-driver.ts
+# tsc m5stackchan-servo-driver.ts
+# tsc none-driver.ts
+# tsc sg90-driver.ts
+# tsc rs30x-driver.ts
+# tsc scservo-driver.ts
+# tsc camera.ts
+# tsc camera-preview.ts
+# tsc preference.ts
+# tsc consts.ts
+# tsc loadPreference.ts
+# tsc timezone-settings.ts
+# tsc network-state.ts
+# tsc network-manager.ts
+# tsc network-service.ts
+# tsc local-peer-capability.ts
+# tsc local-peer-types.ts
+# tsc fake-wifi-scan-results.ts
+# tsc wifi-scan.ts
+# tsc wifi-scan-types.ts
+# tsc stored-wifi.ts
+# tsc preference-server.ts
+# tsc touch.ts
+# tsc touch-panel.ts
+# tsc touch-panel-gesture.ts
+# tsc input-event.ts
+# tsc imu.ts
+# tsc imu-motion.ts
+# tsc led.ts
+# tsc py32-led.ts
+# tsc behavior.ts
+# tsc on-launch.ts
+# tsc startup-choice.ts
+# tsc on-context-created.ts
+# xsid Resource.c.xsi
+# xsid screen.c.xsi
+# xsid modTime.c.xsi
+# xsid timer.c.xsi
+# xsid modInstrumentation.c.xsi
+# xsid modules.c.xsi
+# xsid crc.c.xsi
+# xsid easing.c.xsi
+# xsid piuDie.c.xsi
+# xsid piuFont.c.xsi
+# xsid piuRegion.c.xsi
+# xsid piuTexture.c.xsi
+# xsid piuView.c.xsi
+# xsid ftcalc.c.xsi
+# xsid ftdebug.c.xsi
+# xsid ftoutln.c.xsi
+# xsid ftstroke.c.xsi
+# xsid fttrigon.c.xsi
+# xsid ftutil.c.xsi
+# xsid ftgrays.c.xsi
+# xsid pocoqrcode.c.xsi
+# xsid qrcode.c.xsi
+# xsid qrcodegen.c.xsi
+# xsid aq_synth.c.xsi
+# xsid aqk2r_compat.c.xsi
+# xsid structuredClone.c.xsi
+# xsid deepEqual.c.xsi
+# xsid commodettoPocoBlit.c.xsi
+# xsid piuApplication.c.xsi
+# xsid piuBehavior.c.xsi
+# xsid piuColor.c.xsi
+# xsid piuColumn.c.xsi
+# xsid piuContainer.c.xsi
+# xsid piuContent.c.xsi
+# xsid piuLabel.c.xsi
+# xsid piuLayout.c.xsi
+# xsid piuLocals.c.xsi
+# xsid piuPort.c.xsi
+# xsid piuRectangle.c.xsi
+# xsid piuRow.c.xsi
+# xsid piuScroller.c.xsi
+# xsid piuSkin.c.xsi
+# xsid piuStyle.c.xsi
+# xsid piuText.c.xsi
+# xsid piuTimeline.c.xsi
+# xsid piuTransition.c.xsi
+# xsid commodettoBitmap.c.xsi
+# xsid commodettoParseBMP.c.xsi
+# xsid commodettoParseRLE.c.xsi
+# xsid commodettoPocoCore.c.xsi
+# xsid cfeBMF.c.xsi
+# xsid commodettoOutline.c.xsi
+# xsid commodettoPocoOutline.c.xsi
+# xsid piuShape.c.xsi
+# xsid piuQRCode.c.xsi
+# xsid stackchanvoice.c.xsi
+# xsid audio-bridge.c.xsi
+# xsid camera-bridge.c.xsi
+# xsid runtime-bitmap-port.c.xsi
+# xsid button-bridge.c.xsi
+# xsid screen.h.xsi
+# xsid modInstrumentation.h.xsi
+# xsid ft2build.h.xsi
+# xsid freetype.h.xsi
+# xsid ftadvanc.h.xsi
+# xsid ftbbox.h.xsi
+# xsid ftbdf.h.xsi
+# xsid ftbitmap.h.xsi
+# xsid ftbzip2.h.xsi
+# xsid ftcache.h.xsi
+# xsid ftchapters.h.xsi
+# xsid ftcid.h.xsi
+# xsid ftcolor.h.xsi
+# xsid ftdriver.h.xsi
+# xsid fterrdef.h.xsi
+# xsid fterrors.h.xsi
+# xsid ftfntfmt.h.xsi
+# xsid ftgasp.h.xsi
+# xsid ftglyph.h.xsi
+# xsid ftgxval.h.xsi
+# xsid ftgzip.h.xsi
+# xsid ftimage.h.xsi
+# xsid ftincrem.h.xsi
+# xsid ftlcdfil.h.xsi
+# xsid ftlist.h.xsi
+# xsid ftlogging.h.xsi
+# xsid ftlzw.h.xsi
+# xsid ftmac.h.xsi
+# xsid ftmm.h.xsi
+# xsid ftmodapi.h.xsi
+# xsid ftmoderr.h.xsi
+# xsid ftotval.h.xsi
+# xsid ftoutln.h.xsi
+# xsid ftpfr.h.xsi
+# xsid ftparams.h.xsi
+# xsid ftrender.h.xsi
+# xsid ftsizes.h.xsi
+# xsid ftsnames.h.xsi
+# xsid ftstroke.h.xsi
+# xsid ftsynth.h.xsi
+# xsid ftsystem.h.xsi
+# xsid fttrigon.h.xsi
+# xsid fttypes.h.xsi
+# xsid ftwinfnt.h.xsi
+# xsid otsvg.h.xsi
+# xsid t1tables.h.xsi
+# xsid ttnameid.h.xsi
+# xsid tttables.h.xsi
+# xsid tttags.h.xsi
+# xsid ftconfig.h.xsi
+# xsid ftheader.h.xsi
+# xsid ftmodule.h.xsi
+# xsid ftoption.h.xsi
+# xsid ftstdlib.h.xsi
+# xsid integer-types.h.xsi
+# xsid mac-support.h.xsi
+# xsid public-macros.h.xsi
+# xsid autohint.h.xsi
+# xsid cffotypes.h.xsi
+# xsid cfftypes.h.xsi
+# xsid compiler-macros.h.xsi
+# xsid ftcalc.h.xsi
+# xsid ftdebug.h.xsi
+# xsid ftdrv.h.xsi
+# xsid ftgloadr.h.xsi
+# xsid fthash.h.xsi
+# xsid ftmemory.h.xsi
+# xsid ftmmtypes.h.xsi
+# xsid ftobjs.h.xsi
+# xsid ftpsprop.h.xsi
+# xsid ftrfork.h.xsi
+# xsid ftserv.h.xsi
+# xsid ftstream.h.xsi
+# xsid fttrace.h.xsi
+# xsid ftvalid.h.xsi
+# xsid psaux.h.xsi
+# xsid pshints.h.xsi
+# xsid sfnt.h.xsi
+# xsid svginterface.h.xsi
+# xsid t1types.h.xsi
+# xsid tttypes.h.xsi
+# xsid wofftypes.h.xsi
+# xsid svbdf.h.xsi
+# xsid svcfftl.h.xsi
+# xsid svcid.h.xsi
+# xsid svfntfmt.h.xsi
+# xsid svgldict.h.xsi
+# xsid svgxval.h.xsi
+# xsid svkern.h.xsi
+# xsid svmetric.h.xsi
+# xsid svmm.h.xsi
+# xsid svotval.h.xsi
+# xsid svpfr.h.xsi
+# xsid svpostnm.h.xsi
+# xsid svprop.h.xsi
+# xsid svpscmap.h.xsi
+# xsid svpsinfo.h.xsi
+# xsid svsfnt.h.xsi
+# xsid svttcmap.h.xsi
+# xsid svtteng.h.xsi
+# xsid svttglyf.h.xsi
+# xsid svwinfnt.h.xsi
+# xsid ftgrays.h.xsi
+# xsid qrcodegen.h.xsi
+# xsid aq_synth.h.xsi
+# xsid aqk2r.h.xsi
+# xsid commodettoPocoBlit.h.xsi
+# xsid piuAll.h.xsi
+# xsid commodettoBitmap.h.xsi
+# xsid piuMC.h.xsi
+# xsid commodettoPocoOutline.h.xsi
+# copy stackchan-ja.aqd
+# png2bmp hands-outer-mask-alpha.bm4
+# png2bmp hands-inner-mask-alpha.bm4
+# png2bmp OpenSans-Regular-20-alpha.bmp
+# png2bmp OpenSans-Regular-16-alpha.bmp
+# png2bmp OpenSans-Regular-24-alpha.bmp
+# png2bmp horz-glyph-strip-alpha.bmp
+# png2bmp horz-bottom-row-alpha.bmp
+# png2bmp horz-7pt-28w-alpha.bmp
+# png2bmp horz-7pt-30w-alpha.bmp
+# png2bmp horz-7pt-32w-alpha.bmp
+# png2bmp horz-7pt-34w-alpha.bmp
+# png2bmp horz-7pt-36w-alpha.bmp
+# png2bmp horz-7pt-38w-alpha.bmp
+# png2bmp horz-7pt-40w-alpha.bmp
+# png2bmp microphone-alpha.bmp
+# png2bmp indicator-alpha.bmp
+# png2bmp bubble-alpha.bmp
+# png2bmp emoticon-alpha.bmp
+# png2bmp eye-alpha.bmp
+# png2bmp eyelid-alpha.bmp
+# png2bmp mouth-alpha.bmp
+# png2bmp stackchan-demo-head-normal-alpha.bmp
+# png2bmp stackchan-demo-eye-left-normal-alpha.bmp
+# png2bmp stackchan-demo-eye-right-normal-alpha.bmp
+# png2bmp stackchan-demo-mouth-normal-alpha.bmp
+# png2bmp stackchan-demo-hand-left-normal-alpha.bmp
+# png2bmp stackchan-demo-hand-right-normal-alpha.bmp
+# png2bmp stackchan-demo-head-happy-alpha.bmp
+# png2bmp stackchan-demo-eye-left-happy-alpha.bmp
+# png2bmp stackchan-demo-eye-right-happy-alpha.bmp
+# png2bmp stackchan-demo-mouth-happy-alpha.bmp
+# png2bmp stackchan-demo-hand-left-happy-alpha.bmp
+# png2bmp stackchan-demo-hand-right-happy-alpha.bmp
+# png2bmp stackchan-demo-head-sad-alpha.bmp
+# png2bmp stackchan-demo-eye-left-sad-alpha.bmp
+# png2bmp stackchan-demo-eye-right-sad-alpha.bmp
+# png2bmp stackchan-demo-mouth-sad-alpha.bmp
+# png2bmp stackchan-demo-hand-left-sad-alpha.bmp
+# png2bmp stackchan-demo-hand-right-sad-alpha.bmp
+# png2bmp stackchan-demo-head-angry-alpha.bmp
+# png2bmp stackchan-demo-eye-left-angry-alpha.bmp
+# png2bmp stackchan-demo-eye-right-angry-alpha.bmp
+# png2bmp stackchan-demo-mouth-angry-alpha.bmp
+# png2bmp stackchan-demo-hand-left-angry-alpha.bmp
+# png2bmp stackchan-demo-hand-right-angry-alpha.bmp
+# mclocal strings
+# fontbm k8x12-24
+# cc main.c
+# cp index.html
+# xsc main.xsb
+# xsc app-behavior.xsb
+# xsc app-behavior-resolver.xsb
+# xsc app-launch.xsb
+# xsc boot-network-recovery.xsb
+# xsc boot-services.xsb
+# xsc compose.xsb
+# xsc capabilities.xsb
+# xsc dock.xsb
+# xsc experimental-mini-app-loader.xsb
+# xsc experimental-mini-app-piu.xsb
+# xsc experimental-mini-app-registration.xsb
+# xsc setup-mode.xsb
+# xsc settings-status.xsb
+# xsc volume-preview.xsb
+# xsc runtime-audio.xsb
+# xsc runtime-camera.xsb
+# xsc runtime-context.xsb
+# xsc runtime-input.xsb
+# xsc runtime-lighting.xsb
+# xsc runtime-ui.xsb
+# xsc owned-resources.xsb
+# xsc stackchan-util.xsb
+# xsc mac-address.xsb
+# xsc jitome-face.xsb
+# xsc jitome-face/geometry.xsb
+# xsc app-controller.xsb
+# xsc mini-app.xsb
+# xsc chat-status-bar.xsb
+# xsc mini-app-launcher.xsb
+# xsc ui-controls.xsb
+# xsc ui-theme.xsb
+# xsc localization.xsb
+# xsc localization-core.xsb
+# xsc common-view.xsb
+# xsc face-view.xsb
+# xsc settings-view.xsb
+# xsc settings-network-list.xsb
+# xsc settings-status-model.xsb
+# xsc timezone-model.xsb
+# xsc volume-model.xsb
+# xsc face-state.xsb
+# xsc face-skin.xsb
+# xsc hand-sprites.xsb
+# xsc hands.xsb
+# xsc template.xsb
+# xsc motions/blink.xsb
+# xsc motions/breath.xsb
+# xsc motions/saccade.xsb
+# xsc drawer.xsb
+# xsc motions/types.xsb
+# xsc effects/speech-balloon.xsb
+# xsc effects/multirow-balloon.xsb
+# xsc effects/emoticon-pulse.xsb
+# xsc effects/emoticon.xsb
+# xsc effects/music-notes.xsb
+# xsc parts/image/atlas.xsb
+# xsc parts/image/eye-sprite.xsb
+# xsc parts/image/eyelid-sprite.xsb
+# xsc parts/image/image-avatar-face.xsb
+# xsc parts/image/image-avatar-pack.xsb
+# xsc parts/image/image-avatar-state.xsb
+# xsc parts/image/mouth-sprite.xsb
+# xsc parts/image/iris-sprite.xsb
+# xsc parts/dog/eyebrow.xsb
+# xsc parts/dog/mouth.xsb
+# xsc parts/dog/nose.xsb
+# xsc parts/eye.xsb
+# xsc parts/mouth.xsb
+# xsc parts/relaxed-eye.xsb
+# xsc parts/relaxed-mouth.xsb
+# xsc parts/shape-cache.xsb
+# xsc parts/shape-utils.xsb
+# xsc behaviors/face.xsb
+# xsc startup-splash.xsb
+# xsc camera-preview-utils.xsb
+# xsc audio-buffer.xsb
+# xsc wasm-audio-bridge-contract.xsb
+# xsc microphone.xsb
+# xsc camera.xsb
+# xsc loadPreference.xsb
+# xsc consts.xsb
+# xsc tts-remote.xsb
+# xsc motion-controller.xsb
+# xsc speaker.xsb
+# xsc network-state.xsb
+# xsc timezone-settings.xsb
+# xsc m5stackchan-servo-driver.xsb
+# xsc rs30x-driver.xsb
+# xsc network-service.xsb
+# xsc network-manager.xsb
+# xsc camera-preview.xsb
+# xsc tts-elevenlabs.xsb
+# xsc tts-local.xsb
+# xsc wasm-driver.xsb
+# xsc audio-in.xsb
+# xsc tts-openai.xsb
+# xsc none-driver.xsb
+# xsc local-peer-capability.xsb
+# xsc tts-voicevox-web.xsb
+# xsc tts-types.xsb
+# xsc stackchan-voice-wav.xsb
+# xsc tts-stackchan-voice.xsb
+# xsc tts-voicevox.xsb
+# xsc scservo-driver.xsb
+# xsc preference.xsb
+# xsc local-peer-types.xsb
+# xsc tts-stub.xsb
+# xsc fake-wifi-scan-results.xsb
+# xsc sg90-driver.xsb
+# xsc dynamixel-driver.xsb
+# xsc wifi-scan.xsb
+# xsc wifi-scan-types.xsb
+# xsc stored-wifi.xsb
+# xsc preference-server.xsb
+# xsc touch.xsb
+# xsc touch-panel.xsb
+# xsc touch-panel-gesture.xsb
+# xsc input-event.xsb
+# xsc imu.xsb
+# xsc imu-motion.xsb
+# xsc led.xsb
+# xsc py32-led.xsb
+# xsc app-default-behavior.xsb
+# xsc app-default-behavior/wasm/on-launch.xsb
+# xsc app-default-behavior/startup-choice.xsb
+# xsc app-default-behavior/on-context-created.xsb
+# compressbmf OpenSans-Regular-20.bf4
+# compressbmf OpenSans-Regular-16.bf4
+# compressbmf OpenSans-Regular-24.bf4
+# rle4encode horz-glyph-strip-alpha.bm4
+# rle4encode horz-bottom-row-alpha.bm4
+# rle4encode horz-7pt-28w-alpha.bm4
+# rle4encode horz-7pt-30w-alpha.bm4
+# rle4encode horz-7pt-32w-alpha.bm4
+# rle4encode horz-7pt-34w-alpha.bm4
+# rle4encode horz-7pt-36w-alpha.bm4
+# rle4encode horz-7pt-38w-alpha.bm4
+# rle4encode horz-7pt-40w-alpha.bm4
+# rle4encode microphone-alpha.bm4
+# rle4encode indicator-alpha.bm4
+# rle4encode bubble-alpha.bm4
+# rle4encode emoticon-alpha.bm4
+# rle4encode eye-alpha.bm4
+# rle4encode eyelid-alpha.bm4
+# rle4encode mouth-alpha.bm4
+# rle4encode stackchan-demo-head-normal-alpha.bm4
+# rle4encode stackchan-demo-eye-left-normal-alpha.bm4
+# rle4encode stackchan-demo-eye-right-normal-alpha.bm4
+# rle4encode stackchan-demo-mouth-normal-alpha.bm4
+# rle4encode stackchan-demo-hand-left-normal-alpha.bm4
+# rle4encode stackchan-demo-hand-right-normal-alpha.bm4
+# rle4encode stackchan-demo-head-happy-alpha.bm4
+# rle4encode stackchan-demo-eye-left-happy-alpha.bm4
+# rle4encode stackchan-demo-eye-right-happy-alpha.bm4
+# rle4encode stackchan-demo-mouth-happy-alpha.bm4
+# rle4encode stackchan-demo-hand-left-happy-alpha.bm4
+# rle4encode stackchan-demo-hand-right-happy-alpha.bm4
+# rle4encode stackchan-demo-head-sad-alpha.bm4
+# rle4encode stackchan-demo-eye-left-sad-alpha.bm4
+# rle4encode stackchan-demo-eye-right-sad-alpha.bm4
+# rle4encode stackchan-demo-mouth-sad-alpha.bm4
+# rle4encode stackchan-demo-hand-left-sad-alpha.bm4
+# rle4encode stackchan-demo-hand-right-sad-alpha.bm4
+# rle4encode stackchan-demo-head-angry-alpha.bm4
+# rle4encode stackchan-demo-eye-left-angry-alpha.bm4
+# rle4encode stackchan-demo-eye-right-angry-alpha.bm4
+# rle4encode stackchan-demo-mouth-angry-alpha.bm4
+# rle4encode stackchan-demo-hand-left-angry-alpha.bm4
+# rle4encode stackchan-demo-hand-right-angry-alpha.bm4
+# fontbm k8x12-12
+# fontbm StackchanCJK-12
+warning: glyph 10 not found.
+warning: glyph 127 not found.
+warning: glyph 227 not found.
+warning: glyph 19996 not found.
+warning: glyph 20260 not found.
+warning: glyph 20262 not found.
+warning: glyph 20848 not found.
+warning: glyph 20851 not found.
+warning: glyph 21160 not found.
+warning: glyph 21457 not found.
+warning: glyph 21527 not found.
+warning: glyph 21551 not found.
+warning: glyph 22270 not found.
+warning: glyph 22307 not found.
+warning: glyph 22791 not found.
+warning: glyph 22836 not found.
+warning: glyph 24320 not found.
+warning: glyph 24405 not found.
+warning: glyph 24503 not found.
+warning: glyph 25195 not found.
+warning: glyph 25668 not found.
+warning: glyph 26102 not found.
+warning: glyph 26174 not found.
+warning: glyph 27493 not found.
+warning: glyph 27905 not found.
+warning: glyph 27979 not found.
+warning: glyph 28909 not found.
+warning: glyph 29615 not found.
+warning: glyph 29616 not found.
+warning: glyph 30710 not found.
+warning: glyph 30721 not found.
+warning: glyph 30830 not found.
+warning: glyph 31163 not found.
+warning: glyph 31616 not found.
+warning: glyph 32422 not found.
+warning: glyph 32445 not found.
+warning: glyph 32447 not found.
+warning: glyph 32476 not found.
+warning: glyph 32490 not found.
+warning: glyph 32599 not found.
+warning: glyph 35774 not found.
+warning: glyph 35797 not found.
+warning: glyph 35821 not found.
+warning: glyph 36133 not found.
+warning: glyph 36830 not found.
+warning: glyph 38381 not found.
+warning: glyph 38388 not found.
+warning: glyph 39038 not found.
+warning: glyph 40657 not found.
+warning: glyph 65535 not found.
+warning: glyph 10 not found.
+# xsl modules
+### 2984 instances, 3514 keys, 103 colors, 0 holes
+### warning: consts: DOMAIN: not frozen
+### warning: runtime-context: StackchanRuntimeContext() StackchanRuntimeUI.prototype.showBalloon() sameBalloonOptions() BALLOON_OPTION_KEYS: not frozen
+### warning: runtime-context: StackchanRuntimeContext() StackchanRuntimeUI.prototype.showBalloon() SpeechBalloon() f() defaultOptions: not frozen
+### warning: runtime-context: StackchanRuntimeContext() StackchanRuntimeUI.prototype.showBalloon() SpeechBalloon() f() getTextStyle() textStyleCache: no const
+### warning: runtime-context: StackchanRuntimeContext() StackchanRuntimeUI.prototype.showBalloon() SpeechBalloon() f() getBubbleSkin() bubbleSkinCache: no const
+### warning: runtime-context: StackchanRuntimeContext() StackchanRuntimeUI.prototype.showBalloon() SpeechBalloon() f() getBubbleSkin() bubbleTexture: no const
+### warning: runtime-context: StackchanRuntimeContext() StackchanRuntimeUI.prototype.showBalloon() SpeechBalloon() f() getBubbleSkin() tailTextureRegions: not frozen
+### warning: runtime-context: StackchanRuntimeContext() StackchanRuntimeUI.prototype.showBalloon() SpeechBalloon() f() getBubbleSkin() tailTextureRegions.bottom-left: not frozen
+### warning: runtime-context: StackchanRuntimeContext() StackchanRuntimeUI.prototype.showBalloon() SpeechBalloon() f() getBubbleSkin() tailTextureRegions.bottom-right: not frozen
+### warning: runtime-context: StackchanRuntimeContext() StackchanRuntimeUI.prototype.showBalloon() SpeechBalloon() f() getBubbleSkin() tailTextureRegions.top-left: not frozen
+### warning: runtime-context: StackchanRuntimeContext() StackchanRuntimeUI.prototype.showBalloon() SpeechBalloon() f() getBubbleSkin() tailTextureRegions.top-right: not frozen
+### warning: runtime-context: StackchanRuntimeContext() StackchanRuntimeCamera() NULL_CAMERA: not frozen
+### warning: runtime-context: StackchanRuntimeContext() createI18nCapability() currentLocale: no const
+### warning: runtime-context: StackchanRuntimeContext() createI18nCapability() localizeForContext() getModLocals() hasModLocals: no const
+### warning: runtime-context: StackchanRuntimeContext() createI18nCapability() localizeForContext() getModLocals() modLocals: no const
+### warning: runtime-context: StackchanRuntimeContext() createI18nCapability() localizeForContext() getHostLocals() hostLocals: no const
+### warning: app-default-behavior: default: not frozen
+### warning: app-default-behavior: default.onLaunch() showStartupSplash() uiStyles() cached: no const
+### warning: app-default-behavior: default.onLaunch() showStartupSplash() uiStyles() cachedFont: no const
+### warning: app-default-behavior: default.onLaunch() showStartupSplash() uiStyles() UI.colors: not frozen
+### warning: app-default-behavior: default.onLaunch() showStartupSplash() currentMessageLabel: no const
+### warning: app-default-behavior: default.onLaunch() showStartupSplash() currentActionArea: no const
+### warning: app-default-behavior: default.onLaunch() startSetupMode() stopStoredWiFiConnection() stopNetworkConnection() currentNetworkService: no const
+### warning: app-default-behavior: default.onLaunch() startSetupMode() clearStoredWiFiCredentials() Preference: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() clearStoredWiFiCredentials() Preference.get() values: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[0]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[1]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[1].create() updateSettingsNetworks() getRowPressedSkin() rowPressedSkin: no const
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[1].create() updateSettingsNetworks() getNetworkStyle() networkStyle: no const
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[1].create() updateSettingsNetworks() getNetworkStyle() networkStyleFont: no const
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[2]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[2].create() getKeyboardFieldSkinTemplate() keyboardFieldSkinTemplate: no const
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[2].create() getKeyboardFieldStyleTemplate() keyboardFieldStyleTemplate: no const
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[3]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[4]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[0]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[1]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[2]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[3]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[4]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[5]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[6]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[7]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[8]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[9]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[10]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[11]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[12]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[13]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[14]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[15]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[5].create() TIMEZONE_PRESETS[16]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() settingsViews[6]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() scanWiFiNetworks() getFakeWiFiScanResults() FAKE_WIFI_SCAN_RESULTS[0]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() scanWiFiNetworks() getFakeWiFiScanResults() FAKE_WIFI_SCAN_RESULTS[1]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() scanWiFiNetworks() getFakeWiFiScanResults() FAKE_WIFI_SCAN_RESULTS[2]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() scanWiFiNetworks() getFakeWiFiScanResults() FAKE_WIFI_SCAN_RESULTS[3]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() scanWiFiNetworks() getFakeWiFiScanResults() FAKE_WIFI_SCAN_RESULTS[4]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() scanWiFiNetworks() getFakeWiFiScanResults() FAKE_WIFI_SCAN_RESULTS[5]: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() loadPreferenceConfig() PREFERENCE_DOMAINS: not frozen
+### warning: app-default-behavior: default.onLaunch() startSetupMode() loadPreferenceConfig() loadPreferences() loadModConfig() modConfig: no const
+### warning: app-default-behavior: default.onContextCreated() Emoticon() f() Heart() f() SpritePulseBehavior.prototype.onDraw() drawSpriteCell() getEmoticonTexture() emoticonTexture: no const
+### warning: app-default-behavior: default.onContextCreated() Emoticon() f() Heart() f() SpritePulseBehavior.prototype.onDraw() drawSpriteCell() colorString() colorStringCache: no const
+### warning: app-default-behavior: default.onContextCreated() isJitomeFaceSupported() reusableOutlineSupport: no const
+### warning: app-default-behavior: default.onContextCreated() DogFace() f() Eye() f() Iris() f() getFillSkin() fillSkinCache: no const
+### warning: app-default-behavior: default.onContextCreated() DogFace() f() Eye() f() Iris() f() getIrisFillOutline() irisOutlineCache: no const
+### warning: app-default-behavior: default.onContextCreated() DogFace() f() Eye() f() Eyelid() f() getEyelidFillOutline() eyelidOutlineCache: no const
+### warning: app-default-behavior: default.onContextCreated() DogFace() f() DogEyebrow() f() getFillStrokeSkin() fillStrokeSkinCache: no const
+### warning: app-default-behavior: default.onContextCreated() DogFace() f() DogEyebrow() f() getDogEyebrowFillOutline() dogEyebrowOutlineCache: no const
+### warning: app-default-behavior: default.onContextCreated() DogFace() f() DogMouth() f() getStrokeSkin() strokeSkinCache: no const
+### warning: app-default-behavior: default.onContextCreated() DogFace() f() DogMouth() f() getDogMouthStrokeOutline() dogMouthOutlineCache: no const
+### warning: app-default-behavior: default.onContextCreated() DogFace() f() DogNose() f() getDogNoseFillOutline() dogNoseOutlineCache: no const
+### warning: app-default-behavior: default.onContextCreated() createJitomeFace() JitomeBehavior() 0() JitomeGeometry() 0() COUNTS: not frozen
+### warning: app-default-behavior: default.onContextCreated() createJitomeFace() JitomeBehavior.prototype.createPath() TOPOLOGY: not frozen
+### warning: app-default-behavior: default.onContextCreated() createJitomeFace() JitomeBehavior.prototype.transformOutline() OUTLINE_PARTS: not frozen
+### warning: app-default-behavior: default.onContextCreated() SimpleFace() f() Mouth() f() MouthBehavior.prototype.onDraw() colorString() colorStringCache: no const
+### warning: app-default-behavior: default.onContextCreated() LEFT: not frozen
+### warning: app-default-behavior: default.onContextCreated() RIGHT: not frozen
+### warning: app-default-behavior: default.onContextCreated() DOWN: not frozen
+### warning: app-default-behavior: default.onContextCreated() UP: not frozen
+### warning: app-default-behavior: default.onContextCreated() FORWARD: not frozen
+### warning: hands: HAND_ANIMATION_NAMES: not frozen
+### warning: hands: Hands() f() HandsBehavior() 0() 0() handDirectionFromRotationUnits() HAND_DIRECTIONS: not frozen
+### warning: hands: Hands() f() HandsBehavior() 0() 0() getOuterTexture() outerTexture: no const
+### warning: hands: Hands() f() HandsBehavior() 0() 0() getInnerTexture() innerTexture: no const
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[0]: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[0].hands: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[0].hands.left: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[0].hands.left.pose: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[0].hands.left.pose.position: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[0].hands.left.pose.rotation: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[0].hands.right: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[0].hands.right.pose: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[0].hands.right.pose.position: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[0].hands.right.pose.rotation: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[1]: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[1].hands: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[1].hands.left: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[1].hands.left.pose: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[1].hands.left.pose.position: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[1].hands.left.pose.rotation: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[1].hands.right: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[1].hands.right.pose: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[1].hands.right.pose.position: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[1].hands.right.pose.rotation: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[2]: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[2].hands: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[2].hands.left: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[2].hands.left.pose: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[2].hands.left.pose.position: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[2].hands.left.pose.rotation: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[2].hands.right: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[2].hands.right.pose: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[2].hands.right.pose.position: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.rock-paper-scissors.frames[2].hands.right.pose.rotation: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[0]: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[0].hands: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[0].hands.left: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[0].hands.left.pose: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[0].hands.left.pose.position: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[0].hands.left.pose.rotation: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[0].hands.right: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[0].hands.right.pose: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[0].hands.right.pose.position: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[0].hands.right.pose.rotation: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[1]: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[1].hands: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[1].hands.left: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[1].hands.left.pose: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[1].hands.left.pose.position: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[1].hands.left.pose.rotation: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[1].hands.right: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[1].hands.right.pose: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[1].hands.right.pose.position: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.clap.frames[1].hands.right.pose.rotation: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking.frames: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking.frames[0]: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking.frames[0].hands: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking.frames[0].hands.right: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking.frames[0].hands.right.pose: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking.frames[0].hands.right.pose.position: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking.frames[0].hands.right.pose.rotation: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking.frames[1]: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking.frames[1].hands: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking.frames[1].hands.right: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking.frames[1].hands.right.pose: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking.frames[1].hands.right.pose.position: not frozen
+### warning: hands: Hands() f() HandsBehavior.prototype.onHandAnimationChanged() HAND_ANIMATION_SPECS.thinking.frames[1].hands.right.pose.rotation: not frozen
+### warning: globalThis.__stackchanWasmAudioBridge: not frozen
+### warning: globalThis.__stackchanWasmCameraBridge: not frozen
+# cc mc.xs.c
+# cc Resource.c.o
+# cc screen.c.o
+# cc modTime.c.o
+# cc timer.c.o
+# cc modInstrumentation.c.o
+# cc modules.c.o
+# cc crc.c.o
+# cc easing.c.o
+# cc piuDie.c.o
+# cc piuFont.c.o
+# cc piuRegion.c.o
+# cc piuTexture.c.o
+# cc piuView.c.o
+# cc ftcalc.c.o
+# cc ftdebug.c.o
+# cc ftoutln.c.o
+# cc ftstroke.c.o
+# cc fttrigon.c.o
+# cc ftutil.c.o
+# cc ftgrays.c.o
+# cc pocoqrcode.c.o
+# cc qrcode.c.o
+# cc qrcodegen.c.o
+# cc aq_synth.c.o
+# cc aqk2r_compat.c.o
+# cc structuredClone.c.o
+# cc deepEqual.c.o
+# cc commodettoPocoBlit.c.o
+# cc piuApplication.c.o
+# cc piuBehavior.c.o
+# cc piuColor.c.o
+# cc piuColumn.c.o
+# cc piuContainer.c.o
+# cc piuContent.c.o
+# cc piuLabel.c.o
+# cc piuLayout.c.o
+# cc piuLocals.c.o
+# cc piuPort.c.o
+# cc piuRectangle.c.o
+# cc piuRow.c.o
+# cc piuScroller.c.o
+# cc piuSkin.c.o
+# cc piuStyle.c.o
+# cc piuText.c.o
+# cc piuTimeline.c.o
+# cc piuTransition.c.o
+# cc commodettoBitmap.c.o
+# cc commodettoParseBMP.c.o
+# cc commodettoParseRLE.c.o
+# cc commodettoPocoCore.c.o
+# cc cfeBMF.c.o
+# cc commodettoOutline.c.o
+# cc commodettoPocoOutline.c.o
+# cc piuShape.c.o
+# cc piuQRCode.c.o
+# cc stackchanvoice.c.o
+# cc audio-bridge.c.o
+# cc camera-bridge.c.o
+# cc runtime-bitmap-port.c.o
+# cc button-bridge.c.o
+In file included from /private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/modules/commodetto/outline/commodettoPocoOutline.c:11:
+In file included from /private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/modules/commodetto/freetype/include/freetype/config/ftconfig.h:41:
+/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/modules/commodetto/freetype/include/freetype/config/ftoption.h:1122:10: warning: 'false' macro redefined [-Wmacro-redefined]
+ 1122 |         #define false 0
+      |                 ^
+/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/modules/commodetto/commodettoPoco.h:25:10: note: previous definition is here
+   25 |         #define false (0)
+      |                 ^
+1 warning generated.
+In file included from /private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/modules/piu/MC/outline/piuShape.c:22:
+In file included from /private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/modules/commodetto/freetype/include/freetype/freetype.h:24:
+In file included from /private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/modules/commodetto/freetype/include/freetype/config/ftconfig.h:41:
+/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/modules/commodetto/freetype/include/freetype/config/ftoption.h:1122:10: warning: 'false' macro redefined [-Wmacro-redefined]
+ 1122 |         #define false 0
+      |                 ^
+/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/modules/commodetto/commodettoPoco.h:25:10: note: previous definition is here
+   25 |         #define false (0)
+      |                 ^
+1 warning generated.
+# mcrez resources
+Total resource size: 2728451 bytes
+# cc mc.resources.c
+# cc mc.js
+copied mc.js / mc.wasm to web/simulator/
+{
+  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "sdkPatch": {
+    "baseCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+    "file": "firmware/host/modules/util/stackchan-util.ts",
+    "patchSha256": "af4d44e0582ca323d882d1cf0073d5f270c573d38c6c61b2d0dac01b8fec3d4d",
+    "originalSha256": "d28ad77de7fa759d82167062d67da17f07db422e94b45c8fedc7b6a4b724a141",
+    "patchedSha256": "2b09d340448405d261736e740e98fcd82cbe8de4cae7f2e80dc28cf839024916"
+  },
+  "moddableVersion": "9.5.0",
+  "emccVersion": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 5.0.1 (8c5f43157a3f069ade75876e23061330521eabde)",
+  "moddable": {
+    "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable",
+    "sourceCommit": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",
+    "build": "clean release xsc/xsid/xsl/tools from verified checkout",
+    "tools": {
+      "mcconfig": {
+        "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/build/bin/mac/release/mcconfig",
+        "sha256": "2abb06a6305abbe09d6ed0eb4df23f08c2f474910692f4146d5c826627d23ba4"
+      },
+      "xsc": {
+        "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/build/bin/mac/release/xsc",
+        "sha256": "a2a6b24b2de6c88d0cdd9adcdd8819dafb0a922e478160df7f3617bef9b1383c"
+      },
+      "xsid": {
+        "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/build/bin/mac/release/xsid",
+        "sha256": "4d3536b7c46c244f32d6564b88e3be544c6ebaedbd27aa993f4b02dbff21a173"
+      },
+      "xsl": {
+        "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/build/bin/mac/release/xsl",
+        "sha256": "383a346238cb4b297085d3a09bc3c312e02ae0ac6a832a7692858c8de284e1c5"
+      },
+      "tools": {
+        "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/build/bin/mac/release/tools",
+        "sha256": "c3b70151c9cc72939d14c42feb47b841c9eae180a156e84813d2629b282cf5f1"
+      }
+    }
+  },
+  "emscripten": {
+    "emsdkPath": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/emsdk",
+    "emsdkCommit": "14c18b569f55138fe4963924162244251f454fb0",
+    "release": "bf32ae8b61ac8efeb7eca01b54c8307f992724f7",
+    "upstreamCommit": "8c5f43157a3f069ade75876e23061330521eabde",
+    "installedTreeSha256": "42ce84c65e00be2818a7733704b9f0217f4c3ee9c7f2bb3366293f60c8e47295",
+    "emccPath": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/emsdk/upstream/emscripten/emcc",
+    "emccSha256": "498eba9b6aacffca1c358ba340fc7b37015d7867cb211c7f2d45784ee9310f03"
+  },
+  "fontbm": {
+    "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/fontbm/build/fontbm",
+    "sourceCommit": "7677b908523e909679f67cd5c170396bb9def1aa",
+    "sha256": "2389a3daae8b9af5c3747cb2fbfd34db3fcd786ccec885878addd22bbcd07012"
+  },
+  "sha256": {
+    "mc.js": "20ce522b60a9e99d445b9ffaf622ab20438982c31b86e435901c9fc3d2fcc862",
+    "mc.wasm": "9d32453b68ad0a4d04fbae788a319fd333ce9787b76460624cc7b6274be884d3"
+  }
+}
+
+> coami-e020-web@0.1.0 mod
+> node scripts/build-mod.mjs
+
+> mcrun -d -p wasm -o /build /mod/coami-e020/manifest.json
+### -p wasm
+> xsc -d -e /mod/coami-e020/mod.js -o /build/tmp/wasm/debug/coami-e020/files -r mod
+> xsc -d -e /mod/coami-e020/gaze-control.js -o /build/tmp/wasm/debug/coami-e020/files -r gaze-control
+> xsc -d -e /build/tmp/wasm/debug/coami-e020/check.js -o /build/tmp/wasm/debug/coami-e020/files -r check
+> xsa -b /build/tmp/wasm/debug/coami-e020/files -n tech.moddable.coami-e020 -o /build/bin/wasm/debug/coami-e020 /build/tmp/wasm/debug/coami-e020/files/mod.xsb /build/tmp/wasm/debug/coami-e020/files/gaze-control.xsb /build/tmp/wasm/debug/coami-e020/files/check.xsb
+archive: /build/bin/wasm/debug/coami-e020/mc.xsa
+E020 MOD: 4360 bytes, sha256=57303cae1ac19b4c5a6d558319176a75bc2661ade2defb8698cd79f764887fa9

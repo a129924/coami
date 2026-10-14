@@ -1,0 +1,21 @@
+{
+  "index.html": "c54a59b3e0dc8c1fa1c0c0f4f2ecbea704445b92064f19bb244e8ae0969e4e73",
+  "src/main.ts": "b404dd36bd8cfefe380c74debad7cadc8d65cd8c7a1300e5931065cb86b8c99a",
+  "src/ledger.ts": "0300e8e7ea31f0e2f54ca1087d95c16182bb178560baa53ab4551ad908b6950a",
+  "src/startup.ts": "92abaa4af29c533e3d3c0f2a5de7ea4989fdde53233e8179196a181d92df3128",
+  "src/watchdogs.ts": "53519546147ebdf22db02894d2d74f747a40202dc69ef879458f4ac03e1d96b7",
+  "src/style.css": "b733772f3e65a9089b8c926550a50a8275844ffcbe418bb6bf7fc7bfd664b1d9",
+  "src/mod-pin.json": "7a9174ed845504d2d7e779d52317495c3cb47a147750635f8b9229cb62c28872",
+  "src/runtime-pin.json": "d7491d3ebee797fc84cf63de2352814350575a643f8babed062f46d9f73bb444",
+  "scripts/host-pin.json": "98516a74899096a0d616547dad75414f9fcf4cfaa4621c6ffa2abc9b7b68a633",
+  "vite.config.ts": "4a1de06cc8424a9b6207c3fe2a986fd6ad62a7cb65a4606908859d8f6b547edb",
+  "scripts/harness-inputs.mjs": "e6ffbe3b7c2a18c50616eca0c77c0b05c7e4a61901d82bc56fa151f788da0e0d",
+  "scripts/public-inputs.mjs": "e60eb707c1eb5faa9df9b5a80aa892aa77f6607f5703ad671941046445f67170",
+  "scripts/host-inputs.mjs": "4877da27e64e2eb18931ce64f4b5ca527c41af8af7a5f0597bb1a4464bd0532e",
+  "package.json": "d1caa42f57085f151fe76d6634c04fa20243c2f9438fd6ab5f3496eb9b994f74",
+  "package-lock.json": "7a8caeda7126c1f4c71a81d93f185ca927b8c99d039e750bbbbb36a8c83bbfb6",
+  "tsconfig.json": "6053cb4cc33ba9ac82e6f98af2a8217313d2a0eddd2bef4932c4139303e7c304",
+  "src/stability.ts": "a64309103978bf7c9d14f440b93cd4181f370b8f8c0fdba16b9f9194ffd77c2d",
+  "src/provenance-pin.json": "94c1a59e8a57eaffba8526df1a4e43e231ccfd739e3be919ab0a506650d6f2dc",
+  "src/runtime-provenance.ts": "381252219e2d79dff6f810251d9e6ad109bcf6443ce5987c863c4c0b509d538a"
+}

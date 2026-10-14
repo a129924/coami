@@ -1,0 +1,16 @@
+
+> coami-e020-web@0.1.0 test:scripts
+> node --test scripts/build-safety.test.mjs
+
+✔ restoring verified cache removes extra stale libraries (8.2595ms)
+✔ a failed rebuild cannot leave a matching stale MOD pair or compiled modules (3.338541ms)
+✔ vendor gate rejects wrong checkout, gitlink or dirty files (0.243458ms)
+✔ Moddable rebuilding removes old executables and objects before invoking make (3.982875ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 93.809583

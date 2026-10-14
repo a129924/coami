@@ -1,0 +1,11 @@
+--- a/firmware/host/modules/util/stackchan-util.ts
++++ b/firmware/host/modules/util/stackchan-util.ts
+@@ -216,7 +216,7 @@
+   const sinY = Math.sin(inverseYaw)
+   const yawX = x * cosY - y * sinY
+   const yawY = x * sinY + y * cosY
+-  const inversePitch = -bodyRotation.p
++  const inversePitch = bodyRotation.p
+   const cosP = Math.cos(inversePitch)
+   const sinP = Math.sin(inversePitch)
+   target[0] = yawX * cosP - z * sinP

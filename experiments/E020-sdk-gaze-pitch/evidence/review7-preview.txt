@@ -1,0 +1,4 @@
+PASS: actual clean Vite preview served committed snapshot bytes.
+PASS: replacing dist JS, matching harness provenance and runtime provenance after startup did not alter HTTP responses.
+PASS: forged runtime provenance with unchanged output hashes was rejected before startup.
+No browser UI/human direction run performed.

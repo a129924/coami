@@ -1,0 +1,6 @@
+error when starting preview server:
+Error: Reviewed production bundle provenance mismatch
+    at verifyProductionBundle (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/node_modules/.vite-temp/vite.config.ts.timestamp-1791957853642-8daf967b7855b.mjs:58:226)
+    at async BasicMinimalPluginContext.configurePreviewServer (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/node_modules/.vite-temp/vite.config.ts.timestamp-1791957853642-8daf967b7855b.mjs:80:4)
+    at async preview (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/node_modules/vite/dist/node/chunks/node.js:35751:91)
+    at async CAC.<anonymous> (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/node_modules/vite/dist/node/cli.js:807:18)

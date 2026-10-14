@@ -1,0 +1,12 @@
+{
+  "kind": "single-commit full tracked-tree squash fixture; copied verified runtime and dependencies; no WASM rebuild/browser UI/human run",
+  "checkout": "/private/tmp/e020 squash review10 j7laf8tq",
+  "squashCommit": "d36b5335e1c74077fca70bca3d928a8447dcd615",
+  "commitCount": 1,
+  "originalSourceObjectPresent": false,
+  "reviewedSourceReference": "b97f3bd1b3599ef160d010f87667abf3d01f4d90",
+  "sourceManifestSha256": "85d581ba9e02b3597641a0673d1f03f19f5d9935355ccdeb59970c19f7751028",
+  "cleanBuild": "PASS",
+  "exactBundleHashes": "PASS",
+  "actualPreviewHttp": "PASS"
+}

@@ -1,0 +1,51 @@
+
+> coami-e020-web@0.1.0 test:scripts
+> node --test scripts/build-safety.test.mjs scripts/tool-inputs.test.mjs scripts/public-inputs.test.mjs scripts/harness-inputs.test.mjs
+
+✔ restoring verified cache removes extra stale libraries (6.070875ms)
+✔ a failed rebuild cannot leave a matching stale MOD pair or compiled modules (2.413417ms)
+✔ vendor gate rejects wrong checkout, gitlink or dirty files (0.177834ms)
+✔ Moddable rebuilding removes old executables and objects before invoking make (2.943667ms)
+file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/scripts/harness-inputs.test.mjs:8
+import {verifyHarnessInputs,verifyProductionBundle,snapshotMiddleware} from './harness-inputs.mjs'
+                                                   ^^^^^^^^^^^^^^^^^^
+SyntaxError: The requested module './harness-inputs.mjs' does not provide an export named 'snapshotMiddleware'
+    at #asyncInstantiate (node:internal/modules/esm/module_job:463:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:561:5)
+    at async node:internal/modules/esm/loader:650:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:105:5)
+
+Node.js v26.10.0
+✖ scripts/harness-inputs.test.mjs (67.133042ms)
+✖ current source edits, forged provenance and modified served mesh are rejected (59.137417ms)
+✔ controlled compiler config ignores hostile config and tool overrides (3403.140583ms)
+✔ fontbm clean rebuild discards the binary and CMake cache before configure (2.157083ms)
+✔ staged simulator host is authenticated without reading the live vendor (7.339291ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 7
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3496.654208
+
+✖ failing tests:
+
+test at scripts/harness-inputs.test.mjs:1:1
+✖ scripts/harness-inputs.test.mjs (67.133042ms)
+  'test failed'
+
+test at scripts/public-inputs.test.mjs:8:1
+✖ current source edits, forged provenance and modified served mesh are rejected (59.137417ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/scripts/public-inputs.test.mjs:15:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /runtime provenance mismatch/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

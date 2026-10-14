@@ -1,0 +1,57 @@
+{
+  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "sdkPatch": {
+    "baseCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+    "file": "firmware/host/modules/util/stackchan-util.ts",
+    "patchSha256": "af4d44e0582ca323d882d1cf0073d5f270c573d38c6c61b2d0dac01b8fec3d4d",
+    "originalSha256": "d28ad77de7fa759d82167062d67da17f07db422e94b45c8fedc7b6a4b724a141",
+    "patchedSha256": "2b09d340448405d261736e740e98fcd82cbe8de4cae7f2e80dc28cf839024916"
+  },
+  "moddableVersion": "9.5.0",
+  "emccVersion": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 5.0.1 (8c5f43157a3f069ade75876e23061330521eabde)",
+  "moddable": {
+    "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable",
+    "sourceCommit": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",
+    "build": "clean release xsc/xsid/xsl/tools from verified checkout",
+    "tools": {
+      "mcconfig": {
+        "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/build/bin/mac/release/mcconfig",
+        "sha256": "2abb06a6305abbe09d6ed0eb4df23f08c2f474910692f4146d5c826627d23ba4"
+      },
+      "xsc": {
+        "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/build/bin/mac/release/xsc",
+        "sha256": "a2a6b24b2de6c88d0cdd9adcdd8819dafb0a922e478160df7f3617bef9b1383c"
+      },
+      "xsid": {
+        "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/build/bin/mac/release/xsid",
+        "sha256": "4d3536b7c46c244f32d6564b88e3be544c6ebaedbd27aa993f4b02dbff21a173"
+      },
+      "xsl": {
+        "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/build/bin/mac/release/xsl",
+        "sha256": "383a346238cb4b297085d3a09bc3c312e02ae0ac6a832a7692858c8de284e1c5"
+      },
+      "tools": {
+        "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/moddable/build/bin/mac/release/tools",
+        "sha256": "c3b70151c9cc72939d14c42feb47b841c9eae180a156e84813d2629b282cf5f1"
+      }
+    }
+  },
+  "emscripten": {
+    "emsdkPath": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/emsdk",
+    "emsdkCommit": "14c18b569f55138fe4963924162244251f454fb0",
+    "release": "bf32ae8b61ac8efeb7eca01b54c8307f992724f7",
+    "upstreamCommit": "8c5f43157a3f069ade75876e23061330521eabde",
+    "installedTreeSha256": "42ce84c65e00be2818a7733704b9f0217f4c3ee9c7f2bb3366293f60c8e47295",
+    "emccPath": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/emsdk/upstream/emscripten/emcc",
+    "emccSha256": "498eba9b6aacffca1c358ba340fc7b37015d7867cb211c7f2d45784ee9310f03"
+  },
+  "fontbm": {
+    "path": "/private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/generated/toolchain/fontbm/build/fontbm",
+    "sourceCommit": "7677b908523e909679f67cd5c170396bb9def1aa",
+    "sha256": "2389a3daae8b9af5c3747cb2fbfd34db3fcd786ccec885878addd22bbcd07012"
+  },
+  "sha256": {
+    "mc.js": "20ce522b60a9e99d445b9ffaf622ab20438982c31b86e435901c9fc3d2fcc862",
+    "mc.wasm": "9d32453b68ad0a4d04fbae788a319fd333ce9787b76460624cc7b6274be884d3"
+  }
+}

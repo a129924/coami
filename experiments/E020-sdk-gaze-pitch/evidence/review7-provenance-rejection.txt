@@ -1,0 +1,7 @@
+error when starting preview server:
+Error: Reviewed runtime provenance mismatch
+    at verifyPublicInputs (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/node_modules/.vite-temp/vite.config.ts.timestamp-1791958717276-0b1114058248a.mjs:20:119)
+    at async createPreviewSnapshot (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/node_modules/.vite-temp/vite.config.ts.timestamp-1791958717276-0b1114058248a.mjs:103:2)
+    at async BasicMinimalPluginContext.configurePreviewServer (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/node_modules/.vite-temp/vite.config.ts.timestamp-1791958717276-0b1114058248a.mjs:156:18)
+    at async preview (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/node_modules/vite/dist/node/chunks/node.js:35751:91)
+    at async CAC.<anonymous> (file:///private/tmp/coami-e020-sdk-gaze-pitch/experiments/E020-sdk-gaze-pitch/web/node_modules/vite/dist/node/cli.js:807:18)
