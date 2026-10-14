@@ -557,6 +557,18 @@ source = { registry = "https://pypi.org/simple" }
                 "UNEXPECTED_CAPTURED_BODY",
             )
 
+    def test_valid_analysis_requires_pinned_sdk_acceptance(self) -> None:
+        case = self.cases[0]
+        raw = response().replace(b'"input_tokens":10', b'"input_tokens":"bad"')
+        parsed = e.parse_answer(raw)
+        self.assertEqual(parsed["status"], "VALID")
+        self.assertTrue(evidence.sdk_rejects(raw, case, self.question))
+        row = {**parsed, "model": e.MODEL}
+        self.assertEqual(
+            evidence.response_gap(row, raw, case, self.question),
+            "RAW_ANALYSIS_MISMATCH",
+        )
+
     def test_group_summary_does_not_count_missing_as_correct(self) -> None:
         rows = []
         for case in self.cases:
@@ -950,6 +962,56 @@ source = { registry = "https://pypi.org/simple" }
             )
             self.assertEqual(accepted_with_shim.returncode, 0)
             self.assertFalse(shim_marker.exists())
+            for invalid_authorization in (
+                b"[]\n",
+                b"null\n",
+                b"[" * 1200 + b"0" + b"]" * 1200,
+            ):
+                with self.subTest(invalid_authorization=invalid_authorization[:8]):
+                    auth.write_bytes(invalid_authorization)
+                    subprocess.run(
+                        ["git", "-C", str(root), "add", "authorization.json"],
+                        check=True,
+                    )
+                    subprocess.run(
+                        [
+                            "git",
+                            "-C",
+                            str(root),
+                            "-c",
+                            "user.name=Test",
+                            "-c",
+                            "user.email=test@example.invalid",
+                            "commit",
+                            "-qm",
+                            "invalid authorization",
+                        ],
+                        check=True,
+                    )
+                    rejected = subprocess.run(
+                        [
+                            sys.executable,
+                            "-I",
+                            "-S",
+                            "-B",
+                            "-c",
+                            bootstrap,
+                            "--live",
+                            "--live-authorization",
+                            "authorization.json",
+                            "--credential-file",
+                            "credential.env",
+                        ],
+                        cwd=root,
+                        capture_output=True,
+                        text=True,
+                        check=False,
+                    )
+                    self.assertEqual(rejected.returncode, 2)
+                    self.assertIn(
+                        "E013 BLOCKED RUNNER_SOURCE_UNVERIFIED", rejected.stdout
+                    )
+                    self.assertNotIn("Traceback", rejected.stderr)
 
     def test_documented_bootstrap_authenticates_evidence_tool(self) -> None:
         documentation = (e.TOPIC / "README.md").read_text()
@@ -1862,6 +1924,47 @@ source = { registry = "https://pypi.org/simple" }
                     read_sources.call_args.args[2],
                     load_freeze.call_args.kwargs["source_snapshots"],
                 )
+            local_manifest = e.read_object(restricted / "manifest.json")
+            missing_locator = dict(local_manifest)
+            missing_locator.pop("runner_source_path")
+            self.assertIn(
+                "RUNNER_SOURCE_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_local_run(restricted, missing_locator)[
+                        "gaps"
+                    ]
+                },
+            )
+            changed_runner_hash = dict(local_manifest)
+            changed_runner_hash["runner_sha256"] = "0" * 64
+            self.assertEqual(
+                evidence.authorization_gap(restricted, changed_runner_hash),
+                "AUTHORIZATION_MISMATCH",
+            )
+            original_checked_git = e.checked_git
+            policy_revision = [
+                "show",
+                f"{authorization_revision}:{e.POLICY_RELATIVE.as_posix()}",
+            ]
+
+            def replace_runner_after_snapshot(
+                checkout: Path, arguments: list[str]
+            ) -> bytes:
+                result = original_checked_git(checkout, arguments)
+                if arguments == policy_revision:
+                    (restricted / "runner.py").write_bytes(b"changed after snapshot")
+                return result
+
+            try:
+                with patch.object(
+                    e, "checked_git", side_effect=replace_runner_after_snapshot
+                ):
+                    self.assertIsNone(
+                        evidence.authorization_gap(restricted, local_manifest)
+                    )
+            finally:
+                (restricted / "runner.py").write_bytes(runner_source)
             public_manifest = e.read_object(output / "manifest.json")
             self.assertNotIn("store_root", public_manifest)
             self.assertEqual(

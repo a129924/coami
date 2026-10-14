@@ -689,16 +689,19 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
             return "AUTHORIZATION_COMMIT_MISMATCH"
         if committed != data:
             return "AUTHORIZATION_COMMIT_MISMATCH"
-        revision_inputs = (
-            (e.RUNNER_RELATIVE, (root / "runner.py").read_bytes()),
-            (e.LOCK_RELATIVE, (root / "uv.lock").read_bytes()),
+        revision_inputs = dict(
             (
-                e.FREEZE_RELATIVE,
-                (e.ROOT / e.FREEZE_RELATIVE).read_bytes(),
-            ),
-            (e.POLICY_RELATIVE, policy_snapshot(root, manifest)),
+                (e.RUNNER_RELATIVE, (root / "runner.py").read_bytes()),
+                (e.LOCK_RELATIVE, (root / "uv.lock").read_bytes()),
+                (
+                    e.FREEZE_RELATIVE,
+                    (e.ROOT / e.FREEZE_RELATIVE).read_bytes(),
+                ),
+                (e.POLICY_RELATIVE, policy_snapshot(root, manifest)),
+            )
         )
-        for relative, snapshot in revision_inputs:
+        digest_snapshot = (root / "sdk-code-digests.json").read_bytes()
+        for relative, snapshot in revision_inputs.items():
             try:
                 committed_input = e.checked_git(
                     e.ROOT, ["show", f"{revision}:{relative.as_posix()}"]
@@ -726,19 +729,18 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
                 document["scope"] != "one E013 75-case Context Sufficiency run",
                 document["model"] != e.MODEL,
                 document["freeze_attestation_sha256"]
-                != e.sha(
-                    (e.ORACLE / "versions/v1/freeze-attestation.json").read_bytes()
-                ),
+                != e.sha(revision_inputs[e.FREEZE_RELATIVE]),
                 document["store_policy_sha256"]
-                != e.sha(policy_snapshot(root, manifest)),
-                document["runner_sha256"] != e.sha((root / "runner.py").read_bytes()),
+                != e.sha(revision_inputs[e.POLICY_RELATIVE]),
+                document["runner_sha256"] != e.sha(revision_inputs[e.RUNNER_RELATIVE]),
+                manifest.get("runner_sha256")
+                != e.sha(revision_inputs[e.RUNNER_RELATIVE]),
                 manifest.get("uv_lock_path") != "uv.lock",
                 manifest.get("uv_lock_sha256")
-                != e.sha((root / "uv.lock").read_bytes()),
+                != e.sha(revision_inputs[e.LOCK_RELATIVE]),
                 document["uv_lock_sha256"] != manifest.get("uv_lock_sha256"),
                 manifest.get("sdk_code_digests_path") != "sdk-code-digests.json",
-                manifest.get("sdk_code_digests_sha256")
-                != e.sha((root / "sdk-code-digests.json").read_bytes()),
+                manifest.get("sdk_code_digests_sha256") != e.sha(digest_snapshot),
             )
         ):
             return "AUTHORIZATION_MISMATCH"
@@ -925,6 +927,8 @@ def response_gap(
             )
         ) or not same_json_value(row.get("probabilities"), parsed["probabilities"]):
             return "RAW_ANALYSIS_MISMATCH"
+        if sdk_rejects(raw, case, question):
+            return "RAW_ANALYSIS_MISMATCH"
     elif row["status"] == "INVALID":
         if any(
             row.get(field) is not None
@@ -1054,6 +1058,8 @@ def verify_local_run(
     cases = {(case["group"], case["case_id"]): case for case in case_rows}
     question = e.load_question()
     source_locator = manifest.get("runner_source_path")
+    if run_id != PRE_RECORD_RUN_ID and source_locator != "runner.py":
+        gaps.append({"reason": "RUNNER_SOURCE_MISMATCH"})
     if source_locator is not None:
         try:
             source_hash = e.sha(bounded_path(run_dir, source_locator).read_bytes())
