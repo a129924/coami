@@ -273,7 +273,7 @@ def parse_live_authorization(data: bytes) -> dict[str, Any]:
         document = json.loads(data, object_pairs_hook=unique)
         if not isinstance(document, dict) or json_bytes(document) != data:
             raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
-    except (ValueError, TypeError, UnicodeDecodeError) as exc:
+    except (ValueError, TypeError, UnicodeDecodeError, RecursionError) as exc:
         if isinstance(exc, ContractError):
             raise
         raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED") from exc

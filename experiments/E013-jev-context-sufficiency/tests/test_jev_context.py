@@ -207,6 +207,15 @@ class E013Tests(unittest.TestCase):
             with self.subTest(code=code):
                 with self.assertRaisesRegex(e.ContractError, code):
                     e.parse_gate_document(nested, code)
+        with self.assertRaisesRegex(e.ContractError, "LIVE_AUTHORIZATION_UNVERIFIED"):
+            e.parse_live_authorization(nested)
+
+    def test_symlink_loop_locator_reports_contract_failure(self) -> None:
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "raw.body").symlink_to("raw.body")
+            with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_LOCATOR"):
+                evidence.bounded_path(root, "raw.body")
 
     def test_live_store_rejects_redirected_subdirectories(self) -> None:
         with TemporaryDirectory() as temporary:
@@ -822,13 +831,46 @@ source = { registry = "https://pypi.org/simple" }
             "/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/bin/python3.12"
         )
         self.assertIn(e.sha(executable.read_bytes()), future)
+        uv_binary = Path("/Users/andrew/.local/pipx/venvs/uv/bin/uv")
+        self.assertIn(e.sha(uv_binary.read_bytes()), future)
         self.assertIn("--credential-file", future)
         self.assertEqual(future.count("/usr/bin/env -u TYPESAFE_API_KEY"), 2)
         self.assertNotIn("\nenv -u TYPESAFE_API_KEY", future)
+        runtime_check = future.split("/usr/bin/python3 -I -S -B -c '\n", 1)[1].split(
+            "\n'\n}", 1
+        )[0]
+        verified = subprocess.run(
+            ["/usr/bin/python3", "-I", "-S", "-B", "-c", runtime_check],
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(verified.returncode, 0, verified.stderr)
+        for digest in (
+            e.sha(uv_binary.read_bytes()),
+            "e28f4275a88734b4fc6e768440429812dfd363b026ca221ce966c4ab7f531135",
+        ):
+            with self.subTest(digest=digest):
+                denied = subprocess.run(
+                    [
+                        "/usr/bin/python3",
+                        "-I",
+                        "-S",
+                        "-B",
+                        "-c",
+                        runtime_check.replace(digest, "0" * 64),
+                    ],
+                    capture_output=True,
+                    text=True,
+                )
+                self.assertNotEqual(denied.returncode, 0)
+                self.assertIn("E013 BLOCKED LAUNCH_RUNTIME_UNVERIFIED", denied.stderr)
         bootstrap = documentation.split("python3.12 -I -S -B -c '\n", 1)[1].split(
             "\n' --live", 1
         )[0]
         self.assertNotIn("'", bootstrap)
+        self.assertIn('"rev-parse", "HEAD^{commit}"', bootstrap)
+        self.assertIn('f"{revision}:{relative}"', bootstrap)
+        self.assertNotIn('f"HEAD:{relative}"', bootstrap)
         with TemporaryDirectory() as temporary:
             root = Path(temporary)
             subprocess.run(["git", "init", "-q", str(root)], check=True)

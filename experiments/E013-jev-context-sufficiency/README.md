@@ -42,24 +42,51 @@ env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u RUST_LOG \
   --store-root /Users/andrew/coami-evidence/E013
 ```
 
-For a separately authorized future run, synchronize the full project environment without a credential, then start the reviewed Python 3.12 binary directly. The trusted system Python 3.9 checks that binary's SHA-256 before it runs; the authenticated Python 3.12 bootstrap reads the credential file only after confirming the runner and one-run authorization. The interpreter path and SHA-256 below are pinned for this macOS arm64 host and require a reviewed update if Python changes. Clear `UV_NO_SYNC` and `PYTHONPATH` so inherited settings cannot skip synchronization or shadow the imported SDK:
+For a separately authorized future run, authenticate the `uv` binary and the entire managed Python 3.12 runtime with system Python before and after synchronizing without a credential. The authenticated Python 3.12 bootstrap reads the credential file only after confirming the runner and one-run authorization. The paths and SHA-256 values below are pinned for this macOS arm64 host and require a reviewed update if either installation changes. Clear `UV_NO_SYNC` and `PYTHONPATH` so inherited settings cannot skip synchronization or shadow the imported SDK:
 
 Preflight checks imported SDK and transitive dependency code against the authorized lockfile's versions, installed RECORD hashes, module origins, and the independent 287-file `sdk-code-digests.json` baseline whose SHA-256 is fixed in the authorized runner source. The baseline is for this macOS arm64 Python 3.12 environment and was reviewed as committed source; changing a package and its mutable RECORD together still fails it. A different platform or wheel build requires a separately reviewed baseline and authorization. It also verifies that `runs/` and `authorization-uses/` beneath the approved local store are real directories before consuming the one-use authorization. The command below uses Python's `-I -S -B -c` entry point: `-S` prevents site hooks and `.pth` execution, the site-packages path is appended after the standard library without processing hooks, and an exclusive empty bytecode cache prefix prevents loading existing dependency `.pyc` files. It then executes a single runner byte snapshot without first executing a separate repository launcher script. The runner checks that snapshot against its committed authorization; invoking `jev_context.py --live` directly blocks before the authorization marker. Git authorization reads clear inherited `GIT_*` overrides, validate this checkout's `.git` target, and use that explicit Git directory. These are point-in-time checks; the local store remains unbacked staging until reviewed evidence is committed and pushed.
 
 Before the first third-party import, the runner also checks every locked dependency source byte against the pinned digest baseline. A changed import wrapper therefore blocks before it can execute. Future runs retain `uv.lock` and `sdk-code-digests.json` with separate hashes; evidence replay checks those run-bound bytes against the installed environment and fails closed if the current environment cannot reproduce that run. The historical run predates these snapshots and uses the lock from its fixed Git runner revision, which must agree with the current pinned baseline.
 
-The `-c` bootstrap uses only the standard library until it has compared the exact runner (and, for evidence operations, `evidence_tools.py`) with this checkout's committed `HEAD`. A live run also compares the one-run authorization bytes and its runner hash. It does not execute locally edited evidence code before those checks. After that comparison it appends the synchronized dependency path and executes the verified runner snapshot. Git replacement objects are disabled for these reads.
+The `-c` bootstrap uses only the standard library until it has compared the exact runner (and, for evidence operations, `evidence_tools.py`) with one resolved commit from this checkout's `HEAD`. A live run also compares the one-run authorization bytes and its runner hash. It does not execute locally edited evidence code before those checks. After that comparison it appends the synchronized dependency path and executes the verified runner snapshot. Git replacement objects are disabled for these reads.
 
 ```sh
+verify_inputs() {
+  /usr/bin/python3 -I -S -B -c '
+import hashlib, os
+from pathlib import Path
+def blocked():
+    raise SystemExit("E013 BLOCKED LAUNCH_RUNTIME_UNVERIFIED")
+try:
+    uv_link = Path("/Users/andrew/.local/bin/uv")
+    uv_binary = Path("/Users/andrew/.local/pipx/venvs/uv/bin/uv")
+    if not uv_link.is_symlink() or uv_link.resolve() != uv_binary or hashlib.sha256(uv_binary.read_bytes()).hexdigest() != "ef2d06c5bd20c7ec6ad0ea466d3406211b5fc302efd3d3ce21e5f38fa01559e7":
+        blocked()
+    runtime = Path("/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none")
+    if not runtime.is_dir():
+        blocked()
+    digest = hashlib.sha256()
+    for item in sorted(runtime.rglob("*"), key=lambda path: path.relative_to(runtime).as_posix()):
+        relative = item.relative_to(runtime).as_posix().encode()
+        if item.is_symlink():
+            digest.update(b"L\0" + relative + b"\0" + os.readlink(item).encode() + b"\0")
+        elif item.is_file():
+            digest.update(b"F\0" + relative + b"\0" + hashlib.sha256(item.read_bytes()).digest())
+        elif item.is_dir():
+            digest.update(b"D\0" + relative + b"\0")
+        else:
+            blocked()
+    binary = runtime / "bin/python3.12"
+    if digest.hexdigest() != "e28f4275a88734b4fc6e768440429812dfd363b026ca221ce966c4ab7f531135" or hashlib.sha256(binary.read_bytes()).hexdigest() != "a0ea1fa2b8d2631d1ba8e513b29a90c6a6cdfb9d00febb1a02e5cc5cb44a838e":
+        blocked()
+except (OSError, RuntimeError, ValueError):
+    blocked()
+'
+}
+verify_inputs &&
 /usr/bin/env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u PYTHONPATH -u RUST_LOG \
   /Users/andrew/.local/bin/uv sync --quiet --locked --project experiments/E013-jev-context-sufficiency &&
-/usr/bin/python3 -I -S -B -c '
-import hashlib
-from pathlib import Path
-binary = Path("/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/bin/python3.12")
-if hashlib.sha256(binary.read_bytes()).hexdigest() != "a0ea1fa2b8d2631d1ba8e513b29a90c6a6cdfb9d00febb1a02e5cc5cb44a838e":
-    raise SystemExit("E013 BLOCKED PYTHON_EXECUTABLE_UNVERIFIED")
-' &&
+verify_inputs &&
 /usr/bin/env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u PYTHONPATH -u RUST_LOG \
   /Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/bin/python3.12 -I -S -B -c '
 import hashlib, json, os, subprocess, sys, tempfile
@@ -110,9 +137,12 @@ try:
     git_dir = Path(probe[1]).resolve()
     if git_dir != expected_git_dir or not git_dir.is_dir():
         blocked()
+    revision = subprocess.run(["/usr/bin/git", "--git-dir", str(git_dir), "--work-tree", str(root), "rev-parse", "HEAD^{commit}"], env=env, capture_output=True, check=True).stdout.decode().strip()
+    if len(revision) != 40 or any(character not in "0123456789abcdef" for character in revision):
+        blocked()
     def committed(path):
         relative = path.relative_to(root).as_posix()
-        return subprocess.run(["/usr/bin/git", "--git-dir", str(git_dir), "--work-tree", str(root), "show", f"HEAD:{relative}"], env=env, capture_output=True, check=True).stdout
+        return subprocess.run(["/usr/bin/git", "--git-dir", str(git_dir), "--work-tree", str(root), "show", f"{revision}:{relative}"], env=env, capture_output=True, check=True).stdout
     source = runner.read_bytes()
     if source != committed(runner):
         blocked()

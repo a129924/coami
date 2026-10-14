@@ -271,7 +271,11 @@ def bounded_path(root: Path, locator: str) -> Path:
     if relative.is_absolute() or any(part in ("..", ".") for part in relative.parts):
         raise e.ContractError("INVALID_EVIDENCE_LOCATOR")
     result = root / relative
-    if not result.resolve().is_relative_to(root.resolve()):
+    try:
+        within_root = result.resolve().is_relative_to(root.resolve())
+    except (OSError, RuntimeError) as exc:
+        raise e.ContractError("INVALID_EVIDENCE_LOCATOR") from exc
+    if not within_root:
         raise e.ContractError("INVALID_EVIDENCE_LOCATOR")
     return result
 
