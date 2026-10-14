@@ -5,7 +5,7 @@ test('call return and window end never imply direction or clear-state confirmati
  const l=new Ledger(); l.ingest('COAMI20|{"seq":1,"kind":"away","phase":"begin"}')
  l.ingest('COAMI20|{"seq":1,"kind":"away","phase":"returned"}'); assert.match(l.status,/解除呼叫已返回/)
  l.ingest('COAMI20|{"seq":1,"kind":"away","phase":"window-ended"}'); assert.equal(l.busy,false); assert.equal(l.needsObservation,true)
- assert.equal(l.confirm('符合'),false); assert.equal(l.confirm('未確認'),true)
+ assert.equal(l.confirm('符合'),false); assert.equal(l.confirm('不符合'),false); assert.equal(l.confirm('未確認'),true)
 })
 test('driver error after return overrides call-only state and blocks visual PASS', () => {
  const l=new Ledger(); l.ingest('COAMI20|{"seq":2,"kind":"look","phase":"begin","target":"left","point":[0.5,0.5,0]}')

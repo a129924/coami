@@ -1,3 +1,4 @@
+import {installedTreeSha256} from './installed-tree.mjs'
 import {mkdir,readFile,writeFile,rm,realpath} from 'node:fs/promises'
 import {createHash} from 'node:crypto'
 import {execFileSync} from 'node:child_process'
@@ -11,6 +12,8 @@ export async function prepareCompilerEnvironment(sdk,generated,inherited=process
  if(pythonBinary!==path.join(await realpath(sdk),'python/3.13.3_64bit/bin/python3.13'))throw Error('Pinned SDK Python executable path mismatch')
  const pythonSha256=hash(await readFile(pythonBinary))
  if(pythonSha256!=='051ecc026af314195484c2a8e3ae3de85db8a09ae7998d9cace75323e7a40d81')throw Error('Pinned SDK Python executable mismatch')
+ const pythonTreeSha256=await installedTreeSha256(path.join(sdk,'python/3.13.3_64bit'))
+ if(pythonTreeSha256!=='a8c4f3a2be714ebb6fdd01cf4200c177f78d8ff63b57141982f49426250dff61')throw Error('Pinned SDK Python installation mismatch')
  const env={...inherited}
  for(const key of Object.keys(env))if(/^(EM_|EMCC_|EMSDK_|LLVM|BINARYEN|NODE|PYTHON)/.test(key))delete env[key]
  const config=path.join(generated,'controlled-emscripten.py')
@@ -20,7 +23,7 @@ export async function prepareCompilerEnvironment(sdk,generated,inherited=process
  const python=path.join(generated,'python-no-bytecode')
  await writeFile(python,'#!/bin/sh\nexec "$COAMI_PYTHON" -B "$@"\n',{mode:0o755})
  Object.assign(env,{EM_CONFIG:config,EMSDK:sdk,COAMI_PYTHON:pythonBinary,EMSDK_PYTHON:python,EM_CACHE:path.join(generated,'em-cache'),PYTHONDONTWRITEBYTECODE:'1'})
- return {env,provenance:{configPath:config,configSha256:hash(bytes),paths,nodeSha256,pythonBinary,pythonSha256}}
+ return {env,provenance:{configPath:config,configSha256:hash(bytes),paths,nodeSha256,pythonBinary,pythonSha256,pythonTreeSha256}}
 }
 export async function rebuildFontbm(root,run=execFileSync){
  const build=path.join(root,'build');await rm(build,{recursive:true,force:true})

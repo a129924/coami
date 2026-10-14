@@ -1,3 +1,4 @@
+import {harnessPlugin} from './scripts/harness-inputs.mjs'
 import {verifyPublicInputs} from './scripts/public-inputs.mjs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
@@ -8,7 +9,7 @@ const webRoot = fileURLToPath(new URL('.', import.meta.url))
 const repositoryRoot = path.resolve(webRoot, '../../..')
 
 export default defineConfig({
-  plugins: [{name:'verify-staged-simulator-host',
+  plugins: [harnessPlugin(webRoot),{name:'verify-staged-simulator-host',
     async buildStart(){await verifyStagedHost(path.join(webRoot,'generated/pinned-stack-chan/web'));await verifyPublicInputs(webRoot)},
     async configureServer(){await verifyStagedHost(path.join(webRoot,'generated/pinned-stack-chan/web'));await verifyPublicInputs(webRoot)},
     async handleHotUpdate(){await verifyStagedHost(path.join(webRoot,'generated/pinned-stack-chan/web'));await verifyPublicInputs(webRoot)},

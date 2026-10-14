@@ -28,7 +28,7 @@
 1. `cd experiments/E020-sdk-gaze-pitch/web; npm ci --ignore-scripts`。
 2. `npm run test:original` 對原版應失敗（red）；`npm run source && npm run test:patched` 對實際 patched copy 應通過。patch 位於 `patches/body-relative-pitch.patch`。
 3. 依 `scripts/install-compiler.mjs` 安裝驗證過的 compiler，配置 MODDABLE、EMSDK、EM_CONFIG、FONTBM_SOURCE、FONTBM 和 PATH，再 `npm run prepare:poc`。既有工具可複製到本 worktree generated/toolchain，但必須重新通過完整性檢查；cache 放 generated/em-cache。
-4. `npm test && npm run typecheck && npm run build`；`npm run dev -- --port 5200`。
+4. `npm test && npm run test:scripts && npm run typecheck && npm run build`；`npm run dev -- --port 5200`。
 5. 開 localhost:5200，填觀察者並準備零姿勢；依判準執行雙向切換，每次等待窗口並核對穩定。解除僅記未確認，不把保留姿勢當失敗；匯出本次 JSON 與畫面。
 6. 記錄 automation、真人判定各自的結果；不得把操作者寫為真人或代填真人 PASS。
 
@@ -72,3 +72,7 @@ Review 的建置來源、殘留產物、啟動錯誤處理已修正，逐項說�
 ## PR comment review and fix：第三輪（2026-10-14）
 
 Python interpreter、served mesh、reviewed MOD sources/archive 驗證及 trace／watchdog scope 已修正，見 [review3-fixes](evidence/review3-fixes.md)。舊 run 缺少 host attestation，無法用後來的 staged host hashes 補證；歷史觀察保留，新 gate 真人驗收未執行。E020 的完整來源可驗收結論已限縮，採用仍交 human review。
+
+## PR comment review and fix：第四輪（2026-10-14）
+
+固定 executable runtime、完整 Python install tree、harness source pins 與 production bundle hashes，並限制解除操作只能記錄未確認。重現流程包含 scripts regression suite；逐項決定、驗證與未執行項見 [review4-fixes](evidence/review4-fixes.md)。舊真人紀錄不會因新增 attestation 而改判。

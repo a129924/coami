@@ -1,3 +1,5 @@
+import RUNTIME_PIN from './runtime-pin.json'
+import HARNESS_PIN from './harness-pin.json'
 import {ReplyWatchdog,watchOperation} from './watchdogs.ts'
 import MOD_PIN from './mod-pin.json'
 import HOST_PIN from '../scripts/host-pin.json'
@@ -18,7 +20,7 @@ const ledger=new Ledger(), runId=`E020-${new Date().toISOString().replace(/[:.]/
 const records: {at:string;elapsedMs:number;seq:number|null;message:string}[]=[]
 let engine: SimulatorEngine | undefined, ready=false, modReady=false, runtimeReady=false, pending=false, selection=0
 const replyWatchdog=new ReplyWatchdog(()=>fatal(Error('MOD 2 秒內未回應；請重新載入')),()=>ledger.blocked)
-let provenance: unknown, modProvenance: unknown
+let provenance: unknown, modProvenance: unknown, harnessProvenance: unknown
 get('run').textContent=runId
 function log(message:string):void {
  records.push({at:new Date().toISOString(),elapsedMs:performance.now(),seq:ledger.current?.seq??null,message})
@@ -35,6 +37,7 @@ function render():void {
  next.disabled=locked; apply.disabled=locked||!stable.checked||!operator.value.trim(); away.disabled=apply.disabled
  apply.textContent=target?'設定注視':'準備起始姿勢'
  for(const button of results) button.disabled=ledger.busy||!ledger.needsObservation||!operator.value.trim()
+ for(const button of results)if(button.dataset.result!=='未確認'&&ledger.current?.kind==='away')button.disabled=true
  results[0]!.disabled ||= ledger.failed||ledger.blocked||!ledger.driver||!ledger.returned||ledger.current?.kind==='away'
 }
 function ingest(message:string):void {
@@ -61,6 +64,12 @@ async function json(url:string):Promise<Record<string,unknown>>{
 }
 async function start():Promise<void>{
  try{
+  const hp=await json('/harness-provenance.json');harnessProvenance=hp
+  if(JSON.stringify(hp.sources)!==JSON.stringify(HARNESS_PIN))throw Error('Reviewed harness inputs mismatch')
+  if(hp.mode==='production'){
+   if(typeof hp.bundleSha256!=='object'||!hp.bundleSha256||Object.keys(hp.bundleSha256).length===0)throw Error('Missing harness bundle hashes')
+   for(const [file,expected] of Object.entries(hp.bundleSha256)){const response=await fetch(`/${file}`,{cache:'no-store'});if(!response.ok||await sha(await response.arrayBuffer())!==expected)throw Error('Harness bundle mismatch')}
+  }else if(hp.mode!=='development')throw Error('Unknown harness mode')
   const p=await json('/runtime-provenance.json');provenance=p
   if(p.sourceCommit!=='b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322'||typeof p.sha256!=='object'||!p.sha256)throw Error('runtime pin mismatch')
   const patch=p.sdkPatch as Record<string,unknown> | undefined
@@ -69,6 +78,7 @@ async function start():Promise<void>{
   for(const name of ['mc.js','mc.wasm','assets/case/v1/shell.stl']){
    const response=await fetch(`/simulator/${name}`,{cache:'no-store'});if(!response.ok||await sha(await response.arrayBuffer())!==hashes[name])throw Error(`${name} hash mismatch`)
   }
+  for(const [file,expected] of Object.entries(RUNTIME_PIN))if(hashes[file]!==expected)throw Error('Reviewed runtime pin mismatch')
   if(hashes['assets/case/v1/shell.stl']!==HOST_PIN['simulator/assets/case/v1/shell.stl'])throw Error('mesh pin mismatch')
   const mp=await json('/mod-provenance.json');modProvenance=mp
   const sourceHashes=mp.sources as Record<string,unknown>|undefined
@@ -104,7 +114,7 @@ for(const button of results)button.onclick=()=>{
  if(ledger.confirm(result)){log(`人工判定 operator=${operator.value.trim()} result=${result}`);render()}
 }
 get('download').onclick=()=>{
- const blob=new Blob([JSON.stringify({runId,operator:operator.value.trim(),provenance,modProvenance,records,observations:ledger.observations,userAgent:navigator.userAgent},null,2)],{type:'application/json'})
+ const blob=new Blob([JSON.stringify({runId,operator:operator.value.trim(),provenance,modProvenance,harnessProvenance,records,observations:ledger.observations,userAgent:navigator.userAgent},null,2)],{type:'application/json'})
  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`${runId}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)
 }
 window.addEventListener('pagehide',()=>engine?.dispose(),{once:true})
