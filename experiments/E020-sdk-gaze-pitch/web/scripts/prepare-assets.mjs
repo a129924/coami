@@ -1,3 +1,4 @@
+import {rebuildModdableTools,replaceCache} from './build-safety.mjs'
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { createReadStream } from 'node:fs'
@@ -78,9 +79,12 @@ try {
   if (trackedChanges) throw new Error('Moddable source has tracked changes')
   moddableVersion = (await readFile(path.join(moddableRoot, 'tools/VERSION'), 'utf8')).trim()
   if (moddableVersion !== '9.5.0') throw new Error(`Moddable 9.5.0 required, found ${moddableVersion}`)
+  await rebuildModdableTools(moddableRoot)
   moddableTools = {}
-  for (const name of ['mcconfig', 'xsc']) {
-    const binary = await realpath(output('which', [name]))
+  for (const name of ['mcconfig', 'xsc', 'xsid', 'xsl', 'tools']) {
+    const binary = await realpath(path.join(moddableRoot, 'build/bin/mac/release', name))
+    if (['mcconfig','xsc'].includes(name) && await realpath(output('which',[name])) !== binary)
+      throw new Error(`${name} on PATH is not the freshly rebuilt tool`)
     const info = await stat(binary)
     if (!info.isFile() || (info.mode & 0o111) === 0) throw new Error(`${name} is not executable`)
     const relative = path.relative(path.join(moddableRoot, 'build/bin'), binary)
@@ -153,6 +157,7 @@ try {
 const { sdkPatch } = await import('./prepare-source.mjs')
 execFileSync('npm', ['ci', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit',
   env: { ...process.env, CI: '1', LEFTHOOK: '0' } })
+await replaceCache(path.join(emsdkRoot,'upstream/emscripten/cache'),path.join(generatedRoot,'em-cache'))
 execFileSync('npm', ['run', 'build:wasm'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit',
   env: { ...process.env, FONTBM: fontbmBinary, EM_CACHE: path.join(generatedRoot, 'em-cache'), PYTHONDONTWRITEBYTECODE: '1' } })
 
@@ -166,7 +171,7 @@ for (const name of ['mc.js', 'mc.wasm']) {
 await cp(path.join(vendorRoot, 'web/simulator/assets/case/v1/shell.stl'),
   path.join(publicSimulator, 'assets/case/v1/shell.stl'))
 const provenance = { sourceCommit: PINNED_COMMIT, sdkPatch, moddableVersion, emccVersion,
-  moddable: { path: moddableRoot, sourceCommit: PINNED_MODDABLE_COMMIT, tools: moddableTools },
+  moddable: { path: moddableRoot, sourceCommit: PINNED_MODDABLE_COMMIT, build: 'clean release xsc/xsid/xsl/tools from verified checkout', tools: moddableTools },
   emscripten: { emsdkPath: emsdkRoot, emsdkCommit: PINNED_EMSDK_COMMIT,
     release: PINNED_EMSCRIPTEN_RELEASE, upstreamCommit: PINNED_EMSCRIPTEN_COMMIT,
     installedTreeSha256: emscriptenTreeSha256, emccPath: emccBinary, emccSha256 },

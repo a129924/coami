@@ -58,3 +58,7 @@
 - E020 純測試、共享 runtime-ui 回歸、strict typecheck、MOD／WASM／web build、自動 WASM 與真人雙向各兩次均已記錄。僅最後真人畫面有截圖，完整逐步動畫未保存，限制見 `evidence/human-run.md`。
 - 兩個 PR 都以 dev 為 base，E020 已複用所需操作器，沒有程式上的合併先後依賴；建議先審 #19 問題證據，再審 #20 修正與回歸。
 - 本 topic 的實作與驗證完成，兩個 PR 送 Ready for review。Ready 不等於 reviewer 核准、合併或正式採用；仍待 human review／owner 決策，不自動修改 vendor pin、production、硬體或執行 release。
+
+## PR comment review and fix（2026-10-14）
+
+Review 的建置來源、殘留產物、啟動錯誤處理已修正，逐項說明與驗證見 [review-fixes](evidence/review-fixes.md)。重新以 clean-built pinned 工具與清空後 cache 建置，runtime JS／WASM／MOD 雜湊與原驗證產物完全相同；原實驗結論與真人證據保留。
