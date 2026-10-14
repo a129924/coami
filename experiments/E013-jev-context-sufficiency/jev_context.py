@@ -165,6 +165,7 @@ V1_FREEZE_KEYS = {
 LOCAL_STORE_ROOT = Path("/Users/andrew/coami-evidence/E013")
 HISTORICAL_RUN_ID = "20261008T035450Z-010364d7"
 RUNNER_RELATIVE = Path("experiments/E013-jev-context-sufficiency/jev_context.py")
+SYSTEM_GIT = "/usr/bin/git"
 AUTHORIZATION_DIR = RUNNER_RELATIVE.parent / "authorizations"
 LOCK_RELATIVE = RUNNER_RELATIVE.parent / "uv.lock"
 SDK_DIGESTS_RELATIVE = RUNNER_RELATIVE.parent / "sdk-code-digests.json"
@@ -315,6 +316,7 @@ def load_freeze(
     *,
     snapshot: bytes | None = None,
     review_snapshot: bytes | None = None,
+    source_snapshots: dict[Path, bytes] | None = None,
 ) -> dict[str, str]:
     """Match a separately accepted freeze record to exact on-disk bytes."""
     document = parse_gate_document(
@@ -346,17 +348,20 @@ def load_freeze(
     hashes = document.get("v1_hashes")
     if not isinstance(hashes, dict) or set(hashes) != set(V1_FILES):
         raise ContractError("INVALID_FREEZE_REFERENCE")
-    for name in V1_FILES:
-        actual = sha(
-            (root / "evaluation/context_sufficiency/versions/v1" / name).read_bytes()
+
+    def source(relative: Path) -> bytes:
+        return (
+            (root / relative).read_bytes()
+            if source_snapshots is None
+            else source_snapshots[relative]
         )
+
+    for name in V1_FILES:
+        actual = sha(source(Path("evaluation/context_sufficiency/versions/v1") / name))
         if hashes[name] != actual:
             raise ContractError("V1_HASH_MISMATCH")
     for name, expected in V0_HASHES.items():
-        if (
-            sha((root / "evaluation/context_sufficiency" / name).read_bytes())
-            != expected
-        ):
+        if sha(source(Path("evaluation/context_sufficiency") / name)) != expected:
             raise ContractError("V0_HASH_MISMATCH")
     return {str(name): str(value) for name, value in hashes.items()}
 
@@ -430,7 +435,7 @@ def checked_git(root: Path, arguments: list[str]) -> bytes:
     probe = (
         subprocess.run(
             [
-                "git",
+                SYSTEM_GIT,
                 "-C",
                 str(root),
                 "rev-parse",
@@ -460,7 +465,7 @@ def checked_git(root: Path, arguments: list[str]) -> bytes:
     if git_dir != expected_git_dir or not git_dir.is_dir():
         raise ContractError("LIVE_AUTHORIZATION_UNVERIFIED")
     return subprocess.run(
-        ["git", "--git-dir", str(git_dir), "--work-tree", str(root), *arguments],
+        [SYSTEM_GIT, "--git-dir", str(git_dir), "--work-tree", str(root), *arguments],
         env=environment,
         capture_output=True,
         check=True,
@@ -645,17 +650,24 @@ def load_cases(
 
 
 def read_frozen_case_sources(
-    root: Path, freeze_hashes: dict[str, str]
+    root: Path,
+    freeze_hashes: dict[str, str],
+    source_snapshots: dict[Path, bytes] | None = None,
 ) -> dict[str, bytes]:
     """Read each case file once and bind the bytes used for the live requests."""
+    v1_path = Path(
+        "evaluation/context_sufficiency/versions/v1/context_sufficiency_v1.jsonl"
+    )
+    v0_path = Path(
+        "evaluation/context_sufficiency/dataset/context_sufficiency_v0.jsonl"
+    )
     sources = {
-        "research": (
-            root
-            / "evaluation/context_sufficiency/versions/v1/context_sufficiency_v1.jsonl"
-        ).read_bytes(),
-        "v0": (
-            root / "evaluation/context_sufficiency/dataset/context_sufficiency_v0.jsonl"
-        ).read_bytes(),
+        "research": (root / v1_path).read_bytes()
+        if source_snapshots is None
+        else source_snapshots[v1_path],
+        "v0": (root / v0_path).read_bytes()
+        if source_snapshots is None
+        else source_snapshots[v0_path],
     }
     if (
         sha(sources["research"]) != freeze_hashes["context_sufficiency_v1.jsonl"]

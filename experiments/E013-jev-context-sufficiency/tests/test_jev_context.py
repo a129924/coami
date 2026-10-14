@@ -662,6 +662,9 @@ source = { registry = "https://pypi.org/simple" }
             path.write_bytes(source + b" ")
             with self.assertRaisesRegex(e.ContractError, "INVALID_SUMMARY"):
                 evidence.summary_bytes(path.parent)
+            path.write_bytes(b"[" * 1200 + b"0" + b"]" * 1200)
+            with self.assertRaisesRegex(e.ContractError, "INVALID_SUMMARY"):
+                evidence.summary_bytes(path.parent)
 
     def test_analysis_rejects_unbounded_failure_reasons(self) -> None:
         source = e.TOPIC / "evidence/runs/20261008T035450Z-010364d7/analysis.jsonl"
@@ -863,6 +866,32 @@ source = { registry = "https://pypi.org/simple" }
             )
             self.assertEqual(accepted.returncode, 0)
             self.assertIn("trusted", accepted.stdout)
+            shim_dir = root / "shim"
+            shim_dir.mkdir()
+            shim_marker = root / "git-shim-ran"
+            shim = shim_dir / "git"
+            shim.write_text(f"#!/bin/sh\ntouch {shim_marker}\nexit 99\n")
+            shim.chmod(0o755)
+            accepted_with_shim = subprocess.run(
+                [
+                    sys.executable,
+                    "-I",
+                    "-S",
+                    "-B",
+                    "-c",
+                    bootstrap,
+                    "--live",
+                    "--live-authorization",
+                    "authorization.json",
+                ],
+                cwd=root,
+                env={**os.environ, "PATH": f"{shim_dir}:{os.environ.get('PATH', '')}"},
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(accepted_with_shim.returncode, 0)
+            self.assertFalse(shim_marker.exists())
 
     def test_documented_bootstrap_authenticates_evidence_tool(self) -> None:
         documentation = (e.TOPIC / "README.md").read_text()
@@ -1747,10 +1776,20 @@ source = { registry = "https://pypi.org/simple" }
             output = evidence.publish_reviewed(
                 restricted, approval, root / "checkout-evidence"
             )
-            with patch.object(e, "load_cases", wraps=e.load_cases) as loaded:
+            with (
+                patch.object(e, "load_cases", wraps=e.load_cases) as loaded,
+                patch.object(
+                    e, "read_frozen_case_sources", wraps=e.read_frozen_case_sources
+                ) as read_sources,
+                patch.object(e, "load_freeze", wraps=e.load_freeze) as load_freeze,
+            ):
                 self.assertEqual(evidence.verify_local_run(restricted)["gaps"], [])
                 self.assertEqual(loaded.call_count, 1)
                 self.assertIsNotNone(loaded.call_args.kwargs["source_bytes"])
+                self.assertIs(
+                    read_sources.call_args.args[2],
+                    load_freeze.call_args.kwargs["source_snapshots"],
+                )
             public_manifest = e.read_object(output / "manifest.json")
             self.assertNotIn("store_root", public_manifest)
             self.assertEqual(
@@ -1788,14 +1827,14 @@ source = { registry = "https://pypi.org/simple" }
                 self.assertIsNotNone(loaded.call_args.kwargs["source_bytes"])
             self.assertEqual(with_access["verified_cases"], 75)
             self.assertEqual(with_access["gaps"], [])
-            committed_freeze = e.committed_git_bytes
+            committed_git = e.checked_git
 
-            def changed_freeze(checkout: Path, relative: Path) -> bytes:
-                if relative == e.FREEZE_RELATIVE:
+            def changed_freeze(checkout: Path, arguments: list[str]) -> bytes:
+                if arguments[-1].endswith(f":{e.FREEZE_RELATIVE.as_posix()}"):
                     return b"uncommitted freeze"
-                return committed_freeze(checkout, relative)
+                return committed_git(checkout, arguments)
 
-            with patch.object(e, "committed_git_bytes", side_effect=changed_freeze):
+            with patch.object(e, "checked_git", side_effect=changed_freeze):
                 self.assertIn(
                     "FREEZE_SOURCE_UNCOMMITTED",
                     {
@@ -1875,7 +1914,7 @@ source = { registry = "https://pypi.org/simple" }
             review_path.write_bytes(b"NOT FROZEN\n" + review_bytes)
             try:
                 self.assertIn(
-                    "FREEZE_DECISION_MISMATCH",
+                    "FREEZE_SOURCE_UNCOMMITTED",
                     {
                         gap["reason"]
                         for gap in evidence.verify_evidence(output, restricted)["gaps"]

@@ -438,7 +438,7 @@ def summary_bytes(run_dir: Path) -> bytes:
         )
         if e.json_bytes(summary) != data:
             raise e.ContractError("INVALID_SUMMARY")
-    except (ValueError, TypeError, UnicodeDecodeError) as exc:
+    except (ValueError, TypeError, UnicodeDecodeError, RecursionError) as exc:
         raise e.ContractError("INVALID_SUMMARY") from exc
     if (
         not isinstance(summary, dict)
@@ -723,8 +723,8 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
     return None
 
 
-def frozen_source_commit_gap() -> str | None:
-    """Require the accepted freeze and every case source to match this HEAD."""
+def committed_freeze_sources() -> dict[Path, bytes]:
+    """Pin one HEAD and retain the exact committed bytes used for replay."""
     paths = [
         e.FREEZE_RELATIVE,
         Path("evaluation/context_sufficiency/versions/v1/review.md"),
@@ -735,20 +735,33 @@ def frozen_source_commit_gap() -> str | None:
         *(Path("evaluation/context_sufficiency") / name for name in e.V0_HASHES),
     ]
     try:
-        if any(
-            (e.ROOT / path).read_bytes() != e.committed_git_bytes(e.ROOT, path)
-            for path in paths
-        ):
-            return "FREEZE_SOURCE_UNCOMMITTED"
-    except (OSError, subprocess.CalledProcessError, e.ContractError):
-        return "FREEZE_SOURCE_UNCOMMITTED"
-    return None
+        revision = (
+            e.checked_git(e.ROOT, ["rev-parse", "HEAD^{commit}"]).decode().strip()
+        )
+        if not REVISION.fullmatch(revision):
+            raise e.ContractError("FREEZE_SOURCE_UNCOMMITTED")
+        snapshots = {}
+        for path in paths:
+            local = (e.ROOT / path).read_bytes()
+            committed = e.checked_git(e.ROOT, ["show", f"{revision}:{path.as_posix()}"])
+            if local != committed:
+                raise e.ContractError("FREEZE_SOURCE_UNCOMMITTED")
+            snapshots[path] = committed
+        return snapshots
+    except (
+        OSError,
+        UnicodeDecodeError,
+        subprocess.CalledProcessError,
+        e.ContractError,
+    ) as exc:
+        raise e.ContractError("FREEZE_SOURCE_UNCOMMITTED") from exc
 
 
 def inventory_gaps(
     manifest: dict[str, Any],
     rows: list[dict[str, Any]],
     cases: list[dict[str, Any]] | None = None,
+    source_snapshots: dict[Path, bytes] | None = None,
 ) -> list[dict[str, str]]:
     """Bind public observations to the frozen repository oracle and run contract."""
     gaps: list[dict[str, str]] = []
@@ -763,11 +776,18 @@ def inventory_gaps(
     ):
         return [{"reason": "RUN_CONTRACT_MISMATCH"}]
     try:
+        if source_snapshots is None:
+            source_snapshots = committed_freeze_sources()
         freeze = manifest["freeze_hashes"]
         v0 = manifest["v0_hashes"]
         try:
             accepted_freeze = e.load_freeze(
-                e.ORACLE / "versions/v1/freeze-attestation.json"
+                e.ORACLE / "versions/v1/freeze-attestation.json",
+                snapshot=source_snapshots[e.FREEZE_RELATIVE],
+                review_snapshot=source_snapshots[
+                    Path("evaluation/context_sufficiency/versions/v1/review.md")
+                ],
+                source_snapshots=source_snapshots,
             )
         except (OSError, ValueError, e.ContractError):
             return [{"reason": "FREEZE_DECISION_MISMATCH"}]
@@ -776,15 +796,19 @@ def inventory_gaps(
         if set(freeze) != set(e.V1_FILES) or set(v0) != set(e.V0_HASHES):
             raise e.ContractError("CASE_VERSION_MISMATCH")
         for name in e.V1_FILES:
-            if freeze[name] != e.sha((e.ORACLE / "versions/v1" / name).read_bytes()):
+            if freeze[name] != e.sha(
+                source_snapshots[
+                    Path("evaluation/context_sufficiency/versions/v1") / name
+                ]
+            ):
                 raise e.ContractError("CASE_VERSION_MISMATCH")
         for name in e.V0_HASHES:
             if v0[name] != e.V0_HASHES[name] or v0[name] != e.sha(
-                (e.ORACLE / name).read_bytes()
+                source_snapshots[Path("evaluation/context_sufficiency") / name]
             ):
                 raise e.ContractError("CASE_VERSION_MISMATCH")
         if cases is None:
-            sources = e.read_frozen_case_sources(e.ROOT, freeze)
+            sources = e.read_frozen_case_sources(e.ROOT, freeze, source_snapshots)
             cases = e.load_cases(source_bytes=sources)
     except (KeyError, TypeError, OSError, e.ContractError):
         return [{"reason": "CASE_VERSION_MISMATCH"}]
@@ -982,14 +1006,21 @@ def verify_local_run(
         raise e.ContractError("LOCAL_ANALYSIS_RESTRICTED")
     if any(row["run_id"] != run_id for row in rows):
         raise e.ContractError("RUN_ID_MISMATCH")
+    source_snapshots = None
+    source_gaps = []
     try:
-        sources = e.read_frozen_case_sources(e.ROOT, manifest["freeze_hashes"])
+        source_snapshots = committed_freeze_sources()
+        sources = e.read_frozen_case_sources(
+            e.ROOT, manifest["freeze_hashes"], source_snapshots
+        )
         case_rows = e.load_cases(source_bytes=sources)
-    except (KeyError, TypeError, OSError, ValueError, e.ContractError):
+    except (KeyError, TypeError, OSError, ValueError, e.ContractError) as exc:
+        if isinstance(exc, e.ContractError) and str(exc) == "FREEZE_SOURCE_UNCOMMITTED":
+            source_gaps.append({"reason": "FREEZE_SOURCE_UNCOMMITTED"})
         case_rows = []
-    gaps = inventory_gaps(manifest, rows, case_rows) + metadata_gaps(run_dir, manifest)
-    if issue := frozen_source_commit_gap():
-        gaps.append({"reason": issue})
+    gaps = source_gaps + metadata_gaps(run_dir, manifest)
+    if source_snapshots is not None:
+        gaps.extend(inventory_gaps(manifest, rows, case_rows, source_snapshots))
     if manifest_chronology_gap(manifest, rows):
         gaps.append({"reason": "MANIFEST_CHRONOLOGY_MISMATCH"})
     if run_id != PRE_RECORD_RUN_ID and event_log_gap(run_dir, rows, None):
@@ -1448,8 +1479,11 @@ def verify_evidence(
     }:
         raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
     gaps = metadata_gaps(evidence_run, manifest, published=True)
-    if issue := frozen_source_commit_gap():
-        gaps.append({"reason": issue})
+    try:
+        source_snapshots = committed_freeze_sources()
+    except e.ContractError:
+        source_snapshots = None
+        gaps.append({"reason": "FREEZE_SOURCE_UNCOMMITTED"})
     allowed_files = PUBLIC_EVIDENCE_FILES | {
         item["raw_public_path"]
         for item in locators
@@ -1555,7 +1589,11 @@ def verify_evidence(
         gaps.append({"reason": "REVIEW_MISSING"})
     full_rows = []
     try:
-        sources = e.read_frozen_case_sources(e.ROOT, manifest["freeze_hashes"])
+        if source_snapshots is None:
+            raise e.ContractError("FREEZE_SOURCE_UNCOMMITTED")
+        sources = e.read_frozen_case_sources(
+            e.ROOT, manifest["freeze_hashes"], source_snapshots
+        )
         case_rows = e.load_cases(source_bytes=sources)
     except (KeyError, TypeError, OSError, ValueError, e.ContractError):
         case_rows = []
@@ -1778,7 +1816,10 @@ def verify_evidence(
     if event_hash_bad:
         gaps.append({"reason": "EVENT_LOG_MISMATCH"})
     if len(full_rows) == 75:
-        gaps.extend(inventory_gaps(manifest, full_rows, case_rows))
+        if source_snapshots is not None:
+            gaps.extend(
+                inventory_gaps(manifest, full_rows, case_rows, source_snapshots)
+            )
         if manifest_chronology_gap(manifest, full_rows):
             gaps.append({"reason": "MANIFEST_CHRONOLOGY_MISMATCH"})
         if (
