@@ -1,0 +1,19 @@
+
+> coami-e020-web@0.1.0 test:scripts
+> node --test scripts/build-safety.test.mjs scripts/tool-inputs.test.mjs
+
+✔ restoring verified cache removes extra stale libraries (17.458333ms)
+✔ a failed rebuild cannot leave a matching stale MOD pair or compiled modules (6.448583ms)
+✔ vendor gate rejects wrong checkout, gitlink or dirty files (0.496083ms)
+✔ Moddable rebuilding removes old executables and objects before invoking make (12.798ms)
+✔ controlled compiler config ignores hostile config and tool overrides (806.293583ms)
+✔ fontbm clean rebuild discards the binary and CMake cache before configure (5.698625ms)
+✔ staged simulator host is authenticated without reading the live vendor (13.029833ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1362.815791

@@ -1,3 +1,5 @@
+import {prepareCompilerEnvironment,rebuildFontbm} from './tool-inputs.mjs'
+import {verifyStagedHost} from './host-inputs.mjs'
 import {rebuildModdableTools,replaceCache} from './build-safety.mjs'
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
@@ -97,7 +99,7 @@ try {
 }
 const emsdk = process.env.EMSDK
 if (!emsdk) throw new Error('BLOCKED: pinned emsdk 5.0.1 is not configured')
-let emsdkRoot, emccBinary, emccSha256, emccVersion, emscriptenTreeSha256
+let emsdkRoot, emccBinary, emccSha256, emccVersion, emscriptenTreeSha256, compilerEnvironment
 try {
   emsdkRoot = await realpath(emsdk)
   const checkoutRoot = await realpath(output('git', ['rev-parse', '--show-toplevel'], { cwd: emsdkRoot }))
@@ -120,46 +122,39 @@ try {
   const relative = path.relative(path.join(emsdkRoot, 'upstream/emscripten'), emccBinary)
   if (!relative || relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative))
     throw new Error('emcc is outside the emsdk upstream/emscripten directory')
-  emccVersion = output(emccBinary, ['--version']).split('\n')[0]
+  compilerEnvironment = await prepareCompilerEnvironment(emsdkRoot,generatedRoot)
+  emccVersion = output(emccBinary, ['--version'],{env:compilerEnvironment.env}).split('\n')[0]
   if (!emccVersion.includes(' 5.0.1 ') || !emccVersion.includes(PINNED_EMSCRIPTEN_COMMIT))
     throw new Error(`Emscripten 5.0.1 (${PINNED_EMSCRIPTEN_COMMIT}) required, found ${emccVersion}`)
   emccSha256 = createHash('sha256').update(await readFile(emccBinary)).digest('hex')
 } catch (error) {
   throw new Error(`BLOCKED: pinned Emscripten source and executable could not be verified: ${String(error)}`)
 }
-let fontbm = process.env.FONTBM
-if (!fontbm) {
-  try { fontbm = output('which', ['fontbm']) }
-  catch { throw new Error('BLOCKED: fontbm is unavailable') }
-}
-if (!fontbm) throw new Error('BLOCKED: fontbm is unavailable')
-const fontbmSource = process.env.FONTBM_SOURCE ?? path.resolve(fontbm, '../..')
+const fontbmSource = process.env.FONTBM_SOURCE
+if(!fontbmSource)throw Error('BLOCKED: FONTBM_SOURCE must identify the pinned source checkout')
 let fontbmBinary, fontbmSourceRoot, fontbmCommit, fontbmSha256
 try {
-  fontbmBinary = await realpath(fontbm)
-  fontbmSourceRoot = await realpath(fontbmSource)
-  const binaryInfo = await stat(fontbmBinary)
-  if (!binaryInfo.isFile() || (binaryInfo.mode & 0o111) === 0) throw new Error('fontbm is not executable')
-  const relativeBinary = path.relative(fontbmSourceRoot, fontbmBinary)
-  if (!relativeBinary || relativeBinary === '..' || relativeBinary.startsWith(`..${path.sep}`)
-    || path.isAbsolute(relativeBinary)) throw new Error('fontbm binary is outside its source checkout')
-  const checkoutRoot = await realpath(output('git', ['rev-parse', '--show-toplevel'], { cwd: fontbmSourceRoot }))
-  if (checkoutRoot !== fontbmSourceRoot) throw new Error('fontbm source is not the checkout root')
-  fontbmCommit = output('git', ['rev-parse', 'HEAD'], { cwd: fontbmSourceRoot })
-  if (fontbmCommit !== PINNED_FONTBM_COMMIT) throw new Error(`fontbm source commit is ${fontbmCommit}`)
-  const trackedChanges = output('git', ['status', '--porcelain=v1', '--untracked-files=no'], { cwd: fontbmSourceRoot })
-  if (trackedChanges) throw new Error('fontbm source has tracked changes')
-  fontbmSha256 = createHash('sha256').update(await readFile(fontbmBinary)).digest('hex')
-} catch (error) {
-  throw new Error(`BLOCKED: pinned fontbm source and executable could not be verified: ${String(error)}`)
-}
+ fontbmSourceRoot=await realpath(fontbmSource)
+ const checkoutRoot=await realpath(output('git',['rev-parse','--show-toplevel'],{cwd:fontbmSourceRoot}))
+ if(checkoutRoot!==fontbmSourceRoot)throw Error('fontbm source is not the checkout root')
+ fontbmCommit=output('git',['rev-parse','HEAD'],{cwd:fontbmSourceRoot})
+ if(fontbmCommit!==PINNED_FONTBM_COMMIT)throw Error(`fontbm source commit is ${fontbmCommit}`)
+ if(output('git',['status','--porcelain=v1','--untracked-files=no'],{cwd:fontbmSourceRoot}))throw Error('fontbm source has tracked changes')
+ const expected=path.join(fontbmSourceRoot,'build/fontbm')
+ if(process.env.FONTBM && path.resolve(process.env.FONTBM)!==expected)throw Error('FONTBM must select the clean-built source target')
+ await rebuildFontbm(fontbmSourceRoot)
+ fontbmBinary=await realpath(expected)
+ const info=await stat(fontbmBinary)
+ if(!info.isFile()||(info.mode&0o111)===0)throw Error('fontbm is not executable')
+ fontbmSha256=createHash('sha256').update(await readFile(fontbmBinary)).digest('hex')
+} catch(error){throw Error(`BLOCKED: clean pinned fontbm build failed: ${String(error)}`)}
 
 const { sdkPatch } = await import('./prepare-source.mjs')
 execFileSync('npm', ['ci', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit',
-  env: { ...process.env, CI: '1', LEFTHOOK: '0' } })
+  env: { ...compilerEnvironment.env, CI: '1', LEFTHOOK: '0' } })
 await replaceCache(path.join(emsdkRoot,'upstream/emscripten/cache'),path.join(generatedRoot,'em-cache'))
 execFileSync('npm', ['run', 'build:wasm'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit',
-  env: { ...process.env, FONTBM: fontbmBinary, EM_CACHE: path.join(generatedRoot, 'em-cache'), PYTHONDONTWRITEBYTECODE: '1' } })
+  env: { ...compilerEnvironment.env, FONTBM: fontbmBinary, EM_CACHE: path.join(generatedRoot, 'em-cache'), PYTHONDONTWRITEBYTECODE: '1' } })
 
 await mkdir(path.join(publicSimulator, 'assets/case/v1'), { recursive: true })
 const hashes = {}
@@ -170,12 +165,13 @@ for (const name of ['mc.js', 'mc.wasm']) {
 }
 await cp(path.join(vendorRoot, 'web/simulator/assets/case/v1/shell.stl'),
   path.join(publicSimulator, 'assets/case/v1/shell.stl'))
-const provenance = { sourceCommit: PINNED_COMMIT, sdkPatch, moddableVersion, emccVersion,
+const host = await verifyStagedHost(path.join(sourceRoot,'web'))
+const provenance = { host, sourceCommit: PINNED_COMMIT, sdkPatch, moddableVersion, emccVersion,
   moddable: { path: moddableRoot, sourceCommit: PINNED_MODDABLE_COMMIT, build: 'clean release xsc/xsid/xsl/tools from verified checkout', tools: moddableTools },
   emscripten: { emsdkPath: emsdkRoot, emsdkCommit: PINNED_EMSDK_COMMIT,
-    release: PINNED_EMSCRIPTEN_RELEASE, upstreamCommit: PINNED_EMSCRIPTEN_COMMIT,
+    controlledConfig: compilerEnvironment.provenance, release: PINNED_EMSCRIPTEN_RELEASE, upstreamCommit: PINNED_EMSCRIPTEN_COMMIT,
     installedTreeSha256: emscriptenTreeSha256, emccPath: emccBinary, emccSha256 },
-  fontbm: { path: fontbmBinary, sourceCommit: fontbmCommit, sha256: fontbmSha256 }, sha256: hashes }
+  fontbm: { path: fontbmBinary, build: 'clean CMake Release from verified checkout', sourceCommit: fontbmCommit, sha256: fontbmSha256 }, sha256: hashes }
 await writeFile(provenancePath, `${JSON.stringify(provenance, null, 2)}\n`)
 await writeFile(path.join(publicRoot, 'runtime-provenance.json'), `${JSON.stringify(provenance, null, 2)}\n`)
 console.log(JSON.stringify(provenance, null, 2))

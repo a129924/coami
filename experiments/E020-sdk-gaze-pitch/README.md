@@ -62,3 +62,7 @@
 ## PR comment review and fix（2026-10-14）
 
 Review 的建置來源、殘留產物、啟動錯誤處理已修正，逐項說明與驗證見 [review-fixes](evidence/review-fixes.md)。重新以 clean-built pinned 工具與清空後 cache 建置，runtime JS／WASM／MOD 雜湊與原驗證產物完全相同；原實驗結論與真人證據保留。
+
+## PR comment review and fix：第二輪（2026-10-14）
+
+三項新增建議已採納：fontbm clean source build、受控 Emscripten config／環境、staged simulator host 雜湊核對。詳見 [review2-fixes](evidence/review2-fixes.md)。prepare:poc 不再信任輸入的 EM_CONFIG 或 compiler path overrides；FONTBM_SOURCE 必須提供 pinned checkout，FONTBM 若提供則必須指向其 build/fontbm。網頁 build/dev 需先準備 generated host，staged source 不符固定 hashes 即拒絕。實際重建與負向測試完成，原真人證據對應的 executable artifacts 與 host bytes 保持相同。
