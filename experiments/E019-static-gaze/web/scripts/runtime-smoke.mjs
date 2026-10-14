@@ -1,3 +1,4 @@
+import {analyzeDispatches} from '../src/smoke-analysis.ts'
 import {beginSmokeEvidence} from './smoke-evidence.mjs'
 // Actual C/WASM browser path with automated pointers; NOT human evidence.
 import {spawn} from 'node:child_process'
@@ -55,13 +56,7 @@ try{
  await until(async()=> (await readdir(downloads)).some(f=>f.endsWith('.json')),'export',5000)
  const file=(await readdir(downloads)).find(f=>f.endsWith('.json'));transcript=JSON.parse(await readFile(path.join(downloads,file),'utf8'))
  const begins=transcript.records.filter(r=>r.message.startsWith('COAMI19|')).map(r=>JSON.parse(r.message.slice(8))).filter(e=>e.phase==='begin')
- const failures=[]
- const moves=transcript.records.filter(r=>r.message.startsWith('[WasmDriver] applyRotation'))
- for(const begin of begins.filter(e=>e.kind==='look')){
-  const move=moves.find(r=>r.seq===begin.seq);if(!move){failures.push({seq:begin.seq,target:begin.target,reason:'no driver rotation for accepted target'});continue}
-  const match=move.message.match(/y=([^ ]+) p=([^ ]+)/);const axis=['left','right'].includes(begin.target)?Number(match[1]):Number(match[2])
-  const sign=['left','down'].includes(begin.target)?1:-1;assert.ok(Math.abs(axis-sign*Math.PI/4)<1e-6)
- }
+ const failures=analyzeDispatches(transcript.records)
  assert.equal(errors.length,0);assert.ok(begins.some(e=>e.kind==='away'))
  const finalShot=await call('Page.captureScreenshot',{format:'png'});await writeFile(path.join(run.directory,'automated-final.png'),Buffer.from(finalShot.data,'base64'))
  report={status:failures.length?'FAIL':'PASS',failures,experiment:'E019',capturedAt:new Date().toISOString(),kind:'actual pinned WASM, automated UI operations; NOT human evidence',browser:await call('Browser.getVersion'),cases,transcript,errors}

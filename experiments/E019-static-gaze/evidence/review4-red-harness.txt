@@ -1,0 +1,56 @@
+
+> coami-e019-web@0.1.0 test:scripts
+> node --test scripts/build-safety.test.mjs scripts/tool-inputs.test.mjs scripts/public-inputs.test.mjs scripts/smoke-evidence.test.mjs scripts/harness-inputs.test.mjs
+
+✔ restoring verified cache removes extra stale libraries (5.186917ms)
+✔ a failed rebuild cannot leave a matching stale MOD pair or compiled modules (2.581791ms)
+✔ vendor gate rejects wrong checkout, gitlink or dirty files (0.186417ms)
+✔ Moddable rebuilding removes old executables and objects before invoking make (2.841541ms)
+node:internal/modules/esm/resolve:241
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/harness-inputs.mjs' imported from /private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/harness-inputs.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:241:11)
+    at moduleResolve (node:internal/modules/esm/resolve:846:10)
+    at defaultResolve (node:internal/modules/esm/resolve:973:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:766:56)
+    at #resolve (node:internal/modules/esm/loader:690:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:610:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:277:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:389:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/harness-inputs.mjs'
+}
+
+Node.js v26.10.0
+✖ scripts/harness-inputs.test.mjs (60.314709ms)
+✔ current source edits, forged provenance and modified served mesh are rejected (67.324458ms)
+✔ an aborted repeat run replaces the latest report without reusing old PASS or screenshots (5.970125ms)
+✖ controlled compiler config ignores hostile config and tool overrides (1458.149542ms)
+✔ fontbm clean rebuild discards the binary and CMake cache before configure (4.624834ms)
+✔ staged simulator host is authenticated without reading the live vendor (9.019709ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 8
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1549.362542
+
+✖ failing tests:
+
+test at scripts/harness-inputs.test.mjs:1:1
+✖ scripts/harness-inputs.test.mjs (60.314709ms)
+  'test failed'
+
+test at scripts/tool-inputs.test.mjs:8:1
+✖ controlled compiler config ignores hostile config and tool overrides (1458.149542ms)
+  Error: Pinned SDK Python executable path mismatch
+      at prepareCompilerEnvironment (file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/tool-inputs.mjs:12:94)
+      at async TestContext.<anonymous> (file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/tool-inputs.test.mjs:17:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)

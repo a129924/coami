@@ -1,0 +1,52 @@
+
+> coami-e019-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ each preset uses lookAt with its actual coordinate, never setPose (1.439ms)
+✔ invalid coordinates and unknown target never reach SDK (0.515166ms)
+✔ window prevents overlap; away and subsequent target get new sequence (0.121292ms)
+✔ synchronous failure is failed, never returned; window still isolates late traces (0.119334ms)
+✔ prepare calls lookAway then setPose, with separate preparation kind (0.098666ms)
+✖ call return and window end never imply direction or clear-state confirmation (1.256834ms)
+✔ driver error after return overrides call-only state and blocks visual PASS (0.168834ms)
+✔ stale and malformed records cannot end an active window (0.277417ms)
+✔ observation is explicit, scoped, and separate from call state (0.753833ms)
+✔ runtime errors without an active operation block commands until reload (0.0685ms)
+✔ a call with no driver evidence stays unconfirmed even after its window (0.490625ms)
+✔ wrong-angle or post-return driver traces cannot validate the current look (0.239459ms)
+✔ a matching rotation within the synchronous look call supports its own observation (0.060083ms)
+✔ startup rejection cancels watchdog and preserves the original failure (0.711ms)
+✔ watchdog does not add a second error after another path blocks the ledger (0.092667ms)
+✔ a pending non-ready startup still reports its timeout (0.072292ms)
+✔ an older send timeout cannot fail a newer pending send (0.533041ms)
+✔ operation watchdog preserves an existing fatal error and ignores a finished operation (0.104709ms)
+✔ a genuinely pending operation still times out (0.068375ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 18
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 126.22275
+
+✖ failing tests:
+
+test at src/ledger.test.ts:4:1
+✖ call return and window end never imply direction or clear-state confirmation (1.256834ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  true !== false
+
+      at TestContext.<anonymous> (file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/src/ledger.test.ts:8:46)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

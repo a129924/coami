@@ -1,0 +1,11 @@
+{
+  "kind": "pure offline replay of preserved historical automated transcript; no new browser/human run",
+  "status": "FAIL",
+  "failures": [
+    {
+      "seq": 24,
+      "target": "down",
+      "reason": "no synchronous target-matching driver evidence"
+    }
+  ]
+}

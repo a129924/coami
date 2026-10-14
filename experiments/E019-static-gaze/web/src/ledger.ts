@@ -45,6 +45,7 @@ export class Ledger {
   }
   confirm(result: Observation): boolean {
     if (!this.current || this.busy || !this.needsObservation) return false
+    if (this.current.kind === 'away' && result !== '未確認') return false
     if (result === '符合' && (this.current.kind === 'away' || !this.returned || this.failed || !this.driver || this.blocked)) return false
     this.observations.push({ seq: this.current.seq, kind: this.current.kind, target: this.current.target, result })
     this.needsObservation = false; return true

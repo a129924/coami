@@ -1,0 +1,26 @@
+{
+  "mode": "production",
+  "sources": {
+    "index.html": "dbdffbe952ae71f7642af459a4785faf3631762226f96b549db1d209cb80790e",
+    "src/main.ts": "219baf03d6640530dcb510edbee8a9f2bbd309dcb0affa6869deab4b20e7d35d",
+    "src/ledger.ts": "a5f68000cd71ff56622f880a2097b73fa97f45ab48d7ae204f5f50e52e1af01a",
+    "src/startup.ts": "92abaa4af29c533e3d3c0f2a5de7ea4989fdde53233e8179196a181d92df3128",
+    "src/watchdogs.ts": "53519546147ebdf22db02894d2d74f747a40202dc69ef879458f4ac03e1d96b7",
+    "src/style.css": "b733772f3e65a9089b8c926550a50a8275844ffcbe418bb6bf7fc7bfd664b1d9",
+    "src/mod-pin.json": "8744b2cc63b14fcf3a6a82de370b8d5595f79f0faaf2b3671ba813b776411c95",
+    "src/runtime-pin.json": "298cdd804061aa90cffdab2984bb7ee6529326b894523fdc5004167906b2c40c",
+    "scripts/host-pin.json": "98516a74899096a0d616547dad75414f9fcf4cfaa4621c6ffa2abc9b7b68a633",
+    "vite.config.ts": "4a1de06cc8424a9b6207c3fe2a986fd6ad62a7cb65a4606908859d8f6b547edb",
+    "scripts/harness-inputs.mjs": "a983543d63b4fdfe663b41fdbdbb6b37682e7d28e33e79750198afafe7f9a094",
+    "scripts/public-inputs.mjs": "9957fc8c4612f0d260cfc5f999cd67d16d9c82f534c9be6e51171b9d799ef142",
+    "scripts/host-inputs.mjs": "4877da27e64e2eb18931ce64f4b5ca527c41af8af7a5f0597bb1a4464bd0532e",
+    "package.json": "5fb8d7a82783cc6f24f30017b4a2e5f11b2d58f7673b90ef393308485a387540",
+    "package-lock.json": "8e7a995a0f59d19bf540962dc1dd545896368ba561659cf10e4b2071c2e7a629",
+    "tsconfig.json": "6053cb4cc33ba9ac82e6f98af2a8217313d2a0eddd2bef4932c4139303e7c304"
+  },
+  "bundleSha256": {
+    "assets/index-BP1MvSws.css": "5ba0e030a61bdcd4f33bcbbfd0b9c93f0bb3619b504a129b4135139871417d50",
+    "assets/index-Cz20_-jz.js": "6e0f6f9764f3fb01eb1db213fbe0af7140f683b62df18eb08386c3fb373bbff1",
+    "index.html": "9211c43c16a4a7c01d7fd142f46db8caac88e25f39613ce8324ab4ba20073a67"
+  }
+}

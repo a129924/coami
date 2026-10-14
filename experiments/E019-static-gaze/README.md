@@ -54,6 +54,7 @@ export PATH="$MODDABLE/build/bin/mac/release:$EMSDK/upstream/emscripten:$PATH"
 curl --fail --location --output generated/wasm-binaries-arm64.tar.xz https://storage.googleapis.com/webassembly/emscripten-releases-builds/mac/bf32ae8b61ac8efeb7eca01b54c8307f992724f7/wasm-binaries-arm64.tar.xz
 node scripts/install-compiler.mjs
 npm run prepare:poc
+npm run test:scripts
 npm run typecheck
 npm run build
 npm run dev -- --port 5199
@@ -115,3 +116,7 @@ Review 的建置來源、殘留產物、啟動錯誤處理已修正，逐項說�
 ## PR comment review and fix：第三輪（2026-10-14）
 
 Python interpreter、served mesh、reviewed MOD sources/archive 驗證及 trace／watchdog scope 已修正，見 [review3-fixes](evidence/review3-fixes.md)。舊 run 缺少 host attestation，無法用後來的 staged host hashes 補證；歷史觀察保留，新 gate 真人驗收未執行。E020 的完整來源可驗收結論已限縮，採用仍交 human review。
+
+## PR comment review and fix：第四輪（2026-10-14）
+
+固定 executable runtime、完整 Python install tree、harness source pins 與 production bundle hashes，並限制解除操作只能記錄未確認。重現流程包含 scripts regression suite；逐項決定、驗證與未執行項見 [review4-fixes](evidence/review4-fixes.md)。舊真人紀錄不會因新增 attestation 而改判。
