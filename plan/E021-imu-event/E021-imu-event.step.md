@@ -11,7 +11,7 @@ created: 2026-10-14
 
 | Current status | Allowed next transitions | Next actor |
 | --- | --- | --- |
-| publish-in-progress | publish-in-progress→pr-open | Main Agent |
+| pr-open | pr-open→needs-rework or merged | Human reviewer |
 
 ## Actionable Steps
 
@@ -92,10 +92,10 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 - [X] **Actor:** Main Agent — **Action:** Validate the approved Written set and perform bounded staging only.
 - [X] **Actor:** Main Agent — **Action:** Obtain explicit human approval at STOP POINT 1 before commit, push, or PR creation.
 - [X] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
-- [ ] **Actor:** Main Agent — **Action:** Push the topic branch.
-- [ ] **Actor:** Main Agent — **Action:** Open the pull request.
-- [ ] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
-- [ ] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
+- [X] **Actor:** Main Agent — **Action:** Push the topic branch.
+- [X] **Actor:** Main Agent — **Action:** Open the pull request.
+- [X] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
+- [X] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
 - [ ] **Actor:** Main Agent — **Action:** Record exact human merge evidence after a new execution begins.
 - [ ] **Actor:** Main Agent — **Action:** Require a new explicit human resume before post-merge work.
 - [ ] **Actor:** Main Agent — **Action:** Verify the pull request is merged.
@@ -128,3 +128,5 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 - S3 engineering delivery classification (Planner): full automated runtime matrix/evidence plus executable human procedure and NOT_EXECUTED matrix may be independently reviewed for this creator pass. It does not complete full verification. Frozen head/tail, independent review gates and original all-cases-executed/all-PASS acceptance requirements remain unchanged.
 
 - PR Lens follow-up Actual: normal commits53e38d6/cb635af/f0eec2b; real map snapshot base34fd88c/headf0eec2b local validate/render PASS and independent Reviewer APPROVED. Later docs commits do not change that snapshot.
+
+- Publication Actual: pushed topic branch; Draft PR https://github.com/a129924/coami/pull/21 OPEN/isDraft=true/base=dev, observed head5eb3bf5 and no comments/reviews. STOP POINT 2 handed to human; required simulator acceptance NOT_EXECUTED/fullVerification=false. Human-merge tail wording is frozen and does not authorize merge; post-merge/cleanup rows remain pending. CI was in progress at initial observation; no CI pass inferred.
