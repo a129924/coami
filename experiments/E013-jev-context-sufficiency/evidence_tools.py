@@ -7,6 +7,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 import re
+import stat
 import subprocess
 import tempfile
 from typing import Any
@@ -238,7 +239,7 @@ def parse_review_bytes(data: bytes) -> dict[str, Any]:
 
 def read_review(path: Path) -> dict[str, Any]:
     try:
-        return parse_review_bytes(path.read_bytes())
+        return parse_review_bytes(regular_bytes(path))
     except OSError as exc:
         raise e.ContractError("INVALID_PUBLICATION_REVIEW") from exc
 
@@ -255,7 +256,7 @@ def read_manifest(path: Path) -> dict[str, Any]:
         return document
 
     try:
-        data = path.read_bytes()
+        data = regular_bytes(path)
         manifest = json.loads(data, object_pairs_hook=unique)
         if not isinstance(manifest, dict) or e.json_bytes(manifest) != data:
             raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
@@ -280,9 +281,32 @@ def bounded_path(root: Path, locator: str) -> Path:
     return result
 
 
+def regular_bytes(path: Path) -> bytes:
+    """Reject pipes, devices and symlinks before opening an evidence artifact."""
+    try:
+        if not stat.S_ISREG(path.lstat().st_mode):
+            raise e.ContractError("INVALID_EVIDENCE_FILE")
+        return path.read_bytes()
+    except OSError as exc:
+        raise e.ContractError("INVALID_EVIDENCE_FILE") from exc
+
+
+def require_regular_tree(root: Path) -> None:
+    """Reject non-regular entries before any evidence verifier reads files."""
+    try:
+        if not stat.S_ISDIR(root.lstat().st_mode):
+            raise e.ContractError("INVALID_EVIDENCE_FILE")
+        for path in root.rglob("*"):
+            mode = path.lstat().st_mode
+            if not (stat.S_ISDIR(mode) or stat.S_ISREG(mode)):
+                raise e.ContractError("INVALID_EVIDENCE_FILE")
+    except OSError as exc:
+        raise e.ContractError("INVALID_EVIDENCE_FILE") from exc
+
+
 def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
     try:
-        data = path.read_bytes()
+        data = regular_bytes(path)
         lines = data.splitlines()
         rows = [
             json.loads(
@@ -439,7 +463,7 @@ def read_rows(path: Path, *, allow_stubs: bool = False) -> list[dict[str, Any]]:
 
 def summary_bytes(run_dir: Path) -> bytes:
     """Reject extra metadata and require exact, reviewable summary content."""
-    data = (run_dir / "summary.json").read_bytes()
+    data = regular_bytes(run_dir / "summary.json")
     try:
         summary = json.loads(
             data,
@@ -1016,6 +1040,7 @@ def verify_local_run(
     run_dir: Path, manifest: dict[str, Any] | None = None
 ) -> dict[str, Any]:
     """Verify current local bytes; this does not establish backup or immutability."""
+    require_regular_tree(run_dir)
     if manifest is None:
         manifest = read_manifest(run_dir / "manifest.json")
     verify_replay_sdk(run_dir, manifest)
@@ -1170,6 +1195,7 @@ def publish_reviewed(run_dir: Path, approval_path: Path, evidence_root: Path) ->
 
 def require_approved_publish_source(run_dir: Path) -> None:
     """Keep the reviewed source and private snapshot in the approved local store."""
+    require_regular_tree(run_dir)
     manifest = read_manifest(run_dir / "manifest.json")
     run_id = manifest.get("run_id")
     if not isinstance(run_id, str) or not e.CASE_ID.fullmatch(run_id):
@@ -1189,6 +1215,7 @@ def require_approved_publish_source(run_dir: Path) -> None:
 @contextmanager
 def snapshot_run(run_dir: Path):
     """Keep verification and publication on one private byte snapshot."""
+    require_regular_tree(run_dir)
     with tempfile.TemporaryDirectory(
         prefix=".e013-review-", dir=run_dir.parent
     ) as temp:
@@ -1434,12 +1461,61 @@ def _write_publication(
     e.write_exclusive(output / "summary.json", approved_summary)
 
 
+def verify_committed_evidence(
+    evidence_run: Path,
+    restricted_run: Path | None = None,
+    candidate_threshold: float | None = None,
+) -> dict[str, Any]:
+    """Interpret a snapshot only after every public byte matches one Git commit."""
+    run_id = evidence_run.name
+    canonical = e.TOPIC / "evidence/runs" / run_id
+    if (
+        not e.CASE_ID.fullmatch(run_id)
+        or evidence_run.absolute() != canonical.absolute()
+    ):
+        raise e.ContractError("PUBLIC_EVIDENCE_UNCOMMITTED")
+    require_regular_tree(evidence_run)
+    revision = e.checked_git(e.ROOT, ["rev-parse", "HEAD^{commit}"]).decode().strip()
+    if not REVISION.fullmatch(revision):
+        raise e.ContractError("PUBLIC_EVIDENCE_UNCOMMITTED")
+    prefix = canonical.relative_to(e.ROOT).as_posix() + "/"
+    tracked = e.checked_git(e.ROOT, ["ls-tree", "-r", "-z", revision, "--", prefix])
+    names = set()
+    for entry in tracked.split(b"\0"):
+        if not entry:
+            continue
+        header, name = entry.split(b"\t", 1)
+        mode, kind, _object_id = header.split()
+        if mode not in (b"100644", b"100755") or kind != b"blob":
+            raise e.ContractError("PUBLIC_EVIDENCE_UNCOMMITTED")
+        names.add(name.decode())
+    present = {
+        prefix + path.relative_to(evidence_run).as_posix()
+        for path in evidence_run.rglob("*")
+        if path.is_file()
+    }
+    if not names or names != present or prefix + "manifest.json" not in names:
+        raise e.ContractError("PUBLIC_EVIDENCE_UNCOMMITTED")
+    with tempfile.TemporaryDirectory(prefix="e013-committed-evidence-") as temporary:
+        snapshot = Path(temporary) / run_id
+        snapshot.mkdir()
+        for name in sorted(names):
+            local = evidence_run / name.removeprefix(prefix)
+            data = regular_bytes(local)
+            committed = e.checked_git(e.ROOT, ["show", f"{revision}:{name}"])
+            if data != committed:
+                raise e.ContractError("PUBLIC_EVIDENCE_UNCOMMITTED")
+            e.write_exclusive(snapshot / name.removeprefix(prefix), data)
+        return verify_evidence(snapshot, restricted_run, candidate_threshold)
+
+
 def verify_evidence(
     evidence_run: Path,
     restricted_run: Path | None = None,
     candidate_threshold: float | None = None,
 ) -> dict[str, Any]:
     """Check exact objects and recompute statistics from a clean checkout."""
+    require_regular_tree(evidence_run)
     manifest = read_manifest(evidence_run / "manifest.json")
     verify_replay_sdk(evidence_run, manifest)
     if evidence_run.name != manifest.get("run_id"):

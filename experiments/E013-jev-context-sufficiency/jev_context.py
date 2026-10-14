@@ -1371,7 +1371,11 @@ def main() -> int:
         ):
             print("E013 BLOCKED RUNNER_SOURCE_UNVERIFIED", flush=True)
             return 2
-        from evidence_tools import publish_reviewed, verify_evidence, verify_local_run
+        from evidence_tools import (
+            publish_reviewed,
+            verify_committed_evidence,
+            verify_local_run,
+        )
 
         try:
             if args.publish_reviewed:
@@ -1390,7 +1394,7 @@ def main() -> int:
                 return 0 if not result["gaps"] else 2
             if args.evidence_run is None:
                 raise ContractError("MISSING_EVIDENCE_RUN")
-            result = verify_evidence(
+            result = verify_committed_evidence(
                 args.evidence_run, args.restricted_run, args.candidate_threshold
             )
             print(json.dumps(result, ensure_ascii=False, allow_nan=False))

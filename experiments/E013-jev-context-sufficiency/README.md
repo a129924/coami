@@ -42,7 +42,7 @@ env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u RUST_LOG \
   --store-root /Users/andrew/coami-evidence/E013
 ```
 
-For a separately authorized future run, authenticate the `uv` binary and the entire managed Python 3.12 runtime with system Python before and after synchronizing without a credential. The authenticated Python 3.12 bootstrap reads the credential file only after confirming the runner and one-run authorization. The paths and SHA-256 values below are pinned for this macOS arm64 host and require a reviewed update if either installation changes. Clear `UV_NO_SYNC` and `PYTHONPATH` so inherited settings cannot skip synchronization or shadow the imported SDK:
+For a separately authorized future run, authenticate the `uv` binary, the entire managed Python 3.12 runtime, and the committed project and lock bytes with system Python before and after synchronizing without a credential. Synchronization forbids source builds and project installation; the same Git revision must survive synchronization and match the bootstrap revision. The authenticated Python 3.12 bootstrap reads the credential file only after confirming the runner and one-run authorization. The paths and SHA-256 values below are pinned for this macOS arm64 host and require a reviewed update if either installation changes. Clear `UV_NO_SYNC` and `PYTHONPATH` so inherited settings cannot skip synchronization or shadow the imported SDK:
 
 Preflight checks imported SDK and transitive dependency code against the authorized lockfile's versions, installed RECORD hashes, module origins, and the independent 287-file `sdk-code-digests.json` baseline whose SHA-256 is fixed in the authorized runner source. The baseline is for this macOS arm64 Python 3.12 environment and was reviewed as committed source; changing a package and its mutable RECORD together still fails it. A different platform or wheel build requires a separately reviewed baseline and authorization. It also verifies that `runs/` and `authorization-uses/` beneath the approved local store are real directories before consuming the one-use authorization. The command below uses Python's `-I -S -B -c` entry point: `-S` prevents site hooks and `.pth` execution, the site-packages path is appended after the standard library without processing hooks, and an exclusive empty bytecode cache prefix prevents loading existing dependency `.pyc` files. It then executes a single runner byte snapshot without first executing a separate repository launcher script. The runner checks that snapshot against its committed authorization; invoking `jev_context.py --live` directly blocks before the authorization marker. Git authorization reads clear inherited `GIT_*` overrides, validate this checkout's `.git` target, and use that explicit Git directory. These are point-in-time checks; the local store remains unbacked staging until reviewed evidence is committed and pushed.
 
@@ -53,7 +53,7 @@ The `-c` bootstrap uses only the standard library until it has compared the exac
 ```sh
 verify_inputs() {
   /usr/bin/python3 -I -S -B -c '
-import hashlib, os
+import hashlib, os, stat, subprocess
 from pathlib import Path
 def blocked():
     raise SystemExit("E013 BLOCKED LAUNCH_RUNTIME_UNVERIFIED")
@@ -79,15 +79,44 @@ try:
     binary = runtime / "bin/python3.12"
     if digest.hexdigest() != "e28f4275a88734b4fc6e768440429812dfd363b026ca221ce966c4ab7f531135" or hashlib.sha256(binary.read_bytes()).hexdigest() != "a0ea1fa2b8d2631d1ba8e513b29a90c6a6cdfb9d00febb1a02e5cc5cb44a838e":
         blocked()
-except (OSError, RuntimeError, ValueError):
+    root = Path.cwd().resolve()
+    env = {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
+    env["GIT_NO_REPLACE_OBJECTS"] = "1"
+    probe = subprocess.run(["/usr/bin/git", "-C", str(root), "rev-parse", "--show-toplevel", "--absolute-git-dir"], env=env, capture_output=True, check=True).stdout.decode().splitlines()
+    marker = root / ".git"
+    if len(probe) != 2 or Path(probe[0]).resolve() != root or marker.is_symlink():
+        blocked()
+    if marker.is_dir():
+        expected_git_dir = marker.resolve()
+    elif marker.is_file():
+        pointer = marker.read_text().strip()
+        if not pointer.startswith("gitdir: "):
+            blocked()
+        expected_git_dir = (root / pointer.removeprefix("gitdir: ")).resolve()
+    else:
+        blocked()
+    git_dir = Path(probe[1]).resolve()
+    if git_dir != expected_git_dir or not git_dir.is_dir():
+        blocked()
+    def git(*args):
+        return subprocess.run(["/usr/bin/git", "--git-dir", str(git_dir), "--work-tree", str(root), *args], env=env, capture_output=True, check=True).stdout
+    revision = git("rev-parse", "HEAD^{commit}").decode().strip()
+    if len(revision) != 40 or any(character not in "0123456789abcdef" for character in revision):
+        blocked()
+    for relative in ("experiments/E013-jev-context-sufficiency/pyproject.toml", "experiments/E013-jev-context-sufficiency/uv.lock"):
+        project_input = root / relative
+        if not stat.S_ISREG(project_input.lstat().st_mode) or project_input.read_bytes() != git("show", f"{revision}:{relative}"):
+            blocked()
+    print(revision)
+except (OSError, RuntimeError, ValueError, UnicodeDecodeError, subprocess.CalledProcessError):
     blocked()
 '
 }
-verify_inputs &&
+e013_revision="$(verify_inputs)" &&
 /usr/bin/env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u PYTHONPATH -u RUST_LOG \
-  /Users/andrew/.local/bin/uv sync --quiet --locked --project experiments/E013-jev-context-sufficiency &&
-verify_inputs &&
-/usr/bin/env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u PYTHONPATH -u RUST_LOG \
+  /Users/andrew/.local/bin/uv sync --quiet --locked --no-build --no-install-project --project experiments/E013-jev-context-sufficiency &&
+test "$(verify_inputs)" = "$e013_revision" &&
+/usr/bin/env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u PYTHONPATH -u RUST_LOG E013_PREFLIGHT_REVISION="$e013_revision" \
   /Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/bin/python3.12 -I -S -B -c '
 import hashlib, json, os, subprocess, sys, tempfile
 from pathlib import Path
@@ -138,7 +167,7 @@ try:
     if git_dir != expected_git_dir or not git_dir.is_dir():
         blocked()
     revision = subprocess.run(["/usr/bin/git", "--git-dir", str(git_dir), "--work-tree", str(root), "rev-parse", "HEAD^{commit}"], env=env, capture_output=True, check=True).stdout.decode().strip()
-    if len(revision) != 40 or any(character not in "0123456789abcdef" for character in revision):
+    if len(revision) != 40 or any(character not in "0123456789abcdef" for character in revision) or (live and revision != os.environ.pop("E013_PREFLIGHT_REVISION", None)):
         blocked()
     def committed(path):
         relative = path.relative_to(root).as_posix()
@@ -198,7 +227,7 @@ else:
   --credential-file /Users/andrew/code/python/coami/experiments/E012-jev-text-policy/.env
 ```
 
-For `--verify-local-run`, `--publish-reviewed`, and `--verify-evidence`, use the same authenticated Python 3.12 bootstrap above, omit `--credential-file` and the live-only arguments, and supply the selected evidence mode and its documented paths. The bootstrap installs both checked byte snapshots as Python modules before calling the runner's evidence entry point. Its Git checks invoke the fixed `/usr/bin/git` system executable, independent of `PATH` entries supplied by the environment. Do not execute `jev_context.py` directly for evidence operations: normal Python startup can run `.pth` or `sitecustomize` code before the verifier starts. The bootstrap requires the runner and evidence tool files to match committed `HEAD`; commit reviewed tool changes before using it. These commands make no Jev call.
+For `--verify-local-run`, `--publish-reviewed`, and `--verify-evidence`, use the same authenticated Python 3.12 bootstrap above, omit `--credential-file` and the live-only arguments, and supply the selected evidence mode and its documented paths. The bootstrap installs both checked byte snapshots as Python modules before calling the runner's evidence entry point. Its Git checks invoke the fixed `/usr/bin/git` system executable, independent of `PATH` entries supplied by the environment. Do not execute `jev_context.py` directly for evidence operations: normal Python startup can run `.pth` or `sitecustomize` code before the verifier starts. The bootstrap requires the runner and evidence tool files to match committed `HEAD`; commit reviewed tool changes before using it. `--verify-evidence` accepts only the canonical tracked run directory, compares every public artifact with blobs from one resolved Git commit, then interprets the matching private byte snapshot. Evidence readers reject FIFOs, devices, and symlinks before opening them. These commands make no Jev call.
 
 `.env` is an Owner-maintained, Git-ignored local credential file. Never print, hash, or commit it. The freeze attestation path above is tracked and verified; the local store path is approved for staging, not backed-up archival storage. Any later live run needs a new explicit Owner instruction. Before such a run, commit a dedicated JSON authorization record at `experiments/E013-jev-context-sufficiency/authorizations/<run_id>.json` and pass that path as `--live-authorization`. It must contain `run_id` (a new unique ID), `authorized_by: "Owner"`, `scope: "one E013 75-case Context Sufficiency run"`, `model: "jev-1.13.0"`, `freeze_attestation_sha256`, `store_policy_sha256`, `runner_sha256`, and `uv_lock_sha256`. The runner checks that its exact bytes and the synchronized lockfile are committed at HEAD and match this authorization, records the pre-run HEAD revision and canonical authorization path in the manifest, then consumes that run ID by exclusively creating `authorization-uses/<run_id>.json` in the approved store **before** creating `runs/<run_id>/` or calling Jev. Local and published verification use isolated Git to confirm that the retained authorization bytes occur at that recorded revision and path. The marker remains if the run directory is deleted; a failed run still consumes its authorization. This marker is outside the mutable run directory but remains owner-mutable local state without independent backup or tamper resistance. The manifest retains the authorization SHA-256. A committed record and its recorded revision are auditable but do not cryptographically prove when a call occurred or who approved it. The Owner's separate instruction and commit review establish that human decision. The completed historical run predates this record requirement; no retrospective pre-run authorization is asserted for it. The runner, freeze attestation, store policy, and `uv.lock` must each match their canonical committed `HEAD` bytes. Freeze attestation and store policy are each read once; validation, authorization and the manifest use those same byte snapshots. The historical run ID and IDs already present in tracked evidence are reserved.
 

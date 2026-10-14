@@ -217,6 +217,59 @@ class E013Tests(unittest.TestCase):
             with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_LOCATOR"):
                 evidence.bounded_path(root, "raw.body")
 
+    def test_fifo_manifest_is_rejected_before_open(self) -> None:
+        with TemporaryDirectory() as temporary:
+            run = Path(temporary) / "run-1"
+            run.mkdir()
+            os.mkfifo(run / "manifest.json")
+            with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_FILE"):
+                evidence.read_manifest(run / "manifest.json")
+            with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_FILE"):
+                evidence.verify_evidence(run)
+
+    def test_committed_verifier_rejects_modified_public_bytes(self) -> None:
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            run = root / e.RUNNER_RELATIVE.parent / "evidence/runs/run-1"
+            run.mkdir(parents=True)
+            (run / "manifest.json").write_bytes(b"{}\n")
+            (run / "raw.body").write_bytes(b"original")
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            subprocess.run(["git", "-C", str(root), "add", "."], check=True)
+            subprocess.run(
+                [
+                    "git",
+                    "-C",
+                    str(root),
+                    "-c",
+                    "user.name=Test",
+                    "-c",
+                    "user.email=test@example.invalid",
+                    "commit",
+                    "-qm",
+                    "evidence",
+                ],
+                check=True,
+            )
+            captured = []
+
+            def inspect_snapshot(snapshot: Path, *_args: object) -> dict[str, object]:
+                captured.append((snapshot / "raw.body").read_bytes())
+                return {"gaps": []}
+
+            with (
+                patch.object(e, "ROOT", root),
+                patch.object(e, "TOPIC", root / e.RUNNER_RELATIVE.parent),
+                patch.object(evidence, "verify_evidence", side_effect=inspect_snapshot),
+            ):
+                self.assertEqual(evidence.verify_committed_evidence(run)["gaps"], [])
+                self.assertEqual(captured, [b"original"])
+                (run / "raw.body").write_bytes(b"forged")
+                with self.assertRaisesRegex(
+                    e.ContractError, "PUBLIC_EVIDENCE_UNCOMMITTED"
+                ):
+                    evidence.verify_committed_evidence(run)
+
     def test_live_store_rejects_redirected_subdirectories(self) -> None:
         with TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -825,6 +878,7 @@ source = { registry = "https://pypi.org/simple" }
             1
         ].split("For `--verify-local-run`", 1)[0]
         self.assertIn("uv sync --quiet --locked", future)
+        self.assertIn("--no-build --no-install-project", future)
         self.assertNotIn("--env-file", future)
         self.assertNotIn("uv run", future)
         executable = Path(
@@ -845,6 +899,14 @@ source = { registry = "https://pypi.org/simple" }
             text=True,
         )
         self.assertEqual(verified.returncode, 0, verified.stderr)
+        self.assertIn('git("show", f"{revision}:{relative}")', runtime_check)
+        self.assertIn(
+            '"experiments/E013-jev-context-sufficiency/pyproject.toml"', runtime_check
+        )
+        self.assertIn(
+            '"experiments/E013-jev-context-sufficiency/uv.lock"', runtime_check
+        )
+        self.assertIn('E013_PREFLIGHT_REVISION="$e013_revision"', future)
         for digest in (
             e.sha(uv_binary.read_bytes()),
             "e28f4275a88734b4fc6e768440429812dfd363b026ca221ce966c4ab7f531135",
@@ -869,6 +931,9 @@ source = { registry = "https://pypi.org/simple" }
         )[0]
         self.assertNotIn("'", bootstrap)
         self.assertIn('"rev-parse", "HEAD^{commit}"', bootstrap)
+        self.assertIn(
+            'revision != os.environ.pop("E013_PREFLIGHT_REVISION", None)', bootstrap
+        )
         self.assertIn('f"{revision}:{relative}"', bootstrap)
         self.assertNotIn('f"HEAD:{relative}"', bootstrap)
         with TemporaryDirectory() as temporary:
@@ -898,6 +963,17 @@ source = { registry = "https://pypi.org/simple" }
                 check=True,
             )
             credential.write_text("TYPESAFE_API_KEY=synthetic-test-key\n")
+
+            def revision_env(**extra: str) -> dict[str, str]:
+                revision = (
+                    subprocess.check_output(
+                        ["git", "-C", str(root), "rev-parse", "HEAD^{commit}"]
+                    )
+                    .decode()
+                    .strip()
+                )
+                return {**os.environ, **extra, "E013_PREFLIGHT_REVISION": revision}
+
             marker = root / "malicious-ran"
             runner.write_text(
                 f"from pathlib import Path; Path({str(marker)!r}).write_text('ran')\n"
@@ -917,6 +993,7 @@ source = { registry = "https://pypi.org/simple" }
                     "credential.env",
                 ],
                 cwd=root,
+                env=revision_env(),
                 capture_output=True,
                 text=True,
                 check=False,
@@ -940,6 +1017,7 @@ source = { registry = "https://pypi.org/simple" }
                     "credential.env",
                 ],
                 cwd=root,
+                env=revision_env(),
                 capture_output=True,
                 text=True,
                 check=False,
@@ -997,7 +1075,7 @@ source = { registry = "https://pypi.org/simple" }
                     "credential.env",
                 ],
                 cwd=root,
-                env={**os.environ, "PATH": f"{shim_dir}:{os.environ.get('PATH', '')}"},
+                env=revision_env(PATH=f"{shim_dir}:{os.environ.get('PATH', '')}"),
                 capture_output=True,
                 text=True,
                 check=False,
@@ -1045,6 +1123,7 @@ source = { registry = "https://pypi.org/simple" }
                             "credential.env",
                         ],
                         cwd=root,
+                        env=revision_env(),
                         capture_output=True,
                         text=True,
                         check=False,
