@@ -1,0 +1,34 @@
+
+> coami-e019-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ each preset uses lookAt with its actual coordinate, never setPose (0.85925ms)
+✔ invalid coordinates and unknown target never reach SDK (0.105583ms)
+✔ window prevents overlap; away and subsequent target get new sequence (0.109958ms)
+✔ synchronous failure is failed, never returned; window still isolates late traces (0.112584ms)
+✔ prepare calls lookAway then setPose, with separate preparation kind (0.096334ms)
+✔ call return and window end never imply direction or clear-state confirmation (0.618209ms)
+✔ driver error after return overrides call-only state and blocks visual PASS (0.127ms)
+✔ stale and malformed records cannot end an active window (0.072166ms)
+✔ observation is explicit, scoped, and separate from call state (0.131667ms)
+✔ runtime errors without an active operation block commands until reload (0.047958ms)
+✔ a call with no driver evidence stays unconfirmed even after its window (0.449083ms)
+✔ wrong-angle or post-return driver traces cannot validate the current look (0.144ms)
+✔ a matching rotation within the synchronous look call supports its own observation (0.106417ms)
+✔ smoke uses synchronous target-matching Ledger evidence instead of ambient seq (0.895792ms)
+✔ neutral preparation requires its own synchronous zero dispatch (0.197416ms)
+✔ clear/reassign requires torque-off after the matching prior rotation, with no later motion (0.90025ms)
+✔ startup rejection cancels watchdog and preserves the original failure (0.550916ms)
+✔ watchdog does not add a second error after another path blocks the ledger (0.082917ms)
+✔ a pending non-ready startup still reports its timeout (0.075959ms)
+✔ an older send timeout cannot fail a newer pending send (0.849792ms)
+✔ operation watchdog preserves an existing fatal error and ignores a finished operation (0.136667ms)
+✔ a genuinely pending operation still times out (0.07225ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 147.591583

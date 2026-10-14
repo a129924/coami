@@ -1,4 +1,4 @@
-import {analyzeDispatches} from '../src/smoke-analysis.ts'
+import {analyzeDispatches,readyForReassignment} from '../src/smoke-analysis.ts'
 import {beginSmokeEvidence} from './smoke-evidence.mjs'
 // Actual C/WASM browser path with automated pointers; NOT human evidence.
 import {spawn} from 'node:child_process'
@@ -34,10 +34,13 @@ try{
  await until(async()=>!(await state()).blocked,'runtime ready')
  await evaluate(`document.querySelector('#operator').value='automated smoke (NOT human)';document.querySelector('#operator').dispatchEvent(new Event('input'))`)
  async function select(label){for(let n=0;n<6;n++){if((await state()).selected.startsWith(label))return;await evaluate(`document.querySelector('#next').click()`);await delay(180)}throw Error(`selection ${label}`)}
+ const liveRecords=async()=> (await evaluate(`document.querySelector('#events').textContent`)).split('\n').map(message=>({message:message.replace(/^\d+ms #(?:\d+|-) /,'')}))
  async function operation(button){
+  const preparing=button==='apply'&&(await state()).selected.startsWith('起始準備')
   await evaluate(`document.querySelector('#stable').checked=true;document.querySelector('#stable').dispatchEvent(new Event('change'));document.querySelector('#${button}').click()`)
   await until(()=>evaluate(`!document.querySelector('[data-result="未確認"]').disabled`),'observation window',10000)
   assert.doesNotMatch((await state()).status,/錯誤|失敗/)
+  if(preparing)assert.equal(analyzeDispatches(await liveRecords()).length,0,'neutral preparation lacks synchronous zero-rotation evidence')
   // Automated evidence never claims a human direction PASS.
   await evaluate(`document.querySelector('[data-result="未確認"]').click()`);await delay(180)
  }
@@ -49,7 +52,7 @@ try{
   cases.push({label,repeat,state:await state(),screenshot:`smoke-runs/${run.runId}/${file}`,kind:'automated, human unconfirmed'})
  }
  for(const [first,second] of [['Robot 左','Robot 右'],['上','下']]){
-  await select('起始準備');await operation('apply');await select(first);await operation('apply');await operation('away');await select(second);await operation('apply')
+  await select('起始準備');await operation('apply');await select(first);await operation('apply');await operation('away');await until(async()=>readyForReassignment(await liveRecords()),'prior motion torque-off before reassignment',10000);await select(second);await operation('apply')
   cases.push({kind:'automated clear/reassign',first,second,state:await state()})
  }
  await evaluate(`document.querySelector('#download').click()`)
@@ -61,7 +64,7 @@ try{
  const finalShot=await call('Page.captureScreenshot',{format:'png'});await writeFile(path.join(run.directory,'automated-final.png'),Buffer.from(finalShot.data,'base64'))
  report={status:failures.length?'FAIL':'PASS',failures,experiment:'E019',capturedAt:new Date().toISOString(),kind:'actual pinned WASM, automated UI operations; NOT human evidence',browser:await call('Browser.getVersion'),cases,transcript,errors}
  await run.save(report)
- console.log(JSON.stringify({status:report.status,failures,directionSamples:8,cases:cases.length,human:'unexecuted'}))
+ console.log(JSON.stringify({status:report.status,failures,directionAttempts:8,cases:cases.length,human:'unexecuted'}))
  assert.equal(failures.length,0,'fixed acceptance criteria failed; evidence retained')
 }catch(error){
  if(evaluate){try{errors.push({diagnostic:await evaluate(`({body:document.body.innerText,events:document.querySelector('#events')?.innerText})`)})}catch(diagnosticError){errors.push({diagnosticError:String(diagnosticError)})}}

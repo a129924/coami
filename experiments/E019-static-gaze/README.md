@@ -57,7 +57,7 @@ npm run prepare:poc
 npm run test:scripts
 npm run typecheck
 npm run build
-npm run dev -- --port 5199
+npm exec -- vite preview --host 127.0.0.1 --port 5199 --strictPort
 ```
 
 目前觀察條件為v2正面同高鏡頭（camera=[0,0,200]、target=[0,0,0]），模型區固定高度，方便同時看頭部與腳座。既有自動證據使用v1預設斜上方鏡頭，不回改舊結果。真人初次起始不符合與視角修訂見 `evidence/human-run.md`。
@@ -120,3 +120,7 @@ Python interpreter、served mesh、reviewed MOD sources/archive 驗證及 trace�
 ## PR comment review and fix：第四輪（2026-10-14）
 
 固定 executable runtime、完整 Python install tree、harness source pins 與 production bundle hashes，並限制解除操作只能記錄未確認。重現流程包含 scripts regression suite；逐項決定、驗證與未執行項見 [review4-fixes](evidence/review4-fixes.md)。舊真人紀錄不會因新增 attestation 而改判。
+
+## PR comment review and fix：第五輪（2026-10-14）
+
+正式重現改用 build 後的 preview，提供具 bundle attestation 的 dist；埠占用時直接失敗。Smoke 補驗 prepare 的零旋轉 dispatch，並在 clear 後等待對應 motion torque-off 才再次指定。程序、證據與未執行項見 [review5-fixes](evidence/review5-fixes.md)。
