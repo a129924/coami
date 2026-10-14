@@ -1,0 +1,56 @@
+{
+  "experiment": "E021",
+  "synthetic": true,
+  "sourceTests": {
+    "status": "PASS",
+    "count": 42
+  },
+  "strictTypecheck": "PASS",
+  "wasmBuild": "PASS",
+  "modBuild": "PASS",
+  "runtime": "PASS",
+  "runtimeReason": "Owner-approved scratch Time.ticks wrapper uses emscripten_get_now(); original SDK recognizer, thresholds and Event bytes retained",
+  "human": "NOT_EXECUTED",
+  "hardware": "OUT_OF_SCOPE",
+  "verificationComplete": false,
+  "overallSuccess": false,
+  "events": {
+    "shake": {
+      "recognizerSourceTests": "PASS",
+      "actualRuntime": "PASS",
+      "human": "NOT_EXECUTED"
+    },
+    "fallenForward": {
+      "recognizerSourceTests": "PASS",
+      "actualRuntime": "PASS",
+      "human": "NOT_EXECUTED"
+    },
+    "fallenBackward": {
+      "recognizerSourceTests": "PASS",
+      "actualRuntime": "PASS",
+      "human": "NOT_EXECUTED"
+    },
+    "fallenLeft": {
+      "recognizerSourceTests": "PASS",
+      "actualRuntime": "PASS",
+      "human": "NOT_EXECUTED"
+    },
+    "fallenRight": {
+      "recognizerSourceTests": "PASS",
+      "actualRuntime": "PASS",
+      "human": "NOT_EXECUTED"
+    },
+    "upsideDown": {
+      "recognizerSourceTests": "PASS",
+      "actualRuntime": "PASS",
+      "human": "NOT_EXECUTED"
+    }
+  },
+  "auxiliary": {
+    "archify": "PASS showcase9/9 and visual containment/manual inspection",
+    "graphify": "source fallback; no usable graph",
+    "prLens": "PENDING real reviewed topic commit"
+  },
+  "automatedRuntimeChecks": 53,
+  "fullVerification": false
+}

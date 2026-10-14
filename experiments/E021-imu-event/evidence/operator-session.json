@@ -1,0 +1,239 @@
+{
+  "experiment": "E021",
+  "synthetic": true,
+  "evidenceKind": "human",
+  "status": "NOT_EXECUTED",
+  "runs": [],
+  "reason": "Owner human review/operation pending; Chrome automation is recorded separately.",
+  "required": true,
+  "procedure": [
+    "Build using runtime/TOOLCHAIN.md and start web on localhost:5191.",
+    "Select each case in the UI, execute a fresh run, inspect raw sample identity, MOD events/counts and visible feedback, then export evidence.",
+    "Execute each positive event twice independently, threshold negatives, held posture/recovery, cooldown, input failures and stop/restart cases.",
+    "Check hidden/pagehide and fresh recovery; retain actual exported runs and per-case verdicts. Do not copy automated results into human evidence."
+  ],
+  "matrix": [
+    {
+      "id": "fallenForward",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenForward-two",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenForward-0.749",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenForward-0.751",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenBackward",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenBackward-two",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenBackward-0.749",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenBackward-0.751",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenLeft",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenLeft-two",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenLeft-0.749",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenLeft-0.751",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenRight",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenRight-two",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenRight-0.749",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenRight-0.751",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "upsideDown",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "upsideDown-two",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "upsideDown-0.749",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "upsideDown-0.751",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "shake",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "shake-nine",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "shake-1.199",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "shake-1.201",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "spike",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "broken-nine",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "upright",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "zero",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "unknown",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "cooldown",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "source-interrupt",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "native-failure",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenForward-independent-2",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenBackward-independent-2",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenLeft-independent-2",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fallenRight-independent-2",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "upsideDown-independent-2",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "shake-independent-2",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "restart-after-fallenLeft-0",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "stop-fallenLeft-0",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "restart-after-fallenLeft-5",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "stop-fallenLeft-5",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "restart-after-shake-12",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "stop-shake-12",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "restart-after-fallenLeft-6",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "stop-fallenLeft-6",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "page-watchdog",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "page-initialization-timeout",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "page-hidden",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "pagehide-navigation",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "fresh-after-pagehide",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "missing-provider",
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "id": "visible-final",
+      "status": "NOT_EXECUTED"
+    }
+  ],
+  "caseOperations": {
+    "scenario IDs": "For IDs in window.e021.scenarios select the matching scenario and execute. For *-independent-2 repeat the named positive in a fresh run; visible-final uses fallenForward. Export actual results after each.",
+    "stop-*": "Use fallenLeft at raw counts0,5,6 and shake at12. Click Stop at the requested count; preserve/export old snapshot. Immediately run fresh fallenLeft-two after fallenLeft or shake-nine after shake, and verify no prior recognizer state contributes an event and no old snapshot updates. If manual timing misses the exact raw count, record INDETERMINATE and retry. restart-after-* records that paired fresh negative scenario, without an intervening upright run.",
+    "page-watchdog": "DevTools Console: start fallenForward; while running save window.__savedTimeout=window.setTimeout; set window.setTimeout=()=>0. The independent setInterval watchdog should report error after >=1000ms without samples. Restore window.setTimeout=window.__savedTimeout; delete window.__savedTimeout immediately, then reload and run upright. Do not freeze the whole page.",
+    "page-initialization-timeout": "Before starting, DevTools Console: window.__savedFetch=window.fetch; window.fetch=(...a)=>String(a[0]).includes(\"runtime-provenance.json\")?new Promise(()=>{}):window.__savedFetch(...a). Start upright, wait for initialization exceeded5seconds with raw0. Restore window.fetch=window.__savedFetch; delete window.__savedFetch; reload and retry upright. This holds a request; request blocking with immediate rejection tests a different failure.",
+    "page-hidden": "Start a long scenario such as cooldown, switch to another tab, return, inspect status stopped/reason hidden; then run a fresh upright scenario.",
+    "pagehide-navigation": "Start cooldown. After production handler registration, Console: window.addEventListener(\"pagehide\",()=>sessionStorage.setItem(\"e021-human-pagehide\",JSON.stringify(window.e021.snapshot().runs.at(-1))),{once:true}). Navigate same-origin to /?human-pagehide, inspect JSON.parse(sessionStorage.getItem(\"e021-human-pagehide\")) for stopped/pagehide; save it and removeItem afterward. fresh-after-pagehide: select fallenLeft-two on the fresh page and export its actual result.",
+    "missing-provider": "Navigate to /?missing-provider, execute upright, expect missing-provider error/no events. Remove the query and reload; execute upright to confirm recovery.",
+    "source-interrupt/native-failure": "Select those exact scenarios; expect explicit interrupted/error status and no fabricated successful completion."
+  }
+}

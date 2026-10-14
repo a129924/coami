@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "E021 IMU Event｜受控樣本到可見回饋",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      480
+    ]
+  },
+  "stages": [
+    {
+      "label": "Synthetic 輸入"
+    },
+    {
+      "label": "E021 scratch 接線"
+    },
+    {
+      "label": "Raw driver / 畫面"
+    },
+    {
+      "label": "SDK 取樣 / MOD"
+    },
+    {
+      "label": "原 SDK 辨識與事件"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "e021-samples",
+      "type": "frontend",
+      "label": "受控加速度樣本",
+      "sublabel": "accelerometer {x,y,z}",
+      "stage": 0,
+      "row": 0,
+      "tag": "synthetic · m/s²"
+    },
+    {
+      "id": "e021-native",
+      "type": "backend",
+      "label": "C/WASM bridge",
+      "sublabel": "同步傳遞 raw 與身分",
+      "stage": 1,
+      "row": 0,
+      "tag": "僅 E021 scratch"
+    },
+    {
+      "id": "e021-driver",
+      "type": "backend",
+      "label": "IMU raw driver",
+      "sublabel": "device.sensor.IMU",
+      "stage": 2,
+      "row": 0,
+      "tag": "sampleTicks 上界"
+    },
+    {
+      "id": "sdk-poll",
+      "type": "backend",
+      "label": "SDK IMU 取樣",
+      "sublabel": "100 ms · Time.ticks",
+      "stage": 3,
+      "row": 0,
+      "tag": "imu.ts 未修改"
+    },
+    {
+      "id": "sdk-recognizer",
+      "type": "backend",
+      "label": "MotionRecognizer",
+      "sublabel": "原演算法與預設門檻",
+      "stage": 4,
+      "row": 0,
+      "tag": "六種事件"
+    },
+    {
+      "id": "sdk-event",
+      "type": "messagebus",
+      "label": "IMUInputEvent",
+      "sublabel": "kind / motion / ticks",
+      "stage": 4,
+      "row": 1,
+      "tag": "原 SDK 合約"
+    },
+    {
+      "id": "e021-mod",
+      "type": "backend",
+      "label": "MOD 接收",
+      "sublabel": "onEvent · 複製樣本身分",
+      "stage": 3,
+      "row": 1,
+      "tag": "實收事件與次數"
+    },
+    {
+      "id": "e021-ui",
+      "type": "frontend",
+      "label": "可見回饋",
+      "sublabel": "情境、事件、次數、證據",
+      "stage": 2,
+      "row": 1,
+      "tag": "只讀 MOD 結果"
+    }
+  ],
+  "flows": [
+    {
+      "from": "e021-samples",
+      "to": "e021-native",
+      "label": "同步 raw",
+      "variant": "emphasis"
+    },
+    {
+      "from": "e021-native",
+      "to": "e021-driver",
+      "label": "樣本＋ID",
+      "variant": "emphasis"
+    },
+    {
+      "from": "e021-driver",
+      "to": "sdk-poll",
+      "label": "sample()",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sdk-poll",
+      "to": "sdk-recognizer",
+      "label": "update()",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sdk-recognizer",
+      "to": "sdk-event",
+      "label": "符合條件才建立事件",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sdk-event",
+      "to": "e021-mod",
+      "label": "同步 onEvent",
+      "variant": "emphasis"
+    },
+    {
+      "from": "e021-mod",
+      "to": "e021-ui",
+      "label": "MOD trace",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "實驗邊界",
+      "items": [
+        "Synthetic 受控樣本，沒有實機準確度結論",
+        "只在 E021 scratch 接線，不修改正式 SDK",
+        "不直接注入事件，不觸發馬達或說話"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "可追溯與隔離",
+      "items": [
+        "raw、run / case / sample ID 同筆綁定",
+        "sampleTicks 是 SDK 讀時上界，不宣稱相等",
+        "停止或重試建立 fresh runtime"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "圖的證據限制",
+      "items": [
+        "此圖說明實作路徑，不代表 runtime 驗收通過",
+        "繁中內容；固定 Viewer UI 與 html lang 為 English",
+        "非 production；圖表不替代逐項驗證"
+      ]
+    }
+  ]
+}

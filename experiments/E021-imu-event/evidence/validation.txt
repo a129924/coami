@@ -1,0 +1,577 @@
+node:internal/modules/esm/resolve:241
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/mod/observer.ts' imported from /Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/mod/observer.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:241:11)
+    at moduleResolve (node:internal/modules/esm/resolve:846:10)
+    at defaultResolve (node:internal/modules/esm/resolve:973:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:766:56)
+    at #resolve (node:internal/modules/esm/loader:690:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:610:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:277:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:389:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/mod/observer.ts'
+}
+
+Node.js v26.10.0
+✖ experiments/E021-imu-event/mod/observer.test.ts (109.551666ms)
+node:internal/modules/esm/resolve:241
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/src/input.ts' imported from /Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/src/input.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:241:11)
+    at moduleResolve (node:internal/modules/esm/resolve:846:10)
+    at defaultResolve (node:internal/modules/esm/resolve:973:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:766:56)
+    at #resolve (node:internal/modules/esm/loader:690:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:610:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:277:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:389:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/src/input.ts'
+}
+
+Node.js v26.10.0
+✖ experiments/E021-imu-event/web/src/input.test.ts (106.758083ms)
+node:internal/modules/esm/resolve:241
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/src/scenarios.ts' imported from /Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/src/scenarios.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:241:11)
+    at moduleResolve (node:internal/modules/esm/resolve:846:10)
+    at defaultResolve (node:internal/modules/esm/resolve:973:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:766:56)
+    at #resolve (node:internal/modules/esm/loader:690:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:610:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:277:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:389:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/src/scenarios.ts'
+}
+
+Node.js v26.10.0
+✖ experiments/E021-imu-event/web/src/scenarios.test.ts (106.487958ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 117.288958
+
+✖ failing tests:
+
+test at experiments/E021-imu-event/mod/observer.test.ts:1:1
+✖ experiments/E021-imu-event/mod/observer.test.ts (109.551666ms)
+  'test failed'
+
+test at experiments/E021-imu-event/web/src/input.test.ts:1:1
+✖ experiments/E021-imu-event/web/src/input.test.ts (106.758083ms)
+  'test failed'
+
+test at experiments/E021-imu-event/web/src/scenarios.test.ts:1:1
+✖ experiments/E021-imu-event/web/src/scenarios.test.ts (106.487958ms)
+  'test failed'
+✔ TC-MOD preserves SDK event and correlated raw identity; counts are received-only (1.168084ms)
+node:internal/modules/run_main:111
+    triggerUncaughtException(
+    ^
+
+file:///Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/src/input.ts:9
+ lastProgress=0
+ constructor(readonly run:number,readonly scenario:Scenario,private notify:()=>void=()=>{},private clock:()=>number=()=>performance.now()) {this.lastProgress=clock()}
+                      ^^^^^^^^^^
+ ready():void {if(this.state!=='initializing')return;this.state='active';this.lastProgress=this.clock();this.notify()}
+
+SyntaxError [ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX]: TypeScript parameter property is not supported in strip-only mode
+    at parseTypeScript (node:internal/modules/typescript:57:40)
+    at processTypeScriptCode (node:internal/modules/typescript:129:37)
+    at Object.stripTypeScriptModuleTypes (node:internal/modules/typescript:172:22)
+    at stripTypeScriptModuleTypes (node:internal/modules/esm/translators:35:49)
+    at ModuleLoader.<anonymous> (node:internal/modules/esm/translators:684:29)
+    at #translate (node:internal/modules/esm/loader:441:20)
+    at afterLoad (node:internal/modules/esm/loader:509:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:514:12)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:567:36)
+    at afterResolve (node:internal/modules/esm/loader:614:52) {
+  code: 'ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX'
+}
+
+Node.js v26.10.0
+✖ experiments/E021-imu-event/web/src/input.test.ts (105.440833ms)
+node:internal/modules/run_main:111
+    triggerUncaughtException(
+    ^
+
+file:///Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/src/input.ts:9
+ lastProgress=0
+ constructor(readonly run:number,readonly scenario:Scenario,private notify:()=>void=()=>{},private clock:()=>number=()=>performance.now()) {this.lastProgress=clock()}
+                      ^^^^^^^^^^
+ ready():void {if(this.state!=='initializing')return;this.state='active';this.lastProgress=this.clock();this.notify()}
+
+SyntaxError [ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX]: TypeScript parameter property is not supported in strip-only mode
+    at parseTypeScript (node:internal/modules/typescript:57:40)
+    at processTypeScriptCode (node:internal/modules/typescript:129:37)
+    at Object.stripTypeScriptModuleTypes (node:internal/modules/typescript:172:22)
+    at stripTypeScriptModuleTypes (node:internal/modules/esm/translators:35:49)
+    at ModuleLoader.<anonymous> (node:internal/modules/esm/translators:684:29)
+    at #translate (node:internal/modules/esm/loader:441:20)
+    at afterLoad (node:internal/modules/esm/loader:509:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:514:12)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:567:36)
+    at afterResolve (node:internal/modules/esm/loader:614:52) {
+  code: 'ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX'
+}
+
+Node.js v26.10.0
+✖ experiments/E021-imu-event/web/src/page-lifecycle.test.ts (105.115917ms)
+✔ TC-SAMPLES fallenForward: pinned recognizer receives raw samples (0.962625ms)
+✔ TC-SAMPLES fallenForward-two: pinned recognizer receives raw samples (0.063208ms)
+✔ TC-SAMPLES fallenForward-0.749: pinned recognizer receives raw samples (0.051084ms)
+✔ TC-SAMPLES fallenForward-0.751: pinned recognizer receives raw samples (0.048041ms)
+✔ TC-SAMPLES fallenBackward: pinned recognizer receives raw samples (0.061125ms)
+✔ TC-SAMPLES fallenBackward-two: pinned recognizer receives raw samples (0.039625ms)
+✔ TC-SAMPLES fallenBackward-0.749: pinned recognizer receives raw samples (0.043709ms)
+✔ TC-SAMPLES fallenBackward-0.751: pinned recognizer receives raw samples (0.0425ms)
+✔ TC-SAMPLES fallenLeft: pinned recognizer receives raw samples (0.064083ms)
+✔ TC-SAMPLES fallenLeft-two: pinned recognizer receives raw samples (0.083166ms)
+✔ TC-SAMPLES fallenLeft-0.749: pinned recognizer receives raw samples (0.062292ms)
+✔ TC-SAMPLES fallenLeft-0.751: pinned recognizer receives raw samples (0.040041ms)
+✔ TC-SAMPLES fallenRight: pinned recognizer receives raw samples (0.041708ms)
+✔ TC-SAMPLES fallenRight-two: pinned recognizer receives raw samples (0.028292ms)
+✔ TC-SAMPLES fallenRight-0.749: pinned recognizer receives raw samples (0.021833ms)
+✔ TC-SAMPLES fallenRight-0.751: pinned recognizer receives raw samples (0.030292ms)
+✔ TC-SAMPLES upsideDown: pinned recognizer receives raw samples (0.032458ms)
+✔ TC-SAMPLES upsideDown-two: pinned recognizer receives raw samples (0.021208ms)
+✔ TC-SAMPLES upsideDown-0.749: pinned recognizer receives raw samples (0.020334ms)
+✔ TC-SAMPLES upsideDown-0.751: pinned recognizer receives raw samples (0.039875ms)
+✔ TC-SAMPLES shake: pinned recognizer receives raw samples (0.031625ms)
+✔ TC-SAMPLES shake-nine: pinned recognizer receives raw samples (0.032958ms)
+✔ TC-SAMPLES shake-1.199: pinned recognizer receives raw samples (0.021125ms)
+✔ TC-SAMPLES shake-1.201: pinned recognizer receives raw samples (0.021167ms)
+✔ TC-SAMPLES spike: pinned recognizer receives raw samples (0.024667ms)
+✔ TC-SAMPLES broken-nine: pinned recognizer receives raw samples (0.024459ms)
+✔ TC-SAMPLES upright: pinned recognizer receives raw samples (0.018417ms)
+✔ TC-SAMPLES zero: pinned recognizer receives raw samples (0.016834ms)
+✔ TC-SAMPLES unknown: pinned recognizer receives raw samples (0.01925ms)
+✔ TC-SAMPLES cooldown: pinned recognizer receives raw samples (0.026834ms)
+✔ TC-THRESHOLD exact acceleration delta 1.2 and cooldown 1499/1500 use SDK defaults (0.09425ms)
+✔ TC-THRESHOLD exact posture 0.75 is inclusive; gyroscope shake stays disabled (0.062375ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 33
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 126.038375
+
+✖ failing tests:
+
+test at experiments/E021-imu-event/web/src/input.test.ts:1:1
+✖ experiments/E021-imu-event/web/src/input.test.ts (105.440833ms)
+  'test failed'
+
+test at experiments/E021-imu-event/web/src/page-lifecycle.test.ts:1:1
+✖ experiments/E021-imu-event/web/src/page-lifecycle.test.ts (105.115917ms)
+  'test failed'
+✔ TC-MOD preserves SDK event and correlated raw identity; counts are received-only (1.732208ms)
+✔ TC-MOD pull order, run identity and terminal acknowledgement never replay a sample (1.226625ms)
+✔ TC-LIFECYCLE stop is terminal; fresh input cannot inherit old raw samples (0.923083ms)
+✔ TC-LIFECYCLE native failure and interruption are errors, not normal completion (0.128292ms)
+✔ TC-MOD offered data is copied and invalid clocks are rejected (0.071334ms)
+✔ TC-LIFECYCLE old startup promises, timeout and trace cannot update a replacement run (0.436792ms)
+✔ TC-LIFECYCLE watchdog only fails active stalled input; normal completion is distinct (0.12775ms)
+✔ TC-SAMPLES fallenForward: pinned recognizer receives raw samples (0.989875ms)
+✔ TC-SAMPLES fallenForward-two: pinned recognizer receives raw samples (0.070666ms)
+✔ TC-SAMPLES fallenForward-0.749: pinned recognizer receives raw samples (0.043375ms)
+✔ TC-SAMPLES fallenForward-0.751: pinned recognizer receives raw samples (0.053708ms)
+✔ TC-SAMPLES fallenBackward: pinned recognizer receives raw samples (0.059708ms)
+✔ TC-SAMPLES fallenBackward-two: pinned recognizer receives raw samples (0.039ms)
+✔ TC-SAMPLES fallenBackward-0.749: pinned recognizer receives raw samples (0.043542ms)
+✔ TC-SAMPLES fallenBackward-0.751: pinned recognizer receives raw samples (0.044708ms)
+✔ TC-SAMPLES fallenLeft: pinned recognizer receives raw samples (0.062333ms)
+✔ TC-SAMPLES fallenLeft-two: pinned recognizer receives raw samples (0.085542ms)
+✔ TC-SAMPLES fallenLeft-0.749: pinned recognizer receives raw samples (0.054083ms)
+✔ TC-SAMPLES fallenLeft-0.751: pinned recognizer receives raw samples (0.038875ms)
+✔ TC-SAMPLES fallenRight: pinned recognizer receives raw samples (0.042833ms)
+✔ TC-SAMPLES fallenRight-two: pinned recognizer receives raw samples (0.029625ms)
+✔ TC-SAMPLES fallenRight-0.749: pinned recognizer receives raw samples (0.025583ms)
+✔ TC-SAMPLES fallenRight-0.751: pinned recognizer receives raw samples (0.133709ms)
+✔ TC-SAMPLES upsideDown: pinned recognizer receives raw samples (0.05275ms)
+✔ TC-SAMPLES upsideDown-two: pinned recognizer receives raw samples (0.031333ms)
+✔ TC-SAMPLES upsideDown-0.749: pinned recognizer receives raw samples (0.024667ms)
+✔ TC-SAMPLES upsideDown-0.751: pinned recognizer receives raw samples (0.03175ms)
+✔ TC-SAMPLES shake: pinned recognizer receives raw samples (0.029083ms)
+✔ TC-SAMPLES shake-nine: pinned recognizer receives raw samples (0.024209ms)
+✔ TC-SAMPLES shake-1.199: pinned recognizer receives raw samples (0.0435ms)
+✔ TC-SAMPLES shake-1.201: pinned recognizer receives raw samples (0.089917ms)
+✔ TC-SAMPLES spike: pinned recognizer receives raw samples (0.041333ms)
+✔ TC-SAMPLES broken-nine: pinned recognizer receives raw samples (0.027125ms)
+✔ TC-SAMPLES upright: pinned recognizer receives raw samples (0.022709ms)
+✔ TC-SAMPLES zero: pinned recognizer receives raw samples (0.019292ms)
+✔ TC-SAMPLES unknown: pinned recognizer receives raw samples (0.021167ms)
+✔ TC-SAMPLES cooldown: pinned recognizer receives raw samples (0.028167ms)
+✔ TC-THRESHOLD exact acceleration delta 1.2 and cooldown 1499/1500 use SDK defaults (0.157459ms)
+✔ TC-THRESHOLD exact posture 0.75 is inclusive; gyroscope shake stays disabled (0.066959ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 125.815792
+
+> coami-e021-web@0.1.0 test
+> node --test src/*.test.ts scripts/pin.test.mjs ../mod/observer.test.ts
+
+✔ TC-MOD preserves SDK event and correlated raw identity; counts are received-only (2.485708ms)
+✔ shared vendor guard rejects dirty checkout, moved HEAD and mismatched gitlink (1751.0295ms)
+✔ TC-MOD pull order, run identity and terminal acknowledgement never replay a sample (2.639083ms)
+✔ TC-LIFECYCLE stop is terminal; fresh input cannot inherit old raw samples (0.284709ms)
+✔ TC-LIFECYCLE native failure and interruption are errors, not normal completion (0.254375ms)
+✔ TC-MOD offered data is copied and invalid clocks are rejected (0.222625ms)
+✔ TC-LIFECYCLE old startup promises, timeout and trace cannot update a replacement run (0.546458ms)
+✔ TC-LIFECYCLE watchdog only fails active stalled input; normal completion is distinct (0.135084ms)
+(node:69069) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ TC-RUNTIME real SDK IMU → recognizer → Event → observer, original 100ms poll and sample ticks upper bound (1.061791ms)
+✖ TC-RUNTIME scratch patch leaves original IMU, recognizer and Event bytes unchanged (108.299541ms)
+✔ TC-SAMPLES fallenForward: pinned recognizer receives raw samples (1.3215ms)
+✔ TC-SAMPLES fallenForward-two: pinned recognizer receives raw samples (0.075833ms)
+✔ TC-SAMPLES fallenForward-0.749: pinned recognizer receives raw samples (0.082458ms)
+✔ TC-SAMPLES fallenForward-0.751: pinned recognizer receives raw samples (0.372958ms)
+✔ TC-SAMPLES fallenBackward: pinned recognizer receives raw samples (0.2065ms)
+✔ TC-SAMPLES fallenBackward-two: pinned recognizer receives raw samples (0.115833ms)
+✔ TC-SAMPLES fallenBackward-0.749: pinned recognizer receives raw samples (0.10025ms)
+✔ TC-SAMPLES fallenBackward-0.751: pinned recognizer receives raw samples (0.061416ms)
+✔ TC-SAMPLES fallenLeft: pinned recognizer receives raw samples (0.083584ms)
+✔ TC-SAMPLES fallenLeft-two: pinned recognizer receives raw samples (0.143916ms)
+✔ TC-SAMPLES fallenLeft-0.749: pinned recognizer receives raw samples (0.075708ms)
+✔ TC-SAMPLES fallenLeft-0.751: pinned recognizer receives raw samples (0.048667ms)
+✔ TC-SAMPLES fallenRight: pinned recognizer receives raw samples (0.045708ms)
+✔ TC-SAMPLES fallenRight-two: pinned recognizer receives raw samples (0.028ms)
+✔ TC-SAMPLES fallenRight-0.749: pinned recognizer receives raw samples (0.030667ms)
+✔ TC-SAMPLES fallenRight-0.751: pinned recognizer receives raw samples (0.034542ms)
+✔ TC-SAMPLES upsideDown: pinned recognizer receives raw samples (0.041209ms)
+✔ TC-SAMPLES upsideDown-two: pinned recognizer receives raw samples (0.0245ms)
+✔ TC-SAMPLES upsideDown-0.749: pinned recognizer receives raw samples (0.027ms)
+✔ TC-SAMPLES upsideDown-0.751: pinned recognizer receives raw samples (0.025666ms)
+✔ TC-SAMPLES shake: pinned recognizer receives raw samples (0.029625ms)
+✔ TC-SAMPLES shake-nine: pinned recognizer receives raw samples (0.026417ms)
+✔ TC-SAMPLES shake-1.199: pinned recognizer receives raw samples (0.047083ms)
+✔ TC-SAMPLES shake-1.201: pinned recognizer receives raw samples (0.051125ms)
+✔ TC-SAMPLES spike: pinned recognizer receives raw samples (0.029084ms)
+✔ TC-SAMPLES broken-nine: pinned recognizer receives raw samples (0.024834ms)
+✔ TC-SAMPLES upright: pinned recognizer receives raw samples (0.0265ms)
+✔ TC-SAMPLES zero: pinned recognizer receives raw samples (0.024791ms)
+✔ TC-SAMPLES unknown: pinned recognizer receives raw samples (0.025166ms)
+✔ TC-SAMPLES cooldown: pinned recognizer receives raw samples (0.036208ms)
+✔ TC-THRESHOLD exact acceleration delta 1.2 and cooldown 1499/1500 use SDK defaults (0.113834ms)
+✔ TC-THRESHOLD exact posture 0.75 is inclusive; gyroscope shake stays disabled (0.076291ms)
+ℹ tests 42
+ℹ suites 0
+ℹ pass 41
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1841.950667
+
+✖ failing tests:
+
+test at src/runtime.test.ts:37:1
+✖ TC-RUNTIME scratch patch leaves original IMU, recognizer and Event bytes unchanged (108.299541ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'firmware/host/app/main.ts',
+      'firmware/host/modules/input/manifest_wasm.json',
+  -   'firmware/host/modules/input/wasm/imu-bridge.c',
+  -   'firmware/host/modules/input/wasm/imu-bridge.js',
+      'web/src/services/simulator/simulator-engine.d.mts',
+      'web/src/services/simulator/simulator-engine.mjs'
+    ]
+  
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/src/runtime.test.ts:41:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'firmware/host/app/main.ts', 'firmware/host/modules/input/manifest_wasm.json', 'web/src/services/simulator/simulator-engine.d.mts', 'web/src/services/simulator/simulator-engine.mjs' ],
+    expected: [ 'firmware/host/app/main.ts', 'firmware/host/modules/input/manifest_wasm.json', 'firmware/host/modules/input/wasm/imu-bridge.c', 'firmware/host/modules/input/wasm/imu-bridge.js', 'web/src/services/simulator/simulator-engine.d.mts', 'web/src/services/simulator/simulator-engine.mjs' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+> coami-e021-web@0.1.0 build
+> npm run typecheck && vite build
+
+
+> coami-e021-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+vite v8.2.1 building client environment for production...
+transforming...
+✓ 17 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.84 kB │ gzip:   1.15 kB
+dist/assets/index-pR3GiJzn.css    1.46 kB │ gzip:   0.70 kB
+dist/assets/index-DXarfsfX.js   625.83 kB │ gzip: 163.00 kB
+
+✓ built in 370ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+Build attempt 1 FAILED: C preprocessor split a JS array literal inside EM_ASM_INT. Bounded bridge fix: use Array.of so commas remain parenthesized. No SDK recognizer/IMU/Event change. Runtime scope test corrected to include added untracked patch files as well as tracked diff.
+
+> coami-e021-web@0.1.0 test
+> node --test src/*.test.ts scripts/pin.test.mjs ../mod/observer.test.ts
+
+✔ TC-MOD preserves SDK event and correlated raw identity; counts are received-only (0.894875ms)
+✔ shared vendor guard rejects dirty checkout, moved HEAD and mismatched gitlink (1633.31875ms)
+✔ TC-MOD pull order, run identity and terminal acknowledgement never replay a sample (1.417541ms)
+✔ TC-LIFECYCLE stop is terminal; fresh input cannot inherit old raw samples (0.688709ms)
+✔ TC-LIFECYCLE native failure and interruption are errors, not normal completion (0.366084ms)
+✔ TC-MOD offered data is copied and invalid clocks are rejected (0.216458ms)
+✔ TC-LIFECYCLE old startup promises, timeout and trace cannot update a replacement run (0.822208ms)
+✔ TC-LIFECYCLE watchdog only fails active stalled input; normal completion is distinct (0.448084ms)
+(node:22886) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ TC-RUNTIME real SDK IMU → recognizer → Event → observer, original 100ms poll and sample ticks upper bound (1.074166ms)
+✔ TC-RUNTIME scratch patch leaves original IMU, recognizer and Event bytes unchanged (714.199833ms)
+✔ TC-SAMPLES fallenForward: pinned recognizer receives raw samples (1.041666ms)
+✔ TC-SAMPLES fallenForward-two: pinned recognizer receives raw samples (0.080625ms)
+✔ TC-SAMPLES fallenForward-0.749: pinned recognizer receives raw samples (0.048666ms)
+✔ TC-SAMPLES fallenForward-0.751: pinned recognizer receives raw samples (0.054208ms)
+✔ TC-SAMPLES fallenBackward: pinned recognizer receives raw samples (0.072208ms)
+✔ TC-SAMPLES fallenBackward-two: pinned recognizer receives raw samples (0.039583ms)
+✔ TC-SAMPLES fallenBackward-0.749: pinned recognizer receives raw samples (0.051ms)
+✔ TC-SAMPLES fallenBackward-0.751: pinned recognizer receives raw samples (0.045708ms)
+✔ TC-SAMPLES fallenLeft: pinned recognizer receives raw samples (0.070583ms)
+✔ TC-SAMPLES fallenLeft-two: pinned recognizer receives raw samples (0.090958ms)
+✔ TC-SAMPLES fallenLeft-0.749: pinned recognizer receives raw samples (0.0615ms)
+✔ TC-SAMPLES fallenLeft-0.751: pinned recognizer receives raw samples (0.040292ms)
+✔ TC-SAMPLES fallenRight: pinned recognizer receives raw samples (0.04325ms)
+✔ TC-SAMPLES fallenRight-two: pinned recognizer receives raw samples (0.029708ms)
+✔ TC-SAMPLES fallenRight-0.749: pinned recognizer receives raw samples (0.028625ms)
+✔ TC-SAMPLES fallenRight-0.751: pinned recognizer receives raw samples (0.03575ms)
+✔ TC-SAMPLES upsideDown: pinned recognizer receives raw samples (0.039708ms)
+✔ TC-SAMPLES upsideDown-two: pinned recognizer receives raw samples (0.0225ms)
+✔ TC-SAMPLES upsideDown-0.749: pinned recognizer receives raw samples (0.023667ms)
+✔ TC-SAMPLES upsideDown-0.751: pinned recognizer receives raw samples (0.035334ms)
+✔ TC-SAMPLES shake: pinned recognizer receives raw samples (0.0295ms)
+✔ TC-SAMPLES shake-nine: pinned recognizer receives raw samples (0.022833ms)
+✔ TC-SAMPLES shake-1.199: pinned recognizer receives raw samples (0.043333ms)
+✔ TC-SAMPLES shake-1.201: pinned recognizer receives raw samples (0.036875ms)
+✔ TC-SAMPLES spike: pinned recognizer receives raw samples (0.034667ms)
+✔ TC-SAMPLES broken-nine: pinned recognizer receives raw samples (0.024959ms)
+✔ TC-SAMPLES upright: pinned recognizer receives raw samples (0.025917ms)
+✔ TC-SAMPLES zero: pinned recognizer receives raw samples (0.025458ms)
+✔ TC-SAMPLES unknown: pinned recognizer receives raw samples (0.026125ms)
+✔ TC-SAMPLES cooldown: pinned recognizer receives raw samples (0.036583ms)
+✔ TC-THRESHOLD exact acceleration delta 1.2 and cooldown 1499/1500 use SDK defaults (0.108ms)
+✔ TC-THRESHOLD exact posture 0.75 is inclusive; gyroscope shake stays disabled (0.080459ms)
+ℹ tests 42
+ℹ suites 0
+ℹ pass 42
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1710.440916
+
+> coami-e021-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+
+Actual runtime attempt 1 FAILED: browser raw provider received NaN through EM_ASM double argument, all cases at raw=0. Rebuild attempt uses the SDK integer tick value through the same-clock native integer path, no artificial clock or SDK IMU modification.
+
+Runtime root cause confirmed by source + actual raw traces: pinned Moddable9.5.0 modules/base/time/wasm/modTime.c xs_time_ticks() has empty body. Time.ticks returns undefined; raw JSON omits sampleTicks; MOD observer rejects non-finite time. Earlier EM_ASM integer attempt did not resolve the real SDK clock gap. Scope decision pending; no fabricated timing evidence.
+
+> coami-e021-web@0.1.0 test
+> node --test src/*.test.ts scripts/pin.test.mjs ../mod/observer.test.ts
+
+✔ TC-MOD preserves SDK event and correlated raw identity; counts are received-only (5.818125ms)
+✔ shared vendor guard rejects dirty checkout, moved HEAD and mismatched gitlink (2274.860292ms)
+✔ TC-MOD pull order, run identity and terminal acknowledgement never replay a sample (9.343709ms)
+✔ TC-LIFECYCLE stop is terminal; fresh input cannot inherit old raw samples (0.108375ms)
+✔ TC-LIFECYCLE native failure and interruption are errors, not normal completion (0.09825ms)
+✔ TC-MOD offered data is copied and invalid clocks are rejected (0.066625ms)
+✔ TC-LIFECYCLE old startup promises, timeout and trace cannot update a replacement run (0.930125ms)
+✔ TC-LIFECYCLE watchdog only fails active stalled input; normal completion is distinct (0.145333ms)
+(node:98450) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ TC-RUNTIME real SDK IMU → recognizer → Event → observer, original 100ms poll and sample ticks upper bound (1.679709ms)
+✔ TC-RUNTIME scratch patch leaves original IMU, recognizer and Event bytes unchanged (182.383791ms)
+✔ TC-SAMPLES fallenForward: pinned recognizer receives raw samples (2.2405ms)
+✔ TC-SAMPLES fallenForward-two: pinned recognizer receives raw samples (0.117375ms)
+✔ TC-SAMPLES fallenForward-0.749: pinned recognizer receives raw samples (0.051625ms)
+✔ TC-SAMPLES fallenForward-0.751: pinned recognizer receives raw samples (0.057083ms)
+✔ TC-SAMPLES fallenBackward: pinned recognizer receives raw samples (0.069292ms)
+✔ TC-SAMPLES fallenBackward-two: pinned recognizer receives raw samples (0.041667ms)
+✔ TC-SAMPLES fallenBackward-0.749: pinned recognizer receives raw samples (0.081125ms)
+✔ TC-SAMPLES fallenBackward-0.751: pinned recognizer receives raw samples (0.057916ms)
+✔ TC-SAMPLES fallenLeft: pinned recognizer receives raw samples (0.106292ms)
+✔ TC-SAMPLES fallenLeft-two: pinned recognizer receives raw samples (0.096291ms)
+✔ TC-SAMPLES fallenLeft-0.749: pinned recognizer receives raw samples (0.29175ms)
+✔ TC-SAMPLES fallenLeft-0.751: pinned recognizer receives raw samples (0.20575ms)
+✔ TC-SAMPLES fallenRight: pinned recognizer receives raw samples (0.172791ms)
+✔ TC-SAMPLES fallenRight-two: pinned recognizer receives raw samples (0.0395ms)
+✔ TC-SAMPLES fallenRight-0.749: pinned recognizer receives raw samples (0.027334ms)
+✔ TC-SAMPLES fallenRight-0.751: pinned recognizer receives raw samples (0.033708ms)
+✔ TC-SAMPLES upsideDown: pinned recognizer receives raw samples (0.038625ms)
+✔ TC-SAMPLES upsideDown-two: pinned recognizer receives raw samples (0.023416ms)
+✔ TC-SAMPLES upsideDown-0.749: pinned recognizer receives raw samples (0.022125ms)
+✔ TC-SAMPLES upsideDown-0.751: pinned recognizer receives raw samples (0.022166ms)
+✔ TC-SAMPLES shake: pinned recognizer receives raw samples (0.028708ms)
+✔ TC-SAMPLES shake-nine: pinned recognizer receives raw samples (0.0435ms)
+✔ TC-SAMPLES shake-1.199: pinned recognizer receives raw samples (0.027125ms)
+✔ TC-SAMPLES shake-1.201: pinned recognizer receives raw samples (0.033625ms)
+✔ TC-SAMPLES spike: pinned recognizer receives raw samples (0.030083ms)
+✔ TC-SAMPLES broken-nine: pinned recognizer receives raw samples (0.024167ms)
+✔ TC-SAMPLES upright: pinned recognizer receives raw samples (0.026ms)
+✔ TC-SAMPLES zero: pinned recognizer receives raw samples (0.024417ms)
+✔ TC-SAMPLES unknown: pinned recognizer receives raw samples (0.02775ms)
+✔ TC-SAMPLES cooldown: pinned recognizer receives raw samples (0.068ms)
+✔ TC-THRESHOLD exact acceleration delta 1.2 and cooldown 1499/1500 use SDK defaults (0.117292ms)
+✔ TC-THRESHOLD exact posture 0.75 is inclusive; gyroscope shake stays disabled (0.082458ms)
+ℹ tests 42
+ℹ suites 0
+ℹ pass 42
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2443.194625
+
+> coami-e021-web@0.1.0 build
+> npm run typecheck && vite build
+
+
+> coami-e021-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+vite v8.2.1 building client environment for production...
+transforming...
+✓ 17 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.84 kB │ gzip:   1.15 kB
+dist/assets/index-pR3GiJzn.css    1.46 kB │ gzip:   0.70 kB
+dist/assets/index-DAlXldmD.js   625.85 kB │ gzip: 163.01 kB
+
+✓ built in 161ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+OWNER SCOPE DECISION: explicitly authorized E021 scratch platform real-monotonic Time.ticks compatibility. Adapter in existing patch installs Time getter backed by emscripten_get_now before compose. Original Moddable, SDK IMU/recognizer/Event unchanged; no artificial clock. Previous failures remain historical evidence.
+
+Clock adapter first actual-browser attempt FAILED at startup: [main] error invalid descriptor (in Object.defineProperty). Bounded install fix wraps the native clock in an ordinary JS getter descriptor. No algorithm or source pin change.
+
+Actual runtime rejects redefining preloaded Time.ticks descriptor. Bounded platform implementation fix: manifest selects E021 Time subclass wrapper with native real monotonic ticks; original Time JS/C stay byte-identical, other Time methods inherit unchanged. SDK IMU and raw driver share the same time module. No new production API.
+
+Alias build diagnosis: Moddable manifest wildcard registered original time first and silently kept its source. Bounded fix explicitly excludes original time.js from wildcard, uses a byte-identical private copy as base alias, and maps time to wrapper. Build guard checks the private copy against pinned clean tool source; original files and Time methods are preserved.
+
+> coami-e021-web@0.1.0 test
+> node --test src/*.test.ts scripts/pin.test.mjs ../mod/observer.test.ts
+
+✔ TC-MOD preserves SDK event and correlated raw identity; counts are received-only (2.050084ms)
+✔ shared vendor guard rejects dirty checkout, moved HEAD and mismatched gitlink (2758.129542ms)
+✔ TC-MOD pull order, run identity and terminal acknowledgement never replay a sample (9.534083ms)
+✔ TC-LIFECYCLE stop is terminal; fresh input cannot inherit old raw samples (1.407708ms)
+✔ TC-LIFECYCLE native failure and interruption are errors, not normal completion (0.191125ms)
+✔ TC-MOD offered data is copied and invalid clocks are rejected (0.076708ms)
+✔ TC-LIFECYCLE old startup promises, timeout and trace cannot update a replacement run (0.506084ms)
+✔ TC-LIFECYCLE watchdog only fails active stalled input; normal completion is distinct (0.128125ms)
+(node:23420) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ TC-RUNTIME real SDK IMU → recognizer → Event → observer, original 100ms poll and sample ticks upper bound (2.787417ms)
+✔ TC-RUNTIME scratch patch leaves original IMU, recognizer and Event bytes unchanged (576.250625ms)
+✔ TC-SAMPLES fallenForward: pinned recognizer receives raw samples (3.007666ms)
+✔ TC-SAMPLES fallenForward-two: pinned recognizer receives raw samples (0.094125ms)
+✔ TC-SAMPLES fallenForward-0.749: pinned recognizer receives raw samples (0.128ms)
+✔ TC-SAMPLES fallenForward-0.751: pinned recognizer receives raw samples (0.296125ms)
+✔ TC-SAMPLES fallenBackward: pinned recognizer receives raw samples (0.191833ms)
+✔ TC-SAMPLES fallenBackward-two: pinned recognizer receives raw samples (0.104375ms)
+✔ TC-SAMPLES fallenBackward-0.749: pinned recognizer receives raw samples (0.269875ms)
+✔ TC-SAMPLES fallenBackward-0.751: pinned recognizer receives raw samples (0.084292ms)
+✔ TC-SAMPLES fallenLeft: pinned recognizer receives raw samples (0.078583ms)
+✔ TC-SAMPLES fallenLeft-two: pinned recognizer receives raw samples (0.293541ms)
+✔ TC-SAMPLES fallenLeft-0.749: pinned recognizer receives raw samples (0.263833ms)
+✔ TC-SAMPLES fallenLeft-0.751: pinned recognizer receives raw samples (0.119584ms)
+✔ TC-SAMPLES fallenRight: pinned recognizer receives raw samples (0.413209ms)
+✔ TC-SAMPLES fallenRight-two: pinned recognizer receives raw samples (0.123625ms)
+✔ TC-SAMPLES fallenRight-0.749: pinned recognizer receives raw samples (0.337208ms)
+✔ TC-SAMPLES fallenRight-0.751: pinned recognizer receives raw samples (0.1095ms)
+✔ TC-SAMPLES upsideDown: pinned recognizer receives raw samples (0.089458ms)
+✔ TC-SAMPLES upsideDown-two: pinned recognizer receives raw samples (0.054375ms)
+✔ TC-SAMPLES upsideDown-0.749: pinned recognizer receives raw samples (0.052792ms)
+✔ TC-SAMPLES upsideDown-0.751: pinned recognizer receives raw samples (0.096083ms)
+✔ TC-SAMPLES shake: pinned recognizer receives raw samples (0.074375ms)
+✔ TC-SAMPLES shake-nine: pinned recognizer receives raw samples (0.05775ms)
+✔ TC-SAMPLES shake-1.199: pinned recognizer receives raw samples (0.072042ms)
+✔ TC-SAMPLES shake-1.201: pinned recognizer receives raw samples (0.051958ms)
+✔ TC-SAMPLES spike: pinned recognizer receives raw samples (0.064166ms)
+✔ TC-SAMPLES broken-nine: pinned recognizer receives raw samples (0.061541ms)
+✔ TC-SAMPLES upright: pinned recognizer receives raw samples (0.046209ms)
+✔ TC-SAMPLES zero: pinned recognizer receives raw samples (0.04575ms)
+✔ TC-SAMPLES unknown: pinned recognizer receives raw samples (0.058583ms)
+✔ TC-SAMPLES cooldown: pinned recognizer receives raw samples (0.077209ms)
+✔ TC-THRESHOLD exact acceleration delta 1.2 and cooldown 1499/1500 use SDK defaults (0.241125ms)
+✔ TC-THRESHOLD exact posture 0.75 is inclusive; gyroscope shake stays disabled (0.336291ms)
+ℹ tests 42
+ℹ suites 0
+ℹ pass 42
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2942.040583
+
+> coami-e021-web@0.1.0 build
+> npm run typecheck && vite build
+
+
+> coami-e021-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+vite v8.2.1 building client environment for production...
+transforming...
+✓ 17 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.84 kB │ gzip:   1.15 kB
+dist/assets/index-pR3GiJzn.css    1.46 kB │ gzip:   0.70 kB
+dist/assets/index-d-uS6LbY.js   625.97 kB │ gzip: 163.05 kB
+
+✓ built in 214ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+Actual full run: 52/53 PASS, pagehide observation absent. Independent review identifies runner navigation race, not recognition failure. Bounded test fix waits target location/fresh document/API and captures old pagehide handler state through isolated test sessionStorage/binding; product handler unchanged. Prior attempt preserved.
+
+FINAL actual browser rerun 2026-10-14T03:11:45.718Z: npm run smoke exit0, 53/53PASS, browserErrors=[]; source42PASS/typecheck/build PASS unchanged. Required humanNOT_EXECUTED, fullVerification=false.
