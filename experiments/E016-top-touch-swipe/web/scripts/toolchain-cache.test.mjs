@@ -130,3 +130,9 @@ test('compiler environment rejects inherited tool and wrapper overrides', () => 
   assert.equal(env.KEEP, 'yes')
   for (const key of ['EM_NODE_JS', 'EM_LLVM_ROOT', 'EM_BINARYEN_ROOT', 'EM_COMPILER_WRAPPER', '_EMCC_CCACHE']) assert.equal(env[key], undefined)
 })
+
+test('compiler environment removes EMCC and legacy EMMAKEN build controls', () => {
+  const env = pinnedCompilerEnvironment({ EMCC_CFLAGS: '-sASSERTIONS=0', EMCC_FORCE_STDLIBS: '1', EMCC_DEBUG: '1', EMMAKEN_CFLAGS: '-O3', KEEP: 'yes' }, '/sdk', '/launcher')
+  for (const key of ['EMCC_CFLAGS', 'EMCC_FORCE_STDLIBS', 'EMCC_DEBUG', 'EMMAKEN_CFLAGS']) assert.equal(env[key], undefined)
+  assert.equal(env.KEEP, 'yes')
+})

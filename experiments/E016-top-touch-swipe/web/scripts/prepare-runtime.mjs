@@ -34,17 +34,15 @@ const common = path.dirname(capture('git',['rev-parse','--path-format=absolute',
 const vendor = process.env.STACK_CHAN_SOURCE ?? path.join(common,'vendor/stack-chan')
 if (capture('git',['rev-parse','HEAD'],vendor) !== base) throw new Error('Pinned vendor revision mismatch')
 const patchHash = await hash(patch)
-let staged = false
-try { staged = (await readFile(path.join(generated,'stage-hash'),'utf8')).trim() === patchHash } catch {}
-if (!staged || fullBuild) {
-  await mkdir(generated,{recursive:true})
-  await rm(source,{recursive:true,force:true})
-  run('git',['clone','--shared','--no-checkout',vendor,source])
-  run('git',['checkout','--detach',base],source)
-  run('git',['apply','--check',patch],source)
-  run('git',['apply',patch],source)
-  await writeFile(path.join(generated,'stage-hash'),patchHash)
-}
+// Never trust an ignored checkout or marker for pinned-SDK test evidence.
+await mkdir(generated,{recursive:true})
+await rm(path.join(generated,'stage-hash'),{force:true})
+await rm(source,{recursive:true,force:true})
+run('git',['clone','--shared','--no-checkout',vendor,source])
+run('git',['checkout','--detach',base],source)
+run('git',['apply','--check',patch],source)
+run('git',['apply',patch],source)
+await writeFile(path.join(generated,'stage-hash'),patchHash)
 const enginePath = path.join(source,'web/src/services/simulator/simulator-engine.d.mts')
 await copyFile(path.join(web,'runtime-types/simulator-engine.d.mts'),enginePath)
 if (process.argv.includes('--stage-only')) process.exit(0)

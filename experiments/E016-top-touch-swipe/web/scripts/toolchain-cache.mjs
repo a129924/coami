@@ -24,7 +24,7 @@ export function pythonLauncher(python) {
 
 export function pinnedCompilerEnvironment(parent, emsdk, launcher) {
   const env = { ...parent }
-  for (const key of Object.keys(env)) if (key.startsWith('EM_') || key.startsWith('EMSDK_') || key === '_EMCC_CCACHE') delete env[key]
+  for (const key of Object.keys(env)) if (/^(EM_|EMCC_|EMMAKEN_|EMSDK_)/.test(key) || key === '_EMCC_CCACHE') delete env[key]
   return { ...env, EMSDK_PYTHON: launcher, EMSDK_NODE: path.join(emsdk, 'node/22.16.0_64bit/bin/node') }
 }
 
