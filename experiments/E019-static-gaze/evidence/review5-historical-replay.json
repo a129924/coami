@@ -1,0 +1,20 @@
+{
+  "kind": "offline historical transcript replay, no new browser/human run",
+  "failures": [
+    {
+      "seq": 24,
+      "target": "down",
+      "reason": "no synchronous target-matching driver evidence"
+    }
+  ],
+  "clears": [
+    {
+      "seq": 19,
+      "stable": true
+    },
+    {
+      "seq": 23,
+      "stable": true
+    }
+  ]
+}

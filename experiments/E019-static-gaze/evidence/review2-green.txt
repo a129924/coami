@@ -1,0 +1,11 @@
+✔ controlled compiler config ignores hostile config and tool overrides (172.237416ms)
+✔ fontbm clean rebuild discards the binary and CMake cache before configure (1.463625ms)
+✔ staged simulator host is authenticated without reading the live vendor (8.867792ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 253.141

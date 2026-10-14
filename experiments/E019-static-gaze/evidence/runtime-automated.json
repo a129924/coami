@@ -1,0 +1,3057 @@
+{
+  "status": "FAIL",
+  "failures": [
+    {
+      "seq": 24,
+      "target": "down",
+      "reason": "no driver rotation for accepted target"
+    }
+  ],
+  "experiment": "E019",
+  "capturedAt": "2026-10-13T07:39:32.925Z",
+  "kind": "actual pinned WASM, automated UI operations; NOT human evidence",
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/155.0.8059.40",
+    "revision": "@cfaadc5a132d78e1828635aa8405a499f3e14864",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "jsVersion": "15.5.35.20"
+  },
+  "cases": [
+    {
+      "label": "Robot 左",
+      "repeat": 1,
+      "state": {
+        "runtime": "Pinned runtime 已核對；MOD 已載入",
+        "selected": "Robot 左",
+        "status": "設定呼叫已返回；方向待確認",
+        "blocked": false
+      },
+      "screenshot": "automated-左-1.png",
+      "kind": "automated, human unconfirmed"
+    },
+    {
+      "label": "Robot 右",
+      "repeat": 1,
+      "state": {
+        "runtime": "Pinned runtime 已核對；MOD 已載入",
+        "selected": "Robot 右",
+        "status": "設定呼叫已返回；方向待確認",
+        "blocked": false
+      },
+      "screenshot": "automated-右-1.png",
+      "kind": "automated, human unconfirmed"
+    },
+    {
+      "label": "上",
+      "repeat": 1,
+      "state": {
+        "runtime": "Pinned runtime 已核對；MOD 已載入",
+        "selected": "上",
+        "status": "設定呼叫已返回；方向待確認",
+        "blocked": false
+      },
+      "screenshot": "automated-上-1.png",
+      "kind": "automated, human unconfirmed"
+    },
+    {
+      "label": "下",
+      "repeat": 1,
+      "state": {
+        "runtime": "Pinned runtime 已核對；MOD 已載入",
+        "selected": "下",
+        "status": "設定呼叫已返回；方向待確認",
+        "blocked": false
+      },
+      "screenshot": "automated-下-1.png",
+      "kind": "automated, human unconfirmed"
+    },
+    {
+      "label": "Robot 左",
+      "repeat": 2,
+      "state": {
+        "runtime": "Pinned runtime 已核對；MOD 已載入",
+        "selected": "Robot 左",
+        "status": "設定呼叫已返回；方向待確認",
+        "blocked": false
+      },
+      "screenshot": "automated-左-2.png",
+      "kind": "automated, human unconfirmed"
+    },
+    {
+      "label": "Robot 右",
+      "repeat": 2,
+      "state": {
+        "runtime": "Pinned runtime 已核對；MOD 已載入",
+        "selected": "Robot 右",
+        "status": "設定呼叫已返回；方向待確認",
+        "blocked": false
+      },
+      "screenshot": "automated-右-2.png",
+      "kind": "automated, human unconfirmed"
+    },
+    {
+      "label": "上",
+      "repeat": 2,
+      "state": {
+        "runtime": "Pinned runtime 已核對；MOD 已載入",
+        "selected": "上",
+        "status": "設定呼叫已返回；方向待確認",
+        "blocked": false
+      },
+      "screenshot": "automated-上-2.png",
+      "kind": "automated, human unconfirmed"
+    },
+    {
+      "label": "下",
+      "repeat": 2,
+      "state": {
+        "runtime": "Pinned runtime 已核對；MOD 已載入",
+        "selected": "下",
+        "status": "設定呼叫已返回；方向待確認",
+        "blocked": false
+      },
+      "screenshot": "automated-下-2.png",
+      "kind": "automated, human unconfirmed"
+    },
+    {
+      "kind": "automated clear/reassign",
+      "first": "Robot 左",
+      "second": "Robot 右",
+      "state": {
+        "runtime": "Pinned runtime 已核對；MOD 已載入",
+        "selected": "Robot 右",
+        "status": "設定呼叫已返回；方向待確認",
+        "blocked": false
+      }
+    },
+    {
+      "kind": "automated clear/reassign",
+      "first": "上",
+      "second": "下",
+      "state": {
+        "runtime": "Pinned runtime 已核對；MOD 已載入",
+        "selected": "下",
+        "status": "設定呼叫已返回；方向待確認",
+        "blocked": false
+      }
+    }
+  ],
+  "transcript": {
+    "runId": "E019-2026-10-13T07-37-02-670Z",
+    "operator": "automated smoke (NOT human)",
+    "provenance": {
+      "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+      "moddableVersion": "9.5.0",
+      "emccVersion": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 5.0.1 (8c5f43157a3f069ade75876e23061330521eabde)",
+      "moddable": {
+        "path": "/private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/generated/toolchain/moddable",
+        "sourceCommit": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",
+        "tools": {
+          "mcconfig": {
+            "path": "/private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/generated/toolchain/moddable/build/bin/mac/release/mcconfig",
+            "sha256": "2abb06a6305abbe09d6ed0eb4df23f08c2f474910692f4146d5c826627d23ba4"
+          },
+          "xsc": {
+            "path": "/private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/generated/toolchain/moddable/build/bin/mac/release/xsc",
+            "sha256": "a2a6b24b2de6c88d0cdd9adcdd8819dafb0a922e478160df7f3617bef9b1383c"
+          }
+        }
+      },
+      "emscripten": {
+        "emsdkPath": "/private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/generated/toolchain/emsdk",
+        "emsdkCommit": "14c18b569f55138fe4963924162244251f454fb0",
+        "release": "bf32ae8b61ac8efeb7eca01b54c8307f992724f7",
+        "upstreamCommit": "8c5f43157a3f069ade75876e23061330521eabde",
+        "installedTreeSha256": "42ce84c65e00be2818a7733704b9f0217f4c3ee9c7f2bb3366293f60c8e47295",
+        "emccPath": "/private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/generated/toolchain/emsdk/upstream/emscripten/emcc",
+        "emccSha256": "498eba9b6aacffca1c358ba340fc7b37015d7867cb211c7f2d45784ee9310f03"
+      },
+      "fontbm": {
+        "path": "/private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/generated/toolchain/fontbm/build/fontbm",
+        "sourceCommit": "7677b908523e909679f67cd5c170396bb9def1aa",
+        "sha256": "2389a3daae8b9af5c3747cb2fbfd34db3fcd786ccec885878addd22bbcd07012"
+      },
+      "sha256": {
+        "mc.js": "9e7c0128e4b94ac78cb3646a488a04be227272e61b7fee77cd2b6ec91aa745f0",
+        "mc.wasm": "bc8f5a40fe4e6e1b0f0fd9f29cf5089129fdfca2b9cc0ce229f6788328676ac2"
+      }
+    },
+    "modProvenance": {
+      "experiment": "E019",
+      "sha256": "5f1d070cea194102c65141dba95e04b3245b33ef428b51338c270566696355a8",
+      "sources": {
+        "mod.ts": "7a672339c6280a0befedf79b456a74bfa941b7d4af9fe36b6713b18844cd993e",
+        "gaze-control.ts": "ab6f6e715599c8a26903a983b5be84c8f94db1f5127c005b9fca6678fd539dfc"
+      }
+    },
+    "records": [
+      {
+        "at": "2026-10-13T07:37:02.701Z",
+        "elapsedMs": 165.09999990463257,
+        "seq": null,
+        "message": "verified runtime b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322; MOD 5f1d070cea194102c65141dba95e04b3245b33ef428b51338c270566696355a8"
+      },
+      {
+        "at": "2026-10-13T07:37:05.412Z",
+        "elapsedMs": 2875.8999996185303,
+        "seq": null,
+        "message": "[main] start"
+      },
+      {
+        "at": "2026-10-13T07:37:05.413Z",
+        "elapsedMs": 2877.2999997138977,
+        "seq": null,
+        "message": "[main] installed WASM button bridge"
+      },
+      {
+        "at": "2026-10-13T07:37:05.418Z",
+        "elapsedMs": 2881.5999999046326,
+        "seq": null,
+        "message": "[main] loading app behaviors"
+      },
+      {
+        "at": "2026-10-13T07:37:05.418Z",
+        "elapsedMs": 2882,
+        "seq": null,
+        "message": "[main] checking mod override"
+      },
+      {
+        "at": "2026-10-13T07:37:13.431Z",
+        "elapsedMs": 10895.5,
+        "seq": null,
+        "message": "[main] onLaunch shouldCreateContext=true"
+      },
+      {
+        "at": "2026-10-13T07:37:13.434Z",
+        "elapsedMs": 10897.89999961853,
+        "seq": null,
+        "message": "No Wi-Fi SSID"
+      },
+      {
+        "at": "2026-10-13T07:37:13.439Z",
+        "elapsedMs": 10902.799999713898,
+        "seq": null,
+        "message": "[main] network ready: skipped"
+      },
+      {
+        "at": "2026-10-13T07:37:13.440Z",
+        "elapsedMs": 10904.099999904633,
+        "seq": null,
+        "message": "[main] TTS engine: stackchan-voice"
+      },
+      {
+        "at": "2026-10-13T07:37:13.449Z",
+        "elapsedMs": 10912.799999713898,
+        "seq": null,
+        "message": "[main] app context created"
+      },
+      {
+        "at": "2026-10-13T07:37:13.450Z",
+        "elapsedMs": 10913.89999961853,
+        "seq": null,
+        "message": "COAMI19|{\"phase\":\"ready\",\"experiment\":\"E019\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:13.450Z",
+        "elapsedMs": 10914.099999904633,
+        "seq": null,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:13.459Z",
+        "elapsedMs": 10923.5,
+        "seq": null,
+        "message": "[main] app behaviors ready"
+      },
+      {
+        "at": "2026-10-13T07:37:13.503Z",
+        "elapsedMs": 10966.89999961853,
+        "seq": null,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:13.503Z",
+        "elapsedMs": 10967.299999713898,
+        "seq": null,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:13.506Z",
+        "elapsedMs": 10970,
+        "seq": null,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:13.687Z",
+        "elapsedMs": 11150.799999713898,
+        "seq": null,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:13.687Z",
+        "elapsedMs": 11151.099999904633,
+        "seq": null,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:13.695Z",
+        "elapsedMs": 11159.099999904633,
+        "seq": null,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:13.877Z",
+        "elapsedMs": 11340.799999713898,
+        "seq": null,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:13.877Z",
+        "elapsedMs": 11341.099999904633,
+        "seq": null,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:13.885Z",
+        "elapsedMs": 11349.5,
+        "seq": null,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:14.060Z",
+        "elapsedMs": 11524.199999809265,
+        "seq": null,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:14.060Z",
+        "elapsedMs": 11524.5,
+        "seq": null,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:14.075Z",
+        "elapsedMs": 11538.89999961853,
+        "seq": null,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:14.244Z",
+        "elapsedMs": 11708.299999713898,
+        "seq": null,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:37:14.245Z",
+        "elapsedMs": 11708.699999809265,
+        "seq": null,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:14.246Z",
+        "elapsedMs": 11709.599999904633,
+        "seq": 1,
+        "message": "COAMI19|{\"seq\":1,\"kind\":\"prepare\",\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:14.247Z",
+        "elapsedMs": 11710.599999904633,
+        "seq": 1,
+        "message": "[WasmDriver] applyRotation y=0 p=0 r=0 time=0.5"
+      },
+      {
+        "at": "2026-10-13T07:37:14.261Z",
+        "elapsedMs": 11725.299999713898,
+        "seq": 1,
+        "message": "COAMI19|{\"seq\":1,\"kind\":\"prepare\",\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:19.268Z",
+        "elapsedMs": 16732.599999904633,
+        "seq": 1,
+        "message": "COAMI19|{\"seq\":1,\"kind\":\"prepare\",\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:19.312Z",
+        "elapsedMs": 16775.89999961853,
+        "seq": 1,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:37:19.497Z",
+        "elapsedMs": 16961.099999904633,
+        "seq": 1,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:19.497Z",
+        "elapsedMs": 16961.39999961853,
+        "seq": 1,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:19.510Z",
+        "elapsedMs": 16974,
+        "seq": 1,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:19.680Z",
+        "elapsedMs": 17143.699999809265,
+        "seq": 1,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:37:19.680Z",
+        "elapsedMs": 17144.099999904633,
+        "seq": 1,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:19.683Z",
+        "elapsedMs": 17146.699999809265,
+        "seq": 2,
+        "message": "COAMI19|{\"seq\":2,\"kind\":\"look\",\"target\":\"left\",\"point\":[0.5,0.5,0],\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:19.683Z",
+        "elapsedMs": 17147.39999961853,
+        "seq": 2,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:19.684Z",
+        "elapsedMs": 17147.89999961853,
+        "seq": 2,
+        "message": "[WasmDriver] applyRotation y=0.7853981633974483 p=0 r=0 time=0.8404788008613879"
+      },
+      {
+        "at": "2026-10-13T07:37:19.684Z",
+        "elapsedMs": 17148.099999904633,
+        "seq": 2,
+        "message": "COAMI19|{\"seq\":2,\"kind\":\"look\",\"target\":\"left\",\"point\":[0.5,0.5,0],\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:20.575Z",
+        "elapsedMs": 18039.199999809265,
+        "seq": 2,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:24.686Z",
+        "elapsedMs": 22150.099999904633,
+        "seq": 2,
+        "message": "COAMI19|{\"seq\":2,\"kind\":\"look\",\"target\":\"left\",\"point\":[0.5,0.5,0],\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:24.692Z",
+        "elapsedMs": 22156.5,
+        "seq": 2,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:37:25.146Z",
+        "elapsedMs": 22610.199999809265,
+        "seq": 2,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:25.146Z",
+        "elapsedMs": 22610.599999904633,
+        "seq": 2,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:25.159Z",
+        "elapsedMs": 22623,
+        "seq": 2,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:25.328Z",
+        "elapsedMs": 22792.199999809265,
+        "seq": 2,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:25.328Z",
+        "elapsedMs": 22792.599999904633,
+        "seq": 2,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:25.331Z",
+        "elapsedMs": 22795.299999713898,
+        "seq": 2,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:25.510Z",
+        "elapsedMs": 22974.299999713898,
+        "seq": 2,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:25.510Z",
+        "elapsedMs": 22974.599999904633,
+        "seq": 2,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:25.522Z",
+        "elapsedMs": 22986.199999809265,
+        "seq": 2,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:25.693Z",
+        "elapsedMs": 23157.299999713898,
+        "seq": 2,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:25.694Z",
+        "elapsedMs": 23157.599999904633,
+        "seq": 2,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:25.710Z",
+        "elapsedMs": 23174.099999904633,
+        "seq": 2,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:25.877Z",
+        "elapsedMs": 23341.199999809265,
+        "seq": 2,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:37:25.878Z",
+        "elapsedMs": 23341.699999809265,
+        "seq": 2,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:25.881Z",
+        "elapsedMs": 23345.5,
+        "seq": 3,
+        "message": "COAMI19|{\"seq\":3,\"kind\":\"prepare\",\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:25.882Z",
+        "elapsedMs": 23346.299999713898,
+        "seq": 3,
+        "message": "[WasmDriver] applyRotation y=0 p=0 r=0 time=0.5"
+      },
+      {
+        "at": "2026-10-13T07:37:25.896Z",
+        "elapsedMs": 23360.5,
+        "seq": 3,
+        "message": "COAMI19|{\"seq\":3,\"kind\":\"prepare\",\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:30.904Z",
+        "elapsedMs": 28368.599999904633,
+        "seq": 3,
+        "message": "COAMI19|{\"seq\":3,\"kind\":\"prepare\",\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:30.920Z",
+        "elapsedMs": 28383.799999713898,
+        "seq": 3,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:37:31.103Z",
+        "elapsedMs": 28567.199999809265,
+        "seq": 3,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:31.103Z",
+        "elapsedMs": 28567.699999809265,
+        "seq": 3,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:31.105Z",
+        "elapsedMs": 28569.599999904633,
+        "seq": 3,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:31.286Z",
+        "elapsedMs": 28750.299999713898,
+        "seq": 3,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:31.287Z",
+        "elapsedMs": 28750.799999713898,
+        "seq": 3,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:31.295Z",
+        "elapsedMs": 28759.099999904633,
+        "seq": 3,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:31.470Z",
+        "elapsedMs": 28934.299999713898,
+        "seq": 3,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:37:31.471Z",
+        "elapsedMs": 28934.89999961853,
+        "seq": 3,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:31.484Z",
+        "elapsedMs": 28948.39999961853,
+        "seq": 4,
+        "message": "COAMI19|{\"seq\":4,\"kind\":\"look\",\"target\":\"right\",\"point\":[0.5,-0.5,0],\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:31.485Z",
+        "elapsedMs": 28949,
+        "seq": 4,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:31.485Z",
+        "elapsedMs": 28949.5,
+        "seq": 4,
+        "message": "[WasmDriver] applyRotation y=-0.7853981633974483 p=0 r=0 time=0.8025301156111668"
+      },
+      {
+        "at": "2026-10-13T07:37:31.486Z",
+        "elapsedMs": 28949.89999961853,
+        "seq": 4,
+        "message": "COAMI19|{\"seq\":4,\"kind\":\"look\",\"target\":\"right\",\"point\":[0.5,-0.5,0],\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:32.344Z",
+        "elapsedMs": 29808.299999713898,
+        "seq": 4,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:36.487Z",
+        "elapsedMs": 33951.5,
+        "seq": 4,
+        "message": "COAMI19|{\"seq\":4,\"kind\":\"look\",\"target\":\"right\",\"point\":[0.5,-0.5,0],\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:36.514Z",
+        "elapsedMs": 33978.59999990463,
+        "seq": 4,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:37:37.032Z",
+        "elapsedMs": 34496.59999990463,
+        "seq": 4,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:37.033Z",
+        "elapsedMs": 34497.09999990463,
+        "seq": 4,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:37.035Z",
+        "elapsedMs": 34498.7999997139,
+        "seq": 4,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:37.217Z",
+        "elapsedMs": 34681,
+        "seq": 4,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:37.217Z",
+        "elapsedMs": 34681.5,
+        "seq": 4,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:37.224Z",
+        "elapsedMs": 34688.199999809265,
+        "seq": 4,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:37.401Z",
+        "elapsedMs": 34865,
+        "seq": 4,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:37.401Z",
+        "elapsedMs": 34865.5,
+        "seq": 4,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:37.415Z",
+        "elapsedMs": 34879.59999990463,
+        "seq": 4,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:37.588Z",
+        "elapsedMs": 35052.699999809265,
+        "seq": 4,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:37:37.591Z",
+        "elapsedMs": 35054.7999997139,
+        "seq": 4,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:37.593Z",
+        "elapsedMs": 35056.7999997139,
+        "seq": 5,
+        "message": "COAMI19|{\"seq\":5,\"kind\":\"prepare\",\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:37.594Z",
+        "elapsedMs": 35058.09999990463,
+        "seq": 5,
+        "message": "[WasmDriver] applyRotation y=0 p=0 r=0 time=0.5"
+      },
+      {
+        "at": "2026-10-13T07:37:37.611Z",
+        "elapsedMs": 35074.89999961853,
+        "seq": 5,
+        "message": "COAMI19|{\"seq\":5,\"kind\":\"prepare\",\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:42.613Z",
+        "elapsedMs": 40077.89999961853,
+        "seq": 5,
+        "message": "COAMI19|{\"seq\":5,\"kind\":\"prepare\",\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:42.683Z",
+        "elapsedMs": 40147.59999990463,
+        "seq": 5,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:37:42.873Z",
+        "elapsedMs": 40336.89999961853,
+        "seq": 5,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:42.874Z",
+        "elapsedMs": 40338.2999997139,
+        "seq": 5,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:42.883Z",
+        "elapsedMs": 40347.39999961853,
+        "seq": 5,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:43.059Z",
+        "elapsedMs": 40523.2999997139,
+        "seq": 5,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:43.060Z",
+        "elapsedMs": 40523.89999961853,
+        "seq": 5,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:43.072Z",
+        "elapsedMs": 40536,
+        "seq": 5,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:43.242Z",
+        "elapsedMs": 40706.5,
+        "seq": 5,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:43.243Z",
+        "elapsedMs": 40707.09999990463,
+        "seq": 5,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:43.243Z",
+        "elapsedMs": 40707.699999809265,
+        "seq": 5,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:43.442Z",
+        "elapsedMs": 40906.39999961853,
+        "seq": 5,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:37:43.443Z",
+        "elapsedMs": 40907.199999809265,
+        "seq": 5,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:43.449Z",
+        "elapsedMs": 40913.59999990463,
+        "seq": 6,
+        "message": "COAMI19|{\"seq\":6,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:43.450Z",
+        "elapsedMs": 40914.59999990463,
+        "seq": 6,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:43.451Z",
+        "elapsedMs": 40915.5,
+        "seq": 6,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.8681596111823617"
+      },
+      {
+        "at": "2026-10-13T07:37:43.452Z",
+        "elapsedMs": 40916.699999809265,
+        "seq": 6,
+        "message": "COAMI19|{\"seq\":6,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:44.372Z",
+        "elapsedMs": 41836,
+        "seq": 6,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:44.469Z",
+        "elapsedMs": 41933.2999997139,
+        "seq": 6,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:44.470Z",
+        "elapsedMs": 41934,
+        "seq": 6,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.9085326212963707"
+      },
+      {
+        "at": "2026-10-13T07:37:45.429Z",
+        "elapsedMs": 42893.59999990463,
+        "seq": 6,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:45.494Z",
+        "elapsedMs": 42958.89999961853,
+        "seq": 6,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:45.496Z",
+        "elapsedMs": 42960.09999990463,
+        "seq": 6,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.9692764254143817"
+      },
+      {
+        "at": "2026-10-13T07:37:46.517Z",
+        "elapsedMs": 43981.5,
+        "seq": 6,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:46.519Z",
+        "elapsedMs": 43983.2999997139,
+        "seq": 6,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:46.521Z",
+        "elapsedMs": 43985.09999990463,
+        "seq": 6,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.8267373930787376"
+      },
+      {
+        "at": "2026-10-13T07:37:47.399Z",
+        "elapsedMs": 44863.199999809265,
+        "seq": 6,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:47.444Z",
+        "elapsedMs": 44907.89999961853,
+        "seq": 6,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:47.444Z",
+        "elapsedMs": 44908.699999809265,
+        "seq": 6,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.9315998851934447"
+      },
+      {
+        "at": "2026-10-13T07:37:48.427Z",
+        "elapsedMs": 45891.09999990463,
+        "seq": 6,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:48.455Z",
+        "elapsedMs": 45919.09999990463,
+        "seq": 6,
+        "message": "COAMI19|{\"seq\":6,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:48.472Z",
+        "elapsedMs": 45936.2999997139,
+        "seq": 6,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:48.473Z",
+        "elapsedMs": 45936.89999961853,
+        "seq": 6,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.7245482437892576"
+      },
+      {
+        "at": "2026-10-13T07:37:48.503Z",
+        "elapsedMs": 45967.7999997139,
+        "seq": 6,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:37:48.984Z",
+        "elapsedMs": 46448.699999809265,
+        "seq": 6,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:48.985Z",
+        "elapsedMs": 46449.199999809265,
+        "seq": 6,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:48.987Z",
+        "elapsedMs": 46451,
+        "seq": 6,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:49.168Z",
+        "elapsedMs": 46632.5,
+        "seq": 6,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:49.169Z",
+        "elapsedMs": 46633.09999990463,
+        "seq": 6,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:49.176Z",
+        "elapsedMs": 46640.39999961853,
+        "seq": 6,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:49.248Z",
+        "elapsedMs": 46712.09999990463,
+        "seq": 6,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:49.297Z",
+        "elapsedMs": 46761.59999990463,
+        "seq": 6,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:49.298Z",
+        "elapsedMs": 46762.39999961853,
+        "seq": 6,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.8821954882620813"
+      },
+      {
+        "at": "2026-10-13T07:37:49.352Z",
+        "elapsedMs": 46816.09999990463,
+        "seq": 6,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:37:49.353Z",
+        "elapsedMs": 46816.89999961853,
+        "seq": 6,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:49.367Z",
+        "elapsedMs": 46831.199999809265,
+        "seq": 7,
+        "message": "COAMI19|{\"seq\":7,\"kind\":\"prepare\",\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:49.368Z",
+        "elapsedMs": 46832.09999990463,
+        "seq": 7,
+        "message": "[WasmDriver] applyRotation y=0 p=0 r=0 time=0.5"
+      },
+      {
+        "at": "2026-10-13T07:37:49.382Z",
+        "elapsedMs": 46846.59999990463,
+        "seq": 7,
+        "message": "COAMI19|{\"seq\":7,\"kind\":\"prepare\",\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:50.231Z",
+        "elapsedMs": 47695.5,
+        "seq": 7,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:54.384Z",
+        "elapsedMs": 51848.89999961853,
+        "seq": 7,
+        "message": "COAMI19|{\"seq\":7,\"kind\":\"prepare\",\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:54.459Z",
+        "elapsedMs": 51923.39999961853,
+        "seq": 7,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:37:54.645Z",
+        "elapsedMs": 52109.59999990463,
+        "seq": 7,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:54.646Z",
+        "elapsedMs": 52110.09999990463,
+        "seq": 7,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:54.646Z",
+        "elapsedMs": 52110.7999997139,
+        "seq": 7,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:54.828Z",
+        "elapsedMs": 52292.39999961853,
+        "seq": 7,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:54.829Z",
+        "elapsedMs": 52293.09999990463,
+        "seq": 7,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:54.835Z",
+        "elapsedMs": 52299.2999997139,
+        "seq": 7,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:55.011Z",
+        "elapsedMs": 52475,
+        "seq": 7,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:55.011Z",
+        "elapsedMs": 52475.59999990463,
+        "seq": 7,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:55.024Z",
+        "elapsedMs": 52488.2999997139,
+        "seq": 7,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:55.195Z",
+        "elapsedMs": 52659,
+        "seq": 7,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:37:55.195Z",
+        "elapsedMs": 52659.59999990463,
+        "seq": 7,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:55.212Z",
+        "elapsedMs": 52675.89999961853,
+        "seq": 7,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:55.378Z",
+        "elapsedMs": 52842.2999997139,
+        "seq": 7,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:37:55.379Z",
+        "elapsedMs": 52843.09999990463,
+        "seq": 7,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:37:55.385Z",
+        "elapsedMs": 52849.7999997139,
+        "seq": 8,
+        "message": "COAMI19|{\"seq\":8,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:55.386Z",
+        "elapsedMs": 52850.89999961853,
+        "seq": 8,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:55.387Z",
+        "elapsedMs": 52851.5,
+        "seq": 8,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.7511623337637457"
+      },
+      {
+        "at": "2026-10-13T07:37:55.388Z",
+        "elapsedMs": 52852.199999809265,
+        "seq": 8,
+        "message": "COAMI19|{\"seq\":8,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:37:56.197Z",
+        "elapsedMs": 53661.699999809265,
+        "seq": 8,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:56.214Z",
+        "elapsedMs": 53678.59999990463,
+        "seq": 8,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:56.215Z",
+        "elapsedMs": 53679.199999809265,
+        "seq": 8,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.9800543463696048"
+      },
+      {
+        "at": "2026-10-13T07:37:57.246Z",
+        "elapsedMs": 54710.5,
+        "seq": 8,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:57.344Z",
+        "elapsedMs": 54808.09999990463,
+        "seq": 8,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:57.344Z",
+        "elapsedMs": 54808.7999997139,
+        "seq": 8,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.9063681128464491"
+      },
+      {
+        "at": "2026-10-13T07:37:58.303Z",
+        "elapsedMs": 55767.09999990463,
+        "seq": 8,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:58.372Z",
+        "elapsedMs": 55836.2999997139,
+        "seq": 8,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:58.373Z",
+        "elapsedMs": 55837.5,
+        "seq": 8,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.8398731005563741"
+      },
+      {
+        "at": "2026-10-13T07:37:59.266Z",
+        "elapsedMs": 56730.2999997139,
+        "seq": 8,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:59.294Z",
+        "elapsedMs": 56758.699999809265,
+        "seq": 8,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:59.295Z",
+        "elapsedMs": 56759.39999961853,
+        "seq": 8,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.5243366777544546"
+      },
+      {
+        "at": "2026-10-13T07:37:59.876Z",
+        "elapsedMs": 57340,
+        "seq": 8,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:37:59.910Z",
+        "elapsedMs": 57374.39999961853,
+        "seq": 8,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:37:59.911Z",
+        "elapsedMs": 57375.09999990463,
+        "seq": 8,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.81835168684756"
+      },
+      {
+        "at": "2026-10-13T07:38:00.389Z",
+        "elapsedMs": 57853.59999990463,
+        "seq": 8,
+        "message": "COAMI19|{\"seq\":8,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:00.422Z",
+        "elapsedMs": 57886.5,
+        "seq": 8,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:38:00.780Z",
+        "elapsedMs": 58244.09999990463,
+        "seq": 8,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:00.831Z",
+        "elapsedMs": 58294.89999961853,
+        "seq": 8,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:00.831Z",
+        "elapsedMs": 58295.7999997139,
+        "seq": 8,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.5681371884737803"
+      },
+      {
+        "at": "2026-10-13T07:38:00.871Z",
+        "elapsedMs": 58335.39999961853,
+        "seq": 8,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:00.871Z",
+        "elapsedMs": 58336,
+        "seq": 8,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:00.881Z",
+        "elapsedMs": 58345.59999990463,
+        "seq": 8,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:01.055Z",
+        "elapsedMs": 58519.199999809265,
+        "seq": 8,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:38:01.055Z",
+        "elapsedMs": 58519.89999961853,
+        "seq": 8,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:01.073Z",
+        "elapsedMs": 58537.09999990463,
+        "seq": 9,
+        "message": "COAMI19|{\"seq\":9,\"kind\":\"prepare\",\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:01.074Z",
+        "elapsedMs": 58538,
+        "seq": 9,
+        "message": "[WasmDriver] applyRotation y=0 p=0 r=0 time=0.5"
+      },
+      {
+        "at": "2026-10-13T07:38:01.089Z",
+        "elapsedMs": 58553.2999997139,
+        "seq": 9,
+        "message": "COAMI19|{\"seq\":9,\"kind\":\"prepare\",\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:01.450Z",
+        "elapsedMs": 58914.7999997139,
+        "seq": 9,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:06.093Z",
+        "elapsedMs": 63557.199999809265,
+        "seq": 9,
+        "message": "COAMI19|{\"seq\":9,\"kind\":\"prepare\",\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:06.164Z",
+        "elapsedMs": 63628.2999997139,
+        "seq": 9,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:38:06.346Z",
+        "elapsedMs": 63810.2999997139,
+        "seq": 9,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:06.346Z",
+        "elapsedMs": 63810.89999961853,
+        "seq": 9,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:06.352Z",
+        "elapsedMs": 63816.39999961853,
+        "seq": 9,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:06.528Z",
+        "elapsedMs": 63992.699999809265,
+        "seq": 9,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:38:06.529Z",
+        "elapsedMs": 63993.39999961853,
+        "seq": 9,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:06.541Z",
+        "elapsedMs": 64005.09999990463,
+        "seq": 10,
+        "message": "COAMI19|{\"seq\":10,\"kind\":\"look\",\"target\":\"left\",\"point\":[0.5,0.5,0],\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:06.542Z",
+        "elapsedMs": 64006,
+        "seq": 10,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:06.542Z",
+        "elapsedMs": 64006.7999997139,
+        "seq": 10,
+        "message": "[WasmDriver] applyRotation y=0.7853981633974483 p=0 r=0 time=0.6395152894032725"
+      },
+      {
+        "at": "2026-10-13T07:38:06.543Z",
+        "elapsedMs": 64007.5,
+        "seq": 10,
+        "message": "COAMI19|{\"seq\":10,\"kind\":\"look\",\"target\":\"left\",\"point\":[0.5,0.5,0],\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:07.233Z",
+        "elapsedMs": 64697.699999809265,
+        "seq": 10,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:11.545Z",
+        "elapsedMs": 69009.39999961853,
+        "seq": 10,
+        "message": "COAMI19|{\"seq\":10,\"kind\":\"look\",\"target\":\"left\",\"point\":[0.5,0.5,0],\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:11.605Z",
+        "elapsedMs": 69069.39999961853,
+        "seq": 10,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:38:12.371Z",
+        "elapsedMs": 69835.5,
+        "seq": 10,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:12.372Z",
+        "elapsedMs": 69836.89999961853,
+        "seq": 10,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:12.387Z",
+        "elapsedMs": 69851.39999961853,
+        "seq": 10,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:12.555Z",
+        "elapsedMs": 70019.89999961853,
+        "seq": 10,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:12.556Z",
+        "elapsedMs": 70020.69999980927,
+        "seq": 10,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:12.560Z",
+        "elapsedMs": 70025,
+        "seq": 10,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:12.739Z",
+        "elapsedMs": 70203.2999997139,
+        "seq": 10,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:12.739Z",
+        "elapsedMs": 70204,
+        "seq": 10,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:12.750Z",
+        "elapsedMs": 70214.2999997139,
+        "seq": 10,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:12.922Z",
+        "elapsedMs": 70386.69999980927,
+        "seq": 10,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:12.923Z",
+        "elapsedMs": 70387.39999961853,
+        "seq": 10,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:12.939Z",
+        "elapsedMs": 70403.19999980927,
+        "seq": 10,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:13.105Z",
+        "elapsedMs": 70569.39999961853,
+        "seq": 10,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:38:13.105Z",
+        "elapsedMs": 70569.89999961853,
+        "seq": 10,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:13.111Z",
+        "elapsedMs": 70575.7999997139,
+        "seq": 11,
+        "message": "COAMI19|{\"seq\":11,\"kind\":\"prepare\",\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:13.113Z",
+        "elapsedMs": 70577.19999980927,
+        "seq": 11,
+        "message": "[WasmDriver] applyRotation y=0 p=0 r=0 time=0.5"
+      },
+      {
+        "at": "2026-10-13T07:38:13.127Z",
+        "elapsedMs": 70591.5,
+        "seq": 11,
+        "message": "COAMI19|{\"seq\":11,\"kind\":\"prepare\",\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:18.130Z",
+        "elapsedMs": 75595,
+        "seq": 11,
+        "message": "COAMI19|{\"seq\":11,\"kind\":\"prepare\",\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:18.212Z",
+        "elapsedMs": 75677,
+        "seq": 11,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:38:18.395Z",
+        "elapsedMs": 75859.89999961853,
+        "seq": 11,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:18.396Z",
+        "elapsedMs": 75860.5,
+        "seq": 11,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:18.404Z",
+        "elapsedMs": 75869.09999990463,
+        "seq": 11,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:18.581Z",
+        "elapsedMs": 76045.59999990463,
+        "seq": 11,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:18.582Z",
+        "elapsedMs": 76046.19999980927,
+        "seq": 11,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:18.595Z",
+        "elapsedMs": 76060.09999990463,
+        "seq": 11,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:18.764Z",
+        "elapsedMs": 76228.89999961853,
+        "seq": 11,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:38:18.765Z",
+        "elapsedMs": 76229.7999997139,
+        "seq": 11,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:18.769Z",
+        "elapsedMs": 76233.5,
+        "seq": 12,
+        "message": "COAMI19|{\"seq\":12,\"kind\":\"look\",\"target\":\"right\",\"point\":[0.5,-0.5,0],\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:18.770Z",
+        "elapsedMs": 76234.39999961853,
+        "seq": 12,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:18.771Z",
+        "elapsedMs": 76235.09999990463,
+        "seq": 12,
+        "message": "[WasmDriver] applyRotation y=-0.7853981633974483 p=0 r=0 time=0.7563269481790843"
+      },
+      {
+        "at": "2026-10-13T07:38:18.772Z",
+        "elapsedMs": 76236.19999980927,
+        "seq": 12,
+        "message": "COAMI19|{\"seq\":12,\"kind\":\"look\",\"target\":\"right\",\"point\":[0.5,-0.5,0],\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:19.579Z",
+        "elapsedMs": 77044.09999990463,
+        "seq": 12,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:23.774Z",
+        "elapsedMs": 81238.5,
+        "seq": 12,
+        "message": "COAMI19|{\"seq\":12,\"kind\":\"look\",\"target\":\"right\",\"point\":[0.5,-0.5,0],\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:23.789Z",
+        "elapsedMs": 81253.59999990463,
+        "seq": 12,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:38:24.184Z",
+        "elapsedMs": 81648.7999997139,
+        "seq": 12,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:24.185Z",
+        "elapsedMs": 81649.5,
+        "seq": 12,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:24.186Z",
+        "elapsedMs": 81650.19999980927,
+        "seq": 12,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:24.368Z",
+        "elapsedMs": 81832.89999961853,
+        "seq": 12,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:24.369Z",
+        "elapsedMs": 81833.5,
+        "seq": 12,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:24.373Z",
+        "elapsedMs": 81837.59999990463,
+        "seq": 12,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:24.552Z",
+        "elapsedMs": 82016.19999980927,
+        "seq": 12,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:24.552Z",
+        "elapsedMs": 82016.89999961853,
+        "seq": 12,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:24.563Z",
+        "elapsedMs": 82027.69999980927,
+        "seq": 12,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:24.736Z",
+        "elapsedMs": 82200.59999990463,
+        "seq": 12,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:38:24.738Z",
+        "elapsedMs": 82202.19999980927,
+        "seq": 12,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:24.751Z",
+        "elapsedMs": 82216.09999990463,
+        "seq": 13,
+        "message": "COAMI19|{\"seq\":13,\"kind\":\"prepare\",\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:24.753Z",
+        "elapsedMs": 82218,
+        "seq": 13,
+        "message": "[WasmDriver] applyRotation y=0 p=0 r=0 time=0.5"
+      },
+      {
+        "at": "2026-10-13T07:38:24.771Z",
+        "elapsedMs": 82235.7999997139,
+        "seq": 13,
+        "message": "COAMI19|{\"seq\":13,\"kind\":\"prepare\",\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:29.780Z",
+        "elapsedMs": 87244.89999961853,
+        "seq": 13,
+        "message": "COAMI19|{\"seq\":13,\"kind\":\"prepare\",\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:29.822Z",
+        "elapsedMs": 87286.2999997139,
+        "seq": 13,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:38:30.005Z",
+        "elapsedMs": 87469.89999961853,
+        "seq": 13,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:30.006Z",
+        "elapsedMs": 87471.09999990463,
+        "seq": 13,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:30.019Z",
+        "elapsedMs": 87483.89999961853,
+        "seq": 13,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:30.189Z",
+        "elapsedMs": 87653.5,
+        "seq": 13,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:30.189Z",
+        "elapsedMs": 87654.19999980927,
+        "seq": 13,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:30.194Z",
+        "elapsedMs": 87658.5,
+        "seq": 13,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:30.372Z",
+        "elapsedMs": 87836.59999990463,
+        "seq": 13,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:30.373Z",
+        "elapsedMs": 87837.19999980927,
+        "seq": 13,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:30.382Z",
+        "elapsedMs": 87847,
+        "seq": 13,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:30.555Z",
+        "elapsedMs": 88020,
+        "seq": 13,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:38:30.556Z",
+        "elapsedMs": 88020.69999980927,
+        "seq": 13,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:30.570Z",
+        "elapsedMs": 88034.5,
+        "seq": 14,
+        "message": "COAMI19|{\"seq\":14,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:30.571Z",
+        "elapsedMs": 88035.2999997139,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:30.571Z",
+        "elapsedMs": 88035.89999961853,
+        "seq": 14,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.5194452467930714"
+      },
+      {
+        "at": "2026-10-13T07:38:30.572Z",
+        "elapsedMs": 88036.5,
+        "seq": 14,
+        "message": "COAMI19|{\"seq\":14,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:31.142Z",
+        "elapsedMs": 88606.2999997139,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:31.186Z",
+        "elapsedMs": 88650.2999997139,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:31.186Z",
+        "elapsedMs": 88650.89999961853,
+        "seq": 14,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.7091532865116155"
+      },
+      {
+        "at": "2026-10-13T07:38:31.951Z",
+        "elapsedMs": 89415.39999961853,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:32.002Z",
+        "elapsedMs": 89466.59999990463,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:32.003Z",
+        "elapsedMs": 89467.89999961853,
+        "seq": 14,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.6285842988307515"
+      },
+      {
+        "at": "2026-10-13T07:38:32.689Z",
+        "elapsedMs": 90153.59999990463,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:32.724Z",
+        "elapsedMs": 90188.2999997139,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:32.726Z",
+        "elapsedMs": 90190.19999980927,
+        "seq": 14,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.8114131036267677"
+      },
+      {
+        "at": "2026-10-13T07:38:33.595Z",
+        "elapsedMs": 91059.89999961853,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:33.648Z",
+        "elapsedMs": 91112.7999997139,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:33.649Z",
+        "elapsedMs": 91113.5,
+        "seq": 14,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.9760289725270257"
+      },
+      {
+        "at": "2026-10-13T07:38:34.677Z",
+        "elapsedMs": 92141.59999990463,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:34.773Z",
+        "elapsedMs": 92237.39999961853,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:34.774Z",
+        "elapsedMs": 92238.2999997139,
+        "seq": 14,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.9900833989913033"
+      },
+      {
+        "at": "2026-10-13T07:38:35.574Z",
+        "elapsedMs": 93039,
+        "seq": 14,
+        "message": "COAMI19|{\"seq\":14,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:35.603Z",
+        "elapsedMs": 93067.7999997139,
+        "seq": 14,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:38:35.815Z",
+        "elapsedMs": 93279.5,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:35.901Z",
+        "elapsedMs": 93365.69999980927,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:35.902Z",
+        "elapsedMs": 93366.5,
+        "seq": 14,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.5703448588356119"
+      },
+      {
+        "at": "2026-10-13T07:38:36.275Z",
+        "elapsedMs": 93739.2999997139,
+        "seq": 14,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:36.275Z",
+        "elapsedMs": 93740,
+        "seq": 14,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:36.290Z",
+        "elapsedMs": 93754.69999980927,
+        "seq": 14,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:36.456Z",
+        "elapsedMs": 93921.19999980927,
+        "seq": 14,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:36.457Z",
+        "elapsedMs": 93921.69999980927,
+        "seq": 14,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:36.461Z",
+        "elapsedMs": 93925.89999961853,
+        "seq": 14,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:36.531Z",
+        "elapsedMs": 93995.89999961853,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:36.616Z",
+        "elapsedMs": 94080.39999961853,
+        "seq": 14,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:36.616Z",
+        "elapsedMs": 94081,
+        "seq": 14,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.5479145043287028"
+      },
+      {
+        "at": "2026-10-13T07:38:36.640Z",
+        "elapsedMs": 94104.89999961853,
+        "seq": 14,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:38:36.641Z",
+        "elapsedMs": 94105.59999990463,
+        "seq": 14,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:36.651Z",
+        "elapsedMs": 94115.89999961853,
+        "seq": 15,
+        "message": "COAMI19|{\"seq\":15,\"kind\":\"prepare\",\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:36.652Z",
+        "elapsedMs": 94116.89999961853,
+        "seq": 15,
+        "message": "[WasmDriver] applyRotation y=0 p=0 r=0 time=0.5"
+      },
+      {
+        "at": "2026-10-13T07:38:36.667Z",
+        "elapsedMs": 94131.5,
+        "seq": 15,
+        "message": "COAMI19|{\"seq\":15,\"kind\":\"prepare\",\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:37.218Z",
+        "elapsedMs": 94682.89999961853,
+        "seq": 15,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:41.669Z",
+        "elapsedMs": 99133.2999997139,
+        "seq": 15,
+        "message": "COAMI19|{\"seq\":15,\"kind\":\"prepare\",\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:41.719Z",
+        "elapsedMs": 99184.19999980927,
+        "seq": 15,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:38:41.902Z",
+        "elapsedMs": 99366.89999961853,
+        "seq": 15,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:41.903Z",
+        "elapsedMs": 99367.59999990463,
+        "seq": 15,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:41.905Z",
+        "elapsedMs": 99369.59999990463,
+        "seq": 15,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:42.086Z",
+        "elapsedMs": 99550.39999961853,
+        "seq": 15,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:42.088Z",
+        "elapsedMs": 99552.2999997139,
+        "seq": 15,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:42.092Z",
+        "elapsedMs": 99556.7999997139,
+        "seq": 15,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:42.275Z",
+        "elapsedMs": 99739.2999997139,
+        "seq": 15,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:42.276Z",
+        "elapsedMs": 99740.7999997139,
+        "seq": 15,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:42.279Z",
+        "elapsedMs": 99743.89999961853,
+        "seq": 15,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:42.459Z",
+        "elapsedMs": 99923.89999961853,
+        "seq": 15,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:42.460Z",
+        "elapsedMs": 99924.5,
+        "seq": 15,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:42.468Z",
+        "elapsedMs": 99933.09999990463,
+        "seq": 15,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:42.642Z",
+        "elapsedMs": 100107.19999980927,
+        "seq": 15,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:38:42.643Z",
+        "elapsedMs": 100107.89999961853,
+        "seq": 15,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:42.657Z",
+        "elapsedMs": 100122.19999980927,
+        "seq": 16,
+        "message": "COAMI19|{\"seq\":16,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:42.659Z",
+        "elapsedMs": 100123.39999961853,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:42.659Z",
+        "elapsedMs": 100124,
+        "seq": 16,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.5094773718200053"
+      },
+      {
+        "at": "2026-10-13T07:38:42.660Z",
+        "elapsedMs": 100124.59999990463,
+        "seq": 16,
+        "message": "COAMI19|{\"seq\":16,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:43.221Z",
+        "elapsedMs": 100686.09999990463,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:43.274Z",
+        "elapsedMs": 100738.7999997139,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:43.275Z",
+        "elapsedMs": 100739.5,
+        "seq": 16,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.5443915615530646"
+      },
+      {
+        "at": "2026-10-13T07:38:43.874Z",
+        "elapsedMs": 101339.19999980927,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:43.891Z",
+        "elapsedMs": 101356,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:43.892Z",
+        "elapsedMs": 101356.7999997139,
+        "seq": 16,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.573950672090962"
+      },
+      {
+        "at": "2026-10-13T07:38:44.518Z",
+        "elapsedMs": 101983.09999990463,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:44.605Z",
+        "elapsedMs": 102069.59999990463,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:44.606Z",
+        "elapsedMs": 102070.2999997139,
+        "seq": 16,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.8039413424227113"
+      },
+      {
+        "at": "2026-10-13T07:38:45.461Z",
+        "elapsedMs": 102925.2999997139,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:45.529Z",
+        "elapsedMs": 102994,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:45.530Z",
+        "elapsedMs": 102994.69999980927,
+        "seq": 16,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.9667078931660894"
+      },
+      {
+        "at": "2026-10-13T07:38:46.547Z",
+        "elapsedMs": 104012.19999980927,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:46.557Z",
+        "elapsedMs": 104022.19999980927,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:46.558Z",
+        "elapsedMs": 104022.89999961853,
+        "seq": 16,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.7606528351365834"
+      },
+      {
+        "at": "2026-10-13T07:38:47.370Z",
+        "elapsedMs": 104834.59999990463,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:47.377Z",
+        "elapsedMs": 104842.09999990463,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:47.378Z",
+        "elapsedMs": 104842.7999997139,
+        "seq": 16,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.792217537198317"
+      },
+      {
+        "at": "2026-10-13T07:38:47.668Z",
+        "elapsedMs": 105132.59999990463,
+        "seq": 16,
+        "message": "COAMI19|{\"seq\":16,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:47.731Z",
+        "elapsedMs": 105195.89999961853,
+        "seq": 16,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:38:48.222Z",
+        "elapsedMs": 105686.39999961853,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:48.269Z",
+        "elapsedMs": 105734.09999990463,
+        "seq": 16,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:48.270Z",
+        "elapsedMs": 105734.69999980927,
+        "seq": 16,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:48.286Z",
+        "elapsedMs": 105750.7999997139,
+        "seq": 16,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:48.305Z",
+        "elapsedMs": 105769.39999961853,
+        "seq": 16,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:48.306Z",
+        "elapsedMs": 105771.09999990463,
+        "seq": 16,
+        "message": "[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.6549511452461365"
+      },
+      {
+        "at": "2026-10-13T07:38:48.460Z",
+        "elapsedMs": 105924.89999961853,
+        "seq": 16,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:38:48.461Z",
+        "elapsedMs": 105925.59999990463,
+        "seq": 16,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:48.475Z",
+        "elapsedMs": 105940.09999990463,
+        "seq": 17,
+        "message": "COAMI19|{\"seq\":17,\"kind\":\"prepare\",\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:48.476Z",
+        "elapsedMs": 105941.2999997139,
+        "seq": 17,
+        "message": "[WasmDriver] applyRotation y=0 p=0 r=0 time=0.5"
+      },
+      {
+        "at": "2026-10-13T07:38:48.491Z",
+        "elapsedMs": 105955.59999990463,
+        "seq": 17,
+        "message": "COAMI19|{\"seq\":17,\"kind\":\"prepare\",\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:49.020Z",
+        "elapsedMs": 106485.09999990463,
+        "seq": 17,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:53.500Z",
+        "elapsedMs": 110965.19999980927,
+        "seq": 17,
+        "message": "COAMI19|{\"seq\":17,\"kind\":\"prepare\",\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:53.532Z",
+        "elapsedMs": 110996.89999961853,
+        "seq": 17,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:38:53.713Z",
+        "elapsedMs": 111178,
+        "seq": 17,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:38:53.714Z",
+        "elapsedMs": 111178.5,
+        "seq": 17,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:53.721Z",
+        "elapsedMs": 111186,
+        "seq": 17,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:53.897Z",
+        "elapsedMs": 111362.09999990463,
+        "seq": 17,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:38:53.898Z",
+        "elapsedMs": 111362.7999997139,
+        "seq": 17,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:53.910Z",
+        "elapsedMs": 111375,
+        "seq": 18,
+        "message": "COAMI19|{\"seq\":18,\"kind\":\"look\",\"target\":\"left\",\"point\":[0.5,0.5,0],\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:53.911Z",
+        "elapsedMs": 111375.69999980927,
+        "seq": 18,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:38:53.911Z",
+        "elapsedMs": 111376.2999997139,
+        "seq": 18,
+        "message": "[WasmDriver] applyRotation y=0.7853981633974483 p=0 r=0 time=0.9589181397850244"
+      },
+      {
+        "at": "2026-10-13T07:38:53.912Z",
+        "elapsedMs": 111376.89999961853,
+        "seq": 18,
+        "message": "COAMI19|{\"seq\":18,\"kind\":\"look\",\"target\":\"left\",\"point\":[0.5,0.5,0],\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:54.921Z",
+        "elapsedMs": 112386.09999990463,
+        "seq": 18,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:38:58.915Z",
+        "elapsedMs": 116379.7999997139,
+        "seq": 18,
+        "message": "COAMI19|{\"seq\":18,\"kind\":\"look\",\"target\":\"left\",\"point\":[0.5,0.5,0],\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:58.923Z",
+        "elapsedMs": 116387.69999980927,
+        "seq": 18,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:38:59.107Z",
+        "elapsedMs": 116572,
+        "seq": 18,
+        "message": "operator=automated smoke (NOT human) send=c stable=true"
+      },
+      {
+        "at": "2026-10-13T07:38:59.108Z",
+        "elapsedMs": 116572.89999961853,
+        "seq": 18,
+        "message": "[bridge] Host.Button.c pushed"
+      },
+      {
+        "at": "2026-10-13T07:38:59.121Z",
+        "elapsedMs": 116585.39999961853,
+        "seq": 19,
+        "message": "COAMI19|{\"seq\":19,\"kind\":\"away\",\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:38:59.121Z",
+        "elapsedMs": 116586.2999997139,
+        "seq": 19,
+        "message": "COAMI19|{\"seq\":19,\"kind\":\"away\",\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:04.123Z",
+        "elapsedMs": 121588.09999990463,
+        "seq": 19,
+        "message": "COAMI19|{\"seq\":19,\"kind\":\"away\",\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:04.191Z",
+        "elapsedMs": 121655.89999961853,
+        "seq": 19,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:39:04.373Z",
+        "elapsedMs": 121838.09999990463,
+        "seq": 19,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:39:04.374Z",
+        "elapsedMs": 121839,
+        "seq": 19,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:39:04.390Z",
+        "elapsedMs": 121855,
+        "seq": 19,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:04.556Z",
+        "elapsedMs": 122021,
+        "seq": 19,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:39:04.557Z",
+        "elapsedMs": 122021.69999980927,
+        "seq": 19,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:39:04.561Z",
+        "elapsedMs": 122025.5,
+        "seq": 20,
+        "message": "COAMI19|{\"seq\":20,\"kind\":\"look\",\"target\":\"right\",\"point\":[0.5,-0.5,0],\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:04.562Z",
+        "elapsedMs": 122027.39999961853,
+        "seq": 20,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:39:04.563Z",
+        "elapsedMs": 122028,
+        "seq": 20,
+        "message": "[WasmDriver] applyRotation y=-0.7853981633974483 p=0 r=0 time=0.8963437221927306"
+      },
+      {
+        "at": "2026-10-13T07:39:04.564Z",
+        "elapsedMs": 122028.5,
+        "seq": 20,
+        "message": "COAMI19|{\"seq\":20,\"kind\":\"look\",\"target\":\"right\",\"point\":[0.5,-0.5,0],\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:05.511Z",
+        "elapsedMs": 122975.59999990463,
+        "seq": 20,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:39:09.565Z",
+        "elapsedMs": 127029.7999997139,
+        "seq": 20,
+        "message": "COAMI19|{\"seq\":20,\"kind\":\"look\",\"target\":\"right\",\"point\":[0.5,-0.5,0],\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:09.573Z",
+        "elapsedMs": 127037.69999980927,
+        "seq": 20,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:39:09.756Z",
+        "elapsedMs": 127221.2999997139,
+        "seq": 20,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:39:09.757Z",
+        "elapsedMs": 127222,
+        "seq": 20,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:39:09.770Z",
+        "elapsedMs": 127234.59999990463,
+        "seq": 20,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:09.939Z",
+        "elapsedMs": 127404.39999961853,
+        "seq": 20,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:39:09.940Z",
+        "elapsedMs": 127405,
+        "seq": 20,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:39:09.942Z",
+        "elapsedMs": 127406.7999997139,
+        "seq": 20,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:10.123Z",
+        "elapsedMs": 127587.5,
+        "seq": 20,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:39:10.123Z",
+        "elapsedMs": 127588,
+        "seq": 20,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:39:10.129Z",
+        "elapsedMs": 127594.2999997139,
+        "seq": 20,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":4,\"target\":\"prepare\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:10.306Z",
+        "elapsedMs": 127771.09999990463,
+        "seq": 20,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:39:10.307Z",
+        "elapsedMs": 127771.89999961853,
+        "seq": 20,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:39:10.319Z",
+        "elapsedMs": 127784.09999990463,
+        "seq": 21,
+        "message": "COAMI19|{\"seq\":21,\"kind\":\"prepare\",\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:10.320Z",
+        "elapsedMs": 127785,
+        "seq": 21,
+        "message": "[WasmDriver] applyRotation y=0 p=0 r=0 time=0.5"
+      },
+      {
+        "at": "2026-10-13T07:39:10.334Z",
+        "elapsedMs": 127799.39999961853,
+        "seq": 21,
+        "message": "COAMI19|{\"seq\":21,\"kind\":\"prepare\",\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:15.345Z",
+        "elapsedMs": 132810.59999990463,
+        "seq": 21,
+        "message": "COAMI19|{\"seq\":21,\"kind\":\"prepare\",\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:15.368Z",
+        "elapsedMs": 132833.2999997139,
+        "seq": 21,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:39:15.568Z",
+        "elapsedMs": 133032.69999980927,
+        "seq": 21,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:39:15.568Z",
+        "elapsedMs": 133033.39999961853,
+        "seq": 21,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:39:15.584Z",
+        "elapsedMs": 133049.2999997139,
+        "seq": 21,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":0,\"target\":\"left\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:15.775Z",
+        "elapsedMs": 133240.5,
+        "seq": 21,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:39:15.776Z",
+        "elapsedMs": 133241.09999990463,
+        "seq": 21,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:39:15.790Z",
+        "elapsedMs": 133255.5,
+        "seq": 21,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":1,\"target\":\"right\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:16.017Z",
+        "elapsedMs": 133482.09999990463,
+        "seq": 21,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:39:16.018Z",
+        "elapsedMs": 133483,
+        "seq": 21,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:39:16.030Z",
+        "elapsedMs": 133495.39999961853,
+        "seq": 21,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":2,\"target\":\"up\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:16.202Z",
+        "elapsedMs": 133667.5,
+        "seq": 21,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:39:16.203Z",
+        "elapsedMs": 133668.2999997139,
+        "seq": 21,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:39:16.218Z",
+        "elapsedMs": 133683.5,
+        "seq": 22,
+        "message": "COAMI19|{\"seq\":22,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:16.219Z",
+        "elapsedMs": 133684.2999997139,
+        "seq": 22,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:39:16.220Z",
+        "elapsedMs": 133684.89999961853,
+        "seq": 22,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.7457346027929963"
+      },
+      {
+        "at": "2026-10-13T07:39:16.220Z",
+        "elapsedMs": 133685.5,
+        "seq": 22,
+        "message": "COAMI19|{\"seq\":22,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:17.018Z",
+        "elapsedMs": 134482.59999990463,
+        "seq": 22,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:39:17.035Z",
+        "elapsedMs": 134499.59999990463,
+        "seq": 22,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:39:17.035Z",
+        "elapsedMs": 134500.39999961853,
+        "seq": 22,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.6559260737411333"
+      },
+      {
+        "at": "2026-10-13T07:39:17.742Z",
+        "elapsedMs": 135207.19999980927,
+        "seq": 22,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:39:17.751Z",
+        "elapsedMs": 135216.39999961853,
+        "seq": 22,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:39:17.752Z",
+        "elapsedMs": 135217.5,
+        "seq": 22,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.7490349319991818"
+      },
+      {
+        "at": "2026-10-13T07:39:18.553Z",
+        "elapsedMs": 136017.89999961853,
+        "seq": 22,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:39:18.572Z",
+        "elapsedMs": 136037.2999997139,
+        "seq": 22,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:39:18.574Z",
+        "elapsedMs": 136038.59999990463,
+        "seq": 22,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.55215315895721"
+      },
+      {
+        "at": "2026-10-13T07:39:19.184Z",
+        "elapsedMs": 136649,
+        "seq": 22,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:39:19.186Z",
+        "elapsedMs": 136650.89999961853,
+        "seq": 22,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:39:19.187Z",
+        "elapsedMs": 136652.2999997139,
+        "seq": 22,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.7637277211825027"
+      },
+      {
+        "at": "2026-10-13T07:39:20.007Z",
+        "elapsedMs": 137471.7999997139,
+        "seq": 22,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:39:20.008Z",
+        "elapsedMs": 137472.89999961853,
+        "seq": 22,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:39:20.008Z",
+        "elapsedMs": 137473.5,
+        "seq": 22,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.6959069171901359"
+      },
+      {
+        "at": "2026-10-13T07:39:20.754Z",
+        "elapsedMs": 138219.5,
+        "seq": 22,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:39:20.835Z",
+        "elapsedMs": 138300,
+        "seq": 22,
+        "message": "[WasmDriver] setTorque torque=1"
+      },
+      {
+        "at": "2026-10-13T07:39:20.836Z",
+        "elapsedMs": 138300.89999961853,
+        "seq": 22,
+        "message": "[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.5992078204169906"
+      },
+      {
+        "at": "2026-10-13T07:39:21.228Z",
+        "elapsedMs": 138693.5,
+        "seq": 22,
+        "message": "COAMI19|{\"seq\":22,\"kind\":\"look\",\"target\":\"up\",\"point\":[0.5,0,0.5],\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:21.292Z",
+        "elapsedMs": 138757.19999980927,
+        "seq": 22,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:39:21.475Z",
+        "elapsedMs": 138940.5,
+        "seq": 22,
+        "message": "operator=automated smoke (NOT human) send=c stable=true"
+      },
+      {
+        "at": "2026-10-13T07:39:21.476Z",
+        "elapsedMs": 138941.39999961853,
+        "seq": 22,
+        "message": "[bridge] Host.Button.c pushed"
+      },
+      {
+        "at": "2026-10-13T07:39:21.483Z",
+        "elapsedMs": 138948.2999997139,
+        "seq": 23,
+        "message": "COAMI19|{\"seq\":23,\"kind\":\"away\",\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:21.484Z",
+        "elapsedMs": 138949.19999980927,
+        "seq": 23,
+        "message": "COAMI19|{\"seq\":23,\"kind\":\"away\",\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:21.486Z",
+        "elapsedMs": 138950.59999990463,
+        "seq": 23,
+        "message": "[WasmDriver] setTorque torque=0"
+      },
+      {
+        "at": "2026-10-13T07:39:26.485Z",
+        "elapsedMs": 143950.2999997139,
+        "seq": 23,
+        "message": "COAMI19|{\"seq\":23,\"kind\":\"away\",\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:26.549Z",
+        "elapsedMs": 144014.59999990463,
+        "seq": 23,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      },
+      {
+        "at": "2026-10-13T07:39:26.734Z",
+        "elapsedMs": 144199.09999990463,
+        "seq": 23,
+        "message": "operator=automated smoke (NOT human) send=a stable=false"
+      },
+      {
+        "at": "2026-10-13T07:39:26.735Z",
+        "elapsedMs": 144199.69999980927,
+        "seq": 23,
+        "message": "[bridge] Host.Button.a pushed"
+      },
+      {
+        "at": "2026-10-13T07:39:26.740Z",
+        "elapsedMs": 144205,
+        "seq": 23,
+        "message": "COAMI19|{\"phase\":\"selected\",\"selection\":3,\"target\":\"down\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:26.917Z",
+        "elapsedMs": 144382.5,
+        "seq": 23,
+        "message": "operator=automated smoke (NOT human) send=b stable=true"
+      },
+      {
+        "at": "2026-10-13T07:39:26.918Z",
+        "elapsedMs": 144383.19999980927,
+        "seq": 23,
+        "message": "[bridge] Host.Button.b pushed"
+      },
+      {
+        "at": "2026-10-13T07:39:26.932Z",
+        "elapsedMs": 144396.69999980927,
+        "seq": 24,
+        "message": "COAMI19|{\"seq\":24,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"begin\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:26.934Z",
+        "elapsedMs": 144399,
+        "seq": 24,
+        "message": "COAMI19|{\"seq\":24,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"returned\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:31.944Z",
+        "elapsedMs": 149409.09999990463,
+        "seq": 24,
+        "message": "COAMI19|{\"seq\":24,\"kind\":\"look\",\"target\":\"down\",\"point\":[0.5,0,-0.5],\"phase\":\"window-ended\"}"
+      },
+      {
+        "at": "2026-10-13T07:39:31.954Z",
+        "elapsedMs": 149419.5,
+        "seq": 24,
+        "message": "人工判定 operator=automated smoke (NOT human) result=未確認"
+      }
+    ],
+    "observations": [
+      {
+        "seq": 1,
+        "kind": "prepare",
+        "result": "未確認"
+      },
+      {
+        "seq": 2,
+        "kind": "look",
+        "target": "left",
+        "result": "未確認"
+      },
+      {
+        "seq": 3,
+        "kind": "prepare",
+        "result": "未確認"
+      },
+      {
+        "seq": 4,
+        "kind": "look",
+        "target": "right",
+        "result": "未確認"
+      },
+      {
+        "seq": 5,
+        "kind": "prepare",
+        "result": "未確認"
+      },
+      {
+        "seq": 6,
+        "kind": "look",
+        "target": "up",
+        "result": "未確認"
+      },
+      {
+        "seq": 7,
+        "kind": "prepare",
+        "result": "未確認"
+      },
+      {
+        "seq": 8,
+        "kind": "look",
+        "target": "down",
+        "result": "未確認"
+      },
+      {
+        "seq": 9,
+        "kind": "prepare",
+        "result": "未確認"
+      },
+      {
+        "seq": 10,
+        "kind": "look",
+        "target": "left",
+        "result": "未確認"
+      },
+      {
+        "seq": 11,
+        "kind": "prepare",
+        "result": "未確認"
+      },
+      {
+        "seq": 12,
+        "kind": "look",
+        "target": "right",
+        "result": "未確認"
+      },
+      {
+        "seq": 13,
+        "kind": "prepare",
+        "result": "未確認"
+      },
+      {
+        "seq": 14,
+        "kind": "look",
+        "target": "up",
+        "result": "未確認"
+      },
+      {
+        "seq": 15,
+        "kind": "prepare",
+        "result": "未確認"
+      },
+      {
+        "seq": 16,
+        "kind": "look",
+        "target": "down",
+        "result": "未確認"
+      },
+      {
+        "seq": 17,
+        "kind": "prepare",
+        "result": "未確認"
+      },
+      {
+        "seq": 18,
+        "kind": "look",
+        "target": "left",
+        "result": "未確認"
+      },
+      {
+        "seq": 19,
+        "kind": "away",
+        "result": "未確認"
+      },
+      {
+        "seq": 20,
+        "kind": "look",
+        "target": "right",
+        "result": "未確認"
+      },
+      {
+        "seq": 21,
+        "kind": "prepare",
+        "result": "未確認"
+      },
+      {
+        "seq": 22,
+        "kind": "look",
+        "target": "up",
+        "result": "未確認"
+      },
+      {
+        "seq": 23,
+        "kind": "away",
+        "result": "未確認"
+      },
+      {
+        "seq": 24,
+        "kind": "look",
+        "target": "down",
+        "result": "未確認"
+      }
+    ],
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36"
+  },
+  "errors": []
+}

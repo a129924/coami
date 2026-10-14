@@ -1,0 +1,58 @@
+
+> coami-e019-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ each preset uses lookAt with its actual coordinate, never setPose (0.869542ms)
+✔ invalid coordinates and unknown target never reach SDK (0.113584ms)
+✔ window prevents overlap; away and subsequent target get new sequence (0.115375ms)
+✔ synchronous failure is failed, never returned; window still isolates late traces (0.111458ms)
+✔ prepare calls lookAway then setPose, with separate preparation kind (0.096958ms)
+✔ call return and window end never imply direction or clear-state confirmation (0.643875ms)
+✔ driver error after return overrides call-only state and blocks visual PASS (0.117042ms)
+✔ stale and malformed records cannot end an active window (0.073416ms)
+✔ observation is explicit, scoped, and separate from call state (0.13925ms)
+✔ runtime errors without an active operation block commands until reload (0.047417ms)
+✔ a call with no driver evidence stays unconfirmed even after its window (0.102458ms)
+✔ wrong-angle or post-return driver traces cannot validate the current look (0.118916ms)
+✔ a matching rotation within the synchronous look call supports its own observation (0.063166ms)
+node:internal/modules/esm/resolve:241
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/src/smoke-analysis.ts' imported from /private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/src/smoke-analysis.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:241:11)
+    at moduleResolve (node:internal/modules/esm/resolve:846:10)
+    at defaultResolve (node:internal/modules/esm/resolve:973:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:766:56)
+    at #resolve (node:internal/modules/esm/loader:690:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:610:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:277:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:389:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/src/smoke-analysis.ts'
+}
+
+Node.js v26.10.0
+✖ src/smoke-analysis.test.ts (108.894667ms)
+✔ startup rejection cancels watchdog and preserves the original failure (0.569084ms)
+✔ watchdog does not add a second error after another path blocks the ledger (0.084583ms)
+✔ a pending non-ready startup still reports its timeout (0.0755ms)
+✔ an older send timeout cannot fail a newer pending send (0.402ms)
+✔ operation watchdog preserves an existing fatal error and ignores a finished operation (0.091334ms)
+✔ a genuinely pending operation still times out (0.063291ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 19
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 128.149
+
+✖ failing tests:
+
+test at src/smoke-analysis.test.ts:1:1
+✖ src/smoke-analysis.test.ts (108.894667ms)
+  'test failed'

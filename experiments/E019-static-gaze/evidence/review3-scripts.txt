@@ -1,0 +1,21 @@
+
+> coami-e019-web@0.1.0 test:scripts
+> node --test scripts/build-safety.test.mjs scripts/tool-inputs.test.mjs scripts/public-inputs.test.mjs scripts/smoke-evidence.test.mjs
+
+✔ restoring verified cache removes extra stale libraries (8.555958ms)
+✔ a failed rebuild cannot leave a matching stale MOD pair or compiled modules (6.68875ms)
+✔ vendor gate rejects wrong checkout, gitlink or dirty files (0.8665ms)
+✔ Moddable rebuilding removes old executables and objects before invoking make (7.216833ms)
+✔ current source edits, forged provenance and modified served mesh are rejected (57.1015ms)
+✔ an aborted repeat run replaces the latest report without reusing old PASS or screenshots (11.6505ms)
+✔ controlled compiler config ignores hostile config and tool overrides (337.241792ms)
+✔ fontbm clean rebuild discards the binary and CMake cache before configure (1.38225ms)
+✔ staged simulator host is authenticated without reading the live vendor (6.675334ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 445.908083

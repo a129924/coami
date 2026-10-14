@@ -1,0 +1,77 @@
+> coami-e019-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ each preset uses lookAt with its actual coordinate, never setPose (0.872083ms)
+✔ invalid coordinates and unknown target never reach SDK (0.107416ms)
+✔ window prevents overlap; away and subsequent target get new sequence (0.108916ms)
+✔ synchronous failure is failed, never returned; window still isolates late traces (0.110667ms)
+✔ prepare calls lookAway then setPose, with separate preparation kind (0.089583ms)
+✔ call return and window end never imply direction or clear-state confirmation (0.554166ms)
+✔ driver error after return overrides call-only state and blocks visual PASS (0.1135ms)
+✔ stale and malformed records cannot end an active window (0.067625ms)
+✔ observation is explicit, scoped, and separate from call state (0.069041ms)
+✔ runtime errors without an active operation block commands until reload (0.0555ms)
+✔ a call with no driver evidence stays unconfirmed even after its window (0.053667ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 105.170542
+
+> coami-e019-web@0.1.0 test:contract
+> node --test scripts/controller-contract.test.mjs
+
+✔ real pinned controller: 4 direction formulas exceed strict threshold (0.844625ms)
+✔ real pinned controller: clear gaze during motion, retain then stop polling without recentering (0.437667ms)
+✔ real pinned controller: sub-threshold goal does not require head rotation (0.36525ms)
+✔ characterization: pinned up -> clear -> down accepts a new target but issues no new rotation (0.082958ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 158.736333
+
+> coami-e019-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+
+> coami-e019-web@0.1.0 mod
+> node scripts/build-mod.mjs
+
+> mcrun -d -p wasm -o /build /mod/coami-e019/manifest.json
+### -p wasm
+> xsc -d -e /mod/coami-e019/mod.js -o /build/tmp/wasm/debug/coami-e019/files -r mod
+> xsc -d -e /mod/coami-e019/gaze-control.js -o /build/tmp/wasm/debug/coami-e019/files -r gaze-control
+> xsc -d -e /build/tmp/wasm/debug/coami-e019/check.js -o /build/tmp/wasm/debug/coami-e019/files -r check
+> xsa -b /build/tmp/wasm/debug/coami-e019/files -n tech.moddable.coami-e019 -o /build/bin/wasm/debug/coami-e019 /build/tmp/wasm/debug/coami-e019/files/mod.xsb /build/tmp/wasm/debug/coami-e019/files/gaze-control.xsb /build/tmp/wasm/debug/coami-e019/files/check.xsb
+archive: /build/bin/wasm/debug/coami-e019/mc.xsa
+E019 MOD: 4360 bytes, sha256=5f1d070cea194102c65141dba95e04b3245b33ef428b51338c270566696355a8
+
+> coami-e019-web@0.1.0 build
+> npm run typecheck && vite build
+
+
+> coami-e019-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+vite v8.2.1 building client environment for production...
+transforming...
+✓ 17 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.97 kB │ gzip:   1.23 kB
+dist/assets/index-5ITSFsaD.css    1.37 kB │ gzip:   0.66 kB
+dist/assets/index-CHb0870f.js   622.96 kB │ gzip: 162.19 kB
+
+✓ built in 156ms
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.

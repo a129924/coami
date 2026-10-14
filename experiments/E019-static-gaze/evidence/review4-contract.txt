@@ -1,0 +1,16 @@
+
+> coami-e019-web@0.1.0 test:contract
+> node --test scripts/controller-contract.test.mjs
+
+✔ real pinned controller: 4 direction formulas exceed strict threshold (0.711208ms)
+✔ real pinned controller: clear gaze during motion, retain then stop polling without recentering (0.453958ms)
+✔ real pinned controller: sub-threshold goal does not require head rotation (0.0665ms)
+✔ characterization: pinned up -> clear -> down accepts a new target but issues no new rotation (0.488458ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 124.573458

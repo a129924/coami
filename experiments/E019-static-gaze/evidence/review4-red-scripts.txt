@@ -1,0 +1,45 @@
+
+> coami-e019-web@0.1.0 test:scripts
+> node --test scripts/build-safety.test.mjs scripts/tool-inputs.test.mjs scripts/public-inputs.test.mjs scripts/smoke-evidence.test.mjs
+
+✔ restoring verified cache removes extra stale libraries (5.124917ms)
+✔ a failed rebuild cannot leave a matching stale MOD pair or compiled modules (2.863042ms)
+✔ vendor gate rejects wrong checkout, gitlink or dirty files (0.177959ms)
+✔ Moddable rebuilding removes old executables and objects before invoking make (3.1525ms)
+✖ current source edits, forged provenance and modified served mesh are rejected (56.23475ms)
+✔ an aborted repeat run replaces the latest report without reusing old PASS or screenshots (6.463167ms)
+✖ controlled compiler config ignores hostile config and tool overrides (1493.354292ms)
+✔ fontbm clean rebuild discards the binary and CMake cache before configure (2.081583ms)
+✔ staged simulator host is authenticated without reading the live vendor (7.127208ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 7
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1584.992375
+
+✖ failing tests:
+
+test at scripts/public-inputs.test.mjs:8:1
+✖ current source edits, forged provenance and modified served mesh are rejected (56.23475ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/public-inputs.test.mjs:20:4)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /runtime mismatch/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at scripts/tool-inputs.test.mjs:8:1
+✖ controlled compiler config ignores hostile config and tool overrides (1493.354292ms)
+  Error: Pinned SDK Python executable path mismatch
+      at prepareCompilerEnvironment (file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/tool-inputs.mjs:11:94)
+      at async TestContext.<anonymous> (file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/tool-inputs.test.mjs:17:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)

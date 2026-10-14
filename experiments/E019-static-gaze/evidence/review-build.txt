@@ -1,0 +1,267 @@
+
+> coami-e019-web@0.1.0 prepare:poc
+> npm run assets && npm run mod
+
+
+> coami-e019-web@0.1.0 assets
+> node scripts/prepare-assets.mjs
+
+# xsc release : cc xsBigInt.c
+# xsc release : cc xsCode.c
+# xsc release : cc xsCommon.c
+# xsc release : cc xsdtoa.c
+# xsc release : cc xsLexical.c
+# xsc release : cc xsre.c
+# xsc release : cc xsScript.c
+# xsc release : cc xsScope.c
+# xsc release : cc xsSyntaxical.c
+# xsc release : cc xsTree.c
+# xsc release : cc xsSourceMap.c
+# xsc release : cc xsc.c
+# xsc release : cc xsc
+# xsid release : cc xsdtoa.c
+# xsid release : cc xsre.c
+# xsid release : cc xsCommon.c
+# xsid release : cc xsid.c
+# xsid release : cc xsid
+# xsl release : cc xsAll.c
+# xsl release : cc xsAtomics.c
+# xsl release : cc xsBigInt.c
+# xsl release : cc xsAPI.c
+# xsl release : cc xsBoolean.c
+# xsl release : cc xsArray.c
+# xsl release : cc xsCode.c
+# xsl release : cc xsDataView.c
+# xsl release : cc xsCommon.c
+# xsl release : cc xsDebug.c
+# xsl release : cc xsDate.c
+# xsl release : cc xsArguments.c
+# xsl release : cc xsDefaults.c
+# xsl release : cc xsError.c
+# xsl release : cc xsFunction.c
+# xsl release : cc xsGenerator.c
+# xsl release : cc xsGlobal.c
+# xsl release : cc xsMapSet.c
+# xsl release : cc xsJSON.c
+# xsl release : cc xsLexical.c
+# xsl release : cc xsMarshall.c
+# xsl release : cc xsMath.c
+# xsl release : cc xsMemory.c
+# xsl release : cc xsModule.c
+# xsl release : cc xsPlatforms.c
+# xsl release : cc xsNumber.c
+# xsl release : cc xsObject.c
+# xsl release : cc xsProperty.c
+# xsl release : cc xsPromise.c
+# xsl release : cc xsProxy.c
+# xsl release : cc xsRegExp.c
+# xsl release : cc xsScript.c
+# xsl release : cc xsScope.c
+# xsl release : cc xsRun.c
+# xsl release : cc xsSourceMap.c
+# xsl release : cc xsString.c
+# xsl release : cc xsTree.c
+# xsl release : cc xsSymbol.c
+# xsl release : cc xsSyntaxical.c
+# xsl release : cc xsType.c
+# xsl release : cc xsre.c
+# xsl release : cc xslBase.c
+# xsl release : cc xsdtoa.c
+# xsl release : cc xslOpt.c
+# xsl release : cc xslSlot.c
+# xsl release : cc xsl.c
+# xsl release : cc xslStrip.c
+# xsl release : cc xsl
+# tools release : cc mac_xs.c
+# tools release : cc xsAll.c
+# tools release : cc xsAPI.c
+# tools release : cc xsArguments.c
+# tools release : cc xsArray.c
+# tools release : cc xsAtomics.c
+# tools release : cc xsBigInt.c
+# tools release : cc xsBoolean.c
+# tools release : cc xsCode.c
+# tools release : cc xsCommon.c
+# tools release : cc xsDataView.c
+# tools release : cc xsDate.c
+# tools release : cc xsDebug.c
+# tools release : cc xsError.c
+# tools release : cc xsFunction.c
+# tools release : cc xsGenerator.c
+# tools release : cc xsGlobal.c
+# tools release : cc xsJSON.c
+# tools release : cc xsLexical.c
+# tools release : cc xsMapSet.c
+# tools release : cc xsMarshall.c
+# tools release : cc xsMath.c
+# tools release : cc xsMemory.c
+# tools release : cc xsModule.c
+# tools release : cc xsNumber.c
+# tools release : cc xsObject.c
+# tools release : cc xsPlatforms.c
+# tools release : cc xsProfile.c
+# tools release : cc xsPromise.c
+# tools release : cc xsProperty.c
+# tools release : cc xsProxy.c
+# tools release : cc xsRegExp.c
+# tools release : cc xsRun.c
+# tools release : cc xsScope.c
+# tools release : cc xsScript.c
+# tools release : cc xsSourceMap.c
+# tools release : cc xsString.c
+# tools release : cc xsSymbol.c
+# tools release : cc xsSyntaxical.c
+# tools release : cc xsTree.c
+# tools release : cc xsType.c
+# tools release : cc xsdtoa.c
+# tools release : cc xsmc.c
+# tools release : cc xsre.c
+# tools release : cc xsa.c
+# tools release : cc xsc.c
+# tools release : cc xslBase.c
+# tools release : xsc commodettoBMPOut.js
+# tools release : xsc commodettoConvert.js
+# tools release : xsc commodettoColorCellOut.js
+# tools release : xsc commodettoBitmap.js
+# tools release : xsc commodettoBufferOut.js
+# tools release : xsc commodettoParseBMP.js
+# tools release : xsc commodettoParseBMF.js
+# tools release : xsc commodettoPixelsOut.js
+# tools release : xsc commodettoPoco.js
+# tools release : xsc commodettoPocoCore.js
+# tools release : xsc commodettoReadJPEG.js
+# tools release : xsc commodettoReadPNG.js
+# tools release : xsc commodettoRLE4Out.js
+# tools release : xsc wavreader.js
+# tools release : xsc ber.js
+# tools release : xsc ecp.js
+# tools release : xsc base64.js
+# tools release : xsc curve.js
+# tools release : xsc crypt.js
+# tools release : xsc ec.js
+# tools release : xsc modular.js
+# tools release : xsc x509.js
+/private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/generated/toolchain/moddable/modules/commodetto/commodettoBufferOut.js:31: warning: cannot optimize native!
+# tools release : xsc ffi.js
+# tools release : xsc colorcellencode.js
+# tools release : xsc cdv.js
+# tools release : xsc file.js
+# tools release : xsc image2cs.js
+# tools release : xsc compileDataView.js
+# tools release : xsc compressbmf.js
+# tools release : xsc buildclut.js
+# tools release : xsc mcbundle.js
+# tools release : xsc mcconfig.js
+# tools release : xsc mchex.js
+# tools release : xsc mclocal.js
+# tools release : xsc mcmanifest.js
+# tools release : xsc mcpack.js
+# tools release : xsc mcprintski.js
+# tools release : xsc mcrez.js
+# tools release : xsc mcdevicetree.js
+# tools release : xsc nodered2mcu.js
+# tools release : xsc png2bmp.js
+# tools release : xsc resampler.js
+# tools release : xsc rle4encode.js
+# tools release : xsc transform.js
+# tools release : xsc tool.js
+# tools release : xsc unicode-ranges.js
+# tools release : xsc wav2maud.js
+# tools release : xsc bles2gatt.js
+# tools release : xsc url.js
+# tools release : xsid modBase64.c
+# tools release : xsid commodettoBitmap.c
+# tools release : xsid commodettoBufferOut.c
+# tools release : xsid commodettoColorCellOut.c
+# tools release : xsid commodettoConvert.c
+# tools release : xsid commodettoParseBMF.c
+# tools release : xsid commodettoParseBMP.c
+# tools release : xsid commodettoPocoCore.c
+# tools release : xsid commodettoPocoBlit.c
+# tools release : xsid commodettoReadPNG.c
+# tools release : xsid commodettoReadJPEG.c
+# tools release : xsid cfeBMF.c
+# tools release : xsid xsBigIntEx.c
+# tools release : xsid ec.c
+# tools release : xsid image2cs.c
+# tools release : xsid miniz.c
+# tools release : xsid modCrypt.c
+# tools release : xsid modInstrumentation.c
+# tools release : xsid modular.c
+# tools release : xsid mont.c
+# tools release : xsid tool.c
+# tools release : xsid x509.c
+# tools release : xsid url.c
+# tools release : xsc mcrun.js
+# tools release : cdv
+# tools release : buildclut
+# tools release : colorcellencode
+# tools release : compressbmf
+# tools release : mchex
+# tools release : image2cs
+# tools release : mcbundle
+# tools release : mcconfig
+# tools release : mclocal
+# tools release : mcpack
+# tools release : mcprintski
+# tools release : mcrez
+# tools release : mcdevicetree
+# tools release : bles2gatt
+# tools release : png2bmp
+# tools release : nodered2mcu
+# tools release : rle4encode
+# tools release : mcrun
+# tools release : wav2maud
+# tools release : xsl modules
+### 2162 instances, 2536 keys, 69 colors, 0 holes
+### warning: mcmanifest: FormatFile.prototype.generate() formatValues: no const
+### warning: mcmanifest: FormatFile.prototype.generate() formatValues: not frozen
+### warning: mcmanifest: Tool() formatNames: no const
+### warning: mcmanifest: Tool() formatNames: not frozen
+### warning: mcmanifest: Tool.prototype.run() ResourcesRule.prototype.appendSource() moduleExtensions: no const
+### warning: mcmanifest: Tool.prototype.run() ResourcesRule.prototype.appendSource() moduleExtensions: not frozen
+# tools release : cc adpcm-lib.c
+# tools release : cc adpcm-dns.c
+# tools release : cc modBase64.c
+# tools release : cc commodettoBitmap.c
+# tools release : cc commodettoBufferOut.c
+# tools release : cc commodettoColorCellOut.c
+# tools release : cc commodettoConvert.c
+# tools release : cc commodettoParseBMF.c
+# tools release : cc commodettoParseBMP.c
+# tools release : cc commodettoPocoCore.c
+# tools release : cc commodettoPocoBlit.c
+# tools release : cc commodettoReadJPEG.c
+# tools release : cc commodettoReadPNG.c
+# tools release : cc cfeBMF.c
+# tools release : cc xsBigIntEx.c
+# tools release : cc ec.c
+# tools release : cc image2cs.c
+# tools release : cc mcpack.c
+# tools release : cc miniz.c
+# tools release : cc modCrypt.c
+# tools release : cc modInstrumentation.c
+# tools release : cc modular.c
+# tools release : cc mont.c
+# tools release : cc tool.c
+# tools release : cc wav2maud.c
+# tools release : cc x509.c
+# tools release : cc chacha.c
+# tools release : cc fips46.c
+# tools release : cc fips180.c
+# tools release : cc fips197.c
+# tools release : cc ghash.c
+# tools release : cc rc.c
+# tools release : cc rfc1321.c
+# tools release : cc url.c
+# tools release : cc mc.xs.c
+# tools release : cc tools
+file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/prepare-assets.mjs:128
+  throw new Error(`BLOCKED: pinned Emscripten source and executable could not be verified: ${String(error)}`)
+        ^
+
+Error: BLOCKED: pinned Emscripten source and executable could not be verified: Error: installed Emscripten tree differs from the pinned package: 60260034fc623b51f1339d71f7c262412c2c7207e5fb5e89bca6ad61edece92c
+    at file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/prepare-assets.mjs:128:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v26.10.0
