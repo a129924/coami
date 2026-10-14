@@ -12,3 +12,5 @@ Node public gate 與 browser 共用同一 strict TypeScript normalization；brow
 Red：scripts regression 先證明替換為相同 manifest 的 ancestor commit 未被拒絕；unit red 為缺少 normalization module。Green：搬動所有 checkout 路徑並改變 path-derived config digest 後穩定 identity 相同，匯出不含這些值；竄改 tool／Python／host／WASM／額外 config field 均改變 digest。最終 clean build 與第二個 checkout 路徑的 HTTP 驗證於同 topic evidence 另記。
 
 本輪不執行真人方向驗收，不更改 SDK／vendor／WASM／MOD；搬動 runtime 測試使用已驗證的相同 binaries，不宣稱在搬動目錄重編譯整套 WASM。舊真人 evidence 缺少同次 attestation，完整驗收仍無法判定。
+
+最終驗證：22 unit／11 scripts／6 patched-controller contract、strict checks、clean production build PASS。在另一個含空白的 detached checkout，複製相同已驗證 public binaries、staged host 與依賴，將 raw 診斷路徑及其 config digest 搬至該位置；web build 產生完全相同 bundle hashes，sourceCommit 嚴格等於固定 input revision。實際 preview HTTP 符合 pin；替換成具有相同 manifest 的 evidence-only ancestor commit 被拒絕。見 review8-relocated-build.txt、review8-relocation.txt、review8-source-rejection.txt。首個測試 fixture 的 node_modules symlink 被視為 untracked，clean gate 正確拒絕；改用真實依賴目錄後驗證通過。此測試沒有重編譯 relocated WASM／toolchain，也沒有 browser UI／真人方向驗收。暫時 preview 已停止。

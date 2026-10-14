@@ -1,0 +1,5 @@
+PASS: separate detached checkout with spaces: /private/tmp/e020 relocated review8 v1aq2z33
+PASS: reused verified binaries and relocated diagnostic paths/config digest; clean web build matched committed bundle hashes and exact sourceCommit.
+PASS: actual preview HTTP bundles matched pin.
+PASS: substituting the evidence-only ancestor/HEAD commit with matching harness sources was rejected before listen.
+No relocated WASM/toolchain rebuild or browser/human run performed.
