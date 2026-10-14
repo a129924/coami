@@ -201,6 +201,13 @@ class E013Tests(unittest.TestCase):
             with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_MANIFEST"):
                 evidence.read_manifest(manifest)
 
+    def test_deep_gate_json_reports_contract_failure(self) -> None:
+        nested = b"[" * 1200 + b"0" + b"]" * 1200
+        for code in ("INVALID_FREEZE_ATTESTATION", "STORE_POLICY_MISMATCH"):
+            with self.subTest(code=code):
+                with self.assertRaisesRegex(e.ContractError, code):
+                    e.parse_gate_document(nested, code)
+
     def test_live_store_rejects_redirected_subdirectories(self) -> None:
         with TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -1550,6 +1557,20 @@ source = { registry = "https://pypi.org/simple" }
                     f"{authorization_revision}:{authorization_repo_path}",
                 ]:
                     return authorization
+                authorized_inputs = {
+                    e.RUNNER_RELATIVE: runner_source,
+                    e.LOCK_RELATIVE: uv_lock_bytes,
+                    e.FREEZE_RELATIVE: (
+                        e.ORACLE / "versions/v1/freeze-attestation.json"
+                    ).read_bytes(),
+                    e.POLICY_RELATIVE: store_policy_bytes,
+                }
+                for relative, snapshot in authorized_inputs.items():
+                    if arguments == [
+                        "show",
+                        f"{authorization_revision}:{relative.as_posix()}",
+                    ]:
+                        return snapshot
                 return actual_checked_git(checkout, arguments)
 
             git_patch = patch.object(
@@ -1827,6 +1848,57 @@ source = { registry = "https://pypi.org/simple" }
                 self.assertIsNotNone(loaded.call_args.kwargs["source_bytes"])
             self.assertEqual(with_access["verified_cases"], 75)
             self.assertEqual(with_access["gaps"], [])
+            expected_authorized_lock = [
+                "show",
+                f"{authorization_revision}:{e.LOCK_RELATIVE.as_posix()}",
+            ]
+            original_checked_git = e.checked_git
+
+            def missing_authorized_lock(checkout: Path, arguments: list[str]) -> bytes:
+                if arguments == expected_authorized_lock:
+                    return b"different lock at authorization revision"
+                return original_checked_git(checkout, arguments)
+
+            with patch.object(e, "checked_git", side_effect=missing_authorized_lock):
+                self.assertIn(
+                    "AUTHORIZATION_COMMIT_MISMATCH",
+                    {
+                        gap["reason"]
+                        for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                    },
+                )
+            public_review = (output / "review.json").read_bytes()
+            original_summary_parser = evidence.summary_bytes
+            original_review_parser = evidence.parse_review_bytes
+
+            def replace_summary_after_read(run_dir: Path) -> bytes:
+                snapshot = original_summary_parser(run_dir)
+                (run_dir / "summary.json").write_bytes(b"changed after snapshot")
+                return snapshot
+
+            def replace_review_after_read(snapshot: bytes) -> dict[str, object]:
+                (output / "review.json").write_bytes(b"changed after snapshot")
+                return original_review_parser(snapshot)
+
+            try:
+                with (
+                    patch.object(
+                        evidence,
+                        "summary_bytes",
+                        side_effect=replace_summary_after_read,
+                    ),
+                    patch.object(
+                        evidence,
+                        "parse_review_bytes",
+                        side_effect=replace_review_after_read,
+                    ),
+                ):
+                    self.assertEqual(
+                        evidence.verify_evidence(output, restricted)["gaps"], []
+                    )
+            finally:
+                (output / "summary.json").write_bytes(public_summary)
+                (output / "review.json").write_bytes(public_review)
             committed_git = e.checked_git
 
             def changed_freeze(checkout: Path, arguments: list[str]) -> bytes:

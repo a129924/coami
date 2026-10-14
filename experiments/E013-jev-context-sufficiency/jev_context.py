@@ -244,7 +244,7 @@ def parse_gate_document(data: bytes, code: str) -> dict[str, Any]:
         ).encode()
         if not isinstance(document, dict) or data != canonical:
             raise ContractError(code)
-    except (ValueError, TypeError, UnicodeDecodeError) as exc:
+    except (ValueError, TypeError, UnicodeDecodeError, RecursionError) as exc:
         if isinstance(exc, ContractError):
             raise
         raise ContractError(code) from exc

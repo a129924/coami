@@ -181,7 +181,7 @@ def invalid_constant(value: str) -> None:
     raise e.ContractError("INVALID_ANALYSIS_NUMBER")
 
 
-def read_review(path: Path) -> dict[str, Any]:
+def parse_review_bytes(data: bytes) -> dict[str, Any]:
     """Reject ambiguous approval and retained review documents."""
 
     def unique(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -196,7 +196,6 @@ def read_review(path: Path) -> dict[str, Any]:
         raise e.ContractError("INVALID_PUBLICATION_REVIEW")
 
     try:
-        data = path.read_bytes()
         review = json.loads(
             data,
             object_pairs_hook=unique,
@@ -235,6 +234,13 @@ def read_review(path: Path) -> dict[str, Any]:
     ):
         raise e.ContractError("INVALID_PUBLICATION_REVIEW")
     return review
+
+
+def read_review(path: Path) -> dict[str, Any]:
+    try:
+        return parse_review_bytes(path.read_bytes())
+    except OSError as exc:
+        raise e.ContractError("INVALID_PUBLICATION_REVIEW") from exc
 
 
 def read_manifest(path: Path) -> dict[str, Any]:
@@ -683,6 +689,24 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
             return "AUTHORIZATION_COMMIT_MISMATCH"
         if committed != data:
             return "AUTHORIZATION_COMMIT_MISMATCH"
+        revision_inputs = (
+            (e.RUNNER_RELATIVE, (root / "runner.py").read_bytes()),
+            (e.LOCK_RELATIVE, (root / "uv.lock").read_bytes()),
+            (
+                e.FREEZE_RELATIVE,
+                (e.ROOT / e.FREEZE_RELATIVE).read_bytes(),
+            ),
+            (e.POLICY_RELATIVE, policy_snapshot(root, manifest)),
+        )
+        for relative, snapshot in revision_inputs:
+            try:
+                committed_input = e.checked_git(
+                    e.ROOT, ["show", f"{revision}:{relative.as_posix()}"]
+                )
+            except (OSError, subprocess.CalledProcessError, e.ContractError):
+                return "AUTHORIZATION_COMMIT_MISMATCH"
+            if committed_input != snapshot:
+                return "AUTHORIZATION_COMMIT_MISMATCH"
         document = e.parse_live_authorization(data)
         if not isinstance(document, dict) or set(document) != {
             "run_id",
@@ -1109,8 +1133,7 @@ def verify_local_run(
                         {"group": group, "case_id": case_id, "reason": mismatch}
                     )
     try:
-        summary_bytes(run_dir)
-        recorded = e.read_object(run_dir / "summary.json")
+        recorded = json.loads(summary_bytes(run_dir))
     except (OSError, e.ContractError):
         recorded = {}
     recalculated = e.summarize(rows)
@@ -1544,7 +1567,7 @@ def verify_evidence(
         gaps.append({"reason": "RUNNER_SOURCE_MISSING"})
     try:
         review_bytes = (evidence_run / "review.json").read_bytes()
-        review = read_review(evidence_run / "review.json")
+        review = parse_review_bytes(review_bytes)
         if e.sha(review_bytes) != manifest.get("review_sha256"):
             gaps.append({"reason": "REVIEW_HASH_MISMATCH"})
         decisions = review.get("cases")
@@ -1835,7 +1858,7 @@ def verify_evidence(
     if e.sha(summary) != manifest.get("summary_sha256"):
         gaps.append({"reason": "SUMMARY_HASH_MISMATCH"})
     if summary and len(full_rows) == 75:
-        recorded = e.read_object(evidence_run / "summary.json")
+        recorded = json.loads(summary)
         recalculated = e.summarize(full_rows)
         if (
             not same_json_value(recorded.get("groups"), recalculated["groups"])
