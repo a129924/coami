@@ -1,4 +1,5 @@
-import { mkdir, mkdtemp, rename, rm, writeFile } from 'node:fs/promises'
+import { execFileSync } from 'node:child_process'
+import { lstat, mkdir, mkdtemp, rename, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
 export function normalizeToolchainSource(source) {
@@ -24,7 +25,8 @@ export function pythonLauncher(python) {
 
 export function pinnedCompilerEnvironment(parent, emsdk, launcher) {
   const env = { ...parent }
-  for (const key of Object.keys(env)) if (/^(EM_|EMCC_|EMMAKEN_|EMSDK_)/.test(key) || key === '_EMCC_CCACHE') delete env[key]
+  const headerPaths = new Set(['CPATH', 'C_INCLUDE_PATH', 'CPLUS_INCLUDE_PATH', 'OBJC_INCLUDE_PATH', 'OBJCPLUS_INCLUDE_PATH'])
+  for (const key of Object.keys(env)) if (/^(EM_|EMCC_|EMMAKEN_|EMSDK_)/.test(key) || key === '_EMCC_CCACHE' || headerPaths.has(key)) delete env[key]
   return { ...env, EMSDK_PYTHON: launcher, EMSDK_NODE: path.join(emsdk, 'node/22.16.0_64bit/bin/node') }
 }
 
@@ -66,3 +68,10 @@ export async function resetCompilerCache(directory) {
   await rm(directory, { recursive: true, force: true })
   await mkdir(directory, { recursive: true })
 }
+
+export async function assertToolchainDirectories(folder) {
+  for (const name of ['', 'moddable', 'emsdk', 'fontbm']) {
+    if (!(await lstat(path.join(folder, name))).isDirectory()) throw new Error(`${name || 'toolchain root'} must be a real directory, not a symlink`)
+  }
+}
+export function copyAttestedTree(from, to) { execFileSync('cp', ['-cRpH', from, to], { stdio: 'inherit' }) }

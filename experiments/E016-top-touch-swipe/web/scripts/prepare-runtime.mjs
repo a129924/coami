@@ -4,7 +4,7 @@ import { copyFile, mkdir, readFile, rm, access, writeFile, chmod } from 'node:fs
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { assertCleanGitSource, assertTreeHash, attestToolchain, hashTree } from './artifact-attestation.mjs'
-import { resetCompilerCache, ensureToolchain, normalizeToolchainSource, pinnedCompilerEnvironment, pythonLauncher, renderEmscriptenConfig, writeConfigAtomically } from './toolchain-cache.mjs'
+import { assertToolchainDirectories, copyAttestedTree, resetCompilerCache, ensureToolchain, normalizeToolchainSource, pinnedCompilerEnvironment, pythonLauncher, renderEmscriptenConfig, writeConfigAtomically } from './toolchain-cache.mjs'
 const web = fileURLToPath(new URL('../', import.meta.url))
 const experiment = path.resolve(web, '..')
 const repo = path.resolve(experiment, '../..')
@@ -52,6 +52,7 @@ const expectedTools = JSON.parse(await readFile(attestationFile,'utf8'))
 const publicRoot = path.join(generated,'public')
 const toolchain = path.join(generated,'toolchain')
 const validateToolchain = async folder => {
+  await assertToolchainDirectories(folder)
   for (const [name,revision] of [['moddable','b6e06ba70506a7381ffb28e09e3175bf4e99f305'],['emsdk','14c18b569f55138fe4963924162244251f454fb0'],['fontbm','7677b908523e909679f67cd5c170396bb9def1aa']]) {
     if (capture('git',['rev-parse','HEAD'],path.join(folder,name))!==revision) throw new Error(`Tool revision mismatch: ${name}`)
     assertCleanGitSource(path.join(folder,name))
@@ -62,7 +63,7 @@ const validateToolchain = async folder => {
 }
 // Validate the external source as well as every cached/staged copy.
 await validateToolchain(previous)
-await ensureToolchain({source:previous,destination:toolchain,validate:validateToolchain,copy:(from,to)=>run('cp',['-cR',from,to])})
+await ensureToolchain({source:previous,destination:toolchain,validate:validateToolchain,copy:copyAttestedTree})
 const moddable = path.join(toolchain,'moddable')
 const emsdk = path.join(toolchain,'emsdk')
 const fontbm = path.join(toolchain,'fontbm/build/fontbm')
@@ -84,7 +85,7 @@ if (dependencySnapshot) {
   await assertTreeHash(dependencySnapshot,process.env.E016_FIRMWARE_NODE_MODULES_SHA256)
   if(await hash(path.join(path.dirname(dependencySnapshot),'package-lock.json'))!==await hash(path.join(firmware,'package-lock.json'))) throw new Error('Dependency snapshot lock mismatch')
   await rm(path.join(firmware,'node_modules'),{recursive:true,force:true})
-  run('cp',['-cR',dependencySnapshot,path.join(firmware,'node_modules')])
+  copyAttestedTree(dependencySnapshot,path.join(firmware,'node_modules'))
   await assertTreeHash(path.join(firmware,'node_modules'),process.env.E016_FIRMWARE_NODE_MODULES_SHA256)
 } else run('npm',['ci','--prefer-offline','--no-audit','--no-fund','--logs-dir',path.join(generated,'npm-logs')],firmware,{...env,npm_config_fetch_retries:'0',npm_config_fetch_timeout:'15000'})
 const dependencyTreeSha256=await hashTree(path.join(firmware,'node_modules'))

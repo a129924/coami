@@ -1,10 +1,12 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { chmod, cp, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises'
+import { lstat, stat, chmod, cp, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import { execFileSync } from 'node:child_process'
-import { resetCompilerCache, ensureToolchain, normalizeToolchainSource, pinnedCompilerEnvironment, pythonLauncher, renderEmscriptenConfig, writeConfigAtomically } from './toolchain-cache.mjs'
+import { assertToolchainDirectories, copyAttestedTree, resetCompilerCache, ensureToolchain, normalizeToolchainSource, pinnedCompilerEnvironment, pythonLauncher, renderEmscriptenConfig, writeConfigAtomically } from './toolchain-cache.mjs'
+
+import { hashTree } from './artifact-attestation.mjs'
 
 const components = ['moddable', 'emsdk', 'fontbm']
 async function fixture(t) {
@@ -148,4 +150,54 @@ test('compiler cache starts empty even after a polluted or interrupted prior run
   assert.deepEqual(await readdir(cache), [])
   await resetCompilerCache(cache)
   assert.deepEqual(await readdir(cache), [])
+})
+
+test('compiler environment removes all Clang language header search paths', () => {
+  const keys = ['CPATH', 'C_INCLUDE_PATH', 'CPLUS_INCLUDE_PATH', 'OBJC_INCLUDE_PATH', 'OBJCPLUS_INCLUDE_PATH']
+  const env = pinnedCompilerEnvironment(Object.fromEntries(keys.map(key => [key, '/ambient/headers'])), '/sdk', '/launcher')
+  for (const key of keys) assert.equal(env[key], undefined)
+})
+
+test('symlinked component roots are rejected before source configuration can change', async t => {
+  const f = await fixture(t)
+  await assertToolchainDirectories(f.source)
+  const external = path.join(f.root, 'external-emsdk')
+  await cp(path.join(f.source, 'emsdk'), external, { recursive: true })
+  await writeFile(path.join(external, '.emscripten'), 'read-only source config')
+  await rm(path.join(f.source, 'emsdk'), { recursive: true })
+  await symlink(external, path.join(f.source, 'emsdk'))
+  await assert.rejects(assertToolchainDirectories(f.source), /emsdk.*real directory/)
+  assert.equal(await readFile(path.join(external, '.emscripten'), 'utf8'), 'read-only source config')
+})
+
+test('previous symlinked cache is replaced without rewriting external source', async t => {
+  const f = await fixture(t)
+  await cp(f.source, f.destination, { recursive: true })
+  await rm(path.join(f.destination, 'emsdk'), { recursive: true })
+  await symlink(path.join(f.source, 'emsdk'), path.join(f.destination, 'emsdk'))
+  await ensureToolchain({ ...f, validate: async folder => { await assertToolchainDirectories(folder); await f.validate(folder) } })
+  assert.equal((await lstat(path.join(f.destination, 'emsdk'))).isSymbolicLink(), false)
+  await writeConfigAtomically(path.join(f.destination, 'emsdk', '.emscripten'), 'local config')
+  await assert.rejects(readFile(path.join(f.source, 'emsdk', '.emscripten')), { code: 'ENOENT' })
+})
+
+test('macOS attested tool and dependency copies preserve executable bits under umask077', { skip: process.platform !== 'darwin' }, async t => {
+  const f = await fixture(t)
+  const payload = path.join(f.root, 'payload')
+  await mkdir(payload)
+  await writeFile(path.join(payload, 'executable'), 'attested bytes')
+  await chmod(path.join(payload, 'executable'), 0o755)
+  const expected = await hashTree(payload)
+  const linkedPayload = path.join(f.root, 'linked-payload')
+  await symlink(payload, linkedPayload)
+  const savedMask = process.umask(0o077)
+  try {
+    for (const name of ['tool-copy', 'dependency-copy']) copyAttestedTree(payload, path.join(f.root, name))
+    copyAttestedTree(linkedPayload, path.join(f.root, 'dependency-link-copy'))
+  } finally { process.umask(savedMask) }
+  for (const name of ['tool-copy', 'dependency-copy', 'dependency-link-copy']) {
+    assert.equal((await lstat(path.join(f.root, name))).isDirectory(), true)
+    assert.equal((await stat(path.join(f.root, name, 'executable'))).mode & 0o777, 0o755)
+    assert.equal(await hashTree(path.join(f.root, name)), expected)
+  }
 })
