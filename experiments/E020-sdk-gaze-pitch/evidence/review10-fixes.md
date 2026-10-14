@@ -16,3 +16,5 @@
 單一 commit 的 fixture 刻意不包含 pinned sourceCommit object；red 證明舊 builder 改寫來源，green 證明相同 reviewed tree 可重建並驗證，篡改 sourceManifestSha256 則拒絕。原有替換 sourceCommit、篡改 bundle/provenance 與 dirty source tests 持續通過。最終 clean build／完整實驗 squash fixture 的實際 HTTP 結果另記於本輪 evidence。
 
 本輪不重建 SDK/WASM/MOD，不執行 browser UI／真人方向驗收，既有人工證據限制不變。Squash fixture 是獨立測試 repo，不改寫 PR branch 或 dev history。
+
+最終驗證：22 unit／12 scripts／6 patched-controller contract、strict checks、clean production build PASS。將完整 tracked tree archive 到獨立 repo 並只建立單一 commit，確認原始 sourceCommit object 不存在，複製相同已驗證 runtime 與依賴後重跑 web build／strict checks；來源參照、sourceManifestSha256、所有 bundle hashes 與 committed pin 相同，實際 preview HTTP 檢查通過。見 review10-squash-build.txt 與 review10-squash-verification.json。測試 server 已停止，沒有改寫 PR/dev history，沒有重建 WASM 或執行 browser UI／真人驗收。
