@@ -28,7 +28,7 @@
 1. `cd experiments/E020-sdk-gaze-pitch/web; npm ci --ignore-scripts`。
 2. `npm run test:original` 對原版應失敗（red）；`npm run source && npm run test:patched` 對實際 patched copy 應通過。patch 位於 `patches/body-relative-pitch.patch`。
 3. 依 `scripts/install-compiler.mjs` 安裝驗證過的 compiler，配置 MODDABLE、EMSDK、EM_CONFIG、FONTBM_SOURCE、FONTBM 和 PATH，再 `npm run prepare:poc`。既有工具可複製到本 worktree generated/toolchain，但必須重新通過完整性檢查；cache 放 generated/em-cache。
-4. `npm test && npm run test:scripts && npm run typecheck && npm run build`；`npm exec -- vite preview --host 127.0.0.1 --port 5200 --strictPort`。
+4. 必須在 clean committed experiment checkout 執行（包含 harness-pin 與 production-bundle-pin）；build/dev/HMR/preview 拒絕未提交的實驗修改。`npm test && npm run test:scripts && npm run typecheck && npm run build`；`npm exec -- vite preview --host 127.0.0.1 --port 5200 --strictPort`。
 5. 開 localhost:5200，填觀察者並準備零姿勢；依判準執行雙向切換，每次等待窗口並核對穩定。解除僅記未確認，不把保留姿勢當失敗；匯出本次 JSON 與畫面。
 6. 記錄 automation、真人判定各自的結果；不得把操作者寫為真人或代填真人 PASS。
 
@@ -80,3 +80,7 @@ Python interpreter、served mesh、reviewed MOD sources/archive 驗證及 trace�
 ## PR comment review and fix：第五輪（2026-10-14）
 
 正式重現改用 build 後的 preview，提供具 bundle attestation 的 dist；埠占用時直接失敗。本輪僅文件修正，舊人工證據限制保留。程序、證據與未執行項見 [review5-fixes](evidence/review5-fixes.md)。
+
+## PR comment review and fix：第六輪（2026-10-14）
+
+來源驗證以 Git HEAD 的 harness manifest 為基準，並拒絕 dirty experiment；preview 啟動前核對 Git HEAD 中已提交的 production bundle pin，拒絕 dist 與其 provenance 同時遭替換。新的來源或 bundle 需先完成明確變更、提交及 review，不能只重算本地 manifest 冒充原本產物。詳細程序與限制見 [review6-fixes](evidence/review6-fixes.md)。

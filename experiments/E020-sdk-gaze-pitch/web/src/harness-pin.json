@@ -9,7 +9,7 @@
   "src/runtime-pin.json": "d7491d3ebee797fc84cf63de2352814350575a643f8babed062f46d9f73bb444",
   "scripts/host-pin.json": "98516a74899096a0d616547dad75414f9fcf4cfaa4621c6ffa2abc9b7b68a633",
   "vite.config.ts": "4a1de06cc8424a9b6207c3fe2a986fd6ad62a7cb65a4606908859d8f6b547edb",
-  "scripts/harness-inputs.mjs": "a983543d63b4fdfe663b41fdbdbb6b37682e7d28e33e79750198afafe7f9a094",
+  "scripts/harness-inputs.mjs": "b8db585f9b46a3a3cc0e28795245e393345fbf2141a27d5c37a1b2720752f660",
   "scripts/public-inputs.mjs": "9957fc8c4612f0d260cfc5f999cd67d16d9c82f534c9be6e51171b9d799ef142",
   "scripts/host-inputs.mjs": "4877da27e64e2eb18931ce64f4b5ca527c41af8af7a5f0597bb1a4464bd0532e",
   "package.json": "d1caa42f57085f151fe76d6634c04fa20243c2f9438fd6ab5f3496eb9b994f74",
