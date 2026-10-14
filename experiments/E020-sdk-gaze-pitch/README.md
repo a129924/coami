@@ -96,3 +96,7 @@ Bundle sourceCommit 嚴格對應固定 harness input revision；runtime provenan
 ## PR comment review and fix：第九輪（2026-10-14）
 
 目前完整 history 的固定 source pin 與 fresh build／preview 相符，留言提及的 squash commit 不存在於目前 PR。若實際 squash/rebase 或缺少來源 history，須在改寫後重新驗證並視需要更新 pin；本次不替不存在的 commit 改 pin。查證與證據見 [review9-decision](evidence/review9-decision.md)。
+
+## PR comment review and fix：第十輪（2026-10-14）
+
+輸入身分改由 committed sourceManifestSha256 與逐檔 digest 驗證；sourceCommit 為固定已審核來源參照，仍須嚴格符合 pin，不要求其 Git object 存在於 squash checkout。相同內容可在 history 改寫後重建；內容改變仍須更新可審查的 pin 與證據。本規則取代前輪 ancestry 限制，詳見 [review10-fixes](evidence/review10-fixes.md)。

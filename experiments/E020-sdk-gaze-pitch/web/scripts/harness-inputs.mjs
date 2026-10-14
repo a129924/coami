@@ -13,9 +13,17 @@ function committedExperiment(web){
  if(dirty.trim())throw Error('Evidence requires a clean committed experiment checkout')
  const commit=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim()
  const read=(file,revision=commit)=>execFileSync('git',['show',`${revision}:${path.relative(root,path.join(web,file))}`],{cwd:root,encoding:'utf8'})
- const contains=revision=>execFileSync('git',['merge-base','--is-ancestor',revision,commit],{cwd:root})
  const sourceCommit=execFileSync('git',['log','-1','--format=%H','--',path.relative(root,path.join(web,'src/harness-pin.json'))],{cwd:root,encoding:'utf8'}).trim()
- return {commit,sourceCommit,read,contains}
+ return {commit,sourceCommit,read}
+}
+function sourceIdentity(anchor){
+ const sourceManifestSha256=hash(anchor.read('src/harness-pin.json'))
+ const pin=JSON.parse(anchor.read('scripts/production-bundle-pin.json'))
+ // The reference names the reviewed input, even when squash omits its Git object.
+ // Changed inputs get a new candidate reference and require a new reviewed pin.
+ const sourceCommit=pin.sourceManifestSha256===sourceManifestSha256?pin.sourceCommit:anchor.sourceCommit
+ if(typeof sourceCommit!=='string'||! /^[a-f0-9]{40}$/.test(sourceCommit))throw Error('Invalid reviewed source reference')
+ return {sourceCommit,sourceManifestSha256}
 }
 export async function verifyHarnessInputs(web){
  const anchor=committedExperiment(web),reviewed=anchor.read('src/harness-pin.json')
@@ -32,8 +40,7 @@ export async function verifyProductionBundle(web,dist,read=file=>readFile(path.j
  if(actual.mode!=='production'||JSON.stringify(actual.sources)!==JSON.stringify(sources)
   ||JSON.stringify(actual.bundleSha256)!==JSON.stringify(pin.bundleSha256)||Object.keys(pin.bundleSha256).length===0)throw Error('Reviewed production bundle provenance mismatch')
  if(actual.sourceCommit!==pin.sourceCommit||typeof actual.sourceCommit!=='string'||! /^[a-f0-9]{40}$/.test(actual.sourceCommit))throw Error('Reviewed production build source mismatch')
- anchor.contains(actual.sourceCommit)
- if(JSON.stringify(JSON.parse(anchor.read('src/harness-pin.json',actual.sourceCommit)))!==JSON.stringify(sources))throw Error('Reviewed production build source mismatch')
+ if(actual.sourceManifestSha256!==pin.sourceManifestSha256||pin.sourceManifestSha256!==hash(anchor.read('src/harness-pin.json')))throw Error('Reviewed production source manifest mismatch')
  for(const [file,expected] of Object.entries(pin.bundleSha256))
   if(hash(await read(file))!==expected)throw Error(`Reviewed production bundle mismatch: ${file}`)
  return pin
@@ -74,12 +81,12 @@ export function harnessPlugin(web){
   async configureServer(server){
    await verifyHarnessInputs(web)
    server.middlewares.use('/harness-provenance.json',async(_req,res,next)=>{
-    try{const sources=await verifyHarnessInputs(web);res.setHeader('Content-Type','application/json');res.setHeader('Cache-Control','no-store');res.end(JSON.stringify({mode:'development',sourceCommit:committedExperiment(web).sourceCommit,sources,bundleSha256:null}))}catch(error){next(error)}
+    try{const sources=await verifyHarnessInputs(web);res.setHeader('Content-Type','application/json');res.setHeader('Cache-Control','no-store');res.end(JSON.stringify({mode:'development',...sourceIdentity(committedExperiment(web)),sources,bundleSha256:null}))}catch(error){next(error)}
    })
   },
   async writeBundle(_options,bundle){
    const sources=await verifyHarnessInputs(web)
-   await writeFile(path.resolve(web,outDir,'harness-provenance.json'),JSON.stringify({mode:'production',sourceCommit:committedExperiment(web).sourceCommit,sources,bundleSha256:bundleHashes(bundle)},null,2)+'\n')
+   await writeFile(path.resolve(web,outDir,'harness-provenance.json'),JSON.stringify({mode:'production',...sourceIdentity(committedExperiment(web)),sources,bundleSha256:bundleHashes(bundle)},null,2)+'\n')
   },
  }
 }

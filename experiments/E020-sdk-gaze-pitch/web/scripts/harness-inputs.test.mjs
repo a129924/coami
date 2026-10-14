@@ -1,11 +1,11 @@
 import {test} from 'node:test'
 import assert from 'node:assert/strict'
-import {mkdtemp,mkdir,writeFile,readFile,rm} from 'node:fs/promises'
+import {mkdtemp,mkdir,writeFile,readFile,rm,cp} from 'node:fs/promises'
 import {tmpdir} from 'node:os'
 import {execFileSync} from 'node:child_process'
 import {createHash} from 'node:crypto'
 import path from 'node:path'
-import {verifyHarnessInputs,verifyProductionBundle,snapshotMiddleware} from './harness-inputs.mjs'
+import {verifyHarnessInputs,verifyProductionBundle,snapshotMiddleware,harnessPlugin} from './harness-inputs.mjs'
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex')
 async function fixture(run){
  const root=await mkdtemp(path.join(tmpdir(),'gaze-reviewed-')),web=path.join(root,'experiments/test/web')
@@ -17,7 +17,7 @@ async function fixture(run){
   const sources={'src/main.ts':hash('reviewed logic')}
   await writeFile(path.join(web,'src/harness-pin.json'),JSON.stringify(sources))
   await writeFile(path.join(web,'dist/app.js'),'reviewed bundle')
-  const pin={sourceCommit:'build-commit',bundleSha256:{'app.js':hash('reviewed bundle')}}
+  const pin={sourceCommit:'build-commit',sourceManifestSha256:hash(JSON.stringify(sources)),bundleSha256:{'app.js':hash('reviewed bundle')}}
   await writeFile(path.join(web,'scripts/production-bundle-pin.json'),JSON.stringify(pin))
   await writeFile(path.join(web,'dist/harness-provenance.json'),JSON.stringify({mode:'production',sources,...pin}))
   git('init','-q');git('add','.');git('-c','user.name=Test','-c','user.email=test@example.invalid','-c','core.hooksPath=/dev/null','commit','-qm','reviewed fixture')
@@ -53,3 +53,24 @@ test('preview middleware serves verified buffers rather than subsequent mutable 
  assert.equal(response.bytes.toString(),'reviewed bundle');assert.equal(response.headers['Cache-Control'],'no-store')
  const absent={...response,bytes:null};middleware({url:'/unverified.js',method:'GET'},absent);assert.equal(absent.statusCode,404)
 })
+
+test('squashed checkout rebuild preserves reviewed source reference and verifies content identity',async()=>fixture(async({web,git})=>{
+ const root=await mkdtemp(path.join(tmpdir(),'gaze-squash-')),copy=path.join(root,'experiments/test/web')
+ try{
+  await mkdir(copy,{recursive:true})
+  for(const dir of ['src','scripts','dist'])await cp(path.join(web,dir),path.join(copy,dir),{recursive:true})
+  await writeFile(path.join(root,'.gitignore'),'dist/\n')
+  const run=(...args)=>git('-C',root,...args)
+  run('init','-q');run('add','.');run('-c','user.name=Test','-c','user.email=test@example.invalid','-c','core.hooksPath=/dev/null','commit','-qm','squashed reviewed tree')
+  const pin=JSON.parse(await readFile(path.join(copy,'scripts/production-bundle-pin.json'),'utf8'))
+  assert.throws(()=>run('cat-file','-e',pin.sourceCommit+'^{commit}'))
+  const plugin=harnessPlugin(copy);plugin.configResolved({build:{outDir:'dist'}})
+  await plugin.writeBundle({}, {'app.js':{type:'chunk',code:'reviewed bundle'}})
+  const built=JSON.parse(await readFile(path.join(copy,'dist/harness-provenance.json'),'utf8'))
+  assert.equal(built.sourceCommit,pin.sourceCommit)
+  assert.equal(built.sourceManifestSha256,pin.sourceManifestSha256)
+  await verifyProductionBundle(copy,path.join(copy,'dist'))
+  built.sourceManifestSha256='forged';await writeFile(path.join(copy,'dist/harness-provenance.json'),JSON.stringify(built))
+  await assert.rejects(verifyProductionBundle(copy,path.join(copy,'dist')),/source manifest mismatch/)
+ }finally{await rm(root,{recursive:true,force:true})}
+}))
