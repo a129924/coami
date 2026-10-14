@@ -79,3 +79,9 @@ Historicaloriginal runtime provenance unchanged; originalcontentattestation abse
 Initial independent round5 verdict needs-rework: emcc shell wrapper usesEMSDK_PYTHON/PATH and-E, soconfigPYTHON plusPYTHONDONTWRITEBYTECODEalone insufficient. Corrected with experiment-local launcher bound to isolatedpinnedPython,-B flag, explicitEMSDK_PYTHON and sanitized inheritedEM_*/EMSDK_* /_EMCC_CCACHE. Launcherhash recorded. Added2regressions; final25tests/typecheckPASS. Actualpinnedemcc5.0.1 --version probe succeeded, PythonreportedTruebytecode-disabled andupstreamdigest unchanged. No fullWASMbuild. Re-reviewpending.
 
 Independent round5 re-review: approved; Python bootstrap blocker resolved. Reviewer independently ran25testsPASS, including pinnedinterpreter/quotedpath/-Bunder-E/overrideclearing. OriginalTC05/TC07 remainincomplete; nofullWASMbuild orotherexperiment changes.
+
+## PR comment review round6 — 2026-10-14
+
+ADDRESS4256577091/7096/7102: inheritedEMCCcontrols removed; SDKscratch always rebuilt frompinnedcommit/patch; healthclockpauses acrosspersistedpagehide/pageshow whileactiveackage preserved andrawtickschangednone. Two unitregressionsfirstRED, actualSDKscratch corruptionwithmatchingmarkerfirstRED; correctedstage restoresoriginalbytes. Final27tests/strictchecks/Vitebuild/syntaxPASS. Livebfcache/fullWASM/TC05/TC07 remainunexecuted/incomplete. Existingpaths only; independentreviewpending.
+
+Independent round6 review: approved, no blockers. Reviewer independently ran27testsPASS, confirmed compilercontrol filtering, freshpinnedstage, andactivehealthclock withrawticksunchanged. No fullWASM/liveBFCache orotherexperiment work; TC05/TC07gapsremain.

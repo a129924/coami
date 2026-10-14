@@ -71,7 +71,7 @@ npm run build
 npm run dev
 ```
 
-`npm run stage` 只建立pinned scratch source；完整prepare會重新建立scratch並編譯。工具鏈只從必要的 `E016_TOOLCHAIN_SOURCE` 隔離複製，沒有私人路徑 fallback，版本必須匹配。
+`npm run stage` 每次從pinned git commit重新建立scratch並套用patch，不信任舊checkout或stage-hash marker；完整prepare再進行編譯。工具鏈只從必要的 `E016_TOOLCHAIN_SOURCE` 隔離複製，沒有私人路徑 fallback，版本必須匹配。
 
 本輪offline依賴重現方式：
 
@@ -160,3 +160,9 @@ ADDRESS4256325949/5956/5962：snapshot必須指定核對過的tree SHA256，複�
 **歷史證據限制修正：** 原run只有來源commit、版本、artifact hashes與snapshot相鄰lockfile匹配，未記錄當時工具／installed dependency內容hash。原runtime-provenance.json保持原樣，TC07完整PASS撤回；真人觀測仍保留，但不能用今天量測的tree倒推原建置內容。新attestation流程尚未完整重建WASM；原TC05、bfcache等未執行項不變。
 
 獨立審查先發現Python bootstrap仍可能由PATH選取且-E忽略bytecode環境設定，已補experiment-local-B launcher與環境清理。兩項新測試確認實際interpreter、dont_write_bytecode=True及拒絕環境覆寫；亦以本機pinned emcc --version執行相同launcher，5.0.1啟動成功且upstream tree hash不變，沒有執行完整WASM build。
+
+### 第六輪 review — 2026-10-14
+
+ADDRESS4256577091/7096/7102：清除EMCC_*與legacy EMMAKEN_*，補足原EM_*／EMSDK_* filter；stage-only與完整prepare每次重新checkout pinned SDK再apply patch，marker只記錄不授權重用；persisted pagehide暫停ack健康時鐘，persisted pageshow恢復，原始SDK capture ticks不變。健康時鐘扣除凍結時間但保留前後active等待，不以恢復重新給滿額timeout。
+
+Regression：保留EMCC_CFLAGS、凍結時誤報timeout兩項RED；另實際修改scratch recognizer並保留matching marker，舊stage未還原（RED），新stage還原為原pinned檔案（GREEN）。最終27tests、strict web/MOD typecheck、Vitebuild與script syntaxPASS。健康時鐘是單元驗證，未執行livebfcache往返；完整WASM／TC05／TC07缺口不回改。官方變數參考：[emcc environment variables](https://emscripten.org/docs/tools_reference/emcc.html#environment-variables)，實驗仍固定5.0.1。

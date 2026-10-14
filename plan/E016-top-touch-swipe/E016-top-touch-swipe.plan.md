@@ -123,3 +123,7 @@ ADDRESS4256154628/4638/4647. Normalize explicit toolchain root before validation
 ### PR review round5 — build-content attestation
 
 ADDRESS4256325949/5956/5962. Require externally reviewed tool-tree digest manifest plus tracked-clean source; hash snapshot tree against supplied reviewed baseline before/after copy. Record actual tool/dependency digests and manifest identity, recheck beforepublication, separate mutable cache. Generate portable config from currentEM_CONFIG, not prior absolute paths. Experiment-local helper/test paths above; no SDK/production/new host changes. Originalrun tool/dependency attestation absent, completeTC07 withdrawn to not-run; newfullWASM build not claimed.
+
+### PR review round6 — 2026-10-14
+
+ADDRESS4256577091/7096/7102. Extend inherited compiler control filtering toEMCC_*/EMMAKEN_*. Recreatepinned SDKscratch for every stage; neverreuse basedonlyonmarker. Persistedhide/show pauses/resumesack healthtime without modifyingrawcaptureticks orforgivingprioractivewait. Existingpaths only; noSDK/native/production changes orotherexperiments. Livebfcache/fullWASM/TC05/TC07 gapsremain.

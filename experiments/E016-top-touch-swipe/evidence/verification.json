@@ -1710,5 +1710,43 @@
     },
     "historicalEvidenceCorrection": "TC07 complete PASS withdrawn; original tool/dependency bytes not attested. Keep original provenance/export bytes unchanged.",
     "review": "approved after Python launcher/environment correction; independent Reviewer25testsPASS; original TC05/TC07 evidence gaps retained"
+  },
+  "prCommentReviewRound6": {
+    "date": "2026-10-14",
+    "reviewedHead": "2f420ab50e01fd8cc6069417d76247694517d7a9",
+    "triage": {
+      "ADDRESS": [
+        4256577091,
+        4256577096,
+        4256577102
+      ],
+      "DISCUSS": [],
+      "SKIP": []
+    },
+    "red": {
+      "unitFailures": 2,
+      "reasons": [
+        "EMCC_CFLAGS retained",
+        "pending queue falsely faulted during frozen interval"
+      ],
+      "sdkStage": "Actual matching-marker scratch recognizer modification persisted after old --stage-only."
+    },
+    "green": {
+      "tests": 27,
+      "passed": 27,
+      "failed": 0,
+      "sdkStage": "Actual modified scratch recognizer restored byte-identically after fresh pinned checkout/patch."
+    },
+    "validation": {
+      "typecheck": "strict web/MOD PASS",
+      "frontendBuild": "PASS; existing bundle warning",
+      "scriptSyntax": "PASS",
+      "clock": "Frozen time excluded; active pre/postfreeze wait still times out; raw captured SDK ticks unchanged.",
+      "liveBfcache": "not executed",
+      "fullWasmRebuild": "not executed"
+    },
+    "sourceReference": "https://emscripten.org/docs/tools_reference/emcc.html#environment-variables",
+    "scope": "E016 compiler environment, pinned scratch reconstruction and ack health-time lifecycle only; historical tool/dependency/TC05/TC07 evidence unchanged.",
+    "review": "approved; independent Reviewer27testsPASS, no blockers; fullWASM/liveBFCache/TC05/TC07 evidence gaps retained"
   }
 }

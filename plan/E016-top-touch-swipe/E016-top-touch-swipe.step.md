@@ -226,3 +226,17 @@ Prior human-acceptance summary is superseded for complete TC05: leave/recovery P
 | Goal | attest actual used bytes | snapshot copiedtree verified; tool trees manifestmatched with cleantracked source |
 | Non-Goal | self-hash implies trust/originalrun repair | historicalTC07 incomplete; no newfullWASM/humanclaim |
 | TestCase | digest/dirty/binary/movedconfig regressions | 25PASS,typecheck/build/syntaxPASS; realtrees read-only traversed; pinnedcompilerlauncher probePASS; independentreviewapproved/25PASS |
+
+## PR review round6 — environment, source and frozen-clock guards
+
+| Field | planned | actual |
+| --- | --- | --- |
+| In-Scope | comments4256577091/7096/7102 | controlfilter, pinnedstage reconstruction, pause/resumehealthclock |
+| Out-Of-Scope | SDK/production/otherexperiments/merge | none changed |
+| ReadOnly | vendor/historical artifact evidence | original source and operator records unchanged |
+| Written | existing E016 files | toolchain-cache.mjs/test, prepare-runtime.mjs, top-touch-input.ts/test, main.ts, README/verification/plan/step/review-log |
+| Deleted | none tracked | owned ignoredscratch recreated frompinnedcheckout |
+| Modify | preparation and host lifecycle | no rawSDKtimestamp orgesturepolicy change |
+| Goal | rejectambientcontrols and staleSDK; no false frozen-time stall | regression tests and actualscratch recoveryPASS |
+| Non-Goal | fullWASM/livebfcache/completeAC | gapsremain |
+| TestCase | regression+affected checks | 2unitRED+SDKcorruptionRED→27PASS/SDKrestorePASS;typecheck/build/syntaxPASS;independentreviewapproved/27PASS |
