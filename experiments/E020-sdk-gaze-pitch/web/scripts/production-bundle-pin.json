@@ -1,8 +1,8 @@
 {
-  "sourceCommit": "20477a940821602e55e41aeed598fa32550eaf35",
+  "sourceCommit": "b565e7e41d24cde1e3fcca5df5c688821abbc6d5",
   "bundleSha256": {
+    "assets/index-B_HSMXf6.js": "279abe38f0641c4204a0468c2537cdde75de735d1962e5ef7d94e7a2ea8004e8",
     "assets/index-BP1MvSws.css": "5ba0e030a61bdcd4f33bcbbfd0b9c93f0bb3619b504a129b4135139871417d50",
-    "assets/index-D7AmW20t.js": "8b4dca87f1770cdedc8c0833f4aa3c389ff8866af00e0cd6c299fbd07431259b",
-    "index.html": "a4bb6bc2e96bab45476c86ac71c6bbaafb98f596e04c38d039edd345662a91af"
+    "index.html": "29a3057073104b86d7d2cf4536cd0a79f38783430d64c4736e35d0454748ba4d"
   }
 }
