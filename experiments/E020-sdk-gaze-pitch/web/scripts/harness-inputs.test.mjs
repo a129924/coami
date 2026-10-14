@@ -37,7 +37,8 @@ test('source edits with recomputed harness pins cannot bypass clean Git anchor',
 test('modified dist plus recomputed provenance fails committed production pin',async()=>fixture(async({web,git})=>{
  await verifyProductionBundle(web,path.join(web,'dist'))
  const manifest=path.join(web,'dist/harness-provenance.json'),rebuilt=JSON.parse(await readFile(manifest,'utf8'));rebuilt.sourceCommit=git('rev-parse','HEAD');await writeFile(manifest,JSON.stringify(rebuilt))
- await verifyProductionBundle(web,path.join(web,'dist'))
+ await assert.rejects(verifyProductionBundle(web,path.join(web,'dist')),/production build source mismatch/)
+ rebuilt.sourceCommit=JSON.parse(await readFile(path.join(web,'scripts/production-bundle-pin.json'),'utf8')).sourceCommit;await writeFile(manifest,JSON.stringify(rebuilt))
  await writeFile(path.join(web,'dist/app.js'),'altered pass logic')
  const f=path.join(web,'dist/harness-provenance.json'),p=JSON.parse(await readFile(f,'utf8'));p.bundleSha256['app.js']=hash('altered pass logic');await writeFile(f,JSON.stringify(p))
  await assert.rejects(verifyProductionBundle(web,path.join(web,'dist')),/production bundle/)

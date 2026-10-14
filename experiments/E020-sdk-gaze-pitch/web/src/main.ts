@@ -1,3 +1,4 @@
+import {stableRuntimeProvenance,canonicalJson} from './runtime-provenance.ts'
 import {stabilityState} from './stability.ts'
 import PROVENANCE_PIN from './provenance-pin.json'
 import RUNTIME_PIN from './runtime-pin.json'
@@ -64,8 +65,11 @@ async function sha(bytes:ArrayBuffer):Promise<string>{return Array.from(new Uint
 async function json(url:string):Promise<Record<string,unknown>>{
  const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error(`缺少 ${url}，請執行 npm run prepare:poc`)
  const bytes=await response.arrayBuffer(),expected=(PROVENANCE_PIN as Record<string,string>)[url.slice(1)]
- if(expected&&await sha(bytes)!==expected)throw Error(`Reviewed provenance mismatch: ${url}`)
- const value:unknown=JSON.parse(new TextDecoder().decode(bytes));if(typeof value!=='object'||!value)throw Error(`無效 ${url}`);return value as Record<string,unknown>
+ const parsed:unknown=JSON.parse(new TextDecoder().decode(bytes));if(typeof parsed!=='object'||!parsed||Array.isArray(parsed))throw Error(`無效 ${url}`)
+ const value=url==='/runtime-provenance.json'?stableRuntimeProvenance(parsed as Record<string,unknown>):parsed as Record<string,unknown>
+ const authenticated=url==='/runtime-provenance.json'?new TextEncoder().encode(canonicalJson(value)).buffer:bytes
+ if(expected&&await sha(authenticated)!==expected)throw Error(`Reviewed provenance mismatch: ${url}`)
+ return value
 }
 async function start():Promise<void>{
  try{

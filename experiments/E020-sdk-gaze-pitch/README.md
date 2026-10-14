@@ -88,3 +88,7 @@ Python interpreter、served mesh、reviewed MOD sources/archive 驗證及 trace�
 ## PR comment review and fix：第七輪（2026-10-14）
 
 Preview 提供已驗證的 memory snapshot，啟動後不讀取更新的 dist；更新 bundle 必須重啟 preview。完整 runtime／MOD provenance 固定雜湊，穩定勾選在操作或等待判定時清除，下一次操作須重新確認。程序與證據見 [review7-fixes](evidence/review7-fixes.md)。
+
+## PR comment review and fix：第八輪（2026-10-14）
+
+Bundle sourceCommit 嚴格對應固定 harness input revision；runtime provenance 驗證可攜的工具身分與產物資訊，匯出排除本機 paths 及其 config digest。不同 checkout 的相同 verified runtime 可通過相同身份 pin；程序與範圍見 [review8-fixes](evidence/review8-fixes.md)。

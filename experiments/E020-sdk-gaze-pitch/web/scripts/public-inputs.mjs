@@ -1,3 +1,4 @@
+import {stableRuntimeProvenance,canonicalJson} from '../src/runtime-provenance.ts'
 import {readFile} from 'node:fs/promises'
 import {createHash} from 'node:crypto'
 import path from 'node:path'
@@ -13,7 +14,7 @@ export async function verifyModSources(web){
 export async function verifyPublicInputs(web,readPublic=file=>readFile(path.join(web,'generated/public',file))){
  await verifyModSources(web)
  for(const [file,expected] of Object.entries(provenancePin))
-  if(hash(await readPublic(file))!==expected)throw Error(`Reviewed ${file.startsWith('mod')?'MOD':'runtime'} provenance mismatch`)
+  if(hash(file==='runtime-provenance.json'?canonicalJson(stableRuntimeProvenance(JSON.parse(await readPublic(file)))):await readPublic(file))!==expected)throw Error(`Reviewed ${file.startsWith('mod')?'MOD':'runtime'} provenance mismatch`)
  const mp=JSON.parse(await readPublic('mod-provenance.json'))
  if(mp.experiment!==pin.experiment||mp.sha256!==pin.sha256||Object.entries(pin.sources).some(([f,h])=>mp.sources?.[f]!==h))throw Error('Reviewed MOD provenance mismatch')
  if(hash(await readPublic('coami-mod.xsa'))!==pin.sha256)throw Error('Reviewed MOD archive mismatch')

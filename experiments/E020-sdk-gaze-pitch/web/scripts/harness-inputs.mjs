@@ -14,7 +14,8 @@ function committedExperiment(web){
  const commit=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim()
  const read=(file,revision=commit)=>execFileSync('git',['show',`${revision}:${path.relative(root,path.join(web,file))}`],{cwd:root,encoding:'utf8'})
  const contains=revision=>execFileSync('git',['merge-base','--is-ancestor',revision,commit],{cwd:root})
- return {commit,read,contains}
+ const sourceCommit=execFileSync('git',['log','-1','--format=%H','--',path.relative(root,path.join(web,'src/harness-pin.json'))],{cwd:root,encoding:'utf8'}).trim()
+ return {commit,sourceCommit,read,contains}
 }
 export async function verifyHarnessInputs(web){
  const anchor=committedExperiment(web),reviewed=anchor.read('src/harness-pin.json')
@@ -30,7 +31,7 @@ export async function verifyProductionBundle(web,dist,read=file=>readFile(path.j
  const actual=JSON.parse(await read('harness-provenance.json'))
  if(actual.mode!=='production'||JSON.stringify(actual.sources)!==JSON.stringify(sources)
   ||JSON.stringify(actual.bundleSha256)!==JSON.stringify(pin.bundleSha256)||Object.keys(pin.bundleSha256).length===0)throw Error('Reviewed production bundle provenance mismatch')
- if(typeof actual.sourceCommit!=='string'||! /^[a-f0-9]{40}$/.test(actual.sourceCommit))throw Error('Reviewed production build source mismatch')
+ if(actual.sourceCommit!==pin.sourceCommit||typeof actual.sourceCommit!=='string'||! /^[a-f0-9]{40}$/.test(actual.sourceCommit))throw Error('Reviewed production build source mismatch')
  anchor.contains(actual.sourceCommit)
  if(JSON.stringify(JSON.parse(anchor.read('src/harness-pin.json',actual.sourceCommit)))!==JSON.stringify(sources))throw Error('Reviewed production build source mismatch')
  for(const [file,expected] of Object.entries(pin.bundleSha256))
@@ -73,12 +74,12 @@ export function harnessPlugin(web){
   async configureServer(server){
    await verifyHarnessInputs(web)
    server.middlewares.use('/harness-provenance.json',async(_req,res,next)=>{
-    try{const sources=await verifyHarnessInputs(web);res.setHeader('Content-Type','application/json');res.setHeader('Cache-Control','no-store');res.end(JSON.stringify({mode:'development',sourceCommit:committedExperiment(web).commit,sources,bundleSha256:null}))}catch(error){next(error)}
+    try{const sources=await verifyHarnessInputs(web);res.setHeader('Content-Type','application/json');res.setHeader('Cache-Control','no-store');res.end(JSON.stringify({mode:'development',sourceCommit:committedExperiment(web).sourceCommit,sources,bundleSha256:null}))}catch(error){next(error)}
    })
   },
   async writeBundle(_options,bundle){
    const sources=await verifyHarnessInputs(web)
-   await writeFile(path.resolve(web,outDir,'harness-provenance.json'),JSON.stringify({mode:'production',sourceCommit:committedExperiment(web).commit,sources,bundleSha256:bundleHashes(bundle)},null,2)+'\n')
+   await writeFile(path.resolve(web,outDir,'harness-provenance.json'),JSON.stringify({mode:'production',sourceCommit:committedExperiment(web).sourceCommit,sources,bundleSha256:bundleHashes(bundle)},null,2)+'\n')
   },
  }
 }
