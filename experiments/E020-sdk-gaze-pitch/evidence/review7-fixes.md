@@ -9,3 +9,5 @@
 Red/green：新增 stability module 與 snapshot middleware 的缺少實作 red；public-inputs red 同時重現保留輸出 hashes 的偽造 runtime provenance 未被拒絕。最終 unit/scripts/contract/strict checks、clean build 與 HTTP probe 結果在同 topic evidence 後續記錄。unit middleware 測試會替換原 Map 與原 Buffer，確認提供的仍為副本。
 
 此輪不執行 browser UI 或真人方向驗收，不修改 SDK patch／vendor／runtime／MOD。既有人工紀錄缺少同次 attestation 的限制保留，完整驗收仍無法判定。
+
+最終驗證：20 unit／11 scripts／6 patched controller contract、strict checks、clean production build PASS。實際 Vite preview HTTP probe 在啟動後同時替換 dist JS、matching harness provenance、runtime provenance，HTTP 仍提供原本驗證 bytes；啟動前僅偽造 runtime metadata（保留 output hashes）則拒絕。見 review7-preview.txt 與 review7-provenance-rejection.txt。probe 完成後已還原 ignored 檔案並停止暫時 server；沒有執行 browser UI 或真人驗收。
