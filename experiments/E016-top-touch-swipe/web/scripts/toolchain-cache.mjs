@@ -60,3 +60,9 @@ export async function writeConfigAtomically(file, contents, write = writeFile) {
     await rm(staged, { recursive: true, force: true })
   }
 }
+
+/** Mutable compiler libraries must never survive into the next attested run. */
+export async function resetCompilerCache(directory) {
+  await rm(directory, { recursive: true, force: true })
+  await mkdir(directory, { recursive: true })
+}

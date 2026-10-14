@@ -4,7 +4,7 @@ import { copyFile, mkdir, readFile, rm, access, writeFile, chmod } from 'node:fs
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { assertCleanGitSource, assertTreeHash, attestToolchain, hashTree } from './artifact-attestation.mjs'
-import { ensureToolchain, normalizeToolchainSource, pinnedCompilerEnvironment, pythonLauncher, renderEmscriptenConfig, writeConfigAtomically } from './toolchain-cache.mjs'
+import { resetCompilerCache, ensureToolchain, normalizeToolchainSource, pinnedCompilerEnvironment, pythonLauncher, renderEmscriptenConfig, writeConfigAtomically } from './toolchain-cache.mjs'
 const web = fileURLToPath(new URL('../', import.meta.url))
 const experiment = path.resolve(web, '..')
 const repo = path.resolve(experiment, '../..')
@@ -71,7 +71,10 @@ await writeConfigAtomically(config,renderEmscriptenConfig())
 const launcher=path.join(generated,'python-no-bytecode')
 await writeConfigAtomically(launcher,pythonLauncher(path.join(emsdk,'python/3.13.3_64bit/bin/python3')))
 await chmod(launcher,0o755)
-const env = {...pinnedCompilerEnvironment(process.env,emsdk,launcher),MODDABLE:moddable,EMSDK:emsdk,EM_CONFIG:config,EM_CACHE:path.join(generated,'em-cache'),PYTHONDONTWRITEBYTECODE:'1',FONTBM:fontbm,CI:'1',LEFTHOOK:'0',PATH:[path.join(moddable,'build/bin/mac/release'),path.join(emsdk,'upstream/emscripten'),path.join(emsdk,'upstream/bin'),process.env.PATH].join(path.delimiter)}
+const compilerCache = path.join(generated,'em-cache')
+// Clear before any compiler invocation, including its version/sanity probe.
+await resetCompilerCache(compilerCache)
+const env = {...pinnedCompilerEnvironment(process.env,emsdk,launcher),MODDABLE:moddable,EMSDK:emsdk,EM_CONFIG:config,EM_CACHE:compilerCache,PYTHONDONTWRITEBYTECODE:'1',FONTBM:fontbm,CI:'1',LEFTHOOK:'0',PATH:[path.join(moddable,'build/bin/mac/release'),path.join(emsdk,'upstream/emscripten'),path.join(emsdk,'upstream/bin'),process.env.PATH].join(path.delimiter)}
 if ((await readFile(path.join(moddable,'tools/VERSION'),'utf8')).trim()!=='9.5.0') throw new Error('Moddable 9.5.0 required')
 const emccVersion=execFileSync('emcc',['--version'],{env,encoding:'utf8'}).split('\n')[0]
 if (!emccVersion.includes(' 5.0.1 ')) throw new Error('Emscripten 5.0.1 required')

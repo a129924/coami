@@ -4,7 +4,7 @@ import { chmod, cp, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } 
 import os from 'node:os'
 import path from 'node:path'
 import { execFileSync } from 'node:child_process'
-import { ensureToolchain, normalizeToolchainSource, pinnedCompilerEnvironment, pythonLauncher, renderEmscriptenConfig, writeConfigAtomically } from './toolchain-cache.mjs'
+import { resetCompilerCache, ensureToolchain, normalizeToolchainSource, pinnedCompilerEnvironment, pythonLauncher, renderEmscriptenConfig, writeConfigAtomically } from './toolchain-cache.mjs'
 
 const components = ['moddable', 'emsdk', 'fontbm']
 async function fixture(t) {
@@ -135,4 +135,17 @@ test('compiler environment removes EMCC and legacy EMMAKEN build controls', () =
   const env = pinnedCompilerEnvironment({ EMCC_CFLAGS: '-sASSERTIONS=0', EMCC_FORCE_STDLIBS: '1', EMCC_DEBUG: '1', EMMAKEN_CFLAGS: '-O3', KEEP: 'yes' }, '/sdk', '/launcher')
   for (const key of ['EMCC_CFLAGS', 'EMCC_FORCE_STDLIBS', 'EMCC_DEBUG', 'EMMAKEN_CFLAGS']) assert.equal(env[key], undefined)
   assert.equal(env.KEEP, 'yes')
+})
+
+test('compiler cache starts empty even after a polluted or interrupted prior run', async t => {
+  const f = await fixture(t)
+  const cache = path.join(f.root, 'em-cache')
+  await resetCompilerCache(cache)
+  assert.deepEqual(await readdir(cache), [])
+  await mkdir(path.join(cache, 'sysroot', 'lib'), { recursive: true })
+  await writeFile(path.join(cache, 'sysroot', 'lib', 'libc.a'), 'unverified prior bytes')
+  await resetCompilerCache(cache)
+  assert.deepEqual(await readdir(cache), [])
+  await resetCompilerCache(cache)
+  assert.deepEqual(await readdir(cache), [])
 })
