@@ -19,3 +19,5 @@
 ## 建置證據
 
 19 項純測試、10 項 scripts、6 項 patched controller 契約測試、strict checks 通過。clean `facb569` build 通過，production-bundle-pin.json 記錄其 sourceCommit 與 JS/CSS/HTML digest；review6-harness-provenance.json 保存實際 build manifest。原始 SDK/runtime/MOD 不變。
+
+補充重建規則：production-bundle-pin 固定產物 bytes；build sourceCommit 必須是目前 HEAD 的祖先（含 HEAD），其 Git manifest 必須與現在固定 sources 完全相同。單純新增 evidence/docs 的提交後重建可保留相同 bundle，不因 commit metadata 改變被誤拒絕；這個情境也加入 regression。

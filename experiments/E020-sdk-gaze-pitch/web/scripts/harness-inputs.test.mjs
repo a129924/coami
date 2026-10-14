@@ -21,6 +21,10 @@ async function fixture(run){
   await writeFile(path.join(web,'scripts/production-bundle-pin.json'),JSON.stringify(pin))
   await writeFile(path.join(web,'dist/harness-provenance.json'),JSON.stringify({mode:'production',sources,...pin}))
   git('init','-q');git('add','.');git('-c','user.name=Test','-c','user.email=test@example.invalid','-c','core.hooksPath=/dev/null','commit','-qm','reviewed fixture')
+  pin.sourceCommit=git('rev-parse','HEAD')
+  await writeFile(path.join(web,'scripts/production-bundle-pin.json'),JSON.stringify(pin))
+  await writeFile(path.join(web,'dist/harness-provenance.json'),JSON.stringify({mode:'production',sources,...pin}))
+  git('add','.');git('-c','user.name=Test','-c','user.email=test@example.invalid','-c','core.hooksPath=/dev/null','commit','-qm','record build pin')
   await run({web,git,sources})
  }finally{await rm(root,{recursive:true,force:true})}
 }
@@ -30,7 +34,9 @@ test('source edits with recomputed harness pins cannot bypass clean Git anchor',
  await writeFile(path.join(web,'src/harness-pin.json'),JSON.stringify({'src/main.ts':hash('altered pass logic')}))
  await assert.rejects(verifyHarnessInputs(web),/clean committed experiment/)
 }))
-test('modified dist plus recomputed provenance fails committed production pin',async()=>fixture(async({web})=>{
+test('modified dist plus recomputed provenance fails committed production pin',async()=>fixture(async({web,git})=>{
+ await verifyProductionBundle(web,path.join(web,'dist'))
+ const manifest=path.join(web,'dist/harness-provenance.json'),rebuilt=JSON.parse(await readFile(manifest,'utf8'));rebuilt.sourceCommit=git('rev-parse','HEAD');await writeFile(manifest,JSON.stringify(rebuilt))
  await verifyProductionBundle(web,path.join(web,'dist'))
  await writeFile(path.join(web,'dist/app.js'),'altered pass logic')
  const f=path.join(web,'dist/harness-provenance.json'),p=JSON.parse(await readFile(f,'utf8'));p.bundleSha256['app.js']=hash('altered pass logic');await writeFile(f,JSON.stringify(p))

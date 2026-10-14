@@ -11,8 +11,9 @@ function committedExperiment(web){
  const dirty=execFileSync('git',['status','--porcelain=v1','--untracked-files=all','--',scope],{cwd:root,encoding:'utf8'})
  if(dirty.trim())throw Error('Evidence requires a clean committed experiment checkout')
  const commit=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim()
- const read=file=>execFileSync('git',['show',`${commit}:${path.relative(root,path.join(web,file))}`],{cwd:root,encoding:'utf8'})
- return {commit,read}
+ const read=(file,revision=commit)=>execFileSync('git',['show',`${revision}:${path.relative(root,path.join(web,file))}`],{cwd:root,encoding:'utf8'})
+ const contains=revision=>execFileSync('git',['merge-base','--is-ancestor',revision,commit],{cwd:root})
+ return {commit,read,contains}
 }
 export async function verifyHarnessInputs(web){
  const anchor=committedExperiment(web),reviewed=anchor.read('src/harness-pin.json')
@@ -24,10 +25,13 @@ export async function verifyHarnessInputs(web){
 }
 export async function verifyProductionBundle(web,dist){
  const sources=await verifyHarnessInputs(web)
- const pin=JSON.parse(committedExperiment(web).read('scripts/production-bundle-pin.json'))
+ const anchor=committedExperiment(web),pin=JSON.parse(anchor.read('scripts/production-bundle-pin.json'))
  const actual=JSON.parse(await readFile(path.join(dist,'harness-provenance.json'),'utf8'))
- if(actual.mode!=='production'||actual.sourceCommit!==pin.sourceCommit||JSON.stringify(actual.sources)!==JSON.stringify(sources)
+ if(actual.mode!=='production'||JSON.stringify(actual.sources)!==JSON.stringify(sources)
   ||JSON.stringify(actual.bundleSha256)!==JSON.stringify(pin.bundleSha256)||Object.keys(pin.bundleSha256).length===0)throw Error('Reviewed production bundle provenance mismatch')
+ if(typeof actual.sourceCommit!=='string'||! /^[a-f0-9]{40}$/.test(actual.sourceCommit))throw Error('Reviewed production build source mismatch')
+ anchor.contains(actual.sourceCommit)
+ if(JSON.stringify(JSON.parse(anchor.read('src/harness-pin.json',actual.sourceCommit)))!==JSON.stringify(sources))throw Error('Reviewed production build source mismatch')
  for(const [file,expected] of Object.entries(pin.bundleSha256))
   if(hash(await readFile(path.join(dist,file)))!==expected)throw Error(`Reviewed production bundle mismatch: ${file}`)
  return pin
