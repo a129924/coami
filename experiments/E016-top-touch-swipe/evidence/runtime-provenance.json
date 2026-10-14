@@ -1,0 +1,36 @@
+{
+  "experiment": "E016",
+  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "patchSha256": "39c96dcce1688a285bb2f537399098763becb9bb365e2b6d5d26705bfbe53d81",
+  "moddableCommit": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",
+  "moddableVersion": "9.5.0",
+  "emsdkCommit": "14c18b569f55138fe4963924162244251f454fb0",
+  "emccVersion": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 5.0.1 (8c5f43157a3f069ade75876e23061330521eabde)",
+  "fontbmCommit": "7677b908523e909679f67cd5c170396bb9def1aa",
+  "hostHashes": {
+    "web/simulator/bridge.mjs": "f4a2a66baf6000d9c29597f570d9e23bf32057066aee47a136b35a10f00ba6c6",
+    "web/simulator/geometry.mjs": "7f9b357ec11b82fae1e45d5392e3f661ebadc8fc5b7a69f638f8c5a311f61a55",
+    "web/simulator/mod-storage.mjs": "52d1acc677226fd859979019ff0d158f8e9a445d25830c8f13cc2d7ef792e7cf",
+    "web/src/services/simulator/simulator-engine.mjs": "167a07741821e719acd2c087ea916c5ed141c87d8bc54a2e26d757a58376fe33",
+    "firmware/host/modules/input/touch-panel-gesture.ts": "7df5ff76e7b21b1d143caef2438be3f49e4cd0b95c994ae380b6b893efd763e1",
+    "firmware/host/modules/input/touch-panel.ts": "b1afa7335887e689803b6b4cf62acbb4367027029ee59e9d83ff4d24301ab5de",
+    "firmware/host/modules/input/wasm/touch-panel-bridge.js": "affe59ca62503c4bb32b36d9cf34e05f210657ef007defb1b4359fde77062442",
+    "firmware/host/modules/input/wasm/touch-panel-bridge.c": "008818fefc369e533644bfacaf04573ad08348471f7c193da3e176b93dde3c1e"
+  },
+  "runtimeHashes": {
+    "mc.js": "b956ece89ef7a42db9cc98f2ac3b4c13ff3447dffd8d6761dcb98086a629c7ed",
+    "mc.wasm": "98d30154191b7ddd11a5629f84897f68ea3bbb48e78a868c1503b20e254414d5"
+  },
+  "createdAt": "2026-10-13T04:03:24.619Z",
+  "servedHashes": {
+    "mc.js": "b956ece89ef7a42db9cc98f2ac3b4c13ff3447dffd8d6761dcb98086a629c7ed",
+    "mc.wasm": "98d30154191b7ddd11a5629f84897f68ea3bbb48e78a868c1503b20e254414d5"
+  },
+  "buildCommand": "npm run prepare:poc",
+  "toolchainIsolated": true,
+  "firmwareLockSha256": "fe3ecb4c4815f64b23af326470115970ec303761f5cb8b44a2bda3801435b57d",
+  "dependencySource": "lock-matched local snapshot",
+  "modArchiveSha256": "f448dd5f1086d40bc9e96dd4c27f49f04982b0475395e49a5264af27578d7bbe",
+  "servedAt": "2026-10-13T04:10:57.250Z",
+  "servedBaseUrl": "http://127.0.0.1:5176/simulator/"
+}

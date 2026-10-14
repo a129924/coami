@@ -1,0 +1,133 @@
+diff --git a/firmware/host/app/main.ts b/firmware/host/app/main.ts
+--- a/firmware/host/app/main.ts
++++ b/firmware/host/app/main.ts
+@@ -28,10 +28,14 @@
+ const noopButtonHandler = () => undefined
+ 
+ function installPlatformInputBridge(): void {
+-  if (!Modules.has('wasm-button-bridge')) return
+-  const bridge = Modules.importNow('wasm-button-bridge') as { installWasmButtons?: () => void }
+-  bridge.installWasmButtons?.()
+-  trace('[main] installed WASM button bridge\n')
++  if (Modules.has('wasm-button-bridge')) {
++    const bridge = Modules.importNow('wasm-button-bridge') as { installWasmButtons?: () => void }
++    bridge.installWasmButtons?.()
++  }
++  if (Modules.has('wasm-touch-panel-bridge')) {
++    const bridge = Modules.importNow('wasm-touch-panel-bridge') as { installWasmTouchPanel?: () => void }
++    bridge.installWasmTouchPanel?.()
++  }
+ }
+ 
+ function loadAppBehaviors(): StackchanAppBehavior[] {
+diff --git a/firmware/host/modules/input/manifest_wasm.json b/firmware/host/modules/input/manifest_wasm.json
+--- a/firmware/host/modules/input/manifest_wasm.json
++++ b/firmware/host/modules/input/manifest_wasm.json
+@@ -1,6 +1,9 @@
+ {
+-  "include": ["./manifest.json"],
++  "include": [
++    "./manifest.json"
++  ],
+   "modules": {
+-    "wasm-button-bridge": "./wasm/button-bridge"
++    "wasm-button-bridge": "./wasm/button-bridge",
++    "wasm-touch-panel-bridge": "./wasm/touch-panel-bridge"
+   }
+ }
+diff --git a/firmware/host/modules/input/touch-panel.ts b/firmware/host/modules/input/touch-panel.ts
+--- a/firmware/host/modules/input/touch-panel.ts
++++ b/firmware/host/modules/input/touch-panel.ts
+@@ -12,6 +12,9 @@
+ 
+ type TouchPanelDriver = {
+   sample: () => TouchPanelSample
++  beginSample?: () => void
++  completeSample?: () => void
++  ticks?: () => number
+   configure?: (options: unknown) => void
+   close?: () => void
+ }
+@@ -76,25 +79,23 @@
+     if (this.#timer) return
+     trace(`[TouchPanel] start interval=${this.#interval}ms\n`)
+     this.#timer = Timer.repeat(() => {
+-      const ticks = Time.ticks
+-      let sample: TouchPanelSample
+       try {
+-        sample = this.#sample()
++        this.#driver.beginSample?.()
++        const sample = this.#sample()
++        const ticks = this.#driver.ticks?.() ?? Time.ticks
+         this.#sampleErrorReported = false
++        const gesture = this.#recognizer.update(sample, ticks)
++        if (gesture) {
++          const intensity = Math.max(sample[0] ?? 0, sample[1] ?? 0, sample[2] ?? 0)
++          this.#emit(createTouchPanelInputEvent(gesture.type, this.#recognizer.getPosition(sample), intensity, ticks, gesture.tap))
++        }
+       } catch (error) {
+         if (!this.#sampleErrorReported) {
+           trace(`[TouchPanel] sample error ${errorMessage(error)}\n`)
+           this.#sampleErrorReported = true
+         }
+-        return
+-      }
+-
+-      const gesture = this.#recognizer.update(sample, ticks)
+-      if (gesture) {
+-        const intensity = Math.max(sample[0] ?? 0, sample[1] ?? 0, sample[2] ?? 0)
+-        this.#emit(
+-          createTouchPanelInputEvent(gesture.type, this.#recognizer.getPosition(sample), intensity, ticks, gesture.tap),
+-        )
++      } finally {
++        this.#driver.completeSample?.()
+       }
+     }, this.#interval)
+   }
+diff --git a/firmware/host/modules/input/wasm/touch-panel-bridge.js b/firmware/host/modules/input/wasm/touch-panel-bridge.js
+new file mode 100644
+--- /dev/null
++++ b/firmware/host/modules/input/wasm/touch-panel-bridge.js
+@@ -0,0 +1,15 @@
++const call = native('xs_e016_touch_call')
++class WasmTouchPanel {
++  beginSample() { call(0, 0) }
++  sample() { return [call(1, 0), call(1, 1), call(1, 2)] }
++  ticks() { return call(2, 0) }
++  completeSample() { call(3, 0) }
++}
++export function currentTouchMetadata() {
++  return { session: call(4, 0), operation: call(4, 1), sample: call(4, 2) }
++}
++export function installWasmTouchPanel() {
++  globalThis.device ??= {}
++  globalThis.device.sensor ??= {}
++  globalThis.device.sensor.TouchPanel = WasmTouchPanel
++}
+diff --git a/firmware/host/modules/input/wasm/touch-panel-bridge.c b/firmware/host/modules/input/wasm/touch-panel-bridge.c
+new file mode 100644
+--- /dev/null
++++ b/firmware/host/modules/input/wasm/touch-panel-bridge.c
+@@ -0,0 +1,22 @@
++#include "xs.h"
++#include "xsmc.h"
++#include <emscripten.h>
++
++void xs_e016_touch_call(xsMachine* the)
++{
++  int method = xsmcToInteger(xsArg(0));
++  int slot = xsmcToInteger(xsArg(1));
++  int value = EM_ASM_INT({
++    const panel = stackchanRuntime.host && stackchanRuntime.host.TopTouchPanel;
++    if (!panel) return 0;
++    switch ($0) {
++      case 0: panel.beginSample(); return 0;
++      case 1: return panel.read($1) | 0;
++      case 2: return panel.ticks() | 0;
++      case 3: panel.completeSample(); return 0;
++      case 4: return panel.meta($1) | 0;
++    }
++    return 0;
++  }, method, slot);
++  xsmcSetInteger(xsResult, value);
++}

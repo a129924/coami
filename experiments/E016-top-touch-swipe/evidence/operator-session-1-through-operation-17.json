@@ -1,0 +1,386 @@
+{
+  "experiment": "E016",
+  "evidenceType": "operator-export",
+  "humanVerified": false,
+  "session": 1,
+  "records": [
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 1,
+      "sample": 1,
+      "gesture": "press",
+      "ticks": 58439,
+      "position": -82
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 1,
+      "sample": 59,
+      "gesture": "forwardSwipe",
+      "ticks": 59352,
+      "position": -20
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 1,
+      "sample": 239,
+      "gesture": "release",
+      "ticks": 63691,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 2,
+      "sample": 240,
+      "gesture": "press",
+      "ticks": 240612,
+      "position": 88
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 2,
+      "sample": 289,
+      "gesture": "backwardSwipe",
+      "ticks": 241269,
+      "position": 26
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 2,
+      "sample": 573,
+      "gesture": "release",
+      "ticks": 245298,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 3,
+      "sample": 574,
+      "gesture": "press",
+      "ticks": 513284,
+      "position": -84
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 3,
+      "sample": 621,
+      "gesture": "forwardSwipe",
+      "ticks": 516135,
+      "position": -22
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 3,
+      "sample": 725,
+      "gesture": "release",
+      "ticks": 517547,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 4,
+      "sample": 726,
+      "gesture": "press",
+      "ticks": 519164,
+      "position": -74
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 4,
+      "sample": 753,
+      "gesture": "forwardSwipe",
+      "ticks": 519667,
+      "position": -12
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 4,
+      "sample": 868,
+      "gesture": "release",
+      "ticks": 520872,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 5,
+      "sample": 869,
+      "gesture": "press",
+      "ticks": 522472,
+      "position": 88
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 5,
+      "sample": 886,
+      "gesture": "backwardSwipe",
+      "ticks": 522876,
+      "position": 22
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 5,
+      "sample": 959,
+      "gesture": "release",
+      "ticks": 523730,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 6,
+      "sample": 960,
+      "gesture": "press",
+      "ticks": 525122,
+      "position": 90
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 6,
+      "sample": 973,
+      "gesture": "release",
+      "ticks": 525443,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 7,
+      "sample": 974,
+      "gesture": "press",
+      "ticks": 568805,
+      "position": 82
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 7,
+      "sample": 991,
+      "gesture": "backwardSwipe",
+      "ticks": 569192,
+      "position": 16
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 7,
+      "sample": 1077,
+      "gesture": "release",
+      "ticks": 570030,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 8,
+      "sample": 1078,
+      "gesture": "press",
+      "ticks": 741237,
+      "position": -82
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 8,
+      "sample": 1243,
+      "gesture": "forwardSwipe",
+      "ticks": 743771,
+      "position": -20
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 8,
+      "sample": 1821,
+      "gesture": "release",
+      "ticks": 756508,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 9,
+      "sample": 1822,
+      "gesture": "press",
+      "ticks": 970616,
+      "position": -4
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 9,
+      "sample": 1857,
+      "gesture": "release",
+      "ticks": 972037,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 10,
+      "sample": 1858,
+      "gesture": "press",
+      "ticks": 1137264,
+      "position": 2
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 10,
+      "sample": 1860,
+      "gesture": "release",
+      "ticks": 1137387,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 11,
+      "sample": 1861,
+      "gesture": "press",
+      "ticks": 1162692,
+      "position": 2
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 11,
+      "sample": 1863,
+      "gesture": "release",
+      "ticks": 1162832,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 12,
+      "sample": 1864,
+      "gesture": "press",
+      "ticks": 1164691,
+      "position": 2
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 12,
+      "sample": 1866,
+      "gesture": "release",
+      "ticks": 1164815,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 13,
+      "sample": 1867,
+      "gesture": "press",
+      "ticks": 1265743,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 13,
+      "sample": 1911,
+      "gesture": "release",
+      "ticks": 1270582,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 14,
+      "sample": 1912,
+      "gesture": "press",
+      "ticks": 1684228,
+      "position": 2
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 14,
+      "sample": 1959,
+      "gesture": "release",
+      "ticks": 1685614,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 15,
+      "sample": 1960,
+      "gesture": "press",
+      "ticks": 1703342,
+      "position": 2
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 15,
+      "sample": 1975,
+      "gesture": "release",
+      "ticks": 1703910,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 16,
+      "sample": 1976,
+      "gesture": "press",
+      "ticks": 1963340,
+      "position": -4
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 16,
+      "sample": 2118,
+      "gesture": "release",
+      "ticks": 1975046,
+      "position": 0
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 17,
+      "sample": 2119,
+      "gesture": "press",
+      "ticks": 2484807,
+      "position": -80
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 17,
+      "sample": 2315,
+      "gesture": "forwardSwipe",
+      "ticks": 2501291,
+      "position": -18
+    },
+    {
+      "kind": "touch",
+      "session": 1,
+      "operation": 17,
+      "sample": 2863,
+      "gesture": "release",
+      "ticks": 2523863,
+      "position": 0
+    }
+  ]
+}

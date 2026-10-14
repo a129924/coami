@@ -1,0 +1,26 @@
+{
+  "name": "coami-e016-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <27"
+  },
+  "scripts": {
+    "test": "npm run stage && node --test src/*.test.ts scripts/*.test.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json",
+    "prepare:poc": "node scripts/prepare-runtime.mjs && node scripts/build-mod.mjs",
+    "dev": "vite --host 127.0.0.1",
+    "build": "npm run typecheck && vite build",
+    "stage": "node scripts/prepare-runtime.mjs --stage-only"
+  },
+  "dependencies": {
+    "three": "0.185.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.1.2",
+    "@types/three": "0.185.4",
+    "typescript": "7.0.2",
+    "vite": "8.2.1"
+  }
+}
