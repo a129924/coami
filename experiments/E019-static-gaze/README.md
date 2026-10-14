@@ -92,3 +92,12 @@ npm run dev -- --port 5199
 - Graphify 沒有可用既有 graph，採 targeted-source fallback；未另建 graph。PR Lens 只產生外部本機變更圖，不上傳、不代表 correctness review。
 - pinned runtime、起始條件、解除契約或方向證據不足時停止依賴決策；正式 SDK變更另報 scope gap。
 - 已確認 Scope Gap：固定起始的四方向可走 SDK 路徑，但直接上下再次指定不符合本 Mission 判準。失敗只支持此 pinned simulator 條件，不外推實機。最終停在人類審查；不 merge、不 release、不移入正式程式。
+
+## Topic 交付與審查狀態（2026-10-14）
+
+- [PR #19](https://github.com/a129924/coami/pull/19) 交付原版 pinned SDK 的可重現失敗實驗；實驗狀態仍是失敗，驗證任務已完成。Ready for review 不表示 E019 驗收通過。
+- 原 run 的追加重測 #25 prepare → #26 上 → #27 解除 → #28 下仍失敗，原始匯出見 `evidence/human-retry.json`；原始碼定位與離線對照見 `evidence/pitch-diagnostic/`。24 項 human-final 與 28 項 human-retry 都保留，不覆寫舊證據。
+- Owner 已另立 E020，[PR #20](https://github.com/a129924/coami/pull/20) 在獨立 feature worktree 的 copied runtime 套用一行 pitch 修正。2026-10-14 Andrew 真人驗證上→解除→下、下→解除→上各兩次，4/4 PASS；證據位於該 PR 的 `experiments/E020-sdk-gaze-pitch/evidence/human-final.json` 與 `human-run.md`。
+- E020 成功限修正版 simulator 條件，不回改 E019 原版失敗結論，不補稱 E019 缺少的逐步畫面已取得。
+- 兩個 PR 均以 dev 為 base、各自帶獨立實驗，沒有程式上的合併先後依賴。建議先審 #19 的重現與語意，再審 #20 的修正、來源驗證與回歸。
+- 本 topic 的實作、證據與雙向真人驗證已交付，兩個 PR 送 Ready for review；尚待 reviewer 核准與 owner 合併決策。此紀錄不授權 merge、release、更新 vendor pin 或正式程式採用。

@@ -25,3 +25,9 @@
 ## 真人重現
 
 Andrew於v2 run E019-2026-10-13T07-53-36-719Z完成#22上、#23解除、#24下；#24 begin/returned/window-ended完整但無applyRotation，2154339ms判定不符合，口頭回報「仍抬頭」。詳見human-final.json與human-run.md。原SDK失敗結論維持。
+
+## 後續處置（2026-10-14）
+
+Owner 已授權另立 SDK 修正 topic E020；[PR #20](https://github.com/a129924/coami/pull/20) 的隔離 runtime 修正完成控制器／共享眼神回歸、fresh WASM 與真人雙向各兩次驗證。原 scope gap 已有有界修正證據，但 E019 原版仍失敗；E020 未更新正式 SDK 或 vendor pin。
+
+E019 [PR #19](https://github.com/a129924/coami/pull/19) 作為失敗實驗與證據紀錄送 Ready for review，並非宣稱原驗收通過。兩個 PR 都保留，交 human review 決定是否合併實驗紀錄；正式採用另作決策。
