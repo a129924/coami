@@ -1723,6 +1723,48 @@ source = { registry = "https://pypi.org/simple" }
             self.assertIsNone(capture.raw_path)
             self.assertIsNone(capture.raw_sha)
 
+            interrupted_root = Path(temporary) / "interrupted"
+            interrupted = e.CaptureClient(
+                interrupted_root,
+                case,
+                self.question,
+                transport=httpx2.MockTransport(
+                    lambda request: httpx2.Response(200, content=response())
+                ),
+            )
+
+            def interrupt_after_response_write(path: Path, data: bytes) -> None:
+                original(path, data)
+                if "responses" in path.parts:
+                    raise KeyboardInterrupt
+
+            with (
+                patch.object(
+                    e, "write_exclusive", side_effect=interrupt_after_response_write
+                ),
+                TypeSafeClient(
+                    api_key="test-key",
+                    model=e.MODEL,
+                    base_url="https://example.invalid",
+                    retry=RetryPolicy(max_retries=0),
+                    http_client=interrupted,
+                ) as client,
+            ):
+                with self.assertRaises(KeyboardInterrupt):
+                    client.system_one(
+                        state=case["state"],
+                        questions={"context_sufficiency": Choice(**self.question)},
+                    )
+            self.assertIsNone(interrupted.raw_sha)
+            self.assertTrue(
+                (
+                    interrupted_root
+                    / "responses"
+                    / case["group"]
+                    / f"{case['case_id']}.body"
+                ).is_file()
+            )
+
     def test_request_boundary_mismatch_stops_before_transport(self) -> None:
         case = deepcopy(self.cases[0])
         case["state"]["secret_oracle"] = "INSUFFICIENT"
@@ -2045,6 +2087,16 @@ source = { registry = "https://pypi.org/simple" }
                     read_sources.call_args.args[2],
                     load_freeze.call_args.kwargs["source_snapshots"],
                 )
+            orphan = restricted / "responses/research/orphan.body"
+            orphan.write_bytes(response())
+            self.assertIn(
+                "UNREFERENCED_CAPTURED_FILE",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_local_run(restricted)["gaps"]
+                },
+            )
+            orphan.unlink()
             local_manifest = e.read_object(restricted / "manifest.json")
             missing_locator = dict(local_manifest)
             missing_locator.pop("runner_source_path")

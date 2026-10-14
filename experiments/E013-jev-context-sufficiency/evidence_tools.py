@@ -1076,6 +1076,19 @@ def verify_local_run(
             source_gaps.append({"reason": "FREEZE_SOURCE_UNCOMMITTED"})
         case_rows = []
     gaps = source_gaps + metadata_gaps(run_dir, manifest)
+    for kind, field in (("requests", "request_sha256"), ("responses", "raw_sha256")):
+        referenced = {
+            f"{kind}/{row['group']}/{row['case_id']}.body"
+            for row in rows
+            if row.get(field) is not None
+        }
+        captured = {
+            path.relative_to(run_dir).as_posix()
+            for path in (run_dir / kind).rglob("*")
+            if path.is_file()
+        }
+        for path in sorted(captured - referenced):
+            gaps.append({"reason": "UNREFERENCED_CAPTURED_FILE", "path": path})
     if source_snapshots is not None:
         gaps.extend(inventory_gaps(manifest, rows, case_rows, source_snapshots))
     if manifest_chronology_gap(manifest, rows):
