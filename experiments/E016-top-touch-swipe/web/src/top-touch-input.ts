@@ -22,12 +22,18 @@ export class TopTouchInput {
   private pendingSince: number | null = null
   private healthPausedAt: number | null = null
   private healthPauseTotal = 0
-  pauseHealth(now: number): void { if (this.healthPausedAt === null) this.healthPausedAt = now }
-  resumeHealth(now: number): void {
-    if (this.healthPausedAt === null) return
+  private healthPauses = new Set<'bfcache' | 'hidden'>()
+  pauseHealth(now: number, reason: 'bfcache' | 'hidden' = 'bfcache'): void {
+    this.healthPauses.add(reason)
+    if (this.healthPausedAt === null) this.healthPausedAt = now
+  }
+  resumeHealth(now: number, reason: 'bfcache' | 'hidden' = 'bfcache'): void {
+    this.healthPauses.delete(reason)
+    if (this.healthPauses.size || this.healthPausedAt === null) return
     this.healthPauseTotal += Math.max(0, now - this.healthPausedAt)
     this.healthPausedAt = null
   }
+  setVisibility(hidden: boolean, now: number = this.now()): void { if (hidden) this.pauseHealth(now, 'hidden'); else this.resumeHealth(now, 'hidden') }
   activeTime(now: number = this.now()): number { return (this.healthPausedAt ?? now) - this.healthPauseTotal }
   readonly session: number
   private readonly limit: number

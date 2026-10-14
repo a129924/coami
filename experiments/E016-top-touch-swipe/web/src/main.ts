@@ -49,6 +49,7 @@ async function initialize(): Promise<void> {
   feedback.start(session)
   engine?.dispose(); engine = null
   input = new TopTouchInput(session)
+  input.setVisibility(document.hidden)
   runtimeStatus.textContent = '正在初始化'
   refresh()
   try {
@@ -114,5 +115,6 @@ element('#export').addEventListener('click',()=>{
 setInterval(()=>{input.checkHealth(input.now());refresh()},250)
 // Persisted page hides freeze this document; keep its engine for bfcache restore.
 window.addEventListener('pagehide',event=>{if(event.persisted)input.pauseHealth(input.now());else engine?.dispose()})
-window.addEventListener('pageshow',event=>{if(event.persisted)input.resumeHealth(input.now())})
+window.addEventListener('pageshow',event=>{if(event.persisted){input.setVisibility(document.hidden);input.resumeHealth(input.now())}})
+document.addEventListener('visibilitychange',()=>{input.setVisibility(document.hidden)})
 void initialize()
