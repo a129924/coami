@@ -1777,5 +1777,51 @@
     },
     "scope": "E016 only; historical tool/dependency evidence and TC05/TC07 gaps unchanged",
     "review": "approved; independent Reviewer29testsPASS, caller wiring checked, no blockers; fullWASM/liveBFCache/TC05/TC07 gaps retained"
+  },
+  "prCommentReviewRound8": {
+    "date": "2026-10-14",
+    "reviewedHead": "53b06428decd0436cf8e4b37e39aa27b15bb1b94",
+    "triage": {
+      "ADDRESS": [
+        4266235046,
+        4266235051,
+        4266235058,
+        4266235065
+      ],
+      "DISCUSS": [],
+      "SKIP": []
+    },
+    "red": {
+      "behavioralFailures": 5,
+      "reasons": [
+        "CPATH retained",
+        "symlink component not rejected",
+        "symlink cache reused",
+        "hidden resume clears BFCache pause",
+        "initial hidden clock resumes too early"
+      ],
+      "copy": "Local APFS clone copy fixture already PASS before -p; no false RED claim."
+    },
+    "green": {
+      "tests": 35,
+      "passed": 35,
+      "failed": 0
+    },
+    "validation": {
+      "typecheck": "strict web/MOD PASS",
+      "frontendBuild": "PASS; existing bundle warning",
+      "scriptSyntax": "PASS",
+      "copy": "Actual macOS umask077 cp fixture preserves0755/tree digests and follows snapshot operand link into independent real directory.",
+      "lifecycle": "Unit clock overlaps + initial hidden readiness; main visibilitychange/new-session/pageshow wiring inspected.",
+      "fullWasmRebuild": "not executed",
+      "liveBfcache": "not executed",
+      "liveBackgroundTab": "not executed"
+    },
+    "sourceReferences": [
+      "https://clang.llvm.org/docs/CommandGuide/clang.html#environment",
+      "https://keith.github.io/xcode-man-pages/cp.1.html"
+    ],
+    "scope": "E016 only; source/operator/runtime historical bytes and TC05/TC07 gaps unchanged.",
+    "review": "approved; independent Reviewer35testsPASS including actual macOS copy; caller/overlap/source protection checked, no blockers; fullWASM/live browser/TC05/TC07 gaps retained"
   }
 }

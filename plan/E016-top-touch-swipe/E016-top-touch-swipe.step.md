@@ -254,3 +254,17 @@ Prior human-acceptance summary is superseded for complete TC05: leave/recovery P
 | Goal | no stale library reuse or frozen-time readiness fault | filesystem and active clock regressions PASS |
 | Non-Goal | fullWASM/liveBFCache/completeAC claims | existing gaps retained |
 | TestCase | RED→GREEN plus affected checks | 2RED→29PASS; strict checks/build/syntax PASS; independent review approved/29PASS |
+
+## PR review round8 — source isolation and document visibility
+
+| Field | planned | actual |
+| --- | --- | --- |
+| In-Scope | comments4266235046/5051/5058/5065 | header env, source/cache roots, copy modes, visibility clock |
+| Out-Of-Scope | SDK/production/otherexperiments/merge | none touched |
+| ReadOnly | pinned vendor/historical evidence/shared source | unchanged; linked source config protected |
+| Written | existing E016 scripts/class/main/tests/docs | no new tracked paths |
+| Deleted | no tracked files | invalid owned cache may be replaced during prepare |
+| Modify | bounded build isolation and lifecycle | no raw timestamps or gesture policy changes |
+| Goal | stable copy attestation and no hidden-time false fault | filesystem/clock regressions and caller checks |
+| Non-Goal | fullWASM/browser/completeAC proof | existing gaps retained |
+| TestCase | behavioral regressions and affected checks | 5RED→35PASS; actual macOS umask077 copy PASS; strict checks/build/syntax PASS; independent review approved/35PASS |

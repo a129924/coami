@@ -131,3 +131,7 @@ ADDRESS4256577091/7096/7102. Extend inherited compiler control filtering toEMCC_
 ### PR review round7 — 2026-10-14
 
 ADDRESS4266156233/6239. Recreate owned generated/em-cache before first compiler invocation; use shared activeTime for MOD readiness timeout. Existing E016 helper/main/input/tests/docs paths only. No SDK/native/production/other experiments changes. Preserve historical evidence and fullWASM/liveBFCache/TC05/TC07 gaps; independent bounded review before publication.
+
+### PR review round8 — 2026-10-14
+
+ADDRESS4266235046/5051/5058/5065. Remove Clang header path overrides; reject linked toolchain/component roots before config writes; preserve copy metadata with shared cp -cRpH; handle hidden/BFCache clock reasons independently, including new-session visibility. Existing E016 scripts/class/main/tests/docs only. No new capability or SDK/native/production changes; complete runtime/browser verification and historical evidence gaps unchanged. Independent review before publication.

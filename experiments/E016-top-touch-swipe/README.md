@@ -172,3 +172,11 @@ Regression：保留EMCC_CFLAGS、凍結時誤報timeout兩項RED；另實際修�
 ADDRESS4266156233/6239. 每次完整prepare在任何emcc invocation（含version/sanity probe）之前，清除並重建本實驗owned ignored generated/em-cache；不重用上次可變library bytes。MOD readiness deadline改用與ack相同的activeTime，persisted hide/show凍結期間不累積，恢復後仍保留先前active等待額度。
 
 兩項新增regressions先RED（缺少cache reset export／activeTime method），再GREEN：cache涵蓋不存在、污染nested libc及重複清理；readiness時計涵蓋長凍結、精確30000與超過門檻、多次凍結。整套29tests、strict web/MOD typecheck、Vitebuild與prepare script syntax PASS。這些是filesystem／clock單元測試及caller檢查，不宣稱完整WASM重建、完整初始化或liveBFCache通過。TC05／TC07及原始runtime/operator證據保持不變。獨立審查approved，另行重跑29tests PASS，無blocking issues。
+
+## PR comment review round8 — 2026-10-14
+
+ADDRESS4266235046/5051/5058/5065. Clear Clang CPATH and four language-specific include variables. Validate toolchain root and three component roots with lstat as real directories before source/cached/staged use; reject symlink roots and replace prior linked caches. Both toolchain and dependency copies use one macOS cp -cRpH helper: preserve modes and follow only command-line symlinks (snapshot operands), not internal links. Read-only source configuration remains untouched.
+
+Visibilitychange pauses the shared readiness/ack clock; each new session immediately synchronizes document.hidden. Hidden and BFCache reasons are tracked independently, and clock resumes only when both clear, retaining prior active wait. Six new regressions cover compiler paths, source/cache links, actual macOS copy under umask077, overlapping lifecycle reasons and initial hidden readiness. Five behavioral assertions first FAIL (retained CPATH, missing link rejection, linked-cache reuse, two premature resumes); copy test already passed with local APFS clone mode and is not claimed as RED. Final35tests/strict web+MOD typecheck/Vitebuild/script syntax PASS. The copy test verifies real filesystem executable bits and tree hashes, including symlink snapshot operand; it does not prove a full toolchain build. FullWASM/liveBFCache/background-browser/TC05/TC07 gaps retained; original evidence unchanged. Independent review approved; Reviewer reran35tests PASS, including actual macOS copy fixture, with no blockers.
+
+References: [Clang header environment](https://clang.llvm.org/docs/CommandGuide/clang.html#environment), [macOS cp options](https://keith.github.io/xcode-man-pages/cp.1.html).
