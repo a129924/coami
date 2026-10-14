@@ -800,7 +800,18 @@ source = { registry = "https://pypi.org/simple" }
 
     def test_documented_bootstrap_rejects_edited_runner_before_execution(self) -> None:
         documentation = (e.TOPIC / "README.md").read_text()
-        bootstrap = documentation.split("python -I -S -B -c '\n", 1)[1].split(
+        future = documentation.split("For a separately authorized future run", 1)[
+            1
+        ].split("For `--verify-local-run`", 1)[0]
+        self.assertIn("uv sync --quiet --locked", future)
+        self.assertNotIn("--env-file", future)
+        self.assertNotIn("uv run", future)
+        executable = Path(
+            "/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/bin/python3.12"
+        )
+        self.assertIn(e.sha(executable.read_bytes()), future)
+        self.assertIn("--credential-file", future)
+        bootstrap = documentation.split("python3.12 -I -S -B -c '\n", 1)[1].split(
             "\n' --live", 1
         )[0]
         self.assertNotIn("'", bootstrap)
@@ -813,6 +824,7 @@ source = { registry = "https://pypi.org/simple" }
             runner.write_bytes(trusted)
             auth = root / "authorization.json"
             auth.write_bytes(e.json_bytes({"runner_sha256": e.sha(trusted)}))
+            credential = root / "credential.env"
             subprocess.run(["git", "-C", str(root), "add", "."], check=True)
             subprocess.run(
                 [
@@ -829,6 +841,7 @@ source = { registry = "https://pypi.org/simple" }
                 ],
                 check=True,
             )
+            credential.write_text("TYPESAFE_API_KEY=synthetic-test-key\n")
             marker = root / "malicious-ran"
             runner.write_text(
                 f"from pathlib import Path; Path({str(marker)!r}).write_text('ran')\n"
@@ -844,6 +857,8 @@ source = { registry = "https://pypi.org/simple" }
                     "--live",
                     "--live-authorization",
                     "authorization.json",
+                    "--credential-file",
+                    "credential.env",
                 ],
                 cwd=root,
                 capture_output=True,
@@ -865,6 +880,8 @@ source = { registry = "https://pypi.org/simple" }
                     "--live",
                     "--live-authorization",
                     "authorization.json",
+                    "--credential-file",
+                    "credential.env",
                 ],
                 cwd=root,
                 capture_output=True,
@@ -890,6 +907,8 @@ source = { registry = "https://pypi.org/simple" }
                     "--live",
                     "--live-authorization",
                     "authorization.json",
+                    "--credential-file",
+                    "credential.env",
                 ],
                 cwd=root,
                 env={**os.environ, "PATH": f"{shim_dir}:{os.environ.get('PATH', '')}"},
@@ -902,7 +921,7 @@ source = { registry = "https://pypi.org/simple" }
 
     def test_documented_bootstrap_authenticates_evidence_tool(self) -> None:
         documentation = (e.TOPIC / "README.md").read_text()
-        bootstrap = documentation.split("python -I -S -B -c '\n", 1)[1].split(
+        bootstrap = documentation.split("python3.12 -I -S -B -c '\n", 1)[1].split(
             "\n' --live", 1
         )[0]
         with TemporaryDirectory() as temporary:
