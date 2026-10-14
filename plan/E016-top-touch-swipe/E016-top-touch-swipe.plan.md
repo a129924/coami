@@ -127,3 +127,7 @@ ADDRESS4256325949/5956/5962. Require externally reviewed tool-tree digest manife
 ### PR review round6 — 2026-10-14
 
 ADDRESS4256577091/7096/7102. Extend inherited compiler control filtering toEMCC_*/EMMAKEN_*. Recreatepinned SDKscratch for every stage; neverreuse basedonlyonmarker. Persistedhide/show pauses/resumesack healthtime without modifyingrawcaptureticks orforgivingprioractivewait. Existingpaths only; noSDK/native/production changes orotherexperiments. Livebfcache/fullWASM/TC05/TC07 gapsremain.
+
+### PR review round7 — 2026-10-14
+
+ADDRESS4266156233/6239. Recreate owned generated/em-cache before first compiler invocation; use shared activeTime for MOD readiness timeout. Existing E016 helper/main/input/tests/docs paths only. No SDK/native/production/other experiments changes. Preserve historical evidence and fullWASM/liveBFCache/TC05/TC07 gaps; independent bounded review before publication.

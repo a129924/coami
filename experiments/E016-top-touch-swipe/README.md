@@ -166,3 +166,9 @@ ADDRESS4256325949/5956/5962：snapshot必須指定核對過的tree SHA256，複�
 ADDRESS4256577091/7096/7102：清除EMCC_*與legacy EMMAKEN_*，補足原EM_*／EMSDK_* filter；stage-only與完整prepare每次重新checkout pinned SDK再apply patch，marker只記錄不授權重用；persisted pagehide暫停ack健康時鐘，persisted pageshow恢復，原始SDK capture ticks不變。健康時鐘扣除凍結時間但保留前後active等待，不以恢復重新給滿額timeout。
 
 Regression：保留EMCC_CFLAGS、凍結時誤報timeout兩項RED；另實際修改scratch recognizer並保留matching marker，舊stage未還原（RED），新stage還原為原pinned檔案（GREEN）。最終27tests、strict web/MOD typecheck、Vitebuild與script syntaxPASS。健康時鐘是單元驗證，未執行livebfcache往返；完整WASM／TC05／TC07缺口不回改。官方變數參考：[emcc environment variables](https://emscripten.org/docs/tools_reference/emcc.html#environment-variables)，實驗仍固定5.0.1。
+
+## PR comment review round7 — 2026-10-14
+
+ADDRESS4266156233/6239. 每次完整prepare在任何emcc invocation（含version/sanity probe）之前，清除並重建本實驗owned ignored generated/em-cache；不重用上次可變library bytes。MOD readiness deadline改用與ack相同的activeTime，persisted hide/show凍結期間不累積，恢復後仍保留先前active等待額度。
+
+兩項新增regressions先RED（缺少cache reset export／activeTime method），再GREEN：cache涵蓋不存在、污染nested libc及重複清理；readiness時計涵蓋長凍結、精確30000與超過門檻、多次凍結。整套29tests、strict web/MOD typecheck、Vitebuild與prepare script syntax PASS。這些是filesystem／clock單元測試及caller檢查，不宣稱完整WASM重建、完整初始化或liveBFCache通過。TC05／TC07及原始runtime/operator證據保持不變。獨立審查approved，另行重跑29tests PASS，無blocking issues。

@@ -240,3 +240,17 @@ Prior human-acceptance summary is superseded for complete TC05: leave/recovery P
 | Goal | rejectambientcontrols and staleSDK; no false frozen-time stall | regression tests and actualscratch recoveryPASS |
 | Non-Goal | fullWASM/livebfcache/completeAC | gapsremain |
 | TestCase | regression+affected checks | 2unitRED+SDKcorruptionRED→27PASS/SDKrestorePASS;typecheck/build/syntaxPASS;independentreviewapproved/27PASS |
+
+## PR review round7 — mutable cache and readiness deadline
+
+| Field | planned | actual |
+| --- | --- | --- |
+| In-Scope | comments4266156233/6239 | fresh compiler cache and active readiness clock |
+| Out-Of-Scope | SDK/production/otherexperiments/merge | none touched |
+| ReadOnly | pinned vendor/finalized runtime/operator evidence | unchanged |
+| Written | existing E016 source/tests/docs | toolchain-cache.mjs/test, prepare-runtime.mjs, top-touch-input.ts/test, main.ts, README/verification/plan/step/review-log |
+| Deleted | no tracked files | owned ignored compiler cache cleared per full preparation |
+| Modify | compiler preparation and host deadline | no SDK gesture or raw timestamp changes |
+| Goal | no stale library reuse or frozen-time readiness fault | filesystem and active clock regressions PASS |
+| Non-Goal | fullWASM/liveBFCache/completeAC claims | existing gaps retained |
+| TestCase | RED→GREEN plus affected checks | 2RED→29PASS; strict checks/build/syntax PASS; independent review approved/29PASS |

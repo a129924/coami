@@ -85,3 +85,9 @@ Independent round5 re-review: approved; Python bootstrap blocker resolved. Revie
 ADDRESS4256577091/7096/7102: inheritedEMCCcontrols removed; SDKscratch always rebuilt frompinnedcommit/patch; healthclockpauses acrosspersistedpagehide/pageshow whileactiveackage preserved andrawtickschangednone. Two unitregressionsfirstRED, actualSDKscratch corruptionwithmatchingmarkerfirstRED; correctedstage restoresoriginalbytes. Final27tests/strictchecks/Vitebuild/syntaxPASS. Livebfcache/fullWASM/TC05/TC07 remainunexecuted/incomplete. Existingpaths only; independentreviewpending.
 
 Independent round6 review: approved, no blockers. Reviewer independently ran27testsPASS, confirmed compilercontrol filtering, freshpinnedstage, andactivehealthclock withrawticksunchanged. No fullWASM/liveBFCache orotherexperiment work; TC05/TC07gapsremain.
+
+## PR comment review round7 — 2026-10-14
+
+ADDRESS4266156233/6239. 每次完整prepare在任何emcc invocation（含version/sanity probe）之前，清除並重建本實驗owned ignored generated/em-cache；不重用上次可變library bytes。MOD readiness deadline改用與ack相同的activeTime，persisted hide/show凍結期間不累積，恢復後仍保留先前active等待額度。
+
+兩項新增regressions先RED（缺少cache reset export／activeTime method），再GREEN：cache涵蓋不存在、污染nested libc及重複清理；readiness時計涵蓋長凍結、精確30000與超過門檻、多次凍結。整套29tests、strict web/MOD typecheck、Vitebuild與prepare script syntax PASS。這些是filesystem／clock單元測試及caller檢查，不宣稱完整WASM重建、完整初始化或liveBFCache通過。TC05／TC07及原始runtime/operator證據保持不變。獨立審查approved，另行重跑29tests PASS，無blocking issues。
