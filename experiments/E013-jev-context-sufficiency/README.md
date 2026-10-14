@@ -243,6 +243,8 @@ From a clean checkout, `--verify-evidence --evidence-run <tracked-run> [--restri
 
 For future runs, the authorization revision must remain reachable from the reviewed evidence revision; the check uses the same pinned freeze attestation snapshot as oracle inventory and hashes the retained runner, lock and policy byte snapshots it compared with Git. Retained policy state fields must match the live preflight contract. The manifest runner hash and local `runner_source_path: "runner.py"` must also agree. Restricted request and response artifacts must be regular files before reading; unavailable historical replay code reports a fixed inventory failure. A `VALID` captured response must be accepted by the pinned SDK as well as the E013 parser. The live bootstrap returns its fixed blocked result for non-object or excessively nested authorization JSON.
 
+Evidence reads open each artifact with no symlink following and nonblocking mode, then verify the opened descriptor is a regular file before reading it. An `ERROR` row cannot claim `SDK_RESPONSE_INVALID`: a 2xx body is retained before SDK validation and must be represented as `INVALID` with its raw hash. SDK replay recursion is a runtime verification gap, not proof that the SDK rejected a response.
+
 ## Interpretation
 
 The summary reports planned/attempted/valid/invalid/error/unknown/not-run counts, both error directions, and `correct/valid` separately from `correct/planned` for research, holdout, and v0. E012's earlier v0 result remains historical. A PR merge, technical check, or successful offline test does not freeze v1 or establish a product pass.

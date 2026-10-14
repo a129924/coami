@@ -227,6 +227,30 @@ class E013Tests(unittest.TestCase):
             with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_FILE"):
                 evidence.verify_evidence(run)
 
+    def test_evidence_read_rejects_a_file_replaced_at_open(self) -> None:
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            artifact = root / "artifact"
+            artifact.write_bytes(b"reviewed")
+            target = root / "target"
+            target.write_bytes(b"other")
+            real_open = os.open
+
+            def replace_with_symlink(path: Path, flags: int) -> int:
+                self.assertTrue(flags & os.O_NOFOLLOW)
+                self.assertTrue(flags & os.O_NONBLOCK)
+                artifact.unlink()
+                artifact.symlink_to(target)
+                return real_open(path, flags)
+
+            with patch.object(evidence.os, "open", side_effect=replace_with_symlink):
+                with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_FILE"):
+                    evidence.regular_bytes(artifact)
+            artifact.unlink()
+            os.mkfifo(artifact)
+            with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_FILE"):
+                evidence.regular_bytes(artifact)
+
     def test_unavailable_historical_replay_revision_is_a_contract_error(self) -> None:
         with patch.object(
             e,
@@ -646,6 +670,22 @@ source = { registry = "https://pypi.org/simple" }
             "RAW_ANALYSIS_MISMATCH",
         )
 
+    def test_sdk_recursion_is_not_an_invalid_response(self) -> None:
+        case = self.cases[0]
+        row = {
+            "status": "INVALID",
+            "choice": None,
+            "probabilities": None,
+            "confidence": None,
+            "error_code": "SDK_RESPONSE_INVALID",
+            "model": e.MODEL,
+        }
+        with patch.object(e.TypeSafeClient, "system_one", side_effect=RecursionError):
+            self.assertEqual(
+                evidence.response_gap(row, response(), case, self.question),
+                "SDK_REPLAY_RUNTIME_FAILED",
+            )
+
     def test_group_summary_does_not_count_missing_as_correct(self) -> None:
         rows = []
         for case in self.cases:
@@ -813,6 +853,21 @@ source = { registry = "https://pypi.org/simple" }
                     e.ContractError, "INVALID_ANALYSIS_STATUS_FIELDS"
                 ):
                     evidence.read_rows(path)
+            changed = deepcopy(rows)
+            changed[0].update(
+                status="ERROR",
+                choice=None,
+                probabilities=None,
+                confidence=None,
+                error_code="SDK_RESPONSE_INVALID",
+                raw_sha256=None,
+                raw_locator=None,
+            )
+            path.write_bytes(b"".join(e.json_bytes(row) for row in changed))
+            with self.assertRaisesRegex(
+                e.ContractError, "INVALID_ANALYSIS_STATUS_FIELDS"
+            ):
+                evidence.read_rows(path)
 
     def test_response_parser_rejects_non_json_constants(self) -> None:
         changed = response().replace(b'"usage":{', b'"ignored":NaN,"usage":{')

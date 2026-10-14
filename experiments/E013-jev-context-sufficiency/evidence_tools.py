@@ -5,6 +5,7 @@ from __future__ import annotations
 from contextlib import contextmanager
 import json
 from datetime import datetime
+import os
 from pathlib import Path
 import re
 import stat
@@ -21,7 +22,6 @@ ERROR_CODES = {
     "AUTH_FAILED",
     "ACCESS_DENIED",
     "CONNECTION_FAILED",
-    "SDK_RESPONSE_INVALID",
     "HTTP_FAILED",
     "SDK_FAILED",
     "INTERNAL_ERROR",
@@ -282,11 +282,15 @@ def bounded_path(root: Path, locator: str) -> Path:
 
 
 def regular_bytes(path: Path) -> bytes:
-    """Reject pipes, devices and symlinks before opening an evidence artifact."""
+    """Read one opened regular artifact without following a final symlink."""
     try:
-        if not stat.S_ISREG(path.lstat().st_mode):
-            raise e.ContractError("INVALID_EVIDENCE_FILE")
-        return path.read_bytes()
+        descriptor = os.open(
+            path, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW | os.O_CLOEXEC
+        )
+        with os.fdopen(descriptor, "rb") as source:
+            if not stat.S_ISREG(os.fstat(source.fileno()).st_mode):
+                raise e.ContractError("INVALID_EVIDENCE_FILE")
+            return source.read()
     except OSError as exc:
         raise e.ContractError("INVALID_EVIDENCE_FILE") from exc
 
@@ -509,15 +513,15 @@ def policy_snapshot(root: Path, manifest: dict[str, Any]) -> bytes:
         and isinstance(digest, str)
         and HASH.fullmatch(digest)
     ):
-        data = bounded_path(root, path).read_bytes()
+        data = regular_bytes(bounded_path(root, path))
         if e.sha(data) == digest:
             return data
     elif (
         manifest.get("run_id") == PRE_RECORD_RUN_ID and path is None and digest is None
     ):
-        data = (
+        data = regular_bytes(
             e.TOPIC / "evidence/runs" / PRE_RECORD_RUN_ID / "store-policy.json"
-        ).read_bytes()
+        )
         if e.sha(data) == PRE_RECORD_POLICY_HASH:
             return data
     raise e.ContractError("STORE_POLICY_MISMATCH")
@@ -665,8 +669,8 @@ def event_log_gap(
     root: Path, rows: list[dict[str, Any]], expected_hash: str | None
 ) -> bool:
     try:
-        actual = (root / "events.jsonl").read_bytes()
-    except OSError:
+        actual = regular_bytes(root / "events.jsonl")
+    except e.ContractError:
         return True
     return actual != event_log_bytes(rows) or (
         expected_hash is not None and e.sha(actual) != expected_hash
@@ -736,7 +740,7 @@ def authorization_gap(
             )
         except (OSError, subprocess.CalledProcessError, e.ContractError):
             return "AUTHORIZATION_COMMIT_MISMATCH"
-        data = (root / "authorization.json").read_bytes()
+        data = regular_bytes(root / "authorization.json")
         if e.sha(data) != expected_hash:
             return "AUTHORIZATION_HASH_MISMATCH"
         try:
@@ -747,13 +751,13 @@ def authorization_gap(
             return "AUTHORIZATION_COMMIT_MISMATCH"
         revision_inputs = dict(
             (
-                (e.RUNNER_RELATIVE, (root / "runner.py").read_bytes()),
-                (e.LOCK_RELATIVE, (root / "uv.lock").read_bytes()),
+                (e.RUNNER_RELATIVE, regular_bytes(root / "runner.py")),
+                (e.LOCK_RELATIVE, regular_bytes(root / "uv.lock")),
                 (e.FREEZE_RELATIVE, freeze_snapshot),
                 (e.POLICY_RELATIVE, policy_snapshot(root, manifest)),
             )
         )
-        digest_snapshot = (root / "sdk-code-digests.json").read_bytes()
+        digest_snapshot = regular_bytes(root / "sdk-code-digests.json")
         for relative, snapshot in revision_inputs.items():
             try:
                 committed_input = e.checked_git(
@@ -797,7 +801,7 @@ def authorization_gap(
             )
         ):
             return "AUTHORIZATION_MISMATCH"
-    except (OSError, ValueError, UnicodeDecodeError):
+    except (OSError, ValueError, UnicodeDecodeError, e.ContractError):
         return "AUTHORIZATION_MISSING"
     return None
 
@@ -935,8 +939,10 @@ def sdk_rejects(raw: bytes, case: dict[str, Any], question: dict[str, Any]) -> b
                 state=case["state"],
                 questions={"context_sufficiency": e.Choice(**question)},
             )
-    except (e.TypeSafeError, RecursionError):
+    except e.TypeSafeError:
         return True
+    except RecursionError as exc:
+        raise e.ContractError("SDK_REPLAY_RUNTIME_FAILED") from exc
     return False
 
 
@@ -959,8 +965,8 @@ def verify_replay_sdk(run_dir: Path, manifest: dict[str, Any]) -> None:
             or manifest.get("sdk_code_digests_path") != "sdk-code-digests.json"
         ):
             raise e.ContractError("SDK_REPLAY_INVENTORY_MISSING")
-        lock = bounded_path(run_dir, "uv.lock").read_bytes()
-        baseline = bounded_path(run_dir, "sdk-code-digests.json").read_bytes()
+        lock = regular_bytes(bounded_path(run_dir, "uv.lock"))
+        baseline = regular_bytes(bounded_path(run_dir, "sdk-code-digests.json"))
         if e.sha(lock) != manifest.get("uv_lock_sha256") or e.sha(
             baseline
         ) != manifest.get("sdk_code_digests_sha256"):
@@ -969,6 +975,17 @@ def verify_replay_sdk(run_dir: Path, manifest: dict[str, Any]) -> None:
 
 
 def response_gap(
+    row: dict[str, Any], raw: bytes, case: dict[str, Any], question: dict[str, Any]
+) -> str | None:
+    try:
+        return _response_gap(row, raw, case, question)
+    except e.ContractError as exc:
+        if str(exc) == "SDK_REPLAY_RUNTIME_FAILED":
+            return "SDK_REPLAY_RUNTIME_FAILED"
+        raise
+
+
+def _response_gap(
     row: dict[str, Any], raw: bytes, case: dict[str, Any], question: dict[str, Any]
 ) -> str | None:
     parsed = e.parse_answer(raw)
@@ -1138,7 +1155,7 @@ def verify_local_run(
         gaps.append({"reason": "RUNNER_SOURCE_MISMATCH"})
     if source_locator is not None:
         try:
-            source_hash = e.sha(bounded_path(run_dir, source_locator).read_bytes())
+            source_hash = e.sha(regular_bytes(bounded_path(run_dir, source_locator)))
         except (OSError, TypeError, e.ContractError):
             source_hash = None
         if source_hash != manifest.get("runner_sha256"):
@@ -1181,9 +1198,9 @@ def verify_local_run(
                 )
                 continue
             try:
-                body = bounded_path(run_dir, locator).read_bytes()
+                body = regular_bytes(bounded_path(run_dir, locator))
                 actual = e.sha(body)
-            except OSError:
+            except e.ContractError:
                 actual = None
             if actual != expected:
                 gaps.append(
@@ -1355,7 +1372,7 @@ def _publish_snapshot(run_dir: Path, approval_path: Path, evidence_root: Path) -
         if decision["raw_public"]:
             if row["raw_sha256"] is None:
                 raise e.ContractError("PUBLICATION_BODY_MISSING")
-            raw = bounded_path(run_dir, row["raw_locator"]).read_bytes()
+            raw = regular_bytes(bounded_path(run_dir, row["raw_locator"]))
             if e.sha(raw) != row["raw_sha256"]:
                 raise e.ContractError("PUBLICATION_HASH_MISMATCH")
     output = evidence_root / "runs" / run_id
@@ -1388,7 +1405,7 @@ def _write_publication(
     runner_path = manifest.get("runner_source_path")
     if runner_path != "runner.py":
         raise e.ContractError("RUNNER_SOURCE_MISSING")
-    runner_source = bounded_path(run_dir, runner_path).read_bytes()
+    runner_source = regular_bytes(bounded_path(run_dir, runner_path))
     if e.sha(runner_source) != manifest.get("runner_sha256"):
         raise e.ContractError("RUNNER_SOURCE_MISMATCH")
     e.write_exclusive(output / "runner.py", runner_source)
@@ -1396,14 +1413,14 @@ def _write_publication(
         if authorization_gap(run_dir, manifest):
             raise e.ContractError("AUTHORIZATION_UNVERIFIED")
         e.write_exclusive(
-            output / "authorization.json", (run_dir / "authorization.json").read_bytes()
+            output / "authorization.json", regular_bytes(run_dir / "authorization.json")
         )
     e.write_exclusive(output / "store-policy.json", policy_snapshot(run_dir, manifest))
     if manifest.get("live_authorization_sha256") is not None:
-        e.write_exclusive(output / "uv.lock", (run_dir / "uv.lock").read_bytes())
+        e.write_exclusive(output / "uv.lock", regular_bytes(run_dir / "uv.lock"))
         e.write_exclusive(
             output / "sdk-code-digests.json",
-            (run_dir / "sdk-code-digests.json").read_bytes(),
+            regular_bytes(run_dir / "sdk-code-digests.json"),
         )
     public_review = {
         "run_id": run_id,
@@ -1445,7 +1462,7 @@ def _write_publication(
         if raw_public and row["raw_sha256"] is None:
             raise e.ContractError("PUBLICATION_BODY_MISSING")
         if raw_public:
-            raw = bounded_path(run_dir, row["raw_locator"]).read_bytes()
+            raw = regular_bytes(bounded_path(run_dir, row["raw_locator"]))
             if e.sha(raw) != row["raw_sha256"]:
                 raise e.ContractError("PUBLICATION_HASH_MISMATCH")
             public_path = Path("raw") / group / f"{case_id}.body"
@@ -1499,7 +1516,7 @@ def _write_publication(
         }
     )
     if run_id != PRE_RECORD_RUN_ID:
-        events = (run_dir / "events.jsonl").read_bytes()
+        events = regular_bytes(run_dir / "events.jsonl")
         if events != event_log_bytes(rows):
             raise e.ContractError("EVENT_LOG_MISMATCH")
         e.write_exclusive(output / "events.jsonl", events)
@@ -1694,7 +1711,9 @@ def verify_evidence(
     ):
         gaps.append({"reason": "RUNNER_SOURCE_MISMATCH"})
     try:
-        runner = bounded_path(evidence_run, manifest["runner_public_path"]).read_bytes()
+        runner = regular_bytes(
+            bounded_path(evidence_run, manifest["runner_public_path"])
+        )
         if e.sha(runner) != manifest.get("runner_sha256"):
             gaps.append({"reason": "RUNNER_SOURCE_MISMATCH"})
         revision = manifest.get("runner_revision")
@@ -1719,7 +1738,7 @@ def verify_evidence(
     except (KeyError, OSError, TypeError, e.ContractError):
         gaps.append({"reason": "RUNNER_SOURCE_MISSING"})
     try:
-        review_bytes = (evidence_run / "review.json").read_bytes()
+        review_bytes = regular_bytes(evidence_run / "review.json")
         review = parse_review_bytes(review_bytes)
         if e.sha(review_bytes) != manifest.get("review_sha256"):
             gaps.append({"reason": "REVIEW_HASH_MISMATCH"})
@@ -1791,9 +1810,9 @@ def verify_evidence(
         public_raw_mismatch = False
         if item["raw_public_path"] is not None:
             try:
-                public_raw = bounded_path(
-                    evidence_run, item["raw_public_path"]
-                ).read_bytes()
+                public_raw = regular_bytes(
+                    bounded_path(evidence_run, item["raw_public_path"])
+                )
                 public_raw_mismatch = e.sha(public_raw) != item["raw_sha256"]
             except (OSError, e.ContractError):
                 public_raw_mismatch = True
@@ -1985,10 +2004,10 @@ def verify_evidence(
             event_hash_bad = (
                 not isinstance(expected_event_hash, str)
                 or not HASH.fullmatch(expected_event_hash)
-                or e.sha((evidence_run / "events.jsonl").read_bytes())
+                or e.sha(regular_bytes(evidence_run / "events.jsonl"))
                 != expected_event_hash
             )
-        except OSError:
+        except e.ContractError:
             event_hash_bad = True
     if event_hash_bad:
         gaps.append({"reason": "EVENT_LOG_MISMATCH"})
