@@ -811,6 +811,8 @@ source = { registry = "https://pypi.org/simple" }
         )
         self.assertIn(e.sha(executable.read_bytes()), future)
         self.assertIn("--credential-file", future)
+        self.assertEqual(future.count("/usr/bin/env -u TYPESAFE_API_KEY"), 2)
+        self.assertNotIn("\nenv -u TYPESAFE_API_KEY", future)
         bootstrap = documentation.split("python3.12 -I -S -B -c '\n", 1)[1].split(
             "\n' --live", 1
         )[0]
@@ -890,6 +892,36 @@ source = { registry = "https://pypi.org/simple" }
             )
             self.assertEqual(accepted.returncode, 0)
             self.assertIn("trusted", accepted.stdout)
+            for missing_value in (
+                ["--live", "--live-authorization"],
+                [
+                    "--live",
+                    "--live-authorization",
+                    "authorization.json",
+                    "--credential-file",
+                ],
+            ):
+                with self.subTest(missing_value=missing_value):
+                    malformed = subprocess.run(
+                        [
+                            sys.executable,
+                            "-I",
+                            "-S",
+                            "-B",
+                            "-c",
+                            bootstrap,
+                            *missing_value,
+                        ],
+                        cwd=root,
+                        capture_output=True,
+                        text=True,
+                        check=False,
+                    )
+                    self.assertEqual(malformed.returncode, 2)
+                    self.assertIn(
+                        "E013 BLOCKED RUNNER_SOURCE_UNVERIFIED", malformed.stdout
+                    )
+                    self.assertNotIn("Traceback", malformed.stderr)
             shim_dir = root / "shim"
             shim_dir.mkdir()
             shim_marker = root / "git-shim-ran"

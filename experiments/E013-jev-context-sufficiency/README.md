@@ -51,7 +51,7 @@ Before the first third-party import, the runner also checks every locked depende
 The `-c` bootstrap uses only the standard library until it has compared the exact runner (and, for evidence operations, `evidence_tools.py`) with this checkout's committed `HEAD`. A live run also compares the one-run authorization bytes and its runner hash. It does not execute locally edited evidence code before those checks. After that comparison it appends the synchronized dependency path and executes the verified runner snapshot. Git replacement objects are disabled for these reads.
 
 ```sh
-env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u PYTHONPATH -u RUST_LOG \
+/usr/bin/env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u PYTHONPATH -u RUST_LOG \
   /Users/andrew/.local/bin/uv sync --quiet --locked --project experiments/E013-jev-context-sufficiency &&
 /usr/bin/python3 -I -S -B -c '
 import hashlib
@@ -60,7 +60,7 @@ binary = Path("/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch6
 if hashlib.sha256(binary.read_bytes()).hexdigest() != "a0ea1fa2b8d2631d1ba8e513b29a90c6a6cdfb9d00febb1a02e5cc5cb44a838e":
     raise SystemExit("E013 BLOCKED PYTHON_EXECUTABLE_UNVERIFIED")
 ' &&
-env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u PYTHONPATH -u RUST_LOG \
+/usr/bin/env -u TYPESAFE_API_KEY -u UV_NO_ENV_FILE -u UV_NO_SYNC -u PYTHONPATH -u RUST_LOG \
   /Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/bin/python3.12 -I -S -B -c '
 import hashlib, json, os, subprocess, sys, tempfile
 from pathlib import Path
@@ -80,12 +80,17 @@ try:
     if live:
         if args.count("--live-authorization") != 1:
             blocked()
-        auth = Path(args[args.index("--live-authorization") + 1]).resolve()
+        authorization_index = args.index("--live-authorization")
+        if authorization_index + 1 >= len(args):
+            blocked()
+        auth = Path(args[authorization_index + 1]).resolve()
         if not auth.is_relative_to(root):
             blocked()
         if args.count("--credential-file") != 1:
             blocked()
         credential_index = args.index("--credential-file")
+        if credential_index + 1 >= len(args):
+            blocked()
         credential_file = Path(args[credential_index + 1]).resolve()
     env = {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
     env["GIT_NO_REPLACE_OBJECTS"] = "1"
