@@ -1,6 +1,6 @@
 import {watchStartup} from './startup.ts'
 import './style.css'
-import { SimulatorEngine } from '../../../../vendor/stack-chan/web/src/services/simulator/simulator-engine.mjs'
+import { SimulatorEngine } from '../generated/pinned-stack-chan/web/src/services/simulator/simulator-engine.mjs'
 import { TARGETS } from '../../mod/gaze-control.ts'
 import { Ledger, type Observation } from './ledger.ts'
 const get = <T extends HTMLElement>(id: string): T => { const el=document.getElementById(id); if(!el) throw Error(`Missing ${id}`); return el as T }
