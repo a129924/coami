@@ -3,11 +3,15 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { registerHooks, stripTypeScriptTypes } from 'node:module'
 import { readFileSync } from 'node:fs'
+import {fileURLToPath} from 'node:url'
+import {verifyVendor} from '../../web/scripts/build-safety.mjs'
 import { createHash } from 'node:crypto'
 import { tasks, flush } from '../../web/scripts/fake-timer.mjs'
 const vendor = new URL('../../../../vendor/stack-chan/', import.meta.url)
+verifyVendor(fileURLToPath(new URL('../../../../',import.meta.url)),fileURLToPath(vendor),'b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322')
 const utilUrl = new URL('firmware/host/modules/util/stackchan-util.ts', vendor).href
 const original = readFileSync(new URL(utilUrl), 'utf8')
+assert.equal(createHash('sha256').update(original).digest('hex'),'d28ad77de7fa759d82167062d67da17f07db422e94b45c8fedc7b6a4b724a141')
 const before = 'const inversePitch = -bodyRotation.p'
 const after = 'const inversePitch = bodyRotation.p'
 assert.equal(original.split(before).length, 2)

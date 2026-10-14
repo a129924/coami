@@ -1,0 +1,10 @@
+{
+  "experiment": "E019",
+  "runId": "2026-10-14T02-58-13-067Z-tNWjTT",
+  "capturedAt": "2026-10-14T02:58:13.072Z",
+  "status": "FAIL",
+  "error": "Error: spawn /private/tmp/coami-e019-no-such-browser ENOENT",
+  "cases": [],
+  "errors": [],
+  "logs": []
+}

@@ -1,3 +1,4 @@
+import {watchStartup} from './startup.ts'
 import './style.css'
 import { SimulatorEngine } from '../../../../vendor/stack-chan/web/src/services/simulator/simulator-engine.mjs'
 import { TARGETS } from '../../mod/gaze-control.ts'
@@ -76,8 +77,7 @@ async function start():Promise<void>{
   const scene=(engine as SimulatorEngine & {scene:InspectionScene}).scene
   scene.camera.position.set(0,0,200);scene.controls.target.set(0,0,0);scene.controls.update();scene.setViewportControlsEnabled(false)
   log('observation view=v2-front-eye-level camera=[0,0,200] target=[0,0,0]; robot rotation unchanged')
-  const timeout=setTimeout(()=>{if(!ready)fatal(Error('30 秒內未取得 runtime + E019 MOD ready'))},30000)
-  await engine.start();if(ledger.blocked)clearTimeout(timeout)
+  await watchStartup(()=>engine!.start(),()=>ready,()=>ledger.blocked,()=>fatal(Error('30 秒內未取得 runtime + E019 MOD ready')))
  }catch(error){fatal(error)}
 }
 function fatal(error:unknown):void{ledger.blocked=true;ready=false;runtime.textContent=`無法繼續：${String(error)}`;log(String(error));render()}

@@ -1,3 +1,4 @@
+import {beginSmokeEvidence} from './smoke-evidence.mjs'
 // Actual C/WASM browser path with automated pointers; NOT human evidence.
 import {spawn} from 'node:child_process'
 import {mkdtemp,mkdir,rm,readdir,readFile,writeFile} from 'node:fs/promises'
@@ -6,15 +7,18 @@ import path from 'node:path'
 import {fileURLToPath} from 'node:url'
 import assert from 'node:assert/strict'
 const web=fileURLToPath(new URL('../',import.meta.url)), evidence=path.resolve(web,'../evidence')
-const profile=await mkdtemp(path.join(tmpdir(),'coami-e019-chrome-')), downloads=path.join(web,'generated/smoke-downloads')
-await rm(downloads,{recursive:true,force:true});await mkdir(downloads,{recursive:true})
-const chrome=spawn(process.env.CHROME_EXE??'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',[
- '--headless=new','--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows','--no-first-run','--no-default-browser-check','--remote-debugging-port=0',`--user-data-dir=${profile}`,
- '--use-angle=swiftshader','--enable-unsafe-swiftshader','about:blank'],{stdio:['ignore','ignore','pipe']})
+const run=await beginSmokeEvidence(evidence)
+const downloads=path.join(web,'generated/smoke-downloads')
+let profile,chrome,transcript,report
 let ws,id=0;let evaluate;const pending=new Map(),cases=[],traces=[],errors=[],logs=[]
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms))
 try{
- const port=await new Promise((resolve,reject)=>{let log='';const timer=setTimeout(()=>reject(Error('Chrome startup timeout')),10000);chrome.once('error',reject);chrome.stderr.on('data',chunk=>{log+=chunk;const m=log.match(/DevTools listening on ws:\/\/127\.0\.0\.1:(\d+)/);if(m){clearTimeout(timer);resolve(Number(m[1]))}})})
+ profile=await mkdtemp(path.join(tmpdir(),'coami-e019-chrome-'))
+ await rm(downloads,{recursive:true,force:true});await mkdir(downloads,{recursive:true})
+ chrome=spawn(process.env.CHROME_EXE??'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',[
+ '--headless=new','--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows','--no-first-run','--no-default-browser-check','--remote-debugging-port=0',`--user-data-dir=${profile}`,
+ '--use-angle=swiftshader','--enable-unsafe-swiftshader','about:blank'],{stdio:['ignore','ignore','pipe']})
+ const port=await new Promise((resolve,reject)=>{let log='';const timer=setTimeout(()=>reject(Error('Chrome startup timeout')),10000);chrome.once('error',error=>{clearTimeout(timer);reject(error)});chrome.stderr.on('data',chunk=>{log+=chunk;const m=log.match(/DevTools listening on ws:\/\/127\.0\.0\.1:(\d+)/);if(m){clearTimeout(timer);resolve(Number(m[1]))}})})
  const pages=await(await fetch(`http://127.0.0.1:${port}/json/list`)).json()
  ws=new WebSocket(pages.find(p=>p.type==='page').webSocketDebuggerUrl)
  await new Promise((resolve,reject)=>{ws.addEventListener('open',resolve,{once:true});ws.addEventListener('error',reject,{once:true})})
@@ -40,8 +44,8 @@ try{
   await select('起始準備');await operation('apply');await select(label);await operation('apply')
   const screenshot=await call('Page.captureScreenshot',{format:'png'})
   const file=`automated-${label.replace('Robot ','')}-${repeat}.png`
-  await writeFile(path.join(evidence,file),Buffer.from(screenshot.data,'base64'))
-  cases.push({label,repeat,state:await state(),screenshot:file,kind:'automated, human unconfirmed'})
+  await writeFile(path.join(run.directory,file),Buffer.from(screenshot.data,'base64'))
+  cases.push({label,repeat,state:await state(),screenshot:`smoke-runs/${run.runId}/${file}`,kind:'automated, human unconfirmed'})
  }
  for(const [first,second] of [['Robot 左','Robot 右'],['上','下']]){
   await select('起始準備');await operation('apply');await select(first);await operation('apply');await operation('away');await select(second);await operation('apply')
@@ -49,7 +53,7 @@ try{
  }
  await evaluate(`document.querySelector('#download').click()`)
  await until(async()=> (await readdir(downloads)).some(f=>f.endsWith('.json')),'export',5000)
- const file=(await readdir(downloads)).find(f=>f.endsWith('.json'));const transcript=JSON.parse(await readFile(path.join(downloads,file),'utf8'))
+ const file=(await readdir(downloads)).find(f=>f.endsWith('.json'));transcript=JSON.parse(await readFile(path.join(downloads,file),'utf8'))
  const begins=transcript.records.filter(r=>r.message.startsWith('COAMI19|')).map(r=>JSON.parse(r.message.slice(8))).filter(e=>e.phase==='begin')
  const failures=[]
  const moves=transcript.records.filter(r=>r.message.startsWith('[WasmDriver] applyRotation'))
@@ -59,10 +63,13 @@ try{
   const sign=['left','down'].includes(begin.target)?1:-1;assert.ok(Math.abs(axis-sign*Math.PI/4)<1e-6)
  }
  assert.equal(errors.length,0);assert.ok(begins.some(e=>e.kind==='away'))
- const finalShot=await call('Page.captureScreenshot',{format:'png'});await writeFile(path.join(evidence,'automated-final.png'),Buffer.from(finalShot.data,'base64'))
- const report={status:failures.length?'FAIL':'PASS',failures,experiment:'E019',capturedAt:new Date().toISOString(),kind:'actual pinned WASM, automated UI operations; NOT human evidence',browser:await call('Browser.getVersion'),cases,transcript,errors}
- await writeFile(path.join(evidence,'runtime-automated.json'),JSON.stringify(report,null,2)+'\n')
+ const finalShot=await call('Page.captureScreenshot',{format:'png'});await writeFile(path.join(run.directory,'automated-final.png'),Buffer.from(finalShot.data,'base64'))
+ report={status:failures.length?'FAIL':'PASS',failures,experiment:'E019',capturedAt:new Date().toISOString(),kind:'actual pinned WASM, automated UI operations; NOT human evidence',browser:await call('Browser.getVersion'),cases,transcript,errors}
+ await run.save(report)
  console.log(JSON.stringify({status:report.status,failures,directionSamples:8,cases:cases.length,human:'unexecuted'}))
  assert.equal(failures.length,0,'fixed acceptance criteria failed; evidence retained')
-}catch(error){if(evaluate)errors.push({diagnostic:await evaluate(`({body:document.body.innerText,events:document.querySelector('#events')?.innerText})`)});await writeFile(path.join(web,'generated/runtime-smoke-failure.json'),JSON.stringify({error:String(error),cases,errors,logs},null,2));throw error}
-finally{ws?.close();chrome.kill();await delay(200);await rm(profile,{recursive:true,force:true})}
+}catch(error){
+ if(evaluate){try{errors.push({diagnostic:await evaluate(`({body:document.body.innerText,events:document.querySelector('#events')?.innerText})`)})}catch(diagnosticError){errors.push({diagnosticError:String(diagnosticError)})}}
+ await run.save({...report,status:'FAIL',error:String(error),cases,transcript,errors,logs})
+ throw error
+}finally{ws?.close();chrome?.kill();await delay(200);if(profile)await rm(profile,{recursive:true,force:true})}

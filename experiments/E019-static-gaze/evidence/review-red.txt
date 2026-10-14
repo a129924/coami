@@ -1,0 +1,60 @@
+node:internal/modules/esm/resolve:241
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/build-safety.mjs' imported from /private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/build-safety.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:241:11)
+    at moduleResolve (node:internal/modules/esm/resolve:846:10)
+    at defaultResolve (node:internal/modules/esm/resolve:973:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:766:56)
+    at #resolve (node:internal/modules/esm/loader:690:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:610:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:277:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:389:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/scripts/build-safety.mjs'
+}
+
+Node.js v26.10.0
+✖ scripts/build-safety.test.mjs (63.911375ms)
+node:internal/modules/esm/resolve:241
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/src/startup.ts' imported from /private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/src/startup.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:241:11)
+    at moduleResolve (node:internal/modules/esm/resolve:846:10)
+    at defaultResolve (node:internal/modules/esm/resolve:973:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:766:56)
+    at #resolve (node:internal/modules/esm/loader:690:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:610:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:277:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:389:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/web/src/startup.ts'
+}
+
+Node.js v26.10.0
+✖ src/startup.test.ts (82.093ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 87.98775
+
+✖ failing tests:
+
+test at scripts/build-safety.test.mjs:1:1
+✖ scripts/build-safety.test.mjs (63.911375ms)
+  'test failed'
+
+test at src/startup.test.ts:1:1
+✖ src/startup.test.ts (82.093ms)
+  'test failed'

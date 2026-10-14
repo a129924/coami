@@ -1,0 +1,76 @@
+{"mode":"original","sourceSha256":"d28ad77de7fa759d82167062d67da17f07db422e94b45c8fedc7b6a4b724a141","patch":"const inversePitch = -bodyRotation.p -> const inversePitch = bodyRotation.p","realWasm":false}
+✖ a target already aligned with body yaw/pitch becomes body-forward (4.273125ms)
+✖ up-clear-down and down-clear-up issue the opposite pitch command (0.522625ms)
+✖ a settled matching pitch target does not keep issuing identical rotations (0.113875ms)
+✔ horizontal reassignment and the existing small-angle threshold remain intact (0.114875ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 1
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 147.119625
+
+✖ failing tests:
+
+test at ../evidence/pitch-diagnostic/pitch.test.mjs:41:1
+✖ a target already aligned with body yaw/pitch becomes body-forward (4.273125ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+    assert.ok(Math.abs(relative[0]-1)<1e-9)
+
+      at TestContext.<anonymous> (file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/evidence/pitch-diagnostic/pitch.test.mjs:45:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at ../evidence/pitch-diagnostic/pitch.test.mjs:48:1
+✖ up-clear-down and down-clear-up issue the opposite pitch command (0.522625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 2
+
+      at TestContext.<anonymous> (file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/evidence/pitch-diagnostic/pitch.test.mjs:52:43)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../evidence/pitch-diagnostic/pitch.test.mjs:57:1
+✖ a settled matching pitch target does not keep issuing identical rotations (0.113875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  2 !== 1
+
+      at TestContext.<anonymous> (file:///private/tmp/coami-e019-static-gaze/experiments/E019-static-gaze/evidence/pitch-diagnostic/pitch.test.mjs:59:99)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

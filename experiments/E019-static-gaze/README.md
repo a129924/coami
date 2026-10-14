@@ -101,3 +101,9 @@ npm run dev -- --port 5199
 - E020 成功限修正版 simulator 條件，不回改 E019 原版失敗結論，不補稱 E019 缺少的逐步畫面已取得。
 - 兩個 PR 均以 dev 為 base、各自帶獨立實驗，沒有程式上的合併先後依賴。建議先審 #19 的重現與語意，再審 #20 的修正、來源驗證與回歸。
 - 本 topic 的實作、證據與雙向真人驗證已交付，兩個 PR 送 Ready for review；尚待 reviewer 核准與 owner 合併決策。此紀錄不授權 merge、release、更新 vendor pin 或正式程式採用。
+
+## PR comment review and fix（2026-10-14）
+
+Review 的建置來源、殘留產物、啟動錯誤處理已修正，逐項說明與驗證見 [review-fixes](evidence/review-fixes.md)。重新以 clean-built pinned 工具與清空後 cache 建置，runtime JS／WASM／MOD 雜湊與原驗證產物完全相同；原實驗結論與真人證據保留。
+
+後續 `runtime-smoke.mjs` 的最新報告改為 `evidence/runtime-smoke-latest.json`，每 run 的 report／圖片在 `evidence/smoke-runs/<runId>/`。原 `runtime-automated.json`／automated 圖片為固定歷史 baseline，不能冒充目前重跑結果。

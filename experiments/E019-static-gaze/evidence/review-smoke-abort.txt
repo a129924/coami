@@ -1,0 +1,28 @@
+node:internal/child_process:315
+      const err = new ErrnoException(exitCode, syscall);
+                  ^
+
+Error: spawn /private/tmp/coami-e019-no-such-browser ENOENT
+    at ChildProcess._handle.onexit (node:internal/child_process:315:19)
+    at onErrorNT (node:internal/child_process:553:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'spawn /private/tmp/coami-e019-no-such-browser',
+  path: '/private/tmp/coami-e019-no-such-browser',
+  spawnargs: [
+    '--headless=new',
+    '--disable-background-timer-throttling',
+    '--disable-renderer-backgrounding',
+    '--disable-backgrounding-occluded-windows',
+    '--no-first-run',
+    '--no-default-browser-check',
+    '--remote-debugging-port=0',
+    '--user-data-dir=/var/folders/x9/3v967ts5131dfn6x4bsy9th00000gn/T/coami-e019-chrome-MxVKfq',
+    '--use-angle=swiftshader',
+    '--enable-unsafe-swiftshader',
+    'about:blank'
+  ]
+}
+
+Node.js v26.10.0

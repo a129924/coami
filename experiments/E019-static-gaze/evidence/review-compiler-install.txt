@@ -1,0 +1,1 @@
+Official compiler archive verified and installed; prepare-assets still enforces the fixed installed-tree digest.

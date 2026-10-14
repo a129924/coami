@@ -1,0 +1,15 @@
+{"mode":"candidate","sourceSha256":"d28ad77de7fa759d82167062d67da17f07db422e94b45c8fedc7b6a4b724a141","patch":"const inversePitch = -bodyRotation.p -> const inversePitch = bodyRotation.p","realWasm":false}
+(node:68330) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ a target already aligned with body yaw/pitch becomes body-forward (0.510125ms)
+✔ up-clear-down and down-clear-up issue the opposite pitch command (0.379542ms)
+✔ a settled matching pitch target does not keep issuing identical rotations (0.325375ms)
+✔ horizontal reassignment and the existing small-angle threshold remain intact (0.333375ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 140.584625
