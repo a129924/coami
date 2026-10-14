@@ -1,0 +1,3 @@
+PASS: actual clean E020 Vite preview started on 5206; HTTP-fetched JS/CSS/HTML matched the committed bundle pin.
+PASS: changed dist JS plus matching forged provenance was rejected before preview listened.
+No browser UI or human direction run performed.
