@@ -676,7 +676,9 @@ def same_json_value(recorded: Any, recalculated: Any) -> bool:
     return recorded == recalculated
 
 
-def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
+def authorization_gap(
+    root: Path, manifest: dict[str, Any], evidence_revision: str = "HEAD"
+) -> str | None:
     """The pre-record-gate historical run has no authorization snapshot."""
     expected_hash = manifest.get("live_authorization_sha256")
     if manifest.get("run_id") == PRE_RECORD_RUN_ID:
@@ -708,6 +710,12 @@ def authorization_gap(root: Path, manifest: dict[str, Any]) -> str | None:
     ):
         return "AUTHORIZATION_COMMIT_MISMATCH"
     try:
+        try:
+            e.checked_git(
+                e.ROOT, ["merge-base", "--is-ancestor", revision, evidence_revision]
+            )
+        except (OSError, subprocess.CalledProcessError, e.ContractError):
+            return "AUTHORIZATION_COMMIT_MISMATCH"
         data = (root / "authorization.json").read_bytes()
         if e.sha(data) != expected_hash:
             return "AUTHORIZATION_HASH_MISMATCH"
@@ -918,10 +926,13 @@ def sdk_rejects(raw: bytes, case: dict[str, Any], question: dict[str, Any]) -> b
 def verify_replay_sdk(run_dir: Path, manifest: dict[str, Any]) -> None:
     """Authenticate replay code against the run's retained dependency inventory."""
     if manifest.get("run_id") == PRE_RECORD_RUN_ID:
-        lock = e.checked_git(
-            e.ROOT,
-            ["show", f"{PRE_RECORD_RUNNER_REVISION}:{e.LOCK_RELATIVE.as_posix()}"],
-        )
+        try:
+            lock = e.checked_git(
+                e.ROOT,
+                ["show", f"{PRE_RECORD_RUNNER_REVISION}:{e.LOCK_RELATIVE.as_posix()}"],
+            )
+        except (OSError, subprocess.CalledProcessError, e.ContractError) as exc:
+            raise e.ContractError("SDK_REPLAY_INVENTORY_MISSING") from exc
         baseline = (
             None  # This run predates a retained baseline; current pin must agree.
         )
@@ -1327,9 +1338,11 @@ def _publish_snapshot(run_dir: Path, approval_path: Path, evidence_root: Path) -
     with tempfile.TemporaryDirectory(
         prefix=f".{run_id}-", dir=output.parent
     ) as temporary:
-        staging = Path(temporary) / "run"
+        staging = Path(temporary) / run_id
         staging.mkdir(mode=0o700)
         _write_publication(staging, run_dir, manifest, approval, rows, review)
+        if verify_evidence(staging, run_dir)["gaps"]:
+            raise e.ContractError("PUBLICATION_EVIDENCE_UNVERIFIED")
         if output.exists():
             raise e.ContractError("PUBLICATION_EXISTS")
         staging.rename(output)
@@ -1519,13 +1532,20 @@ def verify_committed_evidence(
             if data != committed:
                 raise e.ContractError("PUBLIC_EVIDENCE_UNCOMMITTED")
             e.write_exclusive(snapshot / name.removeprefix(prefix), data)
-        return verify_evidence(snapshot, restricted_run, candidate_threshold)
+        return verify_evidence(
+            snapshot,
+            restricted_run,
+            candidate_threshold,
+            evidence_revision=revision,
+        )
 
 
 def verify_evidence(
     evidence_run: Path,
     restricted_run: Path | None = None,
     candidate_threshold: float | None = None,
+    *,
+    evidence_revision: str = "HEAD",
 ) -> dict[str, Any]:
     """Check exact objects and recompute statistics from a clean checkout."""
     require_regular_tree(evidence_run)
@@ -1629,7 +1649,7 @@ def verify_evidence(
                     "path": path.relative_to(evidence_run).as_posix(),
                 }
             )
-    if issue := authorization_gap(evidence_run, manifest):
+    if issue := authorization_gap(evidence_run, manifest, evidence_revision):
         gaps.append({"reason": issue})
     source_path = manifest.get("runner_source_path")
     historical_without_source = (
@@ -1862,7 +1882,8 @@ def verify_evidence(
                 try:
                     retained = bounded_path(
                         restricted_run, f"requests/{key[0]}/{key[1]}.body"
-                    ).read_bytes()
+                    )
+                    retained = regular_bytes(retained)
                 except (OSError, e.ContractError):
                     retained = None
                 if retained != reconstructed:
@@ -1901,9 +1922,9 @@ def verify_evidence(
                 )
                 continue
             try:
-                raw = raw_path.read_bytes()
+                raw = regular_bytes(raw_path)
                 actual = e.sha(raw)
-            except OSError:
+            except (OSError, e.ContractError):
                 actual = None
             if actual != raw_hash:
                 gaps.append(

@@ -227,6 +227,19 @@ class E013Tests(unittest.TestCase):
             with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_FILE"):
                 evidence.verify_evidence(run)
 
+    def test_unavailable_historical_replay_revision_is_a_contract_error(self) -> None:
+        with patch.object(
+            e,
+            "checked_git",
+            side_effect=subprocess.CalledProcessError(128, ["git", "show"]),
+        ):
+            with self.assertRaisesRegex(
+                e.ContractError, "SDK_REPLAY_INVENTORY_MISSING"
+            ):
+                evidence.verify_replay_sdk(
+                    Path("unused"), {"run_id": evidence.PRE_RECORD_RUN_ID}
+                )
+
     def test_committed_verifier_rejects_modified_public_bytes(self) -> None:
         with TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -253,7 +266,9 @@ class E013Tests(unittest.TestCase):
             )
             captured = []
 
-            def inspect_snapshot(snapshot: Path, *_args: object) -> dict[str, object]:
+            def inspect_snapshot(
+                snapshot: Path, *_args: object, **_kwargs: object
+            ) -> dict[str, object]:
                 captured.append((snapshot / "raw.body").read_bytes())
                 return {"gaps": []}
 
@@ -1829,6 +1844,13 @@ source = { registry = "https://pypi.org/simple" }
                 checkout: Path, arguments: list[str]
             ) -> bytes:
                 if arguments == [
+                    "merge-base",
+                    "--is-ancestor",
+                    authorization_revision,
+                    "HEAD",
+                ]:
+                    return b""
+                if arguments == [
                     "show",
                     f"{authorization_revision}:{authorization_repo_path}",
                 ]:
@@ -2073,6 +2095,34 @@ source = { registry = "https://pypi.org/simple" }
             output = evidence.publish_reviewed(
                 restricted, approval, root / "checkout-evidence"
             )
+            verified_authorization = evidence.authorization_gap
+            authorization_checks = []
+
+            def replace_authorization_after_review(
+                run_dir: Path, record: dict[str, object], revision: str = "HEAD"
+            ) -> str | None:
+                result = verified_authorization(run_dir, record, revision)
+                authorization_checks.append(run_dir)
+                if len(authorization_checks) == 2:
+                    (run_dir / "authorization.json").write_bytes(
+                        b"changed after review"
+                    )
+                return result
+
+            with patch.object(
+                evidence,
+                "authorization_gap",
+                side_effect=replace_authorization_after_review,
+            ):
+                with self.assertRaisesRegex(
+                    e.ContractError, "PUBLICATION_EVIDENCE_UNVERIFIED"
+                ):
+                    evidence.publish_reviewed(
+                        restricted, approval, root / "changed-authorization-evidence"
+                    )
+            self.assertFalse(
+                (root / "changed-authorization-evidence/runs/run-1").exists()
+            )
             with (
                 patch.object(e, "load_cases", wraps=e.load_cases) as loaded,
                 patch.object(
@@ -2115,6 +2165,20 @@ source = { registry = "https://pypi.org/simple" }
                 evidence.authorization_gap(restricted, changed_runner_hash),
                 "AUTHORIZATION_MISMATCH",
             )
+            checked_before_unreachable = e.checked_git
+
+            def unreachable_authorization(
+                checkout: Path, arguments: list[str]
+            ) -> bytes:
+                if arguments[:2] == ["merge-base", "--is-ancestor"]:
+                    raise subprocess.CalledProcessError(1, ["git", *arguments])
+                return checked_before_unreachable(checkout, arguments)
+
+            with patch.object(e, "checked_git", side_effect=unreachable_authorization):
+                self.assertEqual(
+                    evidence.authorization_gap(restricted, local_manifest),
+                    "AUTHORIZATION_COMMIT_MISMATCH",
+                )
             original_checked_git = e.checked_git
             policy_revision = [
                 "show",
@@ -2680,7 +2744,29 @@ source = { registry = "https://pypi.org/simple" }
                     for gap in evidence.verify_evidence(output, restricted)["gaps"]
                 },
             )
+            os.mkfifo(request_path)
+            self.assertIn(
+                "REQUEST_BODY_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            request_path.unlink()
             request_path.write_bytes(request_bytes)
+            restricted_body = restricted / rows[1]["raw_locator"]
+            restricted_body_bytes = restricted_body.read_bytes()
+            restricted_body.unlink()
+            os.mkfifo(restricted_body)
+            self.assertIn(
+                "RAW_HASH_MISMATCH",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            restricted_body.unlink()
+            restricted_body.write_bytes(restricted_body_bytes)
             reformatted_request = json.dumps(
                 json.loads(request_bytes), ensure_ascii=False, indent=2
             ).encode()
