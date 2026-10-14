@@ -171,6 +171,7 @@ for (const name of ['mc.js', 'mc.wasm']) {
 }
 await cp(path.join(vendorRoot, 'web/simulator/assets/case/v1/shell.stl'),
   path.join(publicSimulator, 'assets/case/v1/shell.stl'))
+hashes['assets/case/v1/shell.stl'] = createHash('sha256').update(await readFile(path.join(publicSimulator,'assets/case/v1/shell.stl'))).digest('hex')
 const host = await verifyStagedHost(path.join(sourceRoot,'web'))
 const provenance = { host, sourceCommit: PINNED_COMMIT, moddableVersion, emccVersion,
   moddable: { path: moddableRoot, sourceCommit: PINNED_MODDABLE_COMMIT, build: 'clean release xsc/xsid/xsl/tools from verified checkout', tools: moddableTools },

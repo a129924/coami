@@ -1,3 +1,4 @@
+import {verifyPublicInputs} from './scripts/public-inputs.mjs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { defineConfig } from 'vite'
@@ -8,9 +9,9 @@ const repositoryRoot = path.resolve(webRoot, '../../..')
 
 export default defineConfig({
   plugins: [{name:'verify-staged-simulator-host',
-    async buildStart(){await verifyStagedHost(path.join(webRoot,'generated/pinned-stack-chan/web'))},
-    async configureServer(){await verifyStagedHost(path.join(webRoot,'generated/pinned-stack-chan/web'))},
-    async handleHotUpdate(){await verifyStagedHost(path.join(webRoot,'generated/pinned-stack-chan/web'))},
+    async buildStart(){await verifyStagedHost(path.join(webRoot,'generated/pinned-stack-chan/web'));await verifyPublicInputs(webRoot)},
+    async configureServer(){await verifyStagedHost(path.join(webRoot,'generated/pinned-stack-chan/web'));await verifyPublicInputs(webRoot)},
+    async handleHotUpdate(){await verifyStagedHost(path.join(webRoot,'generated/pinned-stack-chan/web'));await verifyPublicInputs(webRoot)},
   }],
   optimizeDeps: { entries: ['index.html'] },
   publicDir: path.join(webRoot, 'generated/public'),

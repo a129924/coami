@@ -1,0 +1,5 @@
+Official emsdk package selected by pinned emsdk_manifest.json python 3.13.3 arm64 and emsdk.py package URL.
+Source: https://storage.googleapis.com/webassembly/emscripten-releases-builds/deps/python-3.13.3-0-macos-arm64.tar.gz
+archiveSha256=2b0899d7ade9463b0c909ef23aeea27546a4f412637998d817a49718bc2bac19
+pythonBinarySha256=051ecc026af314195484c2a8e3ae3de85db8a09ae7998d9cace75323e7a40d81
+Both installed python3 executables resolve to bin/python3.13 and match the official package bytes.

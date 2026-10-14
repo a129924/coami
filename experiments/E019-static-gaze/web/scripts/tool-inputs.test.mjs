@@ -1,6 +1,6 @@
 import {test} from 'node:test'
 import assert from 'node:assert/strict'
-import {mkdtemp,mkdir,writeFile,readFile,access,rm,cp} from 'node:fs/promises'
+import {mkdtemp,mkdir,writeFile,readFile,access,rm,cp,symlink} from 'node:fs/promises'
 import {tmpdir} from 'node:os'
 import path from 'node:path'
 import {prepareCompilerEnvironment,rebuildFontbm} from './tool-inputs.mjs'
@@ -10,10 +10,16 @@ test('controlled compiler config ignores hostile config and tool overrides',asyn
   const sdk=path.join(root,'sdk'),generated=path.join(root,'generated');await mkdir(generated)
   for(const dir of ['upstream/bin','node/22.16.0_64bit/bin'])await mkdir(path.join(sdk,dir),{recursive:true})
   await cp(new URL('../generated/toolchain/emsdk/node/22.16.0_64bit/bin/node',import.meta.url),path.join(sdk,'node/22.16.0_64bit/bin/node'))
+  const py=path.join(sdk,'python/3.13.3_64bit/bin');await mkdir(py,{recursive:true})
+  const realPython=new URL('../generated/toolchain/emsdk/python/3.13.3_64bit/bin/python3.13',import.meta.url)
+  await cp(realPython,path.join(py,'python3.13'));await symlink('python3.13',path.join(py,'python3'))
   const result=await prepareCompilerEnvironment(sdk,generated,{PATH:'/bin',EM_CONFIG:'/bad/config',EM_LLVM_ROOT:'/bad/llvm',EM_BINARYEN_ROOT:'/bad/bin',EM_NODE_JS:'/bad/node',EM_COMPILER_WRAPPER:'bad',LLVM:'/bad/legacy',NODE_OPTIONS:'--require bad'})
   assert.equal(result.env.PATH,'/bin');for(const key of ['EM_LLVM_ROOT','EM_BINARYEN_ROOT','EM_NODE_JS','EM_COMPILER_WRAPPER','LLVM','NODE_OPTIONS'])assert.equal(result.env[key],undefined)
   const config=await readFile(result.env.EM_CONFIG,'utf8');assert.ok(config.includes(path.join(sdk,'upstream/bin')));assert.ok(config.includes(path.join(sdk,'upstream')));assert.ok(!config.includes('/bad/'))
   assert.equal(result.env.EM_CACHE,path.join(generated,'em-cache'));assert.equal(result.provenance.configSha256.length,64)
+  await writeFile(path.join(py,'python3.13'),'replaced python')
+  await assert.rejects(prepareCompilerEnvironment(sdk,generated,{}),/Python executable mismatch/)
+  await cp(realPython,path.join(py,'python3.13'))
   await writeFile(path.join(sdk,'node/22.16.0_64bit/bin/node'),'replaced node')
   await assert.rejects(prepareCompilerEnvironment(sdk,generated,{}),/Node executable mismatch/)
  }finally{await rm(root,{recursive:true,force:true})}

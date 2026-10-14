@@ -16,7 +16,16 @@ export class Ledger {
       // An unscoped error may belong to an earlier target. Do not attribute it to a later operation.
       this.blocked = true; return
     }
-    if (line.startsWith('[WasmDriver] applyRotation') && this.busy) this.driver = true
+    // Accept only a target-matching dispatch inside this synchronous SDK call.
+    // Later polling/replayed traces cannot supply evidence for a new operation.
+    if (line.startsWith('[WasmDriver] applyRotation') && this.busy && !this.returned && !this.blocked && this.current) {
+      const m=line.match(/^\[WasmDriver\] applyRotation y=([^ ]+) p=([^ ]+) r=([^ ]+) time=/)
+      const actual=m?[Number(m[1]),Number(m[2]),Number(m[3])]:[]
+      const point=this.current.point
+      const expected=this.current.kind==='prepare'?[0,0,0]:this.current.kind==='look'&&point
+        ?[Math.atan2(point[1],point[0]),-Math.atan2(point[2],Math.hypot(point[0],point[1])),0]:null
+      if(expected&&actual.length===3&&actual.every((v,i)=>Number.isFinite(v)&&Math.abs(v-expected[i]!)<1e-6))this.driver=true
+    }
     if (!line.startsWith('COAMI19|')) return
     let value: unknown
     try { value = JSON.parse(line.slice(8)) } catch { this.blocked = true; return }

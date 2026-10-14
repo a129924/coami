@@ -7,6 +7,10 @@ export async function prepareCompilerEnvironment(sdk,generated,inherited=process
  const node=await realpath(path.join(sdk,'node/22.16.0_64bit/bin/node'))
  const nodeSha256=hash(await readFile(node))
  if(nodeSha256!=='a45751fbfe88440bebff63cd44814e4ed6deb642bc3e3c4a14c4f8ae0ed9e019')throw Error('Pinned SDK Node executable mismatch')
+ const pythonBinary=await realpath(path.join(sdk,'python/3.13.3_64bit/bin/python3'))
+ if(pythonBinary!==path.join(await realpath(sdk),'python/3.13.3_64bit/bin/python3.13'))throw Error('Pinned SDK Python executable path mismatch')
+ const pythonSha256=hash(await readFile(pythonBinary))
+ if(pythonSha256!=='051ecc026af314195484c2a8e3ae3de85db8a09ae7998d9cace75323e7a40d81')throw Error('Pinned SDK Python executable mismatch')
  const env={...inherited}
  for(const key of Object.keys(env))if(/^(EM_|EMCC_|EMSDK_|LLVM|BINARYEN|NODE|PYTHON)/.test(key))delete env[key]
  const config=path.join(generated,'controlled-emscripten.py')
@@ -14,9 +18,9 @@ export async function prepareCompilerEnvironment(sdk,generated,inherited=process
  const bytes=Object.entries(paths).map(([k,v])=>`${k} = ${JSON.stringify(v)}`).join('\n')+'\nCOMPILER_WRAPPER = None\n'
  await mkdir(generated,{recursive:true});await writeFile(config,bytes)
  const python=path.join(generated,'python-no-bytecode')
- await writeFile(python,'#!/bin/sh\nexec "$EMSDK/python/3.13.3_64bit/bin/python3" -B "$@"\n',{mode:0o755})
- Object.assign(env,{EM_CONFIG:config,EMSDK:sdk,EMSDK_PYTHON:python,EM_CACHE:path.join(generated,'em-cache'),PYTHONDONTWRITEBYTECODE:'1'})
- return {env,provenance:{configPath:config,configSha256:hash(bytes),paths,nodeSha256}}
+ await writeFile(python,'#!/bin/sh\nexec "$COAMI_PYTHON" -B "$@"\n',{mode:0o755})
+ Object.assign(env,{EM_CONFIG:config,EMSDK:sdk,COAMI_PYTHON:pythonBinary,EMSDK_PYTHON:python,EM_CACHE:path.join(generated,'em-cache'),PYTHONDONTWRITEBYTECODE:'1'})
+ return {env,provenance:{configPath:config,configSha256:hash(bytes),paths,nodeSha256,pythonBinary,pythonSha256}}
 }
 export async function rebuildFontbm(root,run=execFileSync){
  const build=path.join(root,'build');await rm(build,{recursive:true,force:true})
