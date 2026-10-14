@@ -92,3 +92,7 @@ Preview 提供已驗證的 memory snapshot，啟動後不讀取更新的 dist；
 ## PR comment review and fix：第八輪（2026-10-14）
 
 Bundle sourceCommit 嚴格對應固定 harness input revision；runtime provenance 驗證可攜的工具身分與產物資訊，匯出排除本機 paths 及其 config digest。不同 checkout 的相同 verified runtime 可通過相同身份 pin；程序與範圍見 [review8-fixes](evidence/review8-fixes.md)。
+
+## PR comment review and fix：第九輪（2026-10-14）
+
+目前完整 history 的固定 source pin 與 fresh build／preview 相符，留言提及的 squash commit 不存在於目前 PR。若實際 squash/rebase 或缺少來源 history，須在改寫後重新驗證並視需要更新 pin；本次不替不存在的 commit 改 pin。查證與證據見 [review9-decision](evidence/review9-decision.md)。
