@@ -84,3 +84,7 @@ Python interpreter、served mesh、reviewed MOD sources/archive 驗證及 trace�
 ## PR comment review and fix：第六輪（2026-10-14）
 
 來源驗證以 Git HEAD 的 harness manifest 為基準，並拒絕 dirty experiment；preview 啟動前核對 Git HEAD 中已提交的 production bundle pin，拒絕 dist 與其 provenance 同時遭替換。新的來源或 bundle 需先完成明確變更、提交及 review，不能只重算本地 manifest 冒充原本產物。詳細程序與限制見 [review6-fixes](evidence/review6-fixes.md)。
+
+## PR comment review and fix：第七輪（2026-10-14）
+
+Preview 提供已驗證的 memory snapshot，啟動後不讀取更新的 dist；更新 bundle 必須重啟 preview。完整 runtime／MOD provenance 固定雜湊，穩定勾選在操作或等待判定時清除，下一次操作須重新確認。程序與證據見 [review7-fixes](evidence/review7-fixes.md)。

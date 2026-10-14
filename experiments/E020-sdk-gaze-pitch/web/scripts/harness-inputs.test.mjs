@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os'
 import {execFileSync} from 'node:child_process'
 import {createHash} from 'node:crypto'
 import path from 'node:path'
-import {verifyHarnessInputs,verifyProductionBundle} from './harness-inputs.mjs'
+import {verifyHarnessInputs,verifyProductionBundle,snapshotMiddleware} from './harness-inputs.mjs'
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex')
 async function fixture(run){
  const root=await mkdtemp(path.join(tmpdir(),'gaze-reviewed-')),web=path.join(root,'experiments/test/web')
@@ -42,3 +42,13 @@ test('modified dist plus recomputed provenance fails committed production pin',a
  const f=path.join(web,'dist/harness-provenance.json'),p=JSON.parse(await readFile(f,'utf8'));p.bundleSha256['app.js']=hash('altered pass logic');await writeFile(f,JSON.stringify(p))
  await assert.rejects(verifyProductionBundle(web,path.join(web,'dist')),/production bundle/)
 }))
+
+test('preview middleware serves verified buffers rather than subsequent mutable bytes',()=>{
+ const original=Buffer.from('reviewed bundle'),files=new Map([['index.html',original]])
+ const middleware=snapshotMiddleware(files)
+ original.fill(0);files.set('index.html',Buffer.from('forged after startup'))
+ const response={headers:{},statusCode:200,setHeader(k,v){this.headers[k]=v},end(bytes){this.bytes=bytes}}
+ middleware({url:'/',method:'GET'},response)
+ assert.equal(response.bytes.toString(),'reviewed bundle');assert.equal(response.headers['Cache-Control'],'no-store')
+ const absent={...response,bytes:null};middleware({url:'/unverified.js',method:'GET'},absent);assert.equal(absent.statusCode,404)
+})

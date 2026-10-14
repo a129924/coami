@@ -1,3 +1,5 @@
+import {stabilityState} from './stability.ts'
+import PROVENANCE_PIN from './provenance-pin.json'
 import RUNTIME_PIN from './runtime-pin.json'
 import HARNESS_PIN from './harness-pin.json'
 import {ReplyWatchdog,watchOperation} from './watchdogs.ts'
@@ -34,6 +36,7 @@ function render():void {
  coordinate.textContent=target?`[${target.point.join(', ')}] m`:'僅作驗證準備，不是解除語意'
  status.textContent=ledger.blocked?'執行／證據錯誤；請下載紀錄後重新載入':ledger.status
  const locked=!ready||pending||ledger.busy||ledger.needsObservation||ledger.blocked
+ Object.assign(stable,stabilityState(locked,stable.checked))
  next.disabled=locked; apply.disabled=locked||!stable.checked||!operator.value.trim(); away.disabled=apply.disabled
  apply.textContent=target?'設定注視':'準備起始姿勢'
  for(const button of results) button.disabled=ledger.busy||!ledger.needsObservation||!operator.value.trim()
@@ -60,7 +63,9 @@ function ingest(message:string):void {
 async function sha(bytes:ArrayBuffer):Promise<string>{return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('')}
 async function json(url:string):Promise<Record<string,unknown>>{
  const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error(`缺少 ${url}，請執行 npm run prepare:poc`)
- const value:unknown=await response.json();if(typeof value!=='object'||!value)throw Error(`無效 ${url}`);return value as Record<string,unknown>
+ const bytes=await response.arrayBuffer(),expected=(PROVENANCE_PIN as Record<string,string>)[url.slice(1)]
+ if(expected&&await sha(bytes)!==expected)throw Error(`Reviewed provenance mismatch: ${url}`)
+ const value:unknown=JSON.parse(new TextDecoder().decode(bytes));if(typeof value!=='object'||!value)throw Error(`無效 ${url}`);return value as Record<string,unknown>
 }
 async function start():Promise<void>{
  try{
