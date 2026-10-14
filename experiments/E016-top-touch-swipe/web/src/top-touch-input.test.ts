@@ -145,3 +145,17 @@ test('frozen-page duration does not age pending acknowledgements but active wait
   input.checkHealth(12700)
   assert.equal(input.state, 'fault', 'active wait before/after freeze must still time out')
 })
+
+test('MOD readiness deadline excludes frozen time and preserves accumulated active wait', () => {
+  const input = new TopTouchInput(9)
+  const started = input.activeTime(100)
+  input.pauseHealth(10100)
+  assert.equal(input.activeTime(70100) - started, 10000)
+  input.resumeHealth(70100)
+  assert.equal(input.activeTime(90100) - started, 30000)
+  assert.equal(input.activeTime(90101) - started > 30000, true)
+  input.pauseHealth(90101)
+  input.resumeHealth(190101)
+  assert.equal(input.activeTime(190101) - started, 30001)
+  assert.equal(input.state, 'initializing')
+})

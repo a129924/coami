@@ -70,10 +70,10 @@ async function initialize(): Promise<void> {
     // Runtime ready alone cannot enable input; MOD must confirm its subscription.
     if (input.state === 'initializing') {
       await new Promise<void>((resolve,reject)=>{
-        const started=performance.now()
+        const started=input.activeTime()
         const timer=setInterval(()=>{
           if(input.state==='ready'){clearInterval(timer);resolve()}
-          else if(input.state==='fault'||input.state==='unavailable'||performance.now()-started>30000){clearInterval(timer);reject(new Error(input.error||'MOD input readiness timeout'))}
+          else if(input.state==='fault'||input.state==='unavailable'||input.activeTime()-started>30000){clearInterval(timer);reject(new Error(input.error||'MOD input readiness timeout'))}
         },50)
       })
     }
