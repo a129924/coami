@@ -33,8 +33,8 @@
 6. 記錄 automation、真人判定各自的結果；不得把操作者寫為真人或代填真人 PASS。
 
 ## 是否成功
-- 實驗狀態：成功（限 pinned simulator 與本實驗靜態上下目標）。
-- 本輪驗證任務完成：是；原版 red／patched green、fresh WASM、真人雙向各兩次均完成。正式採用與合併仍交 human review。
+- 實驗狀態：無法判定（新 host／mesh／MOD 完整核對 gate 下的真人驗收尚未執行）。歷史真人觀察為 4/4 PASS，但該 run 沒有 host attestation，不能據後來的 staged host hashes 追溯證明其 renderer 來源。
+- Review 修正與證據判讀完成；原版 red／patched green、fresh WASM 與歷史真人雙向各兩次的紀錄保留。完整來源已核對的新 gate 真人驗收未執行，正式採用仍受此證據缺口限制。
 
 ## 結果與證據
 - `evidence/red.txt`：原版 6 測試中 4 fail／2 pass；`evidence/green.txt`：實際 patched source 6 pass。
@@ -48,7 +48,7 @@
 - 2026-10-14 Andrew 完成真人驗證，run `E020-2026-10-14T02-19-22-568Z`。`evidence/human-final.json` 保存原始匯出，`evidence/human-run.md` 關聯逐項判定；`evidence/human-final.png` 是 #10 最終畫面。
 
 ## 結論與限制
-- 原版 red、修正版 green、實際 WASM 與真人觀察共同支持：隔離 pitch 符號修正恢復已驗證的上下解除後重新指定。雙向各兩次達到事前判準。
+- 原版 red、修正版 green 與相同 WASM／MOD 產物支持換算修正；歷史真人曾觀察雙向各兩次符合。然而舊 run 的 host 來源未留 attestation，新 gate 下的完整可見驗收仍待執行，不宣稱後來的 host hashes 可補證舊 renderer。
 - lookAt 同步返回不代表完成；lookAway 清目標，不承諾回正／急停。SDK 門檻與運動策略維持原樣。
 - 未測實機、roll、動態追蹤或 production。E019 失敗證據與 vendor checkout 保持不變；正式採用交 human review。
 
@@ -65,4 +65,10 @@ Review 的建置來源、殘留產物、啟動錯誤處理已修正，逐項說�
 
 ## PR comment review and fix：第二輪（2026-10-14）
 
-三項新增建議已採納：fontbm clean source build、受控 Emscripten config／環境、staged simulator host 雜湊核對。詳見 [review2-fixes](evidence/review2-fixes.md)。prepare:poc 不再信任輸入的 EM_CONFIG 或 compiler path overrides；FONTBM_SOURCE 必須提供 pinned checkout，FONTBM 若提供則必須指向其 build/fontbm。網頁 build/dev 需先準備 generated host，staged source 不符固定 hashes 即拒絕。實際重建與負向測試完成，原真人證據對應的 executable artifacts 與 host bytes 保持相同。
+三項新增建議已採納：fontbm clean source build、受控 Emscripten config／環境、staged simulator host 雜湊核對。詳見 [review2-fixes](evidence/review2-fixes.md)。prepare:poc 不再信任輸入的 EM_CONFIG 或 compiler path overrides；FONTBM_SOURCE 必須提供 pinned checkout，FONTBM 若提供則必須指向其 build/fontbm。網頁 build/dev 需先準備 generated host，staged source 不符固定 hashes 即拒絕。實際重建與負向測試完成，executable artifacts 與原匯出相同；目前 staged host bytes 對應 pinned commit，但舊真人 run 沒有 host attestation，不能追溯證明其 renderer。
+
+2026-10-14 第三輪 review 校正：前述「成功／驗證完成」為當時判讀，現在以「是否成功」與 review3-fixes 的限定結論為準；歷史 4/4 觀察保留，不能回溯成為新 host gate 的驗收證據。
+
+## PR comment review and fix：第三輪（2026-10-14）
+
+Python interpreter、served mesh、reviewed MOD sources/archive 驗證及 trace／watchdog scope 已修正，見 [review3-fixes](evidence/review3-fixes.md)。舊 run 缺少 host attestation，無法用後來的 staged host hashes 補證；歷史觀察保留，新 gate 真人驗收未執行。E020 的完整來源可驗收結論已限縮，採用仍交 human review。

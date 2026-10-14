@@ -1,3 +1,4 @@
+import {verifyModSources} from './public-inputs.mjs'
 import {clearModOutputs,verifyVendor} from './build-safety.mjs'
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
@@ -7,6 +8,7 @@ import path from 'node:path'
 const web = fileURLToPath(new URL('../', import.meta.url))
 const repo = path.resolve(web, '../../..')
 await clearModOutputs(path.join(web,'generated'))
+await verifyModSources(web)
 verifyVendor(repo,path.join(repo,'vendor/stack-chan'),'b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322')
 const editor = path.join(repo, 'vendor/stack-chan/web/editor')
 const { buildModArchive, isXsArchive } = await import(pathToFileURL(path.join(editor, 'mod-builder.mjs')))

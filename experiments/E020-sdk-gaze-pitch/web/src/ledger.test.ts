@@ -20,7 +20,7 @@ test('stale and malformed records cannot end an active window', () => {
 })
 test('observation is explicit, scoped, and separate from call state', () => {
  const l=new Ledger(); l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"begin","target":"left","point":[0.5,0.5,0]}')
- l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"returned"}'); l.ingest('[WasmDriver] applyRotation y=0.78 p=0 r=0 time=0.5')
+ l.ingest('[WasmDriver] applyRotation y=0.7853981633974483 p=0 r=0 time=0.5'); l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"returned"}')
  l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"window-ended"}'); assert.equal(l.confirm('符合'),true)
  assert.equal(l.observations[0]?.seq,1); assert.match(l.status,/呼叫已返回/)
 })
@@ -32,4 +32,18 @@ test('a call with no driver evidence stays unconfirmed even after its window',()
  const l=new Ledger();l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"begin","target":"down","point":[0.5,0,-0.5]}')
  l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"returned"}');l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"window-ended"}')
  assert.equal(l.confirm('符合'),false);assert.equal(l.confirm('未確認'),true)
+})
+
+test('wrong-angle or post-return driver traces cannot validate the current look',()=>{
+ for(const [trace,late] of [['[WasmDriver] applyRotation y=0 p=-0.7853981633974483 r=0 time=0.5',false],['[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.5',true],['[WasmDriver] applyRotation y=NaN p=0 r=0 time=0.5',false]] as const){
+  const l=new Ledger();l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"begin","target":"down","point":[0.5,0,-0.5]}')
+  if(late)l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"returned"}')
+  l.ingest(trace);l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"returned"}');l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"window-ended"}')
+  assert.equal(l.confirm('符合'),false)
+ }
+})
+test('a matching rotation within the synchronous look call supports its own observation',()=>{
+ const l=new Ledger();l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"begin","target":"down","point":[0.5,0,-0.5]}')
+ l.ingest('[WasmDriver] applyRotation y=0 p=0.7853981633974483 r=0 time=0.5')
+ l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"returned"}');l.ingest('COAMI20|{"seq":1,"kind":"look","phase":"window-ended"}');assert.equal(l.confirm('符合'),true)
 })

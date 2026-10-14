@@ -1,0 +1,22 @@
+✔ controlled compiler config ignores hostile config and tool overrides (290.058041ms)
+✔ fontbm clean rebuild discards the binary and CMake cache before configure (1.3685ms)
+✔ staged simulator host is authenticated without reading the live vendor (7.232666ms)
+✔ call return and window end never imply direction or clear-state confirmation (0.663791ms)
+✔ driver error after return overrides call-only state and blocks visual PASS (0.134583ms)
+✔ stale and malformed records cannot end an active window (0.071666ms)
+✔ observation is explicit, scoped, and separate from call state (0.134542ms)
+✔ runtime errors without an active operation block commands until reload (0.051083ms)
+✔ a call with no driver evidence stays unconfirmed even after its window (0.408334ms)
+✔ wrong-angle or post-return driver traces cannot validate the current look (0.168125ms)
+✔ a matching rotation within the synchronous look call supports its own observation (0.068917ms)
+✔ an older send timeout cannot fail a newer pending send (0.43575ms)
+✔ operation watchdog preserves an existing fatal error and ignores a finished operation (0.07975ms)
+✔ a genuinely pending operation still times out (0.068333ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 377.609375

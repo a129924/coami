@@ -1,3 +1,6 @@
+import {ReplyWatchdog,watchOperation} from './watchdogs.ts'
+import MOD_PIN from './mod-pin.json'
+import HOST_PIN from '../scripts/host-pin.json'
 import {watchStartup} from './startup.ts'
 import './style.css'
 import { SimulatorEngine } from '../generated/pinned-stack-chan/web/src/services/simulator/simulator-engine.mjs'
@@ -14,6 +17,7 @@ type InspectionScene = { camera: { position: { set(x:number,y:number,z:number):v
 const ledger=new Ledger(), runId=`E020-${new Date().toISOString().replace(/[:.]/g,'-')}`
 const records: {at:string;elapsedMs:number;seq:number|null;message:string}[]=[]
 let engine: SimulatorEngine | undefined, ready=false, modReady=false, runtimeReady=false, pending=false, selection=0
+const replyWatchdog=new ReplyWatchdog(()=>fatal(Error('MOD 2 秒內未回應；請重新載入')),()=>ledger.blocked)
 let provenance: unknown, modProvenance: unknown
 get('run').textContent=runId
 function log(message:string):void {
@@ -42,9 +46,9 @@ function ingest(message:string):void {
    if(typeof value==='object'&&value) {
     const v=value as Record<string,unknown>
     if(v.phase==='ready'&&v.experiment==='E020')modReady=true
-    if(v.phase==='selected'&&Number.isInteger(v.selection)&&(v.selection as number)>=0&&(v.selection as number)<=TARGETS.length){selection=v.selection as number;pending=false}
-    if(v.phase==='begin'||v.phase==='rejected')pending=false
-    if(v.phase==='begin'){const seq=v.seq;setTimeout(()=>{if(ledger.current?.seq===seq&&ledger.busy)fatal(Error('未取得觀察窗口結束；請下載紀錄後重新載入'))},12000)}
+    if(v.phase==='selected'&&Number.isInteger(v.selection)&&(v.selection as number)>=0&&(v.selection as number)<=TARGETS.length){selection=v.selection as number;pending=false;replyWatchdog.acknowledge()}
+    if(v.phase==='begin'||v.phase==='rejected'){pending=false;replyWatchdog.acknowledge()}
+    if(v.phase==='begin'){const seq=v.seq;watchOperation(()=>ledger.current?.seq===seq&&ledger.busy,()=>ledger.blocked,()=>fatal(Error('未取得觀察窗口結束；請下載紀錄後重新載入')))}
    }
   }
  }
@@ -62,10 +66,13 @@ async function start():Promise<void>{
   const patch=p.sdkPatch as Record<string,unknown> | undefined
   if(patch?.patchSha256!=='af4d44e0582ca323d882d1cf0073d5f270c573d38c6c61b2d0dac01b8fec3d4d'||patch.patchedSha256!=='2b09d340448405d261736e740e98fcd82cbe8de4cae7f2e80dc28cf839024916')throw Error('SDK pitch patch provenance mismatch')
   const hashes=p.sha256 as Record<string,unknown>
-  for(const name of ['mc.js','mc.wasm']){
+  for(const name of ['mc.js','mc.wasm','assets/case/v1/shell.stl']){
    const response=await fetch(`/simulator/${name}`,{cache:'no-store'});if(!response.ok||await sha(await response.arrayBuffer())!==hashes[name])throw Error(`${name} hash mismatch`)
   }
+  if(hashes['assets/case/v1/shell.stl']!==HOST_PIN['simulator/assets/case/v1/shell.stl'])throw Error('mesh pin mismatch')
   const mp=await json('/mod-provenance.json');modProvenance=mp
+  const sourceHashes=mp.sources as Record<string,unknown>|undefined
+  if(mp.sha256!==MOD_PIN.sha256||Object.entries(MOD_PIN.sources).some(([f,h])=>sourceHashes?.[f]!==h))throw Error('Reviewed MOD sources/archive mismatch')
   const response=await fetch('/coami-mod.xsa',{cache:'no-store'});if(!response.ok)throw Error('missing MOD')
   const buffer=await response.arrayBuffer();if(mp.experiment!=='E020'||await sha(buffer)!==mp.sha256)throw Error('MOD provenance mismatch')
   log(`verified runtime ${p.sourceCommit}; MOD ${String(mp.sha256)}`)
@@ -82,12 +89,11 @@ async function start():Promise<void>{
   await watchStartup(()=>engine!.start(),()=>ready,()=>ledger.blocked,()=>fatal(Error('30 秒內未取得 runtime + E020 MOD ready')))
  }catch(error){fatal(error)}
 }
-function fatal(error:unknown):void{ledger.blocked=true;ready=false;runtime.textContent=`無法繼續：${String(error)}`;log(String(error));render()}
+function fatal(error:unknown):void{replyWatchdog.acknowledge();ledger.blocked=true;ready=false;runtime.textContent=`無法繼續：${String(error)}`;log(String(error));render()}
 function send(button:'a'|'b'|'c'):void{
  if(!engine||!ready||pending||ledger.busy||ledger.needsObservation||ledger.blocked)return
- pending=true;log(`operator=${operator.value.trim()} send=${button} stable=${stable.checked}`);render()
+ pending=true;replyWatchdog.arm();log(`operator=${operator.value.trim()} send=${button} stable=${stable.checked}`);render()
  try{engine.pushButton(button)}catch(error){fatal(error);return}
- setTimeout(()=>{if(pending)fatal(Error('MOD 2 秒內未回應；請重新載入'))},2000)
 }
 next.onclick=()=>send('a')
 apply.onclick=()=>{send('b');stable.checked=false;render()}

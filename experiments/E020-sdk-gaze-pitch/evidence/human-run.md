@@ -31,4 +31,4 @@
 
 真人視覺判定來自使用者回報與使用者在頁面的紀錄。`human-final.png` 僅為 #10 已判定後的最終畫面，未取得逐步錄影或每個操作的截圖；不可把單張畫面當完整動畫證據。自動驗證另見 runtime-automated.json 與 red/green 測試，不混稱真人測試。
 
-本實驗在已測 simulator 條件成功，本輪驗證完成；提交 Draft PR #20 供 human review。E019 原失敗結論不回寫為 PASS。vendor pin、正式 SDK、production 與硬體未採用或驗證。
+歷史真人觀察在本 run 為 4/4 PASS；此 run 未保留 host attestation 與當時的 web bundle，因此完整 pinned-host 來源無法追溯確認，新 gate 真人驗收仍未執行。提交 PR #20 供 human review。E019 原失敗結論不回寫為 PASS。vendor pin、正式 SDK、production 與硬體未採用或驗證。

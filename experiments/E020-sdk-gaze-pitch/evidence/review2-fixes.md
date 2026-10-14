@@ -23,3 +23,7 @@
 - discussion_r4266348756: staged simulator host
 - discussion_r4266348762: controlled Emscripten config
 - discussion_r4266348768: fontbm clean rebuild
+
+## 第三輪 review 更正
+
+上述執行檔／目前 staged host 的相同比對不能追溯證明較早真人 run 的 live-vendor renderer。舊 human-final.json 沒有 host attestation，舊 web bundle 未留存；歷史人工觀察只作當時回報，不宣稱新 host gate 已通過真人驗收。見 review3-fixes.md。
