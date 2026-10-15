@@ -52,7 +52,7 @@ Planner 負責 readiness／gate 判定；Plan-Creator 維護 planning artifacts�
 
 ## Status / Allowed Transitions
 
-- **Current topic implementation lifecycle**: `publish-in-progress`；七個 Implementation Steps 已完成，獨立 implementation-review 與 code-review 均 approved，依 Owner 授權進入 topic commits／push／Draft PR。審閱版本與證據見 review-log。
+- **Current topic implementation lifecycle**: `pr-open`；七個 Implementation Steps 與獨立 implementation-review／code-review 已完成，topic commits 已 push，[Draft PR #22](https://github.com/a129924/coami/pull/22) 停在 human review。審閱版本與證據見 review-log。
 - **Planning handoff**: 獨立 Plan-Reviewer 已 approved，Planner 已判定執行 readiness 可前進；原批准合約不變，本次只同步 canonical lifecycle metadata。
 - Allowed transitions（canonical）：`planned → creator-in-progress → review-ready → reviewer-in-progress`；`reviewer-in-progress → approved | needs-rework`；`needs-rework → creator-in-progress`；`approved → creator-in-progress | publish-in-progress`；`publish-in-progress → pr-open | merged`；`pr-open → needs-rework | merged`；`merged → terminal`。
 - 本次授權路由只到 `pr-open`（Draft PR）後 human review；canonical merge transition 的列示不構成 merge 授權，無 `released` transition。

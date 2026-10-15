@@ -29,6 +29,8 @@ created: 2026-10-15
 
 ## Evidence / Routing Notes
 
+Current handoff：`pr-open`，https://github.com/a129924/coami/pull/22 為 Draft，base=dev、head=feat/andrew/e022-context-threshold。PR Lens 已在真實 commit 存在後 validate/render 外部本機圖，Graphify 無圖 source fallback 保持。等待 Owner human review；不 merge/release、保留 feature worktree，產品採納另決。
+
 2026-10-15 final review evidence：獨立 `/root/plan_reviewer` 先通過 implementation review，再通過 code review，兩者 approved、blocking_issues=[]。其實跑 step_tracker exit0、29合成測試通過，核對 frozen analysis／artifact bindings／三份 scratch replay 一致。完整摘要與 reviewed hashes 見 review-log。進入已授權 publish-in-progress；merge／release／產品採納仍未核准。
 
 2026-10-15：四個 planning artifacts 落盤供獨立審查，未跑本topic實作測試／CLI／門檻計算，未選候選。主代理另提供已完成isolated E013原verifier的環境前置證據（75verified、gaps=[]、complete=true，logs在T/runtime/logs）；這不標任何implementation step完成。Topic lifecycle creator-in-progress；planning handoff review-ready。phase completion 待相應可見 evidence 後更新。

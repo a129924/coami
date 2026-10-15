@@ -122,3 +122,13 @@ Reviewed bytes:
 - Plan/spec 的正式批准版本 hashes 見前述 plan review；本輪之後僅同步 lifecycle metadata 與本次真實 verdict，不改 scope、步驟或執行契約。
 
 Current routing: `approved → publish-in-progress`，六個 workflow stages 均有相應證據。Owner 已授權 topic commit／push／Draft PR；PR Lens 將在真實 committed base/head 存在後產本機 map，不回填成 precommit 已完成。下一停點 human review；未授權 merge、release 或產品設定。
+
+## Draft PR / human review handoff
+
+- 2026-10-15：`0218b11` 研究 topic commit、`ae19cfe` 視覺證據 commit 已 push 至已核對的 origin `https://github.com/a129924/coami.git`。
+- [Draft PR #22](https://github.com/a129924/coami/pull/22)：base `dev`，head `feat/andrew/e022-context-threshold`；current routing `publish-in-progress → pr-open`，停 human review，不 merge/release。
+- PR Lens pinned CLI 0.11.0 已 validate／render 外部 `/private/tmp/E022-jev-context-threshold/pr-lens/graph.json` 與 `rendered/manifest.json`；3 lanes／9 nodes／9 edges／3 walkthrough steps／1 SVG。以真實 commit provenance 產圖，後續交接 metadata commit 後同步 manifest head；不回填成 precommit 已產圖，不上傳 assets。
+- Graphify 維持既有無圖 source fallback，沒有 build／refresh 或 provider calls。
+- Git hook 提示找不到 lefthook，但 commits 成功；手動 Ruff／29 tests 與獨立 implementation／code review 已另完成，不把缺工具的 hook 記為通過。
+- 首次 push 自動審核要求查證 destination／private data；唯讀 GitHub 檢查確認 origin 為公開 a129924/coami、登入 a129924 有 ADMIN、E013 manifest／analysis blob 與公開來源吻合，新 diff 僅26個已批准topic檔案、無credential檔案；補充證據後重試已核准並成功，未繞過拒絕。
+- 本次交接只同步 publication metadata；analysis source、freeze、research/heldout evidence 與報告 bytes 未改。Owner 產品風險／採納仍未決，原 dev worktree 不實作。

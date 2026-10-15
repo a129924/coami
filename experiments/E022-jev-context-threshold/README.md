@@ -91,11 +91,11 @@ Research 的代表性門檻取捨如下；完整 101 點保留在 `research-summ
 
 - [Archify workflow](visuals/workflow.html)：兩 lane composition 修正後 showcase 9/9、0 errors／warnings，deliver 成功；[delivery receipt](visuals/delivery.json) 綁 spec SHA-256 `180f3e2c3dcadc78478654a10c6286b51c28305178d67550d8fbfc3eb6c63edb`／2,258 bytes、HTML SHA-256 `acf784b3fefe137796c5027faa8b72038d62cc28a4f6506ea34673c1f7579e31`／698,651 bytes。
 - [visual-check receipt](visuals/visual-check.json)：1440×900、1600×1000、1920×1080、2048×1320 containment pass；四張小／大 light／dark PNG 與 [contact sheet](visuals/workflow.visual-check.html) 完整。自動 `visualReview: pending` 保留；獨立 Reviewer 首次看四 PNG，因 source→compare 線穿過第二列 lane header 判為 failed；局部 edge 修復並重新 validate／deliver／capture 後，`/root/plan_reviewer` 已實看四張新的小／大 light／dark PNG，確認穿越解除、可讀、無截斷、最大尺寸平衡，人工 `visual_review: passed`。這項獨立紀錄與自動 `visualReview: pending` 並列，未改自動 receipt。作者語言繁中，固定 Viewer UI／HTML lang fallback English。
-- PR Lens：precommit 階段 HEAD 仍為 base、變更為 staged new files，schema 要求 distinct committed base／head，故如實採 direct staged diff review fallback，不自造 provenance。post-review／commit 後主代理才會用固定 CLI 在 `/private/tmp/E022-jev-context-threshold/pr-lens/` 產 graph／render；目前未產圖，不宣稱完成，不 publish。
+- PR Lens：precommit 階段採 direct staged diff review fallback，不自造 committed head。提交研究與視覺證據後，已以固定 CLI 0.11.0 在 `/private/tmp/E022-jev-context-threshold/pr-lens/` validate／render 成功：3 lanes、9 nodes、9 edges、3 walkthrough steps、1 SVG；真實 base／head 見外部 graph.json／rendered/manifest.json。只本機輸出，不上傳圖或修改 repo config。
 - Graphify：已重核 feature worktree 無可用 graph，採 targeted source reads fallback，未 build／refresh／query 空圖。圖與 source 對照見 [source-map.md](visuals/source-map.md)。
 
 ## 結論與限制
 
 在 Owner 鎖定的排序下，research 支持 79% 候選與上述拒絕成本；holdout 僅為固定後的一次描述性檢查，未用來選值。樣本僅 40／20／15、holdout 已公開，模型機率不等於經校準錯誤風險；零觀察誤採用不是安全達標，不能外推 Input／Output Policy 或其他情境。
 
-工具缺口與研究判讀分開，輔助圖、測試或 replay 通過均不核准產品採用。Owner 尚須決定可接受 I→S 風險與候選採納；產品設定未改。獨立審閱已完成，接續 direct topic commits／push／Draft PR 停 human review，不 merge／release。撤回候選建議須保留 freeze／檢查歷史並記原因。
+工具缺口與研究判讀分開，輔助圖、測試或 replay 通過均不核准產品採用。Owner 尚須決定可接受 I→S 風險與候選採納；產品設定未改。獨立審閱、topic commits 與 push 已完成，[Draft PR #22](https://github.com/a129924/coami/pull/22) 停在 human review，不 merge／release。Git hook 提示缺少 lefthook；未宣稱 hook 通過，已另完成手動 Ruff／29 tests 及獨立審閱。撤回候選建議須保留 freeze／檢查歷史並記原因。
