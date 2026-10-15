@@ -32,7 +32,7 @@ The SDK owns its poll clock, recognition thresholds and Event shape. The driver 
 - `evidence/validation.txt`: initial failing tests, bounded fixes, final source checks and build/runtime notes.
 - `evidence/runtime-provenance.json`: actual pins/tool hashes/patch/runtime/MOD hashes; served bytes are checked before startup.
 - `evidence/runtime-automated.json`: actual browser attempts, preserving prior attempts; no unit result is substituted.
-- `evidence/operator-session.json`: human status; no human runs have executed.
+- `evidence/operator-session.json`: human status and owner-provided raw exports; all53 owner-operated synthetic simulator matrix cases PASS; independent final evidence review APPROVED.
 - `evidence/acceptance-summary.json`, `evidence/imu-run.md`: per-layer conclusions and limitations.
 - `evidence/auxiliary.md`, `diagram/imu-flow.html`: supplementary navigation/diagram status, independent from correctness.
 
@@ -42,4 +42,6 @@ Source tests: 42 PASS; strict typecheck PASS; WASM/MOD compilation PASS. Actual 
 
 The owner explicitly authorized an E021 scratch-only clock compatibility extension after the pinned Moddable WASM `xs_time_ticks()` stub was discovered. The staged `time` alias extends a byte-checked copy of pinned Time and implements only `ticks` using real monotonic `emscripten_get_now()`. SDK IMU, recognizer, thresholds and Event bytes remain unchanged. Earlier failed runtime/build/instrumentation attempts are retained.
 
-Required human simulator validation: **NOT_EXECUTED**; procedure and pending matrix are in `operator-session.json`. Hardware: OUT_OF_SCOPE. `fullVerification=false`, `verificationComplete=false` and `overallSuccess=false` until required human acceptance actually executes and passes. Draft PR is the human-review handoff. Preserve E019/PR19 and E020/PR20 evidence unchanged. No production adoption, merge or release is implied.
+Required human simulator validation: **53/53 cases PASS**, independent human-evidence review **APPROVED**. The procedure, final matrix and32 original owner exports are preserved in `operator-session.json`; inconclusive attempts remain historical evidence. `fullVerification=true`, `verificationComplete=true` and `overallSuccess=true` apply only to this controlled synthetic experiment. Six event kinds each have two independent human positive runs; required negatives, boundaries, cooldown, faults, stop/restart and page lifecycle/recovery cases passed.
+
+Fault/lifecycle setup and pagehide observation used owner DevTools-assisted operations. Timeout exports contain terminal reasons rather than exact firing timestamps; inspected source policy and controlled setup support those classifications. Hardware: **OUT_OF_SCOPE / not verified**. Ideal configured-frame vectors and custom scratch provider/clock do not prove physical direction, real sensitivity, false-positive rate or upstream native support. Preserve E019/PR19 and E020/PR20 evidence unchanged. Draft PR remains for owner review; no production adoption, merge or release is implied.

@@ -1,6 +1,6 @@
 # E021 IMU Event：辨識搖晃、傾倒與倒置
 
-本文件持久化 owner 接受且完成對話內容審查的 E021 計畫；原 repo-visible plan／step readiness 已獨立複核。本次 owner 授權的 scratch clock compatibility delta 待 bounded 複核，先前 runtime 失敗不視為已解除；實際進度依 review-log。交付標籤為 `ts-implementation`；Dispatcher 明確選定 step profile 為 `base-plan`，不建立新的 skill／profile。
+本文件持久化 owner 接受且完成對話內容審查的 E021 計畫；原 repo-visible plan／step readiness 已獨立複核。Owner 授權的 scratch clock compatibility 與實際 runtime／真人證據已完成獨立複核；先前失敗保留為歷史證據，實際進度依 review-log。交付標籤為 `ts-implementation`；Dispatcher 明確選定 step profile 為 `base-plan`，不建立新的 skill／profile。
 
 **Analysis warning — INCOMPLETE optional analysis layer**：`analysis/E021-imu-event/requirements.md` 與 `analysis/E021-imu-event/technical-spec.md` 均缺席。本計畫依 owner 草案、已回答決策與 pinned SDK 起草，不假設其他 analysis baseline。
 
@@ -41,7 +41,7 @@
 
 - **Current**: `pr-open`.
 - **Next actor**: Human reviewer.
-- **Stage-local action**: STOP POINT 2 — required human simulator acceptance and Draft PR review; no merge or release authorization.
+- **Stage-local action**: STOP POINT 2 — all53 human simulator cases and independent evidence review complete; Draft PR owner review remains, no merge or release authorization.
 - **Allowed next transition**: `pr-open→needs-rework|merged` only with the applicable new human action/authorization.
 - **Allowed**：`planned→creator-in-progress→review-ready→reviewer-in-progress`；`reviewer-in-progress→approved|needs-rework`；`needs-rework→creator-in-progress`；`approved→creator-in-progress|publish-in-progress`；`publish-in-progress→pr-open|merged`；`pr-open→needs-rework|merged`；`merged→terminal`。
 - Owner 的 clock scope choice 已明確解除，依授權派 Implementer 執行 bounded compatibility 並交獨立 Reviewer 核對 delta；原 readiness verdict 不代表新 runtime 通過。步驟／rework 未完維持 creator-in-progress；completion gate 只讀 step 的 Implementation Steps `[X]` 與證據。無 round cap／release transition。
@@ -182,5 +182,7 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 ## Open Questions / Unresolved Items
 
 - 無待 owner 決定的 IMU scope／contract 問題；raw provider、units／clock、fresh runtime 與全案例要求維持鎖定共識，另包含本次 owner 明確授權的 scratch clock compatibility。
-- Managed worktree／attached branch 與 SDK pin 已確認；S1／S2 source tests／build 及原 readiness 證據見 review-log，但初次 browser 路徑因 pinned clock stub 失敗。Owner 已授權 compatibility，scope choice 不再阻擋；修正後 automated runtime53/53 PASS/browserErrors=[]，包含頁面生命週期；required 人工仍 NOT_EXECUTED/fullVerification=false。
-- 完整 automated matrix／真實證據與 required 人工交接已備齊，Planner completion gate exit0後獨立 Reviewer 已核准工程交付；人工實際操作於 Draft PR 後 STOP POINT 2 仍 required／NOT_EXECUTED。Optional analysis warning 保持。
+- Managed worktree／attached branch 與 SDK pin 已確認；S1／S2 source tests／build 及原 readiness 證據見 review-log，但初次 browser 路徑因 pinned clock stub 失敗。Owner 已授權 compatibility，scope choice 不再阻擋；修正後 automated runtime53/53 PASS/browserErrors=[]，包含頁面生命週期；required 人工53/53 PASS並經獨立 evidence review APPROVED；fullVerification=true僅限本次受控synthetic範圍，硬體未驗。
+- 完整 automated matrix／真實證據與 required 人工交接已備齊，Planner completion gate exit0後獨立 Reviewer 已核准工程交付；Draft PR後required人工操作已實際完成53/53且獨立審查核准，保留全部歷史嘗試；目前待owner PR review，無merge/release授權。Optional analysis warning 保持。
+
+Current acceptance checkpoint — 2026-10-15: initial Draft handoff required NOT_EXECUTED/fullVerification=false statements above describe the engineering-delivery boundary at creation. Required actual human operations have since completed53/53 with independent Reviewer APPROVED; final flags apply only to controlled synthetic scope. Original gates/AC/implementation contract and hardware exclusions remain unchanged; no pending human matrix case remains.

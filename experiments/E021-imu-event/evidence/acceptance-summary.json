@@ -10,40 +10,40 @@
   "modBuild": "PASS",
   "runtime": "PASS",
   "runtimeReason": "Owner-approved scratch Time.ticks wrapper uses emscripten_get_now(); original SDK recognizer, thresholds and Event bytes retained",
-  "human": "NOT_EXECUTED",
+  "human": "PASS",
   "hardware": "OUT_OF_SCOPE",
-  "verificationComplete": false,
-  "overallSuccess": false,
+  "verificationComplete": true,
+  "overallSuccess": true,
   "events": {
     "shake": {
       "recognizerSourceTests": "PASS",
       "actualRuntime": "PASS",
-      "human": "NOT_EXECUTED"
+      "human": "PASS"
     },
     "fallenForward": {
       "recognizerSourceTests": "PASS",
       "actualRuntime": "PASS",
-      "human": "NOT_EXECUTED"
+      "human": "PASS"
     },
     "fallenBackward": {
       "recognizerSourceTests": "PASS",
       "actualRuntime": "PASS",
-      "human": "NOT_EXECUTED"
+      "human": "PASS"
     },
     "fallenLeft": {
       "recognizerSourceTests": "PASS",
       "actualRuntime": "PASS",
-      "human": "NOT_EXECUTED"
+      "human": "PASS"
     },
     "fallenRight": {
       "recognizerSourceTests": "PASS",
       "actualRuntime": "PASS",
-      "human": "NOT_EXECUTED"
+      "human": "PASS"
     },
     "upsideDown": {
       "recognizerSourceTests": "PASS",
       "actualRuntime": "PASS",
-      "human": "NOT_EXECUTED"
+      "human": "PASS"
     }
   },
   "auxiliary": {
@@ -52,5 +52,20 @@
     "prLens": "PASS local validate/render and independent review; historical base34fd88c/headf0eec2b snapshot, external outputs in auxiliary.md"
   },
   "automatedRuntimeChecks": 53,
-  "fullVerification": false
+  "fullVerification": true,
+  "humanCases": {
+    "passed": 53,
+    "required": 53,
+    "remaining": 0
+  },
+  "humanEvidenceReview": "APPROVED",
+  "verificationScope": "E021 controlled synthetic software/runtime and owner-operated simulator cases only",
+  "hardwareVerified": false,
+  "productionAdopted": false,
+  "limitations": [
+    "Fault/lifecycle setup and pagehide observation were owner DevTools-assisted operations.",
+    "Timeout exports show terminal reason without exact firing timestamp; inspected policy and controlled setup support classification.",
+    "Ideal synthetic configured-frame samples do not establish physical mounting direction, sensitivity or false-positive rate.",
+    "Clock compatibility and raw IMU provider are E021 scratch extensions, not upstream native support."
+  ]
 }
