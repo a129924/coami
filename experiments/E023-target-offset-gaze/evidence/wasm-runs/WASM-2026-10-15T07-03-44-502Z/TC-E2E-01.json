@@ -1,0 +1,178 @@
+{
+  "experiment": "E023",
+  "run_id": "5fab679a-45d2-41b2-800c-311e2a44d1ec",
+  "case": {
+    "id": "TC-E2E-01",
+    "offset": [
+      0,
+      0
+    ],
+    "initial": 0
+  },
+  "provenance": {
+    "experiment": "E023",
+    "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+    "hashes": {
+      "mc.js": "a1f2c55234c99663a0d5ab48fd969944ca72da9c1f14e6f1432c36fa53829796",
+      "mc.wasm": "dc4ceb67c0abea9c126557ce63851a41dedbd1c6e10d15f6b8dddb7615ef487e",
+      "assets/case/v1/shell.stl": "832ced3ad3669c3fc6b174a984cc800522ca33cecd9222d531bda430f6cc5236",
+      "coami-mod.xsa": "e1e36d4b32aaeaa6fc44abc8fab653d28a781b1b7cc569923f11894c2cddf350"
+    },
+    "sources": {
+      "mod/mod.ts": "6f48ea9a756e69a86fbe26f0636cc4cacd66b2bc88443f8dbab81dceb1560a4b",
+      "mod/protocol.ts": "e9fd1ff261e1b66c7a53b64e2785fa2b7497b161333af03aca0e10fa989ad21a",
+      "vendor/web/src/services/simulator/simulator-engine.mjs": "167a07741821e719acd2c087ea916c5ed141c87d8bc54a2e26d757a58376fe33",
+      "vendor/web/simulator/geometry.mjs": "7f9b357ec11b82fae1e45d5392e3f661ebadc8fc5b7a69f638f8c5a311f61a55",
+      "vendor/web/simulator/bridge.mjs": "f4a2a66baf6000d9c29597f570d9e23bf32057066aee47a136b35a10f00ba6c6"
+    },
+    "limitation": "Exact E023 source-built runtime bytes; full build provenance is recorded separately in evidence/host-runtime-provenance.json"
+  },
+  "result": {
+    "state": "無法判定",
+    "reason": "Error: MOD trace timeout"
+  },
+  "records": [
+    {
+      "browser_ms": 3733.5999999046326,
+      "kind": "trace",
+      "text": "[main] start"
+    },
+    {
+      "browser_ms": 3734.3999996185303,
+      "kind": "trace",
+      "text": "[main] installed WASM button bridge"
+    },
+    {
+      "browser_ms": 3735.2999997138977,
+      "kind": "trace",
+      "text": "[main] loading app behaviors"
+    },
+    {
+      "browser_ms": 3735.3999996185303,
+      "kind": "trace",
+      "text": "[main] checking mod override"
+    },
+    {
+      "browser_ms": 11747.199999809265,
+      "kind": "trace",
+      "text": "[main] onLaunch shouldCreateContext=true"
+    },
+    {
+      "browser_ms": 11748.099999904633,
+      "kind": "trace",
+      "text": "No Wi-Fi SSID"
+    },
+    {
+      "browser_ms": 11752.89999961853,
+      "kind": "trace",
+      "text": "[main] network ready: skipped"
+    },
+    {
+      "browser_ms": 11753.699999809265,
+      "kind": "trace",
+      "text": "[main] TTS engine: stackchan-voice"
+    },
+    {
+      "browser_ms": 11761.099999904633,
+      "kind": "trace",
+      "text": "[main] app context created"
+    },
+    {
+      "browser_ms": 11761.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"ready\",\"experiment\":\"E023\"}"
+    },
+    {
+      "browser_ms": 11771.199999809265,
+      "kind": "trace",
+      "text": "[main] app behaviors ready"
+    },
+    {
+      "browser_ms": 11867,
+      "kind": "sent",
+      "message": {
+        "kind": "hello",
+        "run_id": "5fab679a-45d2-41b2-800c-311e2a44d1ec"
+      }
+    },
+    {
+      "browser_ms": 11868.699999809265,
+      "kind": "server",
+      "reply": {
+        "kind": "hello",
+        "run_id": "5fab679a-45d2-41b2-800c-311e2a44d1ec"
+      }
+    },
+    {
+      "browser_ms": 11869.39999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":1,\"y\":140}"
+    },
+    {
+      "browser_ms": 11869.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":1,\"y\":140}"
+    },
+    {
+      "browser_ms": 11869.89999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":102}"
+    },
+    {
+      "browser_ms": 11870,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":102}"
+    },
+    {
+      "browser_ms": 11870,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":109}"
+    },
+    {
+      "browser_ms": 11870.099999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":109}"
+    },
+    {
+      "browser_ms": 11870.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":121}"
+    },
+    {
+      "browser_ms": 11870.299999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":121}"
+    },
+    {
+      "browser_ms": 11870.299999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":1,\"y\":128}"
+    },
+    {
+      "browser_ms": 11870.299999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":1,\"y\":128}"
+    },
+    {
+      "browser_ms": 11870.5,
+      "kind": "frame-committed",
+      "seq": 1,
+      "probe": true,
+      "expected": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "browser_ms": 13870.299999713898,
+      "kind": "stop",
+      "state": "無法判定",
+      "reason": "Error: MOD trace timeout"
+    }
+  ],
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+  "capturedAt": "2026-10-15T07:04:01.360Z",
+  "poseSource": "rendered-head-world-quaternion",
+  "limitations": "synthetic ideal zero-offset camera; not physical robot evidence"
+}

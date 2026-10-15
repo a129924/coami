@@ -1,74 +1,127 @@
 {
   "experiment": "E023",
-  "state": "無法判定",
+  "state": "失敗",
   "question": "Can synthetic offset -> Python -> real full WASM SDK -> rendered feedback converge?",
-  "reason": "Pinned host unavailable; located E001 mc.js/mc.wasm differ from required E019 hashes. No compiler installation or substitute runtime allowed.",
-  "runtime_probe": "未執行",
-  "controls_executed": 0,
-  "sdk_calls_executed": 0,
+  "reason": "All 15 actual WASM cases executed. Four near-center +/-0.11 cases retain unchanged rendered pose and offset after 20 SDK calls; original 30-degree SDK threshold remains unchanged.",
+  "runtime_probe": "成功",
+  "probe_frames_executed": 90,
+  "controls_executed": 90,
+  "sdk_calls_executed": 90,
   "cases": [
     {
       "id": "TC-E2E-01",
-      "state": "未執行"
+      "state": "成功",
+      "controls": 0,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-01.json"
     },
     {
       "id": "TC-E2E-02",
-      "state": "未執行"
+      "state": "成功",
+      "controls": 1,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-02.json"
     },
     {
       "id": "TC-E2E-03",
-      "state": "未執行"
+      "state": "成功",
+      "controls": 1,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-03.json"
     },
     {
       "id": "TC-E2E-04",
-      "state": "未執行"
+      "state": "成功",
+      "controls": 1,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-04.json"
     },
     {
       "id": "TC-E2E-05",
-      "state": "未執行"
+      "state": "成功",
+      "controls": 1,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-05.json"
     },
     {
       "id": "TC-E2E-06",
-      "state": "未執行"
+      "state": "成功",
+      "controls": 1,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-06.json"
     },
     {
       "id": "TC-E2E-07",
-      "state": "未執行"
+      "state": "成功",
+      "controls": 1,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-07.json"
     },
     {
       "id": "TC-E2E-08",
-      "state": "未執行"
+      "state": "成功",
+      "controls": 1,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-08.json"
     },
     {
       "id": "TC-E2E-09",
-      "state": "未執行"
+      "state": "成功",
+      "controls": 1,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-09.json"
     },
     {
       "id": "TC-E2E-10",
-      "state": "未執行"
+      "state": "失敗",
+      "reason": "iteration_limit",
+      "controls": 20,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-10.json"
     },
     {
       "id": "TC-E2E-11",
-      "state": "未執行"
+      "state": "失敗",
+      "reason": "iteration_limit",
+      "controls": 20,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-11.json"
     },
     {
       "id": "TC-E2E-12",
-      "state": "未執行"
+      "state": "失敗",
+      "reason": "iteration_limit",
+      "controls": 20,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-12.json"
     },
     {
       "id": "TC-E2E-13",
-      "state": "未執行"
+      "state": "失敗",
+      "reason": "iteration_limit",
+      "controls": 20,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-13.json"
     },
     {
       "id": "TC-E2E-14",
-      "state": "未執行"
+      "state": "成功",
+      "controls": 1,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-14.json"
     },
     {
       "id": "TC-E2E-15",
-      "state": "未執行"
+      "state": "成功",
+      "controls": 1,
+      "probe": true,
+      "evidence": "wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-15.json"
     }
   ],
-  "verification_task_complete": false,
+  "verification_task_complete": true,
   "record_complete": true,
-  "decision": "Do not advance decisions depending on convergence; hand implementation and explicit blocker to human review."
+  "run_id": "WASM-2026-10-15T07-05-48-980Z",
+  "evidence_audit": "wasm-evidence-audit.json",
+  "initial_result": "results-initial.json",
+  "decision": "Bounded validation is complete; convergence hypothesis fails for the fixed case set. Do not advance decisions depending on general centering. Submit evidence to human review; SDK investigation remains separate."
 }
