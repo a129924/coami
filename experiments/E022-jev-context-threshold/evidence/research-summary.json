@@ -1,0 +1,5470 @@
+{
+  "baseline_has_no_i_to_s": false,
+  "candidate_percent": 79,
+  "curve": [
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.0,
+      "threshold_percent": 0
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.01,
+      "threshold_percent": 1
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.02,
+      "threshold_percent": 2
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.03,
+      "threshold_percent": 3
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.04,
+      "threshold_percent": 4
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.05,
+      "threshold_percent": 5
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.06,
+      "threshold_percent": 6
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.07,
+      "threshold_percent": 7
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.08,
+      "threshold_percent": 8
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.09,
+      "threshold_percent": 9
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.1,
+      "threshold_percent": 10
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.11,
+      "threshold_percent": 11
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.12,
+      "threshold_percent": 12
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.13,
+      "threshold_percent": 13
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.14,
+      "threshold_percent": 14
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.15,
+      "threshold_percent": 15
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.16,
+      "threshold_percent": 16
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.17,
+      "threshold_percent": 17
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.18,
+      "threshold_percent": 18
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.19,
+      "threshold_percent": 19
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.2,
+      "threshold_percent": 20
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.21,
+      "threshold_percent": 21
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.22,
+      "threshold_percent": 22
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.23,
+      "threshold_percent": 23
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.24,
+      "threshold_percent": 24
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.25,
+      "threshold_percent": 25
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.26,
+      "threshold_percent": 26
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.27,
+      "threshold_percent": 27
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.28,
+      "threshold_percent": 28
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.29,
+      "threshold_percent": 29
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.3,
+      "threshold_percent": 30
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.31,
+      "threshold_percent": 31
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.32,
+      "threshold_percent": 32
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.33,
+      "threshold_percent": 33
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.34,
+      "threshold_percent": 34
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.35,
+      "threshold_percent": 35
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.36,
+      "threshold_percent": 36
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.37,
+      "threshold_percent": 37
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.38,
+      "threshold_percent": 38
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.39,
+      "threshold_percent": 39
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.4,
+      "threshold_percent": 40
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.41,
+      "threshold_percent": 41
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.42,
+      "threshold_percent": 42
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.43,
+      "threshold_percent": 43
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.44,
+      "threshold_percent": 44
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.45,
+      "threshold_percent": 45
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.46,
+      "threshold_percent": 46
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.47,
+      "threshold_percent": 47
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.48,
+      "threshold_percent": 48
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.49,
+      "threshold_percent": 49
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.5,
+      "threshold_percent": 50
+    },
+    {
+      "A": 40,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 3,
+        "denominator": 17,
+        "rate": 0.17647058823529413
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "adoption": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.51,
+      "threshold_percent": 51
+    },
+    {
+      "A": 39,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 2,
+        "denominator": 17,
+        "rate": 0.11764705882352941
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 4,
+        "denominator": 39,
+        "rate": 0.10256410256410256
+      },
+      "adoption": {
+        "count": 39,
+        "denominator": 40,
+        "rate": 0.975
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "retained_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "threshold": 0.52,
+      "threshold_percent": 52
+    },
+    {
+      "A": 38,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 2,
+        "denominator": 17,
+        "rate": 0.11764705882352941
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 4,
+        "denominator": 38,
+        "rate": 0.10526315789473684
+      },
+      "adoption": {
+        "count": 38,
+        "denominator": 40,
+        "rate": 0.95
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 1,
+        "denominator": 35,
+        "rate": 0.02857142857142857
+      },
+      "retained_correct": {
+        "count": 34,
+        "denominator": 35,
+        "rate": 0.9714285714285714
+      },
+      "threshold": 0.53,
+      "threshold_percent": 53
+    },
+    {
+      "A": 37,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 3,
+        "denominator": 37,
+        "rate": 0.08108108108108109
+      },
+      "adoption": {
+        "count": 37,
+        "denominator": 40,
+        "rate": 0.925
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 1,
+        "denominator": 35,
+        "rate": 0.02857142857142857
+      },
+      "retained_correct": {
+        "count": 34,
+        "denominator": 35,
+        "rate": 0.9714285714285714
+      },
+      "threshold": 0.54,
+      "threshold_percent": 54
+    },
+    {
+      "A": 37,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 3,
+        "denominator": 37,
+        "rate": 0.08108108108108109
+      },
+      "adoption": {
+        "count": 37,
+        "denominator": 40,
+        "rate": 0.925
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 1,
+        "denominator": 35,
+        "rate": 0.02857142857142857
+      },
+      "retained_correct": {
+        "count": 34,
+        "denominator": 35,
+        "rate": 0.9714285714285714
+      },
+      "threshold": 0.55,
+      "threshold_percent": 55
+    },
+    {
+      "A": 37,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 3,
+        "denominator": 37,
+        "rate": 0.08108108108108109
+      },
+      "adoption": {
+        "count": 37,
+        "denominator": 40,
+        "rate": 0.925
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 1,
+        "denominator": 35,
+        "rate": 0.02857142857142857
+      },
+      "retained_correct": {
+        "count": 34,
+        "denominator": 35,
+        "rate": 0.9714285714285714
+      },
+      "threshold": 0.56,
+      "threshold_percent": 56
+    },
+    {
+      "A": 37,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 3,
+        "denominator": 37,
+        "rate": 0.08108108108108109
+      },
+      "adoption": {
+        "count": 37,
+        "denominator": 40,
+        "rate": 0.925
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 1,
+        "denominator": 35,
+        "rate": 0.02857142857142857
+      },
+      "retained_correct": {
+        "count": 34,
+        "denominator": 35,
+        "rate": 0.9714285714285714
+      },
+      "threshold": 0.57,
+      "threshold_percent": 57
+    },
+    {
+      "A": 37,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 3,
+        "denominator": 37,
+        "rate": 0.08108108108108109
+      },
+      "adoption": {
+        "count": 37,
+        "denominator": 40,
+        "rate": 0.925
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 1,
+        "denominator": 35,
+        "rate": 0.02857142857142857
+      },
+      "retained_correct": {
+        "count": 34,
+        "denominator": 35,
+        "rate": 0.9714285714285714
+      },
+      "threshold": 0.58,
+      "threshold_percent": 58
+    },
+    {
+      "A": 37,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 3,
+        "denominator": 37,
+        "rate": 0.08108108108108109
+      },
+      "adoption": {
+        "count": 37,
+        "denominator": 40,
+        "rate": 0.925
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 1,
+        "denominator": 35,
+        "rate": 0.02857142857142857
+      },
+      "retained_correct": {
+        "count": 34,
+        "denominator": 35,
+        "rate": 0.9714285714285714
+      },
+      "threshold": 0.59,
+      "threshold_percent": 59
+    },
+    {
+      "A": 37,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 3,
+        "denominator": 37,
+        "rate": 0.08108108108108109
+      },
+      "adoption": {
+        "count": 37,
+        "denominator": 40,
+        "rate": 0.925
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 1,
+        "denominator": 35,
+        "rate": 0.02857142857142857
+      },
+      "retained_correct": {
+        "count": 34,
+        "denominator": 35,
+        "rate": 0.9714285714285714
+      },
+      "threshold": 0.6,
+      "threshold_percent": 60
+    },
+    {
+      "A": 36,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 2,
+        "denominator": 23,
+        "rate": 0.08695652173913043
+      },
+      "adopted_wrong": {
+        "count": 3,
+        "denominator": 36,
+        "rate": 0.08333333333333333
+      },
+      "adoption": {
+        "count": 36,
+        "denominator": 40,
+        "rate": 0.9
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 2,
+        "denominator": 35,
+        "rate": 0.05714285714285714
+      },
+      "retained_correct": {
+        "count": 33,
+        "denominator": 35,
+        "rate": 0.9428571428571428
+      },
+      "threshold": 0.61,
+      "threshold_percent": 61
+    },
+    {
+      "A": 35,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 1,
+        "denominator": 23,
+        "rate": 0.043478260869565216
+      },
+      "adopted_wrong": {
+        "count": 2,
+        "denominator": 35,
+        "rate": 0.05714285714285714
+      },
+      "adoption": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 2,
+        "denominator": 35,
+        "rate": 0.05714285714285714
+      },
+      "retained_correct": {
+        "count": 33,
+        "denominator": 35,
+        "rate": 0.9428571428571428
+      },
+      "threshold": 0.62,
+      "threshold_percent": 62
+    },
+    {
+      "A": 34,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 1,
+        "denominator": 23,
+        "rate": 0.043478260869565216
+      },
+      "adopted_wrong": {
+        "count": 2,
+        "denominator": 34,
+        "rate": 0.058823529411764705
+      },
+      "adoption": {
+        "count": 34,
+        "denominator": 40,
+        "rate": 0.85
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 3,
+        "denominator": 35,
+        "rate": 0.08571428571428572
+      },
+      "retained_correct": {
+        "count": 32,
+        "denominator": 35,
+        "rate": 0.9142857142857143
+      },
+      "threshold": 0.63,
+      "threshold_percent": 63
+    },
+    {
+      "A": 32,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 1,
+        "denominator": 23,
+        "rate": 0.043478260869565216
+      },
+      "adopted_wrong": {
+        "count": 2,
+        "denominator": 32,
+        "rate": 0.0625
+      },
+      "adoption": {
+        "count": 32,
+        "denominator": 40,
+        "rate": 0.8
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 5,
+        "denominator": 35,
+        "rate": 0.14285714285714285
+      },
+      "retained_correct": {
+        "count": 30,
+        "denominator": 35,
+        "rate": 0.8571428571428571
+      },
+      "threshold": 0.64,
+      "threshold_percent": 64
+    },
+    {
+      "A": 31,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 1,
+        "denominator": 23,
+        "rate": 0.043478260869565216
+      },
+      "adopted_wrong": {
+        "count": 2,
+        "denominator": 31,
+        "rate": 0.06451612903225806
+      },
+      "adoption": {
+        "count": 31,
+        "denominator": 40,
+        "rate": 0.775
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 6,
+        "denominator": 35,
+        "rate": 0.17142857142857143
+      },
+      "retained_correct": {
+        "count": 29,
+        "denominator": 35,
+        "rate": 0.8285714285714286
+      },
+      "threshold": 0.65,
+      "threshold_percent": 65
+    },
+    {
+      "A": 30,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 1,
+        "denominator": 23,
+        "rate": 0.043478260869565216
+      },
+      "adopted_wrong": {
+        "count": 2,
+        "denominator": 30,
+        "rate": 0.06666666666666667
+      },
+      "adoption": {
+        "count": 30,
+        "denominator": 40,
+        "rate": 0.75
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 7,
+        "denominator": 35,
+        "rate": 0.2
+      },
+      "retained_correct": {
+        "count": 28,
+        "denominator": 35,
+        "rate": 0.8
+      },
+      "threshold": 0.66,
+      "threshold_percent": 66
+    },
+    {
+      "A": 28,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 1,
+        "denominator": 28,
+        "rate": 0.03571428571428571
+      },
+      "adoption": {
+        "count": 28,
+        "denominator": 40,
+        "rate": 0.7
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 8,
+        "denominator": 35,
+        "rate": 0.22857142857142856
+      },
+      "retained_correct": {
+        "count": 27,
+        "denominator": 35,
+        "rate": 0.7714285714285715
+      },
+      "threshold": 0.67,
+      "threshold_percent": 67
+    },
+    {
+      "A": 26,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 1,
+        "denominator": 26,
+        "rate": 0.038461538461538464
+      },
+      "adoption": {
+        "count": 26,
+        "denominator": 40,
+        "rate": 0.65
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 10,
+        "denominator": 35,
+        "rate": 0.2857142857142857
+      },
+      "retained_correct": {
+        "count": 25,
+        "denominator": 35,
+        "rate": 0.7142857142857143
+      },
+      "threshold": 0.68,
+      "threshold_percent": 68
+    },
+    {
+      "A": 26,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 1,
+        "denominator": 26,
+        "rate": 0.038461538461538464
+      },
+      "adoption": {
+        "count": 26,
+        "denominator": 40,
+        "rate": 0.65
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 10,
+        "denominator": 35,
+        "rate": 0.2857142857142857
+      },
+      "retained_correct": {
+        "count": 25,
+        "denominator": 35,
+        "rate": 0.7142857142857143
+      },
+      "threshold": 0.69,
+      "threshold_percent": 69
+    },
+    {
+      "A": 26,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 1,
+        "denominator": 26,
+        "rate": 0.038461538461538464
+      },
+      "adoption": {
+        "count": 26,
+        "denominator": 40,
+        "rate": 0.65
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 10,
+        "denominator": 35,
+        "rate": 0.2857142857142857
+      },
+      "retained_correct": {
+        "count": 25,
+        "denominator": 35,
+        "rate": 0.7142857142857143
+      },
+      "threshold": 0.7,
+      "threshold_percent": 70
+    },
+    {
+      "A": 26,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 1,
+        "denominator": 26,
+        "rate": 0.038461538461538464
+      },
+      "adoption": {
+        "count": 26,
+        "denominator": 40,
+        "rate": 0.65
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 10,
+        "denominator": 35,
+        "rate": 0.2857142857142857
+      },
+      "retained_correct": {
+        "count": 25,
+        "denominator": 35,
+        "rate": 0.7142857142857143
+      },
+      "threshold": 0.71,
+      "threshold_percent": 71
+    },
+    {
+      "A": 25,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 1,
+        "denominator": 25,
+        "rate": 0.04
+      },
+      "adoption": {
+        "count": 25,
+        "denominator": 40,
+        "rate": 0.625
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 11,
+        "denominator": 35,
+        "rate": 0.3142857142857143
+      },
+      "retained_correct": {
+        "count": 24,
+        "denominator": 35,
+        "rate": 0.6857142857142857
+      },
+      "threshold": 0.72,
+      "threshold_percent": 72
+    },
+    {
+      "A": 25,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 1,
+        "denominator": 25,
+        "rate": 0.04
+      },
+      "adoption": {
+        "count": 25,
+        "denominator": 40,
+        "rate": 0.625
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 11,
+        "denominator": 35,
+        "rate": 0.3142857142857143
+      },
+      "retained_correct": {
+        "count": 24,
+        "denominator": 35,
+        "rate": 0.6857142857142857
+      },
+      "threshold": 0.73,
+      "threshold_percent": 73
+    },
+    {
+      "A": 25,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 1,
+        "denominator": 25,
+        "rate": 0.04
+      },
+      "adoption": {
+        "count": 25,
+        "denominator": 40,
+        "rate": 0.625
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 11,
+        "denominator": 35,
+        "rate": 0.3142857142857143
+      },
+      "retained_correct": {
+        "count": 24,
+        "denominator": 35,
+        "rate": 0.6857142857142857
+      },
+      "threshold": 0.74,
+      "threshold_percent": 74
+    },
+    {
+      "A": 25,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 1,
+        "denominator": 25,
+        "rate": 0.04
+      },
+      "adoption": {
+        "count": 25,
+        "denominator": 40,
+        "rate": 0.625
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 11,
+        "denominator": 35,
+        "rate": 0.3142857142857143
+      },
+      "retained_correct": {
+        "count": 24,
+        "denominator": 35,
+        "rate": 0.6857142857142857
+      },
+      "threshold": 0.75,
+      "threshold_percent": 75
+    },
+    {
+      "A": 25,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 1,
+        "denominator": 25,
+        "rate": 0.04
+      },
+      "adoption": {
+        "count": 25,
+        "denominator": 40,
+        "rate": 0.625
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 11,
+        "denominator": 35,
+        "rate": 0.3142857142857143
+      },
+      "retained_correct": {
+        "count": 24,
+        "denominator": 35,
+        "rate": 0.6857142857142857
+      },
+      "threshold": 0.76,
+      "threshold_percent": 76
+    },
+    {
+      "A": 25,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 1,
+        "denominator": 25,
+        "rate": 0.04
+      },
+      "adoption": {
+        "count": 25,
+        "denominator": 40,
+        "rate": 0.625
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 11,
+        "denominator": 35,
+        "rate": 0.3142857142857143
+      },
+      "retained_correct": {
+        "count": 24,
+        "denominator": 35,
+        "rate": 0.6857142857142857
+      },
+      "threshold": 0.77,
+      "threshold_percent": 77
+    },
+    {
+      "A": 25,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 1,
+        "denominator": 17,
+        "rate": 0.058823529411764705
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 1,
+        "denominator": 25,
+        "rate": 0.04
+      },
+      "adoption": {
+        "count": 25,
+        "denominator": 40,
+        "rate": 0.625
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 11,
+        "denominator": 35,
+        "rate": 0.3142857142857143
+      },
+      "retained_correct": {
+        "count": 24,
+        "denominator": 35,
+        "rate": 0.6857142857142857
+      },
+      "threshold": 0.78,
+      "threshold_percent": 78
+    },
+    {
+      "A": 24,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 24,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 24,
+        "denominator": 40,
+        "rate": 0.6
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 11,
+        "denominator": 35,
+        "rate": 0.3142857142857143
+      },
+      "retained_correct": {
+        "count": 24,
+        "denominator": 35,
+        "rate": 0.6857142857142857
+      },
+      "threshold": 0.79,
+      "threshold_percent": 79
+    },
+    {
+      "A": 21,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 21,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 21,
+        "denominator": 40,
+        "rate": 0.525
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 14,
+        "denominator": 35,
+        "rate": 0.4
+      },
+      "retained_correct": {
+        "count": 21,
+        "denominator": 35,
+        "rate": 0.6
+      },
+      "threshold": 0.8,
+      "threshold_percent": 80
+    },
+    {
+      "A": 20,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 20,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 20,
+        "denominator": 40,
+        "rate": 0.5
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 15,
+        "denominator": 35,
+        "rate": 0.42857142857142855
+      },
+      "retained_correct": {
+        "count": 20,
+        "denominator": 35,
+        "rate": 0.5714285714285714
+      },
+      "threshold": 0.81,
+      "threshold_percent": 81
+    },
+    {
+      "A": 20,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 20,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 20,
+        "denominator": 40,
+        "rate": 0.5
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 15,
+        "denominator": 35,
+        "rate": 0.42857142857142855
+      },
+      "retained_correct": {
+        "count": 20,
+        "denominator": 35,
+        "rate": 0.5714285714285714
+      },
+      "threshold": 0.82,
+      "threshold_percent": 82
+    },
+    {
+      "A": 19,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 19,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 19,
+        "denominator": 40,
+        "rate": 0.475
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 16,
+        "denominator": 35,
+        "rate": 0.45714285714285713
+      },
+      "retained_correct": {
+        "count": 19,
+        "denominator": 35,
+        "rate": 0.5428571428571428
+      },
+      "threshold": 0.83,
+      "threshold_percent": 83
+    },
+    {
+      "A": 18,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 18,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 18,
+        "denominator": 40,
+        "rate": 0.45
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 17,
+        "denominator": 35,
+        "rate": 0.4857142857142857
+      },
+      "retained_correct": {
+        "count": 18,
+        "denominator": 35,
+        "rate": 0.5142857142857142
+      },
+      "threshold": 0.84,
+      "threshold_percent": 84
+    },
+    {
+      "A": 18,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 18,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 18,
+        "denominator": 40,
+        "rate": 0.45
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 17,
+        "denominator": 35,
+        "rate": 0.4857142857142857
+      },
+      "retained_correct": {
+        "count": 18,
+        "denominator": 35,
+        "rate": 0.5142857142857142
+      },
+      "threshold": 0.85,
+      "threshold_percent": 85
+    },
+    {
+      "A": 17,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 17,
+        "denominator": 40,
+        "rate": 0.425
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 18,
+        "denominator": 35,
+        "rate": 0.5142857142857142
+      },
+      "retained_correct": {
+        "count": 17,
+        "denominator": 35,
+        "rate": 0.4857142857142857
+      },
+      "threshold": 0.86,
+      "threshold_percent": 86
+    },
+    {
+      "A": 15,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 15,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 15,
+        "denominator": 40,
+        "rate": 0.375
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 20,
+        "denominator": 35,
+        "rate": 0.5714285714285714
+      },
+      "retained_correct": {
+        "count": 15,
+        "denominator": 35,
+        "rate": 0.42857142857142855
+      },
+      "threshold": 0.87,
+      "threshold_percent": 87
+    },
+    {
+      "A": 15,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 15,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 15,
+        "denominator": 40,
+        "rate": 0.375
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 20,
+        "denominator": 35,
+        "rate": 0.5714285714285714
+      },
+      "retained_correct": {
+        "count": 15,
+        "denominator": 35,
+        "rate": 0.42857142857142855
+      },
+      "threshold": 0.88,
+      "threshold_percent": 88
+    },
+    {
+      "A": 15,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 15,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 15,
+        "denominator": 40,
+        "rate": 0.375
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 20,
+        "denominator": 35,
+        "rate": 0.5714285714285714
+      },
+      "retained_correct": {
+        "count": 15,
+        "denominator": 35,
+        "rate": 0.42857142857142855
+      },
+      "threshold": 0.89,
+      "threshold_percent": 89
+    },
+    {
+      "A": 11,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 11,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 11,
+        "denominator": 40,
+        "rate": 0.275
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 24,
+        "denominator": 35,
+        "rate": 0.6857142857142857
+      },
+      "retained_correct": {
+        "count": 11,
+        "denominator": 35,
+        "rate": 0.3142857142857143
+      },
+      "threshold": 0.9,
+      "threshold_percent": 90
+    },
+    {
+      "A": 9,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 9,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 9,
+        "denominator": 40,
+        "rate": 0.225
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 26,
+        "denominator": 35,
+        "rate": 0.7428571428571429
+      },
+      "retained_correct": {
+        "count": 9,
+        "denominator": 35,
+        "rate": 0.2571428571428571
+      },
+      "threshold": 0.91,
+      "threshold_percent": 91
+    },
+    {
+      "A": 9,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 9,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 9,
+        "denominator": 40,
+        "rate": 0.225
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 26,
+        "denominator": 35,
+        "rate": 0.7428571428571429
+      },
+      "retained_correct": {
+        "count": 9,
+        "denominator": 35,
+        "rate": 0.2571428571428571
+      },
+      "threshold": 0.92,
+      "threshold_percent": 92
+    },
+    {
+      "A": 7,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 7,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 7,
+        "denominator": 40,
+        "rate": 0.175
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 28,
+        "denominator": 35,
+        "rate": 0.8
+      },
+      "retained_correct": {
+        "count": 7,
+        "denominator": 35,
+        "rate": 0.2
+      },
+      "threshold": 0.93,
+      "threshold_percent": 93
+    },
+    {
+      "A": 6,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 6,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 6,
+        "denominator": 40,
+        "rate": 0.15
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 29,
+        "denominator": 35,
+        "rate": 0.8285714285714286
+      },
+      "retained_correct": {
+        "count": 6,
+        "denominator": 35,
+        "rate": 0.17142857142857143
+      },
+      "threshold": 0.94,
+      "threshold_percent": 94
+    },
+    {
+      "A": 5,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 5,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 5,
+        "denominator": 40,
+        "rate": 0.125
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 30,
+        "denominator": 35,
+        "rate": 0.8571428571428571
+      },
+      "retained_correct": {
+        "count": 5,
+        "denominator": 35,
+        "rate": 0.14285714285714285
+      },
+      "threshold": 0.95,
+      "threshold_percent": 95
+    },
+    {
+      "A": 4,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 4,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 4,
+        "denominator": 40,
+        "rate": 0.1
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 31,
+        "denominator": 35,
+        "rate": 0.8857142857142857
+      },
+      "retained_correct": {
+        "count": 4,
+        "denominator": 35,
+        "rate": 0.11428571428571428
+      },
+      "threshold": 0.96,
+      "threshold_percent": 96
+    },
+    {
+      "A": 2,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 2,
+        "rate": 0.0
+      },
+      "adoption": {
+        "count": 2,
+        "denominator": 40,
+        "rate": 0.05
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 33,
+        "denominator": 35,
+        "rate": 0.9428571428571428
+      },
+      "retained_correct": {
+        "count": 2,
+        "denominator": 35,
+        "rate": 0.05714285714285714
+      },
+      "threshold": 0.97,
+      "threshold_percent": 97
+    },
+    {
+      "A": 0,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "adoption": {
+        "count": 0,
+        "denominator": 40,
+        "rate": 0.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "retained_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "threshold": 0.98,
+      "threshold_percent": 98
+    },
+    {
+      "A": 0,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "adoption": {
+        "count": 0,
+        "denominator": 40,
+        "rate": 0.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "retained_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "threshold": 0.99,
+      "threshold_percent": 99
+    },
+    {
+      "A": 0,
+      "N": 40,
+      "V": 40,
+      "adopted_i_to_s": {
+        "count": 0,
+        "denominator": 17,
+        "rate": 0.0
+      },
+      "adopted_s_to_i": {
+        "count": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "adopted_wrong": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "adoption": {
+        "count": 0,
+        "denominator": 40,
+        "rate": 0.0
+      },
+      "gaps": 0,
+      "invalid": 0,
+      "raw_confusion": {
+        "INSUFFICIENT": {
+          "INSUFFICIENT": 14,
+          "SUFFICIENT": 3
+        },
+        "SUFFICIENT": {
+          "INSUFFICIENT": 2,
+          "SUFFICIENT": 21
+        }
+      },
+      "raw_correct": {
+        "count": 35,
+        "denominator": 40,
+        "rate": 0.875
+      },
+      "rejected_correct": {
+        "count": 35,
+        "denominator": 35,
+        "rate": 1.0
+      },
+      "retained_correct": {
+        "count": 0,
+        "denominator": 35,
+        "rate": 0.0
+      },
+      "threshold": 1.0,
+      "threshold_percent": 100
+    }
+  ],
+  "diagnostic_best_percent": 79,
+  "group": "research",
+  "hypothesis": "成功",
+  "limitation": "公開 holdout，非 unseen/blind；有限樣本與未校準機率不構成安全或產品採納證明。",
+  "policy": [
+    "min_adopted_i_to_s",
+    "max_retained_correct",
+    "min_integer_percent"
+  ],
+  "run_id": "20261008T035450Z-010364d7"
+}
