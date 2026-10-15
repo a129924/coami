@@ -33,4 +33,6 @@ Jev 的定位參考 [TypeSafe 的公開介紹](https://typesafe.ai/blog/introduc
 
 「情境足夠」表示足以給出當下合宜的回應，不表示必須有所有可能的記憶資料。Parent／Safety 方塊只代表交接；觸發閾值、交接後流程、重新提議上限及故障處理均未在本基線定案。下一步的驗證方式見[文字對話實驗提案](experiments/text-companion-loop.md)。
 
+Context Sufficiency 的門檻研究結論、產品採納狀態與尚未實作的 Domain 設計方向，統一見 [Context Sufficiency 門檻決策](decisions/context-sufficiency-threshold.md)。
+
 交接的最小可觀察結果是記下目的地和原因，並停止 Companion 的一般回答。需要照顧者決定的要求（例如購買）交給 Parent，不能由 Coami 先作承諾；疑似受傷或危險的輸入交給 Safety，不能當成一般遊戲對話。孩子與照顧者實際收到什麼提示，仍須由各自的後續流程驗證。
