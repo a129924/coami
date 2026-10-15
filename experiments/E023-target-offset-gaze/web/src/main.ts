@@ -1,4 +1,5 @@
 import './style.css';
+import RUNTIME_PIN from './runtime-pin.json';
 import { SimulatorEngine } from '../../../../vendor/stack-chan/web/src/services/simulator/simulator-engine.mjs';
 import type { Object3D, Vector3 } from 'three';
 import { CASES, centered, fixedTarget, observe, oscillating, poseError } from './observer.ts';
@@ -150,6 +151,8 @@ async function initialize(): Promise<void> {
         const selected = waitTrace(e => e.phase === 'initial-selected' && e.initial === i + 1, 2000);
         engine.pushButton('a');
         await selected;
+        // Pinned button bridge releases after 120ms; separate repeated A presses.
+        await delay(150);
     }
     const initialized = waitTrace(e => e.phase === 'initialized' || e.phase === 'init-failed', 2000);
     engine.pushButton('b');
@@ -271,7 +274,7 @@ async function boot(): Promise<void> {
         provenance = p;
         if (p.experiment !== 'E023' || p.sourceCommit !== 'b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322')
             throw Error('runtime provenance mismatch');
-        const pins = { 'mc.js': '9e7c0128e4b94ac78cb3646a488a04be227272e61b7fee77cd2b6ec91aa745f0', 'mc.wasm': 'bc8f5a40fe4e6e1b0f0fd9f29cf5089129fdfca2b9cc0ce229f6788328676ac2', 'assets/case/v1/shell.stl': '832ced3ad3669c3fc6b174a984cc800522ca33cecd9222d531bda430f6cc5236' };
+        const pins = RUNTIME_PIN.hashes;
         for (const [file, expected] of Object.entries(pins)) {
             const r = await fetch(`/simulator/${file}`, { cache: 'no-store' });
             if (!r.ok || p.hashes[file] !== expected || await sha(await r.arrayBuffer()) !== expected)

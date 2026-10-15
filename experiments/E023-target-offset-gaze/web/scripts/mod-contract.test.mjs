@@ -7,11 +7,10 @@ let root,clock=0;const traces=[],calls=[]
 registerHooks({resolve(spec,context,next){
  if(spec==='piu/MC')return {url:'data:text/javascript,export {}',shortCircuit:true}
  if(spec==='timer')return {url:'data:text/javascript,export default {set(fn){fn()}}',shortCircuit:true}
- if(spec==='time')return {url:'data:text/javascript,export default {get ticks(){return globalThis.e023Ticks()}}',shortCircuit:true}
+ if(spec==='time')throw Error('Use native Piu touch callback ticks, not stripped Time getter')
  if(spec==='./protocol'&&context.parentURL?.endsWith('/mod/mod.ts'))return {url:new URL('../../mod/protocol.ts',import.meta.url).href,shortCircuit:true}
  return next(spec,context)
 }})
-globalThis.e023Ticks=()=>clock
 globalThis.trace=text=>traces.push(JSON.parse(text.trim().slice(8)))
 globalThis.Behavior=class{}
 globalThis.Skin=class{}
@@ -22,7 +21,7 @@ function setup(){
  const robot={ui:{setMain(){}},motion:{lookAt(point){calls.push(point)},lookAway(){},async setPose(){}},input:{button:{a:{},b:{}}}}
  onContextCreated(robot);return robot
 }
-function send(seq,target,probe){for(const {x,y}of encodeFrame(seq,target,probe)){root.behavior.onTouchBegan(root,0,x,y);root.behavior.onTouchEnded(root,0,x,y)}}
+function send(seq,target,probe){for(const {x,y}of encodeFrame(seq,target,probe)){root.behavior.onTouchBegan(root,0,x,y,clock);root.behavior.onTouchEnded(root,0,x,y,clock)}}
 test('probe never calls SDK; initialize before arbitrary target; replay and pending rejected',async()=>{
  const robot=setup()
  send(1,[1,0,0],true)

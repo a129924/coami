@@ -24,7 +24,9 @@ try{
  await writeFile(path.join(out,'mod-provenance.json'),JSON.stringify({sha256:sha(archive),sources:modSources,sourceCommit:pin},null,2)+'\n')
  const runtime=process.env.E023_RUNTIME_DIR
  if(!runtime)throw Error('E023_RUNTIME_DIR is required; no pinned WASM host is bundled')
- const pins={'mc.js':'9e7c0128e4b94ac78cb3646a488a04be227272e61b7fee77cd2b6ec91aa745f0','mc.wasm':'bc8f5a40fe4e6e1b0f0fd9f29cf5089129fdfca2b9cc0ce229f6788328676ac2'}
+ const fixed=JSON.parse(await readFile(path.join(web,'src/runtime-pin.json'),'utf8'))
+ if(fixed.sourceCommit!==pin)throw Error('runtime source pin mismatch')
+ const pins={'mc.js':fixed.hashes['mc.js'],'mc.wasm':fixed.hashes['mc.wasm']}
  for(const [name,expected]of Object.entries(pins)){
   const bytes=await readFile(path.join(runtime,name));if(sha(bytes)!==expected)throw Error(`runtime hash mismatch: ${name}`)
   await mkdir(path.join(publicRoot,'simulator'),{recursive:true});await writeFile(path.join(publicRoot,'simulator',name),bytes)
@@ -35,7 +37,7 @@ try{
  const sources={}
  for(const file of ['mod.ts','protocol.ts'])sources[`mod/${file}`]=sha(await readFile(path.join(web,'../mod',file)))
  for(const file of ['src/services/simulator/simulator-engine.mjs','simulator/geometry.mjs','simulator/bridge.mjs'])sources[`vendor/web/${file}`]=sha(await readFile(path.join(vendor,'web',file)))
- await writeFile(path.join(publicRoot,'runtime-provenance.json'),JSON.stringify({experiment:'E023',sourceCommit:pin,hashes,sources,limitation:'Exact reviewed runtime bytes; no new compiler provenance claimed'},null,2)+'\n')
+ await writeFile(path.join(publicRoot,'runtime-provenance.json'),JSON.stringify({experiment:'E023',sourceCommit:pin,hashes,sources,limitation:'Exact E023 source-built runtime bytes; full build provenance is recorded separately in evidence/host-runtime-provenance.json'},null,2)+'\n')
  await writeFile(path.join(out,'preflight.json'),JSON.stringify({status:'prepared',hashes},null,2)+'\n')
  console.log('Prepared exact pinned host and E023 MOD; roundtrip NOT yet executed')
 }catch(error){

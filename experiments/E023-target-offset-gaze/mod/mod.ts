@@ -1,6 +1,5 @@
 import 'piu/MC';
 import Timer from 'timer';
-import Time from 'time';
 import { FrameDecoder } from './protocol';
 type Rotation = {
     y: number;
@@ -43,12 +42,13 @@ export function onContextCreated(robot: Robot): void {
     const decoder = new FrameDecoder();
     let busy = false, initial = 0, lastTouch = -1, prepared = false, lastMotion = -Infinity;
     const screen = new Container(null, { left: 0, right: 0, top: 0, bottom: 0, active: true, skin: new Skin({ fill: '#213441' }), Behavior: class extends Behavior {
-            onTouchBegan(_content: PiuContainer, id: number): void { lastTouch = id; }
-            onTouchEnded(_content: PiuContainer, id: number, x: number, y: number): void {
+            onTouchBegan(_content: PiuContainer, id: number, x: number, y: number, ticks: number): void { lastTouch = id; emit({phase:'touch-began',id,x,y,ticks}); }
+            onTouchEnded(_content: PiuContainer, id: number, x: number, y: number, ticks: number): void {
+                emit({phase:'touch-ended',id,x,y,ticks});
                 if (lastTouch !== id || busy)
                     return;
                 lastTouch = -1;
-                const frame = decoder.receive(x, y, Time.ticks);
+                const frame = decoder.receive(x, y, ticks);
                 if (!frame)
                     return;
                 emit({ phase: 'decoded', ...frame });
@@ -56,11 +56,11 @@ export function onContextCreated(robot: Robot): void {
                     emit({ phase: 'probe', ...frame });
                     return;
                 }
-                if (!prepared || Time.ticks - lastMotion < 5000 || Math.abs(Math.sqrt(frame.target.reduce((sum, v) => sum + v * v, 0)) - 1) > 0.001) {
+                if (!prepared || ticks - lastMotion < 5000 || Math.abs(Math.sqrt(frame.target.reduce((sum, v) => sum + v * v, 0)) - 1) > 0.001) {
                     emit({ phase: 'failed', seq: frame.seq, error: 'not_initialized_or_pending' });
                     return;
                 }
-                lastMotion = Time.ticks;
+                lastMotion = ticks;
                 try {
                     robot.motion.lookAt(frame.target as [
                         number,

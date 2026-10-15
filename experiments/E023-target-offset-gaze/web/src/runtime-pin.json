@@ -1,0 +1,8 @@
+{
+  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "hashes": {
+    "mc.js": "a1f2c55234c99663a0d5ab48fd969944ca72da9c1f14e6f1432c36fa53829796",
+    "mc.wasm": "dc4ceb67c0abea9c126557ce63851a41dedbd1c6e10d15f6b8dddb7615ef487e",
+    "assets/case/v1/shell.stl": "832ced3ad3669c3fc6b174a984cc800522ca33cecd9222d531bda430f6cc5236"
+  }
+}

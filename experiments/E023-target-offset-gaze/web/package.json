@@ -13,7 +13,9 @@
     "build": "npm run typecheck && vite build",
     "dev": "vite --host 127.0.0.1 --port 5203 --strictPort",
     "preview": "vite preview --host 127.0.0.1 --port 5203 --strictPort",
-    "test:mod": "node --test scripts/mod-contract.test.mjs"
+    "test:mod": "node --test scripts/mod-contract.test.mjs",
+    "prepare:host": "node scripts/prepare-assets.mjs",
+    "test:runtime": "node scripts/runtime-run.mjs"
   },
   "dependencies": {
     "three": "0.185.1"
