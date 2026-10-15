@@ -247,6 +247,8 @@ Evidence reads open each artifact with no symlink following and nonblocking mode
 
 Committed public evidence pins one Git revision before copying artifacts and uses that same revision when comparing the freeze attestation, review, v1 sources, and v0 sources. Mutable checkout source files are read through the same nonblocking regular-file reader; a FIFO or redirect reports `FREEZE_SOURCE_UNCOMMITTED` rather than blocking verification.
 
+The E012 Context policy used for offline replay is also compared with that fixed revision and passed to the question parser as an already checked byte snapshot. When restricted analysis is available, its case order must match the public analysis order; timestamp and stop-sequence checks from the restricted rows then apply to the same canonical case sequence used for statistics.
+
 ## Interpretation
 
 The summary reports planned/attempted/valid/invalid/error/unknown/not-run counts, both error directions, and `correct/valid` separately from `correct/planned` for research, holdout, and v0. E012's earlier v0 result remains historical. A PR merge, technical check, or successful offline test does not freeze v1 or establish a product pass.

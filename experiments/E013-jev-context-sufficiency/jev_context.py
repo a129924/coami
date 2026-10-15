@@ -677,9 +677,11 @@ def read_frozen_case_sources(
     return sources
 
 
-def load_question(root: Path = ROOT) -> dict[str, Any]:
+def load_question(
+    root: Path = ROOT, *, snapshot: bytes | None = None
+) -> dict[str, Any]:
     policy_path = root / "experiments/E012-jev-text-policy/policies.json"
-    data = policy_path.read_bytes()
+    data = policy_path.read_bytes() if snapshot is None else snapshot
     if sha(data) != POLICY_HASH:
         raise ContractError("POLICY_HASH_MISMATCH")
     policy = json.loads(data)

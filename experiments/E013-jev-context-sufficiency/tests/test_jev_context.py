@@ -256,6 +256,7 @@ class E013Tests(unittest.TestCase):
             root = Path(temporary)
             paths = [
                 e.FREEZE_RELATIVE,
+                evidence.REPLAY_POLICY_RELATIVE,
                 Path("evaluation/context_sufficiency/versions/v1/review.md"),
                 *(
                     Path("evaluation/context_sufficiency/versions/v1") / name
@@ -296,6 +297,20 @@ class E013Tests(unittest.TestCase):
                     e.ContractError, "FREEZE_SOURCE_UNCOMMITTED"
                 ):
                     evidence.committed_freeze_sources(revision)
+                first.unlink()
+                first.write_bytes(committed[paths[0].as_posix()])
+                policy = root / evidence.REPLAY_POLICY_RELATIVE
+                policy.unlink()
+                os.mkfifo(policy)
+                with self.assertRaisesRegex(
+                    e.ContractError, "FREEZE_SOURCE_UNCOMMITTED"
+                ):
+                    evidence.committed_freeze_sources(revision)
+
+    def test_question_snapshot_avoids_mutable_policy_read(self) -> None:
+        policy = (e.ROOT / evidence.REPLAY_POLICY_RELATIVE).read_bytes()
+        with patch.object(Path, "read_bytes", side_effect=AssertionError("disk read")):
+            self.assertEqual(e.load_question(snapshot=policy), self.question)
 
     def test_unavailable_historical_replay_revision_is_a_contract_error(self) -> None:
         with patch.object(
@@ -2732,6 +2747,26 @@ source = { registry = "https://pypi.org/simple" }
             )
             self.assertIn(
                 "RESTRICTED_ANALYSIS_INVALID",
+                {
+                    gap["reason"]
+                    for gap in evidence.verify_evidence(output, restricted)["gaps"]
+                },
+            )
+            (restricted / "analysis.jsonl").write_bytes(restricted_rows)
+            reordered = [json.loads(line) for line in restricted_rows.splitlines()]
+            reordered[0], reordered[1] = reordered[1], reordered[0]
+            reordered[0]["started_utc"] = "2026-10-08T00:00:00+00:00"
+            reordered[0]["ended_utc"] = "2026-10-08T00:00:01+00:00"
+            reordered[1]["started_utc"] = "2026-10-08T00:00:01+00:00"
+            reordered[1]["ended_utc"] = "2026-10-08T00:00:02+00:00"
+            (restricted / "analysis.jsonl").write_bytes(
+                b"".join(e.json_bytes(row) for row in reordered)
+            )
+            self.assertEqual(
+                evidence.read_rows(restricted / "analysis.jsonl"), reordered
+            )
+            self.assertIn(
+                "RESTRICTED_ANALYSIS_ORDER_MISMATCH",
                 {
                     gap["reason"]
                     for gap in evidence.verify_evidence(output, restricted)["gaps"]

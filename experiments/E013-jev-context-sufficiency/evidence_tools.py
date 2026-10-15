@@ -40,6 +40,7 @@ PRE_RECORD_POLICY_HASH = (
     "ec532b9bf729a59074b63d57ce22cc4cbf04ffe6be8dcf52527f6b00b492a2ea"
 )
 REVISION = re.compile(r"[0-9a-f]{40}\Z")
+REPLAY_POLICY_RELATIVE = Path("experiments/E012-jev-text-policy/policies.json")
 LOCAL_MANIFEST_KEYS = {
     "run_id",
     "created_utc",
@@ -812,6 +813,7 @@ def committed_freeze_sources(revision: str | None = None) -> dict[Path, bytes]:
     """Read local freeze inputs against one explicit Git revision."""
     paths = [
         e.FREEZE_RELATIVE,
+        REPLAY_POLICY_RELATIVE,
         Path("evaluation/context_sufficiency/versions/v1/review.md"),
         *(
             Path("evaluation/context_sufficiency/versions/v1") / name
@@ -1152,7 +1154,15 @@ def verify_local_run(
     ):
         gaps.append({"reason": issue})
     cases = {(case["group"], case["case_id"]): case for case in case_rows}
-    question = e.load_question()
+    try:
+        question = (
+            e.load_question(snapshot=source_snapshots[REPLAY_POLICY_RELATIVE])
+            if source_snapshots is not None
+            else {}
+        )
+    except (KeyError, TypeError, ValueError, RecursionError, e.ContractError):
+        gaps.append({"reason": "POLICY_SOURCE_MISMATCH"})
+        question = {}
     source_locator = manifest.get("runner_source_path")
     if run_id != PRE_RECORD_RUN_ID and source_locator != "runner.py":
         gaps.append({"reason": "RUNNER_SOURCE_MISMATCH"})
@@ -1798,13 +1808,25 @@ def verify_evidence(
     except (KeyError, TypeError, OSError, ValueError, e.ContractError):
         case_rows = []
     cases = {(case["group"], case["case_id"]): case for case in case_rows}
-    question = e.load_question()
+    try:
+        question = (
+            e.load_question(snapshot=source_snapshots[REPLAY_POLICY_RELATIVE])
+            if source_snapshots is not None
+            else {}
+        )
+    except (KeyError, TypeError, ValueError, RecursionError, e.ContractError):
+        gaps.append({"reason": "POLICY_SOURCE_MISMATCH"})
+        question = {}
     restricted = None
     if restricted_run is not None:
         try:
+            restricted_rows = read_rows(restricted_run / "analysis.jsonl")
+            if [(row["group"], row["case_id"]) for row in restricted_rows] != [
+                (row["group"], row["case_id"]) for row in rows
+            ]:
+                gaps.append({"reason": "RESTRICTED_ANALYSIS_ORDER_MISMATCH"})
             restricted = {
-                (row["group"], row["case_id"]): row
-                for row in read_rows(restricted_run / "analysis.jsonl")
+                (row["group"], row["case_id"]): row for row in restricted_rows
             }
         except e.ContractError:
             restricted = {}
