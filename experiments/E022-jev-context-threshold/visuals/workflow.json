@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "E022：Context Sufficiency 門檻研究",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    {
+      "id": "evidence",
+      "label": "證據與候選"
+    },
+    {
+      "id": "review",
+      "label": "分析與審閱"
+    }
+  ],
+  "mainPath": [
+    "verify",
+    "compare",
+    "freeze",
+    "heldout",
+    "report",
+    "owner"
+  ],
+  "nodes": [
+    {
+      "id": "verify",
+      "lane": "evidence",
+      "col": 0,
+      "type": "database",
+      "label": "驗證來源",
+      "sublabel": "E013 · 75 案"
+    },
+    {
+      "id": "compare",
+      "lane": "review",
+      "col": 1,
+      "type": "backend",
+      "label": "比較門檻",
+      "sublabel": "40 案 · 101 點"
+    },
+    {
+      "id": "freeze",
+      "lane": "evidence",
+      "col": 2,
+      "type": "security",
+      "label": "鎖定候選",
+      "sublabel": "規則與 hashes"
+    },
+    {
+      "id": "heldout",
+      "lane": "review",
+      "col": 3,
+      "type": "backend",
+      "label": "Holdout 檢查",
+      "sublabel": "20 案 · 一個值"
+    },
+    {
+      "id": "report",
+      "lane": "evidence",
+      "col": 4,
+      "type": "frontend",
+      "label": "v0 與報告",
+      "sublabel": "15 案 · 取捨"
+    },
+    {
+      "id": "owner",
+      "lane": "review",
+      "col": 5,
+      "type": "external",
+      "label": "人類審閱",
+      "sublabel": "風險與採納"
+    }
+  ],
+  "edges": [
+    {
+      "from": "verify",
+      "to": "compare",
+      "role": "main",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "from": "compare",
+      "to": "freeze",
+      "role": "main"
+    },
+    {
+      "from": "freeze",
+      "to": "heldout",
+      "label": "固定後",
+      "role": "main"
+    },
+    {
+      "from": "heldout",
+      "to": "report",
+      "role": "main"
+    },
+    {
+      "from": "report",
+      "to": "owner",
+      "role": "main"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "判讀邊界",
+      "items": [
+        "證據缺口或無可用候選，停止相應檢查",
+        "Holdout 已公開；固定後僅作描述性檢查",
+        "候選不核准產品設定；BLOCK 不改模型正誤"
+      ]
+    }
+  ]
+}
