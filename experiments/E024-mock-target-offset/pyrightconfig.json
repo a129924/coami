@@ -1,0 +1,5 @@
+{
+  "include": ["calculator.py", "mock_cases.py", "test_calculator.py", "run_cases.py"],
+  "pythonVersion": "3.12",
+  "typeCheckingMode": "strict"
+}
