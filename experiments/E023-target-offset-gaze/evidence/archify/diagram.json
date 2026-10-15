@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "E023：固定目標閉環實驗設計",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1060,
+      500
+    ],
+    "column_fit": "spread"
+  },
+  "participants": [
+    {
+      "id": "observer",
+      "type": "frontend",
+      "label": "合成觀測"
+    },
+    {
+      "id": "calculator",
+      "type": "backend",
+      "label": "Python"
+    },
+    {
+      "id": "receiver",
+      "type": "frontend",
+      "label": "TS 接收"
+    },
+    {
+      "id": "mod",
+      "type": "backend",
+      "label": "XS MOD"
+    },
+    {
+      "id": "sdk",
+      "type": "external",
+      "label": "SDK"
+    },
+    {
+      "id": "scene",
+      "type": "external",
+      "label": "渲染姿態"
+    }
+  ],
+  "messages": [
+    {
+      "id": "message-0",
+      "from": "scene",
+      "to": "observer",
+      "y": 160,
+      "label": "同一 frame 姿態"
+    },
+    {
+      "id": "message-1",
+      "from": "observer",
+      "to": "calculator",
+      "y": 195,
+      "label": "TargetObservation / WS"
+    },
+    {
+      "id": "message-2",
+      "from": "calculator",
+      "to": "receiver",
+      "y": 230,
+      "label": "LookAtCommand / WS"
+    },
+    {
+      "id": "message-3",
+      "from": "receiver",
+      "to": "mod",
+      "y": 265,
+      "label": "五點 touch frame"
+    },
+    {
+      "id": "message-4",
+      "from": "mod",
+      "to": "sdk",
+      "y": 300,
+      "label": "lookAt(xyz)"
+    },
+    {
+      "id": "message-5",
+      "from": "mod",
+      "to": "receiver",
+      "y": 335,
+      "label": "trace returned / failed"
+    },
+    {
+      "id": "message-6",
+      "from": "sdk",
+      "to": "scene",
+      "y": 370,
+      "label": "原版 driver 旋轉"
+    },
+    {
+      "id": "message-7",
+      "from": "scene",
+      "to": "observer",
+      "y": 405,
+      "label": "實際姿態重新投影"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "證據邊界",
+      "items": [
+        "先通過非運動 probe，再執行閉環",
+        "SDK 返回不代表到位；圖不代表實測通過"
+      ]
+    }
+  ]
+}

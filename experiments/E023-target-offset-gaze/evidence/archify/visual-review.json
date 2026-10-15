@@ -1,0 +1,16 @@
+{
+  "visual_review": "passed",
+  "reviewer": "Codex image inspection",
+  "correction_rounds": 2,
+  "inspected": [
+    "diagram.visual-check.1440x900.light.png",
+    "diagram.visual-check.1440x900.dark.png",
+    "diagram.visual-check.2048x1320.light.png",
+    "diagram.visual-check.2048x1320.dark.png"
+  ],
+  "notes": "Labels/routes readable, no clipping, both themes inspected; automated visualReview remains pending by design.",
+  "artifact": {
+    "sha256": "053800e20af33f100be2fd92387b8a166caea5b323384094124ead5fa5b370cc",
+    "bytes": 699647
+  }
+}
