@@ -730,7 +730,9 @@ def authorization_gap(
         return "AUTHORIZATION_COMMIT_MISMATCH"
     if freeze_snapshot is None:
         try:
-            freeze_snapshot = committed_freeze_sources()[e.FREEZE_RELATIVE]
+            freeze_snapshot = committed_freeze_sources(
+                evidence_revision if REVISION.fullmatch(evidence_revision) else None
+            )[e.FREEZE_RELATIVE]
         except (KeyError, e.ContractError):
             return "FREEZE_SOURCE_UNCOMMITTED"
     try:
@@ -806,8 +808,8 @@ def authorization_gap(
     return None
 
 
-def committed_freeze_sources() -> dict[Path, bytes]:
-    """Pin one HEAD and retain the exact committed bytes used for replay."""
+def committed_freeze_sources(revision: str | None = None) -> dict[Path, bytes]:
+    """Read local freeze inputs against one explicit Git revision."""
     paths = [
         e.FREEZE_RELATIVE,
         Path("evaluation/context_sufficiency/versions/v1/review.md"),
@@ -818,14 +820,15 @@ def committed_freeze_sources() -> dict[Path, bytes]:
         *(Path("evaluation/context_sufficiency") / name for name in e.V0_HASHES),
     ]
     try:
-        revision = (
-            e.checked_git(e.ROOT, ["rev-parse", "HEAD^{commit}"]).decode().strip()
-        )
+        if revision is None:
+            revision = (
+                e.checked_git(e.ROOT, ["rev-parse", "HEAD^{commit}"]).decode().strip()
+            )
         if not REVISION.fullmatch(revision):
             raise e.ContractError("FREEZE_SOURCE_UNCOMMITTED")
         snapshots = {}
         for path in paths:
-            local = (e.ROOT / path).read_bytes()
+            local = regular_bytes(e.ROOT / path)
             committed = e.checked_git(e.ROOT, ["show", f"{revision}:{path.as_posix()}"])
             if local != committed:
                 raise e.ContractError("FREEZE_SOURCE_UNCOMMITTED")
@@ -1666,7 +1669,9 @@ def verify_evidence(
         raise e.ContractError("INVALID_EVIDENCE_MANIFEST")
     gaps = metadata_gaps(evidence_run, manifest, published=True)
     try:
-        source_snapshots = committed_freeze_sources()
+        source_snapshots = committed_freeze_sources(
+            evidence_revision if REVISION.fullmatch(evidence_revision) else None
+        )
     except e.ContractError:
         source_snapshots = None
         gaps.append({"reason": "FREEZE_SOURCE_UNCOMMITTED"})

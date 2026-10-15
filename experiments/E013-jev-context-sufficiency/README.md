@@ -245,6 +245,8 @@ For future runs, the authorization revision must remain reachable from the revie
 
 Evidence reads open each artifact with no symlink following and nonblocking mode, then verify the opened descriptor is a regular file before reading it. An `ERROR` row cannot claim `SDK_RESPONSE_INVALID`: a 2xx body is retained before SDK validation and must be represented as `INVALID` with its raw hash. SDK replay recursion is a runtime verification gap, not proof that the SDK rejected a response.
 
+Committed public evidence pins one Git revision before copying artifacts and uses that same revision when comparing the freeze attestation, review, v1 sources, and v0 sources. Mutable checkout source files are read through the same nonblocking regular-file reader; a FIFO or redirect reports `FREEZE_SOURCE_UNCOMMITTED` rather than blocking verification.
+
 ## Interpretation
 
 The summary reports planned/attempted/valid/invalid/error/unknown/not-run counts, both error directions, and `correct/valid` separately from `correct/planned` for research, holdout, and v0. E012's earlier v0 result remains historical. A PR merge, technical check, or successful offline test does not freeze v1 or establish a product pass.

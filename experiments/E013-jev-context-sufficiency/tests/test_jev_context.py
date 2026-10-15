@@ -251,6 +251,52 @@ class E013Tests(unittest.TestCase):
             with self.assertRaisesRegex(e.ContractError, "INVALID_EVIDENCE_FILE"):
                 evidence.regular_bytes(artifact)
 
+    def test_freeze_sources_use_fixed_revision_and_reject_fifo(self) -> None:
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            paths = [
+                e.FREEZE_RELATIVE,
+                Path("evaluation/context_sufficiency/versions/v1/review.md"),
+                *(
+                    Path("evaluation/context_sufficiency/versions/v1") / name
+                    for name in e.V1_FILES
+                ),
+                *(
+                    Path("evaluation/context_sufficiency") / name
+                    for name in e.V0_HASHES
+                ),
+            ]
+            committed = {}
+            for path in paths:
+                local = root / path
+                local.parent.mkdir(parents=True, exist_ok=True)
+                local.write_bytes(path.as_posix().encode())
+                committed[path.as_posix()] = local.read_bytes()
+            revision = "a" * 40
+
+            def git_show(repo: Path, arguments: list[str]) -> bytes:
+                self.assertEqual(repo, root)
+                self.assertEqual(arguments[0], "show")
+                fixed, name = arguments[1].split(":", 1)
+                self.assertEqual(fixed, revision)
+                return committed[name]
+
+            with (
+                patch.object(e, "ROOT", root),
+                patch.object(e, "checked_git", side_effect=git_show),
+            ):
+                self.assertEqual(
+                    evidence.committed_freeze_sources(revision),
+                    {path: committed[path.as_posix()] for path in paths},
+                )
+                first = root / paths[0]
+                first.unlink()
+                os.mkfifo(first)
+                with self.assertRaisesRegex(
+                    e.ContractError, "FREEZE_SOURCE_UNCOMMITTED"
+                ):
+                    evidence.committed_freeze_sources(revision)
+
     def test_unavailable_historical_replay_revision_is_a_contract_error(self) -> None:
         with patch.object(
             e,
@@ -294,6 +340,14 @@ class E013Tests(unittest.TestCase):
                 snapshot: Path, *_args: object, **_kwargs: object
             ) -> dict[str, object]:
                 captured.append((snapshot / "raw.body").read_bytes())
+                self.assertEqual(
+                    _kwargs["evidence_revision"],
+                    subprocess.check_output(
+                        ["git", "-C", str(root), "rev-parse", "HEAD"]
+                    )
+                    .decode()
+                    .strip(),
+                )
                 return {"gaps": []}
 
             with (
@@ -308,6 +362,21 @@ class E013Tests(unittest.TestCase):
                     e.ContractError, "PUBLIC_EVIDENCE_UNCOMMITTED"
                 ):
                     evidence.verify_committed_evidence(run)
+
+    def test_public_verifier_reuses_evidence_revision_for_freeze(self) -> None:
+        revision = (
+            e.checked_git(e.ROOT, ["rev-parse", "HEAD^{commit}"]).decode().strip()
+        )
+        run = e.TOPIC / "evidence/runs/20261008T035450Z-010364d7"
+        with patch.object(
+            evidence,
+            "committed_freeze_sources",
+            wraps=evidence.committed_freeze_sources,
+        ) as sources:
+            verified = evidence.verify_evidence(run, evidence_revision=revision)
+        self.assertEqual(verified["verified_cases"], 75)
+        self.assertEqual(verified["gaps"], [])
+        sources.assert_called_once_with(revision)
 
     def test_live_store_rejects_redirected_subdirectories(self) -> None:
         with TemporaryDirectory() as temporary:
