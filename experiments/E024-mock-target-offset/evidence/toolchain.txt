@@ -1,0 +1,3 @@
+Python 3.12.12
+ruff 0.16.8
+pyright 1.1.414

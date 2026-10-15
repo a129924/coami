@@ -1,0 +1,21 @@
+test_calculator (unittest.loader._FailedTest.test_calculator) ... ERROR
+
+======================================================================
+ERROR: test_calculator (unittest.loader._FailedTest.test_calculator)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_calculator
+Traceback (most recent call last):
+  File "/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/private/tmp/E024-mock-target-offset/feature-worktree/experiments/E024-mock-target-offset/test_calculator.py", line 8, in <module>
+    from calculator import (
+ModuleNotFoundError: No module named 'calculator'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

@@ -1,0 +1,31 @@
+PYI041 [*] Use `float` instead of `int | float`
+  --> calculator.py:64:31
+   |
+64 | def _valid_pixel_value(value: int | float) -> bool:
+   |                               ^^^^^^^^^^^
+65 |     # Bound original values first: float()/isfinite() on huge ints can overflow.
+66 |     # Chained comparisons also reject NaN and either infinity without conversion.
+   |
+help: Remove redundant type
+   |
+63 |
+   - def _valid_pixel_value(value: int | float) -> bool:
+64 + def _valid_pixel_value(value: float) -> bool:
+65 |     # Bound original values first: float()/isfinite() on huge ints can overflow.
+   |
+
+SIM117 Use a single `with` statement with multiple contexts instead of nested `with` statements
+   --> test_calculator.py:199:13
+    |
+197 |           )
+198 |           for value, field in values:
+199 | /             with self.subTest(type=type(value).__name__):
+200 | |                 with self.assertRaises(FrozenInstanceError):
+    | |____________________________________________________________^
+201 |                       setattr(value, field, 123)
+202 |           self.assertIsInstance(observation.boxes, tuple)
+    |
+help: Combine `with` statements
+
+Found 2 errors.
+[*] 1 fixable with the `--fix` option.

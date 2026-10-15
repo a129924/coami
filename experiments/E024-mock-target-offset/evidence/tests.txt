@@ -1,0 +1,17 @@
+test_common_vectors_and_all_result_identities (test_calculator.CalculatorTests.test_common_vectors_and_all_result_identities) ... ok
+test_each_outside_edge_rejected_without_clipping (test_calculator.CalculatorTests.test_each_outside_edge_rejected_without_clipping) ... ok
+test_exclusive_result_shapes (test_calculator.CalculatorTests.test_exclusive_result_shapes) ... ok
+test_invalid_frame_fields_rejected_before_count (test_calculator.CalculatorTests.test_invalid_frame_fields_rejected_before_count) ... ok
+test_multiple_targets_rejected_without_selection (test_calculator.CalculatorTests.test_multiple_targets_rejected_without_selection) ... ok
+test_no_target_is_distinct_from_center_and_has_no_offset (test_calculator.CalculatorTests.test_no_target_is_distinct_from_center_and_has_no_offset) ... ok
+test_nonnumeric_nonfinite_bool_and_oversized_box_fields (test_calculator.CalculatorTests.test_nonnumeric_nonfinite_bool_and_oversized_box_fields) ... ok
+test_observation_id_is_opaque_and_not_target_identity (test_calculator.CalculatorTests.test_observation_id_is_opaque_and_not_target_identity) ... ok
+test_same_snapshot_repeated_and_interleaved_is_unchanged (test_calculator.CalculatorTests.test_same_snapshot_repeated_and_interleaved_is_unchanged) ... ok
+test_smallest_positive_frame_is_valid (test_calculator.CalculatorTests.test_smallest_positive_frame_is_valid) ... ok
+test_snapshot_and_result_value_objects_are_frozen (test_calculator.CalculatorTests.test_snapshot_and_result_value_objects_are_frozen) ... ok
+test_zero_negative_and_subpixel_overflow_box_sizes (test_calculator.CalculatorTests.test_zero_negative_and_subpixel_overflow_box_sizes) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.001s
+
+OK

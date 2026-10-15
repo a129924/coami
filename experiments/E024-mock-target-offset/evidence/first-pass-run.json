@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-15T07:18:41.349325+00:00",
+  "python": "3.12.12 (main, Oct 10 2025, 12:43:15) [Clang 20.1.4 ]",
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "base_commit": "a855b451b6fe1c24d02caf67c569ffa90a9ea732",
+  "branch": "feat/andrew/e024-mock-target-offset",
+  "runtime_dependencies": "Python standard library only",
+  "simulation": "Independent Mock frame observations; no OpenCV/Tracker/Robot/consumer executed",
+  "commands": [
+    {
+      "name": "tests",
+      "command": [
+        "/Users/andrew/code/python/coami/server/.venv/bin/python",
+        "-m",
+        "unittest",
+        "-v"
+      ],
+      "cwd": "/private/tmp/E024-mock-target-offset/feature-worktree/experiments/E024-mock-target-offset",
+      "started_at": "2026-10-15T07:18:40.744616+00:00",
+      "exit_code": 0,
+      "evidence": "evidence/tests.txt"
+    },
+    {
+      "name": "common-cases",
+      "command": [
+        "/Users/andrew/code/python/coami/server/.venv/bin/python",
+        "run_cases.py"
+      ],
+      "cwd": "/private/tmp/E024-mock-target-offset/feature-worktree/experiments/E024-mock-target-offset",
+      "started_at": "2026-10-15T07:18:40.790896+00:00",
+      "exit_code": 0,
+      "evidence": "evidence/common-cases.txt"
+    },
+    {
+      "name": "ruff-check",
+      "command": [
+        "/Users/andrew/code/python/coami/server/.venv/bin/ruff",
+        "check",
+        "."
+      ],
+      "cwd": "/private/tmp/E024-mock-target-offset/feature-worktree/experiments/E024-mock-target-offset",
+      "started_at": "2026-10-15T07:18:40.817255+00:00",
+      "exit_code": 1,
+      "evidence": "evidence/ruff-check.txt"
+    },
+    {
+      "name": "ruff-format",
+      "command": [
+        "/Users/andrew/code/python/coami/server/.venv/bin/ruff",
+        "format",
+        "--check",
+        "."
+      ],
+      "cwd": "/private/tmp/E024-mock-target-offset/feature-worktree/experiments/E024-mock-target-offset",
+      "started_at": "2026-10-15T07:18:40.860954+00:00",
+      "exit_code": 0,
+      "evidence": "evidence/ruff-format.txt"
+    },
+    {
+      "name": "pyright",
+      "command": [
+        "/Users/andrew/code/python/coami/server/.venv/bin/pyright",
+        "--project",
+        "pyrightconfig.json"
+      ],
+      "cwd": "/private/tmp/E024-mock-target-offset/feature-worktree/experiments/E024-mock-target-offset",
+      "started_at": "2026-10-15T07:18:40.871545+00:00",
+      "exit_code": 1,
+      "evidence": "evidence/pyright.txt"
+    }
+  ],
+  "sha256": {
+    "experiments/E024-mock-target-offset/calculator.py": "c12506b8b2ec7235e6c9fe9779d0dbc1a7c5967c8ce6e6ff03c122b8171e613c",
+    "experiments/E024-mock-target-offset/mock_cases.py": "7d39b98148de7027702b6f0243f969ae57d46e49ce1dd4acb10b568495c6f6a9",
+    "experiments/E024-mock-target-offset/run_cases.py": "97ebee57c697f39fb363da3f950e1b4b1beb922242dc93b23f6d9e4476d27ad5",
+    "experiments/E024-mock-target-offset/test_calculator.py": "b89a050b0e95d07e796d25c18c3f1c6e21076f74aabd8f0e6135243379155f4c"
+  },
+  "initial_test_status": "Import failure before calculator existed, not behavior-level RED or red-tests-ready"
+}

@@ -1,0 +1,7 @@
+Main worktree status:
+## dev...origin/dev
+
+Feature worktree: /private/tmp/E024-mock-target-offset/feature-worktree
+Branch: feat/andrew/e024-mock-target-offset
+Calculator imports: ['dataclasses', 'typing']
+All source writes confined to feature worktree topic paths.
