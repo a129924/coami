@@ -2,6 +2,13 @@ import {execFileSync} from 'node:child_process'
 import {createHash} from 'node:crypto'
 import {readFile,readdir,rm} from 'node:fs/promises'
 import path from 'node:path'
+import {verifyVendor as verifyVendorCheckout} from './build-safety.mjs'
+const VENDOR_PIN='b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322'
+export function verifyPinnedVendor(root){
+ const repo=path.resolve(root,'../..')
+ verifyVendorCheckout(repo,path.join(repo,'vendor/stack-chan'),VENDOR_PIN)
+ return VENDOR_PIN
+}
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex')
 async function treeHashes(base){
  const hashes={}
@@ -25,14 +32,18 @@ export async function sourceHashes(root){
  return Object.fromEntries(Object.entries(hashes).sort(([a],[b])=>a.localeCompare(b)))
 }
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b)
-export async function cleanBuild(root,{build=web=>execFileSync('npm',['run','build'],{cwd:web,stdio:'inherit',timeout:60000})}={}){
+export async function cleanBuild(root,{build=web=>execFileSync('npm',['run','build'],{cwd:web,stdio:'inherit',timeout:60000}),verifyVendor=()=>verifyPinnedVendor(root)}={}){
+ const vendorSourceCommit=verifyVendor()
  const web=path.join(root,'web'),sources=await sourceHashes(root)
  await rm(path.join(web,'dist'),{recursive:true,force:true})
  await build(web)
+ verifyVendor()
  if(!same(sources,await sourceHashes(root)))throw Error('sources changed during build')
- return {kind:'clean build immediately before preview',sourcesSha256:sources,distSha256:await treeHashes(path.join(web,'dist'))}
+ return {vendorSourceCommit,kind:'clean build immediately before preview',sourcesSha256:sources,distSha256:await treeHashes(path.join(web,'dist'))}
 }
-export async function assertBuildCurrent(root,manifest){
+export async function assertBuildCurrent(root,manifest,{verifyVendor=()=>verifyPinnedVendor(root)}={}){
+ verifyVendor()
  if(!same(manifest.sourcesSha256,await sourceHashes(root)))throw Error('sources changed after build')
  if(!same(manifest.distSha256,await treeHashes(path.join(root,'web/dist'))))throw Error('bundle changed after build')
+ verifyVendor()
 }
