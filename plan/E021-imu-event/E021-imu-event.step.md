@@ -11,7 +11,7 @@ created: 2026-10-14
 
 | Current status | Allowed next transitions | Next actor |
 | --- | --- | --- |
-| publish-in-progress | publish-in-progress→pr-open | Main Agent |
+| pr-open | pr-open→needs-rework or merged | Human reviewer |
 
 ## Actionable Steps
 
@@ -28,6 +28,8 @@ created: 2026-10-14
 - [X] **Actor:** Implementer — **Action:** Complete R1–R3 for the five addressed PR #21 review threads, preserving protected runtime and historical evidence, then hand off for independent review.
 
 - [X] **Actor:** Reviewer — **Action:** Complete independent review of the PR #21 bounded fixes and final post-fix validation.
+
+- [X] **Actor:** Main Agent — **Action:** Verify pushed PR #21 fixes and reply/resolve all five addressed review threads.
 
 ## Implementation Steps
 
@@ -192,3 +194,5 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 - Planner PR21 rework gate2026-10-16: canonical check_impl_steps_succeeded E021-imu-event returned exit0 and All 7 implementation steps complete. Current review-ready, next independent Reviewer. R1–R3 engineering completion does not prove final review, commit/push, replies or thread resolution; final Reviewer contextual marker remains pending.
 
 - Active final Reviewer handoff2026-10-16: Main Agent confirmed independent Reviewer accepted/read the queued final handoff and is actively reviewing. Canonical transition review-ready→reviewer-in-progress; final Reviewer contextual checkbox remains pending, publication blocked until actual verdict.
+
+- PR21 review-fix publication Actual2026-10-16: d218426 smoke-verdict,3edf51c provenancepreservation,2ebf7a6 docs/revalidation pushed; actualremotePRhead2ebf7a6e423dd52f979caeef62979de6073fe7ef verified before replies. Five addressed threads individually replied/resolved and read back5total/0unresolved. PRbody updated to54source/53postfixbrowserPASS; Readyforreview retained. Publicationaudit follow-up is metadata-only; no source/runtime/human changes, merge/release/cleanup rows remain pending.
