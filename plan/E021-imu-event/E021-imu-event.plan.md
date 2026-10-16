@@ -39,10 +39,10 @@
 
 ## Status / Allowed Transitions
 
-- **Current**: `publish-in-progress`.
-- **Next actor**: Main Agent.
-- **Stage-local action**: Commit and push the independently approved R4–R5 fixes, verify real PR head, then reply/resolve the two second-pass threads.
-- **Allowed next transition**: `publish-in-progress→pr-open` after verified pushed fixes and thread replies/resolution.
+- **Current**: `pr-open`.
+- **Next actor**: Human reviewer.
+- **Stage-local action**: PR #21 Ready for human review; second-pass fixes pushed and both threads replied/resolved after verified remote head.
+- **Allowed next transition**: `pr-open→needs-rework|merged` only with applicable new human action/authorization.
 - **Allowed**：`planned→creator-in-progress→review-ready→reviewer-in-progress`；`reviewer-in-progress→approved|needs-rework`；`needs-rework→creator-in-progress`；`approved→creator-in-progress|publish-in-progress`；`publish-in-progress→pr-open|merged`；`pr-open→needs-rework|merged`；`merged→terminal`。
 - Owner 的 clock scope choice 已明確解除，依授權派 Implementer 執行 bounded compatibility 並交獨立 Reviewer 核對 delta；原 readiness verdict 不代表新 runtime 通過。步驟／rework 未完維持 creator-in-progress；completion gate 只讀 step 的 Implementation Steps `[X]` 與證據。無 round cap／release transition。
 - Owner 已授權通過 review gates 後的 bounded commits／push／Draft PR，STOP POINT 1 無須再索取相同授權；STOP POINT 2 仍止於 human review，不 merge、不 release。

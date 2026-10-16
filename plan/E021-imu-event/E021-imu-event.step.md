@@ -35,6 +35,8 @@ created: 2026-10-14
 
 - [X] **Actor:** Reviewer — **Action:** Complete independent final review of R4–R5 and the second-pass PR #21 regression and full-smoke evidence.
 
+- [X] **Actor:** Main Agent — **Action:** Verify pushed PR #21 second-pass fixes and reply/resolve both addressed P1 threads.
+
 ## Implementation Steps
 
 Step 逐項鏡映，Actual 初始未執行；下列 Written 指首次建立，Modify 指前步已建立者。
@@ -239,3 +241,5 @@ R1–R3 與原53 PASS／人工證據保留為歷史；本輪 R4–R5 pending。R
 - R5 action-owner Actual2026-10-16: source56/56/typecheck/syntaxPASS, actual full53/53 browserPASS/zeroexceptions/exit0 captured2026-10-16T03:28:23.774Z; current three-source binding and initial/final served/per-run attestationPASS. Exact two pre-verification null exceptions only. Prior attempts preserved; protectedruntime/ledger/humanbytes unchanged483b565. Independent final review and canonical gate remain pending; no publication/resolution inferred.
 
 - Planner second-pass gate2026-10-16: actual canonical check_impl_steps_succeeded E021-imu-event exit0, All 9 implementation steps complete. Canonical creator-in-progress→review-ready→reviewer-in-progress after the confirmed active independent Reviewer handoff. Final R4/R5 Reviewer contextual item remains pending; prior review markers remain historical. No new final approval, push or thread resolution is established by this gate.
+
+Second-pass publication Actual2026-10-16: reviewed commits930d175 (completeMOD atomicledger),644660e (sourceattestation),2416b64 (docs/revalidation) pushed. local/remote/actualPRhead2416b6415a2d5fedd11bbe370a1083fb10226c8c matched before thread operations. Comment4290462965 replied4290652628 and resolvedPRRT_kwDOUk-3EM6tC_mK; comment4290462971 replied4290652913 and resolvedPRRT_kwDOUk-3EM6tC_mP. Readback7total/0unresolved, OPEN/isDraft=false, PRbody56source/53browser updated. Canonical publish-in-progress→pr-open, nextHumanReviewer. This metadata-only audit commit follows actual fixhead; no source/runtime/human changes or merge/release/cleanup authorization.
