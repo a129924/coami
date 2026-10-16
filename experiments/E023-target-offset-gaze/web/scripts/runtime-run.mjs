@@ -1,5 +1,6 @@
 /** Full pinned WASM SDK and Python WS, actual rendered feedback. No fake controller. */
 import {spawn} from 'node:child_process'
+import {startProcess} from './process-start.mjs'
 import {mkdtemp,mkdir,writeFile,readFile,rm} from 'node:fs/promises'
 import {createHash} from 'node:crypto'
 import {tmpdir} from 'node:os'
@@ -14,12 +15,7 @@ const pending=new Map(),cases=[],errors=[];const delay=ms=>new Promise(resolve=>
 const suiteDeadline=Date.now()+35*60000
 const report={runId,capturedAt:new Date().toISOString(),kind:'actual full pinned WASM SDK + Python WS + rendered quaternion; synthetic fixed targets; NOT physical/human evidence',cases,errors}
 async function save(){await writeFile(path.join(directory,'report.json'),JSON.stringify(report,null,2)+'\n')}
-async function startProcess(command,args,cwd,readyText){
- const child=spawn(command,args,{cwd,stdio:['ignore','pipe','pipe']});let output=''
- child.stdout.on('data',chunk=>{output+=chunk});child.stderr.on('data',chunk=>{output+=chunk})
- await new Promise((resolve,reject)=>{const deadline=setTimeout(()=>reject(Error('process startup timeout '+output)),10000);child.once('error',reject);child.once('exit',()=>{clearTimeout(deadline);reject(Error('process exited: '+output))});const poll=setInterval(()=>{if(output.includes(readyText)){clearInterval(poll);clearTimeout(deadline);resolve()}},50);poll.unref()})
- return child
-}
+
 try{
  preview=await startProcess(process.execPath,[path.join(web,'node_modules/vite/bin/vite.js'),'preview','--host','127.0.0.1','--port','5203','--strictPort'],web,'127.0.0.1:5203')
  server=await startProcess(path.join(root,'server/.venv/bin/python'),['-m','uvicorn','app:app','--host','127.0.0.1','--port','8230'],path.join(root,'server'),'Uvicorn running on')
