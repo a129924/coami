@@ -1,3 +1,4 @@
+import {controlledNodeEnvironment} from './node-environment.mjs'
 import {execFileSync} from 'node:child_process'
 import {createHash} from 'node:crypto'
 import {readFile,readdir,rm} from 'node:fs/promises'
@@ -33,16 +34,17 @@ export async function sourceHashes(root){
  return Object.fromEntries(Object.entries(hashes).sort(([a],[b])=>a.localeCompare(b)))
 }
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b)
-export async function cleanBuild(root,{build=web=>execFileSync('npm',['run','build'],{cwd:web,stdio:'inherit',timeout:60000}),verifyVendor=()=>verifyPinnedVendor(root),install=installDependencies}={}){
+export async function cleanBuild(root,{build=(web,env)=>execFileSync('npm',['run','build'],{cwd:web,env,stdio:'inherit',timeout:60000}),verifyVendor=()=>verifyPinnedVendor(root),install=installDependencies}={}){
+ const env=controlledNodeEnvironment(path.join(root,'web'))
  const vendorSourceCommit=verifyVendor()
  const web=path.join(root,'web'),sources=await sourceHashes(root)
  const dependencies=await install(web)
  await rm(path.join(web,'dist'),{recursive:true,force:true})
- await build(web)
+ await build(web,env)
  await verifyDependencies(web,dependencies)
  verifyVendor()
  if(!same(sources,await sourceHashes(root)))throw Error('sources changed during build')
- return {vendorSourceCommit,dependencies,kind:'clean build immediately before preview',sourcesSha256:sources,distSha256:await treeHashes(path.join(web,'dist'))}
+ return {vendorSourceCommit,dependencies,environment:{kind:'controlled allowlist v1',values:env},kind:'clean build immediately before preview',sourcesSha256:sources,distSha256:await treeHashes(path.join(web,'dist'))}
 }
 export async function assertBuildCurrent(root,manifest,{verifyVendor=()=>verifyPinnedVendor(root)}={}){
  await verifyDependencies(path.join(root,'web'),manifest.dependencies)

@@ -72,3 +72,27 @@ for(const phase of ['during','after'])test(`installed dependency edits rejected 
   else{const manifest=await cleanBuild(root,{build});await mutate();await assert.rejects(assertBuildCurrent(root,manifest),/installed dependencies changed/)}
  }finally{vendors.delete(root);await rm(root,{recursive:true,force:true})}
 })
+
+test('attested build rejects Node preload inputs and isolates child environment',async()=>{
+ const root=await fixture(),marker=path.join(root,'preload-ran'),hook=path.join(root,'hook.cjs')
+ const saved={NODE_OPTIONS:process.env.NODE_OPTIONS,NODE_PATH:process.env.NODE_PATH,VITE_UNRECORDED:process.env.VITE_UNRECORDED,NODE_ENV:process.env.NODE_ENV}
+ try{
+  await writeFile(hook,`require('node:fs').writeFileSync(${JSON.stringify(marker)},'preloaded')`)
+  process.env.NODE_OPTIONS=`--require ${hook}`
+  let invoked=false
+  await assert.rejects(cleanBuild(root,{build:()=>{invoked=true}}),/unrecorded Node startup inputs/)
+  assert.equal(invoked,false)
+  delete process.env.NODE_OPTIONS
+  process.env.VITE_UNRECORDED='unrecorded setting';process.env.NODE_ENV='test'
+  const manifest=await cleanBuild(root,{build:(web,env)=>{
+   assert.ok(env,'controlled environment required')
+   assert.equal(env.NODE_OPTIONS,undefined);assert.equal(env.NODE_PATH,undefined);assert.equal(env.VITE_UNRECORDED,undefined);assert.equal(env.NODE_ENV,undefined)
+   execFileSync(process.execPath,['-e',"const fs=require('node:fs');if(process.env.VITE_UNRECORDED||process.env.NODE_ENV)throw Error('ambient env');fs.mkdirSync('dist');fs.copyFileSync('src/main.ts','dist/main.js')"],{cwd:web,env})
+  }})
+  assert.equal(manifest.environment.kind,'controlled allowlist v1')
+  await assert.rejects(readFile(marker),{code:'ENOENT'})
+ }finally{
+  for(const [key,value]of Object.entries(saved)){if(value===undefined)delete process.env[key];else process.env[key]=value}
+  vendors.delete(root);await rm(root,{recursive:true,force:true})
+ }
+})

@@ -1,3 +1,4 @@
+import {controlledNodeEnvironment} from './node-environment.mjs'
 /** No SDK patch or compiler installation: package the MOD with pinned SDK tools. */
 import {execFileSync} from 'node:child_process'
 import {installDependencies,verifyDependencies} from './run-dependencies.mjs'
@@ -18,7 +19,7 @@ try{
  const publicRoot=path.join(out,'public');await mkdir(publicRoot,{recursive:true})
  const emitted=path.join(out,'mod')
  await rm(emitted,{recursive:true,force:true})
- execFileSync(path.join(web,'node_modules/.bin/tsc'),['-p',path.join(web,'../mod/tsconfig.json'),'--noEmit','false','--outDir',emitted],{stdio:'inherit'})
+ execFileSync(path.join(web,'node_modules/.bin/tsc'),['-p',path.join(web,'../mod/tsconfig.json'),'--noEmit','false','--outDir',emitted],{env:controlledNodeEnvironment(web),stdio:'inherit'})
  const {buildModArchive,isXsArchive}=await import(pathToFileURL(path.join(vendor,'web/editor/mod-builder.mjs')))
  const {default:createTools}=await import(pathToFileURL(path.join(vendor,'web/editor/vendor/tools.js')))
  const modJs=await readFile(path.join(emitted,'mod.js'),'utf8'),protocol=await readFile(path.join(emitted,'protocol.js'))
