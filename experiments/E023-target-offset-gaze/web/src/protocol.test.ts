@@ -102,3 +102,19 @@ test('expiry during began prevents ended delivery and SDK frame commit', async (
         assert.equal(frames, 0, 'no completed frame can reach SDK dispatch');
     }
 });
+
+test('rotation-tolerant commands normalize before bounded frame encoding', () => {
+    for (const sign of [-1, 1]) {
+        const target = [sign * (1 + 4e-7), 0, 0];
+        const parsed = parseCommand({ ...command, target });
+        assert.deepEqual(parsed.target, [sign, 0, 0]);
+        const decoder = new FrameDecoder();
+        let decoded = null;
+        for (const point of encodeFrame(1, parsed.target, false))
+            decoded = decoder.receive(point.x, point.y, 0) ?? decoded;
+        assert.deepEqual(decoded?.target, [sign, 0, 0]);
+        assert.deepEqual(target, [sign * (1 + 4e-7), 0, 0], 'wire value remains unchanged');
+    }
+    for (const target of [[1 + 2e-6, 0, 0], [1, 0.01, 0]])
+        assert.throws(() => parseCommand({ ...command, target }));
+});

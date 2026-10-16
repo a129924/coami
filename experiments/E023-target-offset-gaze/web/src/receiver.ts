@@ -10,11 +10,13 @@ export function parseCommand(value: unknown): Command {
     if (!value || typeof value !== 'object')
         throw Error('invalid command');
     const d = value as Record<string, unknown>;
-    if (d.kind !== 'command' || typeof d.run_id !== 'string' || !d.run_id || typeof d.command_id !== 'string' || d.command_id !== `${d.run_id}:${d.observation_seq}` || !Number.isInteger(d.observation_seq) || Number(d.observation_seq) < 1 || Number(d.observation_seq) > 2000 || d.valid_for_ms !== 1000 || !Array.isArray(d.target) || d.target.length !== 3 || d.target.some(v => typeof v !== 'number' || !Number.isFinite(v) || Math.abs(v) > 1))
+    if (d.kind !== 'command' || typeof d.run_id !== 'string' || !d.run_id || typeof d.command_id !== 'string' || d.command_id !== `${d.run_id}:${d.observation_seq}` || !Number.isInteger(d.observation_seq) || Number(d.observation_seq) < 1 || Number(d.observation_seq) > 2000 || d.valid_for_ms !== 1000 || !Array.isArray(d.target) || d.target.length !== 3 || d.target.some(v => typeof v !== 'number' || !Number.isFinite(v) || Math.abs(v) > 1 + 1e-6))
         throw Error('invalid command');
     if (Math.abs(Math.hypot(...d.target) - 1) > 1e-6)
         throw Error('target must lie on the 1m virtual sphere');
-    return d as Command;
+    const command = d as Command;
+    const norm = Math.hypot(...command.target);
+    return { ...command, target: command.target.map(v => v / norm) };
 }
 export class CommandGate {
     private run: string;
