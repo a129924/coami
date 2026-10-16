@@ -1,0 +1,283 @@
+{
+  "audit": "PASS",
+  "run_id": "WASM-2026-10-16T07-00-00-630Z",
+  "source_inputs_match": true,
+  "source_commit": "b4d224116726d704a144f3e456d0a6bce27b7d12",
+  "source_verification": "clean-build manifest bound to immutable Git source blobs and recorded complete dist hashes",
+  "build_manifest_match": true,
+  "browser_exceptions": 0,
+  "total_probe_frames": 90,
+  "total_sdk_calls": 90,
+  "cases": [
+    {
+      "id": "TC-E2E-01",
+      "state": "成功",
+      "controls": 0,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        0,
+        0
+      ],
+      "last_offset": [
+        0,
+        0
+      ],
+      "decision_observations": 3,
+      "window_observations": 0,
+      "max_quaternion_delta_from_initial": 0
+    },
+    {
+      "id": "TC-E2E-02",
+      "state": "成功",
+      "controls": 1,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        0.8,
+        0
+      ],
+      "last_offset": [
+        -0.00015612802498056927,
+        0
+      ],
+      "decision_observations": 4,
+      "window_observations": 20,
+      "max_quaternion_delta_from_initial": 0.3310806038391438
+    },
+    {
+      "id": "TC-E2E-03",
+      "state": "成功",
+      "controls": 1,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        -0.8,
+        0
+      ],
+      "last_offset": [
+        0.00015612802498056927,
+        0
+      ],
+      "decision_observations": 4,
+      "window_observations": 20,
+      "max_quaternion_delta_from_initial": 0.3310806038391438
+    },
+    {
+      "id": "TC-E2E-04",
+      "state": "成功",
+      "controls": 1,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        0,
+        0.8
+      ],
+      "last_offset": [
+        0,
+        -0.00015612802498056927
+      ],
+      "decision_observations": 4,
+      "window_observations": 20,
+      "max_quaternion_delta_from_initial": 0.3310806038391438
+    },
+    {
+      "id": "TC-E2E-05",
+      "state": "成功",
+      "controls": 1,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        0,
+        -0.8
+      ],
+      "last_offset": [
+        0,
+        0.00015612802498056927
+      ],
+      "decision_observations": 4,
+      "window_observations": 20,
+      "max_quaternion_delta_from_initial": 0.3310806038391438
+    },
+    {
+      "id": "TC-E2E-06",
+      "state": "成功",
+      "controls": 1,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        0.8,
+        0.8
+      ],
+      "last_offset": [
+        -0.0003123810408340368,
+        -0.00020679169966467248
+      ],
+      "decision_observations": 4,
+      "window_observations": 20,
+      "max_quaternion_delta_from_initial": 0.3183476189480354
+    },
+    {
+      "id": "TC-E2E-07",
+      "state": "成功",
+      "controls": 1,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        0.8,
+        -0.8
+      ],
+      "last_offset": [
+        -0.0003123810408340368,
+        0.00020679169966467248
+      ],
+      "decision_observations": 4,
+      "window_observations": 20,
+      "max_quaternion_delta_from_initial": 0.3183476189480354
+    },
+    {
+      "id": "TC-E2E-08",
+      "state": "成功",
+      "controls": 1,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        -0.8,
+        0.8
+      ],
+      "last_offset": [
+        0.0003123810408340368,
+        -0.00020679169966467248
+      ],
+      "decision_observations": 4,
+      "window_observations": 20,
+      "max_quaternion_delta_from_initial": 0.3183476189480354
+    },
+    {
+      "id": "TC-E2E-09",
+      "state": "成功",
+      "controls": 1,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        -0.8,
+        -0.8
+      ],
+      "last_offset": [
+        0.0003123810408340368,
+        0.00020679169966467248
+      ],
+      "decision_observations": 4,
+      "window_observations": 20,
+      "max_quaternion_delta_from_initial": 0.3183476189480354
+    },
+    {
+      "id": "TC-E2E-10",
+      "state": "失敗",
+      "controls": 20,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        0.11,
+        0
+      ],
+      "last_offset": [
+        0.11,
+        0
+      ],
+      "decision_observations": 21,
+      "window_observations": 400,
+      "max_quaternion_delta_from_initial": 0
+    },
+    {
+      "id": "TC-E2E-11",
+      "state": "失敗",
+      "controls": 20,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        -0.11,
+        0
+      ],
+      "last_offset": [
+        -0.11,
+        0
+      ],
+      "decision_observations": 21,
+      "window_observations": 400,
+      "max_quaternion_delta_from_initial": 0
+    },
+    {
+      "id": "TC-E2E-12",
+      "state": "失敗",
+      "controls": 20,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        0,
+        0.11
+      ],
+      "last_offset": [
+        0,
+        0.11
+      ],
+      "decision_observations": 21,
+      "window_observations": 400,
+      "max_quaternion_delta_from_initial": 0
+    },
+    {
+      "id": "TC-E2E-13",
+      "state": "失敗",
+      "controls": 20,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        0,
+        -0.11
+      ],
+      "last_offset": [
+        0,
+        -0.11
+      ],
+      "decision_observations": 21,
+      "window_observations": 400,
+      "max_quaternion_delta_from_initial": 0
+    },
+    {
+      "id": "TC-E2E-14",
+      "state": "成功",
+      "controls": 1,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        0.8000000000000003,
+        -5.998130964506261e-17
+      ],
+      "last_offset": [
+        -8.837992900505607e-05,
+        -0.00043698817960065143
+      ],
+      "decision_observations": 4,
+      "window_observations": 20,
+      "max_quaternion_delta_from_initial": 0.33845377104058727
+    },
+    {
+      "id": "TC-E2E-15",
+      "state": "成功",
+      "controls": 1,
+      "probe_frames": 6,
+      "initial_error_radians": 0,
+      "first_offset": [
+        0.8,
+        2.221529986854171e-17
+      ],
+      "last_offset": [
+        4.405996209492613e-05,
+        0.0004020426096348562
+      ],
+      "decision_observations": 4,
+      "window_observations": 20,
+      "max_quaternion_delta_from_initial": 0.31894139902217733
+    }
+  ]
+}

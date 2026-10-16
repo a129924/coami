@@ -16,14 +16,14 @@
 
 E023 使用固定底座、靜態合成目標、零相機安裝平移／旋轉，以及水平／垂直 FOV90° 的理想針孔相機；u向右、v向下。姿態讀自實際 rendered `headGroup` world quaternion，並重新投影固定世界目標，不以命令值或 SDK rotation cache 冒充回饋。
 
-在具clean-build manifest與來源綁定查核的完整再驗證 run `WASM-2026-10-16T07-00-00-630Z` 中，以下四個中立起始姿態案例均通過非運動 probe，SDK 呼叫均正常返回，但各20次控制後姿態及偏差未變：
+在具clean dependency install attestation、clean-build manifest與來源綁定查核的完整再驗證 run `WASM-2026-10-16T07-46-32-258Z` 中，以下四個中立起始姿態案例均通過非運動 probe，SDK 呼叫均正常返回，但各20次控制後姿態及偏差未變：
 
 | 案例 | 起始及最後偏差 (u,v) | SDK控制次數 | 觀測結果 |
 | --- | --- | ---: | --- |
-| [TC-E2E-10](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-16T07-00-00-630Z/TC-E2E-10.json) | (+0.11, 0) | 20 | quaternion未變；未置中 |
-| [TC-E2E-11](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-16T07-00-00-630Z/TC-E2E-11.json) | (-0.11, 0) | 20 | quaternion未變；未置中 |
-| [TC-E2E-12](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-16T07-00-00-630Z/TC-E2E-12.json) | (0, +0.11) | 20 | quaternion未變；未置中 |
-| [TC-E2E-13](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-16T07-00-00-630Z/TC-E2E-13.json) | (0, -0.11) | 20 | quaternion未變；未置中 |
+| [TC-E2E-10](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-10.json) | (+0.11, 0) | 20 | quaternion未變；未置中 |
+| [TC-E2E-11](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-11.json) | (-0.11, 0) | 20 | quaternion未變；未置中 |
+| [TC-E2E-12](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-12.json) | (0, +0.11) | 20 | quaternion未變；未置中 |
+| [TC-E2E-13](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-13.json) | (0, -0.11) | 20 | quaternion未變；未置中 |
 
 該模型下，單軸偏差0.11所需的完整置中角度為 `atan(0.11 × tan(90° / 2)) ≈ 6.28°`，低於30°，未觸發轉頭。原判準是雙軸絕對偏差≤0.1、最多20次控制且連續3筆觀測置中；四案均不符合。全部15案為11成功、4失敗，主收斂假設失敗；本輪驗證任務已完成。
 
@@ -48,4 +48,5 @@ Server 可能在每次重新觀測後，對未變的偏差反覆計算並送出�
 | 日期 | 內容與依據 |
 | --- | --- |
 | 2026-10-16 | 依 E023固定 SDK原始碼與已完成閉環證據建立限制入口；建議保持未實作，交由 Draft PR human review。 |
-| 2026-10-16 | 依第四輪review補齊完整15案來源建置綁定證據，更新至run `WASM-2026-10-16T07-00-00-630Z`；11成功／4失敗，原模型與判準不變。 |
+| 2026-10-16 | 依第四輪review補齊完整15案來源建置綁定證據，更新至run `WASM-2026-10-16T07-46-32-258Z`；11成功／4失敗，原模型與判準不變。 |
+| 2026-10-16 | 第五輪review後，以乾淨依賴安裝與完整tree attestation的15案run更新正式證據；舊資料與receipt保留。 |

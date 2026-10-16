@@ -16,7 +16,7 @@ spec.loader.exec_module(module)
 
 class EvidenceAuditTests(unittest.TestCase):
     def build_fixture(self):
-        run = ROOT / "evidence/wasm-runs/WASM-2026-10-16T06-26-29-613Z"
+        run = ROOT / "evidence/wasm-runs/WASM-2026-10-16T07-46-32-258Z"
         return json.loads((run / "report.json").read_text()), json.loads(
             (run / "source-inputs.json").read_text()
         )
@@ -75,3 +75,19 @@ class EvidenceAuditTests(unittest.TestCase):
         self.assertTrue(result["build_manifest_match"])
         self.assertEqual(result["total_sdk_calls"], 90)
         self.assertEqual(len(result["cases"]), 15)
+
+    def test_missing_clean_install_cannot_pass_dependency_attribution(self):
+        report, inputs = self.build_fixture()
+        del report["build"]["dependencies"]
+        with self.assertRaisesRegex(AssertionError, "dependency install attestation"):
+            module.verify_build(ROOT, report, inputs)
+
+    def test_modified_dependency_tree_or_lock_is_rejected(self):
+        for field, message in [
+            ("installedTreeSha256", "dependency tree mismatch"),
+            ("lockSha256", "dependency lock mismatch"),
+        ]:
+            report, inputs = self.build_fixture()
+            report["build"]["dependencies"][field] = "0" * 64
+            with self.assertRaisesRegex(AssertionError, message):
+                module.verify_build(ROOT, report, inputs)

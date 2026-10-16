@@ -1,0 +1,1633 @@
+{
+  "experiment": "E023",
+  "run_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1",
+  "case": {
+    "id": "TC-E2E-15",
+    "offset": [
+      0.8,
+      0
+    ],
+    "initial": 2
+  },
+  "provenance": {
+    "experiment": "E023",
+    "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+    "hashes": {
+      "mc.js": "a1f2c55234c99663a0d5ab48fd969944ca72da9c1f14e6f1432c36fa53829796",
+      "mc.wasm": "dc4ceb67c0abea9c126557ce63851a41dedbd1c6e10d15f6b8dddb7615ef487e",
+      "assets/case/v1/shell.stl": "832ced3ad3669c3fc6b174a984cc800522ca33cecd9222d531bda430f6cc5236",
+      "coami-mod.xsa": "dc2beed357de80aa1c11bdbb76c869e8b07ac68eaa4797ee7bacd6338a3ed63e"
+    },
+    "sources": {
+      "mod/mod.ts": "1c2e8c7be25898ecbf39747962031b41e560b0bf0773e6243b8b60efb20f5197",
+      "mod/protocol.ts": "e9fd1ff261e1b66c7a53b64e2785fa2b7497b161333af03aca0e10fa989ad21a",
+      "vendor/web/src/services/simulator/simulator-engine.mjs": "167a07741821e719acd2c087ea916c5ed141c87d8bc54a2e26d757a58376fe33",
+      "vendor/web/simulator/geometry.mjs": "7f9b357ec11b82fae1e45d5392e3f661ebadc8fc5b7a69f638f8c5a311f61a55",
+      "vendor/web/simulator/bridge.mjs": "f4a2a66baf6000d9c29597f570d9e23bf32057066aee47a136b35a10f00ba6c6"
+    },
+    "limitation": "Exact E023 source-built runtime bytes; full build provenance is recorded separately in evidence/host-runtime-provenance.json"
+  },
+  "result": {
+    "state": "成功",
+    "controls": 1
+  },
+  "records": [
+    {
+      "browser_ms": 107.19999980926514,
+      "kind": "trace",
+      "text": "[main] start"
+    },
+    {
+      "browser_ms": 107.40000009536743,
+      "kind": "trace",
+      "text": "[main] installed WASM button bridge"
+    },
+    {
+      "browser_ms": 107.59999990463257,
+      "kind": "trace",
+      "text": "[main] loading app behaviors"
+    },
+    {
+      "browser_ms": 107.69999980926514,
+      "kind": "trace",
+      "text": "[main] checking mod override"
+    },
+    {
+      "browser_ms": 8109.699999809265,
+      "kind": "trace",
+      "text": "[main] onLaunch shouldCreateContext=true"
+    },
+    {
+      "browser_ms": 8110.199999809265,
+      "kind": "trace",
+      "text": "No Wi-Fi SSID"
+    },
+    {
+      "browser_ms": 8114.900000095367,
+      "kind": "trace",
+      "text": "[main] network ready: skipped"
+    },
+    {
+      "browser_ms": 8115.400000095367,
+      "kind": "trace",
+      "text": "[main] TTS engine: stackchan-voice"
+    },
+    {
+      "browser_ms": 8120.199999809265,
+      "kind": "trace",
+      "text": "[main] app context created"
+    },
+    {
+      "browser_ms": 8120.400000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"ready\",\"experiment\":\"E023\"}"
+    },
+    {
+      "browser_ms": 8129.699999809265,
+      "kind": "trace",
+      "text": "[main] app behaviors ready"
+    },
+    {
+      "browser_ms": 8144.599999904633,
+      "kind": "sent",
+      "message": {
+        "kind": "hello",
+        "run_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1"
+      }
+    },
+    {
+      "browser_ms": 8145,
+      "kind": "server",
+      "reply": {
+        "kind": "hello",
+        "run_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1"
+      }
+    },
+    {
+      "browser_ms": 8145.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":1,\"y\":140,\"ticks\":1136056912}"
+    },
+    {
+      "browser_ms": 8145.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":1,\"y\":140,\"ticks\":1136056912}"
+    },
+    {
+      "browser_ms": 8145.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":102,\"ticks\":1136056912}"
+    },
+    {
+      "browser_ms": 8145.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":102,\"ticks\":1136056912}"
+    },
+    {
+      "browser_ms": 8145.800000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":109,\"ticks\":1136056913}"
+    },
+    {
+      "browser_ms": 8145.800000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":109,\"ticks\":1136056913}"
+    },
+    {
+      "browser_ms": 8145.900000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1136056913}"
+    },
+    {
+      "browser_ms": 8145.900000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1136056913}"
+    },
+    {
+      "browser_ms": 8145.900000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":1,\"y\":128,\"ticks\":1136056913}"
+    },
+    {
+      "browser_ms": 8146.099999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":1,\"y\":128,\"ticks\":1136056913}"
+    },
+    {
+      "browser_ms": 8146.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"decoded\",\"seq\":1,\"probe\":true,\"target\":[1,0,0]}"
+    },
+    {
+      "browser_ms": 8146.300000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"probe\",\"seq\":1,\"probe\":true,\"target\":[1,0,0]}"
+    },
+    {
+      "browser_ms": 8146.400000095367,
+      "kind": "frame-committed",
+      "seq": 1,
+      "probe": true,
+      "expected": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "browser_ms": 8146.400000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":2,\"y\":140,\"ticks\":1136056913}"
+    },
+    {
+      "browser_ms": 8146.400000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":2,\"y\":140,\"ticks\":1136056913}"
+    },
+    {
+      "browser_ms": 8146.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":97,\"ticks\":1136056913}"
+    },
+    {
+      "browser_ms": 8146.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":97,\"ticks\":1136056913}"
+    },
+    {
+      "browser_ms": 8146.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":104,\"ticks\":1136056913}"
+    },
+    {
+      "browser_ms": 8146.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":104,\"ticks\":1136056913}"
+    },
+    {
+      "browser_ms": 8146.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1136056914}"
+    },
+    {
+      "browser_ms": 8146.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1136056914}"
+    },
+    {
+      "browser_ms": 8146.800000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":2,\"y\":128,\"ticks\":1136056914}"
+    },
+    {
+      "browser_ms": 8147,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":2,\"y\":128,\"ticks\":1136056914}"
+    },
+    {
+      "browser_ms": 8147.099999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"decoded\",\"seq\":2,\"probe\":true,\"target\":[0,-1,0]}"
+    },
+    {
+      "browser_ms": 8147.099999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"probe\",\"seq\":2,\"probe\":true,\"target\":[0,-1,0]}"
+    },
+    {
+      "browser_ms": 8147.199999809265,
+      "kind": "frame-committed",
+      "seq": 2,
+      "probe": true,
+      "expected": [
+        0,
+        -1,
+        0
+      ]
+    },
+    {
+      "browser_ms": 8147.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":3,\"y\":140,\"ticks\":1136056914}"
+    },
+    {
+      "browser_ms": 8147.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":3,\"y\":140,\"ticks\":1136056914}"
+    },
+    {
+      "browser_ms": 8147.300000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":97,\"ticks\":1136056914}"
+    },
+    {
+      "browser_ms": 8147.300000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":97,\"ticks\":1136056914}"
+    },
+    {
+      "browser_ms": 8147.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":109,\"ticks\":1136056914}"
+    },
+    {
+      "browser_ms": 8147.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":109,\"ticks\":1136056914}"
+    },
+    {
+      "browser_ms": 8147.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":126,\"ticks\":1136056914}"
+    },
+    {
+      "browser_ms": 8147.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":126,\"ticks\":1136056914}"
+    },
+    {
+      "browser_ms": 8147.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":3,\"y\":128,\"ticks\":1136056915}"
+    },
+    {
+      "browser_ms": 8147.800000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":3,\"y\":128,\"ticks\":1136056915}"
+    },
+    {
+      "browser_ms": 8147.800000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"decoded\",\"seq\":3,\"probe\":true,\"target\":[0,0,1]}"
+    },
+    {
+      "browser_ms": 8148,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"probe\",\"seq\":3,\"probe\":true,\"target\":[0,0,1]}"
+    },
+    {
+      "browser_ms": 8148,
+      "kind": "frame-committed",
+      "seq": 3,
+      "probe": true,
+      "expected": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "browser_ms": 8148,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":4,\"y\":140,\"ticks\":1136056915}"
+    },
+    {
+      "browser_ms": 8148.099999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":4,\"y\":140,\"ticks\":1136056915}"
+    },
+    {
+      "browser_ms": 8148.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":97,\"ticks\":1136056915}"
+    },
+    {
+      "browser_ms": 8148.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":97,\"ticks\":1136056915}"
+    },
+    {
+      "browser_ms": 8148.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":109,\"ticks\":1136056915}"
+    },
+    {
+      "browser_ms": 8148.300000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":109,\"ticks\":1136056915}"
+    },
+    {
+      "browser_ms": 8148.400000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":116,\"ticks\":1136056915}"
+    },
+    {
+      "browser_ms": 8148.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":116,\"ticks\":1136056915}"
+    },
+    {
+      "browser_ms": 8148.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":4,\"y\":128,\"ticks\":1136056915}"
+    },
+    {
+      "browser_ms": 8148.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":4,\"y\":128,\"ticks\":1136056915}"
+    },
+    {
+      "browser_ms": 8148.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"decoded\",\"seq\":4,\"probe\":true,\"target\":[0,0,-1]}"
+    },
+    {
+      "browser_ms": 8148.800000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"probe\",\"seq\":4,\"probe\":true,\"target\":[0,0,-1]}"
+    },
+    {
+      "browser_ms": 8148.800000190735,
+      "kind": "frame-committed",
+      "seq": 4,
+      "probe": true,
+      "expected": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "browser_ms": 8148.800000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":5,\"y\":140,\"ticks\":1136056916}"
+    },
+    {
+      "browser_ms": 8149,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":5,\"y\":140,\"ticks\":1136056916}"
+    },
+    {
+      "browser_ms": 8149,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":181,\"y\":100,\"ticks\":1136056916}"
+    },
+    {
+      "browser_ms": 8149,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":181,\"y\":100,\"ticks\":1136056916}"
+    },
+    {
+      "browser_ms": 8149.099999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":175,\"y\":105,\"ticks\":1136056916}"
+    },
+    {
+      "browser_ms": 8149.300000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":175,\"y\":105,\"ticks\":1136056916}"
+    },
+    {
+      "browser_ms": 8149.300000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1136056916}"
+    },
+    {
+      "browser_ms": 8149.400000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1136056916}"
+    },
+    {
+      "browser_ms": 8149.400000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":5,\"y\":128,\"ticks\":1136056916}"
+    },
+    {
+      "browser_ms": 8149.400000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":5,\"y\":128,\"ticks\":1136056916}"
+    },
+    {
+      "browser_ms": 8149.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"decoded\",\"seq\":5,\"probe\":true,\"target\":[0.7809999999999999,-0.625,0]}"
+    },
+    {
+      "browser_ms": 8149.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"probe\",\"seq\":5,\"probe\":true,\"target\":[0.7809999999999999,-0.625,0]}"
+    },
+    {
+      "browser_ms": 8149.699999809265,
+      "kind": "frame-committed",
+      "seq": 5,
+      "probe": true,
+      "expected": [
+        0.7809999999999999,
+        -0.625,
+        0
+      ]
+    },
+    {
+      "browser_ms": 8149.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":6,\"y\":140,\"ticks\":1136056917}"
+    },
+    {
+      "browser_ms": 8149.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":6,\"y\":140,\"ticks\":1136056917}"
+    },
+    {
+      "browser_ms": 8149.900000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":194,\"y\":101,\"ticks\":1136056917}"
+    },
+    {
+      "browser_ms": 8149.900000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":194,\"y\":101,\"ticks\":1136056917}"
+    },
+    {
+      "browser_ms": 8150,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":91,\"y\":108,\"ticks\":1136056917}"
+    },
+    {
+      "browser_ms": 8150.099999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":91,\"y\":108,\"ticks\":1136056917}"
+    },
+    {
+      "browser_ms": 8150.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1136056917}"
+    },
+    {
+      "browser_ms": 8150.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1136056917}"
+    },
+    {
+      "browser_ms": 8150.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":6,\"y\":128,\"ticks\":1136056917}"
+    },
+    {
+      "browser_ms": 8150.300000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":6,\"y\":128,\"ticks\":1136056917}"
+    },
+    {
+      "browser_ms": 8150.400000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"decoded\",\"seq\":6,\"probe\":true,\"target\":[0.994,-0.10899999999999999,0]}"
+    },
+    {
+      "browser_ms": 8150.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"probe\",\"seq\":6,\"probe\":true,\"target\":[0.994,-0.10899999999999999,0]}"
+    },
+    {
+      "browser_ms": 8150.5,
+      "kind": "frame-committed",
+      "seq": 6,
+      "probe": true,
+      "expected": [
+        0.994,
+        -0.10899999999999999,
+        0
+      ]
+    },
+    {
+      "browser_ms": 8150.5,
+      "kind": "probe-passed"
+    },
+    {
+      "browser_ms": 8150.599999904633,
+      "kind": "trace",
+      "text": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "browser_ms": 8155.900000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"initial-selected\",\"initial\":1}"
+    },
+    {
+      "browser_ms": 8308,
+      "kind": "trace",
+      "text": "[bridge] Host.Button.a pushed"
+    },
+    {
+      "browser_ms": 8324.300000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"initial-selected\",\"initial\":2}"
+    },
+    {
+      "browser_ms": 8478.099999904633,
+      "kind": "trace",
+      "text": "[bridge] Host.Button.b pushed"
+    },
+    {
+      "browser_ms": 8499.400000095367,
+      "kind": "trace",
+      "text": "[WasmDriver] applyRotation y=-0.3490658503988659 p=-0.17453292519943295 r=0 time=0.25"
+    },
+    {
+      "browser_ms": 8513.400000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"initialized\",\"initial\":2}"
+    },
+    {
+      "browser_ms": 8769.199999809265,
+      "kind": "initial-pose",
+      "error_radians": 0
+    },
+    {
+      "browser_ms": 8769.400000095367,
+      "kind": "fixed-world-target",
+      "target": [
+        0.5089706521133419,
+        -0.850036751667516,
+        0.1355964457567277
+      ]
+    },
+    {
+      "browser_ms": 8769.400000095367,
+      "kind": "decision-observation",
+      "observation_seq": 7,
+      "rotation": [
+        [
+          0.9254165783983234,
+          0.3420201433256686,
+          -0.16317591116653482
+        ],
+        [
+          -0.3368240888334651,
+          0.9396926207859084,
+          0.05939117461388469
+        ],
+        [
+          0.17364817766693033,
+          -6.938893903907228e-18,
+          0.984807753012208
+        ]
+      ],
+      "offset": [
+        0.8,
+        2.221529986854171e-17
+      ],
+      "quaternion": [
+        -0.08583165117743129,
+        -0.1729873939250894,
+        -0.01513443590133862,
+        0.981060262190407
+      ]
+    },
+    {
+      "browser_ms": 8769.5,
+      "kind": "sent",
+      "message": {
+        "kind": "observation",
+        "run_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1",
+        "observation_seq": 7,
+        "offset": [
+          0.8,
+          2.221529986854171e-17
+        ],
+        "rotation": [
+          [
+            0.9254165783983234,
+            0.3420201433256686,
+            -0.16317591116653482
+          ],
+          [
+            -0.3368240888334651,
+            0.9396926207859084,
+            0.05939117461388469
+          ],
+          [
+            0.17364817766693033,
+            -6.938893903907228e-18,
+            0.984807753012208
+          ]
+        ],
+        "age_ms": 0
+      }
+    },
+    {
+      "browser_ms": 8770.099999904633,
+      "kind": "server",
+      "reply": {
+        "run_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1",
+        "observation_seq": 7,
+        "kind": "command",
+        "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+        "target": [
+          0.5089706521133419,
+          -0.850036751667516,
+          0.1355964457567277
+        ],
+        "valid_for_ms": 1000
+      }
+    },
+    {
+      "browser_ms": 8770.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":7,\"y\":80,\"ticks\":1136057537}"
+    },
+    {
+      "browser_ms": 8770.400000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":7,\"y\":80,\"ticks\":1136057537}"
+    },
+    {
+      "browser_ms": 8770.400000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":109,\"y\":99,\"ticks\":1136057537}"
+    },
+    {
+      "browser_ms": 8770.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":109,\"y\":99,\"ticks\":1136057537}"
+    },
+    {
+      "browser_ms": 8770.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":150,\"y\":104,\"ticks\":1136057537}"
+    },
+    {
+      "browser_ms": 8770.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":150,\"y\":104,\"ticks\":1136057537}"
+    },
+    {
+      "browser_ms": 8770.800000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":136,\"y\":121,\"ticks\":1136057537}"
+    },
+    {
+      "browser_ms": 8770.800000190735,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":136,\"y\":121,\"ticks\":1136057538}"
+    },
+    {
+      "browser_ms": 8770.900000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":7,\"y\":128,\"ticks\":1136057538}"
+    },
+    {
+      "browser_ms": 8771,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":7,\"y\":128,\"ticks\":1136057538}"
+    },
+    {
+      "browser_ms": 8771,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"decoded\",\"seq\":7,\"probe\":false,\"target\":[0.5089999999999999,-0.85,0.1359999999999999]}"
+    },
+    {
+      "browser_ms": 8771.199999809265,
+      "kind": "trace",
+      "text": "[WasmDriver] setTorque torque=1"
+    },
+    {
+      "browser_ms": 8771.300000190735,
+      "kind": "trace",
+      "text": "[WasmDriver] applyRotation y=-1.0312423274333506 p=-0.13641748621691105 r=0 time=0.8763545993139756"
+    },
+    {
+      "browser_ms": 8771.400000095367,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"returned\",\"seq\":7,\"target\":[0.5089999999999999,-0.85,0.1359999999999999]}"
+    },
+    {
+      "browser_ms": 8771.5,
+      "kind": "frame-committed",
+      "seq": 7,
+      "probe": false,
+      "expected": [
+        0.5089999999999999,
+        -0.85,
+        0.1359999999999999
+      ]
+    },
+    {
+      "browser_ms": 9022.800000190735,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5442995467349427,
+          0.8355570104615819,
+          -0.07471603370522227
+        ],
+        [
+          -0.8277943147343316,
+          0.5494037515966778,
+          0.11363137869890698
+        ],
+        [
+          0.13599476430235952,
+          -2.7755575615628914e-17,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.04177579179402216,
+        0.0002826682300077822
+      ],
+      "quaternion": [
+        -0.059988851040577565,
+        -0.47355207145926415,
+        -0.032350576784673915,
+        0.8781248279995109
+      ]
+    },
+    {
+      "browser_ms": 9273.400000095367,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 9523.800000190735,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 9698.699999809265,
+      "kind": "trace",
+      "text": "[WasmDriver] setTorque torque=0"
+    },
+    {
+      "browser_ms": 9774.699999809265,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 10025.400000095367,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 10276.400000095367,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 10534.099999904633,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 10789.400000095367,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 11040,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 11290.400000095367,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 11541,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 11791.699999809265,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 12042.5,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 12293.900000095367,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 12545,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 12796,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 13047.199999809265,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 13306,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 13557.099999904633,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 13807.699999809265,
+      "kind": "window-observation",
+      "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7",
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 13807.800000190735,
+      "kind": "sent",
+      "message": {
+        "kind": "completed",
+        "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7"
+      }
+    },
+    {
+      "browser_ms": 13808.199999809265,
+      "kind": "server",
+      "reply": {
+        "kind": "completed",
+        "command_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1:7"
+      }
+    },
+    {
+      "browser_ms": 13808.300000190735,
+      "kind": "decision-observation",
+      "observation_seq": 8,
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 13808.300000190735,
+      "kind": "sent",
+      "message": {
+        "kind": "observation",
+        "run_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1",
+        "observation_seq": 8,
+        "offset": [
+          0.00004405996209492613,
+          0.0004020426096348562
+        ],
+        "rotation": [
+          [
+            0.5089804046316251,
+            0.8579379010305187,
+            -0.06986777280245124
+          ],
+          [
+            -0.8499672768897476,
+            0.5137534019112163,
+            0.11667506263670646
+          ],
+          [
+            0.13599476430235954,
+            0,
+            0.9907095558650606
+          ]
+        ],
+        "age_ms": 0.10000038146972656
+      }
+    },
+    {
+      "browser_ms": 13808.699999809265,
+      "kind": "server",
+      "reply": {
+        "run_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1",
+        "observation_seq": 8,
+        "kind": "centered"
+      }
+    },
+    {
+      "browser_ms": 14059.800000190735,
+      "kind": "decision-observation",
+      "observation_seq": 9,
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 14059.900000095367,
+      "kind": "sent",
+      "message": {
+        "kind": "observation",
+        "run_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1",
+        "observation_seq": 9,
+        "offset": [
+          0.00004405996209492613,
+          0.0004020426096348562
+        ],
+        "rotation": [
+          [
+            0.5089804046316251,
+            0.8579379010305187,
+            -0.06986777280245124
+          ],
+          [
+            -0.8499672768897476,
+            0.5137534019112163,
+            0.11667506263670646
+          ],
+          [
+            0.13599476430235954,
+            0,
+            0.9907095558650606
+          ]
+        ],
+        "age_ms": 0
+      }
+    },
+    {
+      "browser_ms": 14060.900000095367,
+      "kind": "server",
+      "reply": {
+        "run_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1",
+        "observation_seq": 9,
+        "kind": "centered"
+      }
+    },
+    {
+      "browser_ms": 14316.599999904633,
+      "kind": "decision-observation",
+      "observation_seq": 10,
+      "rotation": [
+        [
+          0.5089804046316251,
+          0.8579379010305187,
+          -0.06986777280245124
+        ],
+        [
+          -0.8499672768897476,
+          0.5137534019112163,
+          0.11667506263670646
+        ],
+        [
+          0.13599476430235954,
+          0,
+          0.9907095558650606
+        ]
+      ],
+      "offset": [
+        0.00004405996209492613,
+        0.0004020426096348562
+      ],
+      "quaternion": [
+        -0.059294690771034865,
+        -0.4919287929472667,
+        -0.033605977352802005,
+        0.8679636170957717
+      ]
+    },
+    {
+      "browser_ms": 14316.699999809265,
+      "kind": "sent",
+      "message": {
+        "kind": "observation",
+        "run_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1",
+        "observation_seq": 10,
+        "offset": [
+          0.00004405996209492613,
+          0.0004020426096348562
+        ],
+        "rotation": [
+          [
+            0.5089804046316251,
+            0.8579379010305187,
+            -0.06986777280245124
+          ],
+          [
+            -0.8499672768897476,
+            0.5137534019112163,
+            0.11667506263670646
+          ],
+          [
+            0.13599476430235954,
+            0,
+            0.9907095558650606
+          ]
+        ],
+        "age_ms": 0
+      }
+    },
+    {
+      "browser_ms": 14317.099999904633,
+      "kind": "server",
+      "reply": {
+        "run_id": "53f11a9c-feb0-4d87-bacd-57e613e569e1",
+        "observation_seq": 10,
+        "kind": "centered"
+      }
+    },
+    {
+      "browser_ms": 14317.099999904633,
+      "kind": "result",
+      "state": "成功",
+      "controls": 1
+    }
+  ],
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+  "capturedAt": "2026-10-16T07:57:05.647Z",
+  "poseSource": "rendered-head-world-quaternion",
+  "limitations": "synthetic ideal zero-offset camera; not physical robot evidence"
+}

@@ -1,8 +1,9 @@
 import json,hashlib,math,subprocess
 from pathlib import Path
 
-SOURCE_COMMIT='b4d224116726d704a144f3e456d0a6bce27b7d12'
-RUN_ID='WASM-2026-10-16T07-00-00-630Z'
+SOURCE_COMMIT='fd49f79b24c20583a6bd9d5e9f07d14d0937b68d'
+RUN_ID='WASM-2026-10-16T07-46-32-258Z'
+DEPENDENCY_TREE_SHA256='ddf57ff8eeb7942c197e8c12eea145bd4fa894ff0a6fb0d40302dc5953d7159d'
 
 def verify_sources(root,hashes,source_commit=SOURCE_COMMIT):
  # Tooling has evolved; bind historical evidence to immutable implementation blobs.
@@ -15,6 +16,12 @@ def verify_build(root,report,inputs):
  build=report.get('build')
  assert build and build.get('kind')=='clean build immediately before preview', 'source-bound build manifest required'
  sources=build['sourcesSha256']; dist=build['distSha256']
+ dependencies=build.get('dependencies')
+ assert dependencies and dependencies.get('command')==['npm','ci','--ignore-scripts','--no-audit','--no-fund'], 'clean dependency install attestation required'
+ assert dependencies['lockSha256']==sources['web/package-lock.json'], 'dependency lock mismatch'
+ assert dependencies['installedTreeSha256']==DEPENDENCY_TREE_SHA256, 'dependency tree mismatch'
+ assert dependencies['preparedEmptyDirectories']==['.vite-temp'], 'dependency baseline setup mismatch'
+
  assert sources==inputs['sha256'], 'source-inputs/build manifest mismatch'
  prefix='experiments/E023-target-offset-gaze/'
  repo=root.parent.parent
@@ -78,7 +85,7 @@ def audit(root):
   first,last=decisions[0],decisions[-1]
   rows.append({'id':case['id'],'state':case['result']['state'],'controls':len(returned),'probe_frames':len(probes),'initial_error_radians':init[0]['error_radians'],'first_offset':first['offset'],'last_offset':last['offset'],'decision_observations':len(decisions),'window_observations':len(windows),'max_quaternion_delta_from_initial':max(abs(a-b) for x in decisions for a,b in zip(x['quaternion'],first['quaternion']))})
  assert report['state']==('成功' if all(c['state']=='成功' for c in rows) else '失敗'), 'suite result mismatch'
- out={'audit':'PASS','run_id':report['runId'],'source_inputs_match':True,'source_commit':SOURCE_COMMIT,'source_verification':'clean-build manifest bound to immutable Git source blobs and recorded complete dist hashes','build_manifest_match':True,'browser_exceptions':0,'total_probe_frames':sum(x['probe_frames'] for x in rows),'total_sdk_calls':sum(x['controls'] for x in rows),'cases':rows}
+ out={'audit':'PASS','run_id':report['runId'],'source_inputs_match':True,'source_commit':SOURCE_COMMIT,'source_verification':'clean-build manifest bound to immutable Git source blobs and recorded complete dist hashes','build_manifest_match':True,'dependency_tree_verified':True,'dependency_tree_sha256':DEPENDENCY_TREE_SHA256,'browser_exceptions':0,'total_probe_frames':sum(x['probe_frames'] for x in rows),'total_sdk_calls':sum(x['controls'] for x in rows),'cases':rows}
  return out
 
 if __name__=='__main__':
