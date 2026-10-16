@@ -1,7 +1,7 @@
 import {spawn} from 'node:child_process'
 
-async function terminate(child,graceMs){
- if(!child.pid)return
+export async function terminate(child,graceMs=1000){
+ if(!child?.pid || child.exitCode!==null || child.signalCode!==null)return
  await new Promise(resolve=>{
   const escalation=setTimeout(()=>child.kill('SIGKILL'),graceMs)
   child.once('close',()=>{clearTimeout(escalation);resolve()})

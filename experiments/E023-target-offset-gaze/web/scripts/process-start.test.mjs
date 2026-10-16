@@ -4,7 +4,7 @@ import {once} from 'node:events'
 import {mkdtemp,readFile,rm} from 'node:fs/promises'
 import {tmpdir} from 'node:os'
 import path from 'node:path'
-import {startProcess} from './process-start.mjs'
+import {startProcess,terminate} from './process-start.mjs'
 
 for(const ignoreTerm of [false,true])test(`readiness timeout waits for child cleanup (ignore SIGTERM=${ignoreTerm})`,async()=>{
  const root=await mkdtemp(path.join(tmpdir(),'e023-start-'));let pid
@@ -29,4 +29,14 @@ test('ready child is returned to caller; startup timeout is cancelled',async()=>
 test('early exit and spawn failure reject promptly',async()=>{
  await assert.rejects(startProcess(process.execPath,['-e',"process.stderr.write('early');process.exit(7)"],tmpdir(),'ready'),/process exited: early/)
  await assert.rejects(startProcess('/nonexistent/e023-command',[],tmpdir(),'ready'),{code:'ENOENT'})
+})
+
+test('normal teardown escalates a ready child ignoring SIGTERM and is safe to repeat',async()=>{
+ const child=await startProcess(process.execPath,['-e',"process.on('SIGTERM',()=>{});process.stdout.write('ready');setInterval(()=>{},1000)"],tmpdir(),'ready')
+ try{
+  await terminate(child,100)
+  assert.throws(()=>process.kill(child.pid,0),{code:'ESRCH'})
+  assert.equal(child.signalCode,'SIGKILL')
+  await terminate(child,100);await terminate(undefined)
+ }finally{if(child.exitCode===null&&child.signalCode===null)child.kill('SIGKILL')}
 })

@@ -1,6 +1,6 @@
 /** Full pinned WASM SDK and Python WS, actual rendered feedback. No fake controller. */
 import {spawn} from 'node:child_process'
-import {startProcess} from './process-start.mjs'
+import {startProcess,terminate} from './process-start.mjs'
 import {cleanBuild,assertBuildCurrent} from './run-build.mjs'
 import {selectCases,suiteState,requireSelectedCase} from './run-cases.mjs'
 import {mkdtemp,mkdir,writeFile,readFile,rm} from 'node:fs/promises'
@@ -67,7 +67,7 @@ try{
  if(evaluate){try{report.diagnostic=await evaluate(`({text:document.body.innerText,evidence:window.e023Evidence})`)}catch(diagnosticError){report.diagnosticError=String(diagnosticError)}}
  await save();console.error(report.reason);process.exitCode=1
 }finally{
- ws?.close();chrome?.kill();preview?.kill();server?.kill()
- for(const child of [chrome,preview,server])if(child&&child.exitCode===null)await Promise.race([new Promise(resolve=>child.once('exit',resolve)),delay(3000)])
+ ws?.close()
+ await Promise.all([chrome,preview,server].map(child=>terminate(child,3000)))
  await rm(profile,{recursive:true,force:true,maxRetries:3,retryDelay:100})
 }
