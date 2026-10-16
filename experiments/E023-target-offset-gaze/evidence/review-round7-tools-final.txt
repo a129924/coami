@@ -1,0 +1,36 @@
+
+> coami-e023-web@0.1.0 test:tools
+> node --test scripts/source-cleanliness.test.mjs scripts/process-start.test.mjs scripts/run-build.test.mjs scripts/run-cases.test.mjs scripts/run-dependencies.test.mjs scripts/run-python.test.mjs scripts/run-mod.test.mjs
+
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=false) (510.532375ms)
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=true) (607.50375ms)
+✔ ready child is returned to caller; startup timeout is cancelled (457.309083ms)
+✔ early exit and spawn failure reject promptly (55.910958ms)
+✔ normal teardown escalates a ready child ignoring SIGTERM and is safe to repeat (161.095417ms)
+✔ clean build replaces stale dist and binds sources to output; later edits rejected (365.291084ms)
+✔ a source edit during the build cannot produce attributed evidence (237.550542ms)
+✔ vendor source mutation is rejected before build (100.183708ms)
+✔ vendor source mutation is rejected during build (272.904416ms)
+✔ vendor source mutation is rejected after build (270.984709ms)
+✔ installed dependency edits rejected during bundling (212.044958ms)
+✔ installed dependency edits rejected after bundling (239.852ms)
+✔ attested build rejects Node preload inputs and isolates child environment (241.518459ms)
+✔ case selector rejects duplicates, omissions disguised by bad indices, and malformed values (1.29525ms)
+✔ only exact unique case identities can yield a complete suite (0.233833ms)
+
+up to date in 234ms
+✔ actual npm ci removes modified installed modules; later dependency or lock edits fail attestation (340.138292ms)
+✔ MOD artifact requires matching clean compiler, source and archive attestation (11.547542ms)
+✔ Python attestation rejects installed package, interpreter, stdlib and lock edits (19.523542ms)
+✔ runner recreates the old venv before locked reinstall and attestation (13.468833ms)
+✔ compiler sources reject untracked headers and CMake inputs before rebuilding (153.267125ms)
+✔ compiler rebuilds reject dirty sources or changed HEAD before tool attestation (328.969292ms)
+✔ WASM build rejects Emscripten tree and emsdk checkout mutations before provenance (257.753417ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2039.540417

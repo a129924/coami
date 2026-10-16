@@ -1,0 +1,44 @@
+✔ clean build replaces stale dist and binds sources to output; later edits rejected (280.646458ms)
+✔ a source edit during the build cannot produce attributed evidence (197.651042ms)
+✔ vendor source mutation is rejected before build (75.084ms)
+✔ vendor source mutation is rejected during build (191.3705ms)
+✔ vendor source mutation is rejected after build (205.079291ms)
+✔ installed dependency edits rejected during bundling (178.316458ms)
+✔ installed dependency edits rejected after bundling (193.935959ms)
+✖ attested build rejects Node preload inputs and isolates child environment (142.614083ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1539.707083
+
+✖ failing tests:
+
+test at scripts/run-build.test.mjs:76:1
+✖ attested build rejects Node preload inputs and isolates child environment (142.614083ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /unrecorded Node startup inputs/. Input:
+
+  "Error: ENOENT: no such file or directory, scandir '/var/folders/x9/3v967ts5131dfn6x4bsy9th00000gn/T/e023-build-mL1Cs1/web/dist'"
+
+      at async TestContext.<anonymous> (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-build.test.mjs:83:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: ENOENT: no such file or directory, scandir '/var/folders/x9/3v967ts5131dfn6x4bsy9th00000gn/T/e023-build-mL1Cs1/web/dist'
+        at async readdir (node:internal/fs/promises:1744:18)
+        at async walk (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-build.mjs:17:23)
+        at async treeHashes (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-build.mjs:24:2)
+        at async cleanBuild (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-build.mjs:45:121)
+        at async waitForActual (node:assert:615:5)
+        at async strict.rejects (node:assert:738:25)
+        at async TestContext.<anonymous> (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-build.test.mjs:83:3)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    expected: /unrecorded Node startup inputs/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

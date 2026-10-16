@@ -1,0 +1,58 @@
+
+> coami-e023-web@0.1.0 test:tools
+> node --test scripts/source-cleanliness.test.mjs scripts/process-start.test.mjs scripts/run-build.test.mjs scripts/run-cases.test.mjs scripts/run-dependencies.test.mjs scripts/run-python.test.mjs scripts/run-mod.test.mjs
+
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=false) (508.675792ms)
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=true) (605.863209ms)
+✔ ready child is returned to caller; startup timeout is cancelled (453.787375ms)
+✔ early exit and spawn failure reject promptly (54.136584ms)
+✔ normal teardown escalates a ready child ignoring SIGTERM and is safe to repeat (154.947458ms)
+✔ clean build replaces stale dist and binds sources to output; later edits rejected (300.169666ms)
+✔ a source edit during the build cannot produce attributed evidence (203.541041ms)
+✔ vendor source mutation is rejected before build (87.794709ms)
+✔ vendor source mutation is rejected during build (209.72775ms)
+✔ vendor source mutation is rejected after build (222.712875ms)
+✔ installed dependency edits rejected during bundling (189.480041ms)
+✔ installed dependency edits rejected after bundling (207.630417ms)
+✔ attested build rejects Node preload inputs and isolates child environment (214.721ms)
+✔ case selector rejects duplicates, omissions disguised by bad indices, and malformed values (0.890417ms)
+✔ only exact unique case identities can yield a complete suite (0.213333ms)
+Exit prior to config file resolving
+cause
+double-loading config "/dev/null" as "global", previously loaded as "user"
+✖ actual npm ci removes modified installed modules; later dependency or lock edits fail attestation (95.98825ms)
+✔ MOD artifact requires matching clean compiler, source and archive attestation (6.583209ms)
+✔ Python attestation rejects installed package, interpreter, stdlib and lock edits (12.343334ms)
+✔ runner recreates the old venv before locked reinstall and attestation (5.709584ms)
+✔ compiler sources reject untracked headers and CMake inputs before rebuilding (125.7995ms)
+✔ compiler rebuilds reject dirty sources or changed HEAD before tool attestation (271.261ms)
+✔ WASM build rejects Emscripten tree and emsdk checkout mutations before provenance (214.555875ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 21
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1852.815709
+
+✖ failing tests:
+
+test at scripts/run-dependencies.test.mjs:7:1
+✖ actual npm ci removes modified installed modules; later dependency or lock edits fail attestation (95.98825ms)
+  Error: Command failed: npm ci --ignore-scripts --no-audit --no-fund
+      at genericNodeError (node:internal/errors:999:15)
+      at wrappedFn (node:internal/errors:544:14)
+      at checkExecSyncError (node:child_process:943:11)
+      at execFileSync (node:child_process:979:15)
+      at installDependencies (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-dependencies.mjs:10:2)
+      at async TestContext.<anonymous> (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-dependencies.test.mjs:14:21)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    status: 1,
+    signal: null,
+    output: [ null, null, null ],
+    pid: 96254,
+    stdout: null,
+    stderr: null
+  }

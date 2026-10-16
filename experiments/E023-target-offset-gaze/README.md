@@ -28,7 +28,7 @@ SDK `b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322` 的 controller 只在 yaw 或 pit
 
 ## 成功與失敗判準
 
-相機零安裝平移／旋轉，水平與垂直 FOV 都為 90°；u 向右、v 向下，範圍 [-1,1]，gain=1。Calculator 使用 `R_sdk × normalize([1,-u,-v])`，輸出距原點 1 m 的虛擬目標。SDK X 前、Y 左、Z 上；Three(x,y,z)=SDK(Y,Z,X)，`R_sdk=Sᵀ R_three S`。
+相機零安裝平移／旋轉，水平與垂直 FOV 都為 90°；u 向右、v 向下，範圍 [-1,1]，gain=1。Calculator 使用 `R_sdk × normalize([1,-u,-v])`，輸出距原點 1 m 的虛擬目標。TS接收端保留1e-6單位範數容差，對容差內的目標副本正規化後再量化；Python輸出及觀測資料不被修改。SDK X 前、Y 左、Z 上；Three(x,y,z)=SDK(Y,Z,X)，`R_sdk=Sᵀ R_three S`。
 
 驗證器獨立持有固定世界目標，以實際 quaternion 逆旋轉後重新投影，不讀 Calculator 輸出或 SDK 命令姿態。中心條件為 **雙軸絕對偏差≤0.1、最多20次控制、連續3筆觀測置中**；中心不發修正。同一軸連續4筆中心外決策觀測交替正負即持續反轉。250 ms 診斷取樣與每次控制決策觀測分開記錄。
 
@@ -120,6 +120,8 @@ node scripts/blocked-ui-smoke.mjs
 - [第五輪review修正](evidence/review-round5.md)：乾淨npm ci與完整installed-tree attestation、正常teardown升級終止、compiler rebuild前後固定來源查核；目前正式完整run已包含依賴驗證。
 
 - [第六輪review修正](evidence/review-round6.md)：MOD編譯前clean install、固定Python環境重建與前後attestation、最佳化模式仍有效的audit。
+
+- [第七輪review修正](evidence/review-round7.md)：Emscripten建置後重驗、TS浮點容差對齊與controlled web build環境。只新增兩案partial WASM smoke；沒有以本輪head重跑完整15案，也不追溯提升第六輪證據的防護保證。
 
 - **目前正式依據**：[具MOD編譯／Python環境驗證與來源建置綁定的完整再驗證](evidence/manifest-run.md)與[第六輪review修正](evidence/review-round6.md)。現行audit查核新完整run；舊run與receipts保留各輪原有驗證範圍；第五輪以前沒有本輪MOD編譯／Python環境驗證，不追溯提升其證據保證。
 

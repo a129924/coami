@@ -1,0 +1,1 @@
+{"wire":[1.0000004,0,0],"normalized":[1,0,0],"decoded":[1,0,0],"result":"PASS"}
