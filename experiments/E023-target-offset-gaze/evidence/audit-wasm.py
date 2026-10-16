@@ -1,30 +1,66 @@
 import json,hashlib,math,subprocess
 from pathlib import Path
 
-SOURCE_COMMIT='7171ba976c2d40b06de7724a62d2e803ebbf0114'
+SOURCE_COMMIT='b4d224116726d704a144f3e456d0a6bce27b7d12'
+RUN_ID='WASM-2026-10-16T07-00-00-630Z'
 
-def verify_sources(root,hashes):
+def verify_sources(root,hashes,source_commit=SOURCE_COMMIT):
  # Tooling has evolved; bind historical evidence to immutable implementation blobs.
  repo=root.parent.parent
  for file,expected in hashes.items():
-  blob=subprocess.check_output(['git','show',f'{SOURCE_COMMIT}:experiments/E023-target-offset-gaze/{file}'],cwd=repo)
+  blob=subprocess.check_output(['git','show',f'{source_commit}:experiments/E023-target-offset-gaze/{file}'],cwd=repo)
   assert hashlib.sha256(blob).hexdigest()==expected, f'recorded source mismatch: {file}'
+
+def verify_build(root,report,inputs):
+ build=report.get('build')
+ assert build and build.get('kind')=='clean build immediately before preview', 'source-bound build manifest required'
+ sources=build['sourcesSha256']; dist=build['distSha256']
+ assert sources==inputs['sha256'], 'source-inputs/build manifest mismatch'
+ prefix='experiments/E023-target-offset-gaze/'
+ repo=root.parent.parent
+ tracked=subprocess.check_output(['git','ls-tree','-r','--name-only',SOURCE_COMMIT,'--',prefix],cwd=repo,text=True).splitlines()
+ explicit={'web/package.json','web/package-lock.json','web/vite.config.ts','web/tsconfig.json','web/index.html','server/pyproject.toml','server/uv.lock'}
+ required={f[len(prefix):] for f in tracked if f[len(prefix):].startswith(('web/src/','web/scripts/','mod/')) or (f[len(prefix):].startswith('server/') and f.endswith('.py'))}|explicit
+ actual={f for f in sources if not f.startswith('web/generated/public/')}
+ assert actual==required, 'incomplete recorded source set'
+ verify_sources(root,{f:sources[f] for f in actual})
+ public={f.removeprefix('web/generated/public/'):h for f,h in sources.items() if f.startswith('web/generated/public/')}
+ assets={'assets/'+f:h for f,h in report['bundleSha256'].items()}
+ assert public and any(f.endswith('.js') for f in assets) and any(f.endswith('.css') for f in assets) and set(dist)==set(public)|set(assets)|{'index.html'}, 'incomplete dist manifest'
+ assert all(dist[f]==h for f,h in (public|assets).items()), 'bundle/public hash mismatch'
+ pin=json.loads(subprocess.check_output(['git','show',f'{SOURCE_COMMIT}:{prefix}web/src/runtime-pin.json'],cwd=repo))
+ assert build['vendorSourceCommit']==pin['sourceCommit']==report['provenance']['sourceCommit'], 'vendor pin mismatch'
+ gitlink=subprocess.check_output(['git','rev-parse',f'{SOURCE_COMMIT}:vendor/stack-chan'],cwd=repo,text=True).strip()
+ assert gitlink==pin['sourceCommit'], 'vendor gitlink mismatch'
+ for file,digest in pin['hashes'].items():
+  assert report['provenance']['hashes'][file]==dist['simulator/'+file]==digest, 'runtime pin mismatch'
+ assert dist['coami-mod.xsa']==report['provenance']['hashes']['coami-mod.xsa'], 'MOD archive mismatch'
+ provenance_bytes=(json.dumps(report['provenance'],indent=2)+'\n').encode()
+ assert hashlib.sha256(provenance_bytes).hexdigest()==dist['runtime-provenance.json'], 'runtime provenance bytes mismatch'
+ for file,digest in report['provenance']['sources'].items():
+  if file.startswith('mod/'):
+   assert sources[file]==digest, 'MOD source mismatch'
+  else:
+   assert file.startswith('vendor/web/'), 'unexpected vendor provenance path'
+   blob=subprocess.check_output(['git','show',pin['sourceCommit']+':'+file.removeprefix('vendor/')],cwd=repo/'vendor/stack-chan')
+   assert hashlib.sha256(blob).hexdigest()==digest, 'vendor source mismatch'
 
 def verify_case_ids(cases):
  expected_ids={f'TC-E2E-{i:02}' for i in range(1,16)}
  assert len(cases)==15 and {c['id'] for c in cases}==expected_ids, 'expected exactly 15 distinct cases'
 
 def audit(root):
- r=root/'evidence/wasm-runs/WASM-2026-10-15T07-05-48-980Z'
+ r=root/'evidence/wasm-runs'/RUN_ID
  report=json.loads((r/'report.json').read_text())
  inputs=json.loads((r/'source-inputs.json').read_text())
  verify_case_ids(report['cases'])
  assert report['errors']==[]
- verify_sources(root,inputs['sha256'])
+ verify_build(root,report,inputs)
  rows=[]
  for case in report['cases']:
   d=json.loads((r/case['file']).read_text()); records=d['records']; traces=[]
-  assert d['case']['id']==case['id'], 'case file identity mismatch'
+  assert d['case']['id']==case['id'] and d['result']==case['result'], 'case file identity/result mismatch'
+  assert d['provenance']==report['provenance'], 'case runtime provenance mismatch'
   for x in records:
    if x['kind']=='trace' and x['text'].startswith('COAMI23|'): traces.append(json.loads(x['text'].split('|',1)[1]))
   frames=[x for x in records if x['kind']=='frame-committed']; probes=[x for x in traces if x.get('phase')=='probe']; decoded=[x for x in traces if x.get('phase')=='decoded']; returned=[x for x in traces if x.get('phase')=='returned']; decisions=[x for x in records if x['kind']=='decision-observation']; windows=[x for x in records if x['kind']=='window-observation']; init=[x for x in records if x['kind']=='initial-pose']
@@ -41,7 +77,8 @@ def audit(root):
   else: assert case['result']['reason']=='iteration_limit' and len(returned)==20
   first,last=decisions[0],decisions[-1]
   rows.append({'id':case['id'],'state':case['result']['state'],'controls':len(returned),'probe_frames':len(probes),'initial_error_radians':init[0]['error_radians'],'first_offset':first['offset'],'last_offset':last['offset'],'decision_observations':len(decisions),'window_observations':len(windows),'max_quaternion_delta_from_initial':max(abs(a-b) for x in decisions for a,b in zip(x['quaternion'],first['quaternion']))})
- out={'audit':'PASS','run_id':report['runId'],'source_inputs_match':True,'source_commit':SOURCE_COMMIT,'source_verification':'immutable Git blobs; not current working-tree sources','browser_exceptions':0,'total_probe_frames':sum(x['probe_frames'] for x in rows),'total_sdk_calls':sum(x['controls'] for x in rows),'cases':rows}
+ assert report['state']==('成功' if all(c['state']=='成功' for c in rows) else '失敗'), 'suite result mismatch'
+ out={'audit':'PASS','run_id':report['runId'],'source_inputs_match':True,'source_commit':SOURCE_COMMIT,'source_verification':'clean-build manifest bound to immutable Git source blobs and recorded complete dist hashes','build_manifest_match':True,'browser_exceptions':0,'total_probe_frames':sum(x['probe_frames'] for x in rows),'total_sdk_calls':sum(x['controls'] for x in rows),'cases':rows}
  return out
 
 if __name__=='__main__':

@@ -1,9 +1,10 @@
 {
   "audit": "PASS",
-  "run_id": "WASM-2026-10-15T07-05-48-980Z",
+  "run_id": "WASM-2026-10-16T07-00-00-630Z",
   "source_inputs_match": true,
-  "source_commit": "7171ba976c2d40b06de7724a62d2e803ebbf0114",
-  "source_verification": "immutable Git blobs; not current working-tree sources",
+  "source_commit": "b4d224116726d704a144f3e456d0a6bce27b7d12",
+  "source_verification": "clean-build manifest bound to immutable Git source blobs and recorded complete dist hashes",
+  "build_manifest_match": true,
   "browser_exceptions": 0,
   "total_probe_frames": 90,
   "total_sdk_calls": 90,

@@ -16,18 +16,18 @@
 
 E023 使用固定底座、靜態合成目標、零相機安裝平移／旋轉，以及水平／垂直 FOV90° 的理想針孔相機；u向右、v向下。姿態讀自實際 rendered `headGroup` world quaternion，並重新投影固定世界目標，不以命令值或 SDK rotation cache 冒充回饋。
 
-在 run `WASM-2026-10-15T07-05-48-980Z` 中，以下四個中立起始姿態案例均通過非運動 probe，SDK 呼叫均正常返回，但各20次控制後姿態及偏差未變：
+在具clean-build manifest與來源綁定查核的完整再驗證 run `WASM-2026-10-16T07-00-00-630Z` 中，以下四個中立起始姿態案例均通過非運動 probe，SDK 呼叫均正常返回，但各20次控制後姿態及偏差未變：
 
 | 案例 | 起始及最後偏差 (u,v) | SDK控制次數 | 觀測結果 |
 | --- | --- | ---: | --- |
-| [TC-E2E-10](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-10.json) | (+0.11, 0) | 20 | quaternion未變；未置中 |
-| [TC-E2E-11](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-11.json) | (-0.11, 0) | 20 | quaternion未變；未置中 |
-| [TC-E2E-12](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-12.json) | (0, +0.11) | 20 | quaternion未變；未置中 |
-| [TC-E2E-13](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-15T07-05-48-980Z/TC-E2E-13.json) | (0, -0.11) | 20 | quaternion未變；未置中 |
+| [TC-E2E-10](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-16T07-00-00-630Z/TC-E2E-10.json) | (+0.11, 0) | 20 | quaternion未變；未置中 |
+| [TC-E2E-11](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-16T07-00-00-630Z/TC-E2E-11.json) | (-0.11, 0) | 20 | quaternion未變；未置中 |
+| [TC-E2E-12](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-16T07-00-00-630Z/TC-E2E-12.json) | (0, +0.11) | 20 | quaternion未變；未置中 |
+| [TC-E2E-13](../../experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-16T07-00-00-630Z/TC-E2E-13.json) | (0, -0.11) | 20 | quaternion未變；未置中 |
 
 該模型下，單軸偏差0.11所需的完整置中角度為 `atan(0.11 × tan(90° / 2)) ≈ 6.28°`，低於30°，未觸發轉頭。原判準是雙軸絕對偏差≤0.1、最多20次控制且連續3筆觀測置中；四案均不符合。全部15案為11成功、4失敗，主收斂假設失敗；本輪驗證任務已完成。
 
-摘要與查核入口：[閉環結果](../../experiments/E023-target-offset-gaze/evidence/wasm-run.md)、[結果狀態](../../experiments/E023-target-offset-gaze/evidence/results.json)、[姿態／命令關聯查核](../../experiments/E023-target-offset-gaze/evidence/wasm-evidence-audit.json)。來源、工具及確切 WASM bytes 見 [host建置紀錄](../../experiments/E023-target-offset-gaze/evidence/host-build-notes.md) 與 [runtime provenance](../../experiments/E023-target-offset-gaze/evidence/host-runtime-provenance.json)。
+摘要與查核入口：[閉環結果](../../experiments/E023-target-offset-gaze/evidence/manifest-run.md)、[結果狀態](../../experiments/E023-target-offset-gaze/evidence/results.json)、[姿態／命令關聯查核](../../experiments/E023-target-offset-gaze/evidence/wasm-evidence-audit-current.json)。來源、工具及確切 WASM bytes 見 [host建置紀錄](../../experiments/E023-target-offset-gaze/evidence/host-build-notes.md) 與 [runtime provenance](../../experiments/E023-target-offset-gaze/evidence/host-runtime-provenance.json)。
 
 ## 對 Server 的影響與後續建議
 
@@ -41,8 +41,11 @@ Server 可能在每次重新觀測後，對未變的偏差反覆計算並送出�
 
 結論僅適用於上述已驗證的固定 SDK、確切 runtime 與 E023 模擬模型。未驗證其他 SDK版本、真實攝影機安裝／校正、實機伺服機構、動態目標或 E019上下目標切換；不能由本頁外推實機行為。後續若變更控制策略或來源版本，須保留 E023歷史證據，以新驗證結果更新本頁的適用範圍及狀態。
 
+本頁正式依據改為上述manifest-aware完整run；2026-10-15原run與source-hash receipts保留作歷史觀測，不能由其補造bundle來源綁定。細節見[第四輪review修正](../../experiments/E023-target-offset-gaze/evidence/review-round4.md)。
+
 ## 變更紀錄
 
 | 日期 | 內容與依據 |
 | --- | --- |
 | 2026-10-16 | 依 E023固定 SDK原始碼與已完成閉環證據建立限制入口；建議保持未實作，交由 Draft PR human review。 |
+| 2026-10-16 | 依第四輪review補齊完整15案來源建置綁定證據，更新至run `WASM-2026-10-16T07-00-00-630Z`；11成功／4失敗，原模型與判準不變。 |

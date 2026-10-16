@@ -1,5 +1,7 @@
 # PR #23 第二輪 review 修正（2026-10-16）
 
+本頁保留當輪紀錄。原完整run之source-hash audit仍缺bundle來源綁定；此限制已於[第四輪修正](review-round4.md)改採新的manifest-aware完整run。當前audit入口以第四輪為準。
+
 Reviewed head：`8bdce4e9ea5c1dc337047316a12f44e1a8abe869`。三項 P2 均接受並修正。僅修改 E023 驗證工具、測試與文件；SDK／Server行為、相機模型及0.1／20次／連續3筆判準不變。
 
 | Thread | 修正與證據 | Commit |
