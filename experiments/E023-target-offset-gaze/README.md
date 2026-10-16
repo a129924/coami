@@ -74,6 +74,7 @@ cd ../web
 npm ci --ignore-scripts
 npm test
 npm run test:mod
+npm run test:tools
 ```
 
 真正 runtime 前置檢查與啟動：
@@ -115,6 +116,8 @@ node scripts/blocked-ui-smoke.mjs
 - Python25項、TS10項、MOD contract2項、strict checks、WebSocket smoke 與實際 host／MOD／Browser 建置通過。純測試與輔助圖只支持對應邊界；主結論來自真正閉環。
 
 ## 結果與證據
+
+- [PR review 修正紀錄](evidence/review-fix.md)：工具來源 tracked／untracked 檢查與啟動逾時子程序清理，含5項回歸與歷史 source hash 查核版本說明；本輪未重跑閉環。
 
 - `evidence/python-red.txt`、`ts-red.txt`：在缺少目標 module 時新增測試的 red 證據；Python red 已使用正確3.12測試環境。
 - `python-green.txt`：25項 Python 純測試。`ts-green.txt`：10項 TS 測試。`mod-contract.txt`：2項明示假 host 的 MOD 測試。
