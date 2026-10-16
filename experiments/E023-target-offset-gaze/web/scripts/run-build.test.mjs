@@ -4,11 +4,13 @@ import {execFileSync} from 'node:child_process'
 import {mkdtemp,mkdir,writeFile,readFile,rm} from 'node:fs/promises'
 import {tmpdir} from 'node:os'
 import path from 'node:path'
+import {installDependencies} from './run-dependencies.mjs'
 import {cleanBuild as buildRun,assertBuildCurrent as checkRun} from './run-build.mjs'
 import {verifyVendor as checkVendor} from './build-safety.mjs'
 const vendors=new Map()
 const verifyVendor=root=>()=>{const {repo,vendor,pin}=vendors.get(root);checkVendor(repo,vendor,pin);return pin}
-const cleanBuild=(root,options)=>buildRun(root,{...options,verifyVendor:verifyVendor(root)})
+const install=web=>installDependencies(web,(_command,_args,{cwd})=>execFileSync(process.execPath,['-e',"const fs=require('node:fs');fs.rmSync('node_modules',{recursive:true,force:true});fs.mkdirSync('node_modules');fs.writeFileSync('node_modules/geometry.js','locked fixture')"],{cwd}))
+const cleanBuild=(root,options)=>buildRun(root,{install,...options,verifyVendor:verifyVendor(root)})
 const assertBuildCurrent=(root,manifest)=>checkRun(root,manifest,{verifyVendor:verifyVendor(root)})
 async function fixture(){
  const root=await mkdtemp(path.join(tmpdir(),'e023-build-'))
@@ -59,5 +61,14 @@ for(const phase of ['before','during','after'])test(`vendor source mutation is r
    const manifest=await cleanBuild(root,{build});await modify()
    await assert.rejects(assertBuildCurrent(root,manifest),/Pinned vendor/)
   }
+ }finally{vendors.delete(root);await rm(root,{recursive:true,force:true})}
+})
+
+for(const phase of ['during','after'])test(`installed dependency edits rejected ${phase} bundling`,async()=>{
+ const root=await fixture()
+ const mutate=()=>writeFile(path.join(root,'web/node_modules/geometry.js'),'modified geometry')
+ try{
+  if(phase==='during')await assert.rejects(cleanBuild(root,{build:async web=>{build(web);await mutate()}}),/installed dependencies changed/)
+  else{const manifest=await cleanBuild(root,{build});await mutate();await assert.rejects(assertBuildCurrent(root,manifest),/installed dependencies changed/)}
  }finally{vendors.delete(root);await rm(root,{recursive:true,force:true})}
 })

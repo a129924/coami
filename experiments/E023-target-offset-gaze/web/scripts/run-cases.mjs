@@ -1,11 +1,11 @@
-import {CASES} from '../src/observer.ts'
-export const CASE_IDS=CASES.map(c=>c.id)
+// Fixed experiment identities; do not load installed Three before the clean install.
+export const CASE_IDS=Array.from({length:15},(_,i)=>`TC-E2E-${String(i+1).padStart(2,'0')}`)
 export function selectCases(value){
- if(value===undefined)return CASES.map((_,i)=>i)
+ if(value===undefined)return CASE_IDS.map((_,i)=>i)
  const tokens=value.split(',')
  if(tokens.some(t=>!/^\d+$/.test(t.trim())))throw Error('E023_CASES requires integer indices')
  const indices=tokens.map(Number)
- if(indices.some(i=>!Number.isSafeInteger(i)||i<0||i>=CASES.length)||new Set(indices).size!==indices.length)
+ if(indices.some(i=>!Number.isSafeInteger(i)||i<0||i>=CASE_IDS.length)||new Set(indices).size!==indices.length)
   throw Error('E023_CASES requires unique indices in range 0..14')
  return indices
 }
