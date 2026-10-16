@@ -65,7 +65,7 @@ SDK `b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322` 的 controller 只在 yaw 或 pit
 ```sh
 cd server
 uv sync --locked
-uv run pytest ../tests/test_calculator.py
+uv run pytest ../tests/test_calculator.py ../tests/test_evidence_audit.py
 uv run ruff check . ../tests
 uv run ruff format --check . ../tests
 uv run pyright
@@ -84,7 +84,7 @@ npm run test:tools
 # 只能使用 runtime-pin.json 固定的 bytes；不同建置路徑不得靜默更新 pin。
 E023_RUNTIME_DIR=/absolute/path/to/verified/simulator npm run prepare:poc
 npm run build
-npm run test:runtime  # 自行啟停 preview、Python 與 Chrome，執行全部15案
+npm run test:runtime  # 先清除 dist 並建置；自行啟停 preview、Python 與 Chrome，執行全部15案
 # 若需要手動操作，改執行 npm run preview；另一個 terminal，在本實驗 server/：
 uv run uvicorn app:app --host 127.0.0.1 --port 8230
 ```
@@ -117,6 +117,8 @@ node scripts/blocked-ui-smoke.mjs
 
 ## 結果與證據
 
+- [第二輪 PR review 修正](evidence/review-round2.md)：目前 checkout 可直接查核原始 Git blobs；runner clean build／source-output manifest 與完整唯一案例檢查。下方第一輪查核版本限制已由本輪修正取代。
+
 - [PR review 修正紀錄](evidence/review-fix.md)：工具來源 tracked／untracked 檢查與啟動逾時子程序清理，含5項回歸與歷史 source hash 查核版本說明；本輪未重跑閉環。
 
 - `evidence/python-red.txt`、`ts-red.txt`：在缺少目標 module 時新增測試的 red 證據；Python red 已使用正確3.12測試環境。
@@ -127,7 +129,7 @@ node scripts/blocked-ui-smoke.mjs
 - `blocked-ui.json/png`、`blocked-ui-smoke.txt`：缺 runtime 時的實際 Browser UI 與0筆傳送證據；不是閉環紀錄。
 - `results.json`：補齊後主狀態與15案結果；`results-initial.json` 保留首次未執行狀態。
 - `wasm-run.md`、`wasm-runs/WASM-2026-10-15T07-05-48-980Z/`：真正15案的 report、來源／bundle hashes、raw觀測／命令／SDK trace與截圖。
-- `audit-wasm.py`、`wasm-evidence-audit.json`：可重現的分層證據核對，90筆probe、90次SDK呼叫、15案及source hash一致。
+- `audit-wasm.py`：目前 checkout 執行即可查核固定原始 commit 的 source blobs、90筆probe、90次SDK呼叫與15個不同案例，輸出 `wasm-evidence-audit-current.json`；原 `wasm-evidence-audit.json` 保留為歷史 receipt。
 - `host-build-notes.md`、`host-runtime-*.json`、`host-source-verification.json`、`host-build.txt`：固定來源、工具、產物、新bytes pin與639檔source核對。
 - `host-*.txt`、`host-verification.json`：補齊後25 Python／10 TS／2 MOD contract、strict checks、WebSocket smoke與建置證據；commit hook仍缺lefthook，另執行上述明示checks。初始 preflight／blocked UI只代表歷史缺host狀態，未用來代替本次閉環。
 - `evidence/archify/diagram.html`：設計 sequence 圖。showcase 9/9、零 composition errors／warnings；delivery receipt 綁定 spec／HTML hash。四個 desktop containment 通過，兩種主題與兩個極端尺寸已以圖片檢視，見 visual-review.json。繁中內容，Viewer UI 回退英文。

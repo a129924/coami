@@ -26,6 +26,6 @@
 
 首次真正 run `WASM-2026-10-15T06-59-40-545Z` 因 touch 時間來源無效而 probe timeout，SDK呼叫0。`WASM-2026-10-15T07-03-44-502Z` 為非運動診斷，確認完整 touch 到達但 Time.ticks 缺失。唯一局部修正改用原生 Piu callback ticks，並按既有120ms按鍵release分離初始化選擇；原紀錄均保留。工具來源／新host bytes／建置過程見 `host-build-notes.md`。
 
-查核：`python3 evidence/audit-wasm.py`，重新核對15案、6 probes／案、initial pose、frame→decoded payload、SDK返回關聯、每次控制的觀測窗口、成功案末三筆與原 source hash；輸出 `wasm-evidence-audit.json`。完整 raw JSON 與同次截圖在上述 run 目錄，`results-initial.json` 保留首次交付缺host狀態。
+查核：`python3 evidence/audit-wasm.py`，重新核對15案、6 probes／案、initial pose、frame→decoded payload、SDK返回關聯、每次控制的觀測窗口、成功案末三筆與原 source hash；目前版本驗證固定原始 commit 的 Git blobs，輸出 `wasm-evidence-audit-current.json`；原 `wasm-evidence-audit.json` 保留為歷史 receipt，無須切回舊 checkout。完整 raw JSON 與同次截圖在上述 run 目錄，`results-initial.json` 保留首次交付缺host狀態。
 
 這是固定理想相機與固定靜態場景的模擬證據，沒有真實攝影機／實機或 human review。決策：不能依賴此原版 SDK 達成一般精細置中；下一步 SDK 限制調查與 OpenCV 串接須分別決定。停止於 Draft PR → human review。

@@ -1,5 +1,7 @@
 # PR #23 review 修正（2026-10-16）
 
+本頁保留第一輪紀錄；下述 audit 需舊 checkout 的限制，已由[第二輪修正](review-round2.md)取代，目前 checkout 可直接驗證歷史 source blobs。
+
 Reviewed head：`13876ac45845e6efe2c1b665d17359348433cbc7`。兩項 P2 均接受並修正；本輪僅修改 E023 建置／驗證工具與測試，未改 SDK、Server、相機模型、驗收值或原閉環資料。
 
 | Thread | 判斷與修正 | Commit |
