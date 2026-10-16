@@ -1,10 +1,10 @@
 import {prepareCompilerEnvironment,rebuildFontbm} from './tool-inputs.mjs'
 import {verifyStagedHost} from './host-inputs.mjs'
-import {rebuildModdableTools,replaceCache,verifyCleanSource,rebuildVerifiedSource} from './build-safety.mjs'
+import {rebuildModdableTools,replaceCache,verifyCleanSource,rebuildVerifiedSource,buildWithVerifiedCompiler} from './build-safety.mjs'
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { createReadStream } from 'node:fs'
-import { cp, lstat, mkdir, readdir, readFile, readlink, realpath, rm, stat, writeFile } from 'node:fs/promises'
+import {installedTreeSha256} from './installed-tree.mjs'
+import { cp, mkdir, readFile, realpath, rm, stat, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 
@@ -32,29 +32,6 @@ process.env.EM_CACHE = path.join(generatedRoot, 'em-cache')
 
 function output(command, args, options = {}) {
   return execFileSync(command, args, { encoding: 'utf8', ...options }).trim()
-}
-
-async function installedTreeSha256(root) {
-  const tree = createHash('sha256')
-  async function visit(directory, prefix = '') {
-    for (const name of (await readdir(directory)).sort()) {
-      const absolute = path.join(directory, name)
-      const relative = prefix ? `${prefix}/${name}` : name
-      const info = await lstat(absolute)
-      if (info.isDirectory()) {
-        tree.update(`d\0${relative}\0`)
-        await visit(absolute, relative)
-      } else if (info.isSymbolicLink()) {
-        tree.update(`l\0${relative}\0${await readlink(absolute)}\0`)
-      } else if (info.isFile()) {
-        const file = createHash('sha256')
-        for await (const chunk of createReadStream(absolute)) file.update(chunk)
-        tree.update(`f\0${relative}\0${info.mode & 0o111 ? 'x' : '-'}\0${file.digest('hex')}\0`)
-      } else throw new Error(`unsupported installed file ${relative}`)
-    }
-  }
-  await visit(root)
-  return tree.digest('hex')
 }
 
 // A failed repeat build must never leave a previously served runtime or MOD in place.
@@ -157,8 +134,8 @@ await cp(vendorRoot, sourceRoot, {
 execFileSync('npm', ['ci', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit',
   env: { ...compilerEnvironment.env, CI: '1', LEFTHOOK: '0' } })
 await replaceCache(path.join(emsdkRoot,'upstream/emscripten/cache'),path.join(generatedRoot,'em-cache'))
-execFileSync('npm', ['run', 'build:wasm'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit',
-  env: { ...compilerEnvironment.env, FONTBM: fontbmBinary, EM_CACHE: path.join(generatedRoot, 'em-cache'), PYTHONDONTWRITEBYTECODE: '1' } })
+await buildWithVerifiedCompiler(emsdkRoot,PINNED_EMSDK_COMMIT,emscriptenTreeSha256,()=>execFileSync('npm', ['run', 'build:wasm'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit',
+  env: { ...compilerEnvironment.env, FONTBM: fontbmBinary, EM_CACHE: path.join(generatedRoot, 'em-cache'), PYTHONDONTWRITEBYTECODE: '1' } }))
 
 await mkdir(path.join(publicSimulator, 'assets/case/v1'), { recursive: true })
 const hashes = {}

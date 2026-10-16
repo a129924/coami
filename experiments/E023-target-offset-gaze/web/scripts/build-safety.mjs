@@ -1,3 +1,4 @@
+import {installedTreeSha256} from './installed-tree.mjs'
 import {cp,rm} from 'node:fs/promises'
 import {execFileSync} from 'node:child_process'
 import path from 'node:path'
@@ -42,4 +43,15 @@ export async function rebuildVerifiedSource(root,label,pin,rebuild){
  verifyPinnedSource(root,label,pin)
  await rebuild(root)
  verifyPinnedSource(root,label,pin)
+}
+
+export async function verifyInstalledCompiler(root,pin,expectedTree){
+ verifyPinnedSource(root,'emsdk',pin)
+ if(await installedTreeSha256(path.join(root,'upstream'))!==expectedTree)
+  throw Error('installed Emscripten tree changed during WASM build')
+}
+export async function buildWithVerifiedCompiler(root,pin,expectedTree,build){
+ await verifyInstalledCompiler(root,pin,expectedTree)
+ await build()
+ await verifyInstalledCompiler(root,pin,expectedTree)
 }
