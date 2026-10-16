@@ -39,15 +39,18 @@
 
 ## Status / Allowed Transitions
 
-- **Current**: `pr-open`.
-- **Next actor**: Human reviewer.
-- **Stage-local action**: STOP POINT 2 — all53 human simulator cases and independent evidence review complete; Draft PR owner review remains, no merge or release authorization.
-- **Allowed next transition**: `pr-open→needs-rework|merged` only with the applicable new human action/authorization.
+- **Current**: `publish-in-progress`.
+- **Next actor**: Main Agent.
+- **Stage-local action**: Commit/push approved PR #21 fixes, verify remote head, then reply and resolve the five addressed threads; no merge/release.
+- **Allowed next transition**: `publish-in-progress→pr-open`.
 - **Allowed**：`planned→creator-in-progress→review-ready→reviewer-in-progress`；`reviewer-in-progress→approved|needs-rework`；`needs-rework→creator-in-progress`；`approved→creator-in-progress|publish-in-progress`；`publish-in-progress→pr-open|merged`；`pr-open→needs-rework|merged`；`merged→terminal`。
 - Owner 的 clock scope choice 已明確解除，依授權派 Implementer 執行 bounded compatibility 並交獨立 Reviewer 核對 delta；原 readiness verdict 不代表新 runtime 通過。步驟／rework 未完維持 creator-in-progress；completion gate 只讀 step 的 Implementation Steps `[X]` 與證據。無 round cap／release transition。
 - Owner 已授權通過 review gates 後的 bounded commits／push／Draft PR，STOP POINT 1 無須再索取相同授權；STOP POINT 2 仍止於 human review，不 merge、不 release。
 - Planner 已正式分類為 bounded delivery clarification：本輪 S3 工程交付為完整 automated runtime matrix／證據與 required 人工驗收交接。獨立工程 review 通過後依既有 owner 授權 commit／push／Draft PR；PR 必明列人工 NOT_EXECUTED、未完清單與 fullVerification=false。必要人工操作安排 Draft PR 後 STOP POINT 2，由 owner／human reviewer 實際執行並留下證據；在此之前不宣稱驗證完成／整體 PASS。既有 gates、canonical transitions 與完整 AC 均保留。
 - PR Lens 不得造成 commit gate 循環：S4 若尚無合法、真實的 base／head commit SHA，記 `pending`、原因與後續派遣，即可完成本輪 creator pass 並交獨立 Reviewer；pending 不代表 PR Lens 成果已完成。依正常獨立 review、既有 owner 明確授權及 commit gates 取得真實 head 後，再派 Implementer bounded follow-up，以實際 diff 產外部變更圖，交 Reviewer 核對。既有 canonical transitions 不變；禁止為取得圖提前 commit，working-tree／blob hash 不冒充 commit SHA。若 follow-up 需要改 repo artifacts，先依既有修訂與 review gates 路由。
+
+- 2026-10-16 PR #21 bounded rework follows `pr-open→needs-rework→creator-in-progress`; all five review findings are ADDRESS. Existing owner authorization includes bounded fix commits/push, explicit review replies and resolving threads. Resolve a thread only after its verified fix has been pushed and checked at the real PR head; do not conflate authoring, review, push or resolution. Draft PR remains open; no merge/release authority.
+- 本輪只修 smoke 驗證／CLI verdict、preflight provenance 保留與過時 TOOLCHAIN 狀態；原 IMU algorithm／provider／clock／Event、runtime bytes 及原始人工證據唯讀。既有2026-10-15 human53/53與獨立核准保留為歷史 accepted evidence；不能冒稱本輪新 predicate rerun 已通過。因 runtime/source bytes 不變，不要求 runtime rebuild 或人工重跑；修正後仍必須完整實際53-case browser smoke 與獨立 review。
 
 ## Artifact Paths
 
@@ -62,6 +65,8 @@
 | D／Tester；runtime script 由 Implementer | `web/scripts/runtime-smoke.mjs`、`evidence/validation.txt`、`evidence/runtime-automated.json`、`evidence/operator-session.json`、`evidence/runtime-visible.png`、`evidence/acceptance-summary.json`、`evidence/imu-run.md` |
 | E／Implementer：交付說明／工具證據 | `README.md`、`evidence/auxiliary.md` |
 | F／Implementer：Archify | `diagram/imu-flow.json`、`diagram/imu-flow.html`、`diagram/imu-flow.delivery.json`、`diagram/imu-flow.visual-check.json`、`diagram/imu-flow.visual-check.html`、`diagram/imu-flow.visual-check.1440x900.light.png`、`diagram/imu-flow.visual-check.1440x900.dark.png`、`diagram/imu-flow.visual-check.2048x1320.light.png`、`diagram/imu-flow.visual-check.2048x1320.dark.png` |
+| G／Implementer：PR21 新增純 predicates／negative fixtures | `web/scripts/smoke-verdict.mjs`、`web/scripts/smoke-verdict.test.mjs` |
+| H／Implementer、Tester：PR21 bounded existing Modify | `web/scripts/runtime-smoke.mjs`、`web/scripts/prepare-runtime.mjs`、`web/scripts/pin.test.mjs`、`web/package.json`、`runtime/TOOLCHAIN.md`、`evidence/validation.txt`、`evidence/runtime-automated.json`、`evidence/runtime-visible.png`、`evidence/imu-run.md`、`evidence/acceptance-summary.json`、`README.md` |
 
 Ignored outputs 限 `web/generated/`（E021 scratch SDK／toolchain／runtime）、`web/node_modules/`、`web/dist/`；Archify CLI 同目錄 private snapshot 為其生成工件，依 receipt 記錄，不手改。P 的 plan／step／review-log 分屬規劃／追蹤／審查角色，不混入實作九欄的 creator 成果。
 
@@ -129,6 +134,53 @@ Step 逐項鏡映，Actual 初始未執行；下列 Written 指首次建立，Mo
 
 Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actual；需要新增 source 路徑先修計畫，不藉 S3／S4 擴大寫入。
 
+
+### PR #21 bounded rework — 2026-10-16
+
+原 S1–S4 與53 PASS/human接受證據保持歷史身分；本輪僅下列 R1–R3 待完成，Actual 未執行。RO-R21：既有 RO，另含 `runtime/wasm-imu.patch`、`web/src/`、`mod/`、`web/scripts/stage-host.mjs`／`build-mod.mjs`、工具／runtime／MOD bytes、`evidence/runtime-provenance.json` 已接受 bytes、`evidence/operator-session.json` 及其所有原始人工 imports／exports、Archify成果與歷史 attempts。R2 僅在隔離 scratch fixture 驗 provenance 成功寫入／失敗保留，不回寫 accepted provenance；R3 只能保存真實最新驗證並保留 previousAttempts。
+
+- [ ] **R1 — 封閉 smoke 判定缺口**
+
+| 欄位 | 約束 |
+|---|---|
+| In-Scope | 純且可重用 report／raw／Event／stop／exit predicates、negative fixtures，runtime runner 使用同一 predicates；package test 指令納入 scripts/*.test.mjs。 |
+| Out-Of-Scope | IMU／provider／clock／recognizer／Event 合約、UI／MOD source、門檻或 expected scenario 調校。 |
+| ReadOnly | RO-R21；既有 scenario/sample 定義與53-case／人工證據作唯讀 oracle。 |
+| Written | G：web/scripts/smoke-verdict.mjs、web/scripts/smoke-verdict.test.mjs。 |
+| Deleted | none。 |
+| Modify | web/scripts/runtime-smoke.mjs、web/package.json（只擴 test glob，無 dependencies／lockfile 變更）。 |
+| Goal | Full mode 只有非空完整53-row合法 PASS matrix、zero exceptions 且 browserErrors=[] 才 CLI exit0；E021_ONLY diagnostic subset須明示且不宣稱完整驗收。Raw／Event／stop6 predicates拒絕不合法證據。 |
+| Non-Goal | 不以 aggregate PASS、忽略 INDETERMINATE／unknown status 或缺事件來補成功，不修改既有 runtime 行為。 |
+| TestCase | TC-R21-VERDICT、TC-R21-RAW、TC-R21-EVENT、TC-R21-STOP；positive fixture 與逐一變異 negative fixtures，失敗 path 一律 exit1。 |
+
+- [ ] **R2 — 前置失敗保留 provenance**
+
+| 欄位 | 約束 |
+|---|---|
+| In-Scope | prepare 完成成功的 public provenance 後才以同目錄 temp＋rename 原子發布 tracked ledger；失敗保留既有 tracked evidence bytes，同時移除 stale generated runnable assets；missing／mismatched env 回歸在隔離 scratch 執行。 |
+| Out-Of-Scope | Runtime rebuild、工具安裝／pin 變更、改原 provenance／人工歷史、清理非本題資產。 |
+| ReadOnly | RO-R21；真實 evidence/runtime-provenance.json 與既有 runtime／MOD；測試只能操作隔離 fixture copies。 |
+| Written | none。 |
+| Deleted | Repo files none；只清除隔離 fixture 的 stale generated runnable assets／失敗 temp，不刪歷史 evidence。 |
+| Modify | web/scripts/prepare-runtime.mjs、web/scripts/pin.test.mjs。 |
+| Goal | Missing／mismatched env 失敗前後 provenance bytes 完全相同且無 stale runnable；成功 fixture 經完整產生後才 atomic rename，不留 partial evidence。 |
+| Non-Goal | 不刪 tracked provenance 來表達 unavailable，不把舊 provenance 當新 build 成功，也不為本修正重新 build runtime。 |
+| TestCase | TC-R21-PROVENANCE：missing/mismatched env＋stale assets isolated regressions、bytes 比對、成功 atomic publication／失敗 temp 清理；現有 pin guard tests 保持。 |
+
+- [ ] **R3 — 真實53-case重驗與交付修正證據**
+
+| 欄位 | 約束 |
+|---|---|
+| In-Scope | 完整53-case actual browser smoke rerun、source predicate/pin tests及strict typecheck；修 TOOLCHAIN human狀態與本輪真實 validation/status/counts；保存 previousAttempts。 |
+| Out-Of-Scope | 人工重跑、runtime rebuild、修改原始human payload／hash／accepted53PASS歷史、替代獨立Reviewer或回覆／resolve threads。 |
+| ReadOnly | RO-R21，R1/R2 source；若驗證失敗交 Implementer bounded修正，Tester不默改SDK或oracle。 |
+| Written | none。 |
+| Deleted | none。 |
+| Modify | runtime/TOOLCHAIN.md、evidence/validation.txt、evidence/runtime-automated.json、evidence/runtime-visible.png、evidence/imu-run.md、evidence/acceptance-summary.json、README.md；限實際本輪驗證、狀態／counts與正確歷史人工作業描述。 |
+| Goal | 新predicate下真實53-case/browserErrors/exit具可追溯結果，舊53PASS及人工完成身分清楚；交獨立Reviewer評估五項修正與可發布性。 |
+| Non-Goal | 不把本輪未跑結果或source tests冒成browser PASS，不把舊human驗收改為未執行，不自行宣稱review/gate/push/resolve完成。 |
+| TestCase | TC-R21-FULL、TC-R21-DOCS，重跑全部53案例，核對current served hashes不變、zero browserErrors與CLI exit；歷史previousAttempts及原人工證據保留。 |
+
 ## Validation / Acceptance Checks
 
 **TC-PIN／TC-RUNTIME：前置與真實 runtime**
@@ -159,6 +211,15 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 
 **工程交付分類**：S3 的本輪完成證據限定完整 automated matrix、原始路徑／clock 證據及人工操作程序／NOT_EXECUTED matrix。人工實際操作仍是 full verification 的必要條件，移至 Draft PR 後 STOP POINT 2；此分類只調整交付停點，不把未執行人工案例判 PASS、不繞過獨立工程 review。工程 review／tracker 必區分 S3 工程交接與整體實驗驗收。
 
+
+**PR21 rework checks — 原完整 AC 不變**
+
+- TC-R21-VERDICT：空／缺案例／unknown或非PASS狀態（含 INDETERMINATE）、FAIL、exceptions、browserErrors 非空或不合法 report 均失敗並 CLI exit1。Full mode 要求非空全部既定53案例且均合法PASS、zero exceptions／browserErrors；E021_ONLY只允許明示diagnostic subset，不宣稱full-suite通過。Pure predicates 可被 runner 與 tests 共用，negative fixtures 不需 browser。
+- TC-R21-RAW：以 source-owned getScenario vectors／caseId 作唯讀oracle，Node24 native TS support可供.mjs helpers讀取；正常情境核對完整raw，fault案例核對既定4筆，stop／其他lifecycle核對各停點exact prefix counts與順序。Run/case/sample IDs 為正且歸屬正確、sample順序正確，所有 recorded clocks 有限／同域／非遞減；拒絕 vector變異、zero/錯誤ID、漏／重／亂序與非有限／倒退clock。
+- TC-R21-EVENT：保留原 Event shape，核對種類、觸發位置、樣本身分與run/case相關、clock上下界／先後與counts，原scenario timing/cooldown期待不變；缺／多／錯事件、錯clock／correlation／count均拒絕。TC-R21-STOP：sample6 stop案例必須有對應既定 expected Event 和 count，不得在空Event／零count下PASS；保留exact stopped prefix與fresh recovery判準。
+- TC-R21-PROVENANCE：隔離 scratch 中 missing／mismatched env 造成失敗時，既有tracked provenance逐byte保留，stale generated runnable移除；成功的public provenance完成後才temp＋rename發布tracked ledger，失敗無partial evidence或殘留temp。真實accepted provenance／runtime bytes不改。
+- TC-R21-FULL：修正後完整實際53-case smoke rerun，保存CLI exit、rows、browserErrors、raw/Event/time/provenance correlation與真實畫面，保留previousAttempts；unit/typecheck不能取代該run。TC-R21-DOCS：TOOLCHAIN正確分開已完成human53/53／hardwareOOS與新automation結果；README/summary/counts只採本輪實測，不覆寫accepted人工作業歷史。
+
 ## Reviewer Handoff
 
 以下為未來獨立 Reviewer 回填的 canonical output template，`approved|needs-rework` 表示可選 verdict；不是作者作出的本輪核准證據。實際 repo-visible handoff 與依據由 Reviewer 寫 review-log。
@@ -186,3 +247,5 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 - 完整 automated matrix／真實證據與 required 人工交接已備齊，Planner completion gate exit0後獨立 Reviewer 已核准工程交付；Draft PR後required人工操作已實際完成53/53且獨立審查核准，保留全部歷史嘗試；目前待owner PR review，無merge/release授權。Optional analysis warning 保持。
 
 Current acceptance checkpoint — 2026-10-15: initial Draft handoff required NOT_EXECUTED/fullVerification=false statements above describe the engineering-delivery boundary at creation. Required actual human operations have since completed53/53 with independent Reviewer APPROVED; final flags apply only to controlled synthetic scope. Original gates/AC/implementation contract and hardware exclusions remain unchanged; no pending human matrix case remains.
+
+PR21 current rework checkpoint — 2026-10-16: five ADDRESS findings require R1–R3 and independent review. Historical53/53 controlled-synthetic human acceptance is preserved; this authoring pass supplies no new test/runtime PASS. No runtime rebuild or human rerun is required while protected bytes stay unchanged. Only verified-and-pushed fixes permit thread replies/resolution under owner authorization; PR remains Draft, no merge/release.

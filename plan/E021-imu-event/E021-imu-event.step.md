@@ -11,7 +11,7 @@ created: 2026-10-14
 
 | Current status | Allowed next transitions | Next actor |
 | --- | --- | --- |
-| pr-open | pr-open→needs-rework or merged | Human reviewer |
+| publish-in-progress | publish-in-progress→pr-open | Main Agent |
 
 ## Actionable Steps
 
@@ -24,6 +24,10 @@ created: 2026-10-14
 
 - [X] **Actor:** Tester — **Action:** Complete the automated runtime matrix and prepare the required human-acceptance handoff for independent engineering review.
 - [X] **Actor:** Reviewer — **Action:** Complete independent bounded engineering review of source, actual runtime evidence and required human handoff.
+
+- [X] **Actor:** Implementer — **Action:** Complete R1–R3 for the five addressed PR #21 review threads, preserving protected runtime and historical evidence, then hand off for independent review.
+
+- [X] **Actor:** Reviewer — **Action:** Complete independent review of the PR #21 bounded fixes and final post-fix validation.
 
 ## Implementation Steps
 
@@ -87,6 +91,53 @@ Step 逐項鏡映，Actual 初始未執行；下列 Written 指首次建立，Mo
 
 Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actual；需要新增 source 路徑先修計畫，不藉 S3／S4 擴大寫入。
 
+
+### PR #21 bounded rework — 2026-10-16
+
+原 S1–S4 與53 PASS/human接受證據保持歷史身分；本輪僅下列 R1–R3 待完成，Actual 未執行。RO-R21：既有 RO，另含 `runtime/wasm-imu.patch`、`web/src/`、`mod/`、`web/scripts/stage-host.mjs`／`build-mod.mjs`、工具／runtime／MOD bytes、`evidence/runtime-provenance.json` 已接受 bytes、`evidence/operator-session.json` 及其所有原始人工 imports／exports、Archify成果與歷史 attempts。R2 僅在隔離 scratch fixture 驗 provenance 成功寫入／失敗保留，不回寫 accepted provenance；R3 只能保存真實最新驗證並保留 previousAttempts。
+
+- [X] **R1 — 封閉 smoke 判定缺口**
+
+| 欄位 | 約束 |
+|---|---|
+| In-Scope | 純且可重用 report／raw／Event／stop／exit predicates、negative fixtures，runtime runner 使用同一 predicates；package test 指令納入 scripts/*.test.mjs。 |
+| Out-Of-Scope | IMU／provider／clock／recognizer／Event 合約、UI／MOD source、門檻或 expected scenario 調校。 |
+| ReadOnly | RO-R21；既有 scenario/sample 定義與53-case／人工證據作唯讀 oracle。 |
+| Written | G：web/scripts/smoke-verdict.mjs、web/scripts/smoke-verdict.test.mjs。 |
+| Deleted | none。 |
+| Modify | web/scripts/runtime-smoke.mjs、web/package.json（只擴 test glob，無 dependencies／lockfile 變更）。 |
+| Goal | Full mode 只有非空完整53-row合法 PASS matrix、zero exceptions 且 browserErrors=[] 才 CLI exit0；E021_ONLY diagnostic subset須明示且不宣稱完整驗收。Raw／Event／stop6 predicates拒絕不合法證據。 |
+| Non-Goal | 不以 aggregate PASS、忽略 INDETERMINATE／unknown status 或缺事件來補成功，不修改既有 runtime 行為。 |
+| TestCase | TC-R21-VERDICT、TC-R21-RAW、TC-R21-EVENT、TC-R21-STOP；positive fixture 與逐一變異 negative fixtures，失敗 path 一律 exit1。 |
+
+- [X] **R2 — 前置失敗保留 provenance**
+
+| 欄位 | 約束 |
+|---|---|
+| In-Scope | prepare 完成成功的 public provenance 後才以同目錄 temp＋rename 原子發布 tracked ledger；失敗保留既有 tracked evidence bytes，同時移除 stale generated runnable assets；missing／mismatched env 回歸在隔離 scratch 執行。 |
+| Out-Of-Scope | Runtime rebuild、工具安裝／pin 變更、改原 provenance／人工歷史、清理非本題資產。 |
+| ReadOnly | RO-R21；真實 evidence/runtime-provenance.json 與既有 runtime／MOD；測試只能操作隔離 fixture copies。 |
+| Written | none。 |
+| Deleted | Repo files none；只清除隔離 fixture 的 stale generated runnable assets／失敗 temp，不刪歷史 evidence。 |
+| Modify | web/scripts/prepare-runtime.mjs、web/scripts/pin.test.mjs。 |
+| Goal | Missing／mismatched env 失敗前後 provenance bytes 完全相同且無 stale runnable；成功 fixture 經完整產生後才 atomic rename，不留 partial evidence。 |
+| Non-Goal | 不刪 tracked provenance 來表達 unavailable，不把舊 provenance 當新 build 成功，也不為本修正重新 build runtime。 |
+| TestCase | TC-R21-PROVENANCE：missing/mismatched env＋stale assets isolated regressions、bytes 比對、成功 atomic publication／失敗 temp 清理；現有 pin guard tests 保持。 |
+
+- [X] **R3 — 真實53-case重驗與交付修正證據**
+
+| 欄位 | 約束 |
+|---|---|
+| In-Scope | 完整53-case actual browser smoke rerun、source predicate/pin tests及strict typecheck；修 TOOLCHAIN human狀態與本輪真實 validation/status/counts；保存 previousAttempts。 |
+| Out-Of-Scope | 人工重跑、runtime rebuild、修改原始human payload／hash／accepted53PASS歷史、替代獨立Reviewer或回覆／resolve threads。 |
+| ReadOnly | RO-R21，R1/R2 source；若驗證失敗交 Implementer bounded修正，Tester不默改SDK或oracle。 |
+| Written | none。 |
+| Deleted | none。 |
+| Modify | runtime/TOOLCHAIN.md、evidence/validation.txt、evidence/runtime-automated.json、evidence/runtime-visible.png、evidence/imu-run.md、evidence/acceptance-summary.json、README.md；限實際本輪驗證、狀態／counts與正確歷史人工作業描述。 |
+| Goal | 新predicate下真實53-case/browserErrors/exit具可追溯結果，舊53PASS及人工完成身分清楚；交獨立Reviewer評估五項修正與可發布性。 |
+| Non-Goal | 不把本輪未跑結果或source tests冒成browser PASS，不把舊human驗收改為未執行，不自行宣稱review/gate/push/resolve完成。 |
+| TestCase | TC-R21-FULL、TC-R21-DOCS，重跑全部53案例，核對current served hashes不變、zero browserErrors與CLI exit；歷史previousAttempts及原人工證據保留。 |
+
 ## Main Agent Actionable Steps — Fixed Tail
 
 - [X] **Actor:** Main Agent — **Action:** Validate the approved Written set and perform bounded staging only.
@@ -132,3 +183,12 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 - Publication Actual: pushed topic branch; Draft PR https://github.com/a129924/coami/pull/21 OPEN/isDraft=true/base=dev, observed head5eb3bf5 and no comments/reviews. STOP POINT 2 handed to human; required simulator acceptance NOT_EXECUTED/fullVerification=false. Human-merge tail wording is frozen and does not authorize merge; post-merge/cleanup rows remain pending. CI was in progress at initial observation; no CI pass inferred.
 
 - Human acceptance Actual2026-10-15: all53 original matrix IDs PASS, independent Reviewer APPROVED/no blockers;32 original export hashes/payloads and exact four stop/recovery pairs verified. fullVerification/verificationComplete/overallSuccess=true in controlled synthetic scope only. Source/runtime unchanged; hardwareOOS. Original engineering/head/tail markers unchanged; merge/resume/cleanup rows remain pending.
+
+- PR21 rework routing2026-10-16: pr-open→needs-rework→creator-in-progress, next Implementer. R1–R3 are pending; original S1–S4 action-owner [X] and prior53PASS/human acceptance remain historical. Frozen head/tail is unchanged and does not prove these new fixes reviewed, committed, pushed or resolved.
+- Owner explicitly authorized bounded PR-comment fixes, commit/push, replies and thread resolution. Independent review and actual full53 browser rerun remain required; resolve each thread only after verified fix is pushed and real PR head checked. No runtime rebuild/human rerun/source UI/MOD/vendor-patch change, no merge/release.
+
+- R1–R3 action-owner Actual2026-10-16: source54PASS/typecheckPASS/runner syntaxPASS; negative fixtures include all5findings and independent ID/cleanup refinements. Final actual53/53PASS/zeroexceptions/exit0 at2026-10-16T02:52:36.186Z with exact original case IDs and unchanged accepted runtime/provenance/human bytes. Atomic prepare success/failure tested only in isolated fixtures. Current screenshot inspected. Implementation markers reflect executed bounded actions; Planner completion gate and final independent review still required before publication/replies/resolution.
+
+- Planner PR21 rework gate2026-10-16: canonical check_impl_steps_succeeded E021-imu-event returned exit0 and All 7 implementation steps complete. Current review-ready, next independent Reviewer. R1–R3 engineering completion does not prove final review, commit/push, replies or thread resolution; final Reviewer contextual marker remains pending.
+
+- Active final Reviewer handoff2026-10-16: Main Agent confirmed independent Reviewer accepted/read the queued final handoff and is actively reviewing. Canonical transition review-ready→reviewer-in-progress; final Reviewer contextual checkbox remains pending, publication blocked until actual verdict.

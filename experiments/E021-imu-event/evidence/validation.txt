@@ -577,3 +577,218 @@ Actual full run: 52/53 PASS, pagehide observation absent. Independent review ide
 FINAL actual browser rerun 2026-10-14T03:11:45.718Z: npm run smoke exit0, 53/53PASS, browserErrors=[]; source42PASS/typecheck/build PASS unchanged. Required humanNOT_EXECUTED, fullVerification=false.
 
 2026-10-15 HUMAN ACCEPTANCE:53/53 required matrix cases PASS;32 original owner export SHA256/payloads and all matrix links verified. Independent Reviewer APPROVED/no blockers. All evidence follow-up changes docs/data only; source/runtime/SDK bytes unchanged. No source tests or runtime rebuild re-run for data-only recording. fullVerification=true limited to controlled synthetic scope; hardwareOOS/no production adoption/merge/release.
+
+2026-10-16 PR21 pr-comment-review-and-fix RED→GREEN evidence
+Independent triage: all five code threads ADDRESS. Initial new helper tests failed module-not-found; provenance fixtures initially exposed a macOS /var vs /private/var harness alias and were corrected. The corrected actual-script RED run below isolates the real deletion defect (Node exit1).
+✔ shared vendor guard rejects dirty checkout, moved HEAD and mismatched gitlink (1740.960625ms)
+✖ failed preparation clears runnable assets but preserves accepted provenance for missing/mismatched tools (63.546875ms)
+✖ preparation publishes only after success and cleans atomic temporary output on failure (63.813667ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1938.10725
+
+✖ failing tests:
+
+test at experiments/E021-imu-event/web/scripts/pin.test.mjs:59:1
+✖ failed preparation clears runnable assets but preserves accepted provenance for missing/mismatched tools (63.546875ms)
+  [Error: ENOENT: no such file or directory, open '/var/folders/x9/3v967ts5131dfn6x4bsy9th00000gn/T/e021-prepare-guard-wp0fXZ/evidence/runtime-provenance.json'] { errno: -2, code: 'ENOENT', syscall: 'open', path: '/var/folders/x9/3v967ts5131dfn6x4bsy9th00000gn/T/e021-prepare-guard-wp0fXZ/evidence/runtime-provenance.json' }
+
+test at experiments/E021-imu-event/web/scripts/pin.test.mjs:81:1
+✖ preparation publishes only after success and cleans atomic temporary output on failure (63.813667ms)
+  [Error: ENOENT: no such file or directory, open '/var/folders/x9/3v967ts5131dfn6x4bsy9th00000gn/T/e021-prepare-atomic-VIOhaM/evidence/runtime-provenance.json'] { errno: -2, code: 'ENOENT', syscall: 'open', path: '/var/folders/x9/3v967ts5131dfn6x4bsy9th00000gn/T/e021-prepare-atomic-VIOhaM/evidence/runtime-provenance.json' }
+
+Independent refinement RED: unknown ID replacement could falsely pass same-size coverage; publication failure left public runnable assets (Node exit1). Both tests preceded corresponding fixes.
+✔ shared vendor guard rejects dirty checkout, moved HEAD and mismatched gitlink (1570.538334ms)
+✔ failed preparation clears runnable assets but preserves accepted provenance for missing/mismatched tools (171.658459ms)
+✖ preparation publishes only after success and cleans atomic temporary output on failure (235.927541ms)
+✔ source-owned scenario matrix with complete raw/Event contracts passes (1.516417ms)
+✔ matching Event lists cannot hide broken raw values, counts, identity or clock (0.22675ms)
+✔ Event clock, kind, metadata and MOD count corruption fails (0.259167ms)
+✔ cooldown crossing the negative bound is indeterminate; too-early repeat fails (0.155333ms)
+✔ all four exact stop prefixes and expected Events pass with unchanged snapshots (0.292417ms)
+✔ sample-six stop requires the actual Event and count (0.113ms)
+✔ changed old snapshot fails and a valid stop at the wrong count is indeterminate (0.128625ms)
+✔ lifecycle prefix validates real samples, expected Events and terminal reason (0.098084ms)
+✔ CLI success requires full nonempty unique all-PASS coverage and no browser exceptions (0.249333ms)
+✖ same-size unknown-ID replacement cannot stand in for a required case (0.529458ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 11
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2050.81175
+
+✖ failing tests:
+
+test at experiments/E021-imu-event/web/scripts/pin.test.mjs:81:1
+✖ preparation publishes only after success and cleans atomic temporary output on failure (235.927541ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/scripts/pin.test.mjs:109:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: { code: 'ENOENT' },
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at experiments/E021-imu-event/web/scripts/smoke-verdict.test.mjs:89:1
+✖ same-size unknown-ID replacement cannot stand in for a required case (0.529458ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/scripts/smoke-verdict.test.mjs:91:9)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+Final source regression/typecheck GREEN (54tests; new predicate/corruption/coverage and isolated preparation tests):
+
+> coami-e021-web@0.1.0 test
+> node --test src/*.test.ts scripts/*.test.mjs ../mod/observer.test.ts
+
+✔ TC-MOD preserves SDK event and correlated raw identity; counts are received-only (5.945125ms)
+✔ shared vendor guard rejects dirty checkout, moved HEAD and mismatched gitlink (1794.943375ms)
+✔ failed preparation clears runnable assets but preserves accepted provenance for missing/mismatched tools (166.186416ms)
+✔ preparation publishes only after success and cleans atomic temporary output on failure (185.653125ms)
+✔ source-owned scenario matrix with complete raw/Event contracts passes (8.434958ms)
+✔ matching Event lists cannot hide broken raw values, counts, identity or clock (0.621ms)
+✔ Event clock, kind, metadata and MOD count corruption fails (0.731875ms)
+✔ cooldown crossing the negative bound is indeterminate; too-early repeat fails (0.392167ms)
+✔ all four exact stop prefixes and expected Events pass with unchanged snapshots (1.258292ms)
+✔ sample-six stop requires the actual Event and count (2.205042ms)
+✔ changed old snapshot fails and a valid stop at the wrong count is indeterminate (0.195292ms)
+✔ lifecycle prefix validates real samples, expected Events and terminal reason (0.337541ms)
+✔ CLI success requires full nonempty unique all-PASS coverage and no browser exceptions (24.634125ms)
+✔ same-size unknown-ID replacement cannot stand in for a required case (0.134167ms)
+✔ TC-MOD pull order, run identity and terminal acknowledgement never replay a sample (2.577292ms)
+✔ TC-LIFECYCLE stop is terminal; fresh input cannot inherit old raw samples (0.093667ms)
+✔ TC-LIFECYCLE native failure and interruption are errors, not normal completion (1.619792ms)
+✔ TC-MOD offered data is copied and invalid clocks are rejected (0.10725ms)
+✔ TC-LIFECYCLE old startup promises, timeout and trace cannot update a replacement run (0.433959ms)
+✔ TC-LIFECYCLE watchdog only fails active stalled input; normal completion is distinct (0.128958ms)
+(node:67817) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ TC-RUNTIME real SDK IMU → recognizer → Event → observer, original 100ms poll and sample ticks upper bound (1.36425ms)
+✔ TC-RUNTIME scratch patch leaves original IMU, recognizer and Event bytes unchanged (375.836167ms)
+✔ TC-SAMPLES fallenForward: pinned recognizer receives raw samples (0.99525ms)
+✔ TC-SAMPLES fallenForward-two: pinned recognizer receives raw samples (0.072875ms)
+✔ TC-SAMPLES fallenForward-0.749: pinned recognizer receives raw samples (0.048666ms)
+✔ TC-SAMPLES fallenForward-0.751: pinned recognizer receives raw samples (0.049333ms)
+✔ TC-SAMPLES fallenBackward: pinned recognizer receives raw samples (0.059375ms)
+✔ TC-SAMPLES fallenBackward-two: pinned recognizer receives raw samples (0.036791ms)
+✔ TC-SAMPLES fallenBackward-0.749: pinned recognizer receives raw samples (0.0455ms)
+✔ TC-SAMPLES fallenBackward-0.751: pinned recognizer receives raw samples (0.04275ms)
+✔ TC-SAMPLES fallenLeft: pinned recognizer receives raw samples (0.059875ms)
+✔ TC-SAMPLES fallenLeft-two: pinned recognizer receives raw samples (0.0775ms)
+✔ TC-SAMPLES fallenLeft-0.749: pinned recognizer receives raw samples (0.054333ms)
+✔ TC-SAMPLES fallenLeft-0.751: pinned recognizer receives raw samples (0.047334ms)
+✔ TC-SAMPLES fallenRight: pinned recognizer receives raw samples (0.041458ms)
+✔ TC-SAMPLES fallenRight-two: pinned recognizer receives raw samples (0.029584ms)
+✔ TC-SAMPLES fallenRight-0.749: pinned recognizer receives raw samples (0.024042ms)
+✔ TC-SAMPLES fallenRight-0.751: pinned recognizer receives raw samples (0.027375ms)
+✔ TC-SAMPLES upsideDown: pinned recognizer receives raw samples (0.034ms)
+✔ TC-SAMPLES upsideDown-two: pinned recognizer receives raw samples (0.019875ms)
+✔ TC-SAMPLES upsideDown-0.749: pinned recognizer receives raw samples (0.021458ms)
+✔ TC-SAMPLES upsideDown-0.751: pinned recognizer receives raw samples (0.035834ms)
+✔ TC-SAMPLES shake: pinned recognizer receives raw samples (0.033792ms)
+✔ TC-SAMPLES shake-nine: pinned recognizer receives raw samples (0.022084ms)
+✔ TC-SAMPLES shake-1.199: pinned recognizer receives raw samples (0.021375ms)
+✔ TC-SAMPLES shake-1.201: pinned recognizer receives raw samples (0.072041ms)
+✔ TC-SAMPLES spike: pinned recognizer receives raw samples (0.023459ms)
+✔ TC-SAMPLES broken-nine: pinned recognizer receives raw samples (0.022417ms)
+✔ TC-SAMPLES upright: pinned recognizer receives raw samples (0.018792ms)
+✔ TC-SAMPLES zero: pinned recognizer receives raw samples (0.01825ms)
+✔ TC-SAMPLES unknown: pinned recognizer receives raw samples (0.020083ms)
+✔ TC-SAMPLES cooldown: pinned recognizer receives raw samples (0.026416ms)
+✔ TC-THRESHOLD exact acceleration delta 1.2 and cooldown 1499/1500 use SDK defaults (0.081042ms)
+✔ TC-THRESHOLD exact posture 0.75 is inclusive; gyroscope shake stays disabled (0.067792ms)
+ℹ tests 54
+ℹ suites 0
+ℹ pass 54
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2252.217208
+
+> coami-e021-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+
+First actual full browser rerun before independent refinements:53/53PASS/0nonPASS/0exceptions; retained in previousAttempts. Final rerun after exact-ID/cleanup refinements still in progress at this checkpoint; not declared passed here. No runtime rebuild or human evidence changes.
+
+FINAL PR21 post-fix actual browser rerun: capturedAt 2026-10-16T02:52:36.186Z; npm run smoke exit0,53 exact required IDs/53PASS,0nonPASS,0browserexceptions.
+
+> coami-e021-web@0.1.0 smoke
+> node scripts/runtime-smoke.mjs
+
+fallenForward: PASS raw=22 events=fallenForward,fallenForward last sample processing acknowledged by next SDK poll
+fallenForward-two: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+fallenForward-0.749: PASS raw=6 events= last sample processing acknowledged by next SDK poll
+fallenForward-0.751: PASS raw=6 events=fallenForward last sample processing acknowledged by next SDK poll
+fallenBackward: PASS raw=22 events=fallenBackward,fallenBackward last sample processing acknowledged by next SDK poll
+fallenBackward-two: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+fallenBackward-0.749: PASS raw=6 events= last sample processing acknowledged by next SDK poll
+fallenBackward-0.751: PASS raw=6 events=fallenBackward last sample processing acknowledged by next SDK poll
+fallenLeft: PASS raw=22 events=fallenLeft,fallenLeft last sample processing acknowledged by next SDK poll
+fallenLeft-two: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+fallenLeft-0.749: PASS raw=6 events= last sample processing acknowledged by next SDK poll
+fallenLeft-0.751: PASS raw=6 events=fallenLeft last sample processing acknowledged by next SDK poll
+fallenRight: PASS raw=22 events=fallenRight,fallenRight last sample processing acknowledged by next SDK poll
+fallenRight-two: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+fallenRight-0.749: PASS raw=6 events= last sample processing acknowledged by next SDK poll
+fallenRight-0.751: PASS raw=6 events=fallenRight last sample processing acknowledged by next SDK poll
+upsideDown: PASS raw=22 events=upsideDown,upsideDown last sample processing acknowledged by next SDK poll
+upsideDown-two: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+upsideDown-0.749: PASS raw=6 events= last sample processing acknowledged by next SDK poll
+upsideDown-0.751: PASS raw=6 events=upsideDown last sample processing acknowledged by next SDK poll
+shake: PASS raw=13 events=shake last sample processing acknowledged by next SDK poll
+shake-nine: PASS raw=12 events= last sample processing acknowledged by next SDK poll
+shake-1.199: PASS raw=13 events= last sample processing acknowledged by next SDK poll
+shake-1.201: PASS raw=13 events=shake last sample processing acknowledged by next SDK poll
+spike: PASS raw=14 events= last sample processing acknowledged by next SDK poll
+broken-nine: PASS raw=16 events= last sample processing acknowledged by next SDK poll
+upright: PASS raw=20 events= last sample processing acknowledged by next SDK poll
+zero: PASS raw=20 events= last sample processing acknowledged by next SDK poll
+unknown: PASS raw=20 events= last sample processing acknowledged by next SDK poll
+cooldown: PASS raw=49 events=shake,shake last sample processing acknowledged by next SDK poll
+source-interrupt: PASS raw=4 events= injected interrupt
+native-failure: PASS raw=4 events= injected native-failure
+fallenForward-independent-2: PASS raw=22 events=fallenForward,fallenForward last sample processing acknowledged by next SDK poll
+fallenBackward-independent-2: PASS raw=22 events=fallenBackward,fallenBackward last sample processing acknowledged by next SDK poll
+fallenLeft-independent-2: PASS raw=22 events=fallenLeft,fallenLeft last sample processing acknowledged by next SDK poll
+fallenRight-independent-2: PASS raw=22 events=fallenRight,fallenRight last sample processing acknowledged by next SDK poll
+upsideDown-independent-2: PASS raw=22 events=upsideDown,upsideDown last sample processing acknowledged by next SDK poll
+shake-independent-2: PASS raw=13 events=shake last sample processing acknowledged by next SDK poll
+restart-after-fallenLeft-0: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+restart-after-fallenLeft-5: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+restart-after-shake-12: PASS raw=12 events= last sample processing acknowledged by next SDK poll
+restart-after-fallenLeft-6: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+fresh-after-pagehide: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+visible-final: PASS raw=22 events=fallenForward,fallenForward last sample processing acknowledged by next SDK poll
+SUMMARY 53/53 full matrix; 0 non-PASS; 0 browser exceptions
+
+Readback: coverage.expectedIds equals adopted original53humanmatrix IDs and all actual result IDs; current served mc.js/mc.wasm/MOD SHA256 and publicprovenance match unchanged accepted ledger. wasm patch/humanJSON/accepted provenance unchanged vsHEAD, vendorclean. Final screenshot inspected: completed22/22 fallenForward2, readable feedback. No runtime rebuild or newhumanclaims. Independent final implementation review pending.
+
+Independent final bounded review APPROVED/no blockers; canonical implementation-only gate All7stepscomplete exit0. Publication authorized, threads not yet resolved at this checkpoint.

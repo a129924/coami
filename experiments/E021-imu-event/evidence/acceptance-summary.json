@@ -3,7 +3,7 @@
   "synthetic": true,
   "sourceTests": {
     "status": "PASS",
-    "count": 42
+    "count": 54
   },
   "strictTypecheck": "PASS",
   "wasmBuild": "PASS",
@@ -67,5 +67,18 @@
     "Timeout exports show terminal reason without exact firing timestamp; inspected policy and controlled setup support classification.",
     "Ideal synthetic configured-frame samples do not establish physical mounting direction, sensitivity or false-positive rate.",
     "Clock compatibility and raw IMU provider are E021 scratch extensions, not upstream native support."
-  ]
+  ],
+  "prReviewRevalidation": {
+    "status": "PASS",
+    "capturedAt": "2026-10-16T02:52:36.186Z",
+    "sourceTests": 54,
+    "strictTypecheck": "PASS",
+    "actualBrowserCases": 53,
+    "nonPass": 0,
+    "browserExceptions": 0,
+    "cliExitCode": 0,
+    "exactRequiredIds": true,
+    "originalRuntimeAndHumanEvidenceUnchanged": true,
+    "independentReview": "APPROVED"
+  }
 }
