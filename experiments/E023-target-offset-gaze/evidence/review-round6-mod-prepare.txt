@@ -1,0 +1,7 @@
+
+> coami-e023-web@0.1.0 prepare:poc
+> node scripts/prepare.mjs
+
+
+added 28 packages in 746ms
+Prepared exact pinned host and E023 MOD; roundtrip NOT yet executed

@@ -1,0 +1,31 @@
+Using CPython 3.12.12
+Creating virtual environment at: ../server/.venv
+Activate with: source ../server/.venv/bin/activate
+Resolved 24 packages in 14ms
+Downloading pydantic-core (1.9MiB)
+ Downloading pydantic-core
+Prepared 22 packages in 887ms
+Installed 22 packages in 193ms
+ + annotated-doc==0.0.5
+ + annotated-types==0.8.0
+ + anyio==4.15.1
+ + click==8.5.0
+ + fastapi==0.141.1
+ + h11==0.16.0
+ + idna==3.20
+ + iniconfig==2.3.1
+ + nodeenv==1.11.0
+ + packaging==26.3
+ + pluggy==1.6.0
+ + pydantic==2.14.1
+ + pydantic-core==2.50.1
+ + pygments==2.21.0
+ + pyright==1.1.414
+ + pytest==9.1.1
+ + ruff==0.16.8
+ + starlette==1.7.0
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.4
+ + uvicorn==0.53.0
+ + websockets==16.1.1
+PASS: poisoned venv interpreter was removed without executing; locked recreation and full environment attestation passed

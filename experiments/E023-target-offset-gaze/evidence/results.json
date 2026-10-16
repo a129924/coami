@@ -2,7 +2,7 @@
   "experiment": "E023",
   "state": "失敗",
   "question": "Can synthetic offset -> Python -> real full WASM SDK -> rendered feedback converge?",
-  "reason": "Complete clean-install/dependency-attested rerun with source-bound build evidence; see per-case outcomes.",
+  "reason": "Complete MOD compiler/Python runtime-attested rerun with source-bound build evidence; see per-case outcomes.",
   "runtime_probe": "成功",
   "probe_frames_executed": 90,
   "controls_executed": 90,
@@ -13,63 +13,63 @@
       "state": "成功",
       "controls": 0,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-01.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-01.json"
     },
     {
       "id": "TC-E2E-02",
       "state": "成功",
       "controls": 1,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-02.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-02.json"
     },
     {
       "id": "TC-E2E-03",
       "state": "成功",
       "controls": 1,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-03.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-03.json"
     },
     {
       "id": "TC-E2E-04",
       "state": "成功",
       "controls": 1,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-04.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-04.json"
     },
     {
       "id": "TC-E2E-05",
       "state": "成功",
       "controls": 1,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-05.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-05.json"
     },
     {
       "id": "TC-E2E-06",
       "state": "成功",
       "controls": 1,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-06.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-06.json"
     },
     {
       "id": "TC-E2E-07",
       "state": "成功",
       "controls": 1,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-07.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-07.json"
     },
     {
       "id": "TC-E2E-08",
       "state": "成功",
       "controls": 1,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-08.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-08.json"
     },
     {
       "id": "TC-E2E-09",
       "state": "成功",
       "controls": 1,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-09.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-09.json"
     },
     {
       "id": "TC-E2E-10",
@@ -77,7 +77,7 @@
       "reason": "iteration_limit",
       "controls": 20,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-10.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-10.json"
     },
     {
       "id": "TC-E2E-11",
@@ -85,7 +85,7 @@
       "reason": "iteration_limit",
       "controls": 20,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-11.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-11.json"
     },
     {
       "id": "TC-E2E-12",
@@ -93,7 +93,7 @@
       "reason": "iteration_limit",
       "controls": 20,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-12.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-12.json"
     },
     {
       "id": "TC-E2E-13",
@@ -101,32 +101,35 @@
       "reason": "iteration_limit",
       "controls": 20,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-13.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-13.json"
     },
     {
       "id": "TC-E2E-14",
       "state": "成功",
       "controls": 1,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-14.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-14.json"
     },
     {
       "id": "TC-E2E-15",
       "state": "成功",
       "controls": 1,
       "probe": true,
-      "evidence": "wasm-runs/WASM-2026-10-16T07-46-32-258Z/TC-E2E-15.json"
+      "evidence": "wasm-runs/WASM-2026-10-16T08-20-00-487Z/TC-E2E-15.json"
     }
   ],
   "verification_task_complete": true,
   "record_complete": true,
-  "run_id": "WASM-2026-10-16T07-46-32-258Z",
+  "run_id": "WASM-2026-10-16T08-20-00-487Z",
   "evidence_audit": "wasm-evidence-audit-current.json",
   "initial_result": "results-initial.json",
   "decision": "The complete source-bound rerun is canonical. Review per-case failures; SDK investigation remains separate. Original data is retained as legacy evidence with an attribution limitation.",
-  "source_commit": "fd49f79b24c20583a6bd9d5e9f07d14d0937b68d",
+  "source_commit": "e9915ec49cf762e2d32a61f427036345a1b1670d",
   "build_manifest_verified": true,
-  "previous_result": "results-round4.json",
+  "previous_result": "results-round5.json",
   "dependency_tree_verified": true,
-  "dependency_attestation": "dependency-attestation.json"
+  "dependency_attestation": "dependency-attestation.json",
+  "mod_compiler_verified": true,
+  "python_runtime_verified": true,
+  "python_attestation": "python-attestation.json"
 }

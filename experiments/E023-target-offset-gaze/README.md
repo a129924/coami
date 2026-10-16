@@ -4,7 +4,7 @@
 
 驗證固定靜態模擬目標能否經 **合成 TargetOffset → Python Calculator → LookAtCommand → TS → 真正 WASM＋XS MOD SDK `lookAt()` → rendered 姿態重新投影** 逐步置中。工作包為 `python-and-ts-implementation`，不是新增 workflow profile。
 
-設計與首輪執行：2026-10-15；具乾淨依賴安裝與來源建置綁定的完整再驗證：2026-10-16（`WASM-2026-10-16T07-46-32-258Z`）。**補齊後主結果：失敗；本輪驗證任務已完成。** 真正 WASM probe 全數通過，15案閉環為11成功、4失敗。四個近中心±0.11案例各20次控制後姿態與偏差未變，不符合原0.1判準。首次交付的「無法判定」與受阻證據保留於 results-initial.json。
+設計與首輪執行：2026-10-15；具MOD編譯／Python環境驗證與來源建置綁定的完整再驗證：2026-10-16（`WASM-2026-10-16T08-20-00-487Z`）。**補齊後主結果：失敗；本輪驗證任務已完成。** 真正 WASM probe 全數通過，15案閉環為11成功、4失敗。四個近中心±0.11案例各20次控制後姿態與偏差未變，不符合原0.1判準。首次交付的「無法判定」與受阻證據保留於 results-initial.json。
 
 | 邊界 | 本次工作 |
 |---|---|
@@ -119,7 +119,9 @@ node scripts/blocked-ui-smoke.mjs
 
 - [第五輪review修正](evidence/review-round5.md)：乾淨npm ci與完整installed-tree attestation、正常teardown升級終止、compiler rebuild前後固定來源查核；目前正式完整run已包含依賴驗證。
 
-- **目前正式依據**：[具乾淨依賴安裝與來源建置綁定的完整再驗證](evidence/manifest-run.md)與[第五輪review修正](evidence/review-round5.md)。現行audit查核新完整run；舊run與receipts僅保留歷史觀測，缺少build manifest，不再作為完整來源綁定證明。
+- [第六輪review修正](evidence/review-round6.md)：MOD編譯前clean install、固定Python環境重建與前後attestation、最佳化模式仍有效的audit。
+
+- **目前正式依據**：[具MOD編譯／Python環境驗證與來源建置綁定的完整再驗證](evidence/manifest-run.md)與[第六輪review修正](evidence/review-round6.md)。現行audit查核新完整run；舊run與receipts保留各輪原有驗證範圍；第五輪以前沒有本輪MOD編譯／Python環境驗證，不追溯提升其證據保證。
 
 - [第三輪 PR review 修正](evidence/review-round3.md)：固定vendor在建置／每案manifest查核前後驗證，以及began返回後、ended送出前重查期限；含TDD與真正WASM中心案partial smoke。
 
@@ -134,7 +136,7 @@ node scripts/blocked-ui-smoke.mjs
 - `runtime-preflight*.txt/json`、`mod-provenance.json`：首次交付的 runtime 缺失／雜湊拒絕與當時 MOD archive；本次 archive hash 見真正 run 的 provenance，archive 本身為 ignored build artifact。
 - `blocked-ui.json/png`、`blocked-ui-smoke.txt`：缺 runtime 時的實際 Browser UI 與0筆傳送證據；不是閉環紀錄。
 - `results.json`：補齊後主狀態與15案結果；`results-initial.json`保留首次未執行狀態；`results-pre-manifest.json`保留重新綁定前的舊run結果；`results-round4.json`保留依賴attestation前的結果。
-- `manifest-run.md`、`wasm-runs/WASM-2026-10-16T07-46-32-258Z/`：目前完整15案的report、source-inputs／完整build manifest、raw觀測／命令／SDK trace與截圖。`wasm-run.md`與2026-10-15原run保留作歷史參考。
+- `manifest-run.md`、`wasm-runs/WASM-2026-10-16T08-20-00-487Z/`：目前完整15案的report、source-inputs／完整build manifest、raw觀測／命令／SDK trace與截圖。`wasm-run.md`與2026-10-15原run保留作歷史參考。
 - `audit-wasm.py`：目前 checkout 執行即可查核固定原始 commit 的 source blobs、90筆probe、90次SDK呼叫與15個不同案例，另外要求clean dependency install attestation、clean-build來源／完整dist manifest與runtime一致，輸出 `wasm-evidence-audit-current.json`。原 `wasm-evidence-audit.json`與`wasm-evidence-audit-legacy.json`僅為缺少bundle綁定的歷史receipt。
 - `host-build-notes.md`、`host-runtime-*.json`、`host-source-verification.json`、`host-build.txt`：固定來源、工具、產物、新bytes pin與639檔source核對。
 - `host-*.txt`、`host-verification.json`：補齊後25 Python／10 TS／2 MOD contract、strict checks、WebSocket smoke與建置證據；commit hook仍缺lefthook，另執行上述明示checks。初始 preflight／blocked UI只代表歷史缺host狀態，未用來代替本次閉環。

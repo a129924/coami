@@ -1,8 +1,12 @@
 """Source-bound evidence audit regressions; real Git reads, no runtime control."""
 
+import ast
 import copy
 import importlib.util
 import json
+import os
+import subprocess
+import sys
 import unittest
 from pathlib import Path
 
@@ -16,7 +20,7 @@ spec.loader.exec_module(module)
 
 class EvidenceAuditTests(unittest.TestCase):
     def build_fixture(self):
-        run = ROOT / "evidence/wasm-runs/WASM-2026-10-16T07-46-32-258Z"
+        run = ROOT / "evidence/wasm-runs" / module.RUN_ID
         return json.loads((run / "report.json").read_text()), json.loads(
             (run / "source-inputs.json").read_text()
         )
@@ -27,7 +31,7 @@ class EvidenceAuditTests(unittest.TestCase):
 
     def test_build_binding_rejects_legacy_run_without_manifest(self):
         run = ROOT / "evidence/wasm-runs/WASM-2026-10-15T07-05-48-980Z"
-        with self.assertRaisesRegex(AssertionError, "source-bound build manifest"):
+        with self.assertRaisesRegex(module.AuditError, "source-bound build manifest"):
             module.verify_build(
                 ROOT,
                 json.loads((run / "report.json").read_text()),
@@ -43,7 +47,7 @@ class EvidenceAuditTests(unittest.TestCase):
                 name = next(iter(report["bundleSha256"]))
                 report["bundleSha256"][name] = "0" * 64
             with self.assertRaisesRegex(
-                AssertionError, "bundle/public hash mismatch|incomplete dist"
+                module.AuditError, "bundle/public hash mismatch|incomplete dist"
             ):
                 module.verify_build(ROOT, report, inputs)
 
@@ -51,22 +55,22 @@ class EvidenceAuditTests(unittest.TestCase):
         report, inputs = self.build_fixture()
         del report["build"]["sourcesSha256"]["web/src/observer.ts"]
         inputs["sha256"] = copy.deepcopy(report["build"]["sourcesSha256"])
-        with self.assertRaisesRegex(AssertionError, "incomplete recorded source"):
+        with self.assertRaisesRegex(module.AuditError, "incomplete recorded source"):
             module.verify_build(ROOT, report, inputs)
         report, inputs = self.build_fixture()
         report["provenance"]["hashes"]["mc.wasm"] = "0" * 64
-        with self.assertRaisesRegex(AssertionError, "runtime pin mismatch"):
+        with self.assertRaisesRegex(module.AuditError, "runtime pin mismatch"):
             module.verify_build(ROOT, report, inputs)
 
     def test_wrong_recorded_hash_is_rejected(self):
-        with self.assertRaisesRegex(AssertionError, "recorded source mismatch"):
+        with self.assertRaisesRegex(module.AuditError, "recorded source mismatch"):
             module.verify_sources(ROOT, {"web/scripts/runtime-run.mjs": "0" * 64})
 
     def test_duplicate_or_missing_ids_cannot_pass_audit(self):
         cases = [{"id": f"TC-E2E-{i:02}"} for i in range(1, 16)]
         module.verify_case_ids(cases)
         for invalid in [cases[:-1], cases[:-1] + [cases[0]], [cases[0]] * 15]:
-            with self.assertRaisesRegex(AssertionError, "15 distinct cases"):
+            with self.assertRaisesRegex(module.AuditError, "15 distinct cases"):
                 module.verify_case_ids(invalid)
 
     def test_new_full_run_is_source_bound(self):
@@ -79,7 +83,9 @@ class EvidenceAuditTests(unittest.TestCase):
     def test_missing_clean_install_cannot_pass_dependency_attribution(self):
         report, inputs = self.build_fixture()
         del report["build"]["dependencies"]
-        with self.assertRaisesRegex(AssertionError, "dependency install attestation"):
+        with self.assertRaisesRegex(
+            module.AuditError, "dependency install attestation"
+        ):
             module.verify_build(ROOT, report, inputs)
 
     def test_modified_dependency_tree_or_lock_is_rejected(self):
@@ -89,5 +95,50 @@ class EvidenceAuditTests(unittest.TestCase):
         ]:
             report, inputs = self.build_fixture()
             report["build"]["dependencies"][field] = "0" * 64
-            with self.assertRaisesRegex(AssertionError, message):
+            with self.assertRaisesRegex(module.AuditError, message):
                 module.verify_build(ROOT, report, inputs)
+
+    def test_missing_or_changed_compiler_and_python_proof_is_rejected(self):
+        for field, message in [
+            ("mod", "MOD compiler attestation"),
+            ("python", "Python runtime attestation"),
+        ]:
+            report, inputs = self.build_fixture()
+            del report[field]
+            with self.assertRaisesRegex(module.AuditError, message):
+                module.verify_build(ROOT, report, inputs)
+        report, inputs = self.build_fixture()
+        report["python"]["venvTreeSha256"] = "0" * 64
+        with self.assertRaisesRegex(module.AuditError, "Python runtime attestation"):
+            module.verify_build(ROOT, report, inputs)
+        report, inputs = self.build_fixture()
+        report["mod"]["dependencies"]["installedTreeSha256"] = "0" * 64
+        report["provenance"]["modBuild"] = copy.deepcopy(report["mod"])
+        with self.assertRaisesRegex(
+            module.AuditError, "MOD compiler dependency mismatch"
+        ):
+            module.verify_build(ROOT, report, inputs)
+
+    def test_optimization_cannot_remove_validation(self):
+        tree = ast.parse((ROOT / "evidence/audit-wasm.py").read_text())
+        self.assertFalse(any(isinstance(node, ast.Assert) for node in ast.walk(tree)))
+        for expression in [
+            "m.verify_case_ids([{'id':'TC-E2E-01'}]*15)",
+            "m.verify_sources(root, {'web/scripts/runtime-run.mjs':'0'*64})",
+        ]:
+            code = (
+                "import importlib.util;from pathlib import Path;"
+                f"root=Path({str(ROOT)!r});"
+                "s=importlib.util.spec_from_file_location('audit',root/'evidence/audit-wasm.py');"
+                "m=importlib.util.module_from_spec(s);s.loader.exec_module(m);"
+                + expression
+            )
+            result = subprocess.run(
+                [sys.executable, "-B", "-O", "-c", code],
+                capture_output=True,
+                text=True,
+                env={**os.environ, "PYTHONOPTIMIZE": "2"},
+                check=False,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("AuditError", result.stderr)
