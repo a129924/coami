@@ -32,3 +32,14 @@ export function verifyCleanSource(root,label){
  const status=execFileSync('git',['status','--porcelain=v1','--untracked-files=all'],{cwd:root,encoding:'utf8'}).trim()
  if(status)throw Error(`${label} source has tracked or untracked changes`)
 }
+
+export function verifyPinnedSource(root,label,pin){
+ const head=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim()
+ if(head!==pin)throw Error(`${label} source commit mismatch`)
+ verifyCleanSource(root,label)
+}
+export async function rebuildVerifiedSource(root,label,pin,rebuild){
+ verifyPinnedSource(root,label,pin)
+ await rebuild(root)
+ verifyPinnedSource(root,label,pin)
+}

@@ -4,7 +4,7 @@ import {mkdtemp,writeFile,mkdir,rm} from 'node:fs/promises'
 import {tmpdir} from 'node:os'
 import path from 'node:path'
 import {execFileSync} from 'node:child_process'
-import {verifyCleanSource} from './build-safety.mjs'
+import {verifyCleanSource,rebuildVerifiedSource} from './build-safety.mjs'
 
 test('compiler sources reject untracked headers and CMake inputs before rebuilding',async()=>{
  const root=await mkdtemp(path.join(tmpdir(),'e023-source-'))
@@ -25,6 +25,25 @@ test('compiler sources reject untracked headers and CMake inputs before rebuildi
    await writeFile(path.join(root,'source.c'),'modified\n')
    assert.throws(()=>verifyCleanSource(root,label),/tracked or untracked changes/)
    await writeFile(path.join(root,'source.c'),'original\n')
+  }
+ }finally{await rm(root,{recursive:true,force:true})}
+})
+
+test('compiler rebuilds reject dirty sources or changed HEAD before tool attestation',async()=>{
+ const root=await mkdtemp(path.join(tmpdir(),'e023-rebuild-'))
+ const git=args=>execFileSync('git',args,{cwd:root,encoding:'utf8',stdio:['ignore','pipe','pipe']}).trim()
+ const commit=['-c','user.name=E023 Test','-c','user.email=e023@example.invalid','-c','core.hooksPath=/dev/null','commit','--quiet','-m','fixture']
+ try{
+  git(['init','--quiet']);await writeFile(path.join(root,'source.c'),'original');git(['add','.']);git(commit)
+  const pin=git(['rev-parse','HEAD'])
+  for(const label of ['Moddable','fontbm']){
+   await rebuildVerifiedSource(root,label,pin,async()=>{})
+   await assert.rejects(rebuildVerifiedSource(root,label,pin,async()=>{await writeFile(path.join(root,'source.c'),'changed')}),/tracked or untracked/)
+   git(['restore','source.c'])
+   await assert.rejects(rebuildVerifiedSource(root,label,pin,async()=>{await writeFile(path.join(root,'injected.h'),'new input')}),/tracked or untracked/)
+   await rm(path.join(root,'injected.h'))
+   await assert.rejects(rebuildVerifiedSource(root,label,pin,async()=>{await writeFile(path.join(root,'source.c'),'new commit');git(['add','.']);git(commit)}),/commit mismatch/)
+   git(['reset','--hard',pin])
   }
  }finally{await rm(root,{recursive:true,force:true})}
 })

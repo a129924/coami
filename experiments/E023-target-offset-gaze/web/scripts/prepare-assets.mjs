@@ -1,6 +1,6 @@
 import {prepareCompilerEnvironment,rebuildFontbm} from './tool-inputs.mjs'
 import {verifyStagedHost} from './host-inputs.mjs'
-import {rebuildModdableTools,replaceCache,verifyCleanSource} from './build-safety.mjs'
+import {rebuildModdableTools,replaceCache,verifyCleanSource,rebuildVerifiedSource} from './build-safety.mjs'
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { createReadStream } from 'node:fs'
@@ -80,7 +80,7 @@ try {
   verifyCleanSource(moddableRoot, 'Moddable')
   moddableVersion = (await readFile(path.join(moddableRoot, 'tools/VERSION'), 'utf8')).trim()
   if (moddableVersion !== '9.5.0') throw new Error(`Moddable 9.5.0 required, found ${moddableVersion}`)
-  await rebuildModdableTools(moddableRoot)
+  await rebuildVerifiedSource(moddableRoot,'Moddable',PINNED_MODDABLE_COMMIT,rebuildModdableTools)
   moddableTools = {}
   for (const name of ['mcconfig', 'xsc', 'xsid', 'xsl', 'tools']) {
     const binary = await realpath(path.join(moddableRoot, 'build/bin/mac/release', name))
@@ -140,7 +140,7 @@ try {
  verifyCleanSource(fontbmSourceRoot, 'fontbm')
  const expected=path.join(fontbmSourceRoot,'build/fontbm')
  if(process.env.FONTBM && path.resolve(process.env.FONTBM)!==expected)throw Error('FONTBM must select the clean-built source target')
- await rebuildFontbm(fontbmSourceRoot)
+ await rebuildVerifiedSource(fontbmSourceRoot,'fontbm',PINNED_FONTBM_COMMIT,rebuildFontbm)
  fontbmBinary=await realpath(expected)
  const info=await stat(fontbmBinary)
  if(!info.isFile()||(info.mode&0o111)===0)throw Error('fontbm is not executable')
