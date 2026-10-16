@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E021 · IMU Event</title></head>
+<body><main><header><p class="eyebrow">COAMI / E021 / SYNTHETIC</p><h1>搖晃、傾倒與倒置</h1><p>受控加速度樣本 → 原 SDK 辨識 → MOD 收到事件。只觀察結果，不觸發動作。</p></header>
+<section class="controls"><label>受控情境<select id="scenario"></select></label><button id="run">執行新一輪</button><button id="stop">停止</button><button id="restart">重啟同一情境</button><button id="export">匯出證據</button></section>
+<section class="status"><strong id="state" role="status">idle</strong><span id="progress">0 / 0</span><p id="reason">每次執行都建立全新 runtime；資料全部為 synthetic，沒有實機證據。</p></section>
+<section class="results"><div><small>MOD 實收 Event</small><strong id="last">—</strong></div><div><small>本輪實收次數</small><strong id="total">0</strong></div><div><small>Run / case</small><strong id="identity">—</strong></div></section><pre id="counts">尚無事件</pre>
+<section class="simulator"><canvas id="viewport" aria-label="Stack-chan 模擬器"></canvas><canvas id="screen" width="240" height="320" aria-label="Robot 畫面"></canvas></section>
+<details><summary>來源與證據限制</summary><p>m/s²，CoreS3 BMI270 參考，已是 configure(zxy) 後的辨識座標。自訂 scratch IMU 入口；SDK 辨識參數未改。自動操作不算真人驗證。</p><pre id="provenance">尚未核對 runtime</pre></details>
+<section><h2>本輪觀察紀錄</h2><ol id="events"></ol></section></main><script type="module" src="/src/main.ts"></script></body></html>

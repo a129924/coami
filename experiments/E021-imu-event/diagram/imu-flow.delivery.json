@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "dataflow",
+  "input": "/Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/diagram/imu-flow.json",
+  "output": "/Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/diagram/imu-flow.html",
+  "specification": {
+    "sha256": "0c0e8926c054b55af5dab982b64f2916ce3ecb30d8ed00bb547984dfd75a84fd",
+    "bytes": 3924
+  },
+  "artifact": {
+    "sha256": "d6fc0142b6183dad992eb8119ad049d0a5cbd5119aceea034f1a96e4d7fac338",
+    "bytes": 705892
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}

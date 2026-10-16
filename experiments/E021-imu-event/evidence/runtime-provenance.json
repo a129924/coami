@@ -1,0 +1,43 @@
+{
+  "clockCompatibility": {
+    "scope": "owner-approved E021 scratch platform only",
+    "source": "emscripten_get_now",
+    "unit": "real monotonic milliseconds",
+    "originalPinnedWasmClock": "xs_time_ticks stub preserved; E021 WASM time module wrapper uses native monotonic ticks; original Time module preserved under private alias",
+    "artificialClock": false
+  },
+  "experiment": "E021",
+  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "patchSha256": "91d6cb1bb6b785b9a5820969bf03f62a68c441fd68e9a115c2c23abbecd6cf69",
+  "tools": {
+    "originalTimeJsSha256": "56bccafa966320ac1629bc49169c3ca12e77757fd7c8e3b4c4a78e71a37d28ed",
+    "originalWasmTimeCSha256": "e66edada621ccf82071f0d0eff5bfe125e4b3354ecb01e4ab906c09d0a456e9b",
+    "moddableVersion": "9.5.0",
+    "sourceCommits": {
+      "moddable": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",
+      "emsdk": "14c18b569f55138fe4963924162244251f454fb0",
+      "fontbm": "7677b908523e909679f67cd5c170396bb9def1aa"
+    },
+    "emccVersion": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 5.0.1 (8c5f43157a3f069ade75876e23061330521eabde)",
+    "emccSha256": "498eba9b6aacffca1c358ba340fc7b37015d7867cb211c7f2d45784ee9310f03",
+    "fontbmSha256": "2389a3daae8b9af5c3747cb2fbfd34db3fcd786ccec885878addd22bbcd07012",
+    "mcconfigSha256": "2abb06a6305abbe09d6ed0eb4df23f08c2f474910692f4146d5c826627d23ba4",
+    "xscSha256": "a2a6b24b2de6c88d0cdd9adcdd8819dafb0a922e478160df7f3617bef9b1383c"
+  },
+  "sha256": {
+    "mc.js": "6e7a55edc919a90fec53c5267f9c47620fec82c1e3c28339973dae224b1212a5",
+    "mc.wasm": "e38c2cc0ffa6e2e3871e555992cdac3983f6e5311545fae3a6704d27df4936d2"
+  },
+  "commands": [
+    "npm ci --ignore-scripts --no-audit --no-fund",
+    "npm run build:wasm"
+  ],
+  "scope": "simulator-only; isolated copies of pinned tool sources, including existing local compiler cache; no hardware evidence",
+  "mod": {
+    "sha256": "a9d62b9fff1522d87e23f7ab4ac1af0cb596262afe0ef871e0c8993a171d155c",
+    "sourceSha256": {
+      "mod.ts": "1ee7f8ceca0e31e1e2eb17e891729a4ea2a56cda5cf7d21fc4197295e8b056c8",
+      "observer.ts": "98910b07d80ac6cdcf0c9c0b563d5131f679a4e880019ffb301e2801e8ffd6a5"
+    }
+  }
+}

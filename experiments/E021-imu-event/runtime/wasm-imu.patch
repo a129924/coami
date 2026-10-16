@@ -1,0 +1,203 @@
+diff --git a/firmware/host/app/main.ts b/firmware/host/app/main.ts
+index 67a85b4e..0d97a390 100644
+--- a/firmware/host/app/main.ts
++++ b/firmware/host/app/main.ts
+@@ -28,6 +28,10 @@ const globalEnv = globalThis as typeof globalThis & GlobalEnvironment
+ const noopButtonHandler = () => undefined
+ 
+ function installPlatformInputBridge(): void {
++  if (Modules.has('wasm-imu-bridge')) {
++    const imu = Modules.importNow('wasm-imu-bridge') as { installWasmIMU: () => void }
++    imu.installWasmIMU()
++  }
+   if (!Modules.has('wasm-button-bridge')) return
+   const bridge = Modules.importNow('wasm-button-bridge') as { installWasmButtons?: () => void }
+   bridge.installWasmButtons?.()
+diff --git a/firmware/host/modules/input/manifest_wasm.json b/firmware/host/modules/input/manifest_wasm.json
+index a0980622..22a0cc1d 100644
+--- a/firmware/host/modules/input/manifest_wasm.json
++++ b/firmware/host/modules/input/manifest_wasm.json
+@@ -1,6 +1,15 @@
+ {
+-  "include": ["./manifest.json"],
++  "include": [
++    "./manifest.json"
++  ],
+   "modules": {
+-    "wasm-button-bridge": "./wasm/button-bridge"
++    "wasm-button-bridge": "./wasm/button-bridge",
++    "wasm-imu-bridge": "./wasm/imu-bridge",
++    "time": [
++      "./wasm/time-compat",
++      "$(MODULES)/base/time/wasm/modTime"
++    ],
++    "e021-original-time": "./wasm/pinned-time",
++    "~": "$(MODULES)/base/time/time.js"
+   }
+ }
+diff --git a/firmware/host/modules/input/wasm/imu-bridge.c b/firmware/host/modules/input/wasm/imu-bridge.c
+new file mode 100644
+index 00000000..b9bc1a5d
+--- /dev/null
++++ b/firmware/host/modules/input/wasm/imu-bridge.c
+@@ -0,0 +1,31 @@
++#include "xs.h"
++#include "xsmc.h"
++#include <emscripten.h>
++
++void xs_stackchan_e021_ticks(xsMachine* the) {
++    xsmcSetNumber(xsResult, emscripten_get_now());
++}
++
++void xs_stackchan_e021_available(xsMachine* the) {
++    xsmcSetBoolean(xsResult, EM_ASM_INT({ return !!(stackchanRuntime.host && stackchanRuntime.host.IMU); }));
++}
++void xs_stackchan_e021_take(xsMachine* the) {
++    double ticks = xsmcToNumber(xsArg(0));
++    int available = EM_ASM_INT({
++        const input = stackchanRuntime.host && stackchanRuntime.host.IMU;
++        if (!input) return 0;
++        try {
++            const t = input.take($0);
++            stackchanRuntime.e021Sample = Array.of(t.sample.x,t.sample.y,t.sample.z,t.run,t.caseId,t.sampleId);
++            return 1;
++        } catch (error) { return 0; }
++    }, ticks);
++    if (!available) xsUnknownError("E021 IMU raw sample unavailable or source ended");
++    xsmcVars(1);
++    xsmcSetNewArray(xsResult, 6);
++    for (int i=0; i<6; i++) {
++        double value = EM_ASM_DOUBLE({ return stackchanRuntime.e021Sample[$0]; }, i);
++        xsmcSetNumber(xsVar(0), value);
++        xsmcSetIndex(xsResult, i, xsVar(0));
++    }
++}
+diff --git a/firmware/host/modules/input/wasm/imu-bridge.js b/firmware/host/modules/input/wasm/imu-bridge.js
+new file mode 100644
+index 00000000..f727c288
+--- /dev/null
++++ b/firmware/host/modules/input/wasm/imu-bridge.js
+@@ -0,0 +1,25 @@
++import Time from 'time'
++const available = native('xs_stackchan_e021_available')
++const take = native('xs_stackchan_e021_take')
++class WasmIMU {
++  configure(options) {
++    if (options.order !== 'zxy') throw new Error('E021 expects configured recognizer frame zxy')
++  }
++  sample() {
++    const t = take(Time.ticks)
++    const sample = {accelerometer:{x:t[0],y:t[1],z:t[2]}}
++    const meta = {run:t[3],caseId:t[4],sampleId:t[5],sampleTicks:Time.ticks}
++    globalThis.__coami21 = meta
++    trace(`COAMI21|${JSON.stringify({kind:'raw',meta,sample})}\n`)
++    return sample
++  }
++}
++export function installWasmIMU() {
++  // Owner-approved E021 platform compatibility: pinned WASM xs_time_ticks is a stub.
++  // One real monotonic millisecond domain for original SDK IMU and this driver.
++  trace(`COAMI21|${JSON.stringify({kind:'clock',source:'emscripten_get_now',syntheticClock:false})}\n`)
++  if (!available()) return
++  globalThis.device ??= {}
++  globalThis.device.sensor ??= {}
++  globalThis.device.sensor.IMU = WasmIMU
++}
+diff --git a/firmware/host/modules/input/wasm/pinned-time.js b/firmware/host/modules/input/wasm/pinned-time.js
+new file mode 100644
+index 00000000..a755c23b
+--- /dev/null
++++ b/firmware/host/modules/input/wasm/pinned-time.js
+@@ -0,0 +1,40 @@
++/*
++ * Copyright (c) 2016-2025  Moddable Tech, Inc.
++ *
++ *   This file is part of the Moddable SDK Runtime.
++ * 
++ *   The Moddable SDK Runtime is free software: you can redistribute it and/or modify
++ *   it under the terms of the GNU Lesser General Public License as published by
++ *   the Free Software Foundation, either version 3 of the License, or
++ *   (at your option) any later version.
++ * 
++ *   The Moddable SDK Runtime is distributed in the hope that it will be useful,
++ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *   GNU Lesser General Public License for more details.
++ * 
++ *   You should have received a copy of the GNU Lesser General Public License
++ *   along with the Moddable SDK Runtime.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ */
++
++
++/*
++	time
++*/
++
++class Time {
++	static set(value) { return native("xs_time_set").call(this, value); }
++
++	static get timezone() { return native("xs_time_timezone_get").call(this); }
++	static set timezone(it) { native("xs_time_timezone_set").call(this, it); }
++
++	static get dst() { return native("xs_time_dst_get").call(this); }
++	static set dst(it) { native("xs_time_dst_set").call(this, it); }
++
++	static get ticks() { return native("xs_time_ticks").call(this); }
++
++	static delta(start, end) { return native("xs_time_delta").call(this, start, end); }
++};
++
++export default Time;
+diff --git a/firmware/host/modules/input/wasm/time-compat.js b/firmware/host/modules/input/wasm/time-compat.js
+new file mode 100644
+index 00000000..32f351e8
+--- /dev/null
++++ b/firmware/host/modules/input/wasm/time-compat.js
+@@ -0,0 +1,6 @@
++// E021-only WASM platform adapter. Original pinned time.js/modTime.c stay unchanged.
++import PinnedTime from 'e021-original-time'
++class Time extends PinnedTime {
++  static get ticks() { return native('xs_stackchan_e021_ticks').call(this) }
++}
++export default Time
+diff --git a/web/src/services/simulator/simulator-engine.d.mts b/web/src/services/simulator/simulator-engine.d.mts
+index d2c0b1a7..782bd783 100644
+--- a/web/src/services/simulator/simulator-engine.d.mts
++++ b/web/src/services/simulator/simulator-engine.d.mts
+@@ -43,6 +43,7 @@ export class SimulatorEngine {
+   constructor(options: {
+     viewport: HTMLCanvasElement
+     screen: HTMLCanvasElement
++    imuBridge?: { take(ticks: number): { sample: {x:number;y:number;z:number}; run:number;caseId:number;sampleId:number;offeredTicks:number } }
+     runtimeBaseUrl?: string
+     modStorage?: SimulatorModStorage
+     onStatus?: (status: SimulatorStatus) => void
+diff --git a/web/src/services/simulator/simulator-engine.mjs b/web/src/services/simulator/simulator-engine.mjs
+index 4b30b3ee..242a4884 100644
+--- a/web/src/services/simulator/simulator-engine.mjs
++++ b/web/src/services/simulator/simulator-engine.mjs
+@@ -363,6 +363,7 @@ class WasmView {
+     onModInstallStatus = () => {},
+     onReady = () => {},
+     onError = () => {},
++    imuBridge,
+   }) {
+     this.scene = scene
+     this.screen = screen
+@@ -751,6 +752,7 @@ export class SimulatorEngine {
+     onCameraStatus = () => {},
+     onReady = () => {},
+     onError = () => {},
++    imuBridge,
+     modStorage = createModStorage(),
+     runtimeBaseUrl = new URL('../simulator/', document.baseURI).href,
+   }) {
+@@ -773,6 +775,7 @@ export class SimulatorEngine {
+       onTorque: (torque) => this.scene.setTorqueEnabled(torque),
+     })
+     this.hostBridge = {
++      IMU: imuBridge,
+       Button: this.buttonBridge.Button,
+       AudioOut: this.audioOutBridge,
+       AudioIn: this.audioInBridge,

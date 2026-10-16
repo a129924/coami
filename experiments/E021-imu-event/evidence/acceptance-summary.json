@@ -1,0 +1,86 @@
+{
+  "experiment": "E021",
+  "synthetic": true,
+  "sourceTests": {
+    "status": "PASS",
+    "count": 56
+  },
+  "strictTypecheck": "PASS",
+  "wasmBuild": "PASS",
+  "modBuild": "PASS",
+  "runtime": "PASS",
+  "runtimeReason": "Owner-approved scratch Time.ticks wrapper uses emscripten_get_now(); original SDK recognizer, thresholds and Event bytes retained",
+  "human": "PASS",
+  "hardware": "OUT_OF_SCOPE",
+  "verificationComplete": true,
+  "overallSuccess": true,
+  "events": {
+    "shake": {
+      "recognizerSourceTests": "PASS",
+      "actualRuntime": "PASS",
+      "human": "PASS"
+    },
+    "fallenForward": {
+      "recognizerSourceTests": "PASS",
+      "actualRuntime": "PASS",
+      "human": "PASS"
+    },
+    "fallenBackward": {
+      "recognizerSourceTests": "PASS",
+      "actualRuntime": "PASS",
+      "human": "PASS"
+    },
+    "fallenLeft": {
+      "recognizerSourceTests": "PASS",
+      "actualRuntime": "PASS",
+      "human": "PASS"
+    },
+    "fallenRight": {
+      "recognizerSourceTests": "PASS",
+      "actualRuntime": "PASS",
+      "human": "PASS"
+    },
+    "upsideDown": {
+      "recognizerSourceTests": "PASS",
+      "actualRuntime": "PASS",
+      "human": "PASS"
+    }
+  },
+  "auxiliary": {
+    "archify": "PASS showcase9/9 and visual containment/manual inspection",
+    "graphify": "source fallback; no usable graph",
+    "prLens": "PASS local validate/render and independent review; historical base34fd88c/headf0eec2b snapshot, external outputs in auxiliary.md"
+  },
+  "automatedRuntimeChecks": 53,
+  "fullVerification": true,
+  "humanCases": {
+    "passed": 53,
+    "required": 53,
+    "remaining": 0
+  },
+  "humanEvidenceReview": "APPROVED",
+  "verificationScope": "E021 controlled synthetic software/runtime and owner-operated simulator cases only",
+  "hardwareVerified": false,
+  "productionAdopted": false,
+  "limitations": [
+    "Fault/lifecycle setup and pagehide observation were owner DevTools-assisted operations.",
+    "Timeout exports show terminal reason without exact firing timestamp; inspected policy and controlled setup support classification.",
+    "Ideal synthetic configured-frame samples do not establish physical mounting direction, sensitivity or false-positive rate.",
+    "Clock compatibility and raw IMU provider are E021 scratch extensions, not upstream native support."
+  ],
+  "prReviewRevalidation": {
+    "status": "PASS",
+    "capturedAt": "2026-10-16T03:28:23.774Z",
+    "sourceTests": 56,
+    "strictTypecheck": "PASS",
+    "actualBrowserCases": 53,
+    "nonPass": 0,
+    "browserExceptions": 0,
+    "cliExitCode": 0,
+    "exactRequiredIds": true,
+    "originalRuntimeAndHumanEvidenceUnchanged": true,
+    "independentReview": "APPROVED",
+    "sourceAttestation": "PASS current patch/mod.ts/observer.ts; initial/final served and per-run provenance checked",
+    "completeModPublicationFixtures": "PASS isolated actual scripts; compiler mocked"
+  }
+}
