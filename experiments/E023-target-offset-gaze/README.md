@@ -133,6 +133,8 @@ node scripts/blocked-ui-smoke.mjs
 
 ## 結論與限制
 
+目前能力限制的查詢入口見 [Robot 注視限制](../../docs/limitations/robot-gaze.md)；本實驗保留參數、程序與原始證據，限制文件摘要已確認結果及尚未實作的後續建議。
+
 本輪已回答固定案例集合下的問題：**原版 SDK 無法滿足全部閉環置中判準**。計算與傳遞可執行，但30°門檻與近中心精細置中需求不相容；四案保留失敗。SDK修復、真實相機與實機外推仍不在範圍，依賴一般收斂能力的決策不能前進。
 
 Graphify 是導覽輔助，重要關係已回查 source。PR Lens 只呈現實際變更與必要 unchanged SDK／runtime neighbors，不能取代 human code review。所有輔助工作共用90分鐘上限，不用圖表結果升級主實驗狀態。
