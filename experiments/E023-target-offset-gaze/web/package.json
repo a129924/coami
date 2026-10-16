@@ -16,7 +16,7 @@
     "test:mod": "node --test scripts/mod-contract.test.mjs",
     "prepare:host": "node scripts/prepare-assets.mjs",
     "test:runtime": "node scripts/runtime-run.mjs",
-    "test:tools": "node --test scripts/source-cleanliness.test.mjs scripts/process-start.test.mjs scripts/run-build.test.mjs scripts/run-cases.test.mjs scripts/run-dependencies.test.mjs"
+    "test:tools": "node --test scripts/source-cleanliness.test.mjs scripts/process-start.test.mjs scripts/run-build.test.mjs scripts/run-cases.test.mjs scripts/run-dependencies.test.mjs scripts/run-python.test.mjs scripts/run-mod.test.mjs"
   },
   "dependencies": {
     "three": "0.185.1"

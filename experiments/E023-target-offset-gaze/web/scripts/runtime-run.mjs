@@ -2,6 +2,8 @@
 import {spawn} from 'node:child_process'
 import {startProcess,terminate} from './process-start.mjs'
 import {cleanBuild,assertBuildCurrent} from './run-build.mjs'
+import {preparePython,verifyPython} from './run-python.mjs'
+import {verifyPreparedMod} from './run-mod.mjs'
 import {selectCases,suiteState,requireSelectedCase} from './run-cases.mjs'
 import {mkdtemp,mkdir,writeFile,readFile,rm} from 'node:fs/promises'
 import {createHash} from 'node:crypto'
@@ -20,12 +22,15 @@ async function save(){await writeFile(path.join(directory,'report.json'),JSON.st
 
 try{
  const selected=selectCases(process.env.E023_CASES)
+ report.python=await preparePython(root)
  const build=await cleanBuild(root)
+ report.mod=await verifyPreparedMod(root,build)
  report.build=build
  await writeFile(path.join(directory,'source-inputs.json'),JSON.stringify({capturedAt:new Date().toISOString(),sha256:build.sourcesSha256},null,2)+'\n')
  await assertBuildCurrent(root,build)
  preview=await startProcess(process.execPath,[path.join(web,'node_modules/vite/bin/vite.js'),'preview','--host','127.0.0.1','--port','5203','--strictPort'],web,'127.0.0.1:5203')
- server=await startProcess(path.join(root,'server/.venv/bin/python'),['-m','uvicorn','app:app','--host','127.0.0.1','--port','8230'],path.join(root,'server'),'Uvicorn running on')
+ await verifyPython(root,report.python)
+ server=await startProcess(path.join(root,'server/.venv/bin/python'),['-I','-B','-m','uvicorn','app:app','--app-dir',path.join(root,'server'),'--host','127.0.0.1','--port','8230'],path.join(root,'server'),'Uvicorn running on')
  chrome=spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',['--headless=new','--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows','--no-first-run','--no-default-browser-check','--remote-debugging-port=0',`--user-data-dir=${profile}`,'--use-angle=swiftshader','--enable-unsafe-swiftshader','about:blank'],{stdio:['ignore','ignore','pipe']})
  const port=await new Promise((resolve,reject)=>{let log='';const timer=setTimeout(()=>reject(Error('Chrome startup timeout '+log)),10000);chrome.once('error',reject);chrome.stderr.on('data',chunk=>{log+=chunk;const match=log.match(/DevTools listening on ws:\/\/127\.0\.0\.1:(\d+)/);if(match){clearTimeout(timer);resolve(Number(match[1]))}})})
  const pages=await(await fetch(`http://127.0.0.1:${port}/json/list`)).json()
@@ -59,6 +64,7 @@ try{
   console.log(JSON.stringify(cases.at(-1)));await save()
   if(state.result.state==='無法判定')throw Error('case evidence/transport blocker: '+state.result.reason)
  }
+ await verifyPython(root,report.python)
  report.state=suiteState(cases)
  if(errors.length)throw Error('browser exception(s) captured')
  await save();console.log(JSON.stringify({state:report.state,cases:cases.length,directory}))
@@ -69,5 +75,6 @@ try{
 }finally{
  ws?.close()
  await Promise.all([chrome,preview,server].map(child=>terminate(child,3000)))
+ if(report.python){try{await verifyPython(root,report.python)}catch(error){report.state='無法判定';report.reason=String(error);process.exitCode=1;await save()}}
  await rm(profile,{recursive:true,force:true,maxRetries:3,retryDelay:100})
 }

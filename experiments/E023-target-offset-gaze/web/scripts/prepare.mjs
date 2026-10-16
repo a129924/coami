@@ -1,5 +1,7 @@
 /** No SDK patch or compiler installation: package the MOD with pinned SDK tools. */
 import {execFileSync} from 'node:child_process'
+import {installDependencies,verifyDependencies} from './run-dependencies.mjs'
+import {verifyVendor} from './build-safety.mjs'
 import {readFile,writeFile,mkdir,cp,rm} from 'node:fs/promises'
 import {createHash} from 'node:crypto'
 import path from 'node:path'
@@ -10,8 +12,12 @@ const git=(args,cwd)=>execFileSync('git',args,{cwd,encoding:'utf8'}).trim()
 await mkdir(out,{recursive:true});await rm(path.join(out,'public'),{recursive:true,force:true})
 try{
  if(git(['rev-parse','HEAD:vendor/stack-chan'],repo)!==pin||git(['rev-parse','HEAD'],vendor)!==pin||git(['status','--porcelain=v1','--untracked-files=all'],vendor))throw Error('pinned vendor mismatch/dirty')
+ const dependencies=await installDependencies(web)
+ const modSources={}
+ for(const file of ['mod.ts','protocol.ts'])modSources[file]=sha(await readFile(path.join(web,'../mod',file)))
  const publicRoot=path.join(out,'public');await mkdir(publicRoot,{recursive:true})
  const emitted=path.join(out,'mod')
+ await rm(emitted,{recursive:true,force:true})
  execFileSync(path.join(web,'node_modules/.bin/tsc'),['-p',path.join(web,'../mod/tsconfig.json'),'--noEmit','false','--outDir',emitted],{stdio:'inherit'})
  const {buildModArchive,isXsArchive}=await import(pathToFileURL(path.join(vendor,'web/editor/mod-builder.mjs')))
  const {default:createTools}=await import(pathToFileURL(path.join(vendor,'web/editor/vendor/tools.js')))
@@ -19,9 +25,11 @@ try{
  const archive=await buildModArchive(createTools,{modJs,name:'coami-e023',files:[{path:'protocol.js',bytes:protocol}],manifest:{modules:{'*':['./mod','./protocol']}}})
  if(!isXsArchive(archive))throw Error('invalid MOD archive')
  await writeFile(path.join(out,'coami-mod.xsa'),archive)
- const modSources={}
- for(const file of ['mod.ts','protocol.ts'])modSources[file]=sha(await readFile(path.join(web,'../mod',file)))
- await writeFile(path.join(out,'mod-provenance.json'),JSON.stringify({sha256:sha(archive),sources:modSources,sourceCommit:pin},null,2)+'\n')
+ await verifyDependencies(web,dependencies)
+ verifyVendor(repo,vendor,pin)
+ for(const file of ['mod.ts','protocol.ts'])if(sha(await readFile(path.join(web,'../mod',file)))!==modSources[file])throw Error('MOD sources changed during compilation')
+ const modBuild={dependencies,sources:modSources,archiveSha256:sha(archive)}
+ await writeFile(path.join(out,'mod-provenance.json'),JSON.stringify({sha256:sha(archive),sources:modSources,sourceCommit:pin,modBuild},null,2)+'\n')
  const runtime=process.env.E023_RUNTIME_DIR
  if(!runtime)throw Error('E023_RUNTIME_DIR is required; no pinned WASM host is bundled')
  const fixed=JSON.parse(await readFile(path.join(web,'src/runtime-pin.json'),'utf8'))
@@ -37,7 +45,7 @@ try{
  const sources={}
  for(const file of ['mod.ts','protocol.ts'])sources[`mod/${file}`]=sha(await readFile(path.join(web,'../mod',file)))
  for(const file of ['src/services/simulator/simulator-engine.mjs','simulator/geometry.mjs','simulator/bridge.mjs'])sources[`vendor/web/${file}`]=sha(await readFile(path.join(vendor,'web',file)))
- await writeFile(path.join(publicRoot,'runtime-provenance.json'),JSON.stringify({experiment:'E023',sourceCommit:pin,hashes,sources,limitation:'Exact E023 source-built runtime bytes; full build provenance is recorded separately in evidence/host-runtime-provenance.json'},null,2)+'\n')
+ await writeFile(path.join(publicRoot,'runtime-provenance.json'),JSON.stringify({experiment:'E023',sourceCommit:pin,hashes,sources,modBuild,limitation:'Exact E023 source-built runtime bytes; full build provenance is recorded separately in evidence/host-runtime-provenance.json'},null,2)+'\n')
  await writeFile(path.join(out,'preflight.json'),JSON.stringify({status:'prepared',hashes},null,2)+'\n')
  console.log('Prepared exact pinned host and E023 MOD; roundtrip NOT yet executed')
 }catch(error){
