@@ -1,0 +1,42 @@
+
+> coami-e023-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ rendered transform, not commanded rotation, determines projection (1.280875ms)
+✔ fixed target projection at compound initial orientation and scale (0.221708ms)
+✔ all fifteen predeclared cases and persistent oscillation rule (0.094542ms)
+✔ all axes, signed and near center roundtrip without motion (1.378958ms)
+✔ malformed, replay, reordered and timed out frames never commit (0.101834ms)
+✔ all encoded points avoid host AppBar (0.084166ms)
+✔ reject invalid target and sequence (0.439917ms)
+✔ receiver freshness and pending gate fail closed (0.123917ms)
+✔ malformed command rejected at wire boundary (0.083542ms)
+✔ real Piu event kinds and expiry prevent a later commit (0.80775ms)
+✖ expiry during began prevents ended delivery and SDK frame commit (0.600834ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 10
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 144.595125
+
+✖ failing tests:
+
+test at src/protocol.test.ts:85:1
+✖ expiry during began prevents ended delivery and SDK frame commit (0.600834ms)
+  AssertionError [ERR_ASSERTION]: expired ended event was never sent
+
+  2 !== 0
+
+      at TestContext.<anonymous> (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/src/protocol.test.ts:102:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

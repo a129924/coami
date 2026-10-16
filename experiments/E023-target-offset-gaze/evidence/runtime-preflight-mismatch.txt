@@ -1,0 +1,12 @@
+
+> coami-e023-web@0.1.0 prepare:poc
+> node scripts/prepare.mjs
+
+file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/prepare.mjs:29
+  const bytes=await readFile(path.join(runtime,name));if(sha(bytes)!==expected)throw Error(`runtime hash mismatch: ${name}`)
+                                                                                     ^
+
+Error: runtime hash mismatch: mc.js
+    at file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/prepare.mjs:29:86
+
+Node.js v26.10.0

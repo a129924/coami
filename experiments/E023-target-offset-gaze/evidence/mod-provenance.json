@@ -1,0 +1,8 @@
+{
+  "sha256": "ac45672490246d161d003e90b6078f65c699628501ebd9dc11b5e8cbfdac43b4",
+  "sources": {
+    "mod.ts": "151f81f72628ca01dcc868422d2afd4adbc7eeaa56cc5bb9791057e559d981a8",
+    "protocol.ts": "e9fd1ff261e1b66c7a53b64e2785fa2b7497b161333af03aca0e10fa989ad21a"
+  },
+  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322"
+}

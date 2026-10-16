@@ -1,0 +1,1 @@
+PASS: actual installed dependency tree and lock, source and complete dist, vendor pin/gitlink and clean tree match the full-run attestation

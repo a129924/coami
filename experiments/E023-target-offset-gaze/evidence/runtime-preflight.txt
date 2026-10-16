@@ -1,0 +1,12 @@
+
+> coami-e023-web@0.1.0 prepare:poc
+> node scripts/prepare.mjs
+
+file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/prepare.mjs:23
+ if(!runtime)throw Error('E023_RUNTIME_DIR is required; no pinned WASM host is bundled')
+                   ^
+
+Error: E023_RUNTIME_DIR is required; no pinned WASM host is bundled
+    at file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/prepare.mjs:23:20
+
+Node.js v26.10.0

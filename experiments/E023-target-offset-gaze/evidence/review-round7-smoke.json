@@ -1,0 +1,31 @@
+{
+  "check": "PASS",
+  "state": "partial",
+  "run_id": "WASM-2026-10-16T08-51-58-817Z",
+  "source_commit": "52ba646921b3a68d17cce740ad9cbc1f98cf4f30",
+  "source_blobs_verified": true,
+  "controlled_environment_recorded": true,
+  "browser_exceptions": 0,
+  "cases": [
+    {
+      "id": "TC-E2E-01",
+      "result": {
+        "state": "成功",
+        "controls": 0
+      },
+      "probes": 6,
+      "sdk_calls": 0
+    },
+    {
+      "id": "TC-E2E-10",
+      "result": {
+        "state": "失敗",
+        "reason": "iteration_limit",
+        "controls": 20
+      },
+      "probes": 6,
+      "sdk_calls": 20
+    }
+  ],
+  "limitation": "Two selected cases only; not a complete 15-case convergence verification. Host not rebuilt."
+}

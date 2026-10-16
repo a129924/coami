@@ -1,0 +1,14 @@
+
+> coami-e023-web@0.1.0 test:mod
+> node --test scripts/mod-contract.test.mjs
+
+✔ probe never calls SDK; initialize before arbitrary target; replay and pending rejected (1.780708ms)
+✔ SDK synchronous failure remains failed rather than returned (0.172792ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 138.35775

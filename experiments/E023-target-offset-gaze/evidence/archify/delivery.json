@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "sequence",
+  "input": "/private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/evidence/archify/diagram.json",
+  "output": "/private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/evidence/archify/diagram.html",
+  "specification": {
+    "sha256": "4aeec4717eca788d6fe5829d91e1cc9a18afe1971b7235d880513536ce931175",
+    "bytes": 2126
+  },
+  "artifact": {
+    "sha256": "053800e20af33f100be2fd92387b8a166caea5b323384094124ead5fa5b370cc",
+    "bytes": 699647
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}

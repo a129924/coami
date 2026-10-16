@@ -1,0 +1,24 @@
+npm error code ENOTCACHED
+npm error request to https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.2.tgz failed: cache mode is 'only-if-cached' but no cached response is available.
+npm error A complete log of this run can be found in: /Users/andrew/.npm/_logs/2026-10-16T07_44_33_537Z-debug-0.log
+node:internal/errors:999
+  const err = new Error(message);
+              ^
+
+Error: Command failed: npm ci --offline --ignore-scripts --no-audit --no-fund
+    at genericNodeError (node:internal/errors:999:15)
+    at wrappedFn (node:internal/errors:544:14)
+    at checkExecSyncError (node:child_process:943:11)
+    at execFileSync (node:child_process:979:15)
+    at installDependencies (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-dependencies.mjs:9:2)
+    at async cleanBuild (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-build.mjs:39:21)
+    at async file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/[eval1]:2:16 {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 79655,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v26.10.0

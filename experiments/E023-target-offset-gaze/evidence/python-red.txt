@@ -1,0 +1,21 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.12, pytest-9.1.1, pluggy-1.6.0
+rootdir: /private/tmp/E023-target-offset-gaze/feature-worktree
+plugins: anyio-4.15.1
+collected 0 items / 1 error
+
+==================================== ERRORS ====================================
+_ ERROR collecting experiments/E023-target-offset-gaze/tests/test_calculator.py _
+ImportError while importing test module '/private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/tests/test_calculator.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+experiments/E023-target-offset-gaze/tests/test_calculator.py:8: in <module>
+    from calculator import ObservationError, Session, calculate, parse_observation
+E   ModuleNotFoundError: No module named 'calculator'
+=========================== short test summary info ============================
+ERROR experiments/E023-target-offset-gaze/tests/test_calculator.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+=============================== 1 error in 0.06s ===============================

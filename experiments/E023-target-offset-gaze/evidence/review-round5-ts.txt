@@ -1,0 +1,23 @@
+
+> coami-e023-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ rendered transform, not commanded rotation, determines projection (1.402041ms)
+✔ fixed target projection at compound initial orientation and scale (0.247834ms)
+✔ all fifteen predeclared cases and persistent oscillation rule (0.096792ms)
+✔ all axes, signed and near center roundtrip without motion (0.863666ms)
+✔ malformed, replay, reordered and timed out frames never commit (0.103208ms)
+✔ all encoded points avoid host AppBar (0.086958ms)
+✔ reject invalid target and sequence (0.1365ms)
+✔ receiver freshness and pending gate fail closed (0.397791ms)
+✔ malformed command rejected at wire boundary (0.081708ms)
+✔ real Piu event kinds and expiry prevent a later commit (0.174667ms)
+✔ expiry during began prevents ended delivery and SDK frame commit (0.21975ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 108.515083

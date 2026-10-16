@@ -1,0 +1,34 @@
+
+> coami-e023-web@0.1.0 test:tools
+> node --test scripts/source-cleanliness.test.mjs scripts/process-start.test.mjs scripts/run-build.test.mjs scripts/run-cases.test.mjs scripts/run-dependencies.test.mjs scripts/run-python.test.mjs scripts/run-mod.test.mjs
+
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=false) (510.336209ms)
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=true) (605.286708ms)
+✔ ready child is returned to caller; startup timeout is cancelled (456.704041ms)
+✔ early exit and spawn failure reject promptly (64.000959ms)
+✔ normal teardown escalates a ready child ignoring SIGTERM and is safe to repeat (155.055625ms)
+✔ clean build replaces stale dist and binds sources to output; later edits rejected (337.884625ms)
+✔ a source edit during the build cannot produce attributed evidence (202.200417ms)
+✔ vendor source mutation is rejected before build (95.92325ms)
+✔ vendor source mutation is rejected during build (201.422875ms)
+✔ vendor source mutation is rejected after build (214.972208ms)
+✔ installed dependency edits rejected during bundling (185.546167ms)
+✔ installed dependency edits rejected after bundling (207.637ms)
+✔ case selector rejects duplicates, omissions disguised by bad indices, and malformed values (1.328542ms)
+✔ only exact unique case identities can yield a complete suite (0.25325ms)
+
+up to date in 231ms
+✔ actual npm ci removes modified installed modules; later dependency or lock edits fail attestation (325.301875ms)
+✔ MOD artifact requires matching clean compiler, source and archive attestation (15.153916ms)
+✔ Python attestation rejects installed package, interpreter, stdlib and lock edits (17.329458ms)
+✔ runner recreates the old venv before locked reinstall and attestation (4.315833ms)
+✔ compiler sources reject untracked headers and CMake inputs before rebuilding (147.293917ms)
+✔ compiler rebuilds reject dirty sources or changed HEAD before tool attestation (272.821875ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1878.569083

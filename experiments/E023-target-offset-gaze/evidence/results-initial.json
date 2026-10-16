@@ -1,0 +1,74 @@
+{
+  "experiment": "E023",
+  "state": "無法判定",
+  "question": "Can synthetic offset -> Python -> real full WASM SDK -> rendered feedback converge?",
+  "reason": "Pinned host unavailable; located E001 mc.js/mc.wasm differ from required E019 hashes. No compiler installation or substitute runtime allowed.",
+  "runtime_probe": "未執行",
+  "controls_executed": 0,
+  "sdk_calls_executed": 0,
+  "cases": [
+    {
+      "id": "TC-E2E-01",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-02",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-03",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-04",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-05",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-06",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-07",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-08",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-09",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-10",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-11",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-12",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-13",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-14",
+      "state": "未執行"
+    },
+    {
+      "id": "TC-E2E-15",
+      "state": "未執行"
+    }
+  ],
+  "verification_task_complete": false,
+  "record_complete": true,
+  "decision": "Do not advance decisions depending on convergence; hand implementation and explicit blocker to human review."
+}

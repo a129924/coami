@@ -1,0 +1,38 @@
+
+> coami-e023-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ rendered transform, not commanded rotation, determines projection (1.025875ms)
+✔ fixed target projection at compound initial orientation and scale (0.220791ms)
+✔ all fifteen predeclared cases and persistent oscillation rule (0.091ms)
+✔ all axes, signed and near center roundtrip without motion (0.816041ms)
+✔ malformed, replay, reordered and timed out frames never commit (0.098417ms)
+✔ all encoded points avoid host AppBar (0.094208ms)
+✔ reject invalid target and sequence (0.130417ms)
+✔ receiver freshness and pending gate fail closed (2.057208ms)
+✔ malformed command rejected at wire boundary (0.135459ms)
+✔ real Piu event kinds and expiry prevent a later commit (0.218125ms)
+✔ expiry during began prevents ended delivery and SDK frame commit (0.256542ms)
+✖ rotation-tolerant commands normalize before bounded frame encoding (0.12525ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 111.282041
+
+✖ failing tests:
+
+test at src/protocol.test.ts:106:1
+✖ rotation-tolerant commands normalize before bounded frame encoding (0.12525ms)
+  Error: invalid command
+      at parseCommand (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/src/receiver.ts:14:15)
+      at TestContext.<anonymous> (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/src/protocol.test.ts:109:24)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
