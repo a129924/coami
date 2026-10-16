@@ -1,6 +1,6 @@
 import {prepareCompilerEnvironment,rebuildFontbm} from './tool-inputs.mjs'
 import {verifyStagedHost} from './host-inputs.mjs'
-import {rebuildModdableTools,replaceCache} from './build-safety.mjs'
+import {rebuildModdableTools,replaceCache,verifyCleanSource} from './build-safety.mjs'
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { createReadStream } from 'node:fs'
@@ -77,8 +77,7 @@ try {
   if (checkoutRoot !== moddableRoot) throw new Error('MODDABLE is not the checkout root')
   const sourceCommit = output('git', ['rev-parse', 'HEAD'], { cwd: moddableRoot })
   if (sourceCommit !== PINNED_MODDABLE_COMMIT) throw new Error(`Moddable source commit is ${sourceCommit}`)
-  const trackedChanges = output('git', ['status', '--porcelain=v1', '--untracked-files=no'], { cwd: moddableRoot })
-  if (trackedChanges) throw new Error('Moddable source has tracked changes')
+  verifyCleanSource(moddableRoot, 'Moddable')
   moddableVersion = (await readFile(path.join(moddableRoot, 'tools/VERSION'), 'utf8')).trim()
   if (moddableVersion !== '9.5.0') throw new Error(`Moddable 9.5.0 required, found ${moddableVersion}`)
   await rebuildModdableTools(moddableRoot)
@@ -106,8 +105,7 @@ try {
   if (checkoutRoot !== emsdkRoot) throw new Error('EMSDK is not the checkout root')
   const sourceCommit = output('git', ['rev-parse', 'HEAD'], { cwd: emsdkRoot })
   if (sourceCommit !== PINNED_EMSDK_COMMIT) throw new Error(`emsdk source commit is ${sourceCommit}`)
-  const trackedChanges = output('git', ['status', '--porcelain=v1', '--untracked-files=no'], { cwd: emsdkRoot })
-  if (trackedChanges) throw new Error('emsdk source has tracked changes')
+  verifyCleanSource(emsdkRoot, 'emsdk')
   const releases = JSON.parse(await readFile(path.join(emsdkRoot, 'emscripten-releases-tags.json'), 'utf8'))
   if (releases.releases['5.0.1'] !== PINNED_EMSCRIPTEN_RELEASE)
     throw new Error('emsdk 5.0.1 release mapping differs from the pinned package')
@@ -139,7 +137,7 @@ try {
  if(checkoutRoot!==fontbmSourceRoot)throw Error('fontbm source is not the checkout root')
  fontbmCommit=output('git',['rev-parse','HEAD'],{cwd:fontbmSourceRoot})
  if(fontbmCommit!==PINNED_FONTBM_COMMIT)throw Error(`fontbm source commit is ${fontbmCommit}`)
- if(output('git',['status','--porcelain=v1','--untracked-files=no'],{cwd:fontbmSourceRoot}))throw Error('fontbm source has tracked changes')
+ verifyCleanSource(fontbmSourceRoot, 'fontbm')
  const expected=path.join(fontbmSourceRoot,'build/fontbm')
  if(process.env.FONTBM && path.resolve(process.env.FONTBM)!==expected)throw Error('FONTBM must select the clean-built source target')
  await rebuildFontbm(fontbmSourceRoot)

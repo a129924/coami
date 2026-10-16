@@ -26,3 +26,9 @@ export async function rebuildModdableTools(root,run=execFileSync){
  for(const file of ['xs/makefiles/mac/xsc.mk','xs/makefiles/mac/xsid.mk','xs/makefiles/mac/xsl.mk','build/makefiles/mac/tools.mk'])
   run('/usr/bin/make',['GOAL=release','-f',path.join(root,file)],{cwd,env,stdio:'inherit'})
 }
+
+// Ignored build outputs remain allowed; untracked source/build inputs do not.
+export function verifyCleanSource(root,label){
+ const status=execFileSync('git',['status','--porcelain=v1','--untracked-files=all'],{cwd:root,encoding:'utf8'}).trim()
+ if(status)throw Error(`${label} source has tracked or untracked changes`)
+}
