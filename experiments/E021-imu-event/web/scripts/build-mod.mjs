@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
-import { mkdir, readFile, writeFile, rm } from 'node:fs/promises'
+import { mkdir, readFile, writeFile, rm, mkdtemp, rename } from 'node:fs/promises'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import path from 'node:path'
 import { verifyVendor, base, patch } from './stage-host.mjs'
@@ -38,10 +38,22 @@ const archive = await buildModArchive(createTools, {
 })
 if (!isXsArchive(archive)) throw new Error('MOD compiler did not produce an XS archive')
 await mkdir(outputDirectory, { recursive: true })
-await writeFile(archivePath, archive)
 provenance.mod = { sha256: sha256(archive), sourceSha256: {} }
 for (const file of ['mod.ts', 'observer.ts']) provenance.mod.sourceSha256[file] = sha256(await readFile(path.join(experimentRoot, 'mod', file)))
 const provenanceBytes = `${JSON.stringify(provenance, null, 2)}\n`
-await writeFile(provenancePath, provenanceBytes)
-await writeFile(path.join(experimentRoot, 'evidence/runtime-provenance.json'), provenanceBytes)
+// Publish accepted evidence only after the complete runtime/MOD build succeeds.
+let temporary
+try {
+  await writeFile(archivePath, archive)
+  await writeFile(provenancePath, provenanceBytes)
+  temporary = await mkdtemp(path.join(experimentRoot, 'evidence/.runtime-provenance-'))
+  const staged = path.join(temporary, 'provenance.json')
+  await writeFile(staged, provenanceBytes)
+  await rename(staged, path.join(experimentRoot, 'evidence/runtime-provenance.json'))
+} catch (error) {
+  await rm(outputDirectory, { recursive: true, force: true })
+  throw error
+} finally {
+  if (temporary) await rm(temporary, { recursive: true, force: true })
+}
 console.log(`Built coami-mod.xsa (${archive.length} bytes)`)
