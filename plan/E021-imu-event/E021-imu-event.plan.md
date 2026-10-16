@@ -39,10 +39,10 @@
 
 ## Status / Allowed Transitions
 
-- **Current**: `pr-open`.
-- **Next actor**: Human reviewer.
-- **Stage-local action**: PR #21 Ready for owner review; all five addressed threads replied/resolved after verified push, no merge/release authorization.
-- **Allowed next transition**: `pr-open→needs-rework|merged` only with applicable new human action/authorization.
+- **Current**: `publish-in-progress`.
+- **Next actor**: Main Agent.
+- **Stage-local action**: Commit and push the independently approved R4–R5 fixes, verify real PR head, then reply/resolve the two second-pass threads.
+- **Allowed next transition**: `publish-in-progress→pr-open` after verified pushed fixes and thread replies/resolution.
 - **Allowed**：`planned→creator-in-progress→review-ready→reviewer-in-progress`；`reviewer-in-progress→approved|needs-rework`；`needs-rework→creator-in-progress`；`approved→creator-in-progress|publish-in-progress`；`publish-in-progress→pr-open|merged`；`pr-open→needs-rework|merged`；`merged→terminal`。
 - Owner 的 clock scope choice 已明確解除，依授權派 Implementer 執行 bounded compatibility 並交獨立 Reviewer 核對 delta；原 readiness verdict 不代表新 runtime 通過。步驟／rework 未完維持 creator-in-progress；completion gate 只讀 step 的 Implementation Steps `[X]` 與證據。無 round cap／release transition。
 - Owner 已授權通過 review gates 後的 bounded commits／push／Draft PR，STOP POINT 1 無須再索取相同授權；STOP POINT 2 仍止於 human review，不 merge、不 release。
@@ -51,6 +51,8 @@
 
 - 2026-10-16 PR #21 bounded rework follows `pr-open→needs-rework→creator-in-progress`; all five review findings are ADDRESS. Existing owner authorization includes bounded fix commits/push, explicit review replies and resolving threads. Resolve a thread only after its verified fix has been pushed and checked at the real PR head; do not conflate authoring, review, push or resolution. Draft PR remains open; no merge/release authority.
 - 本輪只修 smoke 驗證／CLI verdict、preflight provenance 保留與過時 TOOLCHAIN 狀態；原 IMU algorithm／provider／clock／Event、runtime bytes 及原始人工證據唯讀。既有2026-10-15 human53/53與獨立核准保留為歷史 accepted evidence；不能冒稱本輪新 predicate rerun 已通過。因 runtime/source bytes 不變，不要求 runtime rebuild 或人工重跑；修正後仍必須完整實際53-case browser smoke 與獨立 review。
+
+- PR21 second review pass2026-10-16: `pr-open→needs-rework→creator-in-progress`, two P1 findings ADDRESS. R4 supersedes the earlier runtime-tail publication criterion: accepted ledger is published only after complete successful MOD production, never by runtime preparation alone. R5 requires current-source attestation of served and per-run provenance. Existing owner bounded fix/commit/push/reply/resolve authorization and independent gates apply; resolve only after verified fixes are pushed and the real PR head is checked. Current PR remains Ready/open; no merge/release or human rerun.
 
 ## Artifact Paths
 
@@ -67,6 +69,8 @@
 | F／Implementer：Archify | `diagram/imu-flow.json`、`diagram/imu-flow.html`、`diagram/imu-flow.delivery.json`、`diagram/imu-flow.visual-check.json`、`diagram/imu-flow.visual-check.html`、`diagram/imu-flow.visual-check.1440x900.light.png`、`diagram/imu-flow.visual-check.1440x900.dark.png`、`diagram/imu-flow.visual-check.2048x1320.light.png`、`diagram/imu-flow.visual-check.2048x1320.dark.png` |
 | G／Implementer：PR21 新增純 predicates／negative fixtures | `web/scripts/smoke-verdict.mjs`、`web/scripts/smoke-verdict.test.mjs` |
 | H／Implementer、Tester：PR21 bounded existing Modify | `web/scripts/runtime-smoke.mjs`、`web/scripts/prepare-runtime.mjs`、`web/scripts/pin.test.mjs`、`web/package.json`、`runtime/TOOLCHAIN.md`、`evidence/validation.txt`、`evidence/runtime-automated.json`、`evidence/runtime-visible.png`、`evidence/imu-run.md`、`evidence/acceptance-summary.json`、`README.md` |
+| I／Implementer：second-pass Node source attestation／regressions | `web/scripts/source-provenance.mjs`、`web/scripts/source-provenance.test.mjs` |
+| J／Implementer、Tester：second-pass existing Modify | `web/scripts/prepare-runtime.mjs`、`web/scripts/build-mod.mjs`、`web/scripts/pin.test.mjs`、`web/scripts/runtime-smoke.mjs`、`web/scripts/smoke-verdict.mjs`、`web/scripts/smoke-verdict.test.mjs`、`runtime/TOOLCHAIN.md`、`evidence/validation.txt`、`evidence/runtime-automated.json`、`evidence/runtime-visible.png`、`evidence/imu-run.md`、`evidence/acceptance-summary.json`、`README.md` |
 
 Ignored outputs 限 `web/generated/`（E021 scratch SDK／toolchain／runtime）、`web/node_modules/`、`web/dist/`；Archify CLI 同目錄 private snapshot 為其生成工件，依 receipt 記錄，不手改。P 的 plan／step／review-log 分屬規劃／追蹤／審查角色，不混入實作九欄的 creator 成果。
 
@@ -181,6 +185,39 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 | Non-Goal | 不把本輪未跑結果或source tests冒成browser PASS，不把舊human驗收改為未執行，不自行宣稱review/gate/push/resolve完成。 |
 | TestCase | TC-R21-FULL、TC-R21-DOCS，重跑全部53案例，核對current served hashes不變、zero browserErrors與CLI exit；歷史previousAttempts及原人工證據保留。 |
 
+
+### PR #21 second-pass bounded rework — 2026-10-16
+
+R1–R3 與原53 PASS／人工證據保留為歷史；本輪 R4–R5 pending。RO-R21 繼續適用，唯一 script 例外為 R4 可修改 `web/scripts/build-mod.mjs` 的 provenance publication。原 UI／MOD／wasm patch／SDK／clock capability／runtime bytes、真實 accepted ledger 與原人工 exports 均唯讀；完整 pipeline 成功／失敗回歸只在隔離 fixture（mock external compiler、執行真實 scripts）操作 ledger copies，不重建真實 runtime。新增 Node helper 不修改 `main.ts`，無新 runtime capability／repo artifact 除 I 兩檔。
+
+- [ ] **R4 — 完整 MOD 成功後才發布 accepted ledger**
+
+| 欄位 | 約束 |
+|---|---|
+| In-Scope | Runtime preparation 只 stage public provenance；build-mod 成功編譯並完成 runtime＋MOD public provenance 後才 temp＋rename 原子發布完整 tracked ledger；所有前置／MOD／發布失敗保留舊 ledger。 |
+| Out-Of-Scope | Runtime rebuild、新 capability、UI／MOD／patch／Time source 修改、人工重跑或改 accepted evidence。 |
+| ReadOnly | RO-R21；build-mod publication 為本步明列例外；真實 accepted ledger／runtime／人工 bytes 不改，fixtures 操作 copies。 |
+| Written | none。 |
+| Deleted | Repo files none；只清除隔離 fixture 的 stale generated runnable／本次 temp，不刪 accepted ledger／歷史 evidence。 |
+| Modify | web/scripts/prepare-runtime.mjs、web/scripts/build-mod.mjs、web/scripts/pin.test.mjs。 |
+| Goal | Runtime 成功但 MOD 未執行／編譯失敗時，accepted ledger 仍逐 byte 等於舊完整紀錄；唯完整 pipeline 成功才 atomic 發布含 MOD 的新 ledger。 |
+| Non-Goal | 不讓 runtime-only provenance 升格 accepted evidence，不以刪 ledger 表達失敗，不冒稱 mocked fixture 是實際 runtime build。 |
+| TestCase | TC-R21-PUBLISH：隔離 fixture 執行真實 prepare／build-mod scripts、mock external compiler；驗 runtime-only ledger不變、MOD failure保留、完整success atomic完整ledger及失敗temp清理／舊ledger保留。 |
+
+- [ ] **R5 — 綁定目前 source 並完整 smoke 重驗**
+
+| 欄位 | 約束 |
+|---|---|
+| In-Scope | Node fs/hash helper 讀取 checked-in patch／MOD sources，在 browser 啟動前核對實際 served provenance、每筆 non-null run provenance，收尾再 hash sources；negative regressions、完整53-case smoke及真實狀態文件。 |
+| Out-Of-Scope | main.ts／UI／MOD／patch／SDK／runtime 修改、重建／人工重跑、變更原 recognizer／clock／Event。 |
+| ReadOnly | RO-R21；runtime/wasm-imu.patch、mod/mod.ts、mod/observer.ts 是 source oracle，原 accepted ledger／human exports／runtime bytes保持。 |
+| Written | I：web/scripts/source-provenance.mjs、web/scripts/source-provenance.test.mjs。 |
+| Deleted | none。 |
+| Modify | web/scripts/runtime-smoke.mjs、web/scripts/smoke-verdict.mjs、web/scripts/smoke-verdict.test.mjs、web/scripts/pin.test.mjs；runtime/TOOLCHAIN.md、evidence/validation.txt、evidence/runtime-automated.json、evidence/runtime-visible.png、evidence/imu-run.md、evidence/acceptance-summary.json、README.md 僅本輪真實驗證／來源判定／counts。 |
+| Goal | Served與run provenance的patchSha256及mod.sourceSha256逐檔符合目前source，拒絕自洽但stale的runtime/MOD assets；完整53-case rerun與zeroerrors/exit可獨立核對。 |
+| Non-Goal | 不只比對 served assets 自有 hashes；不允許一般案例 null provenance，不用歷史53PASS取代本輪重驗，不改原human raw／accepted ledger。 |
+| TestCase | TC-R21-SOURCE：temp source fixtures覆蓋patch/MOD hash不符、缺欄位、non-null run不符、收尾source變更；null只限精確stop-fallenLeft-0／page-initialization-timeout的status/reason/raw0 allowlist。TC-R21-FULL再次實際53-case驗證，保留previousAttempts與原人工作業歷史。 |
+
 ## Validation / Acceptance Checks
 
 **TC-PIN／TC-RUNTIME：前置與真實 runtime**
@@ -220,6 +257,13 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 - TC-R21-PROVENANCE：隔離 scratch 中 missing／mismatched env 造成失敗時，既有tracked provenance逐byte保留，stale generated runnable移除；成功的public provenance完成後才temp＋rename發布tracked ledger，失敗無partial evidence或殘留temp。真實accepted provenance／runtime bytes不改。
 - TC-R21-FULL：修正後完整實際53-case smoke rerun，保存CLI exit、rows、browserErrors、raw/Event/time/provenance correlation與真實畫面，保留previousAttempts；unit/typecheck不能取代該run。TC-R21-DOCS：TOOLCHAIN正確分開已完成human53/53／hardwareOOS與新automation結果；README/summary/counts只採本輪實測，不覆寫accepted人工作業歷史。
 
+
+**Second-pass PR21 checks — 原 AC 與前輪證據保持**
+
+- TC-R21-PUBLISH：prepare只stage public、不得改tracked accepted ledger；build-mod在MOD成功且完整public runtime＋MOD provenance可用後才temp＋rename ledger。Runtime-only／MOD compiler failure／publication failure均保留舊ledger bytes；隔離fixture執行actual scripts、external compiler mocked，成功fixture核對完整MOD hashes與atomic發布，不將fixture當真實runtime證據。
+- TC-R21-SOURCE：Node runner用fs/hash讀`runtime/wasm-imu.patch`得到patchSha256，讀`mod/mod.ts`與`mod/observer.ts`得到對應`mod.sourceSha256['mod.ts']`／`['observer.ts']`。Browser啟動前fetch實際served provenance並核對；每筆non-null run provenance也核同一expected source hashes。Null provenance僅可用於兩個實證allowlist：`stop-fallenLeft-0` 必須 `status=stopped`、`reason=operator stop`、raw/event皆0；`page-initialization-timeout` 必須 `status=error`、`reason=initialization exceeded 5 seconds`、raw/event皆0。不符合精確ID/status/reason/空樣本條件均拒絕；browser前及收尾的actual served attestation仍必須執行，不能被null例外略過。接受最終results前再次hash三個sources；過程中變更／缺值／不符均令report不通過及CLI exit1。Negative temp-source fixtures包括資產與自身provenance一致但source已不同的stale案例。
+- TC-R21-FULL：R4/R5修正後重跑actual完整53-case smoke、source/pin regressions、strict typecheck，保存zeroexceptions/browserErrors與實際exit；保留previousAttempts。原runtime／MOD／patch bytes與accepted ledger／human exports保持，不需要runtime rebuild／人工重跑。只依新結果更新docs／counts；獨立Reviewer核實後才commit/push/reply/resolve。
+
 ## Reviewer Handoff
 
 以下為未來獨立 Reviewer 回填的 canonical output template，`approved|needs-rework` 表示可選 verdict；不是作者作出的本輪核准證據。實際 repo-visible handoff 與依據由 Reviewer 寫 review-log。
@@ -249,3 +293,5 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 Current acceptance checkpoint — 2026-10-15: initial Draft handoff required NOT_EXECUTED/fullVerification=false statements above describe the engineering-delivery boundary at creation. Required actual human operations have since completed53/53 with independent Reviewer APPROVED; final flags apply only to controlled synthetic scope. Original gates/AC/implementation contract and hardware exclusions remain unchanged; no pending human matrix case remains.
 
 PR21 current rework checkpoint — 2026-10-16: five ADDRESS findings require R1–R3 and independent review. Historical53/53 controlled-synthetic human acceptance is preserved; this authoring pass supplies no new test/runtime PASS. No runtime rebuild or human rerun is required while protected bytes stay unchanged. Only verified-and-pushed fixes permit thread replies/resolution under owner authorization; PR remains Draft, no merge/release.
+
+PR21 second-pass checkpoint2026-10-16: R4/R5 pending; previous R1–R3 source54/browser53PASS and human53PASS remain historical accepted evidence, not proof of these new P1 fixes. No new runtime capability/source change or merge/release authorization.

@@ -3,7 +3,7 @@
   "synthetic": true,
   "sourceTests": {
     "status": "PASS",
-    "count": 54
+    "count": 56
   },
   "strictTypecheck": "PASS",
   "wasmBuild": "PASS",
@@ -70,8 +70,8 @@
   ],
   "prReviewRevalidation": {
     "status": "PASS",
-    "capturedAt": "2026-10-16T02:52:36.186Z",
-    "sourceTests": 54,
+    "capturedAt": "2026-10-16T03:28:23.774Z",
+    "sourceTests": 56,
     "strictTypecheck": "PASS",
     "actualBrowserCases": 53,
     "nonPass": 0,
@@ -79,6 +79,8 @@
     "cliExitCode": 0,
     "exactRequiredIds": true,
     "originalRuntimeAndHumanEvidenceUnchanged": true,
-    "independentReview": "APPROVED"
+    "independentReview": "APPROVED",
+    "sourceAttestation": "PASS current patch/mod.ts/observer.ts; initial/final served and per-run provenance checked",
+    "completeModPublicationFixtures": "PASS isolated actual scripts; compiler mocked"
   }
 }

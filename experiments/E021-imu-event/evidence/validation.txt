@@ -792,3 +792,246 @@ SUMMARY 53/53 full matrix; 0 non-PASS; 0 browser exceptions
 Readback: coverage.expectedIds equals adopted original53humanmatrix IDs and all actual result IDs; current served mc.js/mc.wasm/MOD SHA256 and publicprovenance match unchanged accepted ledger. wasm patch/humanJSON/accepted provenance unchanged vsHEAD, vendorclean. Final screenshot inspected: completed22/22 fallenForward2, readable feedback. No runtime rebuild or newhumanclaims. Independent final implementation review pending.
 
 Independent final bounded review APPROVED/no blockers; canonical implementation-only gate All7stepscomplete exit0. Publication authorized, threads not yet resolved at this checkpoint.
+
+
+2026-10-16 PR21 second-pass R4/R5 actual verification
+
+--- second-pass red ---
+✔ shared vendor guard rejects dirty checkout, moved HEAD and mismatched gitlink (1835.06775ms)
+✔ failed preparation clears runnable assets but preserves accepted provenance for missing/mismatched tools (158.295125ms)
+✖ only complete runtime plus MOD success atomically publishes accepted provenance (129.89225ms)
+node:internal/modules/esm/resolve:241
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/scripts/source-provenance.mjs' imported from /Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/scripts/source-provenance.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:241:11)
+    at moduleResolve (node:internal/modules/esm/resolve:846:10)
+    at defaultResolve (node:internal/modules/esm/resolve:973:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:708:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:728:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:766:56)
+    at #resolve (node:internal/modules/esm/loader:690:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:610:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:277:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:389:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/scripts/source-provenance.mjs'
+}
+
+Node.js v26.10.0
+✖ experiments/E021-imu-event/web/scripts/source-provenance.test.mjs (99.462459ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 2
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2208.570167
+
+✖ failing tests:
+
+test at experiments/E021-imu-event/web/scripts/pin.test.mjs:81:1
+✖ only complete runtime plus MOD success atomically publishes accepted provenance (129.89225ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '{\n' +
+  +   '  "clockCompatibility": {\n' +
+  +   '    "scope": "owner-approved E021 scratch platform only",\n' +
+  +   '    "source": "emscripten_get_now",\n' +
+  +   '    "unit": "real monotonic milliseconds",\n' +
+  +   '    "originalPinnedWasmClock": "xs_time_ticks stub preserved; E021 WASM time module wrapper uses native monotonic ticks; original Time module preserved under private alias",\n' +
+  +   '    "artificialClock": false\n' +
+  +   '  },\n' +
+  +   '  "experiment": "E021",\n' +
+  +   '  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",\n' +
+  +   '  "patchSha256": "8ed8616ab91f030a0262de10c23d3eb80a52a222b25d7e4de3be2eecead36e06",\n' +
+  +   '  "tools": {\n' +
+  +   '    "originalTimeJsSha256": "0c3a1d33f09bbc5ac31a06dd8790a915470aecbbadbf26d8cc4e7a3945467138",\n' +
+  +   '    "originalWasmTimeCSha256": "0c3a1d33f09bbc5ac31a06dd8790a915470aecbbadbf26d8cc4e7a3945467138",\n' +
+  +   '    "moddableVersion": "9.5.0",\n' +
+  +   '    "sourceCommits": {\n' +
+  +   '      "moddable": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",\n' +
+  +   '      "emsdk": "14c18b569f55138fe4963924162244251f454fb0",\n' +
+  +   '      "fontbm": "7677b908523e909679f67cd5c170396bb9def1aa"\n' +
+  +   '    },\n' +
+  +   '    "emccVersion": "emcc 5.0.1 8c5f43157a3f069ade75876e23061330521eabde",\n' +
+  +   '    "emccSha256": "e112559424eb73e8116a1b0765fabcf493828e015dbe81192373ee0093289b69",\n' +
+  +   '    "fontbmSha256": "e112559424eb73e8116a1b0765fabcf493828e015dbe81192373ee0093289b69",\n' +
+  +   '    "mcconfigSha256": "e112559424eb73e8116a1b0765fabcf493828e015dbe81192373ee0093289b69",\n' +
+  +   '    "xscSha256": "e112559424eb73e8116a1b0765fabcf493828e015dbe81192373ee0093289b69"\n' +
+  +   '  },\n' +
+  +   '  "sha256": {\n' +
+  +   '    "mc.js": "19052b011027a71a52a66f2b24c55138e3351b53a6fe5c1becad9f7d5ab6babd",\n' +
+  +   '    "mc.wasm": "19052b011027a71a52a66f2b24c55138e3351b53a6fe5c1becad9f7d5ab6babd"\n' +
+  +   '  },\n' +
+  +   '  "commands": [\n' +
+  +   '    "npm ci --ignore-scripts --no-audit --no-fund",\n' +
+  +   '    "npm run build:wasm"\n' +
+  +   '  ],\n' +
+  +   '  "scope": "simulator-only; isolated copies of pinned tool sources, including existing local compiler cache; no hardware evidence"\n' +
+  +   '}\n'
+  - 'accepted provenance bytes'
+  
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/05ae/coami/experiments/E021-imu-event/web/scripts/pin.test.mjs:108:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '{\n  "clockCompatibility": {\n    "scope": "owner-approved E021 scratch platform only",\n    "source": "emscripten_get_now",\n    "unit": "real monotonic milliseconds",\n    "originalPinnedWasmClock": "xs_time_ticks stub preserved; E021 WASM time module wrapper uses native monotonic ticks; original Time module preserved under private alias",\n    "artificialClock": false\n  },\n  "experiment": "E021",\n  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",\n  "patchSha256": "8ed8616ab91f030a0262de10c23d3eb80a52a222b25d7e4de3be2eecead36e06",\n  "tools": {\n    "originalTimeJsSha256": "0c3a1d33f09bbc5ac31a06dd8790a915470aecbbadbf26d8cc4e7a3945467138",\n    "originalWasmTimeCSha256": "0c3a1d33f09bbc5ac31a06dd8790a915470aecbbadbf26d8cc4e7a3945467138",\n    "moddableVersion": "9.5.0",\n    "sourceCommits": {\n      "moddable": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",\n      "emsdk": "14c18b569f55138fe4963924162244251f454fb0",\n      "fontbm": "7677b908523e909679f67cd5c170396bb9def1aa"\n    },\n    "emccVersion": "emcc 5.0.1 8c5f43157a3f069ade75876e23061330521eabde",\n    "emccSha256": "e112559424eb73e8116a1b0765fabcf493828e015dbe81192373ee0093289b69",\n    "fontbmSha256": "e112559424eb73e8116a1b0765fabcf493828e015dbe81192373ee0093289b69",\n    "mcconfigSha256": "e112559424eb73e8116a1b0765fabcf493828e015dbe81192373ee0093289b69",\n    "xscSha256": "e112559424eb73e8116a1b0765fabcf493828e015dbe81192373ee0093289b69"\n  },\n  "sha256": {\n    "mc.js": "19052b011027a71a52a66f2b24c55138e3351b53a6fe5c1becad9f7d5ab6babd",\n    "mc.wasm": "19052b011027a71a52a66f2b24c55138e3351b53a6fe5c1becad9f7d5ab6babd"\n  },\n  "commands": [\n    "npm ci --ignore-scripts --no-audit --no-fund",\n    "npm run build:wasm"\n  ],\n  "scope": "simulator-only; isolated copies of pinned tool sources, including existing local compiler cache; no hardware evidence"\n}\n',
+    expected: 'accepted provenance bytes',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E021-imu-event/web/scripts/source-provenance.test.mjs:1:1
+✖ experiments/E021-imu-event/web/scripts/source-provenance.test.mjs (99.462459ms)
+  'test failed'
+
+--- second-pass green ---
+✔ shared vendor guard rejects dirty checkout, moved HEAD and mismatched gitlink (1871.97075ms)
+✔ failed preparation clears runnable assets but preserves accepted provenance for missing/mismatched tools (157.673417ms)
+✔ only complete runtime plus MOD success atomically publishes accepted provenance (1282.494625ms)
+✔ smoke rejects stale patch and MOD sources before browser launch and preserves accepted evidence (369.557375ms)
+✔ every run is source-bound, with only exact pre-verification lifecycle exceptions (1.101666ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3390.235708
+
+--- second-pass tests ---
+
+> coami-e021-web@0.1.0 test
+> node --test src/*.test.ts scripts/*.test.mjs ../mod/observer.test.ts
+
+✔ TC-MOD preserves SDK event and correlated raw identity; counts are received-only (1.051292ms)
+✔ shared vendor guard rejects dirty checkout, moved HEAD and mismatched gitlink (2049.230916ms)
+✔ failed preparation clears runnable assets but preserves accepted provenance for missing/mismatched tools (168.624458ms)
+✔ only complete runtime plus MOD success atomically publishes accepted provenance (1025.266916ms)
+✔ source-owned scenario matrix with complete raw/Event contracts passes (2.887292ms)
+✔ matching Event lists cannot hide broken raw values, counts, identity or clock (0.411958ms)
+✔ Event clock, kind, metadata and MOD count corruption fails (0.861709ms)
+✔ cooldown crossing the negative bound is indeterminate; too-early repeat fails (0.176125ms)
+✔ all four exact stop prefixes and expected Events pass with unchanged snapshots (0.574458ms)
+✔ sample-six stop requires the actual Event and count (0.15825ms)
+✔ changed old snapshot fails and a valid stop at the wrong count is indeterminate (0.129417ms)
+✔ lifecycle prefix validates real samples, expected Events and terminal reason (0.106958ms)
+✔ CLI success requires full nonempty unique all-PASS coverage and no browser exceptions (20.410708ms)
+✔ same-size unknown-ID replacement cannot stand in for a required case (0.143583ms)
+✔ smoke rejects stale patch and MOD sources before browser launch and preserves accepted evidence (380.801542ms)
+✔ every run is source-bound, with only exact pre-verification lifecycle exceptions (1.440166ms)
+✔ TC-MOD pull order, run identity and terminal acknowledgement never replay a sample (1.928791ms)
+✔ TC-LIFECYCLE stop is terminal; fresh input cannot inherit old raw samples (0.246292ms)
+✔ TC-LIFECYCLE native failure and interruption are errors, not normal completion (0.34025ms)
+✔ TC-MOD offered data is copied and invalid clocks are rejected (0.186291ms)
+✔ TC-LIFECYCLE old startup promises, timeout and trace cannot update a replacement run (0.778166ms)
+✔ TC-LIFECYCLE watchdog only fails active stalled input; normal completion is distinct (0.418167ms)
+(node:49244) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ TC-RUNTIME real SDK IMU → recognizer → Event → observer, original 100ms poll and sample ticks upper bound (1.090542ms)
+✔ TC-RUNTIME scratch patch leaves original IMU, recognizer and Event bytes unchanged (370.2455ms)
+✔ TC-SAMPLES fallenForward: pinned recognizer receives raw samples (1.607375ms)
+✔ TC-SAMPLES fallenForward-two: pinned recognizer receives raw samples (0.202959ms)
+✔ TC-SAMPLES fallenForward-0.749: pinned recognizer receives raw samples (0.071542ms)
+✔ TC-SAMPLES fallenForward-0.751: pinned recognizer receives raw samples (0.087917ms)
+✔ TC-SAMPLES fallenBackward: pinned recognizer receives raw samples (0.297167ms)
+✔ TC-SAMPLES fallenBackward-two: pinned recognizer receives raw samples (0.139166ms)
+✔ TC-SAMPLES fallenBackward-0.749: pinned recognizer receives raw samples (0.143709ms)
+✔ TC-SAMPLES fallenBackward-0.751: pinned recognizer receives raw samples (0.115334ms)
+✔ TC-SAMPLES fallenLeft: pinned recognizer receives raw samples (0.145792ms)
+✔ TC-SAMPLES fallenLeft-two: pinned recognizer receives raw samples (0.220667ms)
+✔ TC-SAMPLES fallenLeft-0.749: pinned recognizer receives raw samples (0.11025ms)
+✔ TC-SAMPLES fallenLeft-0.751: pinned recognizer receives raw samples (0.079958ms)
+✔ TC-SAMPLES fallenRight: pinned recognizer receives raw samples (0.083375ms)
+✔ TC-SAMPLES fallenRight-two: pinned recognizer receives raw samples (0.061042ms)
+✔ TC-SAMPLES fallenRight-0.749: pinned recognizer receives raw samples (0.063875ms)
+✔ TC-SAMPLES fallenRight-0.751: pinned recognizer receives raw samples (0.079375ms)
+✔ TC-SAMPLES upsideDown: pinned recognizer receives raw samples (0.102959ms)
+✔ TC-SAMPLES upsideDown-two: pinned recognizer receives raw samples (0.052958ms)
+✔ TC-SAMPLES upsideDown-0.749: pinned recognizer receives raw samples (0.050167ms)
+✔ TC-SAMPLES upsideDown-0.751: pinned recognizer receives raw samples (0.051292ms)
+✔ TC-SAMPLES shake: pinned recognizer receives raw samples (0.062875ms)
+✔ TC-SAMPLES shake-nine: pinned recognizer receives raw samples (0.058959ms)
+✔ TC-SAMPLES shake-1.199: pinned recognizer receives raw samples (0.0725ms)
+✔ TC-SAMPLES shake-1.201: pinned recognizer receives raw samples (0.057166ms)
+✔ TC-SAMPLES spike: pinned recognizer receives raw samples (0.057417ms)
+✔ TC-SAMPLES broken-nine: pinned recognizer receives raw samples (0.050083ms)
+✔ TC-SAMPLES upright: pinned recognizer receives raw samples (0.056084ms)
+✔ TC-SAMPLES zero: pinned recognizer receives raw samples (0.09275ms)
+✔ TC-SAMPLES unknown: pinned recognizer receives raw samples (0.036625ms)
+✔ TC-SAMPLES cooldown: pinned recognizer receives raw samples (0.038458ms)
+✔ TC-THRESHOLD exact acceleration delta 1.2 and cooldown 1499/1500 use SDK defaults (0.108916ms)
+✔ TC-THRESHOLD exact posture 0.75 is inclusive; gyroscope shake stays disabled (0.072916ms)
+ℹ tests 56
+ℹ suites 0
+ℹ pass 56
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3360.712167
+
+--- second-pass typecheck ---
+
+> coami-e021-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+
+--- second-pass smoke ---
+
+> coami-e021-web@0.1.0 smoke
+> node scripts/runtime-smoke.mjs
+
+fallenForward: PASS raw=22 events=fallenForward,fallenForward last sample processing acknowledged by next SDK poll
+fallenForward-two: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+fallenForward-0.749: PASS raw=6 events= last sample processing acknowledged by next SDK poll
+fallenForward-0.751: PASS raw=6 events=fallenForward last sample processing acknowledged by next SDK poll
+fallenBackward: PASS raw=22 events=fallenBackward,fallenBackward last sample processing acknowledged by next SDK poll
+fallenBackward-two: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+fallenBackward-0.749: PASS raw=6 events= last sample processing acknowledged by next SDK poll
+fallenBackward-0.751: PASS raw=6 events=fallenBackward last sample processing acknowledged by next SDK poll
+fallenLeft: PASS raw=22 events=fallenLeft,fallenLeft last sample processing acknowledged by next SDK poll
+fallenLeft-two: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+fallenLeft-0.749: PASS raw=6 events= last sample processing acknowledged by next SDK poll
+fallenLeft-0.751: PASS raw=6 events=fallenLeft last sample processing acknowledged by next SDK poll
+fallenRight: PASS raw=22 events=fallenRight,fallenRight last sample processing acknowledged by next SDK poll
+fallenRight-two: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+fallenRight-0.749: PASS raw=6 events= last sample processing acknowledged by next SDK poll
+fallenRight-0.751: PASS raw=6 events=fallenRight last sample processing acknowledged by next SDK poll
+upsideDown: PASS raw=22 events=upsideDown,upsideDown last sample processing acknowledged by next SDK poll
+upsideDown-two: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+upsideDown-0.749: PASS raw=6 events= last sample processing acknowledged by next SDK poll
+upsideDown-0.751: PASS raw=6 events=upsideDown last sample processing acknowledged by next SDK poll
+shake: PASS raw=13 events=shake last sample processing acknowledged by next SDK poll
+shake-nine: PASS raw=12 events= last sample processing acknowledged by next SDK poll
+shake-1.199: PASS raw=13 events= last sample processing acknowledged by next SDK poll
+shake-1.201: PASS raw=13 events=shake last sample processing acknowledged by next SDK poll
+spike: PASS raw=14 events= last sample processing acknowledged by next SDK poll
+broken-nine: PASS raw=16 events= last sample processing acknowledged by next SDK poll
+upright: PASS raw=20 events= last sample processing acknowledged by next SDK poll
+zero: PASS raw=20 events= last sample processing acknowledged by next SDK poll
+unknown: PASS raw=20 events= last sample processing acknowledged by next SDK poll
+cooldown: PASS raw=49 events=shake,shake last sample processing acknowledged by next SDK poll
+source-interrupt: PASS raw=4 events= injected interrupt
+native-failure: PASS raw=4 events= injected native-failure
+fallenForward-independent-2: PASS raw=22 events=fallenForward,fallenForward last sample processing acknowledged by next SDK poll
+fallenBackward-independent-2: PASS raw=22 events=fallenBackward,fallenBackward last sample processing acknowledged by next SDK poll
+fallenLeft-independent-2: PASS raw=22 events=fallenLeft,fallenLeft last sample processing acknowledged by next SDK poll
+fallenRight-independent-2: PASS raw=22 events=fallenRight,fallenRight last sample processing acknowledged by next SDK poll
+upsideDown-independent-2: PASS raw=22 events=upsideDown,upsideDown last sample processing acknowledged by next SDK poll
+shake-independent-2: PASS raw=13 events=shake last sample processing acknowledged by next SDK poll
+restart-after-fallenLeft-0: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+restart-after-fallenLeft-5: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+restart-after-shake-12: PASS raw=12 events= last sample processing acknowledged by next SDK poll
+restart-after-fallenLeft-6: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+fresh-after-pagehide: PASS raw=5 events= last sample processing acknowledged by next SDK poll
+visible-final: PASS raw=22 events=fallenForward,fallenForward last sample processing acknowledged by next SDK poll
+SUMMARY 53/53 full matrix; 0 non-PASS; 0 browser exceptions
+
+Actual final source56 PASS/typecheck/syntax PASS; full53 PASS/zero exceptions/exit0. Fixture builds are isolated mocks, not runtime rebuild. Protected bytes unchanged483b565; all prior browser attempts retained.

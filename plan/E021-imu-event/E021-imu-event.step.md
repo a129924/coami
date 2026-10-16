@@ -11,7 +11,7 @@ created: 2026-10-14
 
 | Current status | Allowed next transitions | Next actor |
 | --- | --- | --- |
-| pr-open | pr-open→needs-rework or merged | Human reviewer |
+| reviewer-in-progress | reviewer-in-progress→approved, reviewer-in-progress→needs-rework | Reviewer |
 
 ## Actionable Steps
 
@@ -30,6 +30,10 @@ created: 2026-10-14
 - [X] **Actor:** Reviewer — **Action:** Complete independent review of the PR #21 bounded fixes and final post-fix validation.
 
 - [X] **Actor:** Main Agent — **Action:** Verify pushed PR #21 fixes and reply/resolve all five addressed review threads.
+
+- [X] **Actor:** Implementer — **Action:** Complete R4–R5 for the two second-pass PR #21 P1 findings, then hand off regression and full-smoke evidence for independent review.
+
+- [X] **Actor:** Reviewer — **Action:** Complete independent final review of R4–R5 and the second-pass PR #21 regression and full-smoke evidence.
 
 ## Implementation Steps
 
@@ -140,6 +144,39 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 | Non-Goal | 不把本輪未跑結果或source tests冒成browser PASS，不把舊human驗收改為未執行，不自行宣稱review/gate/push/resolve完成。 |
 | TestCase | TC-R21-FULL、TC-R21-DOCS，重跑全部53案例，核對current served hashes不變、zero browserErrors與CLI exit；歷史previousAttempts及原人工證據保留。 |
 
+
+### PR #21 second-pass bounded rework — 2026-10-16
+
+R1–R3 與原53 PASS／人工證據保留為歷史；本輪 R4–R5 pending。RO-R21 繼續適用，唯一 script 例外為 R4 可修改 `web/scripts/build-mod.mjs` 的 provenance publication。原 UI／MOD／wasm patch／SDK／clock capability／runtime bytes、真實 accepted ledger 與原人工 exports 均唯讀；完整 pipeline 成功／失敗回歸只在隔離 fixture（mock external compiler、執行真實 scripts）操作 ledger copies，不重建真實 runtime。新增 Node helper 不修改 `main.ts`，無新 runtime capability／repo artifact 除 I 兩檔。
+
+- [X] **R4 — 完整 MOD 成功後才發布 accepted ledger**
+
+| 欄位 | 約束 |
+|---|---|
+| In-Scope | Runtime preparation 只 stage public provenance；build-mod 成功編譯並完成 runtime＋MOD public provenance 後才 temp＋rename 原子發布完整 tracked ledger；所有前置／MOD／發布失敗保留舊 ledger。 |
+| Out-Of-Scope | Runtime rebuild、新 capability、UI／MOD／patch／Time source 修改、人工重跑或改 accepted evidence。 |
+| ReadOnly | RO-R21；build-mod publication 為本步明列例外；真實 accepted ledger／runtime／人工 bytes 不改，fixtures 操作 copies。 |
+| Written | none。 |
+| Deleted | Repo files none；只清除隔離 fixture 的 stale generated runnable／本次 temp，不刪 accepted ledger／歷史 evidence。 |
+| Modify | web/scripts/prepare-runtime.mjs、web/scripts/build-mod.mjs、web/scripts/pin.test.mjs。 |
+| Goal | Runtime 成功但 MOD 未執行／編譯失敗時，accepted ledger 仍逐 byte 等於舊完整紀錄；唯完整 pipeline 成功才 atomic 發布含 MOD 的新 ledger。 |
+| Non-Goal | 不讓 runtime-only provenance 升格 accepted evidence，不以刪 ledger 表達失敗，不冒稱 mocked fixture 是實際 runtime build。 |
+| TestCase | TC-R21-PUBLISH：隔離 fixture 執行真實 prepare／build-mod scripts、mock external compiler；驗 runtime-only ledger不變、MOD failure保留、完整success atomic完整ledger及失敗temp清理／舊ledger保留。 |
+
+- [X] **R5 — 綁定目前 source 並完整 smoke 重驗**
+
+| 欄位 | 約束 |
+|---|---|
+| In-Scope | Node fs/hash helper 讀取 checked-in patch／MOD sources，在 browser 啟動前核對實際 served provenance、每筆 non-null run provenance，收尾再 hash sources；negative regressions、完整53-case smoke及真實狀態文件。 |
+| Out-Of-Scope | main.ts／UI／MOD／patch／SDK／runtime 修改、重建／人工重跑、變更原 recognizer／clock／Event。 |
+| ReadOnly | RO-R21；runtime/wasm-imu.patch、mod/mod.ts、mod/observer.ts 是 source oracle，原 accepted ledger／human exports／runtime bytes保持。 |
+| Written | I：web/scripts/source-provenance.mjs、web/scripts/source-provenance.test.mjs。 |
+| Deleted | none。 |
+| Modify | web/scripts/runtime-smoke.mjs、web/scripts/smoke-verdict.mjs、web/scripts/smoke-verdict.test.mjs、web/scripts/pin.test.mjs；runtime/TOOLCHAIN.md、evidence/validation.txt、evidence/runtime-automated.json、evidence/runtime-visible.png、evidence/imu-run.md、evidence/acceptance-summary.json、README.md 僅本輪真實驗證／來源判定／counts。 |
+| Goal | Served與run provenance的patchSha256及mod.sourceSha256逐檔符合目前source，拒絕自洽但stale的runtime/MOD assets；完整53-case rerun與zeroerrors/exit可獨立核對。 |
+| Non-Goal | 不只比對 served assets 自有 hashes；不允許一般案例 null provenance，不用歷史53PASS取代本輪重驗，不改原human raw／accepted ledger。 |
+| TestCase | TC-R21-SOURCE：temp source fixtures覆蓋patch/MOD hash不符、缺欄位、non-null run不符、收尾source變更；null只限精確stop-fallenLeft-0／page-initialization-timeout的status/reason/raw0 allowlist。TC-R21-FULL再次實際53-case驗證，保留previousAttempts與原人工作業歷史。 |
+
 ## Main Agent Actionable Steps — Fixed Tail
 
 - [X] **Actor:** Main Agent — **Action:** Validate the approved Written set and perform bounded staging only.
@@ -196,3 +233,9 @@ Source failure 的修正須回到 S1／S2 對應 bounded 範圍並更新其 Actu
 - Active final Reviewer handoff2026-10-16: Main Agent confirmed independent Reviewer accepted/read the queued final handoff and is actively reviewing. Canonical transition review-ready→reviewer-in-progress; final Reviewer contextual checkbox remains pending, publication blocked until actual verdict.
 
 - PR21 review-fix publication Actual2026-10-16: d218426 smoke-verdict,3edf51c provenancepreservation,2ebf7a6 docs/revalidation pushed; actualremotePRhead2ebf7a6e423dd52f979caeef62979de6073fe7ef verified before replies. Five addressed threads individually replied/resolved and read back5total/0unresolved. PRbody updated to54source/53postfixbrowserPASS; Readyforreview retained. Publicationaudit follow-up is metadata-only; no source/runtime/human changes, merge/release/cleanup rows remain pending.
+
+- PR21 second-pass rework2026-10-16: pr-open→needs-rework→creator-in-progress, next Implementer; R4/R5 pending. Earlier completed markers/frozenheadtail/history unchanged. Accepted ledger publication now belongs only after successful complete build-mod; Node source attestation requires actual served/non-null runs/end rehash. Independent plan and implementation reviews plus full53 rerun required; resolve threads only after verified pushed fixes.
+
+- R5 action-owner Actual2026-10-16: source56/56/typecheck/syntaxPASS, actual full53/53 browserPASS/zeroexceptions/exit0 captured2026-10-16T03:28:23.774Z; current three-source binding and initial/final served/per-run attestationPASS. Exact two pre-verification null exceptions only. Prior attempts preserved; protectedruntime/ledger/humanbytes unchanged483b565. Independent final review and canonical gate remain pending; no publication/resolution inferred.
+
+- Planner second-pass gate2026-10-16: actual canonical check_impl_steps_succeeded E021-imu-event exit0, All 9 implementation steps complete. Canonical creator-in-progress→review-ready→reviewer-in-progress after the confirmed active independent Reviewer handoff. Final R4/R5 Reviewer contextual item remains pending; prior review markers remain historical. No new final approval, push or thread resolution is established by this gate.
