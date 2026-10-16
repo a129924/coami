@@ -1,3 +1,4 @@
+import {readSourceHashes,assertSourceProvenance,assertRunProvenance} from './source-provenance.mjs'
 import {getScenario,scenarios} from '../src/scenarios.ts'
 import {scenarioVerdict,stopVerdict,lifecycleVerdict,smokePassed,expectedSmokeIds,stopCases} from './smoke-verdict.mjs'
 import {spawn} from 'node:child_process'
@@ -9,6 +10,15 @@ const selected=scenarios.filter(s=>!process.env.E021_ONLY||s.id===process.env.E0
 const expectedIds=expectedSmokeIds(scenarios,process.env.E021_ONLY)
 if(!process.env.E021_ONLY&&expectedIds.length!==53)throw new Error('Full matrix must contain the locked 53 cases')
 const coverage={scope:process.env.E021_ONLY?'diagnostic subset':'full matrix',expectedCount:expectedIds.length,expectedIds,selectedScenario:process.env.E021_ONLY??null}
+// Attest the actual server against current sources before Chrome can accept stale assets.
+const sourceHashes=await readSourceHashes()
+const servedProvenance=async()=>{
+ const response=await fetch(`${origin}/runtime-provenance.json`,{cache:'no-store'})
+ if(!response.ok)throw new Error('served runtime provenance missing')
+ return response.json()
+}
+const initialProvenance=await servedProvenance()
+assertSourceProvenance(initialProvenance,sourceHashes)
 const directory=await mkdtemp(path.join(tmpdir(),'e021-browser-'))
 const chrome=spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',['--headless=new','--no-first-run','--no-default-browser-check','--enable-unsafe-swiftshader','--use-angle=swiftshader','--remote-debugging-port=0',`--user-data-dir=${directory}`,'about:blank'],{stdio:['ignore','ignore','pipe']})
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms))
@@ -83,6 +93,10 @@ try {
  await cdp('Page.navigate',{url:origin});await wait('location.search===""&&document.readyState==="complete"&&!!window.e021&&window.e021.snapshot().runs.length===0');await execute('fallenForward','visible-final')
  const image=await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})
  await writeFile(new URL('../../evidence/runtime-visible.png',import.meta.url),Buffer.from(image.data,'base64'))
+ const finalHashes=await readSourceHashes()
+ assertSourceProvenance(initialProvenance,finalHashes)
+ assertSourceProvenance(await servedProvenance(),finalHashes)
+ assertRunProvenance(results,finalHashes)
  await persist()
  console.log(`SUMMARY ${results.length}/${coverage.expectedCount} ${coverage.scope}; ${results.filter(r=>r.verdict!=='PASS').length} non-PASS; ${browserErrors.length} browser exceptions`)
  process.exitCode=smokePassed(results,browserErrors,expectedIds)?0:1
