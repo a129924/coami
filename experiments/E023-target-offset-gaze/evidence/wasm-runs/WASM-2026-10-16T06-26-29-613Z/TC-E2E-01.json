@@ -1,0 +1,792 @@
+{
+  "experiment": "E023",
+  "run_id": "3f091d91-a0c3-4e22-843a-e0f2e4b31774",
+  "case": {
+    "id": "TC-E2E-01",
+    "offset": [
+      0,
+      0
+    ],
+    "initial": 0
+  },
+  "provenance": {
+    "experiment": "E023",
+    "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+    "hashes": {
+      "mc.js": "a1f2c55234c99663a0d5ab48fd969944ca72da9c1f14e6f1432c36fa53829796",
+      "mc.wasm": "dc4ceb67c0abea9c126557ce63851a41dedbd1c6e10d15f6b8dddb7615ef487e",
+      "assets/case/v1/shell.stl": "832ced3ad3669c3fc6b174a984cc800522ca33cecd9222d531bda430f6cc5236",
+      "coami-mod.xsa": "dc2beed357de80aa1c11bdbb76c869e8b07ac68eaa4797ee7bacd6338a3ed63e"
+    },
+    "sources": {
+      "mod/mod.ts": "1c2e8c7be25898ecbf39747962031b41e560b0bf0773e6243b8b60efb20f5197",
+      "mod/protocol.ts": "e9fd1ff261e1b66c7a53b64e2785fa2b7497b161333af03aca0e10fa989ad21a",
+      "vendor/web/src/services/simulator/simulator-engine.mjs": "167a07741821e719acd2c087ea916c5ed141c87d8bc54a2e26d757a58376fe33",
+      "vendor/web/simulator/geometry.mjs": "7f9b357ec11b82fae1e45d5392e3f661ebadc8fc5b7a69f638f8c5a311f61a55",
+      "vendor/web/simulator/bridge.mjs": "f4a2a66baf6000d9c29597f570d9e23bf32057066aee47a136b35a10f00ba6c6"
+    },
+    "limitation": "Exact E023 source-built runtime bytes; full build provenance is recorded separately in evidence/host-runtime-provenance.json"
+  },
+  "result": {
+    "state": "成功",
+    "controls": 0
+  },
+  "records": [
+    {
+      "browser_ms": 3183.8999996185303,
+      "kind": "trace",
+      "text": "[main] start"
+    },
+    {
+      "browser_ms": 3184.7999997138977,
+      "kind": "trace",
+      "text": "[main] installed WASM button bridge"
+    },
+    {
+      "browser_ms": 3185.699999809265,
+      "kind": "trace",
+      "text": "[main] loading app behaviors"
+    },
+    {
+      "browser_ms": 3186.0999999046326,
+      "kind": "trace",
+      "text": "[main] checking mod override"
+    },
+    {
+      "browser_ms": 11192.699999809265,
+      "kind": "trace",
+      "text": "[main] onLaunch shouldCreateContext=true"
+    },
+    {
+      "browser_ms": 11193.299999713898,
+      "kind": "trace",
+      "text": "No Wi-Fi SSID"
+    },
+    {
+      "browser_ms": 11198.199999809265,
+      "kind": "trace",
+      "text": "[main] network ready: skipped"
+    },
+    {
+      "browser_ms": 11198.89999961853,
+      "kind": "trace",
+      "text": "[main] TTS engine: stackchan-voice"
+    },
+    {
+      "browser_ms": 11206,
+      "kind": "trace",
+      "text": "[main] app context created"
+    },
+    {
+      "browser_ms": 11206.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"ready\",\"experiment\":\"E023\"}"
+    },
+    {
+      "browser_ms": 11216.5,
+      "kind": "trace",
+      "text": "[main] app behaviors ready"
+    },
+    {
+      "browser_ms": 11325,
+      "kind": "sent",
+      "message": {
+        "kind": "hello",
+        "run_id": "3f091d91-a0c3-4e22-843a-e0f2e4b31774"
+      }
+    },
+    {
+      "browser_ms": 11327.699999809265,
+      "kind": "server",
+      "reply": {
+        "kind": "hello",
+        "run_id": "3f091d91-a0c3-4e22-843a-e0f2e4b31774"
+      }
+    },
+    {
+      "browser_ms": 11328.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":1,\"y\":140,\"ticks\":1130641709}"
+    },
+    {
+      "browser_ms": 11329,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":1,\"y\":140,\"ticks\":1130641710}"
+    },
+    {
+      "browser_ms": 11329.099999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":102,\"ticks\":1130641710}"
+    },
+    {
+      "browser_ms": 11329.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":102,\"ticks\":1130641710}"
+    },
+    {
+      "browser_ms": 11329.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":109,\"ticks\":1130641710}"
+    },
+    {
+      "browser_ms": 11329.39999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":109,\"ticks\":1130641710}"
+    },
+    {
+      "browser_ms": 11329.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1130641710}"
+    },
+    {
+      "browser_ms": 11329.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1130641710}"
+    },
+    {
+      "browser_ms": 11329.799999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":1,\"y\":128,\"ticks\":1130641710}"
+    },
+    {
+      "browser_ms": 11329.799999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":1,\"y\":128,\"ticks\":1130641710}"
+    },
+    {
+      "browser_ms": 11329.89999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"decoded\",\"seq\":1,\"probe\":true,\"target\":[1,0,0]}"
+    },
+    {
+      "browser_ms": 11330.099999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"probe\",\"seq\":1,\"probe\":true,\"target\":[1,0,0]}"
+    },
+    {
+      "browser_ms": 11330.199999809265,
+      "kind": "frame-committed",
+      "seq": 1,
+      "probe": true,
+      "expected": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "browser_ms": 11330.299999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":2,\"y\":140,\"ticks\":1130641711}"
+    },
+    {
+      "browser_ms": 11330.299999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":2,\"y\":140,\"ticks\":1130641711}"
+    },
+    {
+      "browser_ms": 11330.299999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":97,\"ticks\":1130641711}"
+    },
+    {
+      "browser_ms": 11330.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":97,\"ticks\":1130641711}"
+    },
+    {
+      "browser_ms": 11330.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":104,\"ticks\":1130641711}"
+    },
+    {
+      "browser_ms": 11330.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":104,\"ticks\":1130641711}"
+    },
+    {
+      "browser_ms": 11330.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1130641711}"
+    },
+    {
+      "browser_ms": 11330.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1130641711}"
+    },
+    {
+      "browser_ms": 11330.799999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":2,\"y\":128,\"ticks\":1130641711}"
+    },
+    {
+      "browser_ms": 11331,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":2,\"y\":128,\"ticks\":1130641712}"
+    },
+    {
+      "browser_ms": 11331,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"decoded\",\"seq\":2,\"probe\":true,\"target\":[0,-1,0]}"
+    },
+    {
+      "browser_ms": 11331.099999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"probe\",\"seq\":2,\"probe\":true,\"target\":[0,-1,0]}"
+    },
+    {
+      "browser_ms": 11331.199999809265,
+      "kind": "frame-committed",
+      "seq": 2,
+      "probe": true,
+      "expected": [
+        0,
+        -1,
+        0
+      ]
+    },
+    {
+      "browser_ms": 11331.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":3,\"y\":140,\"ticks\":1130641712}"
+    },
+    {
+      "browser_ms": 11331.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":3,\"y\":140,\"ticks\":1130641712}"
+    },
+    {
+      "browser_ms": 11331.299999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":97,\"ticks\":1130641712}"
+    },
+    {
+      "browser_ms": 11331.39999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":97,\"ticks\":1130641712}"
+    },
+    {
+      "browser_ms": 11331.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":109,\"ticks\":1130641712}"
+    },
+    {
+      "browser_ms": 11331.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":109,\"ticks\":1130641712}"
+    },
+    {
+      "browser_ms": 11331.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":126,\"ticks\":1130641712}"
+    },
+    {
+      "browser_ms": 11331.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":126,\"ticks\":1130641712}"
+    },
+    {
+      "browser_ms": 11331.799999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":3,\"y\":128,\"ticks\":1130641712}"
+    },
+    {
+      "browser_ms": 11331.799999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":3,\"y\":128,\"ticks\":1130641713}"
+    },
+    {
+      "browser_ms": 11332,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"decoded\",\"seq\":3,\"probe\":true,\"target\":[0,0,1]}"
+    },
+    {
+      "browser_ms": 11332.299999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"probe\",\"seq\":3,\"probe\":true,\"target\":[0,0,1]}"
+    },
+    {
+      "browser_ms": 11332.299999713898,
+      "kind": "frame-committed",
+      "seq": 3,
+      "probe": true,
+      "expected": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "browser_ms": 11332.39999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":4,\"y\":140,\"ticks\":1130641713}"
+    },
+    {
+      "browser_ms": 11332.39999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":4,\"y\":140,\"ticks\":1130641713}"
+    },
+    {
+      "browser_ms": 11332.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":97,\"ticks\":1130641713}"
+    },
+    {
+      "browser_ms": 11332.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":97,\"ticks\":1130641713}"
+    },
+    {
+      "browser_ms": 11332.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":109,\"ticks\":1130641713}"
+    },
+    {
+      "browser_ms": 11332.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":109,\"ticks\":1130641713}"
+    },
+    {
+      "browser_ms": 11332.89999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":116,\"ticks\":1130641713}"
+    },
+    {
+      "browser_ms": 11332.89999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":116,\"ticks\":1130641714}"
+    },
+    {
+      "browser_ms": 11333,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":4,\"y\":128,\"ticks\":1130641714}"
+    },
+    {
+      "browser_ms": 11333,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":4,\"y\":128,\"ticks\":1130641714}"
+    },
+    {
+      "browser_ms": 11333.099999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"decoded\",\"seq\":4,\"probe\":true,\"target\":[0,0,-1]}"
+    },
+    {
+      "browser_ms": 11333.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"probe\",\"seq\":4,\"probe\":true,\"target\":[0,0,-1]}"
+    },
+    {
+      "browser_ms": 11333.299999713898,
+      "kind": "frame-committed",
+      "seq": 4,
+      "probe": true,
+      "expected": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "browser_ms": 11333.299999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":5,\"y\":140,\"ticks\":1130641714}"
+    },
+    {
+      "browser_ms": 11333.39999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":5,\"y\":140,\"ticks\":1130641714}"
+    },
+    {
+      "browser_ms": 11333.39999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":181,\"y\":100,\"ticks\":1130641714}"
+    },
+    {
+      "browser_ms": 11333.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":181,\"y\":100,\"ticks\":1130641714}"
+    },
+    {
+      "browser_ms": 11333.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":175,\"y\":105,\"ticks\":1130641714}"
+    },
+    {
+      "browser_ms": 11333.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":175,\"y\":105,\"ticks\":1130641714}"
+    },
+    {
+      "browser_ms": 11333.799999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1130641714}"
+    },
+    {
+      "browser_ms": 11333.799999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1130641715}"
+    },
+    {
+      "browser_ms": 11333.89999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":5,\"y\":128,\"ticks\":1130641715}"
+    },
+    {
+      "browser_ms": 11334,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":5,\"y\":128,\"ticks\":1130641715}"
+    },
+    {
+      "browser_ms": 11334.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"decoded\",\"seq\":5,\"probe\":true,\"target\":[0.7809999999999999,-0.625,0]}"
+    },
+    {
+      "browser_ms": 11334.299999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"probe\",\"seq\":5,\"probe\":true,\"target\":[0.7809999999999999,-0.625,0]}"
+    },
+    {
+      "browser_ms": 11334.299999713898,
+      "kind": "frame-committed",
+      "seq": 5,
+      "probe": true,
+      "expected": [
+        0.7809999999999999,
+        -0.625,
+        0
+      ]
+    },
+    {
+      "browser_ms": 11334.39999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":6,\"y\":140,\"ticks\":1130641715}"
+    },
+    {
+      "browser_ms": 11334.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":6,\"y\":140,\"ticks\":1130641715}"
+    },
+    {
+      "browser_ms": 11334.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":194,\"y\":101,\"ticks\":1130641715}"
+    },
+    {
+      "browser_ms": 11334.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":194,\"y\":101,\"ticks\":1130641715}"
+    },
+    {
+      "browser_ms": 11334.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":91,\"y\":108,\"ticks\":1130641715}"
+    },
+    {
+      "browser_ms": 11335.099999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":91,\"y\":108,\"ticks\":1130641716}"
+    },
+    {
+      "browser_ms": 11335.199999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1130641716}"
+    },
+    {
+      "browser_ms": 11335.299999713898,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":0,\"y\":121,\"ticks\":1130641716}"
+    },
+    {
+      "browser_ms": 11335.39999961853,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-began\",\"id\":0,\"x\":6,\"y\":128,\"ticks\":1130641716}"
+    },
+    {
+      "browser_ms": 11335.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"touch-ended\",\"id\":0,\"x\":6,\"y\":128,\"ticks\":1130641716}"
+    },
+    {
+      "browser_ms": 11335.5,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"decoded\",\"seq\":6,\"probe\":true,\"target\":[0.994,-0.10899999999999999,0]}"
+    },
+    {
+      "browser_ms": 11335.699999809265,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"probe\",\"seq\":6,\"probe\":true,\"target\":[0.994,-0.10899999999999999,0]}"
+    },
+    {
+      "browser_ms": 11335.799999713898,
+      "kind": "frame-committed",
+      "seq": 6,
+      "probe": true,
+      "expected": [
+        0.994,
+        -0.10899999999999999,
+        0
+      ]
+    },
+    {
+      "browser_ms": 11335.799999713898,
+      "kind": "probe-passed"
+    },
+    {
+      "browser_ms": 11335.89999961853,
+      "kind": "trace",
+      "text": "[bridge] Host.Button.b pushed"
+    },
+    {
+      "browser_ms": 11342.5,
+      "kind": "trace",
+      "text": "[WasmDriver] applyRotation y=0 p=0 r=0 time=0.25"
+    },
+    {
+      "browser_ms": 11360.599999904633,
+      "kind": "trace",
+      "text": "COAMI23|{\"phase\":\"initialized\",\"initial\":0}"
+    },
+    {
+      "browser_ms": 11613.39999961853,
+      "kind": "initial-pose",
+      "error_radians": 0
+    },
+    {
+      "browser_ms": 11613.39999961853,
+      "kind": "fixed-world-target",
+      "target": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "browser_ms": 11613.5,
+      "kind": "decision-observation",
+      "observation_seq": 7,
+      "rotation": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "quaternion": [
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "browser_ms": 11613.599999904633,
+      "kind": "sent",
+      "message": {
+        "kind": "observation",
+        "run_id": "3f091d91-a0c3-4e22-843a-e0f2e4b31774",
+        "observation_seq": 7,
+        "offset": [
+          0,
+          0
+        ],
+        "rotation": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ],
+        "age_ms": 0.09999990463256836
+      }
+    },
+    {
+      "browser_ms": 11614.39999961853,
+      "kind": "server",
+      "reply": {
+        "run_id": "3f091d91-a0c3-4e22-843a-e0f2e4b31774",
+        "observation_seq": 7,
+        "kind": "centered"
+      }
+    },
+    {
+      "browser_ms": 11869.39999961853,
+      "kind": "decision-observation",
+      "observation_seq": 8,
+      "rotation": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "quaternion": [
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "browser_ms": 11869.39999961853,
+      "kind": "sent",
+      "message": {
+        "kind": "observation",
+        "run_id": "3f091d91-a0c3-4e22-843a-e0f2e4b31774",
+        "observation_seq": 8,
+        "offset": [
+          0,
+          0
+        ],
+        "rotation": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ],
+        "age_ms": 0
+      }
+    },
+    {
+      "browser_ms": 11870,
+      "kind": "server",
+      "reply": {
+        "run_id": "3f091d91-a0c3-4e22-843a-e0f2e4b31774",
+        "observation_seq": 8,
+        "kind": "centered"
+      }
+    },
+    {
+      "browser_ms": 12120.39999961853,
+      "kind": "decision-observation",
+      "observation_seq": 9,
+      "rotation": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "quaternion": [
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "browser_ms": 12120.599999904633,
+      "kind": "sent",
+      "message": {
+        "kind": "observation",
+        "run_id": "3f091d91-a0c3-4e22-843a-e0f2e4b31774",
+        "observation_seq": 9,
+        "offset": [
+          0,
+          0
+        ],
+        "rotation": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ],
+        "age_ms": 0.10000038146972656
+      }
+    },
+    {
+      "browser_ms": 12121,
+      "kind": "server",
+      "reply": {
+        "run_id": "3f091d91-a0c3-4e22-843a-e0f2e4b31774",
+        "observation_seq": 9,
+        "kind": "centered"
+      }
+    },
+    {
+      "browser_ms": 12121.099999904633,
+      "kind": "result",
+      "state": "成功",
+      "controls": 0
+    }
+  ],
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+  "capturedAt": "2026-10-16T06:26:45.140Z",
+  "poseSource": "rendered-head-world-quaternion",
+  "limitations": "synthetic ideal zero-offset camera; not physical robot evidence"
+}

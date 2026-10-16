@@ -117,6 +117,8 @@ node scripts/blocked-ui-smoke.mjs
 
 ## 結果與證據
 
+- [第三輪 PR review 修正](evidence/review-round3.md)：固定vendor在建置／每案manifest查核前後驗證，以及began返回後、ended送出前重查期限；含TDD與真正WASM中心案partial smoke。
+
 - [第二輪 PR review 修正](evidence/review-round2.md)：目前 checkout 可直接查核原始 Git blobs；runner clean build／source-output manifest 與完整唯一案例檢查。下方第一輪查核版本限制已由本輪修正取代。
 
 - [PR review 修正紀錄](evidence/review-fix.md)：工具來源 tracked／untracked 檢查與啟動逾時子程序清理，含5項回歸與歷史 source hash 查核版本說明；本輪未重跑閉環。
