@@ -54,3 +54,59 @@ test('shared vendor guard rejects dirty checkout, moved HEAD and mismatched gitl
     await rejectBuild(/pinned SDK mismatch/)
   } finally { await rm(scratch, { recursive: true, force: true }) }
 })
+
+
+test('failed preparation clears runnable assets but preserves accepted provenance for missing/mismatched tools',async()=>{
+ const scratch=await mkdtemp(path.join(tmpdir(),'e021-prepare-guard-'))
+ try {
+  const web=path.join(scratch,'web'),scripts=path.join(web,'scripts'),output=path.join(web,'generated/public'),evidence=path.join(scratch,'evidence/runtime-provenance.json')
+  await mkdir(scripts,{recursive:true});await mkdir(path.dirname(evidence),{recursive:true})
+  for(const name of ['prepare-runtime.mjs','stage-host.mjs'])await copyFile(new URL(name,import.meta.url),path.join(scripts,name))
+  const accepted='accepted historical provenance bytes\n'
+  const env={...process.env};for(const k of ['MODDABLE','EMSDK','FONTBM_SOURCE','FONTBM'])delete env[k]
+  const attempt=async(pattern)=>{
+   await mkdir(output,{recursive:true});await writeFile(path.join(output,'mc.wasm'),'stale runnable');await writeFile(evidence,accepted)
+   assert.throws(()=>execFileSync(process.execPath,[path.join(scripts,'prepare-runtime.mjs')],{env,stdio:['ignore','pipe','pipe']}),pattern)
+   assert.equal(await readFile(evidence,'utf8'),accepted)
+   await assert.rejects(readFile(path.join(output,'mc.wasm')),{code:'ENOENT'})
+  }
+  await attempt(/moddable is not configured/)
+  const tool=path.join(web,'generated/toolchain/moddable');await mkdir(tool,{recursive:true});git(tool,'init')
+  const tree=git(tool,'write-tree'),commit=git(tool,'-c','user.name=E021 Test','-c','user.email=e021@example.invalid','commit-tree',tree,'-m','wrong tool pin');git(tool,'update-ref','HEAD',commit)
+  Object.assign(env,{MODDABLE:tool,EMSDK:tool,FONTBM_SOURCE:tool})
+  await attempt(/source pin or tracked cleanliness mismatch/)
+ }finally{await rm(scratch,{recursive:true,force:true})}
+})
+
+test('preparation publishes only after success and cleans atomic temporary output on failure',async()=>{
+ const scratch=await mkdtemp(path.join(tmpdir(),'e021-prepare-atomic-'))
+ try {
+  const web=path.join(scratch,'web'),scripts=path.join(web,'scripts'),generated=path.join(web,'generated'),evidence=path.join(scratch,'evidence/runtime-provenance.json')
+  const roots=Object.fromEntries(['moddable','emsdk','fontbm'].map(n=>[n,path.join(generated,'toolchain',n)]))
+  const source=path.join(generated,'source'),publicRoot=path.join(generated,'public'),tools={emcc:path.join(roots.emsdk,'emcc'),fontbm:path.join(roots.fontbm,'build/fontbm'),mcconfig:path.join(roots.moddable,'bin/mcconfig'),xsc:path.join(roots.moddable,'bin/xsc')}
+  await mkdir(scripts,{recursive:true});await mkdir(path.dirname(evidence),{recursive:true})
+  await copyFile(new URL('prepare-runtime.mjs',import.meta.url),path.join(scripts,'prepare-runtime.mjs'))
+  for(const root of Object.values(roots))await mkdir(root,{recursive:true})
+  for(const file of Object.values(tools)){await mkdir(path.dirname(file),{recursive:true});await writeFile(file,'isolated executable fixture')}
+  const time=path.join(roots.moddable,'modules/base/time/time.js'),timeC=path.join(roots.moddable,'modules/base/time/wasm/modTime.c')
+  for(const file of [time,timeC,path.join(roots.moddable,'tools/VERSION'),path.join(source,'firmware/host/modules/input/wasm/pinned-time.js')]){await mkdir(path.dirname(file),{recursive:true});await writeFile(file,file.endsWith('VERSION')?'9.5.0':'pinned time fixture')}
+  const patch=path.join(scratch,'wasm-imu.patch');await writeFile(patch,'patch fixture')
+  const pins={moddable:'b6e06ba70506a7381ffb28e09e3175bf4e99f305',emsdk:'14c18b569f55138fe4963924162244251f454fb0',fontbm:'7677b908523e909679f67cd5c170396bb9def1aa'}
+  const shim=`import {mkdirSync,writeFileSync} from 'node:fs';import path from 'node:path';
+export const web=${JSON.stringify(web)},experiment=${JSON.stringify(scratch)},source=${JSON.stringify(source)},patch=${JSON.stringify(patch)},base='${base}';
+const tools=${JSON.stringify(tools)},roots=${JSON.stringify(roots)},pins=${JSON.stringify(pins)};
+export const capture=(cmd,args,cwd)=>{if(cmd==='git')return args[0]==='rev-parse'?pins[path.basename(cwd)]:'';if(cmd==='which')return tools[args[0]];if(cmd===tools.emcc)return 'emcc 5.0.1 8c5f43157a3f069ade75876e23061330521eabde';throw new Error('unexpected fixture capture')};
+export const stageHost=async()=>{};
+export const run=(cmd,args)=>{if(args[1]==='build:wasm'){if(process.env.E021_PREPARE_FAIL)throw new Error('injected build failure');mkdirSync(path.join(source,'web/simulator'),{recursive:true});for(const name of ['mc.js','mc.wasm'])writeFileSync(path.join(source,'web/simulator',name),'new runtime fixture')}};
+`
+  await writeFile(path.join(scripts,'stage-host.mjs'),shim)
+  const env={...process.env,MODDABLE:roots.moddable,EMSDK:roots.emsdk,FONTBM_SOURCE:roots.fontbm,FONTBM:tools.fontbm};delete env.E021_PREPARE_FAIL
+  const prepare=()=>execFileSync(process.execPath,[path.join(scripts,'prepare-runtime.mjs')],{env,stdio:['ignore','pipe','pipe']})
+  await writeFile(evidence,'accepted provenance bytes');env.E021_PREPARE_FAIL='1';assert.throws(prepare,/injected build failure/);assert.equal(await readFile(evidence,'utf8'),'accepted provenance bytes')
+  delete env.E021_PREPARE_FAIL;prepare();const bytes=await readFile(evidence,'utf8');assert.equal(JSON.parse(bytes).sourceCommit,base);assert.equal(await readFile(path.join(publicRoot,'runtime-provenance.json'),'utf8'),bytes)
+  await rm(evidence);await mkdir(evidence);await writeFile(path.join(evidence,'marker'),'retain destination')
+  assert.throws(prepare);assert.equal(await readFile(path.join(evidence,'marker'),'utf8'),'retain destination')
+  await assert.rejects(readFile(path.join(publicRoot,'simulator/mc.wasm')),{code:'ENOENT'})
+  const {readdir}=await import('node:fs/promises');assert.deepEqual((await readdir(path.dirname(evidence))).filter(n=>n.startsWith('.runtime-provenance-')),[])
+ }finally{await rm(scratch,{recursive:true,force:true})}
+})

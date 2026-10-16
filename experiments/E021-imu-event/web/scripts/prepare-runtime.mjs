@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { readFile, writeFile, rm, mkdir, copyFile, realpath } from 'node:fs/promises'
+import { readFile, writeFile, rm, mkdir, copyFile, realpath, mkdtemp, rename } from 'node:fs/promises'
 import path from 'node:path'
 import { stageHost, base, web, experiment, source, patch, run, capture } from './stage-host.mjs'
 
@@ -8,7 +8,6 @@ const evidence = path.join(experiment, 'evidence/runtime-provenance.json')
 const hash = async file => createHash('sha256').update(await readFile(file)).digest('hex')
 // Failure cannot leave a stale runnable runtime/MOD behind.
 await rm(publicRoot, { recursive: true, force: true })
-await rm(evidence, { force: true })
 const pins = {
   moddable: 'b6e06ba70506a7381ffb28e09e3175bf4e99f305',
   emsdk: '14c18b569f55138fe4963924162244251f454fb0',
@@ -55,6 +54,18 @@ const provenance = { clockCompatibility: { scope:'owner-approved E021 scratch pl
   commands:['npm ci --ignore-scripts --no-audit --no-fund','npm run build:wasm'],
   scope:'simulator-only; isolated copies of pinned tool sources, including existing local compiler cache; no hardware evidence' }
 const bytes = `${JSON.stringify(provenance,null,2)}\n`
-await writeFile(evidence,bytes)
-await writeFile(path.join(publicRoot,'runtime-provenance.json'),bytes)
+// Publish the historical ledger only after the complete successful preparation.
+let temporary
+try {
+  await writeFile(path.join(publicRoot,'runtime-provenance.json'),bytes)
+  temporary=await mkdtemp(path.join(path.dirname(evidence),'.runtime-provenance-'))
+  const staged=path.join(temporary,'provenance.json')
+  await writeFile(staged,bytes)
+  await rename(staged,evidence)
+} catch(error) {
+  await rm(publicRoot,{recursive:true,force:true})
+  throw error
+} finally {
+  if(temporary)await rm(temporary,{recursive:true,force:true})
+}
 console.log(bytes)
