@@ -1,6 +1,8 @@
 /** Full pinned WASM SDK and Python WS, actual rendered feedback. No fake controller. */
 import {spawn} from 'node:child_process'
 import {startProcess} from './process-start.mjs'
+import {cleanBuild,assertBuildCurrent} from './run-build.mjs'
+import {selectCases,suiteState,requireSelectedCase} from './run-cases.mjs'
 import {mkdtemp,mkdir,writeFile,readFile,rm} from 'node:fs/promises'
 import {createHash} from 'node:crypto'
 import {tmpdir} from 'node:os'
@@ -17,6 +19,11 @@ const report={runId,capturedAt:new Date().toISOString(),kind:'actual full pinned
 async function save(){await writeFile(path.join(directory,'report.json'),JSON.stringify(report,null,2)+'\n')}
 
 try{
+ const selected=selectCases(process.env.E023_CASES)
+ const build=await cleanBuild(root)
+ report.build=build
+ await writeFile(path.join(directory,'source-inputs.json'),JSON.stringify({capturedAt:new Date().toISOString(),sha256:build.sourcesSha256},null,2)+'\n')
+ await assertBuildCurrent(root,build)
  preview=await startProcess(process.execPath,[path.join(web,'node_modules/vite/bin/vite.js'),'preview','--host','127.0.0.1','--port','5203','--strictPort'],web,'127.0.0.1:5203')
  server=await startProcess(path.join(root,'server/.venv/bin/python'),['-m','uvicorn','app:app','--host','127.0.0.1','--port','8230'],path.join(root,'server'),'Uvicorn running on')
  chrome=spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',['--headless=new','--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows','--no-first-run','--no-default-browser-check','--remote-debugging-port=0',`--user-data-dir=${profile}`,'--use-angle=swiftshader','--enable-unsafe-swiftshader','about:blank'],{stdio:['ignore','ignore','pipe']})
@@ -33,8 +40,8 @@ try{
  report.bundleSha256={}
  const {readdir}=await import('node:fs/promises')
  for(const name of await readdir(path.join(web,'dist/assets'))){report.bundleSha256[name]=createHash('sha256').update(await readFile(path.join(web,'dist/assets',name))).digest('hex')}
- const selected=process.env.E023_CASES?process.env.E023_CASES.split(',').map(Number):Array.from({length:15},(_,i)=>i)
  for(const index of selected){
+  await assertBuildCurrent(root,build)
   if(Date.now()>suiteDeadline)throw Error('suite hard timeout')
   await call('Page.navigate',{url:`http://127.0.0.1:5203/?case=${index}`})
   const startup=Date.now()+40000;let state
@@ -44,13 +51,15 @@ try{
   const deadline=Date.now()+140000
   while(Date.now()<deadline){state=await evaluate('window.e023Evidence');if(['成功','失敗','無法判定'].includes(state?.result.state))break;await delay(250)}
   if(!['成功','失敗','無法判定'].includes(state?.result.state))throw Error('case timeout '+index)
+  requireSelectedCase(index,state)
+  await assertBuildCurrent(root,build)
   const file=`${state.case.id}.json`;await writeFile(path.join(directory,file),JSON.stringify(state,null,2)+'\n')
   const shot=await call('Page.captureScreenshot',{format:'png'});await writeFile(path.join(directory,`${state.case.id}.png`),Buffer.from(shot.data,'base64'))
   cases.push({id:state.case.id,result:state.result,file,probe:state.records.some(r=>r.kind==='probe-passed'),sdkCalls:state.records.filter(r=>r.kind==='trace'&&r.text.includes('"phase":"returned"')).length})
   console.log(JSON.stringify(cases.at(-1)));await save()
   if(state.result.state==='無法判定')throw Error('case evidence/transport blocker: '+state.result.reason)
  }
- report.state=cases.length===15?(cases.every(c=>c.result.state==='成功')?'成功':'失敗'):'partial'
+ report.state=suiteState(cases)
  if(errors.length)throw Error('browser exception(s) captured')
  await save();console.log(JSON.stringify({state:report.state,cases:cases.length,directory}))
 }catch(error){
