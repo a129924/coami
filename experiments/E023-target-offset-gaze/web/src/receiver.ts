@@ -46,6 +46,8 @@ export function transmitFrame(points: readonly {
         if (!isValid())
             throw Error('expired before commit; frame aborted');
         send(0, x, y, now());
+        if (!isValid())
+            throw Error('expired before ended; frame aborted');
         // Pinned Piu: 0 began, 1 cancelled, 2 ended, 3 moved.
         send(2, x, y, now());
     }

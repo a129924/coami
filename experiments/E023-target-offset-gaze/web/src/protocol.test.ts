@@ -75,9 +75,30 @@ test('real Piu event kinds and expiry prevent a later commit', async () => {
     }[] = [];
     transmitFrame(points, (kind, x, y) => sent.push({ kind, x, y }), () => true, () => 10);
     assert.deepEqual(sent.map(p => p.kind), [0, 2, 0, 2, 0, 2, 0, 2, 0, 2]);
-    let valid = 0;
     sent.length = 0;
-    assert.throws(() => transmitFrame(points, (kind, x, y) => sent.push({ kind, x, y }), () => ++valid < 5, () => 10));
+    assert.throws(() => transmitFrame(points, (kind, x, y) => sent.push({ kind, x, y }), () => sent.length < 8, () => 10));
     assert.equal(sent.length, 8);
     assert.ok(sent.every(p => p.y < 128), 'commit field was never transmitted');
+});
+
+test('expiry during began prevents ended delivery and SDK frame commit', async () => {
+    const { transmitFrame } = await import('./receiver.ts');
+    for (const expireAt of [0, 4]) {
+        const gate = new CommandGate('test');
+        gate.observe(1, 0);
+        let clock = 999;
+        assert.equal(gate.begin(parseCommand(command), clock), true);
+        const points = encodeFrame(1, point, false), decoder = new FrameDecoder();
+        const sent: number[] = [];
+        let frames = 0;
+        assert.throws(() => transmitFrame(points, (kind, x, y) => {
+            sent.push(kind);
+            if (kind === 0 && y === points[expireAt]!.y)
+                clock = 1001;
+            if (kind === 2 && decoder.receive(x, y, clock))
+                frames++;
+        }, () => gate.canCommit(clock), () => clock), /expired/);
+        assert.equal(sent.at(-1), 0, 'expired ended event was never sent');
+        assert.equal(frames, 0, 'no completed frame can reach SDK dispatch');
+    }
 });
