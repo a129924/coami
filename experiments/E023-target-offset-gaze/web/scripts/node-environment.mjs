@@ -1,11 +1,16 @@
-import {mkdirSync,writeFileSync} from 'node:fs'
+import {mkdirSync,writeFileSync,lstatSync} from 'node:fs'
 import path from 'node:path'
 export function assertNoNodePreloads(){
  if(process.env.NODE_OPTIONS?.trim() || process.env.NODE_PATH?.trim() || process.execArgv.some(arg=>/^(?:-r|--(?:require|import|(?:experimental-)?loader)(?:=|$))/.test(arg)))
   throw Error('unrecorded Node startup inputs; restart without NODE_OPTIONS/NODE_PATH or preload flags')
 }
+export function assertNoProjectNpmConfig(web){
+ try{lstatSync(path.join(web,'.npmrc'))}catch(error){if(error.code==='ENOENT')return;throw error}
+ throw Error('project npm configuration is not allowed for attested builds')
+}
 export function controlledNodeEnvironment(web){
  assertNoNodePreloads()
+ assertNoProjectNpmConfig(web)
  // All other inherited variables, including VITE_*, NODE_ENV and npm_config_*,
  // are deliberately absent. Disable user/global npm configuration as well.
  const config=path.join(path.resolve(web),'generated/npm-config')

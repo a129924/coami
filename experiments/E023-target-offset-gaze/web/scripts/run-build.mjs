@@ -1,4 +1,4 @@
-import {controlledNodeEnvironment} from './node-environment.mjs'
+import {controlledNodeEnvironment,assertNoProjectNpmConfig} from './node-environment.mjs'
 import {execFileSync} from 'node:child_process'
 import {createHash} from 'node:crypto'
 import {readFile,readdir,rm} from 'node:fs/promises'
@@ -40,17 +40,21 @@ export async function cleanBuild(root,{build=(web,env)=>execFileSync('npm',['run
  const web=path.join(root,'web'),sources=await sourceHashes(root)
  const dependencies=await install(web)
  await rm(path.join(web,'dist'),{recursive:true,force:true})
+ assertNoProjectNpmConfig(web)
  await build(web,env)
+ assertNoProjectNpmConfig(web)
  await verifyDependencies(web,dependencies)
  verifyVendor()
  if(!same(sources,await sourceHashes(root)))throw Error('sources changed during build')
  return {vendorSourceCommit,dependencies,environment:{kind:'controlled allowlist v1',values:env},kind:'clean build immediately before preview',sourcesSha256:sources,distSha256:await treeHashes(path.join(web,'dist'))}
 }
 export async function assertBuildCurrent(root,manifest,{verifyVendor=()=>verifyPinnedVendor(root)}={}){
+ assertNoProjectNpmConfig(path.join(root,'web'))
  await verifyDependencies(path.join(root,'web'),manifest.dependencies)
  verifyVendor()
  if(!same(manifest.sourcesSha256,await sourceHashes(root)))throw Error('sources changed after build')
  if(!same(manifest.distSha256,await treeHashes(path.join(root,'web/dist'))))throw Error('bundle changed after build')
+ assertNoProjectNpmConfig(path.join(root,'web'))
  await verifyDependencies(path.join(root,'web'),manifest.dependencies)
  verifyVendor()
 }

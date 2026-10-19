@@ -96,3 +96,19 @@ test('attested build rejects Node preload inputs and isolates child environment'
   vendors.delete(root);await rm(root,{recursive:true,force:true})
  }
 })
+
+test('project npm config is rejected before attributed install/build and after build',async()=>{
+ const root=await fixture(),web=path.join(root,'web'),config=path.join(web,'.npmrc')
+ try{
+  await writeFile(config,'node-options=--require=/tmp/unrecorded-hook.cjs\n')
+  let called=false
+  await assert.rejects(cleanBuild(root,{build:()=>{called=true}}),/project npm configuration/)
+  assert.equal(called,false)
+  await rm(config)
+  await assert.rejects(cleanBuild(root,{build:async web=>{build(web);await writeFile(config,'node-options=--require=/tmp/unrecorded-hook.cjs\n')}}),/project npm configuration/)
+  await rm(config)
+  const manifest=await cleanBuild(root,{build})
+  await writeFile(config,'')
+  await assert.rejects(assertBuildCurrent(root,manifest),/project npm configuration/)
+ }finally{vendors.delete(root);await rm(root,{recursive:true,force:true})}
+})
