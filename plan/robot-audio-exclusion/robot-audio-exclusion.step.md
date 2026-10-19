@@ -116,3 +116,7 @@ created: 2026-10-19
 - E025 ready handoff: 本機 http://127.0.0.1:5195/，Chrome tab 287644920；dev process 僅 loopback，保留供真人操作。準備程序不記為人耳或錄放並行 PASS；第9步必須等待實際輸入。
 
 - E025 actual evidence: experiments/E025-listening-saying-exclusion/evidence/validation.md 的 Human execution and interpretation；主要互斥假設已否定，逐筆保存不完整與整批回報分開。第9步對應實際commit 2da7f13、push及Draft PR#27更新讀回；維持OPEN／Draft、人工作業審查pending；不將human聽辨當作code review。
+
+## Owner final scope lock — 2026-10-19
+
+Owner要求本PR轉Ready for review；硬體錄放、喇叭回音及插話另行驗證，不是本PR阻擋項。固定結論見source-report.md頂端四點；直接record／say與XiaoZhi輪流控制分層，原逐筆缺口保留。Next actor仍為Human Reviewer；不將ready等同approved或merged。

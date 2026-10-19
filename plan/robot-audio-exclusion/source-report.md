@@ -2,6 +2,17 @@
 
 > 歷史階段說明：下列 source-only 結論與未執行狀態保存先前交付當時的事實。Owner 後續要求真人驗證，已另啟動 [E025](../../experiments/E025-listening-saying-exclusion/README.md)；新階段結果不得倒填為本報告當時已測。
 
+## 本次 PR 固定結論（以此為準）
+
+- 模擬器直接 `record()`／`say()` 已觀察到重疊。
+- XiaoZhi 對話路徑有輪流控制，不能概括成整個 SDK 都不互斥。
+- 真機錄放、喇叭回音與插話能力待驗證。
+- 逐筆儲存缺口如實保留。
+
+XiaoZhi 為來源層級的路徑區分，沒有執行該對話路徑的動態驗證：固定pin的 [xiaozhi-model.js L254–270](https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/modules/conversation/chat-audioio/xiaozhi-model.js#L254-L270) 控制 listen start／stop 與 uploading；[L400–447](https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/modules/conversation/chat-audioio/xiaozhi-model.js#L400-L447) 在 TTS start 將 uploading=false、clear encoder，並有 listen／speak 控制。這是對話流程的輪流控制，不能把直接audio API的反例外推成整個SDK都不互斥，也不能從此來源證明物理麥克風已停止、回音消除或插話有效。
+
+本PR範圍鎖定為固定pin的模擬器直接audio API觀測、來源路徑差異與原始證據限制。真機錄放、喇叭回音與插話另立獨立驗證，不是本PR Ready for review 或merge的硬體前置條件。後續歷史來源章節只描述直接record／say路徑，不作整個SDK的結論。
+
 ## 問題、版本與結論
 
 2026-10-19，核對 stack-chan `b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322`。
@@ -65,4 +76,4 @@ Archify 只呈現來源路徑，兩段不是執行時間線，也不證明互斥
 
 原來源階段結論保留為歷史；E025新增動態反例：Chrome153、耳機40%、固定同pin官方CI runtime。record→say5筆、say→record4筆，均非空錄音且SDK終態成功、自然播放與回放，capture／TTS保守區間重疊3055.3～3689.2ms。Owner回報「我剛剛測是都有聽到」。
 
-因此本次stock simulator 的 Listening／Saying 不由SDK強制互斥。動態證據、原頁面逐筆未保存缺口及整批事後真人回報分開記錄，見 [E025驗證](../../experiments/E025-listening-saying-exclusion/evidence/validation.md#human-execution-and-interpretation--2026-10-19)。此結論不外推真機／其他provider，不在本topic定義Robot State。
+因此本次stock simulator直接record／say路徑已觀察到重疊；不可概括為整個SDK都不互斥。動態證據、原頁面逐筆未保存缺口及整批事後真人回報分開記錄，見 [E025驗證](../../experiments/E025-listening-saying-exclusion/evidence/validation.md#human-execution-and-interpretation--2026-10-19)。此結論不外推真機／其他provider，不在本topic定義Robot State。

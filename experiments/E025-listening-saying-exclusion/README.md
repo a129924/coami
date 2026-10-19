@@ -47,7 +47,14 @@ Andrew 在 Chrome153、耳機40% 完成兩基線及9筆：錄音→說話5筆，
 
 ## 結論與限制
 
-固定版本 stock simulator 的 `audio.record()` 與 `audio.say()` 可以重疊活動；來源未見交叉guard的結果獲本次動態反例支持。後續 Robot State 定義不能假設 Listening／Saying 天生互斥；本實驗不制定新的 state model 或互斥政策。
+- 模擬器直接 `record()`／`say()` 已觀察到重疊。
+- XiaoZhi 對話路徑有輪流控制，不能概括成整個 SDK 都不互斥。
+- 真機錄放、喇叭回音與插話能力待驗證。
+- 逐筆儲存缺口如實保留。
+
+XiaoZhi 為來源層級的路徑區分，沒有執行該對話路徑的動態驗證：固定pin的 [xiaozhi-model.js L254–270](https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/modules/conversation/chat-audioio/xiaozhi-model.js#L254-L270) 控制 listen start／stop 與 uploading；[L400–447](https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/modules/conversation/chat-audioio/xiaozhi-model.js#L400-L447) 在 TTS start 將 uploading=false、clear encoder，並有 listen／speak 控制。這是對話流程的輪流控制，不能把直接audio API的反例外推成整個SDK都不互斥，也不能從此來源證明物理麥克風已停止、回音消除或插話有效。
+
+本PR範圍鎖定；真機驗證是獨立後續工作，不阻擋本PR轉Ready for review。實驗不制定state model或互斥政策。
 
 只支持固定pin、此Chrome與輸入條件，不保證真機或其他provider。被動觀測是保守瀏覽器生命週期區間，非實際聲學同步測量。頁面只儲存最後一筆且容許未儲存就開始下一筆，造成8筆缺逐筆聽辨欄位；保留原始缺口，以對話整批回報補充，不捏造逐筆簽認。獨立TS code review與human PR review仍未完成。
 

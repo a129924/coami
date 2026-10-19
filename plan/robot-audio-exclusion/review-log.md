@@ -78,3 +78,7 @@ Tests9/9、strict typecheck／build重新通過；bundle-size warning保留。�
 ## E025 Draft PR handoff
 
 Commit2da7f13已push，Draft PR#27已更新並讀回OPEN／Draft，reviews=[]。原始資料、整批真人回報與逐筆保存缺口均可review；PR Lens新committed diff validate／render PASS。Creator未自行宣稱獨立TS code review核可，交Human Reviewer；停STOP POINT2，不merge。
+
+## Owner final conclusion and scope lock — 2026-10-19
+
+Owner鎖定四點結論並要求Ready for review。Creator補充固定pin XiaoZhi startListening／stopListening／TTS start之uploading與encoder控制的唯讀引用，區分直接record／say反例與對話輪流控制。沒有執行XiaoZhi／真機新實驗，原始human-run／trace保持不變。真機錄放、喇叭回音與插話是獨立後續驗證，不阻擋本PR。此為範圍收斂，不是新增code review核可；Human Reviewer pending，不merge。

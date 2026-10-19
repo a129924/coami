@@ -10,7 +10,7 @@
 
 ## Goal / Outcome
 
-驗證固定 pin 的 stock simulator SDK 是否為 `audio.record()`（Listening）與 `audio.say()`（Saying）提供交叉互斥判斷。交付來源報告、版本證據與本機檢視圖；owner 後續要求啟動 E025 browser 動態與真人聽辨，供後續 Robot State 定義引用。
+驗證固定 pin 的 stock simulator 直接 audio API 是否為 `audio.record()`（Listening）與 `audio.say()`（Saying）提供交叉互斥判斷。交付來源報告、版本證據與本機檢視圖；owner 後續要求啟動 E025 browser 動態與真人聽辨，供後續 Robot State 定義引用。
 
 ## Scope
 
@@ -162,3 +162,12 @@ Owner 隨後明確要求「可以真人驗證」，新增 browser 真實錄放�
 主要假設被否定：record→say5筆／say→record4筆，有效重疊3055.3～3689.2ms；SDK terminals均成功，錄音非空，9筆均有自然回放。原頁面僅最後1筆完整保存heard／heard，其餘8筆保留unconfirmed；owner隨後回報「我剛剛測是都有聽到」，另記為整批事後聽辨。詳見E025 evidence/validation.md；不倒填原始trace或逐筆簽認。
 
 事前任一有效重疊即足以否定互斥，故主要技術問題可判讀；逐筆保存程序缺口作human review限制。範圍／判準不因結果改動，不外推真機或制定Robot State。獨立TS code review未完成，現交既有Draft PR供human review，不宣稱implementation-approved／merge gate通過。
+
+## Owner final scope lock / Ready for review — 2026-10-19
+
+- 模擬器直接 `record()`／`say()` 已觀察到重疊。
+- XiaoZhi 對話路徑有輪流控制，不能概括成整個 SDK 都不互斥。
+- 真機錄放、喇叭回音與插話能力待驗證。
+- 逐筆儲存缺口如實保留。
+
+本PR到此鎖定：直接record／say模擬器證據與XiaoZhi來源輪流控制分層。真機錄放、喇叭回音及插話移交獨立驗證，非本PR的review／merge硬體依賴；本輪不啟動硬體實驗。原始逐筆保存缺口不補造。Owner明確授權由Draft轉Ready for review；Human Reviewer仍是next actor，未宣稱code review通過，不merge。

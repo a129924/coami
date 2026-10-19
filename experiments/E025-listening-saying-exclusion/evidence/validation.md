@@ -88,10 +88,23 @@ Andrew 使用 Chrome153、耳機40% 完成基線及9筆雙操作（record-say5�
 
 判讀：互斥假設「失敗」（否定），不是驗證失敗。依事前判準，任一有效完整重疊即足以否定；實際兩順序均有至少3筆，且所有9筆都回放。真人逐筆欄位齊備的目標未完全達成，整批回報不能改寫為逐筆 contemporaneous sign-off；但不阻擋對主要互斥問題作有限結論。
 
-結論限於固定 pin／stock simulator／此 Chrome 與耳機條件：Listening 與 Saying 可以同時活動，不能視為 SDK 強制互斥狀態。不外推真機、其他provider或所有時序；不在本topic定義 Robot State 或實作互斥政策。
+結論限於固定 pin／stock simulator／此 Chrome 與耳機條件：直接record／say可以重疊活動；不能推論整個SDK都不互斥。不外推真機、其他provider或所有時序；不在本topic定義 Robot State 或實作互斥政策。
 
 本輪技術問題判讀已完成；Draft PR 維持人工作業審查，不宣稱正式 TS code review 或 merge gate 通過。`npm test` 再次9/9、`npm run build`（含strict web／MOD typecheck）exit0，只有既知bundle-size warning。
 
 原始檔 SHA-256（此 checkpoint）：
 - `human-run.md`: `b921677f7d8310cbe99255c3c0ce37e98a190e32d189d4d25f060d1614a65678`
 - `trace.jsonl`: `8e8d1750a7af4a1d2eb4c511a6dcec9faab8b1f1927eb3e7b2009e02e8cfe9e5`
+
+## Owner scope lock — 2026-10-19
+
+- 模擬器直接 `record()`／`say()` 已觀察到重疊。
+- XiaoZhi 對話路徑有輪流控制，不能概括成整個 SDK 都不互斥。
+- 真機錄放、喇叭回音與插話能力待驗證。
+- 逐筆儲存缺口如實保留。
+
+XiaoZhi 為來源層級的路徑區分，沒有執行該對話路徑的動態驗證：固定pin的 [xiaozhi-model.js L254–270](https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/modules/conversation/chat-audioio/xiaozhi-model.js#L254-L270) 控制 listen start／stop 與 uploading；[L400–447](https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/modules/conversation/chat-audioio/xiaozhi-model.js#L400-L447) 在 TTS start 將 uploading=false、clear encoder，並有 listen／speak 控制。這是對話流程的輪流控制，不能把直接audio API的反例外推成整個SDK都不互斥，也不能從此來源證明物理麥克風已停止、回音消除或插話有效。
+
+新增唯讀來源指紋：`firmware/host/modules/conversation/chat-audioio/xiaozhi-model.js` SHA-256 `ee54f95383a6b7491ebaa2be3489c8bbb5f37de07a3a8bc8b7f6a69002126860`，working bytes與固定pin git show一致。未改原11檔歷史inventory或原始human-run／trace。
+
+真機錄放、喇叭回音與插話另開獨立驗證；本PR不等待硬體，不新增真機PASS，也不因轉Ready for review宣稱code review已核可。
