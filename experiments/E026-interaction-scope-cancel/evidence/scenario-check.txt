@@ -1,0 +1,12 @@
+cancel-before-action 1 restartable
+cancel-before-action 2 restartable
+cancel-before-action 3 restartable
+duplicate-late 1 restartable
+duplicate-late 2 restartable
+duplicate-late 3 restartable
+natural-before-cancel 1 restartable
+natural-before-cancel 2 restartable
+natural-before-cancel 3 restartable
+robot-first 1 restartable
+robot-first 2 restartable
+robot-first 3 restartable

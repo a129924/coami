@@ -1,0 +1,49 @@
+{
+  "baseRevision": "d7ff0368a4e7d3ecd36d79a955745baae8b3c756",
+  "sourceState": "E026 content hashes; sources uncommitted at measurement time",
+  "sha256": {
+    "README.md": "5d094dbfda88cb621328648a42aa57cc0575cc670e5cde5db4a24702e4381ff6",
+    "artifact-manifest.json": "72c2d257397f9d2fdc23527828d6eee249048cfde32b9a543376b865dcc2646a",
+    "mod/host.d.ts": "04af3da35e4e3be42d3fb605761c7831f7e73e7c4e5341985098d8f042e37085",
+    "mod/manifest.json": "09ca0e52efcd479705795c9ec8fc76dd7862c61d7f8dfc89d11b4f8f337260c4",
+    "mod/mod.ts": "9f5005a8ff03f9c5e77e9ca875464ad994d7b751bee2a90044deb8342f9602e4",
+    "mod/tsconfig.json": "c49252a286ff6e395431771e7d1ff8858a26686f7ea992df1bf8f6ea9d4e7d83",
+    "run_experiment.py": "97d7be1cb5731cdbd81df1ec3fa4ead3d86a5208d2218a871d03416724fd59ed",
+    "scope-contract.md": "2eee8d127f9a0da74e9cb910b4ddd6263b1696df5e326b3f9a2660ffef8cc05a",
+    "server/app.py": "ad7e1bd95816ef559f6219c035967c06cc07c4c04fb5650b38dfe642f1400c38",
+    "server/e025_core.py": "9dd3cc1ab1dc364c4951450bb68d0896953fb1ee87101a27c55b76af4ea46488",
+    "server/pyproject.toml": "0aced04fdab1ad511fbacaa675a48abde062689362f2352adf61bcb4498cbf30",
+    "server/test_app.py": "a7a2a06b5e25880648689af24d9e22feb9bdbcb93ff4192d41a09feb30c175ec",
+    "server/uv.lock": "537095ef174fca1eef8a66945827c07a940cd2f67ef61cdfed06504ac0a9849d",
+    "web/.gitignore": "d6561dedc87d352acdff982cd34f7988c720e408909d3e8a6be840d4c1b6db7b",
+    "web/index.html": "ea65929d8039e4f94ea825d088b274fac9b46dcc355064a1f9e33d8729265c2d",
+    "web/package-lock.json": "b821e29654eb7713a9ccf299515fdc74e9884d4647a256ae62bd2492ad6e7214",
+    "web/package.json": "ba22249561200d4ffca7989c7d70df42e13487bf5798dfd579b1ba13933254ba",
+    "web/scripts/browser-check.mjs": "427492779eda91a50ca10a849d64351e9ed5da62d7459b61f94d15fd7e3f9457",
+    "web/scripts/build-mod.mjs": "6b8977d5bdb08841df0fe28e0770e1a0b9a8d45707f41cbf5ca383a2596f737e",
+    "web/scripts/fault-check.mjs": "5781f5578fa24f0d4b4e7b4ae1ea6a97ee1b02ee6a36f5e2c4347828fa1b4db5",
+    "web/scripts/prepare-assets.mjs": "440ad03511285398783f736b2004719c9267c3d7d9cf46111e573802e3202620",
+    "web/scripts/scenario-check.mjs": "57318e5702ad70fe8486894d592a5505b2e973f7e2cd60c0afec684bc9baba56",
+    "web/src/audio-adapter.test.ts": "4039a9a86e382b6b7f5de0e027d1dad6e9f7e75bb07f5f5dd73dc09222913dbc",
+    "web/src/audio-adapter.ts": "5f8e1321102f8f0c923768e81b686ab7622e3f1481c919265d252e5d0ab01267",
+    "web/src/main.ts": "12c319c574c486221b22e6f4417e0b4d839d820c264e3ea8de8011d88f6c0b1d",
+    "web/src/opening.test.ts": "cd079335657db0383fec7626bf2d02f697c2b3c079e28a6739c355c6ca16e8aa",
+    "web/src/opening.ts": "ce5bf5479ae94b841ab34e84f3873abae2e8816e178bcee9ba3d642e32239052",
+    "web/src/scope-controller.test.ts": "963418f9f8ed23462cd3e700d38a7f924d986694b7e76496fb524d99df712461",
+    "web/src/scope-controller.ts": "bb8a2a1e0ead2770a8891a9cf3b8af5b255b68e8755faa510ffbb248dd6aca4a",
+    "web/tsconfig.json": "286c9e6010394f1ff2b95abbde6c6d86979244f492d964498ac55983f730f857",
+    "web/vite.config.ts": "04b7f158f7b4adae9c193730ca1ca321459ad8e8a21a1dc6422901d48ccca430"
+  },
+  "coreReuse": {
+    "source": "experiments/E025-server-async-event-bus/app.py",
+    "snapshot": "server/e025_core.py",
+    "identical": true,
+    "sha256": "9dd3cc1ab1dc364c4951450bb68d0896953fb1ee87101a27c55b76af4ea46488"
+  },
+  "oldAudioSnapshot": {
+    "path": "evidence/round-2/audio-adapter-before-fix.ts",
+    "sha256": "36a91561bd0e59c520c47b2736e406fe86e6b9d8b5b5d4ad7ddeda0fd634bf54",
+    "preRunAttestation": false
+  },
+  "runtime": "runtime-provenance.json"
+}

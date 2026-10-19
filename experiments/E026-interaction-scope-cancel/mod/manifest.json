@@ -1,0 +1,8 @@
+{
+  "kind": "experiment-mod-descriptor",
+  "entry": "mod.ts",
+  "archiveName": "coami-e026",
+  "runtimePin": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "compilerManifest": "generated virtually by pinned upstream web/editor/mod-builder.mjs",
+  "note": "This descriptor is not a replacement vendor/compiler manifest."
+}

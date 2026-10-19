@@ -1,0 +1,12 @@
+{
+  "reason": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+  "errors": [],
+  "records": [
+    {
+      "at": 1283.9000000953674,
+      "utc": "2026-10-19T08:01:51.816Z",
+      "kind": "error",
+      "reason": "Error: Robot A connect failed"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+robot-stop-error 1 quarantined; independent environment disposed
+robot-stop-error 2 quarantined; independent environment disposed
+robot-stop-error 3 quarantined; independent environment disposed
+robot-stop-timeout 1 quarantined; independent environment disposed
+robot-stop-timeout 2 quarantined; independent environment disposed
+robot-stop-timeout 3 quarantined; independent environment disposed
+robot-close-error 1 quarantined; independent environment disposed
+robot-close-error 2 quarantined; independent environment disposed
+robot-close-error 3 quarantined; independent environment disposed
+server-cleanup-error 1 quarantined; independent environment disposed
+server-cleanup-error 2 quarantined; independent environment disposed
+server-cleanup-error 3 quarantined; independent environment disposed
+server-cleanup-timeout 1 quarantined; independent environment disposed
+server-cleanup-timeout 2 quarantined; independent environment disposed
+server-cleanup-timeout 3 quarantined; independent environment disposed

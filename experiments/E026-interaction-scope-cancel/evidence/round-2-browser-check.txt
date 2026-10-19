@@ -1,0 +1,10 @@
+READY 155.0.8059.80
+say 1 quarantined
+file:///private/tmp/coami-interaction-scope-cancel-worktree/experiments/E026-interaction-scope-cancel/web/scripts/browser-check.mjs:30
+    if (result.state !== 'restartable') throw Error(`${mode} ${repeat} quarantined`)
+                                              ^
+
+Error: say 1 quarantined
+    at file:///private/tmp/coami-interaction-scope-cancel-worktree/experiments/E026-interaction-scope-cancel/web/scripts/browser-check.mjs:30:47
+
+Node.js v26.10.0

@@ -1,0 +1,11 @@
+
+> coami-e026-web@0.1.0 mod
+> node scripts/build-mod.mjs
+
+[mod] > mcrun -d -p wasm -o /build /mod/coami-e026/manifest.json
+[mod] ### -p wasm
+[mod] > xsc -d -e /mod/coami-e026/mod.js -o /build/tmp/wasm/debug/coami-e026/files -r mod
+[mod] > xsc -d -e /build/tmp/wasm/debug/coami-e026/check.js -o /build/tmp/wasm/debug/coami-e026/files -r check
+[mod] > xsa -b /build/tmp/wasm/debug/coami-e026/files -n tech.moddable.coami-e026 -o /build/bin/wasm/debug/coami-e026 /build/tmp/wasm/debug/coami-e026/files/mod.xsb /build/tmp/wasm/debug/coami-e026/files/check.xsb
+[mod] archive: /build/bin/wasm/debug/coami-e026/mc.xsa
+Built coami-mod.xsa (3214 bytes)

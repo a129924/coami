@@ -1,0 +1,10 @@
+{
+  "snapshot": "audio-adapter-before-fix.ts",
+  "method": "reconstructed by reversing the recorded single cancellation-order patch",
+  "preRunSourceAttestation": false,
+  "actualTrialEvidence": [
+    "browser-failure.json",
+    "automated-browser.jsonl"
+  ],
+  "purpose": "preserve failing algorithm; do not treat reconstructed file as a served-byte attestation"
+}
