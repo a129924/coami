@@ -1,7 +1,8 @@
-import {assertNoNodePreloads} from './node-environment.mjs'
+import {stagePinnedVendor} from './stage-vendor.mjs'
+import {assertNoNodePreloads,npmConfigFreeEnvironment} from './node-environment.mjs'
 import {prepareCompilerEnvironment,rebuildFontbm} from './tool-inputs.mjs'
 import {verifyStagedHost} from './host-inputs.mjs'
-import {rebuildModdableTools,replaceCache,verifyCleanSource,rebuildVerifiedSource,buildWithVerifiedCompiler} from './build-safety.mjs'
+import {rebuildModdableTools,replaceCache,verifyCleanSource,rebuildVerifiedSource,buildWithVerifiedCompiler,verifyVendor} from './build-safety.mjs'
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import {installedTreeSha256} from './installed-tree.mjs'
@@ -130,17 +131,14 @@ try {
 } catch(error){throw Error(`BLOCKED: clean pinned fontbm build failed: ${String(error)}`)}
 
 await mkdir(generatedRoot, { recursive: true })
-await rm(sourceRoot, { recursive: true, force: true })
-await cp(vendorRoot, sourceRoot, {
-  recursive: true,
-  force: true,
-  filter: (source) => !['.git', 'node_modules', 'dist', 'mc.js', 'mc.wasm'].includes(path.basename(source)),
-})
+await stagePinnedVendor(repositoryRoot,vendorRoot,PINNED_COMMIT,sourceRoot)
 execFileSync('npm', ['ci', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit',
-  env: { ...compilerEnvironment.env, CI: '1', LEFTHOOK: '0' } })
+  env: { ...npmConfigFreeEnvironment(path.join(sourceRoot,'firmware'),compilerEnvironment.env), CI: '1', LEFTHOOK: '0' } })
 await replaceCache(path.join(emsdkRoot,'upstream/emscripten/cache'),path.join(generatedRoot,'em-cache'))
 await buildWithVerifiedCompiler(emsdkRoot,PINNED_EMSDK_COMMIT,emscriptenTreeSha256,()=>execFileSync('npm', ['run', 'build:wasm'], { cwd: path.join(sourceRoot, 'firmware'), stdio: 'inherit',
-  env: { ...compilerEnvironment.env, FONTBM: fontbmBinary, EM_CACHE: path.join(generatedRoot, 'em-cache'), PYTHONDONTWRITEBYTECODE: '1' } }))
+  env: { ...npmConfigFreeEnvironment(path.join(sourceRoot,'firmware'),compilerEnvironment.env), FONTBM: fontbmBinary, EM_CACHE: path.join(generatedRoot, 'em-cache'), PYTHONDONTWRITEBYTECODE: '1' } }))
+
+verifyVendor(repositoryRoot,vendorRoot,PINNED_COMMIT)
 
 await mkdir(path.join(publicSimulator, 'assets/case/v1'), { recursive: true })
 const hashes = {}
@@ -149,16 +147,17 @@ for (const name of ['mc.js', 'mc.wasm']) {
   hashes[name] = createHash('sha256').update(bytes).digest('hex')
   await writeFile(path.join(publicSimulator, name), bytes)
 }
-await cp(path.join(vendorRoot, 'web/simulator/assets/case/v1/shell.stl'),
+await cp(path.join(sourceRoot, 'web/simulator/assets/case/v1/shell.stl'),
   path.join(publicSimulator, 'assets/case/v1/shell.stl'))
 hashes['assets/case/v1/shell.stl'] = createHash('sha256').update(await readFile(path.join(publicSimulator,'assets/case/v1/shell.stl'))).digest('hex')
 const host = await verifyStagedHost(path.join(sourceRoot,'web'))
-const provenance = { host, sourceCommit: PINNED_COMMIT, moddableVersion, emccVersion,
+const provenance = { host, npmConfiguration:'inherited npm_* removed; empty user/global configs; project .npmrc rejected', sourceCommit: PINNED_COMMIT, moddableVersion, emccVersion,
   moddable: { path: moddableRoot, sourceCommit: PINNED_MODDABLE_COMMIT, build: 'clean release xsc/xsid/xsl/tools from verified checkout', tools: moddableTools },
   emscripten: { emsdkPath: emsdkRoot, emsdkCommit: PINNED_EMSDK_COMMIT,
     controlledConfig: compilerEnvironment.provenance, release: PINNED_EMSCRIPTEN_RELEASE, upstreamCommit: PINNED_EMSCRIPTEN_COMMIT,
     installedTreeSha256: emscriptenTreeSha256, emccPath: emccBinary, emccSha256 },
   fontbm: { path: fontbmBinary, build: 'clean CMake Release from verified checkout', sourceCommit: fontbmCommit, sha256: fontbmSha256 }, sha256: hashes }
+verifyVendor(repositoryRoot,vendorRoot,PINNED_COMMIT)
 await writeFile(provenancePath, `${JSON.stringify(provenance, null, 2)}\n`)
 await writeFile(path.join(publicRoot, 'runtime-provenance.json'), `${JSON.stringify(provenance, null, 2)}\n`)
 console.log(JSON.stringify(provenance, null, 2))

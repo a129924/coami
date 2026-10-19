@@ -13,10 +13,18 @@ export function controlledNodeEnvironment(web){
  assertNoProjectNpmConfig(web)
  // All other inherited variables, including VITE_*, NODE_ENV and npm_config_*,
  // are deliberately absent. Disable user/global npm configuration as well.
+ const env={PATH:[path.dirname(process.execPath),'/opt/homebrew/bin','/usr/bin','/bin','/usr/sbin','/sbin'].join(path.delimiter),CI:'1',LANG:'C'}
+ for(const key of ['HOME','TMPDIR'])if(process.env[key])env[key]=process.env[key]
+ return npmConfigFreeEnvironment(web,env)
+}
+
+export function npmConfigFreeEnvironment(web,inherited){
+ assertNoProjectNpmConfig(web)
+ const env={...inherited}
+ for(const key of Object.keys(env))if(/^npm_/i.test(key))delete env[key]
  const config=path.join(path.resolve(web),'generated/npm-config')
  mkdirSync(config,{recursive:true})
  for(const name of ['user','global'])writeFileSync(path.join(config,name),'')
- const env={PATH:[path.dirname(process.execPath),'/opt/homebrew/bin','/usr/bin','/bin','/usr/sbin','/sbin'].join(path.delimiter),CI:'1',LANG:'C',npm_config_userconfig:path.join(config,'user'),npm_config_globalconfig:path.join(config,'global'),npm_config_cache:path.join(path.resolve(web),'generated/npm-cache')}
- for(const key of ['HOME','TMPDIR'])if(process.env[key])env[key]=process.env[key]
+ Object.assign(env,{npm_config_userconfig:path.join(config,'user'),npm_config_globalconfig:path.join(config,'global'),npm_config_cache:path.join(path.resolve(web),'generated/npm-cache')})
  return env
 }
