@@ -1,0 +1,28 @@
+
+> coami-e027-web@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.0 /private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web
+
+ ❯ src/turn-bridge.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/turn-bridge.test.ts [ src/turn-bridge.test.ts ]
+Error: Cannot find module './turn-bridge.ts' imported from /private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/src/turn-bridge.test.ts
+ ❯ src/turn-bridge.test.ts:3:1
+      1| import { expect, it } from 'vitest'
+      2| import { TurnSession } from './turn-session.ts'
+      3| import { TurnBridge } from './turn-bridge.ts'
+       | ^
+      4| it('rejects changed record bytes before any upload', async () => {
+      5|   const session = new TurnSession('test'); const token = session.begin…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  3 passed (3)
+   Start at  12:28:52
+   Duration  118ms (transform 22ms, setup 0ms, import 17ms, tests 2ms, environment 0ms)

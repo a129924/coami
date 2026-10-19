@@ -1,0 +1,13 @@
+{
+  "experiment": "E027",
+  "ttsPrerequisite": "未執行",
+  "mainHypothesis": "未執行",
+  "taskComplete": false,
+  "missing": [
+    "fresh native runtime",
+    "TTS A/B natural-ended and human hearing",
+    "six contextual adult voice trials"
+  ],
+  "liveProviderCalls": 0,
+  "rawAudioSaved": false
+}

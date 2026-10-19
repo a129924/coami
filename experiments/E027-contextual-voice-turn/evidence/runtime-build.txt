@@ -1,0 +1,8 @@
+file:///private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/scripts/prepare-assets.mjs:62
+if (!moddable) throw new Error('BLOCKED: MODDABLE 9.5.0 is not configured')
+                     ^
+
+Error: BLOCKED: MODDABLE 9.5.0 is not configured
+    at file:///private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/scripts/prepare-assets.mjs:62:22
+
+Node.js v26.10.0

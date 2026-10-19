@@ -1,0 +1,70 @@
+
+> coami-e027-web@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.0 /private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web
+
+ ❯ src/turn-session.test.ts (3 tests | 3 failed) 5ms
+     × requires natural ended AND same-turn SDK completion 3ms
+     × invalidates stale callbacks and locks uncertain playback 1ms
+     × cannot complete on SDK success without ended evidence 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/turn-session.test.ts > same-turn lifecycle > requires natural ended AND same-turn SDK completion
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ src/turn-session.test.ts:6:36
+      4|   it('requires natural ended AND same-turn SDK completion', () => {
+      5|     const s = new TurnSession('session'); const t = s.begin('clear')
+      6|     expect(() => s.begin('clear')).toThrow(/busy/)
+       |                                    ^
+      7|     s.sdk(t, true); expect(s.state).toBe('busy')
+      8|     s.playback(t, 'ended'); expect(s.state).toBe('completed')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/turn-session.test.ts > same-turn lifecycle > invalidates stale callbacks and locks uncertain playback
+AssertionError: expected 'idle' to be 'unconfirmed' // Object.is equality
+
+Expected: "unconfirmed"
+Received: "idle"
+
+ ❯ src/turn-session.test.ts:14:21
+     12|     const s = new TurnSession('session'); const t = s.begin('clear')
+     13|     s.playback(t, 'started'); s.timeout(t)
+     14|     expect(s.state).toBe('unconfirmed'); expect(s.accept(t)).toBe(fals…
+       |                     ^
+     15|     expect(() => s.begin('clear')).toThrow(/reload/)
+     16|     s.playback(t, 'ended'); expect(s.state).toBe('unconfirmed')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/turn-session.test.ts > same-turn lifecycle > cannot complete on SDK success without ended evidence
+AssertionError: expected 'idle' to be 'failed' // Object.is equality
+
+Expected: "failed"
+Received: "idle"
+
+ ❯ src/turn-session.test.ts:21:21
+     19|     const s = new TurnSession('session'); const t = s.begin('clear')
+     20|     s.sdk({...t, run_seq: 99}, true); s.timeout(t)
+     21|     expect(s.state).toBe('failed')
+       |                     ^
+     22|     expect(s.begin('ambiguous').run_seq).toBe(2)
+     23|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed (3)
+   Start at  12:28:26
+   Duration  127ms (transform 11ms, setup 0ms, import 16ms, tests 5ms, environment 0ms)

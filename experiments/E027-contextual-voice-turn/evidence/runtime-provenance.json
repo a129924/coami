@@ -1,0 +1,11 @@
+{
+  "experiment": "E027",
+  "status": "無法判定",
+  "attempt": "fresh runtime prepare",
+  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "missing": [
+    "E027-local Moddable 9.5.0 and pinned compiler toolchain"
+  ],
+  "runtimeBuilt": false,
+  "servedAssetsVerified": false
+}

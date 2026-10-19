@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "sequence",
+  "input": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/evidence/archify/candidate.json",
+  "output": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/evidence/archify/contextual-voice-turn.html",
+  "specification": {
+    "sha256": "cc57804a6f9c294a2b69ab9319bfdf31a9186b8e473dbfc0fe9bd1f0289570a0",
+    "bytes": 1984
+  },
+  "artifact": {
+    "sha256": "1d7feaf0b55483ab679f5fe8e84b16b3b9e2d48032ec9c915bcd8b9ea4191980",
+    "bytes": 699182
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}
