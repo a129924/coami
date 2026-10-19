@@ -1,0 +1,41 @@
+
+> coami-e023-web@0.1.0 test:tools
+> node --test scripts/source-cleanliness.test.mjs scripts/stage-vendor.test.mjs scripts/host-npm.test.mjs scripts/host-startup.test.mjs scripts/process-start.test.mjs scripts/run-build.test.mjs scripts/run-cases.test.mjs scripts/run-dependencies.test.mjs scripts/run-python.test.mjs scripts/run-mod.test.mjs
+
+✔ host npm ignores inherited node-options and user/global configs in actual lifecycle (469.097458ms)
+✔ host coordinator rejects require/import preloads before preparing artifacts (181.83175ms)
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=false) (517.205625ms)
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=true) (605.831ms)
+✔ ready child is returned to caller; startup timeout is cancelled (462.746666ms)
+✔ early exit and spawn failure reject promptly (97.323292ms)
+✔ normal teardown escalates a ready child ignoring SIGTERM and is safe to repeat (267.212375ms)
+✔ clean build replaces stale dist and binds sources to output; later edits rejected (464.509125ms)
+✔ a source edit during the build cannot produce attributed evidence (241.82575ms)
+✔ vendor source mutation is rejected before build (99.683833ms)
+✔ vendor source mutation is rejected during build (232.154167ms)
+✔ vendor source mutation is rejected after build (265.920958ms)
+✔ installed dependency edits rejected during bundling (209.067792ms)
+✔ installed dependency edits rejected after bundling (639.475709ms)
+✔ attested build rejects Node preload inputs and isolates child environment (291.974417ms)
+✔ project npm config is rejected before attributed install/build and after build (369.217ms)
+✔ case selector rejects duplicates, omissions disguised by bad indices, and malformed values (4.083917ms)
+✔ only exact unique case identities can yield a complete suite (0.693042ms)
+
+up to date in 295ms
+✔ actual npm ci removes modified installed modules; later dependency or lock edits fail attestation (417.104084ms)
+✔ MOD artifact requires matching clean compiler, source and archive attestation (19.119667ms)
+✔ MOD compiler input boundary rejects external config and extra local files (16.244583ms)
+✔ Python attestation rejects installed package, interpreter, stdlib and lock edits (30.13075ms)
+✔ runner recreates the old venv before locked reinstall and attestation (15.896667ms)
+✔ compiler sources reject untracked headers and CMake inputs before rebuilding (222.219ms)
+✔ compiler rebuilds reject dirty sources or changed HEAD before tool attestation (371.700959ms)
+✔ WASM build rejects Emscripten tree and emsdk checkout mutations before provenance (238.225625ms)
+✔ host staging uses immutable commit blobs and rejects vendor changes after staging/build (550.856167ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3030.956333

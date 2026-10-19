@@ -125,6 +125,8 @@ node scripts/blocked-ui-smoke.mjs
 
 - [第八輪review修正](evidence/review-round8.md)：拒絕project npm config、host preload guard、完整三軸SDK target查核及MOD設定／host declarations attestation。只新增中心案partial smoke；完整15案仍為第六輪，未追溯增加其MOD config保證。
 
+- [第九輪review修正](evidence/review-round9.md)：固定Git archive staging、host npm設定隔離、完整雙軸offset及Server交換關聯查核。未重跑WASM suite；既有完整15案raw已通過新audit，舊host建置保證不追溯提升。
+
 - **目前正式依據**：[具MOD編譯／Python環境驗證與來源建置綁定的完整再驗證](evidence/manifest-run.md)與[第六輪review修正](evidence/review-round6.md)。現行audit查核新完整run；舊run與receipts保留各輪原有驗證範圍；第五輪以前沒有本輪MOD編譯／Python環境驗證，不追溯提升其證據保證。
 
 - [第三輪 PR review 修正](evidence/review-round3.md)：固定vendor在建置／每案manifest查核前後驗證，以及began返回後、ended送出前重查期限；含TDD與真正WASM中心案partial smoke。

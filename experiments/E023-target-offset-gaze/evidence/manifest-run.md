@@ -33,3 +33,5 @@ Audit使用明確require／AuditError；正常與-O且繼承PYTHONOPTIMIZE=2均�
 四個近中心案例20次後姿態與±0.11偏差未變，對應約6.28°修正，未觸發原版SDK嚴格30°門檻。SDK、Server、相機模型與驗收判準均未改，本結論不外推實機。
 
 舊run與receipts保留各輪驗證範圍，不追溯宣稱具本輪MOD compiler／Python runtime attestation。第五輪摘要見 [manifest-run-round5.md](manifest-run-round5.md)。本輪沿用固定host bytes，未重編host。
+
+2026-10-19第九輪查核：同一份raw資料另通過完整雙軸offset及hello／observation／Calculator command／SDK frame／completion交換關聯查核；receipt標示complete_offsets_verified與server_exchanges_verified。這不是重新執行run；[修正與範圍](review-round9.md)說明新增host guards不可追溯至原host建置。
