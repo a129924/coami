@@ -1,0 +1,39 @@
+
+> coami-e023-web@0.1.0 test:tools
+> node --test scripts/source-cleanliness.test.mjs scripts/host-startup.test.mjs scripts/process-start.test.mjs scripts/run-build.test.mjs scripts/run-cases.test.mjs scripts/run-dependencies.test.mjs scripts/run-python.test.mjs scripts/run-mod.test.mjs
+
+✔ host coordinator rejects require/import preloads before preparing artifacts (198.336084ms)
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=false) (514.519625ms)
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=true) (604.71825ms)
+✔ ready child is returned to caller; startup timeout is cancelled (455.07325ms)
+✔ early exit and spawn failure reject promptly (55.41825ms)
+✔ normal teardown escalates a ready child ignoring SIGTERM and is safe to repeat (154.983666ms)
+✔ clean build replaces stale dist and binds sources to output; later edits rejected (382.62025ms)
+✔ a source edit during the build cannot produce attributed evidence (216.716333ms)
+✔ vendor source mutation is rejected before build (96.426709ms)
+✔ vendor source mutation is rejected during build (221.096875ms)
+✔ vendor source mutation is rejected after build (230.612291ms)
+✔ installed dependency edits rejected during bundling (196.59825ms)
+✔ installed dependency edits rejected after bundling (228.205542ms)
+✔ attested build rejects Node preload inputs and isolates child environment (228.313375ms)
+✔ project npm config is rejected before attributed install/build and after build (382.143875ms)
+✔ case selector rejects duplicates, omissions disguised by bad indices, and malformed values (2.488125ms)
+✔ only exact unique case identities can yield a complete suite (0.278ms)
+
+up to date in 225ms
+✔ actual npm ci removes modified installed modules; later dependency or lock edits fail attestation (354.963208ms)
+✔ MOD artifact requires matching clean compiler, source and archive attestation (21.505542ms)
+✔ MOD compiler input boundary rejects external config and extra local files (11.885292ms)
+✔ Python attestation rejects installed package, interpreter, stdlib and lock edits (27.576292ms)
+✔ runner recreates the old venv before locked reinstall and attestation (11.562416ms)
+✔ compiler sources reject untracked headers and CMake inputs before rebuilding (188.377ms)
+✔ compiler rebuilds reject dirty sources or changed HEAD before tool attestation (316.789416ms)
+✔ WASM build rejects Emscripten tree and emsdk checkout mutations before provenance (235.167167ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2319.949709

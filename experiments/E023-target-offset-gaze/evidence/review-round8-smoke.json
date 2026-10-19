@@ -1,0 +1,22 @@
+{
+  "check": "PASS",
+  "state": "partial",
+  "run_id": "WASM-2026-10-19T02-11-43-546Z",
+  "source_commit": "46a2040f338839acf9d28b9419d328f6ce6aae34",
+  "source_blobs_verified": true,
+  "mod_compiler_inputs_verified": [
+    "mod.ts",
+    "protocol.ts",
+    "host.d.ts",
+    "tsconfig.json"
+  ],
+  "case": "TC-E2E-01",
+  "result": {
+    "state": "成功",
+    "controls": 0
+  },
+  "probe_frames": 6,
+  "sdk_calls": 0,
+  "browser_exceptions": 0,
+  "limitation": "One selected center case only; not a complete 15-case rerun. Host not rebuilt."
+}

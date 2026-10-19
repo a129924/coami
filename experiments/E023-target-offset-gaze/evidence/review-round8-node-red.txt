@@ -1,0 +1,89 @@
+✖ host coordinator rejects require/import preloads before preparing artifacts (88.576459ms)
+✔ clean build replaces stale dist and binds sources to output; later edits rejected (330.018958ms)
+✔ a source edit during the build cannot produce attributed evidence (210.60425ms)
+✔ vendor source mutation is rejected before build (83.977125ms)
+✔ vendor source mutation is rejected during build (204.831333ms)
+✔ vendor source mutation is rejected after build (275.61075ms)
+✔ installed dependency edits rejected during bundling (230.107292ms)
+✔ installed dependency edits rejected after bundling (201.897833ms)
+✔ attested build rejects Node preload inputs and isolates child environment (209.260042ms)
+✖ project npm config is rejected before attributed install/build and after build (155.172209ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 8
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1989.642417
+
+✖ failing tests:
+
+test at scripts/host-startup.test.mjs:8:1
+✖ host coordinator rejects require/import preloads before preparing artifacts (88.576459ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /unrecorded Node startup inputs/. Input:
+
+  'fatal: not a git repository (or any of the parent directories): .git\n' +
+    'node:internal/errors:999\n' +
+    '  const err = new Error(message);\n' +
+    '              ^\n' +
+    '\n' +
+    'Error: Command failed: git rev-parse HEAD:vendor/stack-chan\n' +
+    'fatal: not a git repository (or any of the parent directories): .git\n' +
+    '\n' +
+    '    at genericNodeError (node:internal/errors:999:15)\n' +
+    '    at wrappedFn (node:internal/errors:544:14)\n' +
+    '    at checkExecSyncError (node:child_process:943:11)\n' +
+    '    at execFileSync (node:child_process:979:15)\n' +
+    '    at output (file:///private/var/folders/x9/3v967ts5131dfn6x4bsy9th00000gn/T/e023-host-start-tcibns/web/scripts/prepare-assets.mjs:34:10)\n' +
+    '    at file:///private/var/folders/x9/3v967ts5131dfn6x4bsy9th00000gn/T/e023-host-start-tcibns/web/scripts/prepare-assets.mjs:41:17 {\n' +
+    '  status: 128,\n' +
+    '  signal: null,\n' +
+    '  output: [\n' +
+    '    null,\n' +
+    "    '',\n" +
+    "    'fatal: not a git repository (or any of the parent directories): .git\\n'\n" +
+    '  ],\n' +
+    '  pid: 95085,\n' +
+    "  stdout: '',\n" +
+    "  stderr: 'fatal: not a git repository (or any of the parent directories): .git\\n'\n" +
+    '}\n' +
+    '\n' +
+    'Node.js v26.10.0\n'
+
+      at TestContext.<anonymous> (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/host-startup.test.mjs:21:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: "fatal: not a git repository (or any of the parent directories): .git\nnode:internal/errors:999\n  const err = new Error(message);\n              ^\n\nError: Command failed: git rev-parse HEAD:vendor/stack-chan\nfatal: not a git repository (or any of the parent directories): .git\n\n    at genericNodeError (node:internal/errors:999:15)\n    at wrappedFn (node:internal/errors:544:14)\n    at checkExecSyncError (node:child_process:943:11)\n    at execFileSync (node:child_process:979:15)\n    at output (file:///private/var/folders/x9/3v967ts5131dfn6x4bsy9th00000gn/T/e023-host-start-tcibns/web/scripts/prepare-assets.mjs:34:10)\n    at file:///private/var/folders/x9/3v967ts5131dfn6x4bsy9th00000gn/T/e023-host-start-tcibns/web/scripts/prepare-assets.mjs:41:17 {\n  status: 128,\n  signal: null,\n  output: [\n    null,\n    '',\n    'fatal: not a git repository (or any of the parent directories): .git\\n'\n  ],\n  pid: 95085,\n  stdout: '',\n  stderr: 'fatal: not a git repository (or any of the parent directories): .git\\n'\n}\n\nNode.js v26.10.0\n",
+    expected: /unrecorded Node startup inputs/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at scripts/run-build.test.mjs:100:1
+✖ project npm config is rejected before attributed install/build and after build (155.172209ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /project npm configuration/. Input:
+
+  "Error: ENOENT: no such file or directory, scandir '/var/folders/x9/3v967ts5131dfn6x4bsy9th00000gn/T/e023-build-h7hgMC/web/dist'"
+
+      at async TestContext.<anonymous> (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-build.test.mjs:105:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: ENOENT: no such file or directory, scandir '/var/folders/x9/3v967ts5131dfn6x4bsy9th00000gn/T/e023-build-h7hgMC/web/dist'
+        at async readdir (node:internal/fs/promises:1744:18)
+        at async walk (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-build.mjs:18:23)
+        at async treeHashes (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-build.mjs:25:2)
+        at async cleanBuild (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-build.mjs:47:177)
+        at async waitForActual (node:assert:615:5)
+        at async strict.rejects (node:assert:738:25)
+        at async TestContext.<anonymous> (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/run-build.test.mjs:105:3)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    expected: /project npm configuration/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

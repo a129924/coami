@@ -1,0 +1,15 @@
+
+> coami-e023-web@0.1.0 prepare:poc
+> node scripts/prepare.mjs
+
+
+added 28 packages in 996ms
+file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/mod-inputs.mjs:7
+ if(JSON.stringify(names)!==JSON.stringify([...MOD_INPUT_FILES].sort()))throw Error('unsupported MOD compiler input set')
+                                                                              ^
+
+Error: unsupported MOD compiler input set
+    at modInputHashes (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/mod-inputs.mjs:7:79)
+    at async file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/prepare.mjs:18:19
+
+Node.js v26.10.0
