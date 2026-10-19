@@ -1,3 +1,4 @@
+import {modInputHashes,MOD_INPUT_FILES} from './mod-inputs.mjs'
 import {controlledNodeEnvironment} from './node-environment.mjs'
 /** No SDK patch or compiler installation: package the MOD with pinned SDK tools. */
 import {execFileSync} from 'node:child_process'
@@ -14,8 +15,7 @@ await mkdir(out,{recursive:true});await rm(path.join(out,'public'),{recursive:tr
 try{
  if(git(['rev-parse','HEAD:vendor/stack-chan'],repo)!==pin||git(['rev-parse','HEAD'],vendor)!==pin||git(['status','--porcelain=v1','--untracked-files=all'],vendor))throw Error('pinned vendor mismatch/dirty')
  const dependencies=await installDependencies(web)
- const modSources={}
- for(const file of ['mod.ts','protocol.ts'])modSources[file]=sha(await readFile(path.join(web,'../mod',file)))
+ const modSources=await modInputHashes(path.resolve(web,'..'))
  const publicRoot=path.join(out,'public');await mkdir(publicRoot,{recursive:true})
  const emitted=path.join(out,'mod')
  await rm(emitted,{recursive:true,force:true})
@@ -28,7 +28,7 @@ try{
  await writeFile(path.join(out,'coami-mod.xsa'),archive)
  await verifyDependencies(web,dependencies)
  verifyVendor(repo,vendor,pin)
- for(const file of ['mod.ts','protocol.ts'])if(sha(await readFile(path.join(web,'../mod',file)))!==modSources[file])throw Error('MOD sources changed during compilation')
+ if(JSON.stringify(await modInputHashes(path.resolve(web,'..')))!==JSON.stringify(modSources))throw Error('MOD sources changed during compilation')
  const modBuild={dependencies,sources:modSources,archiveSha256:sha(archive)}
  await writeFile(path.join(out,'mod-provenance.json'),JSON.stringify({sha256:sha(archive),sources:modSources,sourceCommit:pin,modBuild},null,2)+'\n')
  const runtime=process.env.E023_RUNTIME_DIR
@@ -44,7 +44,7 @@ try{
  await writeFile(path.join(publicRoot,'coami-mod.xsa'),archive)
  const hashes={...pins,'assets/case/v1/shell.stl':sha(await readFile(path.join(publicRoot,'simulator/assets/case/v1/shell.stl'))),'coami-mod.xsa':sha(archive)}
  const sources={}
- for(const file of ['mod.ts','protocol.ts'])sources[`mod/${file}`]=sha(await readFile(path.join(web,'../mod',file)))
+ for(const file of MOD_INPUT_FILES)sources[`mod/${file}`]=sha(await readFile(path.join(web,'../mod',file)))
  for(const file of ['src/services/simulator/simulator-engine.mjs','simulator/geometry.mjs','simulator/bridge.mjs'])sources[`vendor/web/${file}`]=sha(await readFile(path.join(vendor,'web',file)))
  await writeFile(path.join(publicRoot,'runtime-provenance.json'),JSON.stringify({experiment:'E023',sourceCommit:pin,hashes,sources,modBuild,limitation:'Exact E023 source-built runtime bytes; full build provenance is recorded separately in evidence/host-runtime-provenance.json'},null,2)+'\n')
  await writeFile(path.join(out,'preflight.json'),JSON.stringify({status:'prepared',hashes},null,2)+'\n')
