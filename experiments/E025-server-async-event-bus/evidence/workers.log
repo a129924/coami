@@ -1,0 +1,1439 @@
+
+### test_app.py::test_complete_cancellation repetition 1
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 1
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 1
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 1
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 1
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 1
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 1
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 1
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 1
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 1
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 1
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 1
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 2
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 2
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 2
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 2
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 2
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 2
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 2
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 2
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 2
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 2
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 2
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 2
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 3
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 3
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 3
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 3
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 3
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 3
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 3
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 3
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 3
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 3
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 3
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 3
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 4
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 4
+.                                                                        [100%]
+1 passed, 2 warnings in 0.05s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 4
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 4
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 4
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 4
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 4
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 4
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 4
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 4
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 4
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 4
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 5
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 5
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 5
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 5
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 5
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 5
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 5
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 5
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 5
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 5
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 5
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 5
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 6
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 6
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 6
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 6
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 6
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 6
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 6
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 6
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 6
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 6
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 6
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 6
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 7
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 7
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 7
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 7
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 7
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 7
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 7
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 7
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 7
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 7
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 7
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 7
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 8
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 8
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 8
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 8
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 8
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 8
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 8
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 8
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 8
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 8
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 8
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 8
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 9
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 9
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 9
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 9
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 9
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 9
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 9
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 9
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 9
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 9
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 9
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 9
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 10
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 10
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 10
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 10
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 10
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 10
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 10
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 10
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 10
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 10
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 10
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 10
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 11
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 11
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 11
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 11
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 11
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 11
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 11
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 11
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 11
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 11
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 11
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 11
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 12
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 12
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 12
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 12
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 12
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 12
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 12
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 12
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 12
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 12
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 12
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 12
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 13
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 13
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 13
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 13
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 13
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 13
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 13
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 13
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 13
+.                                                                        [100%]
+1 passed, 2 warnings in 2.05s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 13
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 13
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 13
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 14
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 14
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 14
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 14
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 14
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 14
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 14
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 14
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 14
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 14
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 14
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 14
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 15
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 15
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 15
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 15
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 15
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 15
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 15
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 15
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 15
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 15
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 15
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 15
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 16
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 16
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 16
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 16
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 16
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 16
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 16
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 16
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 16
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 16
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 16
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 16
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 17
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 17
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 17
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 17
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 17
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 17
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 17
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 17
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 17
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 17
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 17
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 17
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 18
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 18
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 18
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 18
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 18
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 18
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 18
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 18
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 18
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 18
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 18
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 18
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 19
+.                                                                        [100%]
+1 passed, 2 warnings in 0.05s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 19
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 19
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 19
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 19
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 19
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 19
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 19
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 19
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 19
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 19
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 19
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_complete_cancellation repetition 20
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_robot_isolation repetition 20
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_queue_full_and_repeated_cancel repetition 20
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[complete-first] repetition 20
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[cancel-first] repetition 20
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[bus-pending] repetition 20
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_races_and_restart[writer-pending] repetition 20
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_disconnect_and_reconnect repetition 20
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_timeout] repetition 20
+.                                                                        [100%]
+1 passed, 2 warnings in 2.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[cleanup_error] repetition 20
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[child_error] repetition 20
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
+
+
+### test_app.py::test_failure_quarantine[subscriber_error] repetition 20
+.                                                                        [100%]
+1 passed, 2 warnings in 0.04s
+E025_WORKER {"status":"success","reasons":[]}
