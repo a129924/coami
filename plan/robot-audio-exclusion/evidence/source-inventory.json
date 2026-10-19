@@ -1,0 +1,74 @@
+{
+  "observed_at_utc": "2026-10-19T03:51:55.612941+00:00",
+  "coami_base": "93a1a7d62d739a2e936d4fa43d993683e4a02f46",
+  "sdk_commit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "method": "Read existing pinned SDK checkout without modification; compare each inspected working file with git show at SDK commit. Feature worktree submodule is not initialized; no build or browser audio run.",
+  "sources": [
+    {
+      "path": "vendor/stack-chan/firmware/host/app/runtime-context.ts",
+      "sha256": "80e211ba059558a08b93355b62713513ada0e952af73e64721a4541de3279fe7",
+      "lines": 694,
+      "source_url": "https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/app/runtime-context.ts"
+    },
+    {
+      "path": "vendor/stack-chan/firmware/host/app/runtime-audio.ts",
+      "sha256": "63bb539c931e951aa607888dd260039aa0901ae1b86fab9fd77bd878fe891107",
+      "lines": 163,
+      "source_url": "https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/app/runtime-audio.ts"
+    },
+    {
+      "path": "vendor/stack-chan/firmware/host/app/compose.ts",
+      "sha256": "8ecb3ed70241e36f344b0293f241dd67d43450cb6dfb6ce5ff1515494908a2b7",
+      "lines": 274,
+      "source_url": "https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/app/compose.ts"
+    },
+    {
+      "path": "vendor/stack-chan/firmware/host/platforms/wasm/manifest.json",
+      "sha256": "638916a7d19c92d8e29c19a9aef909503941c4973c5776b09933b19a10046999",
+      "lines": 106,
+      "source_url": "https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/platforms/wasm/manifest.json"
+    },
+    {
+      "path": "vendor/stack-chan/firmware/host/modules/audio/manifest_wasm.json",
+      "sha256": "bb56ed5cd05b1289ffeb911aa63f69a22b2b3e385784370c530dd3b9a24e7919",
+      "lines": 26,
+      "source_url": "https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/modules/audio/manifest_wasm.json"
+    },
+    {
+      "path": "vendor/stack-chan/firmware/host/modules/audio/wasm/microphone.ts",
+      "sha256": "9ae33a2bceefd96b3b08d3be483a309a2deb7023522a73b9482fa1d21a10cb47",
+      "lines": 86,
+      "source_url": "https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/modules/audio/wasm/microphone.ts"
+    },
+    {
+      "path": "vendor/stack-chan/firmware/host/modules/audio/wasm/tts-stackchan-voice.ts",
+      "sha256": "b85d2df0517f542b353978b520987eff3fde8d2c7aad5259b553742ce3ec8e97",
+      "lines": 136,
+      "source_url": "https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/modules/audio/wasm/tts-stackchan-voice.ts"
+    },
+    {
+      "path": "vendor/stack-chan/firmware/host/modules/audio/wasm/audio-bridge.js",
+      "sha256": "05bfef0549f3c8449d127d00342cd9463c085b69e8bc4a38a499a669828ef5b0",
+      "lines": 20,
+      "source_url": "https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/modules/audio/wasm/audio-bridge.js"
+    },
+    {
+      "path": "vendor/stack-chan/firmware/host/modules/audio/wasm/audio-bridge.c",
+      "sha256": "b37598e41a9fef759e77c880836b453251f2a9b957f7443214b0687720a7ea5b",
+      "lines": 120,
+      "source_url": "https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/firmware/host/modules/audio/wasm/audio-bridge.c"
+    },
+    {
+      "path": "vendor/stack-chan/web/src/services/simulator/simulator-engine.mjs",
+      "sha256": "167a07741821e719acd2c087ea916c5ed141c87d8bc54a2e26d757a58376fe33",
+      "lines": 877,
+      "source_url": "https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/web/src/services/simulator/simulator-engine.mjs"
+    },
+    {
+      "path": "vendor/stack-chan/web/simulator/bridge.mjs",
+      "sha256": "f4a2a66baf6000d9c29597f570d9e23bf32057066aee47a136b35a10f00ba6c6",
+      "lines": 534,
+      "source_url": "https://github.com/stack-chan/stack-chan/blob/b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322/web/simulator/bridge.mjs"
+    }
+  ]
+}

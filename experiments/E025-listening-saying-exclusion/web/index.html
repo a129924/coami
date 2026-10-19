@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E025 · Listening / Saying 真人驗證</title></head>
+<body><main>
+<header><span class="eyebrow">COAMI · E025 · SIMULATOR</span><h1>能一邊聽，一邊說嗎？</h1><p>戴上耳機，先確認兩種音訊正常，再測錄音與說話是否重疊。真人判定由你填寫。</p></header>
+<section class="workspace"><div class="robot"><canvas id="viewport" aria-label="Robot 模擬器"></canvas><canvas id="screen" hidden></canvas></div>
+<div class="controls"><button id="start" class="primary">啟動模擬器並解鎖聲音</button><p id="status" role="status">尚未啟動</p><p id="detail">錄音只在本頁記憶體，供測後回放，不上傳或存成音訊檔。</p>
+<h2>1 · 單項基線</h2><div class="buttons"><button id="record-baseline" disabled>錄音五秒</button><button id="say-baseline" disabled>播放日文 TTS</button></div>
+<p class="hint">錄音時念「一、二、三、四、五」，結束後回放。TTS 為「こんにちは。」四次。兩項都填寫真人通過後，開放並行測試。</p>
+<h2>2 · 兩種啟動順序</h2><div class="buttons"><button id="record-say" disabled>錄音 → 說話</button><button id="say-record" disabled>說話 → 錄音</button></div><p class="hint">在日文仍播放時開始念數字；兩個方向各測三次，每筆結束後回放並儲存真人判定。</p><p id="progress"></p>
+</div></section>
+<section class="verification"><div><h2>3 · 本筆真人聽辨</h2><button id="replay" disabled>回放本筆錄音</button><p>回放結束後再填寫。聽到聲音與程式觀測是兩份證據。</p>
+<label>驗證者名稱／角色<input id="tester" placeholder="例如 Andrew" maxlength="80"></label><label>設備與音量<input id="equipment" placeholder="例如耳機、內建麥克風、音量 50%" maxlength="160"></label></div>
+<div class="form"><label>日文 TTS<select id="human-tts"><option value="unconfirmed">未確認</option><option value="heard">聽到「こんにちは。」</option><option value="not-heard">沒有聽到／內容不符</option><option value="not-applicable">本筆未測 TTS</option></select></label>
+<label>錄音回放<select id="human-recording"><option value="unconfirmed">未確認</option><option value="heard">可辨認「一、二、三、四、五」</option><option value="not-heard">沒有聽到／內容不符</option><option value="not-applicable">本筆未測錄音</option></select></label>
+<label>備註<textarea id="note" rows="2" maxlength="500" placeholder="例如是否在日文播放中念數字、是否有中斷"></textarea></label><button id="save" class="primary" disabled>儲存本筆真人判定與事件紀錄</button></div></section>
+<section><h2>本次紀錄</h2><ol id="history"></ol></section><details><summary>版本、判讀方式與最近事件</summary><p>固定 SDK b31bc0d9；使用官方同版本 CI runtime 與本次 MOD。原版錄放控制不加互斥鎖。程式以保守區間觀測重疊；沒有重疊不能單獨證明 SDK 互斥。未知時請儲存紀錄後 reload。</p><pre id="trace"></pre></details>
+</main><script type="module" src="/src/main.ts"></script></body></html>
