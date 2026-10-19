@@ -13,3 +13,7 @@ Robot 能力、用途及驗證依據請見 [Action／Event 能力與驗證目錄
 靜態注視與解除實驗：[`E019-static-gaze/`](E019-static-gaze/README.md)，人工方向驗證狀態請以該實驗紀錄為準。
 
 Server 每 Robot 取消與隔離實驗：[`E025-server-async-event-bus/`](E025-server-async-event-bus/README.md)。bubus 1.5.6 搭配標準 TaskGroup、短 handler 轉交與直接取消路徑，通過 240／240 次 synthetic async／ASGI 驗證；結論限此受管理的工作範圍，不包含真實 LLM／TTS SDK、遠端工作或 Robot 已開始的語音／動作，也不代表正式採用。
+
+模擬器直接錄放重疊實驗：[`E025-listening-saying-exclusion/`](E025-listening-saying-exclusion/README.md)，已由 [PR #27](https://github.com/a129924/coami/pull/27) 合併。固定版本模擬器直接 `record()`／`say()` 的9筆案例觀察到約3.06～3.69秒重疊；XiaoZhi對話路徑有輪流控制，不能概括成整個SDK都不互斥。真機錄放、喇叭回音與插話能力另行驗證；逐筆儲存缺口與整批真人回報分開保留，不因PR合併補成完整逐筆簽認。
+
+目前有26個實驗目錄，其中兩個沿用E025編號：錄放重疊與Server工作取消。請以完整目錄名稱區分，原始紀錄不重新編號或互相補證。

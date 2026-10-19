@@ -3,7 +3,7 @@
 本頁將既有實驗依 feasibility-validation 的八段結構整合，回答「驗證了什麼、證據支持到哪裡、哪些決策仍不能前進」。成功、否定結果、無法判定及工具流程都保留；本頁不是產品能力清單或正式採用核准。
 
 - 整理日期：2026-10-19。
-- 來源基準：E001–E024 沿用 Coami `ddef30883df3b2f7b2bba84bb7278c1502eb8d08` 的已提交文件與公開證據；E025 增補依已合併 [PR #29](https://github.com/a129924/coami/pull/29)，merge commit `7985bff1bcb610accfc31009267af6ac8677d6f0` 的紀錄與證據。原 E001–E024 結論不變。
+- 來源基準：E001–E024 沿用 Coami `ddef30883df3b2f7b2bba84bb7278c1502eb8d08` 的已提交文件與公開證據；E025 Server工作取消增補依已合併 [PR #29](https://github.com/a129924/coami/pull/29)，merge commit `7985bff1bcb610accfc31009267af6ac8677d6f0` 的紀錄與證據；E025直接錄放重疊增補依已合併 [PR #27](https://github.com/a129924/coami/pull/27)，merge commit `02ee10ea0dd202a20923db4e0d80b25a440b156b`。原 E001–E024 結論不變。
 - 方法：唯讀核對 README、EXPERIMENT、相關 evidence 與既有決策入口。本次未重跑實驗、模型、建置或原實驗測試，也未重新計算門檻。
 - 來源優先序：先辨認問題、run、版本及後續明示限縮，再判讀；不以較新日期或較樂觀敘述自動取代原結果。原始紀錄與決策文件持有詳細證據，本頁只提供摘要與連結。
 
@@ -14,7 +14,9 @@
 3. 早期紀錄未一致保存設計日期、判準設定時間、投入上限與「驗證任務完成」欄；缺者記為「歷史紀錄未載」或「未記錄」，不補造事前條件。下列「判準」轉述來源，並非本次追溯新增的事前判準。
 4. 真實瀏覽器 runtime、真人觀察、agent 自動操作、純測試／Mock、synthetic 輸入分開。模擬器使用實際 WASM 不代表實體 Robot 已驗證。
 5. 重現步驟是原入口與歷史程序，**不是本次執行紀錄或再次執行授權**。日期、版本、run ID、指令與雜湊依各 E 原紀錄，不把本頁來源基準當成舊 run 的執行版本。
-6. 未解衝突、缺檔、外部私人路徑或不可得資料，只限制相關結論，不以其他片段補證。原文 PR 狀態是歷史紀錄，本頁沒有重新查核各舊 PR 的即時狀態；本次僅核對 E025 的 PR #29 已於 2026-10-19T06:37:20Z 合併。合併不代替實驗成功證據，也不等於正式採用。
+6. 未解衝突、缺檔、外部私人路徑或不可得資料，只限制相關結論，不以其他片段補證。原文 PR 狀態是歷史紀錄，本頁沒有重新查核各舊 PR 的即時狀態；兩個E025增補分別核對PR #29（2026-10-19T06:37:20Z）與PR #27（2026-10-19T06:45:48Z）已合併。合併不代替實驗成功證據，也不等於正式採用。
+
+目前共26個實驗目錄，兩個不同實驗沿用E025編號；下列以完整目錄連結區分，不重編原始紀錄，不將Server取消證據與模擬器錄放證據混用。
 
 ## 逐 E 對照索引
 
@@ -46,7 +48,8 @@
 | [E022](E022-jev-context-threshold/README.md)：研究候選能否降低誤採用並保留正確？ | Research 成功；79%候選 | 成功：research I→S 3→0、保留24筆正確 | 是：核心研究完成 | 離線固定證據；holdout 描述性，Owner 採納待決 |
 | [E023](E023-target-offset-gaze/README.md)：固定模擬目標閉環是否全量置中？ | 主假設失敗；任務完成 | 失敗：完整15案11成功4失敗，原0.1判準未滿足 | 是：第六輪完整再驗證 | 真 WASM／rendered quaternion＋合成目標；非相機／實機 |
 | [E024](E024-mock-target-offset/README.md)：Mock 框能否純轉換為當前偏差？ | 成功；任務完成 | 成功：19共同案例及分類／邊界 assertions 符合 | 是：單次 Mock 契約驗證 | Pure Python／自有 VO；無 detector、Tracker 或 Robot |
-| [E025](E025-server-async-event-bus/README.md)：現成 bus 能否配合完整取消單一 Robot 舊工作並保留控制與其他 Robot？ | 成功；推薦 bubus 1.5.6 作後續候選 | 成功：修正後 12 節點各 20 次，240／240、0 watchdog，工作終止與 cleanup 可追溯 | 是：synthetic cooperative async／ASGI 驗證 | 短 handlers＋TaskGroup ownership；真 SDK／網路／執行緒／遠端工作／Robot 效果另驗 |
+| [E025 · Server取消](E025-server-async-event-bus/README.md)：現成 bus 能否配合完整取消單一 Robot 舊工作並保留控制與其他 Robot？ | 成功；推薦 bubus 1.5.6 作後續候選 | 成功：修正後 12 節點各 20 次，240／240、0 watchdog，工作終止與 cleanup 可追溯 | 是：synthetic cooperative async／ASGI 驗證 | 短 handlers＋TaskGroup ownership；真 SDK／網路／執行緒／遠端工作／Robot 效果另驗 |
+| [E025 · 直接錄放](E025-listening-saying-exclusion/README.md)：stock simulator會阻止直接record／say重疊嗎？ | 假設失敗；主要技術判讀完成 | 失敗：兩方向9筆均有有效重疊，否定直接API互斥假設 | 是：主要問題可判讀；8筆逐筆聽辨未保存的程序缺口保留 | 真人Chrome／耳機、stock同pin官方runtime；XiaoZhi有輪流控制，真機錄放／回音／插話另驗 |
 
 ## 命令、事件與動作：E001、E003、E004、E005、E014
 
@@ -311,6 +314,47 @@ Server 收到已成立的取消訊號後，bubus 1.5.6 能否配合標準非同�
 
 證據限於單程序／event loop、合作式 synthetic async 與 ASGI。真實 LLM／TTS SDK、執行緒、遠端／不合作工作、實際網路及 Robot 已開始的播放／動作另驗；取消前已進入傳送的資料無法撤回。本輪沒有正式 Robot protocol、身份驗證或隔離恢復策略。實驗成功、PR 合併與語意 tag 都不等於正式套件採用或 production release。
 
+## 模擬器直接錄放與對話控制：E025-listening-saying-exclusion
+
+### 驗證什麼
+
+固定SDK的stock simulator直接`audio.record(5000)`與`audio.say()`是否會被SDK阻止重疊。Listening／Saying在此專指這兩個直接API，不等同XiaoZhi對話狀態或所有SDK路徑。
+
+### 為什麼
+
+來源未見直接record／say交叉guard，仍需動態證據確認瀏覽器生命週期重疊及音訊可用性。結果供後續Robot State定義引用；不在本實驗制定狀態機或互斥政策。
+
+### 成功與失敗判準
+
+原假設為SDK會阻止錄放重疊。任一完整有效案例有正長度capture／TTS playback交集、非空錄音及完整成功SDK終態即否定；僅無重疊不能證明互斥，需能歸因拒絕／排隊／中斷至SDK。真人TTS聽辨及測後錄音回放另記，不能以Promise成功或build通過代替。
+
+### 環境與前置條件
+
+2026-10-19，Andrew／Chrome153／耳機40%。SDK pin `b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322`；官方同pin CI run35444663129／artifact10585271971的stock runtime，並非本機fresh rebuild；MOD為本次新建。stock Host factory以依賴注入被動觀測，不加跨record／say guard；官方metadata及runtime／MOD／observer指紋見原實驗provenance。
+
+### 重現步驟
+
+依[README](E025-listening-saying-exclusion/README.md)準備固定artifact／MOD、tests／strict build及本機頁面。兩項基線分別確認；record→say由capture start觸發，say→record由實際前進中的播放窗口觸發。每筆念「一、二、三、四、五」、回放並保存聽辨。這是原程序入口，本次文件更新未重跑真人或硬體實驗。
+
+### 是否成功
+
+原互斥假設「失敗」：直接API觀察到有效重疊；主要技術驗證任務完成。原頁面只有最後1筆保存heard／heard，其餘8筆聽辨欄位仍unconfirmed；這是逐筆保存程序未完全達成，不改寫成9筆都已逐筆簽認。Owner事後整批回報「我剛剛測是都有聽到」另記。
+
+### 結果與證據
+
+- [human-run](E025-listening-saying-exclusion/evidence/human-run.md)、[trace](E025-listening-saying-exclusion/evidence/trace.jsonl)：錄音→說話5筆重疊3341.5～3689.2ms，說話→錄音4筆重疊3055.3～3116.5ms；9筆錄音均非空，SDK record／say／replay終態成功、自然播放與回放。
+- [validation](E025-listening-saying-exclusion/evidence/validation.md)記錄區間由trace重算一致、原始檔指紋、錯位基線欄位、8筆缺逐筆保存及整批事後回報；原始音訊未保存或上傳。9/9 pure tests及strict typecheck／build是另層工程檢查。
+- [來源報告](../plan/robot-audio-exclusion/source-report.md)核對固定pin XiaoZhi的listen start／stop與TTS start停止uploading、clear encoder之輪流控制；這是來源核對，不是XiaoZhi動態或真機驗證。
+
+### 結論與限制
+
+- 模擬器直接record()／say()已觀察到重疊。
+- XiaoZhi對話路徑有輪流控制，不能概括成整個SDK都不互斥。
+- 真機錄放、喇叭回音與插話能力待驗證；另立獨立驗證，不是本PR硬體前置條件。
+- 逐筆儲存缺口如實保留；整批回報不冒充逐筆保存。
+
+區間是保守瀏覽器生命週期觀測，非實際聲學同步精度測量。合併、語意tag與純測試不等於真機能力、正式採用或production release。
+
 ## 工具流程驗證附錄：E002
 
 ### 驗證什麼
@@ -351,7 +395,7 @@ CLI發現與腳本成功；實際skill載入／獨立因果效果無法判定。
 
 | 欄位 | 範圍 |
 | --- | --- |
-| In-Scope | 全25個E的回溯索引、七主題八段、來源與決策限制；本次增補 E025，保留 E001–E024 結論。 |
+| In-Scope | 全26個實驗目錄的回溯索引、八主題八段、來源與決策限制；兩個E025分列，保留E001–E024結論。 |
 | Out-Of-Scope | 新實驗／重跑、模板或程式修改、門檻重選、SDK修復、產品採用、merge／release。 |
 | ReadOnly | 所有原E紀錄與證據、plan／docs決策治理、production、vendor、skills與既有工具設定。 |
 | Written | 本總覽；本機Archify／PR Lens的外部產物不納repo。 |
@@ -359,6 +403,6 @@ CLI發現與腳本成功；實際skill載入／獨立因果效果無法判定。
 | Modify | Tracked既有修改僅`experiments/README.md`入口。 |
 | Goal | 有來源的技術問題、證據與決策限制可按主題或編號查找。 |
 | Non-Goal | 不把本頁完成、工具通過或Draft PR等同假設成功與正式採用。 |
-| TestCase | TC01全25E／八段；TC02分類與完成分離；TC03連結／數字追溯；TC04不外推／不重開決策；TC05兩檔範圍；TC06工具結果與fallback誠實。 |
+| TestCase | TC01全26目錄／八段；TC02分類與完成分離；TC03連結／數字追溯；TC04不外推／不重開決策；TC05兩檔範圍；TC06工具結果與fallback誠實。 |
 
 本機輔助產物位於外部topic目錄，不成為可攜實驗證據或本頁的依賴。Archify導覽只解釋既有來源→主題→限制；PR Lens只解釋真實提交diff；Graphify無可驗證新鮮graph時採定向來源查閱，不建圖／刷新。這些工具的收據、失敗或fallback與本頁靜態文件查核分開交付，不改任何實驗狀態。
