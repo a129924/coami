@@ -67,3 +67,13 @@ code_review:
 ```
 
 Routing: review-ready -> reviewer-in-progress -> approved -> publish-in-progress. All six workflow stages are complete. Owner current-turn authorization permits bounded topic commit/push/Draft PR without another message-approval request. Stop for human review; no merge/release/adoption/cleanup.
+
+## Draft PR publication — human review boundary
+
+Implementation topic commit: `9430a3e9e52ea6c145f78005ce130df6c7056ba5` (`feat(experiments): verify per-robot cancellation with bubus`). Pushed to origin `feat/andrew/server-async-event-bus`, base `dev` at `93a1a7d62d739a2e936d4fa43d993683e4a02f46`.
+
+Created https://github.com/a129924/coami/pull/29 and read back OPEN, isDraft=true, correct base/head and implementation commit. Existing CI server/device/e001-server/e001-web/e003-server/e003-web checks succeeded at that readback; existing CI does not execute E025, whose source-matched 240-worker receipts are local committed evidence.
+
+Commit hook printed `Can't find lefthook in PATH` but commit exited 0; explicit E025 Ruff lint/format, strict Pyright, invalid-input smoke, OSError diagnostic and corrected full matrix passed. No hook/config/package integration was changed.
+
+This documentation-only publication receipt records publish-in-progress -> pr-open. User instructed human review: retain feature branch/worktree; do not merge, release, adopt production code or delete anything. PR Lens uses only local external validate/render; Graphify has no existing usable graph and follows targeted-source fallback without building a graph.

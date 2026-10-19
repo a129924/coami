@@ -30,7 +30,7 @@ No `server/src/`, `device/src/`, `.github/`, root README/VERSION or unrelated ex
 
 ## Status / Allowed Transitions
 
-- Topic execution current: `publish-in-progress` (independent implementation review and code review approved; owner-authorized topic commit/push/Draft PR preparation). Planning review was independently approved; see review-log.
+- Topic execution current: `pr-open` — Draft PR https://github.com/a129924/coami/pull/29; stop for human review, no merge/release/adoption. Planning review was independently approved; see review-log.
 - Canonical transitions: `planned` -> `creator-in-progress` -> `review-ready` -> `reviewer-in-progress` -> `approved` or `needs-rework`; `needs-rework` -> `creator-in-progress`; `approved` -> `creator-in-progress` or `publish-in-progress`; `publish-in-progress` -> `pr-open` or `merged`; `pr-open` -> `needs-rework` or `merged`; `merged` -> terminal.
 - Authorized publication stops at Draft `pr-open` for human review. The merge transitions describe the repository lifecycle, not authorization to execute them. No `released` transition.
 - Creator owns implementation steps; Tester supplies execution evidence; independent Reviewer owns verdicts; Main agent owns authorized publication routing. Do not mark reviewer work as creator implementation completion.
