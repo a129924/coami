@@ -1,0 +1,34 @@
+{
+  "python": "3.12.12 (main, Oct 10 2025, 12:43:15) [Clang 20.1.4 ]",
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "packages": {
+    "bubus": "1.5.6",
+    "fastapi": "0.141.1",
+    "starlette": "1.6.0",
+    "anyio": "4.15.1",
+    "pydantic": "2.13.5",
+    "pytest": "9.1.1",
+    "httpx": "0.28.1",
+    "ruff": "0.16.8",
+    "pyright": "1.1.414"
+  },
+  "source_git_head": "93a1a7d62d739a2e936d4fa43d993683e4a02f46",
+  "source_files_sha256": {
+    "app.py": "9dd3cc1ab1dc364c4951450bb68d0896953fb1ee87101a27c55b76af4ea46488",
+    "test_app.py": "dc449b3d8e81e88fb3d7c40e51a3505aef6a5b6beef649bcc1021fe139848dc3",
+    "run_experiment.py": "2f2ec440354bacd152fae04505f1017e44b4c99ba2f5a1830f87a9db8a91662c",
+    "pyproject.toml": "8394f5d47dbe66fa558210adad465858c117398442dc8ca8625ddf825933889d",
+    "uv.lock": "69d48c4bfafdc36da120c47f085e40e820faa47a598befa627fb0aa9520eb31f"
+  },
+  "command": [
+    "run_experiment.py",
+    "--repetitions",
+    "20",
+    "--case-timeout",
+    "10",
+    "--worker-timeout",
+    "30",
+    "--deadline",
+    "2026-10-19T05:52:30Z"
+  ]
+}

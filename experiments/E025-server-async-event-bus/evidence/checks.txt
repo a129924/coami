@@ -1,0 +1,93 @@
+Corrected source validation after independent code review. Initial importable-scaffold RED and original checks are retained in round-1/checks.txt. No formal TDD guard pass is claimed.
+
+$ .venv/bin/ruff check app.py test_app.py run_experiment.py
+All checks passed!
+
+exit=0
+
+$ .venv/bin/ruff format --check app.py test_app.py run_experiment.py
+3 files already formatted
+
+exit=0
+
+$ .venv/bin/pyright app.py test_app.py run_experiment.py --pythonversion 3.12
+0 errors, 0 warnings, 0 informations
+
+exit=0
+
+$ /private/tmp/coami-server-async-event-bus-worktree/experiments/E025-server-async-event-bus/.venv/bin/python -m pytest --collect-only -q test_app.py
+test_app.py::test_complete_cancellation
+test_app.py::test_robot_isolation
+test_app.py::test_queue_full_and_repeated_cancel
+test_app.py::test_races_and_restart[complete-first]
+test_app.py::test_races_and_restart[cancel-first]
+test_app.py::test_races_and_restart[bus-pending]
+test_app.py::test_races_and_restart[writer-pending]
+test_app.py::test_disconnect_and_reconnect
+test_app.py::test_failure_quarantine[cleanup_timeout]
+test_app.py::test_failure_quarantine[cleanup_error]
+test_app.py::test_failure_quarantine[child_error]
+test_app.py::test_failure_quarantine[subscriber_error]
+test_app.py::test_invalid_input_keeps_control
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /private/tmp/coami-server-async-event-bus-worktree/experiments/E025-server-async-event-bus/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /private/tmp/coami-server-async-event-bus-worktree/experiments/E025-server-async-event-bus/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+13 tests collected in 0.15s
+
+exit=0
+
+$ /private/tmp/coami-server-async-event-bus-worktree/experiments/E025-server-async-event-bus/.venv/bin/python -m pytest -q test_app.py::test_invalid_input_keeps_control
+.                                                                        [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /private/tmp/coami-server-async-event-bus-worktree/experiments/E025-server-async-event-bus/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /private/tmp/coami-server-async-event-bus-worktree/experiments/E025-server-async-event-bus/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1 passed, 2 warnings in 0.25s
+
+exit=0
+
+$ python -c (complete reproducible diagnostic below)
+import json
+from unittest.mock import AsyncMock
+from fastapi.testclient import TestClient
+from app import Lab, create_app
+lab=Lab()
+with TestClient(create_app(lab)) as client:
+    with client.websocket_connect('/ws/A') as a, client.websocket_connect('/ws/B') as b:
+        portal=client.portal
+        assert portal is not None
+        portal.call(lab.wait, 'connected', 'A')
+        async def break_writer():
+            conn=lab.robots['A'].connection
+            assert conn is not None
+            conn.socket.send_json=AsyncMock(side_effect=OSError('synthetic writer failure'))
+        portal.call(break_writer)
+        a.send_json({'kind':'ping'})
+        row=portal.call(lab.wait, 'writer_failed', 'A')
+        assert row.session > 0 and 'OSError' in row.detail and 'synthetic writer failure' in row.detail
+        b.send_json({'kind':'ping'})
+        portal.call(lab.wait, 'sent_pong', 'B')
+        print(json.dumps(row.model_dump()))
+assert lab.records[-1].action=='teardown' and lab.records[-1].detail=='0'
+print('writer failure audit and other-Robot control verified')
+
+{"seq": 4, "at": 2731220.050176708, "action": "writer_failed", "robot": "A", "work": "", "role": "", "generation": 0, "session": 1, "detail": "OSError: synthetic writer failure"}
+writer failure audit and other-Robot control verified
+/private/tmp/coami-server-async-event-bus-worktree/experiments/E025-server-async-event-bus/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+
+exit=0
