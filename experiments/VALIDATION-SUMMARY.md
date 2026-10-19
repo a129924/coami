@@ -1,9 +1,9 @@
-# E001–E024 可行性驗證總覽
+# E001–E025 可行性驗證總覽
 
 本頁將既有實驗依 feasibility-validation 的八段結構整合，回答「驗證了什麼、證據支持到哪裡、哪些決策仍不能前進」。成功、否定結果、無法判定及工具流程都保留；本頁不是產品能力清單或正式採用核准。
 
 - 整理日期：2026-10-19。
-- 來源基準：Coami `ddef30883df3b2f7b2bba84bb7278c1502eb8d08`；E001–E024 的已提交文件與公開證據。
+- 來源基準：E001–E024 沿用 Coami `ddef30883df3b2f7b2bba84bb7278c1502eb8d08` 的已提交文件與公開證據；E025 增補依已合併 [PR #29](https://github.com/a129924/coami/pull/29)，merge commit `7985bff1bcb610accfc31009267af6ac8677d6f0` 的紀錄與證據。原 E001–E024 結論不變。
 - 方法：唯讀核對 README、EXPERIMENT、相關 evidence 與既有決策入口。本次未重跑實驗、模型、建置或原實驗測試，也未重新計算門檻。
 - 來源優先序：先辨認問題、run、版本及後續明示限縮，再判讀；不以較新日期或較樂觀敘述自動取代原結果。原始紀錄與決策文件持有詳細證據，本頁只提供摘要與連結。
 
@@ -14,7 +14,7 @@
 3. 早期紀錄未一致保存設計日期、判準設定時間、投入上限與「驗證任務完成」欄；缺者記為「歷史紀錄未載」或「未記錄」，不補造事前條件。下列「判準」轉述來源，並非本次追溯新增的事前判準。
 4. 真實瀏覽器 runtime、真人觀察、agent 自動操作、純測試／Mock、synthetic 輸入分開。模擬器使用實際 WASM 不代表實體 Robot 已驗證。
 5. 重現步驟是原入口與歷史程序，**不是本次執行紀錄或再次執行授權**。日期、版本、run ID、指令與雜湊依各 E 原紀錄，不把本頁來源基準當成舊 run 的執行版本。
-6. 未解衝突、缺檔、外部私人路徑或不可得資料，只限制相關結論，不以其他片段補證。原文 PR 狀態是歷史紀錄，本頁沒有重新查核各舊 PR 的即時狀態。
+6. 未解衝突、缺檔、外部私人路徑或不可得資料，只限制相關結論，不以其他片段補證。原文 PR 狀態是歷史紀錄，本頁沒有重新查核各舊 PR 的即時狀態；本次僅核對 E025 的 PR #29 已於 2026-10-19T06:37:20Z 合併。合併不代替實驗成功證據，也不等於正式採用。
 
 ## 逐 E 對照索引
 
@@ -46,6 +46,7 @@
 | [E022](E022-jev-context-threshold/README.md)：研究候選能否降低誤採用並保留正確？ | Research 成功；79%候選 | 成功：research I→S 3→0、保留24筆正確 | 是：核心研究完成 | 離線固定證據；holdout 描述性，Owner 採納待決 |
 | [E023](E023-target-offset-gaze/README.md)：固定模擬目標閉環是否全量置中？ | 主假設失敗；任務完成 | 失敗：完整15案11成功4失敗，原0.1判準未滿足 | 是：第六輪完整再驗證 | 真 WASM／rendered quaternion＋合成目標；非相機／實機 |
 | [E024](E024-mock-target-offset/README.md)：Mock 框能否純轉換為當前偏差？ | 成功；任務完成 | 成功：19共同案例及分類／邊界 assertions 符合 | 是：單次 Mock 契約驗證 | Pure Python／自有 VO；無 detector、Tracker 或 Robot |
+| [E025](E025-server-async-event-bus/README.md)：現成 bus 能否配合完整取消單一 Robot 舊工作並保留控制與其他 Robot？ | 成功；推薦 bubus 1.5.6 作後續候選 | 成功：修正後 12 節點各 20 次，240／240、0 watchdog，工作終止與 cleanup 可追溯 | 是：synthetic cooperative async／ASGI 驗證 | 短 handlers＋TaskGroup ownership；真 SDK／網路／執行緒／遠端工作／Robot 效果另驗 |
 
 ## 命令、事件與動作：E001、E003、E004、E005、E014
 
@@ -267,6 +268,49 @@ E019原版假設失敗，任務完成；E020歷史4/4觀察保留，但新來源
 
 E024 TargetOffset是當前框中心相對當前畫面中心，不是prev-curr、角度或控制狀態。相同輸入重複輸出不會自行趨零；無框、拒絕與Target互斥，模型錯誤不可假裝無目標。真detector／Tracker、consumer相容性、相機校正、實機與動態控制均未驗證。
 
+## Server 工作取消與隔離：E025
+
+### 驗證什麼
+
+Server 收到已成立的取消訊號後，bubus 1.5.6 能否配合標準非同步原語，結束該 Robot 的執行中、排隊、子任務與 async subscriber 業務工作並完成清理，同時保留 WebSocket、控制訊號與其他 Robot？「孩子說不要」是需求情境；語音／拒絕意圖辨識不在本輪。
+
+### 為什麼
+
+現成 EventBus 與 Pydantic 支援不能自動證明完整取消。原紀錄核對 bubus 的同 event loop 共用鎖與停止語意，不能以 `parallel_handlers` 或 `bus.stop()` 返回宣稱 Robot 隔離／工作清理完成。實驗讓 bus 僅做短派送，handlers 將長工作登記到 Robot 的 `asyncio.TaskGroup`；取消由 receiver 直接觸發工作範圍，不排在業務 bus 或滿載 queue 後面，也沒有另造 EventBus。
+
+### 成功與失敗判準
+
+[Shared spec R1–R6](../plan/E025-server-async-event-bus/E025-server-async-event-bus.spec.md) 在執行前固定：全部舊業務結束並通過 cleanup barrier、queued 工作不開始；B 在 A 取消前及清理中均可前進；滿載／重複取消仍保留 control；舊 bus 事件與尚未開始傳送的舊結果失效；清理完成後可開始新工作；斷線取消、重連不續舊工作，清理／子任務／subscriber 故障則跨連線隔離而不假報完成。
+
+12 個主要參數化節點各在獨立程序重複 20 次。完整違規證據為失敗；環境或中止造成證據不足為無法判定。原 cleanup／barrier 上限 2 秒、case watchdog 10 秒、個別 worker 外層 30 秒及 90 分鐘投入界線是合成實驗限制，不是產品 SLA，本次總覽增補不重設或執行這些預算。
+
+### 環境與前置條件
+
+原執行環境為 macOS 26.5.2 arm64、Python 3.12.12、bubus 1.5.6、FastAPI 0.141.1、Starlette 1.6.0、AnyIO 4.15.1、Pydantic 2.13.5，工具及 lock 依 [toolchain](E025-server-async-event-bus/evidence/toolchain.txt)。同一 worker 內的 A／B sessions 使用同一 TestClient／portal／app event loop，記錄 loop identity，避免跨 loop 掩蓋 bus 鎖的影響。
+
+這是實際 bubus 與 FastAPI ASGI 整合，但 Robot、工作與清理資源皆為可控 synthetic 模型，不是實際網路或硬體。Robot identity 亦非已驗證身份；正式 server/device 程式及通信契約未因此採用本實驗。
+
+### 重現步驟
+
+[E025 README](E025-server-async-event-bus/README.md) 持有 `uv sync --frozen`、lint／typecheck／pytest 與 `run_experiment.py` 的完整入口。外層 runner 每次啟動獨立 worker，保存參數節點、次數、退出原因、audit 與來源雜湊；另一次執行須使用新輸出目錄及獲授權的新 deadline，不覆寫歷史證據。本次清理與文件增補只核對已提交紀錄，不重跑矩陣。
+
+### 是否成功
+
+**成功；原輪驗證任務完成：是。** 修正後於 2026-10-19T04:37:06.879539+00:00 至 04:38:57.013972+00:00 完成 240／240 次，failure、inconclusive、watchdog 均為 0，每個成功 worker 有零殘留業務工作的 teardown 證據。額外 invalid-input smoke、Ruff、strict Pyright 與 writer OSError 診斷分列，不拿一般 checks 或 PR 合併代替主假設證據。
+
+### 結果與證據
+
+- [summary](E025-server-async-event-bus/evidence/summary.json)、[逐次 audit](E025-server-async-event-bus/evidence/runs.jsonl)、[worker transcripts](E025-server-async-event-bus/evidence/workers.log)：完整取消、多 Robot 隔離、滿載、斷線重連各 20 次；四種競態各 20 次；四種故障隔離各 20 次，合計 240 次。
+- 工作 `started／cleaned／ended／scope_stopped`、取消截點與傳送開始／完成分開記錄，確認 queued 工作不啟動、bus-pending 舊事件不能新建業務、writer-pending 舊結果不開始傳送，barrier 後新工作可執行。
+- [checks](E025-server-async-event-bus/evidence/checks.txt) 保存驗證命令與 OSError 注入診斷，確認 writer terminal audit 包含 Robot／session／例外，B control 仍可用。第一輪 240 次後的獨立 code review 要求這項 bounded 修正；[round-1](E025-server-async-event-bus/evidence/round-1/summary.json) 與 [原來源](E025-server-async-event-bus/evidence/round-1/app.py) 僅為歷史證據，不與修正後矩陣混成一個版本。
+- Summary 的 `source_git_head=93a1a7d...` 是執行當時基底；五個來源檔案 SHA-256 識別實際受測程式。後續提交／merge 是來源關聯，不能追造執行時 merge-commit attestation。[審查紀錄](../plan/E025-server-async-event-bus/review-log.md) 保留修正及獨立 review 結果。
+
+### 結論與限制
+
+推薦 bubus 1.5.6 作後續整合候選，條件是 handlers 只做短轉交，全部長業務由標準 TaskGroup 工作範圍管理，並保留直接取消、完整 barrier 與舊結果隔離。完整取消不是 bubus 自動提供的能力；本輪也未證明長時間等待的 bus handler 能隔離其他 Robot。
+
+證據限於單程序／event loop、合作式 synthetic async 與 ASGI。真實 LLM／TTS SDK、執行緒、遠端／不合作工作、實際網路及 Robot 已開始的播放／動作另驗；取消前已進入傳送的資料無法撤回。本輪沒有正式 Robot protocol、身份驗證或隔離恢復策略。實驗成功、PR 合併與語意 tag 都不等於正式套件採用或 production release。
+
 ## 工具流程驗證附錄：E002
 
 ### 驗證什麼
@@ -307,7 +351,7 @@ CLI發現與腳本成功；實際skill載入／獨立因果效果無法判定。
 
 | 欄位 | 範圍 |
 | --- | --- |
-| In-Scope | 全24個E的回溯索引、六主題八段、來源與決策限制。 |
+| In-Scope | 全25個E的回溯索引、七主題八段、來源與決策限制；本次增補 E025，保留 E001–E024 結論。 |
 | Out-Of-Scope | 新實驗／重跑、模板或程式修改、門檻重選、SDK修復、產品採用、merge／release。 |
 | ReadOnly | 所有原E紀錄與證據、plan／docs決策治理、production、vendor、skills與既有工具設定。 |
 | Written | 本總覽；本機Archify／PR Lens的外部產物不納repo。 |
@@ -315,6 +359,6 @@ CLI發現與腳本成功；實際skill載入／獨立因果效果無法判定。
 | Modify | Tracked既有修改僅`experiments/README.md`入口。 |
 | Goal | 有來源的技術問題、證據與決策限制可按主題或編號查找。 |
 | Non-Goal | 不把本頁完成、工具通過或Draft PR等同假設成功與正式採用。 |
-| TestCase | TC01全24E／八段；TC02分類與完成分離；TC03連結／數字追溯；TC04不外推／不重開決策；TC05兩檔範圍；TC06工具結果與fallback誠實。 |
+| TestCase | TC01全25E／八段；TC02分類與完成分離；TC03連結／數字追溯；TC04不外推／不重開決策；TC05兩檔範圍；TC06工具結果與fallback誠實。 |
 
 本機輔助產物位於外部topic目錄，不成為可攜實驗證據或本頁的依賴。Archify導覽只解釋既有來源→主題→限制；PR Lens只解釋真實提交diff；Graphify無可驗證新鮮graph時採定向來源查閱，不建圖／刷新。這些工具的收據、失敗或fallback與本頁靜態文件查核分開交付，不改任何實驗狀態。
