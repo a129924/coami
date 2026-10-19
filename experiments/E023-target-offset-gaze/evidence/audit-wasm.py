@@ -194,6 +194,20 @@ def verify_case_ids(cases):
     )
 
 
+def verify_sdk_target(actual, expected):
+    for vector in [actual, expected]:
+        require(
+            isinstance(vector, list)
+            and len(vector) == 3
+            and all(type(v) in (int, float) and math.isfinite(v) for v in vector),
+            "SDK target requires exactly three finite numeric components",
+        )
+    require(
+        all(abs(actual[i] - expected[i]) < 1e-9 for i in range(3)),
+        "SDK target mismatch",
+    )
+
+
 def audit(root):
     r = root / "evidence/wasm-runs" / RUN_ID
     report = json.loads((r / "report.json").read_text())
@@ -244,22 +258,12 @@ def audit(root):
         )
         for f in frames:
             matches = [x for x in decoded if x["seq"] == f["seq"]]
-            require(
-                len(matches) == 1
-                and all(
-                    (
-                        abs(a - b) < 1e-09
-                        for a, b in zip(matches[0]["target"], f["expected"])
-                    )
-                ),
-                "evidence validation failed",
-            )
+            require(len(matches) == 1, "SDK target decoded identity mismatch")
+            verify_sdk_target(matches[0].get("target"), f.get("expected"))
         for ret in returned:
-            require(
-                len([f for f in frames if f["seq"] == ret["seq"] and (not f["probe"])])
-                == 1,
-                "evidence validation failed",
-            )
+            matches = [f for f in frames if f["seq"] == ret["seq"] and not f["probe"]]
+            require(len(matches) == 1, "SDK target returned identity mismatch")
+            verify_sdk_target(ret.get("target"), matches[0].get("expected"))
             require(
                 len(
                     [

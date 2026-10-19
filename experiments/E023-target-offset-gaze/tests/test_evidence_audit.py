@@ -9,6 +9,7 @@ import subprocess
 import sys
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parent.parent
 spec = importlib.util.spec_from_file_location(
@@ -142,3 +143,44 @@ class EvidenceAuditTests(unittest.TestCase):
             )
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("AuditError", result.stderr)
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [
+                [],
+                [1],
+                [1, 0],
+                [1, 0, 0, 0],
+                [float("nan"), 0, 0],
+                [True, 0, 0],
+                [0, 0, 1],
+                None,
+            ]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+
+                serialized = json.dumps(data)
+
+                def read(path, *args, payload=serialized, **kwargs):
+                    return (
+                        payload
+                        if path == case_path
+                        else original_read(path, *args, **kwargs)
+                    )
+
+                with (
+                    self.subTest(phase=phase, target=target),
+                    patch.object(Path, "read_text", read),
+                    self.assertRaisesRegex(module.AuditError, "SDK target"),
+                ):
+                    module.audit(ROOT)
