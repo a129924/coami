@@ -72,3 +72,12 @@ node /Users/andrew/.codex/skills/archify/bin/archify.mjs visual-check /private/t
 - `gh pr create --repo a129924/coami --base dev --head chore/andrew/robot-audio-exclusion --draft --title 'docs(robot): document simulator listening/saying exclusion limits' --body-file /private/tmp/coami-robot-audio-exclusion/pr-body.md`：exit 0，https://github.com/a129924/coami/pull/27。
 - gh 讀回：PR #27 OPEN、isDraft=true、base=dev、head=topic branch、headOid=7d5b6a9180c0381e565ca98fe512ba4536e7153c；尚無 reviews／comments。當時部分自動 CI 成功、部分仍 IN_PROGRESS，不宣稱最終 head CI 全過。
 - 本次補入 handoff metadata 後會再次 topic commit／push，最終 remote head、Draft／CI snapshot 見本機 publication.json；不 merge、不發送評論或上傳圖示。
+
+## E025 publication — 2026-10-19
+
+- Commit `2da7f139ea3e4d44eec0b4a59ca73e82431a9a9e` (`test(robot): verify simulator recording and speech overlap`) 已push至topic branch；staged Written set27檔均在plan明示paths，沒有audio／generated／dist／node_modules。原source6檔加E02523檔，base→head共29檔。dev仍為93a1a7d且clean；SDK source指紋與provenance相符。
+- Git hook顯示 `Can't find lefthook in PATH`，commit exit0；未裝工具或改hook，不將其誤記為hook checks通過。局部pure tests9/9、strict typecheck／build實際另跑通過。
+- Draft PR#27已更新標題與結果／限制，gh讀回OPEN、isDraft=true、base=dev、head=2da7f13、reviews=[]；此snapshot既有CI checks均SUCCESS，但不把它當E025或human review證據。
+- PR Lens map已對base93a1a7d→真實head2da7f13新增E025 nodes／unchangedSDK neighbor。初次generatedAt採+00:00遭validator拒絕，改ISO-Z後validate／render PASS（2 lanes、8 nodes、8 edges、5 steps、1SVG）。外部manifest保留；交付不包含上傳圖。
+- Archify原來源sequence未變動，維持原9/9交付；不將其宣稱為新動態圖。Graphify維持無graph的source fallback，不build／refresh。
+- Step9主要判讀及Draft PR交接完成；獨立TS review與human PR review仍pending。STOP POINT2停下，不merge、不做post-merge／cleanup。

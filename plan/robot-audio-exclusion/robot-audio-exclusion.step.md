@@ -36,7 +36,7 @@ created: 2026-10-19
 - [X] 7. 完成受影響 pure tests、strict typecheck／build 及不冒充真人的 browser smoke，記錄 actual evidence。
 - [X] 8. 完成可重現啟動方式、served-bytes provenance、真人程序與未執行結果表，交人工作業確認。
 
-- [ ] 9. 依真人實際保存的 metadata／聽辨與 interval 證據判讀 E025，寫回結果與限制並更新 Draft PR 交接。
+- [X] 9. 依真人實際保存的 metadata／聽辨與 interval 證據判讀 E025，寫回結果與限制並更新 Draft PR 交接。
 
 ## Main Agent Actionable Steps — Fixed Tail
 
@@ -46,7 +46,7 @@ created: 2026-10-19
 - [X] **Actor:** Main Agent — **Action:** Push the topic branch.
 - [X] **Actor:** Main Agent — **Action:** Open the pull request.
 - [X] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
-- [ ] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
+- [X] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
 - [ ] **Actor:** Main Agent — **Action:** Record exact human merge evidence after a new execution begins.
 - [ ] **Actor:** Main Agent — **Action:** Require a new explicit human resume before post-merge work.
 - [ ] **Actor:** Main Agent — **Action:** Verify the pull request is merged.
@@ -115,4 +115,4 @@ created: 2026-10-19
 
 - E025 ready handoff: 本機 http://127.0.0.1:5195/，Chrome tab 287644920；dev process 僅 loopback，保留供真人操作。準備程序不記為人耳或錄放並行 PASS；第9步必須等待實際輸入。
 
-- E025 actual evidence: experiments/E025-listening-saying-exclusion/evidence/validation.md 的 Human execution and interpretation；主要互斥假設已否定，逐筆保存不完整與整批回報分開。第9步尚待Draft PR更新讀回後標記；不將human聽辨當作code review。
+- E025 actual evidence: experiments/E025-listening-saying-exclusion/evidence/validation.md 的 Human execution and interpretation；主要互斥假設已否定，逐筆保存不完整與整批回報分開。第9步對應實際commit 2da7f13、push及Draft PR#27更新讀回；維持OPEN／Draft、人工作業審查pending；不將human聽辨當作code review。

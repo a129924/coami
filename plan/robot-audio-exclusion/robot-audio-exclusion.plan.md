@@ -105,7 +105,7 @@ External-only roots：`/private/tmp/coami-robot-audio-exclusion/archify/` 的 `s
 - [X] 7. 完成受影響 pure tests、strict typecheck／build 及不冒充真人的 browser smoke，記錄 actual evidence。
 - [X] 8. 完成可重現啟動方式、served-bytes provenance、真人程序與未執行結果表，交人工作業確認。
 
-- [ ] 9. 依真人實際保存的 metadata／聽辨與 interval 證據判讀 E025，寫回結果與限制並更新 Draft PR 交接。
+- [X] 9. 依真人實際保存的 metadata／聽辨與 interval 證據判讀 E025，寫回結果與限制並更新 Draft PR 交接。
 
 ## Validation / Acceptance Checks
 

@@ -74,3 +74,7 @@ needs-rework：canonical 契約仍殘留 source-only 未啟動條件。已把 In
 Creator依原始事件重算9筆區間均一致；兩方向各至少3筆，非空錄音／成功SDK terminals／自然播放與回放。Owner於對話回報「我剛剛測是都有聽到」。原頁面8筆逐筆欄位未保存，未倒填，整批事後回報分開記錄。依原判準否定互斥假設，詳見E025 evidence/validation.md。
 
 Tests9/9、strict typecheck／build重新通過；bundle-size warning保留。這是Creator檢查與human聽辨，非獨立TS code review verdict。Draft PR需人工作業審查實作、儲存介面限制與證據邊界；不宣稱review-approved或merge gate通過。
+
+## E025 Draft PR handoff
+
+Commit2da7f13已push，Draft PR#27已更新並讀回OPEN／Draft，reviews=[]。原始資料、整批真人回報與逐筆保存缺口均可review；PR Lens新committed diff validate／render PASS。Creator未自行宣稱獨立TS code review核可，交Human Reviewer；停STOP POINT2，不merge。
