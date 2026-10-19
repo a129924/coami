@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "E027 單輪語音流程",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1400,
+      900
+    ],
+    "column_fit": "spread"
+  },
+  "participants": [
+    {
+      "id": "adult",
+      "type": "external",
+      "label": "成人操作者"
+    },
+    {
+      "id": "mod",
+      "type": "frontend",
+      "label": "Robot MOD"
+    },
+    {
+      "id": "host",
+      "type": "frontend",
+      "label": "瀏覽器橋接"
+    },
+    {
+      "id": "server",
+      "type": "backend",
+      "label": "Python Server"
+    },
+    {
+      "id": "cloud",
+      "type": "cloud",
+      "label": "OpenAI"
+    }
+  ],
+  "messages": [
+    {
+      "id": "step1",
+      "from": "adult",
+      "to": "mod",
+      "y": 180,
+      "label": "啟動單輪"
+    },
+    {
+      "id": "step2",
+      "from": "mod",
+      "to": "host",
+      "y": 240,
+      "label": "SDK 錄音四秒"
+    },
+    {
+      "id": "step3",
+      "from": "host",
+      "to": "server",
+      "y": 300,
+      "label": "POST /turn"
+    },
+    {
+      "id": "step4",
+      "from": "server",
+      "to": "cloud",
+      "y": 360,
+      "label": "ASR → 生成 → TTS"
+    },
+    {
+      "id": "step5",
+      "from": "cloud",
+      "to": "server",
+      "y": 420,
+      "label": "繁中語音 WAV"
+    },
+    {
+      "id": "step6",
+      "from": "server",
+      "to": "host",
+      "y": 480,
+      "label": "同輪 token 與 WAV"
+    },
+    {
+      "id": "step7",
+      "from": "host",
+      "to": "mod",
+      "y": 540,
+      "label": "傳入回覆音訊"
+    },
+    {
+      "id": "step8",
+      "from": "mod",
+      "to": "host",
+      "y": 600,
+      "label": "SDK.playAudio"
+    },
+    {
+      "id": "step9",
+      "from": "host",
+      "to": "mod",
+      "y": 660,
+      "label": "自然播放結束"
+    },
+    {
+      "id": "step10",
+      "from": "mod",
+      "to": "adult",
+      "y": 720,
+      "label": "SDK 結果與人工聽辨"
+    }
+  ]
+}

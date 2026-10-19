@@ -1,0 +1,21 @@
+{
+  "experiment": "E027",
+  "ttsPrerequisite": "未執行",
+  "mainHypothesis": "未執行",
+  "taskComplete": false,
+  "missing": [
+    "TTS A/B real provider access, native playback natural-ended and human hearing",
+    "six contextual adult voice trials",
+    "live injected playback failure and pending reload isolation",
+    "full browser trace export confirmation"
+  ],
+  "liveProviderCalls": 0,
+  "rawAudioSaved": false,
+  "runtimePreparation": "成功",
+  "browserStartup": "成功",
+  "keyValidity": "未執行",
+  "liveAcceptedOperationsThisContinuation": 0,
+  "liveNativePlayback": "未執行",
+  "humanVerification": "owner deferred",
+  "formalImplementationReview": "pending"
+}

@@ -1,0 +1,110 @@
+$ npm test
+
+> coami-e027-web@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.0 /private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web
+
+
+ Test Files  3 passed (3)
+      Tests  12 passed (12)
+   Start at  12:35:09
+   Duration  146ms (transform 62ms, setup 0ms, import 83ms, tests 9ms, environment 0ms)
+
+
+exit=0
+
+$ npm run build
+
+> coami-e027-web@0.1.0 build
+> npm run typecheck && vite build
+
+
+> coami-e027-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+vite v8.2.1 building client environment for production...
+transforming...
+✓ 19 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.35 kB │ gzip:   0.28 kB
+dist/assets/index-BGdjX-C0.css    1.33 kB │ gzip:   0.65 kB
+dist/assets/index-CR6KL2Gu.js   630.48 kB │ gzip: 164.55 kB
+
+✓ built in 149ms
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+exit=0
+
+$ .venv/bin/python -m pytest -q
+............                                                             [100%]
+12 passed in 0.17s
+
+exit=0
+
+$ .venv/bin/pyright
+0 errors, 0 warnings, 0 informations
+
+exit=0
+
+$ .venv/bin/ruff check .
+All checks passed!
+
+exit=0
+
+TC-ENV: empty single-variable template / ignored .env / trackable example PASS; no dotenv autoload claim.
+Live cloud API calls: 0. Fresh native runtime and human cases remain pending.
+
+
+2026-10-19 continuation
+Pinned SDK callback regression fixed with complete-line parsing; no trailing newline required.
+After restoring ignored generated sources, unconstrained Vitest discovery also scanned vendor/toolchain tests (184 non-E027 suites failed; all 13 E027 tests passed). A bare src filename filter still matched nested vendor src paths. npm test now uses documented --dir src, limiting discovery to E027 tests.
+
+> coami-e027-web@0.1.0 test
+> vitest run --dir src
+
+
+ RUN  v4.1.0 /private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web
+
+
+ Test Files  3 passed (3)
+      Tests  13 passed (13)
+   Start at  14:55:30
+   Duration  148ms (transform 67ms, setup 0ms, import 91ms, tests 20ms, environment 0ms)
+
+
+exit=0
+
+> coami-e027-web@0.1.0 build
+> npm run typecheck && vite build
+
+
+> coami-e027-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+vite v8.2.1 building client environment for production...
+transforming...
+✓ 19 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.35 kB │ gzip:   0.28 kB
+dist/assets/index-BGdjX-C0.css    1.33 kB │ gzip:   0.65 kB
+dist/assets/index-BYl7vgqu.js   630.40 kB │ gzip: 164.53 kB
+
+✓ built in 150ms
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+exit=0
+Fresh runtime prepare:poc and MOD rebuild passed; actual browser served hashes matched and MOD ready unlocked only TTS buttons. Hearing checkboxes and recording stayed disabled.
+Local shell sourced ignored server/.env only into the loopback Server process, without displaying/logging it. OpenAPI GET returned HTTP200; this performs no provider call and does not validate the key. .env.example remains exact empty contract. No dotenv or config system added.
+Owner deferred human validation. TTS A/B, provider/key access, six adult trials, and live native playback-failure/pending-reload checks remain unverified. Live provider calls=0; no server budget ledger created; no ledger cleared/reset.

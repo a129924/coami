@@ -1,0 +1,106 @@
+
+> coami-e027-web@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.0 /private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web
+
+ ❯ src/turn-bridge.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/turn-bridge.test.ts [ src/turn-bridge.test.ts ]
+Error: Cannot find module './turn-bridge.ts' imported from /private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/src/turn-bridge.test.ts
+ ❯ src/turn-bridge.test.ts:3:1
+      1| import { expect, it } from 'vitest'
+      2| import { TurnSession } from './turn-session.ts'
+      3| import { TurnBridge } from './turn-bridge.ts'
+       | ^
+      4| it('rejects changed record bytes before any upload', async () => {
+      5|   const session = new TurnSession('test'); const token = session.begin…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  3 passed (3)
+   Start at  12:28:52
+   Duration  118ms (transform 22ms, setup 0ms, import 17ms, tests 2ms, environment 0ms)
+
+
+2026-10-19 host ready regression — real pinned SDK print callback omits trailing newline. Existing host buffered every record forever. RED: npm test -- src/turn-bridge.test.ts; missing mod-trace ready (1 failed / 2 passed).
+
+> coami-e027-web@0.1.0 test
+> vitest run src/turn-bridge.test.ts
+
+
+ RUN  v4.1.0 /private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web
+
+ ❯ src/turn-bridge.test.ts (3 tests | 1 failed) 20ms
+   × becomes ready from pinned SDK trace callbacks without trailing newlines 17ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/turn-bridge.test.ts > becomes ready from pinned SDK trace callbacks without trailing newlines
+AssertionError: expected [ Array(4) ] to deep equally contain { kind: 'mod-trace', …(1) }
+
+- Expected:
+{
+  "kind": "mod-trace",
+  "record": {
+    "kind": "ready",
+  },
+}
+
++ Received:
+[
+  {
+    "bytes": 2,
+    "kind": "served-asset",
+    "path": "/simulator/mc.js",
+    "sha256": "a12871fee210fb8619291eaea194581cbd2531e4b23759d225f6806923f63222",
+  },
+  {
+    "bytes": 2,
+    "kind": "served-asset",
+    "path": "/simulator/mc.wasm",
+    "sha256": "a12871fee210fb8619291eaea194581cbd2531e4b23759d225f6806923f63222",
+  },
+  {
+    "bytes": 2,
+    "kind": "served-asset",
+    "path": "/coami-mod.xsa",
+    "sha256": "a12871fee210fb8619291eaea194581cbd2531e4b23759d225f6806923f63222",
+  },
+  {
+    "kind": "provenance",
+    "value": {
+      "experiment": "E027",
+      "mod": {
+        "sha256": "a12871fee210fb8619291eaea194581cbd2531e4b23759d225f6806923f63222",
+      },
+      "patchHashes": {},
+      "sha256": {
+        "mc.js": "a12871fee210fb8619291eaea194581cbd2531e4b23759d225f6806923f63222",
+        "mc.wasm": "a12871fee210fb8619291eaea194581cbd2531e4b23759d225f6806923f63222",
+      },
+      "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+    },
+  },
+]
+
+ ❯ src/turn-bridge.test.ts:40:22
+     38|     // Mock engine does not inspect either canvas; no browser or provi…
+     39|     await runtime.open({} as HTMLCanvasElement, {} as HTMLCanvasElemen…
+     40|     expect(evidence).toContainEqual({kind:'mod-trace', record:{kind:'r…
+       |                      ^
+     41|     expect(runtime.ready).toBe(true)
+     42|   } finally {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  14:55:02
+   Duration  155ms (transform 28ms, setup 0ms, import 37ms, tests 20ms, environment 0ms)
