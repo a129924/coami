@@ -34,3 +34,11 @@ Owner 已核可對話計畫並授權 worktree／bounded delivery／topic commit�
 ```
 
 Scope、來源判讀與 Written set 均無其他 blocker。核可後轉 publish-in-progress，publication 動作保持 pending，未宣稱已 push 或已開 PR。
+
+## Publication handoff
+
+- Source delivery commit: `7d5b6a9180c0381e565ca98fe512ba4536e7153c`；獨立核可後已 push。
+- Draft PR: https://github.com/a129924/coami/pull/27；base dev；OPEN／Draft 已 gh 讀回。
+- PR Lens 在真實 committed diff 上 local validate／render PASS；Graphify source fallback、Archify final validation 皆已另記證據。
+- 後續本 topic commit 只保存 publication／aux evidence 與目前 actor Human Reviewer，不修改已核可來源結論、SDK、inventory 或實驗範圍。
+- Human review／merge decision pending；CI 與 review comments 以實際 PR snapshot 為準。保留 branch／worktree，沒有 merge／cleanup 授權。

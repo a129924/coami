@@ -58,3 +58,17 @@ node /Users/andrew/.codex/skills/archify/bin/archify.mjs visual-check /private/t
 - `python3 .codex/skills/plan-step-tracker/scripts/step_tracker.py check_impl_steps_succeeded robot-audio-exclusion`：exit 0，All 4 implementation steps complete。僅查 implementation checkboxes，未宣稱全 lifecycle 完成。
 - Publication preflight：遠端 dev 為 base `93a1a7d62d739a2e936d4fa43d993683e4a02f46`；ls-remote 未見同名 topic branch；gh pr list 未見既存此 head PR。GitHub API 讀取成功，Draft PR 目標為 dev（不是 default main）。
 - Topic commit 使用 owner 本輪明確直接 commit／push／Draft PR 授權；沒有請求新的重複批准。提交前檢查 staged 六檔同一個來源驗證 topic；不含 SDK／production／其他實驗變更。
+
+## PR Lens committed-diff 驗收與 publication
+
+- Source topic commit: `7d5b6a9180c0381e565ca98fe512ba4536e7153c`，`docs(robot): document simulator audio exclusion limits`。Commit exit 0；hook 顯示 `Can't find lefthook in PATH`，未安裝／繞改 hook，也未宣稱 hook 成功。實際本 topic 手動完整性檢查已分開記錄。
+- `git diff --find-renames 93a1a7d62d739a2e936d4fa43d993683e4a02f46...7d5b6a9180c0381e565ca98fe512ba4536e7153c`：真實六檔新增、427 insertions／0 deletions；外部 committed.diff 與 diff-provenance.json 保存對應內容。
+- 修正 generatedAt 為真實 UTC ISO Z 格式，head 採上述真實 commit；不虛構 PR provenance。
+- `/Users/andrew/.local/share/pr-lens-runtime/bin/pr-lens validate /private/tmp/coami-robot-audio-exclusion/pr-lens/graph.json`：exit 0；2 lanes、5 nodes、4 edges、0 flows、3 walkthrough steps。
+- `/Users/andrew/.local/share/pr-lens-runtime/bin/pr-lens render /private/tmp/coami-robot-audio-exclusion/pr-lens/graph.json --theme light --no-config --out /private/tmp/coami-robot-audio-exclusion/pr-lens/rendered`：exit 0；1 SVG／1 diagram。Repo 沒有既存 PR Lens overlay。
+- 已讀 rendered/manifest.json：headSha=7d5b6a9180c0381e565ca98fe512ba4536e7153c；asset=`topic-change-light-5b0accc382cfd16859aee7f9eb7b5eab.svg`，8987 bytes、860×388。本機圖包含 unchanged SDK gitlink／catalog，未稱它們有程式變更；upstream 精確檔案來源仍以 source-report 為準。
+- TC-AUX-03：PASS。為避免 metadata commit 使圖的 provenance 過時，publication 結束會對最終真實 HEAD 重新 validate／render，最終 receipts 留外部；此處明確保存已驗 snapshot，不使用自我引用的 final commit hash。
+- `git push -u origin chore/andrew/robot-audio-exclusion`：exit 0，建立 origin tracking branch。
+- `gh pr create --repo a129924/coami --base dev --head chore/andrew/robot-audio-exclusion --draft --title 'docs(robot): document simulator listening/saying exclusion limits' --body-file /private/tmp/coami-robot-audio-exclusion/pr-body.md`：exit 0，https://github.com/a129924/coami/pull/27。
+- gh 讀回：PR #27 OPEN、isDraft=true、base=dev、head=topic branch、headOid=7d5b6a9180c0381e565ca98fe512ba4536e7153c；尚無 reviews／comments。當時部分自動 CI 成功、部分仍 IN_PROGRESS，不宣稱最終 head CI 全過。
+- 本次補入 handoff metadata 後會再次 topic commit／push，最終 remote head、Draft／CI snapshot 見本機 publication.json；不 merge、不發送評論或上傳圖示。

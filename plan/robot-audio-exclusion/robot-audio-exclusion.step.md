@@ -11,7 +11,7 @@ created: 2026-10-19
 
 | Current status | Allowed next transitions | Next actor |
 | --- | --- | --- |
-| publish-in-progress | pr-open | Main Agent |
+| pr-open | needs-rework, merged | Human Reviewer |
 
 ## Actionable Steps
 
@@ -22,7 +22,7 @@ created: 2026-10-19
 
 ### Contextual Actions
 
-- [ ] **Actor:** Main Agent — **Action:** Commit approved bounded source delivery, push topic branch and open Draft PR.
+- [ ] **Actor:** Human Reviewer — **Action:** Review Draft PR #27 and decide whether changes may be merged.
 
 ## Implementation Steps
 
@@ -35,10 +35,10 @@ created: 2026-10-19
 
 - [X] **Actor:** Main Agent — **Action:** Validate the approved Written set and perform bounded staging only.
 - [X] **Actor:** Main Agent — **Action:** Obtain explicit human approval at STOP POINT 1 before commit, push, or PR creation.
-- [ ] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
-- [ ] **Actor:** Main Agent — **Action:** Push the topic branch.
-- [ ] **Actor:** Main Agent — **Action:** Open the pull request.
-- [ ] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
+- [X] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
+- [X] **Actor:** Main Agent — **Action:** Push the topic branch.
+- [X] **Actor:** Main Agent — **Action:** Open the pull request.
+- [X] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
 - [ ] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
 - [ ] **Actor:** Main Agent — **Action:** Record exact human merge evidence after a new execution begins.
 - [ ] **Actor:** Main Agent — **Action:** Require a new explicit human resume before post-merge work.
@@ -77,9 +77,13 @@ Planned 九欄引用 source plan Scope；此表是本次 source-only delivery �
 | In-Scope | 已讀 fixed pin 的公開 capability、manifest、runtime、WASM、native 與 Host；source-report.md。 |
 | Out-Of-Scope | 沒有執行真機、ASR、remoteSession、browser 並行實驗或 production 修改。 |
 | ReadOnly | SDK source 只讀，11 個 working files 與 committed bytes 相同；source-inventory.json。 |
-| Written | 本 topic 六個文件／JSON；外部 Archify 已交付，PR Lens 已有 staged diff，CLI 要求真實 head，因此 final map 待 publication。 |
+| Written | 本 topic 六個文件／JSON；外部 Archify 已交付，PR Lens 已對 committed diff validate／render PASS；外部 manifest／publication record 記錄實際 head。 |
 | Deleted | 無。 |
 | Modify | 僅本 topic 新工件；git Written set 檢查在 validation.md 更新。 |
 | Goal | source-report.md 已回答固定路徑未見交叉 guard，限制未超出證據。 |
 | Non-Goal | 未定義 Robot State、未改 SDK、未加互斥 guard。 |
-| TestCase | TC-SOURCE 完成；Graphify fallback、Archify final checks 完成；TC-TS 未啟動／未適用；文件完整性 PASS；PR Lens 初次 validate FAIL，依 CLI 需求排於真實 commit 後，尚未宣稱 final map 通過。 |
+| TestCase | TC-SOURCE 完成；Graphify fallback、Archify final checks 完成；TC-TS 未啟動／未適用；文件完整性 PASS；PR Lens 初次 validate FAIL 已保留；真實 commit 後 validate／render PASS，見 evidence/validation.md。 |
+
+- Publication evidence: source commit `7d5b6a9180c0381e565ca98fe512ba4536e7153c`，origin branch tracking 已設定；Draft PR #27 `https://github.com/a129924/coami/pull/27`，base=dev、state=OPEN、isDraft=true、尚無 human reviews／comments。
+- Commit／push／open 標記對應上述已發生的初次 publication；後續僅補同 topic handoff evidence 並再次 push，不改來源結論。最終遠端 head／CI snapshot 保存於外部 publication.json。
+- STOP POINT 2: Draft PR 交人工作業；Human Reviewer action 保持 pending。主 agent 不 merge、不做 merge 後動作或 cleanup。

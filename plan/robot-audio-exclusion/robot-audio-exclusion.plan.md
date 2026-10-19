@@ -49,9 +49,9 @@ Tracker 另記九欄 Actual 與 evidence，不以複製 Planned 作完成證據�
 
 ## Status / Allowed Transitions
 
-- **Current**: `publish-in-progress`
-- **Next actor**: `Main Agent`
-- **Stage-local action**: Commit approved bounded source delivery, push topic branch and open Draft PR.
+- **Current**: `pr-open`
+- **Next actor**: `Human Reviewer`
+- **Stage-local action**: Review Draft PR #27 and decide whether changes may be merged.
 - **Execution model**: 已接受對話計畫 → feature worktree → bounded source delivery → independent review → bounded topic commit／push／Draft PR → human review。不 merge。
 - **Allowed transitions**: planned -> creator-in-progress; creator-in-progress -> review-ready; review-ready -> reviewer-in-progress; reviewer-in-progress -> approved | needs-rework; needs-rework -> creator-in-progress; approved -> creator-in-progress | publish-in-progress; publish-in-progress -> pr-open | merged; pr-open -> needs-rework | merged; merged -> terminal。
 - Owner 本輪明確授權直接 topic commit／push／Draft PR；不重複請求已給予的批准。仍須查 staged diff、語義 commit 與真實檢查證據。
@@ -109,4 +109,4 @@ External-only roots：`/private/tmp/coami-robot-audio-exclusion/archify/` 的 `s
 
 ## Open Questions / Unresolved Items
 
-沒有未決產品設計；browser 實際重疊、其他 provider 與真機均明確未驗證。Optional analysis layer 缺漏為具名 soft fail，不阻擋此已授權 bounded source-only 驗證。獨立審查已 approved；實際 publication 與 PR Lens committed-diff 驗收尚待完成。
+沒有未決產品設計；browser 實際重疊、其他 provider 與真機均明確未驗證。Optional analysis layer 缺漏為具名 soft fail，不阻擋此已授權 bounded source-only 驗證。獨立審查已 approved；來源交付已 push，Draft PR #27 已開啟且 PR Lens committed-diff 驗收通過。等待 human review；CI 狀態另以實際 PR head 讀回，不預先宣稱通過。
