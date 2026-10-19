@@ -1,0 +1,10 @@
+READY 155.0.8059.80
+say 1 restartable
+say 2 restartable
+say 3 restartable
+greet 1 restartable
+greet 2 restartable
+greet 3 restartable
+both 1 restartable
+both 2 restartable
+both 3 restartable

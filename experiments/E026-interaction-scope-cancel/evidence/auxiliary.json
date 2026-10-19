@@ -1,0 +1,27 @@
+{
+  "kind": "topic-authored-summary",
+  "archify": {
+    "status": "delivered-and-checked",
+    "root": "/private/tmp/coami-interaction-scope-cancel/archify",
+    "finalHtml": "scope-cancel-sequence-v2.html",
+    "showcase": "9 checks, zero errors/warnings",
+    "desktopContainment": "4 viewports passed",
+    "nativeVisualReview": "pending",
+    "assistantVisualInspection": "smallest light and largest dark inspected separately"
+  },
+  "graphify": {
+    "version": "0.9.73",
+    "graphQuery": "not-executed",
+    "reason": "no existing graph",
+    "fallback": "targeted source navigation",
+    "buildExecuted": false,
+    "receipt": "/private/tmp/coami-interaction-scope-cancel/pr-lens/graphify-receipt.json"
+  },
+  "prLens": {
+    "version": "0.11.0",
+    "statusAtSourceCommit": "deferred until actual committed diff exists",
+    "root": "/private/tmp/coami-interaction-scope-cancel/pr-lens",
+    "publication": "local only; external receipt will record final status"
+  },
+  "pocGate": false
+}

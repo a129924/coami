@@ -1,0 +1,10 @@
+{
+  "automated": "completed",
+  "cases": 3,
+  "modes": [
+    "opening-startup-timeout"
+  ],
+  "expectedFailureIsolation": "observed",
+  "human": "unobserved",
+  "overall": "inconclusive"
+}

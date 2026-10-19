@@ -1,0 +1,23 @@
+{
+  "experiment": "E026",
+  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "buildPolicy": "official pinned CI build, not a fresh local rebuild",
+  "official": {
+    "runId": 35444663129,
+    "artifactId": 10585271971,
+    "archiveSha256": "0570742fb76a8dd73289d4a06b8b72aaa6f3c516a6cc831a53cdb6320da6d0e7",
+    "headSha": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322"
+  },
+  "sha256": {
+    "mc.js": "426b1e8ce3044477fa3af609605b3666cc4fd1c33f18fdd93eefe3ab2deea1d1",
+    "mc.wasm": "8453c01764635dfd14ebf79a285168de03a7169e1346b16e8c11066b12bb0a5e"
+  },
+  "host": {
+    "bridgeSourceSha256": "f4a2a66baf6000d9c29597f570d9e23bf32057066aee47a136b35a10f00ba6c6",
+    "observerSourceSha256": "dbe61476bbc4a3dfa2aaca7ebd111b27dd7a8a7d899ee2daf0df3eee7957036d"
+  },
+  "mod": {
+    "sha256": "740d10edef8843bde4bdc134a3b35e1dada12d9d7fcdbb938d68fb35e563d3f2",
+    "sourceSha256": "9f5005a8ff03f9c5e77e9ca875464ad994d7b751bee2a90044deb8342f9602e4"
+  }
+}

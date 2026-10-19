@@ -1,0 +1,10 @@
+{
+  "experiment": "E026",
+  "startedUtc": "2026-10-19T07:46:23Z",
+  "pocDeadlineUtc": "2026-10-19T09:16:23Z",
+  "stopNewRunsUtc": "2026-10-19T09:06:23Z",
+  "base": "d7ff0368a4e7d3ecd36d79a955745baae8b3c756",
+  "branch": "feat/andrew/interaction-scope-cancel",
+  "worktree": "/private/tmp/coami-interaction-scope-cancel-worktree",
+  "humanEvidence": "not-yet-observed"
+}

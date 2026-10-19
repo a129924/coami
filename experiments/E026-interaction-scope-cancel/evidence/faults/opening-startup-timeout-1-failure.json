@@ -1,0 +1,6678 @@
+{
+  "reason": "Error: WASM startup gate not reached",
+  "records": [
+    {
+      "at": 830.3000001907349,
+      "utc": "2026-10-19T08:37:44.954Z",
+      "kind": "scope-opening",
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      }
+    },
+    {
+      "at": 832.5999999046326,
+      "utc": "2026-10-19T08:37:44.956Z",
+      "kind": "robot-b-frame",
+      "frame": {
+        "kind": "opened",
+        "token": {
+          "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+          "robotId": "B",
+          "scopeId": "background"
+        }
+      }
+    },
+    {
+      "at": 832.6999998092651,
+      "utc": "2026-10-19T08:37:44.957Z",
+      "kind": "server-frame",
+      "frame": {
+        "kind": "opened",
+        "token": {
+          "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+          "robotId": "A",
+          "scopeId": "scope-1"
+        }
+      }
+    },
+    {
+      "at": 991,
+      "utc": "2026-10-19T08:37:45.115Z",
+      "kind": "served-asset",
+      "url": "/simulator/mc.js",
+      "sha256": "426b1e8ce3044477fa3af609605b3666cc4fd1c33f18fdd93eefe3ab2deea1d1",
+      "bytes": 73325
+    },
+    {
+      "at": 1021.5999999046326,
+      "utc": "2026-10-19T08:37:45.145Z",
+      "kind": "served-asset",
+      "url": "/simulator/mc.wasm",
+      "sha256": "8453c01764635dfd14ebf79a285168de03a7169e1346b16e8c11066b12bb0a5e",
+      "bytes": 5087848
+    },
+    {
+      "at": 1024.0999999046326,
+      "utc": "2026-10-19T08:37:45.148Z",
+      "kind": "served-asset",
+      "url": "/coami-mod.xsa",
+      "sha256": "740d10edef8843bde4bdc134a3b35e1dada12d9d7fcdbb938d68fb35e563d3f2",
+      "bytes": 3326
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 2951.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 2979.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3260.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3347.4000000953674,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3381.0999999046326,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3414.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3449.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3480.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3511.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3542.4000000953674,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3572.9000000953674,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3602.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3633.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3665.0999999046326,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3695.5999999046326,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3726.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3756.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3787.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3818,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3849.4000000953674,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3879.9000000953674,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3917.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3951.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 3983.5999999046326,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4014.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4047,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4078.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4109.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4141,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4171.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4201.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4233.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4265.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4295.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4326.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4357.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4388.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4418.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4449.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4481.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4514.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4547,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4577.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4607.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4640.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4674.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4707.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4740.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4773,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4806.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4838.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4871,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4901.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4932.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4964.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 4995.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5025.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5056.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5087.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5118.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5149,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5180.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5210.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5241.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5272.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5303.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5334.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5365.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5395.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5426.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5456.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5487.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5519,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5548.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5579.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5609.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5640.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5673.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5704.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5734.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5765.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5796.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5826.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5858.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5888.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5920.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5950.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 5981.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6013.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6043.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6074,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6105.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6135.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6167.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6199.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6231,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6262.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6292.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6323.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6354.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6385.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6416,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6447,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6478.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6509.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6539.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6570,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6601.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6632.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6663.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6693.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6724.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6755.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6787.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6818.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6852.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6887,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6921.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6956,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 6990.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7023.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7056.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7088.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7119.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7150.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7181.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7215.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7250.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7282.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7317.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7350.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7384.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7420.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7454.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7489.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7521.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7551.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7581.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7613.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7643.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7673.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7705.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7741.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7778.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7815.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7849.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7882,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7913.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7945.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 7977.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8007.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8038.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8068.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8100.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8132.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8165.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8198.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8231.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8267.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8300.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8331.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8364.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8397.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8428.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8458.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8491,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8523.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8556.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8593.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8627.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8659.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8691,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8722.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8753.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8784.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8815.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8847.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8877.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8910.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8943,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 8981.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9020.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9055.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9092.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9123.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9156.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9189.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9222.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9255.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9289.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9326.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9360,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9395.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9429.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9468,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9503.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9541.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9577.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9619.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9655.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9698,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9737.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9806.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9853.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9888.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9922.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 9995.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 10061.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 10218.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 10336,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 10416,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 10482.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 10539.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 10586.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 10635.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 10687.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 10731.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 10790.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "at": 10858.5,
+      "utc": "2026-10-19T08:37:54.982Z",
+      "kind": "mod-trace",
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "record": {
+        "kind": "ready"
+      }
+    },
+    {
+      "at": 10858.900000095367,
+      "utc": "2026-10-19T08:37:54.983Z",
+      "kind": "scope-active",
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      }
+    },
+    {
+      "at": 10858.900000095367,
+      "utc": "2026-10-19T08:37:54.983Z",
+      "kind": "scope-ready",
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 10862.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11093,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11150.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11202.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11255.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11302.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11355.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11398.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11448.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11490,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11531.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11570.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11652.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11742.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11797.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11841.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11879.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11925.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 11961.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12000.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12039.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12084.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12121,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12159.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12196.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12233,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12269.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12306.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12346.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12381.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12418.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12456.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12494.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12534,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12569.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12605.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12640.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12675.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12709.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12742.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12779.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12819.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12855.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12891.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12928.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12962,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 12996,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13028.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13064.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13100.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13133.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13168.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13204.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13239,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13279.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13316.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13359.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13406.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13450.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13484.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13519.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13556.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13597.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13633.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13668.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13709.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13747,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13786.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13829.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13875.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13929.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 13971.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14020.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14057.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14092.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14128.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14167.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14203.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14239.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14274.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14323.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14361.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14402.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14441,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14476.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14514.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14549.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14584,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14621.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14659.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14697,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14732,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14768.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14806.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14846,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14884.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14926.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 14963.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15001.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15037,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15071.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15110,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15146,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15179.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15216,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15249.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15286.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15324.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15359.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15394.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15428.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15463,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15500.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15535.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15570,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15608,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15641.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15676.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15722,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15761.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15800.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15850.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15909.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 15957.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16026.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16078.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16117.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16155.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16196.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16234.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16271.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16305.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16341.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16376.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16412.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16447.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16481.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16515,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16547.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16582.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16615.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16652.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16686.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16719.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16755.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16790.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16825.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16862.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16899.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16935.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 16977.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17027.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17076.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17122.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17166.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17209.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17259.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17303.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17355.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17403.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17444.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17501.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17545.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17593.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17636.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17726.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17783.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17822.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17856.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17891.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17933.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 17970.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18011.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18045.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18081.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18117,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18153.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18191.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18226.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18263.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18297.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18331.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18374.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18412.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18450.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18485.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18527.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18565.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18602,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18634.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18668.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18703.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18737.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18772.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18809.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18846.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18878.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18911.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18945.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 18981,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19018.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19053.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19087.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19122.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19157.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19192.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19226.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19260.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19296.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19335.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19371.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19409.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19444.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19478.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19515.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19551.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19587.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19620.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19656.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19691.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19728.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19766.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19802.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19837.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19871.300000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19905.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19940,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 19976.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20010.599999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20045.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20078.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20111.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20143.900000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20177.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20213,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20248,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20281.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20315.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20348.800000190735,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20390.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20423.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20456.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20490.400000095367,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20528.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20562.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20600.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20639.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20678.199999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20713.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20746.699999809265,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20779.5,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    },
+    {
+      "kind": "rendered-pose",
+      "at": 20813.099999904633,
+      "token": {
+        "runEpoch": "dd76df62-3220-4340-a7b9-30bb2f608317",
+        "robotId": "A",
+        "scopeId": "scope-1"
+      },
+      "pose": {
+        "y": 0,
+        "p": 0,
+        "r": 0
+      }
+    }
+  ]
+}

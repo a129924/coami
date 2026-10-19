@@ -1,0 +1,27 @@
+✔ barrier robot first, repeat 1 (1.579416ms)
+✔ barrier server first, repeat 1 (0.401458ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 1 (0.153833ms)
+✔ robot-error holds quarantine, repeat 1 (0.092875ms)
+✔ server-error holds quarantine, repeat 1 (0.066125ms)
+✔ cleanup-timeout holds quarantine, repeat 1 (0.105041ms)
+✔ barrier robot first, repeat 2 (0.078709ms)
+✔ barrier server first, repeat 2 (0.071333ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 2 (0.085208ms)
+✔ robot-error holds quarantine, repeat 2 (0.09725ms)
+✔ server-error holds quarantine, repeat 2 (0.074083ms)
+✔ cleanup-timeout holds quarantine, repeat 2 (0.063208ms)
+✔ barrier robot first, repeat 3 (0.05375ms)
+✔ barrier server first, repeat 3 (0.04175ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 3 (0.043208ms)
+✔ robot-error holds quarantine, repeat 3 (0.0415ms)
+✔ server-error holds quarantine, repeat 3 (0.042167ms)
+✔ cleanup-timeout holds quarantine, repeat 3 (0.038459ms)
+✔ foreign robot and mismatched cancel cannot acknowledge the barrier (0.052458ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 106.333792

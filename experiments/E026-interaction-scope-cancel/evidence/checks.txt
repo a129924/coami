@@ -1,0 +1,5 @@
+Final checks: Node 26 tests passed; Python 10 tests passed; TS strict typecheck/build passed; Pyright app+runner 0 errors; Ruff passed.
+Browser: 9 normal + 12 boundary + 18 expected-fault cases.
+Overall remains inconclusive: human observation not executed.
+Historical checks-run.txt contains a corrected runner import-order lint failure; final checks/ruff.txt supersedes that check only.
+Staged source diff --check (excluding evidence) passed. Full diff --check reports raw Vite/pytest/tsc output whitespace only; retained verbatim in evidence/checks/git-diff-raw.txt.
