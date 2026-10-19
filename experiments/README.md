@@ -2,6 +2,8 @@
 
 每個 POC 放在獨立的 `E001-<slug>/` 目錄中，將可執行程式、操作方式與結果放在一起。實驗程式不要直接寫入 `server/src/` 或 `device/src/`；完成驗證後，再根據紀錄決定是否移入正式實作。
 
+Robot 能力、用途及驗證依據請見 [Action／Event 能力與驗證目錄](../docs/robot-action-event-catalog.md)；SDK 支援與實驗實際效果分開記錄。
+
 每個實驗從 [`TEMPLATE.md`](TEMPLATE.md) 建立紀錄。記下實際操作、可重做的證據與結論；尚未執行的實驗不要填成已驗證。
 
 完整主題與證據入口見 [E001–E024 可行性驗證總覽](VALIDATION-SUMMARY.md)。總覽依 feasibility-validation 八段結構涵蓋成功、失敗、無法判定及工具流程，分開記錄歷史結論、回溯分類與驗證任務完成否；原始實驗與既有決策文件仍持有詳細證據及採用狀態，不因整理完成而升級能力或核准正式採用。
