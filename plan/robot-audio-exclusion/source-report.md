@@ -1,5 +1,7 @@
 # Listening／Saying：模擬器 SDK 交叉互斥來源驗證
 
+> 歷史階段說明：下列 source-only 結論與未執行狀態保存先前交付當時的事實。Owner 後續要求真人驗證，已另啟動 [E025](../../experiments/E025-listening-saying-exclusion/README.md)；新階段結果不得倒填為本報告當時已測。
+
 ## 問題、版本與結論
 
 2026-10-19，核對 stack-chan `b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322`。
@@ -58,3 +60,9 @@
 ## 本機檢視產物
 
 Archify 只呈現來源路徑，兩段不是執行時間線，也不證明互斥或重疊。PR Lens 只呈現本 topic 的實際文件 diff；兩者留在本機、不上傳。Graphify 未見可用 graph，已採 bounded 搜尋與直接來源核對，沒有 build／refresh。命令、版本與驗收見 [validation.md](evidence/validation.md)。
+
+## E025 human/runtime follow-up — 2026-10-19
+
+原來源階段結論保留為歷史；E025新增動態反例：Chrome153、耳機40%、固定同pin官方CI runtime。record→say5筆、say→record4筆，均非空錄音且SDK終態成功、自然播放與回放，capture／TTS保守區間重疊3055.3～3689.2ms。Owner回報「我剛剛測是都有聽到」。
+
+因此本次stock simulator 的 Listening／Saying 不由SDK強制互斥。動態證據、原頁面逐筆未保存缺口及整批事後真人回報分開記錄，見 [E025驗證](../../experiments/E025-listening-saying-exclusion/evidence/validation.md#human-execution-and-interpretation--2026-10-19)。此結論不外推真機／其他provider，不在本topic定義Robot State。

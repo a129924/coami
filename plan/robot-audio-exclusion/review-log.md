@@ -42,3 +42,35 @@ Scope、來源判讀與 Written set 均無其他 blocker。核可後轉 publish-
 - PR Lens 在真實 committed diff 上 local validate／render PASS；Graphify source fallback、Archify final validation 皆已另記證據。
 - 後續本 topic commit 只保存 publication／aux evidence 與目前 actor Human Reviewer，不修改已核可來源結論、SDK、inventory 或實驗範圍。
 - Human review／merge decision pending；CI 與 review comments 以實際 PR snapshot 為準。保留 branch／worktree，沒有 merge／cleanup 授權。
+
+## Owner-requested human validation
+
+Owner 在 source-only Draft PR 交付後要求真人驗證。新增 E025 的 browser overlap／human listening；官方 pinned CI artifact 取代缺失的本地 compiler，明示 provenance 修訂。原 source-only 結論保留。新 scope 尚待獨立審查，不沿用 source-only verdict 作 TS 實作核可。
+
+## E025 scope review — round 1
+
+needs-rework：canonical 契約仍殘留 source-only 未啟動條件。已把 Inputs／Scope／Locked Decisions／Validation／Open Questions 同步為 owner 明確啟動 E025；舊 Actual 與 stop point 明標歷史，tracker 新增目前 E025 九欄 Planned／Actual，不沿用舊 verdict。
+
+## E025 scope review — round 2
+
+獨立 Plan-Reviewer 已核可同步後的 canonical 契約。
+
+```json
+{
+  "verdict": "approved",
+  "blocking_issues": [],
+  "copilot_feedback_triage": {
+    "ADDRESS": [],
+    "DISCUSS": [],
+    "SKIP": []
+  }
+}
+```
+
+此核可只涵蓋人工作業新增 scope／事前判準／provenance；不代替新 TS tests 或真人結果。
+
+## E025 runtime / human result checkpoint — 2026-10-19
+
+Creator依原始事件重算9筆區間均一致；兩方向各至少3筆，非空錄音／成功SDK terminals／自然播放與回放。Owner於對話回報「我剛剛測是都有聽到」。原頁面8筆逐筆欄位未保存，未倒填，整批事後回報分開記錄。依原判準否定互斥假設，詳見E025 evidence/validation.md。
+
+Tests9/9、strict typecheck／build重新通過；bundle-size warning保留。這是Creator檢查與human聽辨，非獨立TS code review verdict。Draft PR需人工作業審查實作、儲存介面限制與證據邊界；不宣稱review-approved或merge gate通過。
