@@ -184,3 +184,83 @@ class EvidenceAuditTests(unittest.TestCase):
                     self.assertRaisesRegex(module.AuditError, "SDK target"),
                 ):
                     module.audit(ROOT)
+
+    def test_full_audit_rejects_missing_transport_records_and_short_offsets(self):
+        original_read = Path.read_text
+        for filename, mutation in [
+            ("TC-E2E-02.json", "transport"),
+            ("TC-E2E-01.json", "offset"),
+        ]:
+            case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / filename
+            data = json.loads(original_read(case_path))
+            if mutation == "transport":
+                data["records"] = [
+                    r for r in data["records"] if r["kind"] not in ["sent", "server"]
+                ]
+            else:
+                for row in data["records"]:
+                    if row["kind"] == "decision-observation":
+                        row["offset"] = []
+            serialized = json.dumps(data)
+
+            def read(path, *args, payload=serialized, selected=case_path, **kwargs):
+                return (
+                    payload
+                    if path == selected
+                    else original_read(path, *args, **kwargs)
+                )
+
+            with (
+                self.subTest(mutation=mutation),
+                patch.object(Path, "read_text", read),
+                self.assertRaises(module.AuditError),
+            ):
+                module.audit(ROOT)
+
+    def test_server_exchanges_reject_broken_identity_targets_and_completions(self):
+        data = json.loads(
+            (ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json").read_text()
+        )
+        self.assertEqual(
+            module.verify_server_exchanges(data), {"observations": 4, "commands": 1}
+        )
+        changes = [
+            ("sent", "hello", "run_id", "other"),
+            ("server", "hello", "run_id", "other"),
+            ("sent", "observation", "run_id", "other"),
+            ("sent", "observation", "observation_seq", 99),
+            ("sent", "observation", "offset", [0, 0.8]),
+            ("sent", "observation", "rotation", []),
+            ("sent", "observation", "age_ms", 1001),
+            ("server", "command", "run_id", "other"),
+            ("server", "command", "observation_seq", 99),
+            ("server", "command", "command_id", "other:7"),
+            ("server", "command", "target", [0, 0, 1]),
+            ("server", "command", "target", []),
+            ("sent", "completed", "command_id", "other:7"),
+            ("server", "completed", "command_id", "other:7"),
+        ]
+        for kind, phase, field, value in changes:
+            changed = copy.deepcopy(data)
+            row = next(
+                r
+                for r in changed["records"]
+                if r["kind"] == kind
+                and r["message" if kind == "sent" else "reply"]["kind"] == phase
+            )
+            row["message" if kind == "sent" else "reply"][field] = value
+            with (
+                self.subTest(kind=kind, phase=phase, field=field),
+                self.assertRaises(module.AuditError),
+            ):
+                module.verify_server_exchanges(changed)
+        for kind in ["sent", "server", "frame-committed"]:
+            changed = copy.deepcopy(data)
+            changed["records"] = [r for r in changed["records"] if r["kind"] != kind]
+            with self.subTest(missing=kind), self.assertRaises(module.AuditError):
+                module.verify_server_exchanges(changed)
+
+    def test_centering_requires_two_finite_numeric_offset_components(self):
+        for offset in [[], [0], [0, 0, 0], [float("nan"), 0], [True, 0], [None, 0]]:
+            self.assertFalse(module.finite_vector(offset, 2))
+        self.assertTrue(module.finite_vector([0.1, -0.1], 2))

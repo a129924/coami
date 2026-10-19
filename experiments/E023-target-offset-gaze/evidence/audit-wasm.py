@@ -208,6 +208,162 @@ def verify_sdk_target(actual, expected):
     )
 
 
+def finite_vector(value, length):
+    return (
+        isinstance(value, list)
+        and len(value) == length
+        and all(type(v) in (int, float) and math.isfinite(v) for v in value)
+    )
+
+
+def verify_server_exchanges(data):
+    records, run = data["records"], data["run_id"]
+    rpc = [
+        (i, row) for i, row in enumerate(records) if row["kind"] in ["sent", "server"]
+    ]
+    require(
+        len(rpc) >= 2 and len(rpc) % 2 == 0,
+        "server exchange records missing or unpaired",
+    )
+    decisions = [
+        (i, row)
+        for i, row in enumerate(records)
+        if row["kind"] == "decision-observation"
+    ]
+    expected = {}
+    previous_seq = 0
+    for i, row in decisions:
+        seq = row.get("observation_seq")
+        require(
+            type(seq) is int and previous_seq < seq <= 2000,
+            "server exchange decision sequence",
+        )
+        expected[seq] = (i, row)
+        previous_seq = seq
+    frames = [
+        (i, row)
+        for i, row in enumerate(records)
+        if row["kind"] == "frame-committed" and not row["probe"]
+    ]
+    returned = []
+    for i, row in enumerate(records):
+        if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+            trace = json.loads(row["text"].split("|", 1)[1])
+            if trace.get("phase") == "returned":
+                returned.append((i, trace))
+    seen, commands, pending = set(), 0, None
+    for pair in range(0, len(rpc), 2):
+        (sent_i, sent), (reply_i, received) = rpc[pair : pair + 2]
+        require(
+            sent["kind"] == "sent" and received["kind"] == "server",
+            "server exchange ordering",
+        )
+        message, reply = sent.get("message"), received.get("reply")
+        require(
+            isinstance(message, dict) and isinstance(reply, dict),
+            "server exchange payload missing",
+        )
+        if pair == 0:
+            require(
+                message == {"kind": "hello", "run_id": run} and reply == message,
+                "server exchange hello mismatch",
+            )
+            continue
+        if message.get("kind") == "completed":
+            require(
+                pending is not None
+                and message == {"kind": "completed", "command_id": pending[0]}
+                and reply == message,
+                "server exchange completion mismatch",
+            )
+            matches = [(i, r) for i, r in returned if r.get("seq") == pending[1]]
+            require(
+                len(matches) == 1 and pending[2] < matches[0][0] < pending[3] < sent_i,
+                "server exchange SDK return ordering",
+            )
+            pending = None
+            continue
+        require(
+            message.get("kind") == "observation" and pending is None,
+            "server exchange single-flight observation",
+        )
+        seq = message.get("observation_seq")
+        require(
+            type(seq) is int and seq in expected and seq not in seen,
+            "server exchange observation identity",
+        )
+        decision_i, decision = expected[seq]
+        require(
+            decision_i < sent_i
+            and message.get("run_id") == reply.get("run_id") == run
+            and reply.get("observation_seq") == seq,
+            "server exchange run/sequence mismatch",
+        )
+        offset, rotation = message.get("offset"), message.get("rotation")
+        require(
+            finite_vector(offset, 2) and offset == decision["offset"],
+            "server exchange offset mismatch",
+        )
+        require(
+            isinstance(rotation, list)
+            and len(rotation) == 3
+            and all(finite_vector(row, 3) for row in rotation)
+            and rotation == decision["rotation"],
+            "server exchange rotation mismatch",
+        )
+        age = message.get("age_ms")
+        require(
+            type(age) in (int, float) and math.isfinite(age) and 0 <= age <= 1000,
+            "server exchange observation age",
+        )
+        seen.add(seq)
+        if all(abs(v) <= 0.1 for v in offset):
+            require(
+                reply.get("kind") == "centered",
+                "server exchange centered reply mismatch",
+            )
+            continue
+        if commands == 20:
+            require(
+                reply.get("kind") == "rejected"
+                and reply.get("reason") == "iteration_limit",
+                "server exchange budget reply mismatch",
+            )
+            continue
+        command_id = f"{run}:{seq}"
+        require(
+            reply.get("kind") == "command"
+            and reply.get("command_id") == command_id
+            and reply.get("valid_for_ms") == 1000,
+            "server exchange command identity",
+        )
+        target = reply.get("target")
+        require(finite_vector(target, 3), "server exchange command target incomplete")
+        scale = math.sqrt(1 + offset[0] ** 2 + offset[1] ** 2)
+        ray = [1 / scale, -offset[0] / scale, -offset[1] / scale]
+        calculated = [sum(rotation[i][j] * ray[j] for j in range(3)) for i in range(3)]
+        require(
+            all(abs(target[i] - calculated[i]) < 1e-9 for i in range(3)),
+            "server exchange Calculator target mismatch",
+        )
+        committed = [(i, f) for i, f in frames if f["seq"] == seq]
+        require(
+            len(committed) == 1 and reply_i < committed[0][0],
+            "server exchange frame identity/order",
+        )
+        quantized = [math.floor((v + 1) * 1000 + 0.5) / 1000 - 1 for v in target]
+        verify_sdk_target(committed[0][1].get("expected"), quantized)
+        pending = (command_id, seq, reply_i, committed[0][0])
+        commands += 1
+    require(
+        seen == set(expected)
+        and pending is None
+        and commands == data["result"]["controls"] == len(frames),
+        "server exchange observation/command/completion coverage",
+    )
+    return {"observations": len(seen), "commands": commands}
+
+
 def audit(root):
     r = root / "evidence/wasm-runs" / RUN_ID
     report = json.loads((r / "report.json").read_text())
@@ -237,6 +393,12 @@ def audit(root):
         decisions = [x for x in records if x["kind"] == "decision-observation"]
         windows = [x for x in records if x["kind"] == "window-observation"]
         init = [x for x in records if x["kind"] == "initial-pose"]
+        for sample in decisions + windows:
+            require(
+                finite_vector(sample.get("offset"), 2),
+                "offset requires exactly two finite numeric components",
+            )
+        verify_server_exchanges(d)
         require(
             case["probe"]
             and len(probes) == 6
@@ -325,6 +487,8 @@ def audit(root):
         "python_attestation": "python-attestation.json",
         "dependency_tree_sha256": DEPENDENCY_TREE_SHA256,
         "browser_exceptions": 0,
+        "complete_offsets_verified": True,
+        "server_exchanges_verified": True,
         "total_probe_frames": sum(x["probe_frames"] for x in rows),
         "total_sdk_calls": sum(x["controls"] for x in rows),
         "cases": rows,
