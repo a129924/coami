@@ -1,3 +1,4 @@
+import {assertNoNodePreloads} from './node-environment.mjs'
 import {prepareCompilerEnvironment,rebuildFontbm} from './tool-inputs.mjs'
 import {verifyStagedHost} from './host-inputs.mjs'
 import {rebuildModdableTools,replaceCache,verifyCleanSource,rebuildVerifiedSource,buildWithVerifiedCompiler} from './build-safety.mjs'
@@ -7,6 +8,10 @@ import {installedTreeSha256} from './installed-tree.mjs'
 import { cp, mkdir, readFile, realpath, rm, stat, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
+
+// A preload has already run at this point; reject its startup inputs before
+// beginning preparation or publishing new artifacts. This does not undo the hook.
+assertNoNodePreloads()
 
 const PINNED_COMMIT = 'b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322'
 const PINNED_MODDABLE_COMMIT = 'b6e06ba70506a7381ffb28e09e3175bf4e99f305'
