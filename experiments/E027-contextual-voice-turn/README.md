@@ -32,12 +32,14 @@ Server pipeline30秒、host40秒；busy拒絕、不排隊。未確認播放終�
 ## 是否成功
 - 中文 TTS 前置：未執行。
 - 主要假設：未執行。
-- 驗證任務：未完成；缺 fresh native runtime 與真人聽辨。
+- 驗證任務：未完成；fresh native runtime 已建置並在 browser 啟動，仍缺真實 provider／播放終態與真人聽辨。
 - 純測試／web build：見 evidence/validation.txt；不是主要假設成功。
 
 ## 結果與證據
 保存命令／版本、token、錄音 MIME／SHA256、ASR、生成 kind/text、prompt hash、provider request／returned model、WAV hash、SDK及natural ended與聽辨。raw聲音只在記憶體，不落檔。voice-run.md 與 acceptance-summary.json 目前是未執行紀錄。
-目前 MOD bytecode 可編譯；fresh runtime prepare 已嘗試但缺 MODDABLE 9.5.0。失敗不保留可服務的舊 runtime。runtime-build.txt 記實際錯誤；runtime-provenance.json 不冒充已建置。
+2026-10-19：已在 E027 ignored generated 內恢復原 pin 的 Moddable／emsdk／fontbm，fresh runtime 與 MOD 建置成功。修正 EM_ASM 物件逗號的 C macro 編譯錯誤，以及 host 對 SDK 無尾端換行 trace 的處理；13 個 E027 Vitest、strict TS/MOD typecheck、web build 通過。測試搜尋限制在 E027 src，避免把 generated 第三方測試納入。實際 browser 載入 hash 相符、MOD installed／ready、TTS 按鈕解鎖；錄音仍受真人前置確認控制。
+runtime-build.txt 保留先前失敗及本次 red/green；runtime-provenance.json 是本次實際建置 receipt。voice-trace.jsonl 含明確標示來源的 HTTP hash 與 browser 觀察，不冒充已匯出的完整真人 trace。自動化 download-event 等待逾時，完整 browser trace 下載仍待確認。
+本機已將 ignored server/.env 透過 shell 注入單一 loopback Server process，僅確認非空與 OpenAPI HTTP200；沒有新增 dotenv，也沒有驗證金鑰有效性。範本仍是空值 OPENAI_API_KEY=。依 owner 指示稍後再做真人驗證，目前 live provider calls=0、未接受任何語音操作、未建立 Server budget ledger，未清除／重置任何 ledger。TTS A/B、六筆真人案例及 live 播放失敗／pending reload 均未執行。
 
 ## 結論與限制
 本輪仍不能判定閉環假設。假設失敗可完成驗證任務；無法判定須記缺口及決策限制，不能推進受阻決策。未驗證兒童、實機、多輪、一般情境充分性或 production採用。完整模型與原目標未改。

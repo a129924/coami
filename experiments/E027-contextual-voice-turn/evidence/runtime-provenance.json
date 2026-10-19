@@ -1,11 +1,50 @@
 {
   "experiment": "E027",
-  "status": "無法判定",
-  "attempt": "fresh runtime prepare",
+  "patchHashes": {
+    "turn-exchange.c.inc": "bfe7094b9d5d577938f89970e9562c4880e3265eb7e2adc9767592f05623775c",
+    "turn-exchange.js": "c0cf11036403aac879072a81e73a3402b3e033bcf9a072eb747067d077d5ad84"
+  },
+  "buildPolicy": "fresh pinned runtime with E027 native ingress patch; isolated pinned tool source copies with existing compiler cache; actual installed-tree hash attested, not pristine-package equivalence",
   "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
-  "missing": [
-    "E027-local Moddable 9.5.0 and pinned compiler toolchain"
-  ],
-  "runtimeBuilt": false,
-  "servedAssetsVerified": false
+  "moddableVersion": "9.5.0",
+  "emccVersion": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 5.0.1 (8c5f43157a3f069ade75876e23061330521eabde)",
+  "moddable": {
+    "path": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable",
+    "sourceCommit": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",
+    "tools": {
+      "mcconfig": {
+        "path": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable/build/bin/mac/release/mcconfig",
+        "sha256": "2abb06a6305abbe09d6ed0eb4df23f08c2f474910692f4146d5c826627d23ba4"
+      },
+      "xsc": {
+        "path": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable/build/bin/mac/release/xsc",
+        "sha256": "a2a6b24b2de6c88d0cdd9adcdd8819dafb0a922e478160df7f3617bef9b1383c"
+      }
+    }
+  },
+  "emscripten": {
+    "emsdkPath": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/emsdk",
+    "emsdkCommit": "14c18b569f55138fe4963924162244251f454fb0",
+    "release": "bf32ae8b61ac8efeb7eca01b54c8307f992724f7",
+    "upstreamCommit": "8c5f43157a3f069ade75876e23061330521eabde",
+    "installedTreeSha256": "6a5c6da8a385729daa917960e523b7a0f42ad0e8151d969e262bde3f38e22803",
+    "emccPath": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/emsdk/upstream/emscripten/emcc",
+    "emccSha256": "498eba9b6aacffca1c358ba340fc7b37015d7867cb211c7f2d45784ee9310f03"
+  },
+  "fontbm": {
+    "path": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/fontbm/build/fontbm",
+    "sourceCommit": "7677b908523e909679f67cd5c170396bb9def1aa",
+    "sha256": "2389a3daae8b9af5c3747cb2fbfd34db3fcd786ccec885878addd22bbcd07012"
+  },
+  "sha256": {
+    "mc.js": "3cd140e4393772a7174e59c70b9d64f9027bd446dffe0831408672fb9e9086ac",
+    "mc.wasm": "1cfb2fcc04619bc8108f4420027c65f8551747de0535a4fe7ef1d377592e4180"
+  },
+  "mod": {
+    "sha256": "a802a0bdfad0587de66fa3c42d74fc35577159cb1814cd806b2e9df03866e95b",
+    "sourceSha256": "0ff174458921d1a7af84240265f04f62bd7339e55047465a6c6644f2215f6ea6"
+  },
+  "host": {
+    "bridgeSourceSha256": "1a95a54ade2e7140481c9bbe475a228c5a4179638bfc0f0ea473c9cc2d7a4f43"
+  }
 }

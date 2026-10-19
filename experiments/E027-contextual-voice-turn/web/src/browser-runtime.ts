@@ -19,7 +19,6 @@ export class BrowserRuntime {
   private mode: Mode = 'A'
   private modBusy = false
   private operation: RequestToken | null = null
-  private traceBuffer = ''
   constructor(private readonly evidence: Evidence, private readonly changed: (mode:Mode, token:RequestToken|null)=>void) {}
   async open(viewport: HTMLCanvasElement, screen: HTMLCanvasElement): Promise<void> {
     if (this.engine || this.player) throw Error('runtime already opened; reload to retry startup')
@@ -46,9 +45,8 @@ export class BrowserRuntime {
       },
       onModStatus:(status:unknown) => this.evidence({kind:'mod-status',status}),
       onTrace:(message:string) => {
-        this.traceBuffer += message
-        const lines=this.traceBuffer.split('\n');this.traceBuffer=lines.pop() ?? ''
-        for(const line of lines) {
+        // Pinned SDK forwards complete Emscripten print lines, without their newline.
+        for(const line of message.split('\n')) {
           const index=line.indexOf('COAMI27|'); if(index<0) continue
           let v:unknown; try {v=JSON.parse(line.slice(index+8))}catch{continue}
           if(!isObject(v)) continue

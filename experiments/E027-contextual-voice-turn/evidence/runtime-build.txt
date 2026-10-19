@@ -6,3 +6,161 @@ Error: BLOCKED: MODDABLE 9.5.0 is not configured
     at file:///private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/scripts/prepare-assets.mjs:62:22
 
 Node.js v26.10.0
+
+2026-10-19 continuation — source pins and tool hashes in runtime-provenance.json.
+Moddable, emsdk and fontbm restored only under E027 web/generated/toolchain. Moddable make initially lacked newly built build/bin/mac/release in PATH; rerun with that PATH passed. fontbm cmake build and emsdk install/embedded activation 5.0.1 passed. No system install or profile changes.
+prepare:poc first encountered sandbox npm registry ENOTFOUND; stopped that build, then reran same locked dependencies with network access.
+Native RED: prepare:poc exit=1, EM_ASM object comma incorrectly split C macro arguments. Representative actual diagnostics:
+/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/pinned-stack-chan/firmware/host/modules/audio/wasm/audio-bridge.c:126:30: error: use of undeclared identifier 'data'
+/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/pinned-stack-chan/firmware/host/modules/audio/wasm/audio-bridge.c:125:5: error: expected expression
+/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/pinned-stack-chan/firmware/host/modules/audio/wasm/audio-bridge.c:125:5: error: expected expression
+/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/pinned-stack-chan/firmware/host/modules/audio/wasm/audio-bridge.c:125:5: error: expected expression
+Fix: initialize status/data in separate statements in the existing EM_ASM. No wire, SDK, model, timeout or cap change.
+GREEN command, from web/:
+e027_tools="$PWD/generated/toolchain"
+export MODDABLE="$e027_tools/moddable" EMSDK="$e027_tools/emsdk"
+export EM_CONFIG="$EMSDK/.emscripten" FONTBM_SOURCE="$e027_tools/fontbm"
+export FONTBM="$FONTBM_SOURCE/build/fontbm"
+export PATH="$MODDABLE/build/bin/mac/release:$EMSDK/upstream/emscripten:$PATH"
+npm_config_cache=/private/tmp/coami-e027-npm-cache npm run prepare:poc
+exit=0
+Full local build log: /private/tmp/coami-e027-runtime-build.log
+SHA256: dd0f509894a8e1ada220037a54df1fae9385f5dd8d76b19a9b45a8b721471e36
+Full local native-red log: /private/tmp/coami-e027-runtime-build-native-red.log
+SHA256: fddfacf923fd6629b532d3fcb024b2089838abbc3edc99d8ef9c1c402e076190
+Build log excerpts only; routine compilation lines and repeated third-party warnings omitted. Representative warnings:
+/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable/modules/piu/MC/piuMC.js:39: warning: cannot optimize native!
+warning: glyph 10 not found.
+warning: glyph 127 not found.
+warning: glyph 227 not found.
+warning: glyph 19996 not found.
+warning: glyph 20260 not found.
+warning: glyph 20262 not found.
+warning: glyph 20848 not found.
+warning: glyph 20851 not found.
+warning: glyph 21160 not found.
+warning: glyph 21457 not found.
+warning: glyph 21527 not found.
+warning: glyph 21551 not found.
+warning: glyph 22270 not found.
+warning: glyph 22307 not found.
+warning: glyph 22791 not found.
+warning: glyph 22836 not found.
+warning: glyph 24320 not found.
+warning: glyph 24405 not found.
+warning: glyph 24503 not found.
+warning: glyph 25195 not found.
+warning: glyph 25668 not found.
+warning: glyph 26102 not found.
+warning: glyph 26174 not found.
+warning: glyph 27493 not found.
+warning: glyph 27905 not found.
+warning: glyph 27979 not found.
+warning: glyph 28909 not found.
+warning: glyph 29615 not found.
+warning: glyph 29616 not found.
+warning: glyph 30710 not found.
+warning: glyph 30721 not found.
+warning: glyph 30830 not found.
+warning: glyph 31163 not found.
+warning: glyph 31616 not found.
+warning: glyph 32422 not found.
+warning: glyph 32445 not found.
+warning: glyph 32447 not found.
+warning: glyph 32476 not found.
+warning: glyph 32490 not found.
+warning: glyph 32599 not found.
+warning: glyph 35774 not found.
+warning: glyph 35797 not found.
+warning: glyph 35821 not found.
+warning: glyph 36133 not found.
+warning: glyph 3
+Final build output excerpt:
+/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable/modules/commodetto/freetype/include/freetype/config/ftoption.h:1122:10: warning: 'false' macro redefined [-Wmacro-redefined]
+ 1122 |         #define false 0
+      |                 ^
+/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable/modules/commodetto/commodettoPoco.h:25:10: note: previous definition is here
+   25 |         #define false (0)
+      |                 ^
+In file included from /private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable/modules/piu/MC/outline/piuShape.c:22:
+In file included from /private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable/modules/commodetto/freetype/include/freetype/freetype.h:24:
+In file included from /private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable/modules/commodetto/freetype/include/freetype/config/ftconfig.h:41:
+/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable/modules/commodetto/freetype/include/freetype/config/ftoption.h:1122:10: warning: 'false' macro redefined [-Wmacro-redefined]
+ 1122 |         #define false 0
+      |                 ^
+/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable/modules/commodetto/commodettoPoco.h:25:10: note: previous definition is here
+   25 |         #define false (0)
+      |                 ^
+1 warning generated.
+1 warning generated.
+# mcrez resources
+Total resource size: 2728451 bytes
+# cc mc.resources.c
+# cc mc.js
+copied mc.js / mc.wasm to web/simulator/
+{
+  "experiment": "E027",
+  "patchHashes": {
+    "turn-exchange.c.inc": "bfe7094b9d5d577938f89970e9562c4880e3265eb7e2adc9767592f05623775c",
+    "turn-exchange.js": "c0cf11036403aac879072a81e73a3402b3e033bcf9a072eb747067d077d5ad84"
+  },
+  "buildPolicy": "fresh pinned runtime with E027 native ingress patch; isolated pinned tool source copies with existing compiler cache; actual installed-tree hash attested, not pristine-package equivalence",
+  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "moddableVersion": "9.5.0",
+  "emccVersion": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 5.0.1 (8c5f43157a3f069ade75876e23061330521eabde)",
+  "moddable": {
+    "path": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable",
+    "sourceCommit": "b6e06ba70506a7381ffb28e09e3175bf4e99f305",
+    "tools": {
+      "mcconfig": {
+        "path": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable/build/bin/mac/release/mcconfig",
+        "sha256": "2abb06a6305abbe09d6ed0eb4df23f08c2f474910692f4146d5c826627d23ba4"
+      },
+      "xsc": {
+        "path": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/moddable/build/bin/mac/release/xsc",
+        "sha256": "a2a6b24b2de6c88d0cdd9adcdd8819dafb0a922e478160df7f3617bef9b1383c"
+      }
+    }
+  },
+  "emscripten": {
+    "emsdkPath": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/emsdk",
+    "emsdkCommit": "14c18b569f55138fe4963924162244251f454fb0",
+    "release": "bf32ae8b61ac8efeb7eca01b54c8307f992724f7",
+    "upstreamCommit": "8c5f43157a3f069ade75876e23061330521eabde",
+    "installedTreeSha256": "6a5c6da8a385729daa917960e523b7a0f42ad0e8151d969e262bde3f38e22803",
+    "emccPath": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/emsdk/upstream/emscripten/emcc",
+    "emccSha256": "498eba9b6aacffca1c358ba340fc7b37015d7867cb211c7f2d45784ee9310f03"
+  },
+  "fontbm": {
+    "path": "/private/tmp/coami-contextual-voice-turn-worktree/experiments/E027-contextual-voice-turn/web/generated/toolchain/fontbm/build/fontbm",
+    "sourceCommit": "7677b908523e909679f67cd5c170396bb9def1aa",
+    "sha256": "2389a3daae8b9af5c3747cb2fbfd34db3fcd786ccec885878addd22bbcd07012"
+  },
+  "sha256": {
+    "mc.js": "3cd140e4393772a7174e59c70b9d64f9027bd446dffe0831408672fb9e9086ac",
+    "mc.wasm": "1cfb2fcc04619bc8108f4420027c65f8551747de0535a4fe7ef1d377592e4180"
+  }
+}
+
+> coami-e027-web@0.1.0 mod
+> node scripts/build-mod.mjs
+
+[mod] > mcrun -d -p wasm -o /build /mod/coami-e027/manifest.json
+[mod] ### -p wasm
+[mod] > xsc -d -e /mod/coami-e027/mod.js -o /build/tmp/wasm/debug/coami-e027/files -r mod
+[mod] > xsc -d -e /build/tmp/wasm/debug/coami-e027/check.js -o /build/tmp/wasm/debug/coami-e027/files -r check
+[mod] > xsa -b /build/tmp/wasm/debug/coami-e027/files -n tech.moddable.coami-e027 -o /build/bin/wasm/debug/coami-e027 /build/tmp/wasm/debug/coami-e027/files/mod.xsb /build/tmp/wasm/debug/coami-e027/files/check.xsb
+[mod] archive: /build/bin/wasm/debug/coami-e027/mc.xsa
+Built coami-mod.xsa (1854 bytes)
+Final MOD rebuild after host-only repair (exit=0):
+
+> coami-e027-web@0.1.0 mod
+> node scripts/build-mod.mjs
+
+[mod] > mcrun -d -p wasm -o /build /mod/coami-e027/manifest.json
+[mod] ### -p wasm
+[mod] > xsc -d -e /mod/coami-e027/mod.js -o /build/tmp/wasm/debug/coami-e027/files -r mod
+[mod] > xsc -d -e /build/tmp/wasm/debug/coami-e027/check.js -o /build/tmp/wasm/debug/coami-e027/files -r check
+[mod] > xsa -b /build/tmp/wasm/debug/coami-e027/files -n tech.moddable.coami-e027 -o /build/bin/wasm/debug/coami-e027 /build/tmp/wasm/debug/coami-e027/files/mod.xsb /build/tmp/wasm/debug/coami-e027/files/check.xsb
+[mod] archive: /build/bin/wasm/debug/coami-e027/mc.xsa
+Built coami-mod.xsa (1854 bytes)

@@ -28,7 +28,7 @@ creator-in-progress. Code is reviewable for Draft PR; S4 runtime/human evidence 
 
 ## Artifact Paths
 Experiment prefix experiments/E027-contextual-voice-turn/. Exact source inventory: server/{app.py,models.py,contexts.py,providers.py,pyproject.toml,uv.lock,.env.example,tests/test_turn.py}; mod/{mod.ts,host.d.ts,tsconfig.json}; bridge/{turn-exchange.c.inc,turn-exchange.js}; web/{package.json,package-lock.json,tsconfig.json,vite.config.ts,index.html,.gitignore}; web/scripts/{prepare-assets.mjs,build-mod.mjs}; web/src/{browser-runtime.ts,turn-bridge.ts,turn-session.ts,strict-audio-bridge.ts,main.ts,style.css,turn-bridge.test.ts,turn-session.test.ts,strict-audio-bridge.test.ts}.
-Evidence README.md plus evidence/{validation.txt,ts-red.txt,bridge-red.txt,runtime-build.txt,runtime-provenance.json,voice-trace.jsonl,voice-run.md,acceptance-summary.json,auxiliary.md}; evidence/archify candidate/HTML/receipts/contact sheet/screenshots named by actual CLI receipt. Public renderer's private spec snapshot is CLI-owned.
+Evidence README.md plus evidence/{validation.txt,ts-red.txt,bridge-red.txt,runtime-build.txt,runtime-provenance.json,voice-trace.jsonl,voice-run.md,acceptance-summary.json,auxiliary.md}; evidence/archify/{candidate.json,contextual-voice-turn.html,validation.json,delivery.json,contextual-voice-turn.visual-check.json,contextual-voice-turn.visual-check.html,contextual-voice-turn.visual-check.{1440x900|2048x1320}.{light|dark}.png}. validation.json and delivery.json store CLI JSON stdout. Public renderer's private same-directory spec snapshot is CLI-owned and identified by delivery.json; no fabricated snapshot filename.
 Planning prefix plan/E027-contextual-voice-turn/ with .plan.md, .python.plan.md, .spec.md, .step.md and review-log.md. External PR Lens: /private/tmp/E027-contextual-voice-turn/pr-lens/{graph.json,rendered/drawn.graph.json,rendered/manifest.json,manifest-selected SVGs}; no repo config modifications.
 
 ## Implementation Steps
@@ -42,11 +42,18 @@ Planning prefix plan/E027-contextual-voice-turn/ with .plan.md, .python.plan.md,
 Pure pytest + Ruff/Pyright strict; Vitest/typecheck/Vite build; pinned MOD/fresh native runtime/served-byte hashes; synthetic decode/reload isolation separately. Adult cases require ASR sense, branch/content, exact token/WAV, SDK and natural onended, human hearing. Four statuses only 未執行/成功/失敗/無法判定; prerequisite separately scored, main unexecuted when prereq not reached. Hypothesis failure can finish validation; unknown requires documented cause/evidence gap and cannot unblock decision. Source tests/graphs never prove voice hypothesis.
 
 ## Reviewer Handoff
-Current source quality reviewed independently; see review-log. Actual runtime/human completion pending; no formal completion approval claimed.
-{"verdict":"needs-rework","blocking_issues":["Fresh native runtime and human acceptance evidence pending"],"copilot_feedback_triage":{"ADDRESS":[],"DISCUSS":[],"SKIP":[]}}
+{
+  "verdict": "approved",
+  "blocking_issues": [],
+  "copilot_feedback_triage": {
+    "ADDRESS": [],
+    "DISCUSS": [],
+    "SKIP": []
+  }
+}
 
 ## Post-merge / release actions
 Stop at human review on Draft PR. No merge, release, deployment, stable promotion, branch/worktree deletion authorized by this handoff.
 
 ## Open Questions / Unresolved Items
-Pinned compiler/toolchain absent in current environment. Live account/model access, Chinese TTS hearing, native bridge execution and six adult semantic outcomes unverified. No model/architecture decision reopened.
+Pinned compiler/toolchain restored E027-locally on 2026-10-19; fresh runtime build and actual browser MOD ready passed. Owner deferred human checks. Live account/model access, Chinese TTS hearing, native exchange/playback, failure/reload trials and six adult semantic outcomes remain unverified. Full browser trace download not yet verified. No model/architecture decision reopened.

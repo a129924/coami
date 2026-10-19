@@ -2,7 +2,8 @@
 static void e027_start(int mode, const uint8_t *bytes, int length)
 {
     EM_ASM({
-        const s = {status:0, data:new Uint8Array(0)};
+        const s = {status:0};
+        s.data = new Uint8Array(0);
         stackchanRuntime.state.coamiTurn = s;
         const bridge = stackchanRuntime.host && stackchanRuntime.host.VoiceTurn;
         const mode = $0;

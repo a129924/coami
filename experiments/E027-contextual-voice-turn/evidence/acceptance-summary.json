@@ -4,10 +4,18 @@
   "mainHypothesis": "未執行",
   "taskComplete": false,
   "missing": [
-    "fresh native runtime",
-    "TTS A/B natural-ended and human hearing",
-    "six contextual adult voice trials"
+    "TTS A/B real provider access, native playback natural-ended and human hearing",
+    "six contextual adult voice trials",
+    "live injected playback failure and pending reload isolation",
+    "full browser trace export confirmation"
   ],
   "liveProviderCalls": 0,
-  "rawAudioSaved": false
+  "rawAudioSaved": false,
+  "runtimePreparation": "成功",
+  "browserStartup": "成功",
+  "keyValidity": "未執行",
+  "liveAcceptedOperationsThisContinuation": 0,
+  "liveNativePlayback": "未執行",
+  "humanVerification": "owner deferred",
+  "formalImplementationReview": "pending"
 }
