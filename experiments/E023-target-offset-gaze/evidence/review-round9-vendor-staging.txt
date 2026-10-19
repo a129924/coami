@@ -1,0 +1,1 @@
+{"check":"PASS","sourceCommit":"b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322","stagedGitBlobsVerified":1500,"method":"git archive from immutable commit; each extracted blob compared with ls-tree object ID","hostBuildExecuted":false}

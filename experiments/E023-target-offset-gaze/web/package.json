@@ -1,0 +1,30 @@
+{
+  "name": "coami-e023-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <27"
+  },
+  "scripts": {
+    "test": "node --test src/*.test.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json",
+    "prepare:poc": "node scripts/prepare.mjs",
+    "build": "npm run typecheck && vite build",
+    "dev": "vite --host 127.0.0.1 --port 5203 --strictPort",
+    "preview": "vite preview --host 127.0.0.1 --port 5203 --strictPort",
+    "test:mod": "node --test scripts/mod-contract.test.mjs",
+    "prepare:host": "node scripts/prepare-assets.mjs",
+    "test:runtime": "node scripts/runtime-run.mjs",
+    "test:tools": "node --test scripts/source-cleanliness.test.mjs scripts/stage-vendor.test.mjs scripts/host-npm.test.mjs scripts/host-startup.test.mjs scripts/process-start.test.mjs scripts/run-build.test.mjs scripts/run-cases.test.mjs scripts/run-dependencies.test.mjs scripts/run-python.test.mjs scripts/run-mod.test.mjs"
+  },
+  "dependencies": {
+    "three": "0.185.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.1.2",
+    "@types/three": "0.185.4",
+    "typescript": "7.0.2",
+    "vite": "8.2.1"
+  }
+}

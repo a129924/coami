@@ -1,0 +1,20 @@
+
+> coami-e023-web@0.1.0 test:runtime
+> node scripts/runtime-run.mjs
+
+{"id":"TC-E2E-01","result":{"state":"成功","controls":0},"file":"TC-E2E-01.json","probe":true,"sdkCalls":0}
+{"id":"TC-E2E-02","result":{"state":"成功","controls":1},"file":"TC-E2E-02.json","probe":true,"sdkCalls":1}
+{"id":"TC-E2E-03","result":{"state":"成功","controls":1},"file":"TC-E2E-03.json","probe":true,"sdkCalls":1}
+{"id":"TC-E2E-04","result":{"state":"成功","controls":1},"file":"TC-E2E-04.json","probe":true,"sdkCalls":1}
+{"id":"TC-E2E-05","result":{"state":"成功","controls":1},"file":"TC-E2E-05.json","probe":true,"sdkCalls":1}
+{"id":"TC-E2E-06","result":{"state":"成功","controls":1},"file":"TC-E2E-06.json","probe":true,"sdkCalls":1}
+{"id":"TC-E2E-07","result":{"state":"成功","controls":1},"file":"TC-E2E-07.json","probe":true,"sdkCalls":1}
+{"id":"TC-E2E-08","result":{"state":"成功","controls":1},"file":"TC-E2E-08.json","probe":true,"sdkCalls":1}
+{"id":"TC-E2E-09","result":{"state":"成功","controls":1},"file":"TC-E2E-09.json","probe":true,"sdkCalls":1}
+{"id":"TC-E2E-10","result":{"state":"失敗","reason":"iteration_limit","controls":20},"file":"TC-E2E-10.json","probe":true,"sdkCalls":20}
+{"id":"TC-E2E-11","result":{"state":"失敗","reason":"iteration_limit","controls":20},"file":"TC-E2E-11.json","probe":true,"sdkCalls":20}
+{"id":"TC-E2E-12","result":{"state":"失敗","reason":"iteration_limit","controls":20},"file":"TC-E2E-12.json","probe":true,"sdkCalls":20}
+{"id":"TC-E2E-13","result":{"state":"失敗","reason":"iteration_limit","controls":20},"file":"TC-E2E-13.json","probe":true,"sdkCalls":20}
+{"id":"TC-E2E-14","result":{"state":"成功","controls":1},"file":"TC-E2E-14.json","probe":true,"sdkCalls":1}
+{"id":"TC-E2E-15","result":{"state":"成功","controls":1},"file":"TC-E2E-15.json","probe":true,"sdkCalls":1}
+{"state":"失敗","cases":15,"directory":"/private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/evidence/wasm-runs/WASM-2026-10-15T07-05-48-980Z"}

@@ -1,0 +1,107 @@
+{
+  "runId": "WASM-2026-10-16T06-26-29-613Z",
+  "capturedAt": "2026-10-16T06:26:29.615Z",
+  "kind": "actual full pinned WASM SDK + Python WS + rendered quaternion; synthetic fixed targets; NOT physical/human evidence",
+  "cases": [
+    {
+      "id": "TC-E2E-01",
+      "result": {
+        "state": "成功",
+        "controls": 0
+      },
+      "file": "TC-E2E-01.json",
+      "probe": true,
+      "sdkCalls": 0
+    }
+  ],
+  "errors": [],
+  "build": {
+    "vendorSourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+    "kind": "clean build immediately before preview",
+    "sourcesSha256": {
+      "mod/host.d.ts": "cf5571d0c38aa0e43f4a8e67cb33ef34a702ddbed22fbef551d885a9fcd8d5ec",
+      "mod/mod.ts": "1c2e8c7be25898ecbf39747962031b41e560b0bf0773e6243b8b60efb20f5197",
+      "mod/protocol.ts": "e9fd1ff261e1b66c7a53b64e2785fa2b7497b161333af03aca0e10fa989ad21a",
+      "mod/tsconfig.json": "6f772f6b8ebb1c13410ef961b127b890dafa7b3ab70139ed73759b289787f04a",
+      "server/app.py": "eff8c6b6a796a73b25f3f273f13b9886c6a6e678fdfdddbceef5cee26f8b1f5e",
+      "server/calculator.py": "8cbe02afdc17f8ce1c0fdd6900a23d156d14c5cd7a766a365a5a0dea3fc2b5d0",
+      "server/pyproject.toml": "a3e356c557433605dffa6ba078da7a059dff524f7036eef837a561f6a15c58ad",
+      "server/uv.lock": "f5dc17fc885a4efb875f8c33384f94cba22ea61cc64bd175f50e50d043e88473",
+      "web/generated/public/coami-mod.xsa": "dc2beed357de80aa1c11bdbb76c869e8b07ac68eaa4797ee7bacd6338a3ed63e",
+      "web/generated/public/runtime-provenance.json": "d7e8dd94e8e6166b620424846f7ac15eec92ebb62badb0c9691210398cd52b40",
+      "web/generated/public/simulator/assets/case/v1/shell.stl": "832ced3ad3669c3fc6b174a984cc800522ca33cecd9222d531bda430f6cc5236",
+      "web/generated/public/simulator/mc.js": "a1f2c55234c99663a0d5ab48fd969944ca72da9c1f14e6f1432c36fa53829796",
+      "web/generated/public/simulator/mc.wasm": "dc4ceb67c0abea9c126557ce63851a41dedbd1c6e10d15f6b8dddb7615ef487e",
+      "web/index.html": "dba5d6317fc14b38ed674061cde89de2c7dd06c73585289efea557a694139de4",
+      "web/package-lock.json": "9ad93f423f77adb61e71080c23bb8e2950cff126d5c25172a92d85c7d706efba",
+      "web/package.json": "62ba8c2bf93709d9fa6a6c1aee93cb2659daf005aa6b136e9648d952d1a7c094",
+      "web/scripts/blocked-ui-smoke.mjs": "62e740cd5923f01a489b7d3b024f2d54a5ac5d6848fa03b26ebfbf312c243c7b",
+      "web/scripts/build-safety.mjs": "fb97d0c7dd6ede7ccf873b19dc6f96db0b41d16c2b53c4e4d5310d181475fc54",
+      "web/scripts/host-inputs.mjs": "4877da27e64e2eb18931ce64f4b5ca527c41af8af7a5f0597bb1a4464bd0532e",
+      "web/scripts/host-pin.json": "98516a74899096a0d616547dad75414f9fcf4cfaa4621c6ffa2abc9b7b68a633",
+      "web/scripts/install-compiler.mjs": "95f90f4f3e9e837b1f979a3567816ef3febbff47dc0d6ff5413300f656ebbd77",
+      "web/scripts/installed-tree.mjs": "19f699845c01c25939d40df614d6e52489c53a9dcd68b9ddda775962bf24346e",
+      "web/scripts/mod-contract.test.mjs": "560f16314ba2bf4637617888e073df5a7fa62316534cce45cf677bea58f681dd",
+      "web/scripts/prepare-assets.mjs": "7aabcd6cf78d2e92e9afac07fc48757535f2dbbaa763f7dd17571cf829812893",
+      "web/scripts/prepare.mjs": "48549041d7df441025b75990ecd03b1f94534f7c6a3479049ec2dc2b79e72df1",
+      "web/scripts/process-start.mjs": "bbf5eac0185dce34594a5a0797a36ef322a17ba3113f496ec2667c83bcef4214",
+      "web/scripts/process-start.test.mjs": "39af6bf1a8f28e493bec65639212224714d3361adb8b5668765d1a0949773c9c",
+      "web/scripts/run-build.mjs": "7d3ca14cf37fabe5ff50f35d46b4db7539bc83906b72324b0db09c295dba667f",
+      "web/scripts/run-build.test.mjs": "a95c2ba854748ba00109bf8e8287702af60204eee417500c34004ba1c64d3805",
+      "web/scripts/run-cases.mjs": "2ffde09a2d86420a2097fd8fc013cd33dcf39419bb2727c524d41502a9fddf42",
+      "web/scripts/run-cases.test.mjs": "09f857f8099e3b22f5affe00ac8edba26830662e320f3388396a06768ff6aab7",
+      "web/scripts/runtime-run.mjs": "1b2ad3d2d98bf926953347df2c26127ad291beaf6b6461a2e9a85d46607b74a9",
+      "web/scripts/source-cleanliness.test.mjs": "c050ccc4237febd32af8b03d227edbf8de0035ad106a6a2ac4138a75a2d6dd9d",
+      "web/scripts/tool-inputs.mjs": "c8c5354b546c11ab3f8a5ff80f7d9d68249e6c4752bc86ce8d7b596b700fb656",
+      "web/src/main.ts": "4b253ab2a0f62a8d4e608eec762bc7d1d18f891ca30f7011c0c0cae0e2b432a1",
+      "web/src/observer.test.ts": "8fb56585a3f682f934b96d4fb7c6cd1d576166d20e5a7e315315d3869efb9f16",
+      "web/src/observer.ts": "0fc6288fe0cd00d01d5728c606e9cc8a4583ab061a557ebab07fb628daea141a",
+      "web/src/protocol.test.ts": "cab38fb84677569bdd7088d0fa12c599ea759087c0f3bab9987c47226422f594",
+      "web/src/receiver.ts": "a5be6f331711707c85ea47cf3886ccd5b9f66d63066547928b9f1ea83de2467f",
+      "web/src/runtime-pin.json": "a0b66e57f8a5a7704f088e1d709ae7ae9a89be5af7b32947671c6fda98556f59",
+      "web/src/style.css": "e17712fbca10f516f68bcb4d3906739357f038232b5c88e13c8f941a27106e72",
+      "web/tsconfig.json": "6053cb4cc33ba9ac82e6f98af2a8217313d2a0eddd2bef4932c4139303e7c304",
+      "web/vite.config.ts": "7fd03357febe91759315c27d1a453854e82287c5fc1420366e84ddb38fb8926f"
+    },
+    "distSha256": {
+      "assets/index-BaxZNlqH.css": "802c0e5268baca673f7f2be187fe65d2ada9d90865a41d4a8124b433e1990e97",
+      "assets/index-C5AazYLI.js": "7b2b916160346809e459996e94f040b87df11a7d1fdc81a9d4a39d2c42996e9c",
+      "coami-mod.xsa": "dc2beed357de80aa1c11bdbb76c869e8b07ac68eaa4797ee7bacd6338a3ed63e",
+      "index.html": "9937b8277a5b82151719ff34713513d7561c197c4e57039853fb1940c2b75b6b",
+      "runtime-provenance.json": "d7e8dd94e8e6166b620424846f7ac15eec92ebb62badb0c9691210398cd52b40",
+      "simulator/assets/case/v1/shell.stl": "832ced3ad3669c3fc6b174a984cc800522ca33cecd9222d531bda430f6cc5236",
+      "simulator/mc.js": "a1f2c55234c99663a0d5ab48fd969944ca72da9c1f14e6f1432c36fa53829796",
+      "simulator/mc.wasm": "dc4ceb67c0abea9c126557ce63851a41dedbd1c6e10d15f6b8dddb7615ef487e"
+    }
+  },
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/155.0.8059.79",
+    "revision": "@a49e2e3d4addfd84e765b52afe230bedb81096db",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "jsVersion": "15.5.35.23"
+  },
+  "provenance": {
+    "experiment": "E023",
+    "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+    "hashes": {
+      "mc.js": "a1f2c55234c99663a0d5ab48fd969944ca72da9c1f14e6f1432c36fa53829796",
+      "mc.wasm": "dc4ceb67c0abea9c126557ce63851a41dedbd1c6e10d15f6b8dddb7615ef487e",
+      "assets/case/v1/shell.stl": "832ced3ad3669c3fc6b174a984cc800522ca33cecd9222d531bda430f6cc5236",
+      "coami-mod.xsa": "dc2beed357de80aa1c11bdbb76c869e8b07ac68eaa4797ee7bacd6338a3ed63e"
+    },
+    "sources": {
+      "mod/mod.ts": "1c2e8c7be25898ecbf39747962031b41e560b0bf0773e6243b8b60efb20f5197",
+      "mod/protocol.ts": "e9fd1ff261e1b66c7a53b64e2785fa2b7497b161333af03aca0e10fa989ad21a",
+      "vendor/web/src/services/simulator/simulator-engine.mjs": "167a07741821e719acd2c087ea916c5ed141c87d8bc54a2e26d757a58376fe33",
+      "vendor/web/simulator/geometry.mjs": "7f9b357ec11b82fae1e45d5392e3f661ebadc8fc5b7a69f638f8c5a311f61a55",
+      "vendor/web/simulator/bridge.mjs": "f4a2a66baf6000d9c29597f570d9e23bf32057066aee47a136b35a10f00ba6c6"
+    },
+    "limitation": "Exact E023 source-built runtime bytes; full build provenance is recorded separately in evidence/host-runtime-provenance.json"
+  },
+  "bundleSha256": {
+    "index-BaxZNlqH.css": "802c0e5268baca673f7f2be187fe65d2ada9d90865a41d4a8124b433e1990e97",
+    "index-C5AazYLI.js": "7b2b916160346809e459996e94f040b87df11a7d1fdc81a9d4a39d2c42996e9c"
+  },
+  "state": "partial"
+}

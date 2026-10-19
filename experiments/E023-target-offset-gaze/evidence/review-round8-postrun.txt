@@ -1,0 +1,1 @@
+PASS: actual source/dist/vendor/dependencies/Python/MOD and all four local MOD compiler inputs unchanged after partial smoke

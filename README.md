@@ -10,6 +10,14 @@ Coami 是以 M5Stack Chan／StackChan K151 為目標硬體的兒童陪伴機器�
 
 POC 的可執行程式與結果放在 [`experiments/`](experiments/README.md)，與正式的 `server/src/`、`device/src/` 分開。驗證後再決定哪些成果值得移入正式實作；協定與程式結構將依實驗證據逐步形成。
 
+## 文件索引
+
+- [產品意圖](docs/product.md)
+- [Companion 對話流程](docs/companion-flow.md)
+- [文字 Companion 實驗提案](docs/experiments/text-companion-loop.md)
+- [實驗索引與證據](experiments/README.md)
+- [Robot 注視限制](docs/limitations/robot-gaze.md)：目前已確認的 SDK／模擬模型能力限制與後續建議。
+
 ## 環境
 
 - Python 3.12、[`uv`](https://docs.astral.sh/uv/)

@@ -1,0 +1,18 @@
+{
+  "capturedAt": "2026-10-15T07:00:36.599013+00:00",
+  "headBeforeCommit": "dc7af224c74ba6980b06bd5221130a76b25c23a9",
+  "note": "Run executes these working-tree inputs; follow-up commit will preserve these exact source bytes.",
+  "sha256": {
+    "server/app.py": "eff8c6b6a796a73b25f3f273f13b9886c6a6e678fdfdddbceef5cee26f8b1f5e",
+    "server/calculator.py": "8cbe02afdc17f8ce1c0fdd6900a23d156d14c5cd7a766a365a5a0dea3fc2b5d0",
+    "server/uv.lock": "f5dc17fc885a4efb875f8c33384f94cba22ea61cc64bd175f50e50d043e88473",
+    "web/src/main.ts": "4b253ab2a0f62a8d4e608eec762bc7d1d18f891ca30f7011c0c0cae0e2b432a1",
+    "web/src/observer.ts": "0fc6288fe0cd00d01d5728c606e9cc8a4583ab061a557ebab07fb628daea141a",
+    "web/src/receiver.ts": "ddb625ee3d22780c3c8fa427be3570a595d5254c310c97cafe2e0bb626bc7655",
+    "web/src/runtime-pin.json": "a0b66e57f8a5a7704f088e1d709ae7ae9a89be5af7b32947671c6fda98556f59",
+    "web/package-lock.json": "9ad93f423f77adb61e71080c23bb8e2950cff126d5c25172a92d85c7d706efba",
+    "web/scripts/runtime-run.mjs": "54dc243c1a0290de8c464819ac421210ad7696613f3cac0b57faf003e26fc2d5",
+    "mod/mod.ts": "151f81f72628ca01dcc868422d2afd4adbc7eeaa56cc5bb9791057e559d981a8",
+    "mod/protocol.ts": "e9fd1ff261e1b66c7a53b64e2785fa2b7497b161333af03aca0e10fa989ad21a"
+  }
+}

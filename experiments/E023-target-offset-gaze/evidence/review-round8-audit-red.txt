@@ -1,0 +1,542 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.12, pytest-9.1.1, pluggy-1.6.0
+rootdir: /private/tmp/E023-target-offset-gaze/feature-worktree
+plugins: anyio-4.15.1
+collected 12 items / 11 deselected / 1 selected
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py . [100%]
+
+=================================== FAILURES ===================================
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='decoded', target=[]) _
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: AuditError not raised
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='decoded', target=[1]) _
+evidence_audit.AuditError: evidence validation failed
+
+During handling of the above exception, another exception occurred:
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: "SDK target" does not match "evidence validation failed"
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='decoded', target=[1, 0]) _
+evidence_audit.AuditError: evidence validation failed
+
+During handling of the above exception, another exception occurred:
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: "SDK target" does not match "evidence validation failed"
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='decoded', target=[1, 0, 0, 0]) _
+evidence_audit.AuditError: evidence validation failed
+
+During handling of the above exception, another exception occurred:
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: "SDK target" does not match "evidence validation failed"
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='decoded', target=[nan, 0, 0]) _
+evidence_audit.AuditError: evidence validation failed
+
+During handling of the above exception, another exception occurred:
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: "SDK target" does not match "evidence validation failed"
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='decoded', target=[True, 0, 0]) _
+evidence_audit.AuditError: evidence validation failed
+
+During handling of the above exception, another exception occurred:
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: "SDK target" does not match "evidence validation failed"
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='decoded', target=[0, 0, 1]) _
+evidence_audit.AuditError: evidence validation failed
+
+During handling of the above exception, another exception occurred:
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: "SDK target" does not match "evidence validation failed"
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='decoded', target=None) _
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+                    with self.assertRaisesRegex(module.AuditError, "SDK target"):
+>                       module.audit(ROOT)
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:166:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def audit(root):
+        r = root / "evidence/wasm-runs" / RUN_ID
+        report = json.loads((r / "report.json").read_text())
+        inputs = json.loads((r / "source-inputs.json").read_text())
+        verify_case_ids(report["cases"])
+        require(report["errors"] == [], "evidence validation failed")
+        verify_build(root, report, inputs)
+        rows = []
+        for case in report["cases"]:
+            d = json.loads((r / case["file"]).read_text())
+            records = d["records"]
+            traces = []
+            require(
+                d["case"]["id"] == case["id"] and d["result"] == case["result"],
+                "case file identity/result mismatch",
+            )
+            require(
+                d["provenance"] == report["provenance"], "case runtime provenance mismatch"
+            )
+            for x in records:
+                if x["kind"] == "trace" and x["text"].startswith("COAMI23|"):
+                    traces.append(json.loads(x["text"].split("|", 1)[1]))
+            frames = [x for x in records if x["kind"] == "frame-committed"]
+            probes = [x for x in traces if x.get("phase") == "probe"]
+            decoded = [x for x in traces if x.get("phase") == "decoded"]
+            returned = [x for x in traces if x.get("phase") == "returned"]
+            decisions = [x for x in records if x["kind"] == "decision-observation"]
+            windows = [x for x in records if x["kind"] == "window-observation"]
+            init = [x for x in records if x["kind"] == "initial-pose"]
+            require(
+                case["probe"]
+                and len(probes) == 6
+                and (len(init) == 1)
+                and (init[0]["error_radians"] <= math.pi / 180),
+                "evidence validation failed",
+            )
+            require(
+                not [x for x in traces if x.get("phase") in ["failed", "init-failed"]],
+                "evidence validation failed",
+            )
+            require(
+                len(returned) == case["sdkCalls"] == case["result"]["controls"],
+                "evidence validation failed",
+            )
+            require(
+                len(decoded) == len(frames) == 6 + len(returned),
+                "evidence validation failed",
+            )
+            for f in frames:
+                matches = [x for x in decoded if x["seq"] == f["seq"]]
+                require(
+                    len(matches) == 1
+                    and all(
+                        (
+                            abs(a - b) < 1e-09
+>                           for a, b in zip(matches[0]["target"], f["expected"])
+                                            ^^^^^^^^^^^^^^^^^^^^
+                        )
+                    ),
+                    "evidence validation failed",
+                )
+E               KeyError: 'target'
+
+experiments/E023-target-offset-gaze/evidence/audit-wasm.py:252: KeyError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='returned', target=[]) _
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: AuditError not raised
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='returned', target=[1]) _
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: AuditError not raised
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='returned', target=[1, 0]) _
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: AuditError not raised
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='returned', target=[1, 0, 0, 0]) _
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: AuditError not raised
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='returned', target=[nan, 0, 0]) _
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: AuditError not raised
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='returned', target=[True, 0, 0]) _
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: AuditError not raised
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='returned', target=[0, 0, 1]) _
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: AuditError not raised
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+_ EvidenceAuditTests.test_full_audit_rejects_incomplete_or_mismatched_sdk_targets (phase='returned', target=None) _
+
+self = <test_evidence_audit.EvidenceAuditTests testMethod=test_full_audit_rejects_incomplete_or_mismatched_sdk_targets>
+
+    def test_full_audit_rejects_incomplete_or_mismatched_sdk_targets(self):
+        case_path = ROOT / "evidence/wasm-runs" / module.RUN_ID / "TC-E2E-02.json"
+        original_read = Path.read_text
+        for phase in ["decoded", "returned"]:
+            for target in [[], [1], [1, 0], [1, 0, 0, 0], [float("nan"), 0, 0], [True, 0, 0], [0, 0, 1], None]:
+                data = json.loads(original_read(case_path))
+                for row in data["records"]:
+                    if row["kind"] == "trace" and row["text"].startswith("COAMI23|"):
+                        trace = json.loads(row["text"].split("|", 1)[1])
+                        if trace.get("phase") == phase and trace["seq"] == 7:
+                            if target is None:
+                                trace.pop("target")
+                            else:
+                                trace["target"] = target
+                            row["text"] = "COAMI23|" + json.dumps(trace)
+                def read(path, *args, **kwargs):
+                    return json.dumps(data) if path == case_path else original_read(path, *args, **kwargs)
+                with self.subTest(phase=phase, target=target), patch.object(Path, "read_text", read):
+>                   with self.assertRaisesRegex(module.AuditError, "SDK target"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: AuditError not raised
+
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py:165: AssertionError
+=========================== short test summary info ============================
+SUBFAILED(phase='decoded', target=[]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='decoded', target=[1]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='decoded', target=[1, 0]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='decoded', target=[1, 0, 0, 0]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='decoded', target=[nan, 0, 0]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='decoded', target=[True, 0, 0]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='decoded', target=[0, 0, 1]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='decoded', target=None) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='returned', target=[]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='returned', target=[1]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='returned', target=[1, 0]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='returned', target=[1, 0, 0, 0]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='returned', target=[nan, 0, 0]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='returned', target=[True, 0, 0]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='returned', target=[0, 0, 1]) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+SUBFAILED(phase='returned', target=None) experiments/E023-target-offset-gaze/tests/test_evidence_audit.py::EvidenceAuditTests::test_full_audit_rejects_incomplete_or_mismatched_sdk_targets
+================= 16 failed, 1 passed, 11 deselected in 4.63s ==================

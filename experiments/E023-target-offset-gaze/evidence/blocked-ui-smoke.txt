@@ -1,0 +1,1 @@
+PASS: actual browser blocks correction and sends zero WS/frame commands when pinned runtime missing

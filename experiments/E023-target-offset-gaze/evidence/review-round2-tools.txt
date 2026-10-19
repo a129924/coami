@@ -1,0 +1,21 @@
+
+> coami-e023-web@0.1.0 test:tools
+> node --test scripts/source-cleanliness.test.mjs scripts/process-start.test.mjs scripts/run-build.test.mjs scripts/run-cases.test.mjs
+
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=false) (509.966292ms)
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=true) (614.353458ms)
+✔ ready child is returned to caller; startup timeout is cancelled (499.704916ms)
+✔ early exit and spawn failure reject promptly (96.40275ms)
+✔ clean build replaces stale dist and binds sources to output; later edits rejected (71.634458ms)
+✔ a source edit during the build cannot produce attributed evidence (56.288083ms)
+✔ case selector rejects duplicates, omissions disguised by bad indices, and malformed values (0.8495ms)
+✔ only exact unique case identities can yield a complete suite (0.192541ms)
+✔ compiler sources reject untracked headers and CMake inputs before rebuilding (143.960583ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1791.586584

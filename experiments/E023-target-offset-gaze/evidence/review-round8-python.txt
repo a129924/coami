@@ -1,0 +1,12 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.12, pytest-9.1.1, pluggy-1.6.0
+rootdir: /private/tmp/E023-target-offset-gaze/feature-worktree
+plugins: anyio-4.15.1
+collected 37 items
+
+experiments/E023-target-offset-gaze/tests/test_calculator.py ........... [ 29%]
+..............                                                           [ 67%]
+experiments/E023-target-offset-gaze/tests/test_evidence_audit.py ....... [ 86%]
+.....                                                                    [100%]
+
+============================= 37 passed in 10.02s ==============================

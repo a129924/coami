@@ -1,0 +1,17 @@
+
+> coami-e023-web@0.1.0 test:tools
+> node --test scripts/source-cleanliness.test.mjs scripts/process-start.test.mjs
+
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=false) (521.453ms)
+✔ readiness timeout waits for child cleanup (ignore SIGTERM=true) (613.597042ms)
+✔ ready child is returned to caller; startup timeout is cancelled (502.270125ms)
+✔ early exit and spawn failure reject promptly (85.084292ms)
+✔ compiler sources reject untracked headers and CMake inputs before rebuilding (121.291333ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1789.501209

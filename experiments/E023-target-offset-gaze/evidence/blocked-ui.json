@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "kind": "fail-closed UI only; NOT WASM convergence",
+  "text": "無法判定：Error: pinned runtime unavailable; run prepare:poc with exact E023_RUNTIME_DIR",
+  "disabled": true,
+  "evidence": {
+    "experiment": "E023",
+    "run_id": "8009a036-722f-4458-8ba4-c65ba01b9578",
+    "case": {
+      "id": "TC-E2E-01",
+      "offset": [
+        0,
+        0
+      ],
+      "initial": 0
+    },
+    "provenance": null,
+    "result": {
+      "state": "無法判定",
+      "reason": "Error: pinned runtime unavailable; run prepare:poc with exact E023_RUNTIME_DIR"
+    },
+    "records": [
+      {
+        "browser_ms": 803.4000000953674,
+        "kind": "stop",
+        "state": "無法判定",
+        "reason": "Error: pinned runtime unavailable; run prepare:poc with exact E023_RUNTIME_DIR"
+      }
+    ],
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "capturedAt": "2026-10-15T06:44:18.438Z",
+    "poseSource": "rendered-head-world-quaternion",
+    "limitations": "synthetic ideal zero-offset camera; not physical robot evidence"
+  }
+}

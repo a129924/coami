@@ -1,0 +1,13 @@
+file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/build-safety.mjs:51
+  throw Error('installed Emscripten tree changed during WASM build')
+        ^
+
+Error: installed Emscripten tree changed during WASM build
+    at verifyInstalledCompiler (file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/scripts/build-safety.mjs:51:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///private/tmp/E023-target-offset-gaze/feature-worktree/experiments/E023-target-offset-gaze/web/[eval1]:2:1
+
+Node.js v26.10.0
+Observed upstream SHA256: 60260034fc623b51f1339d71f7c262412c2c7207e5fb5e89bca6ad61edece92c
+Expected upstream SHA256: 42ce84c65e00be2818a7733704b9f0217f4c3ee9c7f2bb3366293f60c8e47295
+No host build attempted; baseline mismatch retained, no compiler tree repair or pin relaxation

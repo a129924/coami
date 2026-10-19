@@ -1,0 +1,18 @@
+{
+  "version": "3.12.12",
+  "executable": "/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/bin/python3.12",
+  "executableSha256": "a0ea1fa2b8d2631d1ba8e513b29a90c6a6cdfb9d00febb1a02e5cc5cb44a838e",
+  "basePrefix": "/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none",
+  "baseTreeSha256": "e5874d3b2c35a8dcb0bc3cb19ef3957c6aa69081227229ec4b1e87614397532d",
+  "venvTreeSha256": "f82a3e6a10eef2441db61e271854aa253115b2cac361f6e924129404f3f6ee74",
+  "lockSha256": "f5dc17fc885a4efb875f8c33384f94cba22ea61cc64bd175f50e50d043e88473",
+  "projectSha256": "a3e356c557433605dffa6ba078da7a059dff524f7036eef837a561f6a15c58ad",
+  "setup": [
+    "uv venv --clear --python 3.12.12 .venv",
+    "uv sync --locked --reinstall"
+  ],
+  "launchFlags": [
+    "-I",
+    "-B"
+  ]
+}

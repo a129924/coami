@@ -1,0 +1,2 @@
+graphify 0.9.73
+No usable graph found in bounded repository search (hidden/ignored included; dependency/vendor/generated/Git objects excluded). Source revision freshness cannot be established for a nonexistent graph. Used rg and direct source; no extract/build/refresh/provider performed.
