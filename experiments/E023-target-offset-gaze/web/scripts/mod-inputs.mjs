@@ -1,7 +1,7 @@
 import {readFile,readdir,lstat} from 'node:fs/promises'
 import {createHash} from 'node:crypto'
 import path from 'node:path'
-export const MOD_INPUT_FILES=['mod.ts','protocol.ts','tsconfig.json']
+export const MOD_INPUT_FILES=['mod.ts','protocol.ts','host.d.ts','tsconfig.json']
 export async function modInputHashes(root){
  const dir=path.join(root,'mod'),names=(await readdir(dir)).sort()
  if(JSON.stringify(names)!==JSON.stringify([...MOD_INPUT_FILES].sort()))throw Error('unsupported MOD compiler input set')

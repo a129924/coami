@@ -11,11 +11,11 @@ test('MOD artifact requires matching clean compiler, source and archive attestat
  const publicRoot=path.join(root,'web/generated/public'),dependencies={command:['npm','ci'],lockSha256:'lock',installedTreeSha256:'tree'}
  try{
   await mkdir(publicRoot,{recursive:true});await mkdir(path.join(root,'mod'))
-  for(const file of ['mod.ts','protocol.ts'])await writeFile(path.join(root,'mod',file),'source')
+  for(const file of ['mod.ts','protocol.ts','host.d.ts'])await writeFile(path.join(root,'mod',file),'source')
   const config=JSON.stringify({compilerOptions:{strict:true},include:['*.ts']})
   await writeFile(path.join(root,'mod/tsconfig.json'),config)
   await writeFile(path.join(publicRoot,'coami-mod.xsa'),'archive')
-  const p={hashes:{'coami-mod.xsa':sha('archive')},modBuild:{dependencies,archiveSha256:sha('archive'),sources:{'mod.ts':sha('source'),'protocol.ts':sha('source'),'tsconfig.json':sha(config)}}}
+  const p={hashes:{'coami-mod.xsa':sha('archive')},modBuild:{dependencies,archiveSha256:sha('archive'),sources:{'mod.ts':sha('source'),'protocol.ts':sha('source'),'host.d.ts':sha('source'),'tsconfig.json':sha(config)}}}
   const save=()=>writeFile(path.join(publicRoot,'runtime-provenance.json'),JSON.stringify(p))
   await save();await verifyPreparedMod(root,{dependencies})
   p.modBuild.sources['tsconfig.json']=sha('changed configuration used to compile')
@@ -32,7 +32,7 @@ test('MOD compiler input boundary rejects external config and extra local files'
  const root=await mkdtemp(path.join(tmpdir(),'e023-mod-inputs-')),mod=path.join(root,'mod')
  try{
   await mkdir(mod)
-  for(const file of ['mod.ts','protocol.ts'])await writeFile(path.join(mod,file),'source')
+  for(const file of ['mod.ts','protocol.ts','host.d.ts'])await writeFile(path.join(mod,file),'source')
   const config={compilerOptions:{strict:true},include:['*.ts']}
   const save=cfg=>writeFile(path.join(mod,'tsconfig.json'),JSON.stringify(cfg))
   await save(config);const before=await modInputHashes(root)
