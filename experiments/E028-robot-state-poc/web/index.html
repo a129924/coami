@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E028 Robot State POC</title></head>
+<body><main><h1>E028 · Robot State POC</h1><p>固定 simulator、managed session。錄音只在記憶體；下載只含 metadata。所有真人效果仍 awaiting-human。</p>
+<button id="start">啟動／解鎖音訊</button><p id="status" role="status">尚未啟動</p>
+<div class="workspace"><canvas id="viewport" aria-label="Robot simulator"></canvas><canvas id="screen" hidden></canvas><section>
+<h2>操作與拒絕原因</h2><div class="controls"><button id="record" disabled>Record 5 秒</button><button id="replay" disabled>Host Replay</button><button id="say" disabled>Say 固定日文</button><button id="head.nod" disabled>Head nod + neutral</button></div>
+<p>活動中仍保留按鈕，讓你驗證拒絕。30 秒只標 unknown，不釋放資源。Reload 是新 session，不能證明舊實體工作已停。</p><button id="download">下載 metadata trace</button><h2>身份／資源／State</h2><pre id="state"></pre></section></div>
+<h2>最近事件</h2><pre id="trace"></pre></main><script type="module" src="/src/main.ts"></script></body></html>

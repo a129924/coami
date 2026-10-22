@@ -1,0 +1,63 @@
+{
+  "experiment": "E028",
+  "checkedAt": "2026-10-22T07:01:59.982Z",
+  "sourceCommit": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+  "buildPolicy": "official pinned CI runtime; freshly compiled E028 MOD",
+  "official": {
+    "runId": 35444663129,
+    "artifactId": 10585271971,
+    "archiveSha256": "0570742fb76a8dd73289d4a06b8b72aaa6f3c516a6cc831a53cdb6320da6d0e7",
+    "headSha": "b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322",
+    "expired": false
+  },
+  "sha256": {
+    "simulator/mc.js": "426b1e8ce3044477fa3af609605b3666cc4fd1c33f18fdd93eefe3ab2deea1d1",
+    "simulator/mc.wasm": "8453c01764635dfd14ebf79a285168de03a7169e1346b16e8c11066b12bb0a5e",
+    "simulator/assets/case/v1/shell.stl": "832ced3ad3669c3fc6b174a984cc800522ca33cecd9222d531bda430f6cc5236"
+  },
+  "mod": {
+    "sha256": "0c7a02fe7ebac51c8f4509658a871a019a4e0506caf9b4cdd8853ef964e97090",
+    "sourceSha256": "67d79211103325b8ef0477a5754ac4ad1b624a9041a3dfbd5c61a37394d337ca"
+  },
+  "host": {
+    "bridgeSourceSha256": "f4a2a66baf6000d9c29597f570d9e23bf32057066aee47a136b35a10f00ba6c6",
+    "observerSourceSha256": "d56a8d808b5184f3c18e76d80236ae8d2d03cfb1cd6be1271e566a1b01bab7d3"
+  },
+  "toolchain": {
+    "node": "v24.19.0",
+    "packages": {
+      "name": "coami-e028-web",
+      "version": "0.1.0",
+      "private": true,
+      "type": "module",
+      "engines": {
+        "node": ">=24 <25"
+      },
+      "scripts": {
+        "assets": "node scripts/prepare-assets.mjs",
+        "mod": "node scripts/build-mod.mjs",
+        "prepare:poc": "npm run assets && npm run mod",
+        "dev": "vite --host 127.0.0.1",
+        "test": "node --test src/*.test.ts",
+        "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json",
+        "build": "npm run typecheck && vite build"
+      },
+      "dependencies": {
+        "three": "0.185.1"
+      },
+      "devDependencies": {
+        "@types/node": "26.1.2",
+        "@types/three": "0.185.4",
+        "typescript": "7.0.2",
+        "vite": "8.2.1"
+      }
+    }
+  },
+  "sourceSha256": {
+    "src/state.ts": "45074ce7fd4327a7f3d5a03a34b76104d834a8502b509f96611f160761cc7cd5",
+    "src/adapter.ts": "3193d87e466db11e99b5526c844080b5c4caa943d3802b38320c1cfa3149c3f2",
+    "src/observed-audio.ts": "d56a8d808b5184f3c18e76d80236ae8d2d03cfb1cd6be1271e566a1b01bab7d3",
+    "src/main.ts": "055a4d0d2713d74a3b6392c98d4e46dc5211c10ef7e04e3a0ce79ea4fc511210",
+    "package-lock.json": "3efb61bc0365212bea24ecb3ccf2e0ce1369d3a1dc6f3c26f51d51b9c4ea6dfc"
+  }
+}
