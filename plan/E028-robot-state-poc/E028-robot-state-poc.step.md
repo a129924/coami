@@ -11,7 +11,7 @@ created: 2026-10-22
 
 | Current status | Allowed next transitions | Next actor |
 | --- | --- | --- |
-| publish-in-progress | publish-in-progress → pr-open | Main Agent |
+| pr-open | pr-open → needs-rework or merged (human authorization required) | Human Reviewer |
 
 ## Actionable Steps
 
@@ -37,10 +37,10 @@ created: 2026-10-22
 
 - [X] **Actor:** Main Agent — **Action:** Validate the approved Written set and perform bounded staging only. — **Evidence:** 29 staged additions confined to E028 experiment/plan; independent approved source-set digest b064414d69f5a688b60f732a725a91636fff00ad6677c7ace43a3325ccaa4c18; source/doc whitespace check passes. Raw RED/check logs retain original tool whitespace (review-log exception).
 - [X] **Actor:** Main Agent — **Action:** Obtain explicit human approval at STOP POINT 1 before commit, push, or PR creation.
-- [ ] **Actor:** Main Agent — **Action:** Commit the approved bounded changes.
-- [ ] **Actor:** Main Agent — **Action:** Push the topic branch.
-- [ ] **Actor:** Main Agent — **Action:** Open the pull request.
-- [ ] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback.
+- [X] **Actor:** Main Agent — **Action:** Commit the approved bounded changes. — **Evidence:** Implementation topic commit `ad2bcde7d7737acf53d6c625d61ed424b5945400`; commit exit 0. Hook reported missing lefthook; independent manual tests/typechecks/build passed, no hook success claimed.
+- [X] **Actor:** Main Agent — **Action:** Push the topic branch. — **Evidence:** `git push -u origin feat/andrew/robot-state-poc` exit 0; origin tracks the E028 feature branch.
+- [X] **Actor:** Main Agent — **Action:** Open the pull request. — **Evidence:** Draft [PR #32](https://github.com/a129924/coami/pull/32), base dev, head feat/andrew/robot-state-poc; OPEN/isDraft=true/mergeCommit=null verified after creation.
+- [X] **Actor:** Main Agent — **Action:** Review and observe the pull request and route actionable feedback. — **Evidence:** Read-only PR status: no reviews/actionable feedback at initial observation; CI still in progress, not claimed passed. PR #31 remains OPEN/Draft at original eb1b4b7beb8a0eea4fff05d086c4de66c0d42f13 with no merge.
 - [ ] **Actor:** Main Agent — **Action:** Hand off for human merge at STOP POINT 2 and completely stop.
 - [ ] **Actor:** Main Agent — **Action:** Record exact human merge evidence after a new execution begins.
 - [ ] **Actor:** Main Agent — **Action:** Require a new explicit human resume before post-merge work.
@@ -66,6 +66,8 @@ created: 2026-10-22
 - Marker semantics: `[X]` exact one-to-one evidence; `[ ]` pending/planned/unproved. Source has no lowercase markers.
 - Tracker semantics: check_all_succeeded covers rendered head, contextual, Implementation Steps and tail; check_impl_steps_succeeded covers only Implementation Steps.
 - Owner-only updates: only the action owner may update after exact evidence; Step-Creator never updates an existing output.
-- All six implementation steps passed the tracker CLI gate; independent implementation review approved. Publication is in progress. H1–H6 remain awaiting-human; no human pass has been recorded.
+- All six implementation steps passed the tracker CLI gate; independent implementation review approved. Draft PR #32 is open for human review. H1–H6 remain awaiting-human; no human pass has been recorded. Merge/post-merge/cleanup remain pending and unauthorized.
 - Remote retention is unknown: human/policy follow-up is required before any remote deletion. Initial cleanup rows are pending; their rendering grants no cleanup authority.
 - Generation handoff: review-ready (tracker rendering only); no self-approval, stable promotion or implementation-completion claim.
+
+- Publication handoff: local simulator remains at http://127.0.0.1:5198/; user-supplied original metadata is preserved byte-for-byte. Current boundary is human review and H1–H6 operation/listening/visual validation. No merge, release, dev sync or worktree removal has been performed.

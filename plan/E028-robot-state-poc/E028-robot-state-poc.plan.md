@@ -43,15 +43,16 @@ Runtime is fixed official artifact plus an E028 MOD freshly compiled from the pi
 
 ## Status / Allowed Transitions
 
-- **Current**: `publish-in-progress`
-- **Next actor**: `Main Agent`
-- **Stage-local action**: `Validate and stage only the approved bounded topic files, commit and push the feature branch, open a Draft PR, then stop at human review without merge; preserve human cases as awaiting-human.`
+- **Current**: `pr-open`
+- **Next actor**: `Human reviewer`
+- **Stage-local action**: `Await human PR review and H1–H6 human effects verification; keep pending outcomes awaiting-human and stop without merge.`
 - **Execution model**: canonical creator→independent reviewer→publish→Draft PR; stop at human review. Separate plan-review gate precedes implementation. No topic-specific round cap and no automatic merge/release.
 - **Allowed transitions**: planned→creator-in-progress; creator-in-progress→review-ready; review-ready→reviewer-in-progress; reviewer-in-progress→approved; reviewer-in-progress→needs-rework; needs-rework→creator-in-progress; approved→creator-in-progress; approved→publish-in-progress; publish-in-progress→pr-open; publish-in-progress→merged; pr-open→needs-rework; pr-open→merged; merged→terminal. The merge transitions are canonical lifecycle vocabulary, not execution authorization in this topic.
 - Independent Plan-Reviewer logs plan verdict; Planner routes readiness; Step-Creator generates the exact base-plan tracker after approval. Creator-owned implementation checkboxes can complete when runnable handoff/evidence is ready while actual human effect cases remain awaiting-human. Do not claim whole lifecycle completion or human success from implementation completion.
 - **Lifecycle routing record (2026-10-22T07:17:16.627610+00:00, recorded after owner-role evidence arrived):** `creator-in-progress`→`review-ready` on frozen six-step delivery and Main Agent's exact tracker CLI `check_impl_steps_succeeded E028-robot-state-poc`, exit 0 (`All 6 implementation steps complete`); `review-ready`→`reviewer-in-progress` on dispatch to independent `/root/poc_implementation_reviewer`; `reviewer-in-progress`→`approved` on that reviewer's original approved JSON with `blocking_issues=[]` in `review-log.md` (review timestamp 2026-10-22T07:15:48.317428+00:00); `approved`→`publish-in-progress` on Main Agent publication dispatch. This recording timestamp does not invent earlier transition timestamps or imply publication is already complete.
 - **Frozen evidence:** 26 experiment-file manifest digest `b064414d69f5a688b60f732a725a91636fff00ad6677c7ace43a3325ccaa4c18`; independent 35/35 unit pass; strict browser/MOD checks and build exit 0 recorded in `evidence/checks.txt`; four-category handoff in `evidence/validation.md`. Actual simulator metadata is limited to the saved 28-line trace; final missing-end regression change was not rerun in browser. Human outcomes remain awaiting-human. Lifecycle-only planning changes do not change the reviewed experiment manifest.
-- **Publication remains pending:** commit, push, Draft PR identity and subsequent human review require exact Main Agent evidence. No merge/release/cleanup is authorized.
+- **Publication evidence (2026-10-22T07:18:42.368520+00:00, recorded from Main Agent's completed publication checks):** commit `ad2bcde7d7737acf53d6c625d61ed424b5945400` on `feat/andrew/robot-state-poc` from managed worktree `/Users/andrew/.codex/worktrees/7a76/coami`; push to `origin` exit 0; [Draft PR #32](https://github.com/a129924/coami/pull/32), base `dev`, state `OPEN`, `isDraft=true`, `mergeCommit=null`. This exact evidence routes `publish-in-progress`→`pr-open`; subsequent lifecycle-only handoff commits do not alter the reviewed experiment scope. CI is currently in progress, not asserted fully passed.
+- **Human boundary:** PR review and H1–H6 effects remain pending/awaiting-human. Main Agent rechecked PR #31: still OPEN/Draft, head `eb1b4b7beb8a0eea4fff05d086c4de66c0d42f13`, `mergedAt=null`; it is not modified by this topic. No merge/release/cleanup is authorized.
 
 ## Artifact Paths
 
