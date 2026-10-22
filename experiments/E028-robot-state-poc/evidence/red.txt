@@ -1,0 +1,780 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.ts:12
+export class Kernel {
+ constructor(readonly sessionEpoch: string) {}
+                      ^^^^^^^^^^^^^^^^^^^^
+ admit(_action: Action): Admission { return {accepted:false,reason:'not implemented',conflicts:[]} }
+
+SyntaxError [ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX]: TypeScript parameter property is not supported in strip-only mode
+    at parseTypeScript (node:internal/modules/typescript:68:40)
+    at processTypeScriptCode (node:internal/modules/typescript:146:42)
+    at stripTypeScriptModuleTypes (node:internal/modules/typescript:215:22)
+    at ModuleLoader.<anonymous> (node:internal/modules/esm/translators:680:29)
+    at #translate (node:internal/modules/esm/loader:434:20)
+    at afterLoad (node:internal/modules/esm/loader:502:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:507:12)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:560:36)
+    at afterResolve (node:internal/modules/esm/loader:607:52)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:613:12) {
+  code: 'ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX'
+}
+
+Node.js v24.19.0
+✖ experiments/E028-robot-state-poc/web/src/state.test.ts (67.247417ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 72.40825
+
+✖ failing tests:
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:1:1
+✖ experiments/E028-robot-state-poc/web/src/state.test.ts (67.247417ms)
+  'test failed'
+
+Command: Node24 node --test web/src/state.test.ts
+Phase: typed nonfunctional Kernel stub, before implementation
+Exit: 1
+✖ atomic admission reserves complete appearance and output before start (0.861667ms)
+✖ correlated start/end, uncertainty sticky, independent head and recording (0.11175ms)
+✖ record rejects same resource and reciprocal exclusion in requested (0.082792ms)
+✖ record rejects same resource and reciprocal exclusion in active (0.063833ms)
+✖ record rejects same resource and reciprocal exclusion in unknown (0.063833ms)
+✖ say rejects same resource and reciprocal exclusion in requested (0.053ms)
+✖ say rejects same resource and reciprocal exclusion in active (0.048208ms)
+✖ say rejects same resource and reciprocal exclusion in unknown (0.456041ms)
+✖ replay rejects same resource and reciprocal exclusion in requested (0.107416ms)
+✖ replay rejects same resource and reciprocal exclusion in active (0.111583ms)
+✖ replay rejects same resource and reciprocal exclusion in unknown (0.064542ms)
+✖ head.nod rejects same resource and reciprocal exclusion in requested (0.051417ms)
+✖ head.nod rejects same resource and reciprocal exclusion in active (0.054542ms)
+✖ head.nod rejects same resource and reciprocal exclusion in unknown (0.044ms)
+✖ stale, wrong ID, duplicate and tombstone late events never clear newer work (0.065166ms)
+✖ external stock overlap is retained with policy diagnosis and separate identities (0.055375ms)
+✖ unattributed occupancy blocks resources and snapshots cannot mutate kernel (0.167458ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 0
+ℹ fail 17
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 87.04375
+
+✖ failing tests:
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:5:1
+✖ atomic admission reserves complete appearance and output before start (0.861667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:5:108)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:6:1
+✖ correlated start/end, uncertainty sticky, independent head and recording (0.11175ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:6:119)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:7:128
+✖ record rejects same resource and reciprocal exclusion in requested (0.082792ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:7:242)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:7:128
+✖ record rejects same resource and reciprocal exclusion in active (0.063833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:7:242)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:7:128
+✖ record rejects same resource and reciprocal exclusion in unknown (0.063833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:7:242)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:7:128
+✖ say rejects same resource and reciprocal exclusion in requested (0.053ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:7:242)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:7:128
+✖ say rejects same resource and reciprocal exclusion in active (0.048208ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:7:242)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:7:128
+✖ say rejects same resource and reciprocal exclusion in unknown (0.456041ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:7:242)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:7:128
+✖ replay rejects same resource and reciprocal exclusion in requested (0.107416ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:7:242)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:7:128
+✖ replay rejects same resource and reciprocal exclusion in active (0.111583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:7:242)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:7:128
+✖ replay rejects same resource and reciprocal exclusion in unknown (0.064542ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:7:242)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:7:128
+✖ head.nod rejects same resource and reciprocal exclusion in requested (0.051417ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:7:242)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:7:128
+✖ head.nod rejects same resource and reciprocal exclusion in active (0.054542ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:7:242)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:7:128
+✖ head.nod rejects same resource and reciprocal exclusion in unknown (0.044ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:7:242)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:8:1
+✖ stale, wrong ID, duplicate and tombstone late events never clear newer work (0.065166ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:8:116)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:9:1
+✖ external stock overlap is retained with policy diagnosis and separate identities (0.055375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at accepted (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:4:86)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:9:118)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/state.test.ts:10:1
+✖ unattributed occupancy blocks resources and snapshots cannot mutate kernel (0.167458ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'inactive'
+  - 'unknown'
+  
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/state.test.ts:10:360)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'inactive',
+    expected: 'unknown',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+Corrected strip-only syntax; still nonfunctional stub. Genuine behavior RED command: Node24 node --test web/src/state.test.ts; exit=1
+✖ accepted dispatch once, denied dispatch zero, no-buffer replay preflight (1.235209ms)
+✖ called ack binds identity; duplicate/stale ack cannot bind latest pending command (0.147917ms)
+✖ output requires producer success plus every scheduled source natural end and advancing start (0.105625ms)
+✖ output absent stays unknown and does not release (0.092375ms)
+✖ output interrupted stays unknown and does not release (0.06875ms)
+✖ output failed stays unknown and does not release (0.059125ms)
+✖ output unmatched stays unknown and does not release (0.055791ms)
+✖ sequence-end frees head but pose/motor unknown; timeout/failure do not (0.077459ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 0
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 110.11125
+
+✖ failing tests:
+
+test at experiments/E028-robot-state-poc/web/src/adapter.test.ts:17:1
+✖ accepted dispatch once, denied dispatch zero, no-buffer replay preflight (1.235209ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at request (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:13:9)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:20:2)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/adapter.test.ts:25:1
+✖ called ack binds identity; duplicate/stale ack cannot bind latest pending command (0.147917ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at request (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:13:9)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:26:35)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/adapter.test.ts:40:1
+✖ output requires producer success plus every scheduled source natural end and advancing start (0.105625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at request (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:13:9)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:41:35)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/adapter.test.ts:53:76
+✖ output absent stays unknown and does not release (0.092375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at request (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:13:9)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:54:35)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/adapter.test.ts:53:76
+✖ output interrupted stays unknown and does not release (0.06875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at request (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:13:9)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:54:35)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/adapter.test.ts:53:76
+✖ output failed stays unknown and does not release (0.059125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at request (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:13:9)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:54:35)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/adapter.test.ts:53:76
+✖ output unmatched stays unknown and does not release (0.055791ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at request (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:13:9)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:54:35)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E028-robot-state-poc/web/src/adapter.test.ts:63:1
+✖ sequence-end frees head but pose/motor unknown; timeout/failure do not (0.077459ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at request (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:13:9)
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:64:35)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+Adapter typed nonfunctional stub, before implementation. Node24 node --test web/src/adapter.test.ts exit=1
+✔ accepted dispatch once, denied dispatch zero, no-buffer replay preflight (2.327708ms)
+✔ called ack binds identity; duplicate/stale ack cannot bind latest pending command (0.350333ms)
+✔ output requires producer success plus every scheduled source natural end and advancing start (0.174792ms)
+✔ output absent stays unknown and does not release (0.113083ms)
+✔ output interrupted stays unknown and does not release (0.088625ms)
+✔ output failed stays unknown and does not release (0.076375ms)
+✔ output unmatched stays unknown and does not release (1.180291ms)
+✔ sequence-end frees head but pose/motor unknown; timeout/failure do not (0.158166ms)
+✖ new source on completed token reserves unknown occupancy without clearing newer work (6.101292ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 121.327541
+
+✖ failing tests:
+
+test at experiments/E028-robot-state-poc/web/src/adapter.test.ts:74:1
+✖ new source on completed token reserves unknown occupancy without clearing newer work (6.101292ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(adapter.kernel.snapshot().unknownOccupancy.includes('output'))
+  
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:84:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+Regression RED before late-source fix, node --test adapter.test.ts exit=1
+✔ accepted dispatch once, denied dispatch zero, no-buffer replay preflight (1.962541ms)
+✔ called ack binds identity; duplicate/stale ack cannot bind latest pending command (0.3645ms)
+✔ output requires producer success plus every scheduled source natural end and advancing start (0.192625ms)
+✔ output absent stays unknown and does not release (0.126ms)
+✔ output interrupted stays unknown and does not release (0.098334ms)
+✔ output failed stays unknown and does not release (0.720791ms)
+✔ output unmatched stays unknown and does not release (0.089708ms)
+✔ sequence-end frees head but pose/motor unknown; timeout/failure do not (0.1195ms)
+✔ new source on completed token reserves unknown occupancy without clearing newer work (0.169ms)
+✖ capture-ended precedes bytes; current buffer survives end while older bytes cannot replace new recording (0.521834ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 115.882959
+
+✖ failing tests:
+
+test at experiments/E028-robot-state-poc/web/src/adapter.test.ts:89:1
+✖ capture-ended precedes bytes; current buffer survives end while older bytes cannot replace new recording (0.521834ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:95:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+Regression RED capture-stop-before-bytes before buffer fix; exit=1
+✔ accepted dispatch once, denied dispatch zero, no-buffer replay preflight (2.193125ms)
+✔ called ack binds identity; duplicate/stale ack cannot bind latest pending command (0.45425ms)
+✔ output requires producer success plus every scheduled source natural end and advancing start (0.642916ms)
+✔ output absent stays unknown and does not release (0.163833ms)
+✔ output interrupted stays unknown and does not release (0.097166ms)
+✔ output failed stays unknown and does not release (0.0745ms)
+✔ output unmatched stays unknown and does not release (0.175875ms)
+✔ sequence-end frees head but pose/motor unknown; timeout/failure do not (0.188291ms)
+✔ new source on completed token reserves unknown occupancy without clearing newer work (0.210208ms)
+✔ capture-ended precedes bytes; current buffer survives end while older bytes cannot replace new recording (0.196667ms)
+✔ previous record bytes cannot supply replay after newer recording begins (0.100458ms)
+(node:30617) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ adopted MOD executes full head body including neutral and resource declaration (7.238333ms)
+✔ stock observer keeps per-call identity across out-of-order async decoding (2.532458ms)
+✔ stock input observer freezes identity before deferred getUserMedia and ends before bytes (1.440417ms)
+✔ out-of-scope tone explicitly rejects rather than resolving a silent noop (0.37225ms)
+✔ late new source remains unknown after bounded finished display rows were evicted (1.812459ms)
+✔ unattributed microphone issues retain recording unknown, generic issues retain both (0.101ms)
+✖ successful record/head producer without reliable lifecycle end immediately becomes unknown (0.641834ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 17
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 134.845792
+
+✖ failing tests:
+
+test at experiments/E028-robot-state-poc/web/src/adapter.test.ts:253:1
+✖ successful record/head producer without reliable lifecycle end immediately becomes unknown (0.641834ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'requested'
+  - 'unknown'
+  
+      at TestContext.<anonymous> (file:///Users/andrew/.codex/worktrees/7a76/coami/experiments/E028-robot-state-poc/web/src/adapter.test.ts:259:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'requested',
+    expected: 'unknown',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+Final successful producer without lifecycle end RED before fix: Node24 node --test adapter.test.ts; exit=1

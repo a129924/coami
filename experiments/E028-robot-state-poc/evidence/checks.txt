@@ -1,0 +1,424 @@
+
+> coami-e028-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ accepted dispatch once, denied dispatch zero, no-buffer replay preflight (1.489417ms)
+✔ called ack binds identity; duplicate/stale ack cannot bind latest pending command (0.344375ms)
+✔ output requires producer success plus every scheduled source natural end and advancing start (0.175791ms)
+✔ output absent stays unknown and does not release (0.540708ms)
+✔ output interrupted stays unknown and does not release (0.092958ms)
+✔ output failed stays unknown and does not release (0.072083ms)
+✔ output unmatched stays unknown and does not release (0.074458ms)
+✔ sequence-end frees head but pose/motor unknown; timeout/failure do not (0.11475ms)
+✔ new source on completed token reserves unknown occupancy without clearing newer work (0.154209ms)
+✔ capture-ended precedes bytes; current buffer survives end while older bytes cannot replace new recording (0.144709ms)
+✔ previous record bytes cannot supply replay after newer recording begins (0.074208ms)
+(node:23332) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ adopted MOD executes full head body including neutral and resource declaration (5.047375ms)
+✔ stock observer keeps per-call identity across out-of-order async decoding (2.53375ms)
+✔ stock input observer freezes identity before deferred getUserMedia and ends before bytes (2.04575ms)
+✔ atomic admission reserves complete appearance and output before start (1.118791ms)
+✔ correlated start/end, uncertainty sticky, independent head and recording (0.230375ms)
+✔ record rejects same resource and reciprocal exclusion in requested (0.077083ms)
+✔ record rejects same resource and reciprocal exclusion in active (0.057125ms)
+✔ record rejects same resource and reciprocal exclusion in unknown (0.061417ms)
+✔ say rejects same resource and reciprocal exclusion in requested (0.467917ms)
+✔ say rejects same resource and reciprocal exclusion in active (0.077375ms)
+✔ say rejects same resource and reciprocal exclusion in unknown (0.05275ms)
+✔ replay rejects same resource and reciprocal exclusion in requested (0.052208ms)
+✔ replay rejects same resource and reciprocal exclusion in active (0.090917ms)
+✔ replay rejects same resource and reciprocal exclusion in unknown (0.050583ms)
+✔ head.nod rejects same resource and reciprocal exclusion in requested (0.041708ms)
+✔ head.nod rejects same resource and reciprocal exclusion in active (0.030833ms)
+✔ head.nod rejects same resource and reciprocal exclusion in unknown (0.028667ms)
+✔ stale, wrong ID, duplicate and tombstone late events never clear newer work (0.089125ms)
+✔ external stock overlap is retained with policy diagnosis and separate identities (0.147166ms)
+✔ unattributed occupancy blocks resources and snapshots cannot mutate kernel (0.386667ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 107.36725
+
+Command npm test; Node24 v24.19.0; exit=0
+
+> coami-e028-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+
+Command npm run typecheck; exit=0
+
+> coami-e028-web@0.1.0 build
+> npm run typecheck && vite build
+
+
+> coami-e028-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+vite v8.2.1 building client environment for production...
+transforming...
+✓ 17 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.33 kB │ gzip:   0.86 kB
+dist/assets/index-UC2zeFcn.css    0.76 kB │ gzip:   0.45 kB
+dist/assets/index-rUr54Q4R.js   628.36 kB │ gzip: 163.47 kB
+
+✓ built in 364ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+Command npm run build; exit=0
+Automated verification before browser smoke: 2026-10-22
+
+> coami-e028-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ accepted dispatch once, denied dispatch zero, no-buffer replay preflight (1.657166ms)
+✔ called ack binds identity; duplicate/stale ack cannot bind latest pending command (0.491375ms)
+✔ output requires producer success plus every scheduled source natural end and advancing start (0.261375ms)
+✔ output absent stays unknown and does not release (0.613417ms)
+✔ output interrupted stays unknown and does not release (0.102625ms)
+✔ output failed stays unknown and does not release (0.077791ms)
+✔ output unmatched stays unknown and does not release (0.078958ms)
+✔ sequence-end frees head but pose/motor unknown; timeout/failure do not (0.129375ms)
+✔ new source on completed token reserves unknown occupancy without clearing newer work (0.146458ms)
+✔ capture-ended precedes bytes; current buffer survives end while older bytes cannot replace new recording (0.145208ms)
+✔ previous record bytes cannot supply replay after newer recording begins (0.0715ms)
+(node:24222) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ adopted MOD executes full head body including neutral and resource declaration (5.084916ms)
+✔ stock observer keeps per-call identity across out-of-order async decoding (2.668709ms)
+✔ stock input observer freezes identity before deferred getUserMedia and ends before bytes (2.264875ms)
+✔ out-of-scope tone explicitly rejects rather than resolving a silent noop (0.460917ms)
+✔ atomic admission reserves complete appearance and output before start (1.215917ms)
+✔ correlated start/end, uncertainty sticky, independent head and recording (0.295125ms)
+✔ record rejects same resource and reciprocal exclusion in requested (0.093584ms)
+✔ record rejects same resource and reciprocal exclusion in active (0.065084ms)
+✔ record rejects same resource and reciprocal exclusion in unknown (0.647875ms)
+✔ say rejects same resource and reciprocal exclusion in requested (0.065584ms)
+✔ say rejects same resource and reciprocal exclusion in active (0.072791ms)
+✔ say rejects same resource and reciprocal exclusion in unknown (0.053959ms)
+✔ replay rejects same resource and reciprocal exclusion in requested (0.052875ms)
+✔ replay rejects same resource and reciprocal exclusion in active (0.094125ms)
+✔ replay rejects same resource and reciprocal exclusion in unknown (0.056208ms)
+✔ head.nod rejects same resource and reciprocal exclusion in requested (0.086042ms)
+✔ head.nod rejects same resource and reciprocal exclusion in active (0.033875ms)
+✔ head.nod rejects same resource and reciprocal exclusion in unknown (0.030291ms)
+✔ stale, wrong ID, duplicate and tombstone late events never clear newer work (0.102458ms)
+✔ external stock overlap is retained with policy diagnosis and separate identities (0.162791ms)
+✔ unattributed occupancy blocks resources and snapshots cannot mutate kernel (0.41225ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 112.416916
+
+Final tone/correlation/refactor checks npm test; exit=0
+
+> coami-e028-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+
+Final npm run typecheck; exit=0
+
+> coami-e028-web@0.1.0 build
+> npm run typecheck && vite build
+
+
+> coami-e028-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+vite v8.2.1 building client environment for production...
+transforming...
+✓ 17 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.33 kB │ gzip:   0.86 kB
+dist/assets/index-UC2zeFcn.css    0.76 kB │ gzip:   0.45 kB
+dist/assets/index-D6XQPNhF.js   628.49 kB │ gzip: 163.53 kB
+
+✓ built in 150ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+Final npm run build; exit=0
+All final automated checks precede final browser verification.
+
+> coami-e028-web@0.1.0 mod
+> node scripts/build-mod.mjs
+
+[mod] > mcrun -d -p wasm -o /build /mod/coami-e028/manifest.json
+[mod] ### -p wasm
+[mod] > xsc -d -e /mod/coami-e028/mod.js -o /build/tmp/wasm/debug/coami-e028/files -r mod
+[mod] > xsc -d -e /build/tmp/wasm/debug/coami-e028/check.js -o /build/tmp/wasm/debug/coami-e028/files -r check
+[mod] > xsa -b /build/tmp/wasm/debug/coami-e028/files -n tech.moddable.coami-e028 -o /build/bin/wasm/debug/coami-e028 /build/tmp/wasm/debug/coami-e028/files/mod.xsb /build/tmp/wasm/debug/coami-e028/files/check.xsb
+[mod] archive: /build/bin/wasm/debug/coami-e028/mc.xsa
+Built coami-mod.xsa (3315 bytes)
+
+Final fresh MOD/provenance after observer changes npm run mod; exit=0
+
+> coami-e028-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ accepted dispatch once, denied dispatch zero, no-buffer replay preflight (1.072ms)
+✔ called ack binds identity; duplicate/stale ack cannot bind latest pending command (0.393667ms)
+✔ output requires producer success plus every scheduled source natural end and advancing start (1.090667ms)
+✔ output absent stays unknown and does not release (0.179ms)
+✔ output interrupted stays unknown and does not release (0.08625ms)
+✔ output failed stays unknown and does not release (0.075166ms)
+✔ output unmatched stays unknown and does not release (0.088042ms)
+✔ sequence-end frees head but pose/motor unknown; timeout/failure do not (0.146792ms)
+✔ new source on completed token reserves unknown occupancy without clearing newer work (0.171875ms)
+✔ capture-ended precedes bytes; current buffer survives end while older bytes cannot replace new recording (0.156167ms)
+✔ previous record bytes cannot supply replay after newer recording begins (0.0765ms)
+(node:24805) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ adopted MOD executes full head body including neutral and resource declaration (5.299959ms)
+✔ stock observer keeps per-call identity across out-of-order async decoding (2.518625ms)
+✔ stock input observer freezes identity before deferred getUserMedia and ends before bytes (2.05525ms)
+✔ out-of-scope tone explicitly rejects rather than resolving a silent noop (0.30025ms)
+✔ late new source remains unknown after bounded finished display rows were evicted (1.724417ms)
+✔ atomic admission reserves complete appearance and output before start (0.838625ms)
+✔ correlated start/end, uncertainty sticky, independent head and recording (0.529542ms)
+✔ record rejects same resource and reciprocal exclusion in requested (0.128792ms)
+✔ record rejects same resource and reciprocal exclusion in active (0.068417ms)
+✔ record rejects same resource and reciprocal exclusion in unknown (0.715292ms)
+✔ say rejects same resource and reciprocal exclusion in requested (0.064125ms)
+✔ say rejects same resource and reciprocal exclusion in active (0.082291ms)
+✔ say rejects same resource and reciprocal exclusion in unknown (0.056458ms)
+✔ replay rejects same resource and reciprocal exclusion in requested (0.049541ms)
+✔ replay rejects same resource and reciprocal exclusion in active (0.091291ms)
+✔ replay rejects same resource and reciprocal exclusion in unknown (0.048375ms)
+✔ head.nod rejects same resource and reciprocal exclusion in requested (0.049ms)
+✔ head.nod rejects same resource and reciprocal exclusion in active (0.031459ms)
+✔ head.nod rejects same resource and reciprocal exclusion in unknown (0.026834ms)
+✔ stale, wrong ID, duplicate and tombstone late events never clear newer work (0.094792ms)
+✔ external stock overlap is retained with policy diagnosis and separate identities (0.162375ms)
+✔ unattributed occupancy blocks resources and snapshots cannot mutate kernel (0.400584ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 116.611791
+
+Finished-row-eviction regression npm test; exit=0
+
+> coami-e028-web@0.1.0 build
+> npm run typecheck && vite build
+
+
+> coami-e028-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+vite v8.2.1 building client environment for production...
+transforming...
+✓ 17 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.33 kB │ gzip:   0.86 kB
+dist/assets/index-UC2zeFcn.css    0.76 kB │ gzip:   0.45 kB
+dist/assets/index-Do3APcW6.js   628.43 kB │ gzip: 163.52 kB
+
+✓ built in 137ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+Final npm run build (includes strict browser/MOD typecheck); exit=0
+
+> coami-e028-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ accepted dispatch once, denied dispatch zero, no-buffer replay preflight (0.975083ms)
+✔ called ack binds identity; duplicate/stale ack cannot bind latest pending command (0.345166ms)
+✔ output requires producer success plus every scheduled source natural end and advancing start (0.849709ms)
+✔ output absent stays unknown and does not release (0.132292ms)
+✔ output interrupted stays unknown and does not release (0.0915ms)
+✔ output failed stays unknown and does not release (0.142125ms)
+✔ output unmatched stays unknown and does not release (0.120166ms)
+✔ sequence-end frees head but pose/motor unknown; timeout/failure do not (0.157042ms)
+✔ new source on completed token reserves unknown occupancy without clearing newer work (0.170125ms)
+✔ capture-ended precedes bytes; current buffer survives end while older bytes cannot replace new recording (0.182625ms)
+✔ previous record bytes cannot supply replay after newer recording begins (0.081791ms)
+(node:25432) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ adopted MOD executes full head body including neutral and resource declaration (4.799333ms)
+✔ stock observer keeps per-call identity across out-of-order async decoding (2.264292ms)
+✔ stock input observer freezes identity before deferred getUserMedia and ends before bytes (0.756291ms)
+✔ out-of-scope tone explicitly rejects rather than resolving a silent noop (0.261209ms)
+✔ late new source remains unknown after bounded finished display rows were evicted (1.652958ms)
+✔ unattributed microphone issues retain recording unknown, generic issues retain both (0.102375ms)
+✔ atomic admission reserves complete appearance and output before start (0.695167ms)
+✔ correlated start/end, uncertainty sticky, independent head and recording (0.223833ms)
+✔ record rejects same resource and reciprocal exclusion in requested (0.070917ms)
+✔ record rejects same resource and reciprocal exclusion in active (0.054833ms)
+✔ record rejects same resource and reciprocal exclusion in unknown (0.064125ms)
+✔ say rejects same resource and reciprocal exclusion in requested (0.503208ms)
+✔ say rejects same resource and reciprocal exclusion in active (0.051ms)
+✔ say rejects same resource and reciprocal exclusion in unknown (0.056083ms)
+✔ replay rejects same resource and reciprocal exclusion in requested (0.048416ms)
+✔ replay rejects same resource and reciprocal exclusion in active (0.086416ms)
+✔ replay rejects same resource and reciprocal exclusion in unknown (0.049041ms)
+✔ head.nod rejects same resource and reciprocal exclusion in requested (0.043208ms)
+✔ head.nod rejects same resource and reciprocal exclusion in active (0.030667ms)
+✔ head.nod rejects same resource and reciprocal exclusion in unknown (0.033958ms)
+✔ stale, wrong ID, duplicate and tombstone late events never clear newer work (0.084333ms)
+✔ external stock overlap is retained with policy diagnosis and separate identities (0.147708ms)
+✔ unattributed occupancy blocks resources and snapshots cannot mutate kernel (0.367375ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 95.165916
+
+Resource-specific audio issue regression npm test; exit=0
+
+> coami-e028-web@0.1.0 build
+> npm run typecheck && vite build
+
+
+> coami-e028-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+vite v8.2.1 building client environment for production...
+transforming...
+✓ 17 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.33 kB │ gzip:   0.86 kB
+dist/assets/index-UC2zeFcn.css    0.76 kB │ gzip:   0.45 kB
+dist/assets/index-DvaElmTQ.js   628.64 kB │ gzip: 163.57 kB
+
+✓ built in 154ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+Final npm run build includes strict typecheck; exit=0
+
+> coami-e028-web@0.1.0 mod
+> node scripts/build-mod.mjs
+
+[mod] > mcrun -d -p wasm -o /build /mod/coami-e028/manifest.json
+[mod] ### -p wasm
+[mod] > xsc -d -e /mod/coami-e028/mod.js -o /build/tmp/wasm/debug/coami-e028/files -r mod
+[mod] > xsc -d -e /build/tmp/wasm/debug/coami-e028/check.js -o /build/tmp/wasm/debug/coami-e028/files -r check
+[mod] > xsa -b /build/tmp/wasm/debug/coami-e028/files -n tech.moddable.coami-e028 -o /build/bin/wasm/debug/coami-e028 /build/tmp/wasm/debug/coami-e028/files/mod.xsb /build/tmp/wasm/debug/coami-e028/files/check.xsb
+[mod] archive: /build/bin/wasm/debug/coami-e028/mc.xsa
+Built coami-mod.xsa (3315 bytes)
+
+Observer resource tags fresh MOD/provenance; exit=0
+
+> coami-e028-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ accepted dispatch once, denied dispatch zero, no-buffer replay preflight (1.509875ms)
+✔ called ack binds identity; duplicate/stale ack cannot bind latest pending command (0.916208ms)
+✔ output requires producer success plus every scheduled source natural end and advancing start (0.253292ms)
+✔ output absent stays unknown and does not release (0.2795ms)
+✔ output interrupted stays unknown and does not release (0.096959ms)
+✔ output failed stays unknown and does not release (0.073167ms)
+✔ output unmatched stays unknown and does not release (0.085667ms)
+✔ sequence-end frees head but pose/motor unknown; timeout/failure do not (0.148375ms)
+✔ new source on completed token reserves unknown occupancy without clearing newer work (0.176334ms)
+✔ capture-ended precedes bytes; current buffer survives end while older bytes cannot replace new recording (0.167375ms)
+✔ previous record bytes cannot supply replay after newer recording begins (0.078666ms)
+(node:30640) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ adopted MOD executes full head body including neutral and resource declaration (4.445208ms)
+✔ stock observer keeps per-call identity across out-of-order async decoding (1.967375ms)
+✔ stock input observer freezes identity before deferred getUserMedia and ends before bytes (1.427ms)
+✔ out-of-scope tone explicitly rejects rather than resolving a silent noop (0.339208ms)
+✔ late new source remains unknown after bounded finished display rows were evicted (1.298083ms)
+✔ unattributed microphone issues retain recording unknown, generic issues retain both (0.071333ms)
+✔ successful record/head producer without reliable lifecycle end immediately becomes unknown (0.075292ms)
+✔ atomic admission reserves complete appearance and output before start (0.892833ms)
+✔ correlated start/end, uncertainty sticky, independent head and recording (0.25225ms)
+✔ record rejects same resource and reciprocal exclusion in requested (0.077875ms)
+✔ record rejects same resource and reciprocal exclusion in active (0.059708ms)
+✔ record rejects same resource and reciprocal exclusion in unknown (0.068833ms)
+✔ say rejects same resource and reciprocal exclusion in requested (0.917666ms)
+✔ say rejects same resource and reciprocal exclusion in active (0.232833ms)
+✔ say rejects same resource and reciprocal exclusion in unknown (0.101375ms)
+✔ replay rejects same resource and reciprocal exclusion in requested (0.070542ms)
+✔ replay rejects same resource and reciprocal exclusion in active (0.117333ms)
+✔ replay rejects same resource and reciprocal exclusion in unknown (0.054375ms)
+✔ head.nod rejects same resource and reciprocal exclusion in requested (0.063584ms)
+✔ head.nod rejects same resource and reciprocal exclusion in active (0.041792ms)
+✔ head.nod rejects same resource and reciprocal exclusion in unknown (0.185792ms)
+✔ stale, wrong ID, duplicate and tombstone late events never clear newer work (0.36925ms)
+✔ external stock overlap is retained with policy diagnosis and separate identities (0.390042ms)
+✔ unattributed occupancy blocks resources and snapshots cannot mutate kernel (0.657917ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 105.5655
+
+Final missing-end regression GREEN npm test; exit=0
+
+> coami-e028-web@0.1.0 build
+> npm run typecheck && vite build
+
+
+> coami-e028-web@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json && tsc --noEmit -p ../mod/tsconfig.json
+
+vite v8.2.1 building client environment for production...
+transforming...
+✓ 17 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.33 kB │ gzip:   0.86 kB
+dist/assets/index-UC2zeFcn.css    0.76 kB │ gzip:   0.45 kB
+dist/assets/index-BO2ao_Hm.js   628.77 kB │ gzip: 163.61 kB
+
+✓ built in 160ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+Final build includes strict browser/MOD typecheck; exit=0
+No browser retrial after final bounded producer-end change.
+
+> coami-e028-web@0.1.0 mod
+> node scripts/build-mod.mjs
+
+[mod] > mcrun -d -p wasm -o /build /mod/coami-e028/manifest.json
+[mod] ### -p wasm
+[mod] > xsc -d -e /mod/coami-e028/mod.js -o /build/tmp/wasm/debug/coami-e028/files -r mod
+[mod] > xsc -d -e /build/tmp/wasm/debug/coami-e028/check.js -o /build/tmp/wasm/debug/coami-e028/files -r check
+[mod] > xsa -b /build/tmp/wasm/debug/coami-e028/files -n tech.moddable.coami-e028 -o /build/bin/wasm/debug/coami-e028 /build/tmp/wasm/debug/coami-e028/files/mod.xsb /build/tmp/wasm/debug/coami-e028/files/check.xsb
+[mod] archive: /build/bin/wasm/debug/coami-e028/mc.xsa
+Built coami-mod.xsa (3315 bytes)
+
+Final provenance toolchain/source hashes generated; npm run mod exit=0
