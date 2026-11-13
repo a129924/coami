@@ -1,9 +1,9 @@
-# E001–E025 可行性驗證總覽
+# E001–E026 可行性驗證總覽
 
 本頁將既有實驗依 feasibility-validation 的八段結構整合，回答「驗證了什麼、證據支持到哪裡、哪些決策仍不能前進」。成功、否定結果、無法判定及工具流程都保留；本頁不是產品能力清單或正式採用核准。
 
-- 整理日期：2026-10-19。
-- 來源基準：E001–E024 沿用 Coami `ddef30883df3b2f7b2bba84bb7278c1502eb8d08` 的已提交文件與公開證據；E025 Server工作取消增補依已合併 [PR #29](https://github.com/a129924/coami/pull/29)，merge commit `7985bff1bcb610accfc31009267af6ac8677d6f0` 的紀錄與證據；E025直接錄放重疊增補依已合併 [PR #27](https://github.com/a129924/coami/pull/27)，merge commit `02ee10ea0dd202a20923db4e0d80b25a440b156b`。原 E001–E024 結論不變。
+- 整理日期：2026-10-19；E026 增補與合併事實核對：2026-11-13。
+- 來源基準：E001–E024 沿用 Coami `ddef30883df3b2f7b2bba84bb7278c1502eb8d08` 的已提交文件與公開證據；E025 Server工作取消增補依已合併 [PR #29](https://github.com/a129924/coami/pull/29)，merge commit `7985bff1bcb610accfc31009267af6ac8677d6f0` 的紀錄與證據；E025直接錄放重疊增補依已合併 [PR #27](https://github.com/a129924/coami/pull/27)，merge commit `02ee10ea0dd202a20923db4e0d80b25a440b156b`。E026 增補依已合併 [PR #30](https://github.com/a129924/coami/pull/30)，merge commit `fcf10ac06c4688d2fad512b86bfe5c2dd6a4d7bb`，及該版本的原始、真人與 PR 回歸證據。原 E001–E025 結論不變。
 - 方法：唯讀核對 README、EXPERIMENT、相關 evidence 與既有決策入口。本次未重跑實驗、模型、建置或原實驗測試，也未重新計算門檻。
 - 來源優先序：先辨認問題、run、版本及後續明示限縮，再判讀；不以較新日期或較樂觀敘述自動取代原結果。原始紀錄與決策文件持有詳細證據，本頁只提供摘要與連結。
 
@@ -14,9 +14,9 @@
 3. 早期紀錄未一致保存設計日期、判準設定時間、投入上限與「驗證任務完成」欄；缺者記為「歷史紀錄未載」或「未記錄」，不補造事前條件。下列「判準」轉述來源，並非本次追溯新增的事前判準。
 4. 真實瀏覽器 runtime、真人觀察、agent 自動操作、純測試／Mock、synthetic 輸入分開。模擬器使用實際 WASM 不代表實體 Robot 已驗證。
 5. 重現步驟是原入口與歷史程序，**不是本次執行紀錄或再次執行授權**。日期、版本、run ID、指令與雜湊依各 E 原紀錄，不把本頁來源基準當成舊 run 的執行版本。
-6. 未解衝突、缺檔、外部私人路徑或不可得資料，只限制相關結論，不以其他片段補證。原文 PR 狀態是歷史紀錄，本頁沒有重新查核各舊 PR 的即時狀態；兩個E025增補分別核對PR #29（2026-10-19T06:37:20Z）與PR #27（2026-10-19T06:45:48Z）已合併。合併不代替實驗成功證據，也不等於正式採用。
+6. 未解衝突、缺檔、外部私人路徑或不可得資料，只限制相關結論，不以其他片段補證。原文 PR 狀態是歷史紀錄，本頁沒有重新查核各舊 PR 的即時狀態；兩個E025增補分別核對PR #29（2026-10-19T06:37:20Z）與PR #27（2026-10-19T06:45:48Z）已合併。E026 核對 PR #30 已於 2026-11-13T04:15:10Z 合併；語意 tag `e026-interaction-scope-cancellation-validation` 指向該合併 commit，僅為來源里程碑。合併與 tag 不代替實驗成功證據，也不等於正式採用。
 
-目前共26個實驗目錄，兩個不同實驗沿用E025編號；下列以完整目錄連結區分，不重編原始紀錄，不將Server取消證據與模擬器錄放證據混用。
+目前共27個實驗目錄，兩個不同實驗沿用E025編號；下列以完整目錄連結區分，不重編原始紀錄，不將Server取消證據與模擬器錄放證據混用。
 
 ## 逐 E 對照索引
 
@@ -50,6 +50,7 @@
 | [E024](E024-mock-target-offset/README.md)：Mock 框能否純轉換為當前偏差？ | 成功；任務完成 | 成功：19共同案例及分類／邊界 assertions 符合 | 是：單次 Mock 契約驗證 | Pure Python／自有 VO；無 detector、Tracker 或 Robot |
 | [E025 · Server取消](E025-server-async-event-bus/README.md)：現成 bus 能否配合完整取消單一 Robot 舊工作並保留控制與其他 Robot？ | 成功；推薦 bubus 1.5.6 作後續候選 | 成功：修正後 12 節點各 20 次，240／240、0 watchdog，工作終止與 cleanup 可追溯 | 是：synthetic cooperative async／ASGI 驗證 | 短 handlers＋TaskGroup ownership；真 SDK／網路／執行緒／遠端工作／Robot 效果另驗 |
 | [E025 · 直接錄放](E025-listening-saying-exclusion/README.md)：stock simulator會阻止直接record／say重疊嗎？ | 假設失敗；主要技術判讀完成 | 失敗：兩方向9筆均有有效重疊，否定直接API互斥假設 | 是：主要問題可判讀；8筆逐筆聽辨未保存的程序缺口保留 | 真人Chrome／耳機、stock同pin官方runtime；XiaoZhi有輪流控制，真機錄放／回音／插話另驗 |
+| [E026 · Scope取消](E026-interaction-scope-cancel/README.md)：舊互動效果能否停止，且雙方清理後由新 Scope 重新開始？ | 原始 inconclusive；後續指定真人功能確認完成，歷史失敗保留 | 已測正常取消／queue／重開及後續斷線回歸成功；不改寫原輪分類或未測能力 | 後續指定 human check 已完成；PR #30 已合併，非正式採用 | 固定 simulator TTS／招呼＋Server synthetic；真人與自動來源版本分開，非實機／所有 Actions |
 
 ## 命令、事件與動作：E001、E003、E004、E005、E014
 
@@ -355,6 +356,54 @@ Server 收到已成立的取消訊號後，bubus 1.5.6 能否配合標準非同�
 
 區間是保守瀏覽器生命週期觀測，非實際聲學同步精度測量。合併、語意tag與純測試不等於真機能力、正式採用或production release。
 
+## 互動 Scope 整體取消與重新開始：E026
+
+### 驗證什麼
+
+已成立的取消訊號能否讓舊互動 Scope 的 TTS、招呼動作、排隊工作與 Server synthetic 業務停止／失效，阻擋遲到命令與 callbacks，並於 Robot／Server 雙方完成清理後啟動新 Scope？不含語音拒絕辨識、暫停恢復或所有 SDK Actions 的普遍取消能力。
+
+### 為什麼
+
+取消事件送達、generation 失效或 cancel() 返回，都不足以證明聲音／動作已停止。只重設狀態可能讓舊播放、排隊及遲到結果干擾下一互動。本輪由 browser bridge 協調雙方清理，Robot 本機停止不等待 Server ACK；Server 保留 E025 TaskGroup owner，不重開 EventBus 選型。
+
+### 成功與失敗判準
+
+原判準固定：接受取消後停止 ≤1000 ms、雙方清理 ≤5000 ms；rendered pose 各軸 ≤0.02 rad，連續中立 300 ms 且後續 2000 ms 無舊效果；每個適用分支 3 次。舊 queue 不開始，舊 token／ACK／callback 不觸發新業務；只有雙方完成才允許正常取消後重開。失敗／超時保持隔離，不假報完成。
+
+控制通道斷線另維持 quarantined：本機停止至多啟動一次，清理成功、失敗或 pending 都不解鎖。這和明確取消完成後可重開是不同情境。缺實際效果或清理證據仍無法判定，不能用測試數、PR 合併或 tag 取代效果證明。原 90 分鐘 POC 界線與後續明確授權的保存／review 修正分開，不事後放寬期限或混成同一 run。
+
+### 環境與前置條件
+
+固定 Stack-chan `b31bc0d9c8b87a4d1a6bdcf3df1343aae925c322`，沿用官方同 pin runtime run `35444663129`／artifact `10585271971`，E026 新建 MOD；Node 26.10.0、Python 3.12.12 與原 lock。Server 工作為 synthetic，不是實體 Robot runtime。合併 commit／tag 是來源入口，不冒充歷次執行當時的 git attestation。
+
+真人觀察為 Andrew／耳機 30%；事後補充 Google Chrome 153.0.8010.53（正式版本、arm64）、macOS 26.5.2（25F84），見 [環境補述](E026-interaction-scope-cancel/evidence/human-resume-20261113/environment-supplement.json)。這不是當時自動擷取，11/02 TTS 與 11/13 招呼 session 是否完全相同環境未逐場指定。初始自動 browser Chrome 155 與後續 review 斷線回歸 Chrome 157.0.8103.52 為不同來源；不得用其結果代填真人。
+
+### 重現步驟
+
+依 [E026 README](E026-interaction-scope-cancel/README.md) 在獨立 worktree 恢復固定 vendor／runtime／MOD、啟動 Server 與 simulator。一次一筆：TTS 播放中取消、招呼進行中取消、等待雙方屏障後建立新 Scope；每筆保存 trace 與實際觀察。新 session 前關閉前次 fixture、重啟 Server，不能把人工重啟當成 quarantined Scope 自動恢復。
+
+[review-disconnect-check.mjs](E026-interaction-scope-cancel/web/scripts/review-disconnect-check.mjs) 使用既有 Playwright 與自有本機 fixture，分別在 TTS／greet 進行中關閉 WebSocket，各 3 次；每次建立新的 evidence 目錄，不能覆寫歷史。這些是可重現入口，本次索引更新沒有執行測試、重跑真人或實機，也不增加 SDK／runtime 修改。
+
+### 是否成功
+
+**限定於已測條件的正常取消、queue 丟棄、雙方清理後重開與後續斷線回歸成功；後續指定真人功能確認已完成。** 初始 [summary](E026-interaction-scope-cancel/evidence/summary.json) 的歷史 inconclusive 保留，latest 欄位另列後續證據；不把原輪改寫成從未失敗。PR #30 已合併不等於正式採用。
+
+保存超限曾使已 restartable 的 scope-3 被錯誤 handler 隔離；該失敗及完整 rescue 保留。後續有界修正分批保存與重試，不解除原隔離、不提高既定請求／停止／清理上限。保存成功、工程檢查或修正後自動回歸本身都不能新增真人通過。
+
+### 結果與證據
+
+- [真人功能摘要](E026-interaction-scope-cancel/evidence/human-resume-20261113/human-check-summary.json)、[逐筆觀察](E026-interaction-scope-cancel/evidence/human-observations.md)、[原始 browser JSONL](E026-interaction-scope-cancel/evidence/round-1/browser-runs.jsonl)：TTS 止聲、招呼停止回中立、招呼取消後排隊 TTS 丟棄，各適用觀察 3 次；scope-1→2、2→3、3→4 三次屏障後重開。這些觀察有重疊案例，不相加成 12 個獨立 run；最後新 Scope 的 TTS／招呼正常完成。真人招呼最大停止 431.2 ms、雙方清理 2439.5 ms。
+- 原始自動 browser 39 案為正常 9、scenario 12、故障／啟動超時 18；與真人及後續新增案例分列，不把同一 case 的多次保存或分段當作額外測試。
+- [保存故障分析](E026-interaction-scope-cancel/evidence/human-session-20261102T031031Z/scope-3-quarantine/rescue-analysis.json)、[原始 rescue](E026-interaction-scope-cancel/evidence/human-session-20261102T031031Z/scope-3-quarantine/E026-scope-3-rescue.json)、[保存往返](E026-interaction-scope-cancel/evidence/human-session-20261102T031031Z/save-repair/rescue-roundtrip.json)：61,537 筆／10,324,228 bytes 原始資料救回；6 個有界 HTTP 請求逐筆值與順序一致，重送沒有追加重複。這是保存驗證，不是新的 Action／真人案例。
+- [PR comment 回歸摘要](E026-interaction-scope-cancel/evidence/pr-comment-review-20261113/review-summary.json)、[6 筆斷線原始紀錄](E026-interaction-scope-cancel/evidence/pr-comment-review-20261113/disconnect-final/runs.jsonl)：修正斷線時只隔離未啟動本機停止，以及 missing／empty work ID 逸出驗證邊界。53 個 TypeScript tests、16 個 Server tests、strict build、Ruff／Pyright 通過；原 39 TS／10 Server 已包含於較新數字，不重複相加。
+- 新增 6 筆斷線 simulator 案例最大停止 434.7 ms、cleanup settlement 2458.5 ms，AudioContext closed／MOD invalidated／SDK 排空、queue 未啟動、B Ping 與持續隔離有證據；全部 human=unobserved。原建議、red tests、修正前來源與執行紀錄均保留，後續修正版本不冒充原真人執行版本。
+
+### 結論與限制
+
+證據支持在固定 simulator 的受測 TTS／招呼與 managed Server synthetic 工作上協調停止／隔離、清理與正常取消後重開；不支持實機馬達、其他 Actions、所有 SDK、遠端或不合作工作、語音意圖辨識或通用 startup abort。Server 完成通知只代表 Server 清理，不能取代 Robot 效果證據。
+
+歷史 runtime-provenance observer hash 不一致保持原檔，恢復與來源比對另記；before-fix audio snapshot 為重建，不是 served bytes attestation；早期 fixture 覆寫缺口保留在 [fixture-development](E026-interaction-scope-cancel/evidence/fixture-development.md)。本機保存端不增加斷電／磁碟故障 durability 保證，單筆過大會明確回報並保留未保存。所有原始失敗、事後環境補述與來源版本限制保留，合併／tag／清理不升級成正式架構或 production release。
+
 ## 工具流程驗證附錄：E002
 
 ### 驗證什麼
@@ -395,14 +444,14 @@ CLI發現與腳本成功；實際skill載入／獨立因果效果無法判定。
 
 | 欄位 | 範圍 |
 | --- | --- |
-| In-Scope | 全26個實驗目錄的回溯索引、八主題八段、來源與決策限制；兩個E025分列，保留E001–E024結論。 |
+| In-Scope | 全27個實驗目錄的回溯索引、九主題八段、來源與決策限制；兩個E025分列，保留E001–E025結論。 |
 | Out-Of-Scope | 新實驗／重跑、模板或程式修改、門檻重選、SDK修復、產品採用、merge／release。 |
 | ReadOnly | 所有原E紀錄與證據、plan／docs決策治理、production、vendor、skills與既有工具設定。 |
-| Written | 本總覽；本機Archify／PR Lens的外部產物不納repo。 |
-| Deleted | Repo既有內容無刪除；工具僅可受控清理本輪外部暫存。 |
-| Modify | Tracked既有修改僅`experiments/README.md`入口。 |
+| Written | 本總覽與 experiments/README.md；本機輔助產物不納 repo。 |
+| Deleted | Tracked 既有內容無刪除；合併分支／worktree 僅依後續明示 cleanup 授權處理。 |
+| Modify | Tracked 修改僅 `experiments/README.md` 與本總覽。 |
 | Goal | 有來源的技術問題、證據與決策限制可按主題或編號查找。 |
 | Non-Goal | 不把本頁完成、工具通過或Draft PR等同假設成功與正式採用。 |
-| TestCase | TC01全26目錄／八段；TC02分類與完成分離；TC03連結／數字追溯；TC04不外推／不重開決策；TC05兩檔範圍；TC06工具結果與fallback誠實。 |
+| TestCase | TC01全27目錄／九主題八段；TC02分類與完成分離；TC03連結／數字追溯；TC04不外推／不重開決策；TC05兩檔範圍；TC06工具結果與fallback誠實。 |
 
 本機輔助產物位於外部topic目錄，不成為可攜實驗證據或本頁的依賴。Archify導覽只解釋既有來源→主題→限制；PR Lens只解釋真實提交diff；Graphify無可驗證新鮮graph時採定向來源查閱，不建圖／刷新。這些工具的收據、失敗或fallback與本頁靜態文件查核分開交付，不改任何實驗狀態。
