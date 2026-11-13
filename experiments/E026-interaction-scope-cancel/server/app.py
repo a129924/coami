@@ -4,10 +4,10 @@ from __future__ import annotations
 import asyncio
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import Literal
+from typing import Literal, Self
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
 
 from e025_core import Frame, Lab, Robot, Work
 
@@ -31,6 +31,12 @@ class Message(BaseModel):
     id: str = Field(default="", max_length=64)
     mode: Literal["blocked", "quick", "cleanup_hold", "cleanup_timeout", "cleanup_error"] = "blocked"
     key: str = Field(default="", max_length=200)
+
+    @model_validator(mode="after")
+    def validate_work_id(self) -> Self:
+        if self.kind == "work" and not self.id:
+            raise ValueError("work requires a non-empty id")
+        return self
 
 
 class ScopedRobot(Robot):

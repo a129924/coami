@@ -63,3 +63,29 @@ def test_open_without_work_still_requires_cancel_before_replacement():
         a.send_json({"kind": "cancel", "operation": {**old, "cancelId": "cancel"}})
         assert until(a, "server-cleaned")["okay"] is True
         a.send_json({"kind": "open", "token": fresh}); assert until(a, "opened")["token"] == fresh
+
+
+@pytest.mark.parametrize("repeat", range(3))
+@pytest.mark.parametrize("invalid_id", [None, ""])
+def test_malformed_work_id_is_rejected_without_closing_or_cancelling_session(invalid_id, repeat):
+    with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a, client.websocket_connect("/ws/B") as b:
+        token = {"runEpoch": f"run-{repeat}", "robotId": "A", "scopeId": "old"}
+        a.send_json({"kind": "open", "token": token}); until(a, "opened")
+        a.send_json({"kind": "work", "token": token, "id": "running"}); until(a, "accepted")
+        invalid = {"kind": "work", "token": token}
+        if invalid_id is not None:
+            invalid["id"] = invalid_id
+        a.send_json(invalid)
+        assert until(a, "rejected")["detail"] == "invalid-envelope"
+        a.send_json({"kind": "ping"}); assert until(a, "pong")["kind"] == "pong"
+        b.send_json({"kind": "ping"}); assert until(b, "pong")["kind"] == "pong"
+        rows = client.get("/fixture/records").json()
+        assert not any(r["action"] == "cancel_started" and r["robot"] == "A" for r in rows)
+        a.send_json({"kind": "work", "token": token, "id": "valid-after-invalid"})
+        assert until(a, "accepted")["id"] == "valid-after-invalid"
+        a.send_json({"kind": "cancel", "operation": {**token, "cancelId": "cancel"}})
+        assert until(a, "server-cleaned")["okay"] is True
+        fresh = {**token, "scopeId": "new"}
+        a.send_json({"kind": "open", "token": fresh}); until(a, "opened")
+        a.send_json({"kind": "work", "token": fresh, "id": "fresh", "mode": "quick"})
+        assert until(a, "result")["token"] == fresh
