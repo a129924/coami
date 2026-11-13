@@ -153,5 +153,16 @@
     "decision": "no blocking finding in bounded save repair/evidence; Draft PR human review remains",
     "testReuse": "existing tests/build inputs hash-verified; no new human result invented",
     "historicalResultUnchanged": true
+  },
+  "prCommentReviewLatest": {
+    "summary": "pr-comment-review-20261113/review-summary.json",
+    "reviewedBase": "9bf9dc14590850c840801042cb97cfb0511f9320",
+    "actionableThreads": 2,
+    "decisions": "fix both",
+    "typescriptTests": 53,
+    "serverTests": 16,
+    "newBrowserCases": 6,
+    "human": "no new human result; prior observations retained",
+    "threadResolution": "after pushed commits; GitHub is source of truth"
   }
 }

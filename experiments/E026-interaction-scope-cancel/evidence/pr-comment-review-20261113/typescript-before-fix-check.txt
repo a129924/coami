@@ -1,0 +1,333 @@
+
+> coami-e026-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ cancel waits for actual ended and context close; next scope requires a new adapter (3.513375ms)
+✔ late decode cannot create playback after invalidation and is awaited by cleanup (0.189667ms)
+✔ actual HTTP endpoint saves oversized total trace in bounded UTF-8 chunks, with receipt retry (85.120834ms)
+✔ endpoint retains same-origin checks and rejects oversized request with detailed response (6.33075ms)
+✔ large Unicode evidence saves every record in order within the unchanged endpoint limit (58.169083ms)
+✔ HTTP failure reports status/body, leaves trace and lifecycle unchanged, and retains unsaved cursor (0.513958ms)
+✔ partial failure retries identical unacknowledged chunk, without skipping acknowledged records (0.481208ms)
+✔ records arriving while saving remain for the next save; concurrent clicks share one request (0.320625ms)
+✔ a single oversized record remains unsaved and is reported without sending (0.096667ms)
+✔ a mismatched receipt cannot advance the cursor (0.139042ms)
+✔ successful evidence save never unlocks an already quarantined Scope (0.157084ms)
+✔ retry after append or store restart acknowledges original chunk without duplicate rows (4.178208ms)
+✔ conflicting retry and out-of-order chunk are rejected without appending (1.39775ms)
+✔ concurrent retries append once; legacy harness saves remain compatible (1.135292ms)
+✔ invalid chunk ranges never claim success (0.650458ms)
+✔ cancel during opening stage 0 drains and disposes, never creates later resources (0.759167ms)
+✔ cancel during opening stage 1 drains and disposes, never creates later resources (0.100958ms)
+✔ cancel during opening stage 2 drains and disposes, never creates later resources (0.072ms)
+✔ cancel during opening stage 3 drains and disposes, never creates later resources (0.065ms)
+✔ an opening error disposes resources before rejection (0.247708ms)
+✔ barrier robot first, repeat 1 (1.777291ms)
+✔ barrier server first, repeat 1 (0.145792ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 1 (0.279792ms)
+✔ robot-error holds quarantine, repeat 1 (0.108834ms)
+✔ server-error holds quarantine, repeat 1 (0.131083ms)
+✔ cleanup-timeout holds quarantine, repeat 1 (0.111959ms)
+✔ barrier robot first, repeat 2 (0.10275ms)
+✔ barrier server first, repeat 2 (0.081875ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 2 (0.091542ms)
+✔ robot-error holds quarantine, repeat 2 (0.333042ms)
+✔ server-error holds quarantine, repeat 2 (0.066625ms)
+✔ cleanup-timeout holds quarantine, repeat 2 (0.078291ms)
+✔ barrier robot first, repeat 3 (0.053291ms)
+✔ barrier server first, repeat 3 (0.048834ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 3 (0.043833ms)
+✔ robot-error holds quarantine, repeat 3 (0.036542ms)
+✔ server-error holds quarantine, repeat 3 (0.028959ms)
+✔ cleanup-timeout holds quarantine, repeat 3 (0.031959ms)
+✔ foreign robot and mismatched cancel cannot acknowledge the barrier (0.076542ms)
+✖ disconnect stops once, drops queue, and stays quarantined after success, repeat 1 (0.767208ms)
+✖ disconnect stops once, drops queue, and stays quarantined after failure, repeat 1 (0.140334ms)
+✖ disconnect stops once, drops queue, and stays quarantined after pending, repeat 1 (0.090625ms)
+✖ disconnect stops once, drops queue, and stays quarantined after success, repeat 2 (0.066792ms)
+✖ disconnect stops once, drops queue, and stays quarantined after failure, repeat 2 (0.667875ms)
+✖ disconnect stops once, drops queue, and stays quarantined after pending, repeat 2 (0.064625ms)
+✖ disconnect stops once, drops queue, and stays quarantined after success, repeat 3 (0.0635ms)
+✖ disconnect stops once, drops queue, and stays quarantined after failure, repeat 3 (0.067834ms)
+✖ disconnect stops once, drops queue, and stays quarantined after pending, repeat 3 (0.075334ms)
+✖ disconnect during opening starts cleanup without activation or unlock (0.097666ms)
+✔ disconnect during cancellation does not start local stop twice or unlock on late cleanup (0.053166ms)
+✖ synchronous stop failure is contained and repeated disconnect does not retry side effects (0.160583ms)
+✔ idle disconnect does not create a Scope or local effects (0.031583ms)
+ℹ tests 52
+ℹ suites 0
+ℹ pass 41
+ℹ fail 11
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 228.205625
+
+✖ failing tests:
+
+test at src/scope-controller.test.ts:66:69
+✖ disconnect stops once, drops queue, and stays quarantined after success, repeat 1 (0.767208ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   'local'
+  - ]
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/scope-controller.test.ts:72:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'local' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/scope-controller.test.ts:66:69
+✖ disconnect stops once, drops queue, and stays quarantined after failure, repeat 1 (0.140334ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   'local'
+  - ]
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/scope-controller.test.ts:72:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'local' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/scope-controller.test.ts:66:69
+✖ disconnect stops once, drops queue, and stays quarantined after pending, repeat 1 (0.090625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   'local'
+  - ]
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/scope-controller.test.ts:72:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'local' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/scope-controller.test.ts:66:69
+✖ disconnect stops once, drops queue, and stays quarantined after success, repeat 2 (0.066792ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   'local'
+  - ]
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/scope-controller.test.ts:72:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'local' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/scope-controller.test.ts:66:69
+✖ disconnect stops once, drops queue, and stays quarantined after failure, repeat 2 (0.667875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   'local'
+  - ]
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/scope-controller.test.ts:72:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'local' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/scope-controller.test.ts:66:69
+✖ disconnect stops once, drops queue, and stays quarantined after pending, repeat 2 (0.064625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   'local'
+  - ]
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/scope-controller.test.ts:72:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'local' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/scope-controller.test.ts:66:69
+✖ disconnect stops once, drops queue, and stays quarantined after success, repeat 3 (0.0635ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   'local'
+  - ]
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/scope-controller.test.ts:72:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'local' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/scope-controller.test.ts:66:69
+✖ disconnect stops once, drops queue, and stays quarantined after failure, repeat 3 (0.067834ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   'local'
+  - ]
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/scope-controller.test.ts:72:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'local' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/scope-controller.test.ts:66:69
+✖ disconnect stops once, drops queue, and stays quarantined after pending, repeat 3 (0.075334ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   'local'
+  - ]
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/scope-controller.test.ts:72:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'local' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/scope-controller.test.ts:84:1
+✖ disconnect during opening starts cleanup without activation or unlock (0.097666ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   'local'
+  - ]
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/scope-controller.test.ts:85:63)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'local' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/scope-controller.test.ts:94:1
+✖ synchronous stop failure is contained and repeated disconnect does not retry side effects (0.160583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/scope-controller.test.ts:101:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

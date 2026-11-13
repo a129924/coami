@@ -28,3 +28,9 @@ opening 每個 async stage 前後查 token；取消後停止後續初始化，�
 ## 結論
 
 成功須有全部適用案例、真人聽辨與畫面觀察。自動化完成不等於整體成功；無觀察或矩陣缺項為無法判定。預期故障正確隔離可通過該故障案例。
+
+## 控制通道斷線
+
+非 idle Scope 在斷線時同步失效、丟棄排隊工作並進入 quarantined；至多一次啟動本機停止／清理。若既有取消已啟動本機停止，不重複啟動。無控制通道時不等待或假造 Server ACK；本機清理成功、失敗或持續 pending 都不解除隔離。錯誤與停止 settlement 有獨立 trace，不能宣稱自動恢復。
+
+work envelope 的 id 依 E025 core 最少 1 字元；omitted／empty id 在既有 Message 驗證邊界拒絕，返回 rejected invalid-envelope，不中斷控制連線或取消既有工作。其他控制訊息的 id 維持可省略。

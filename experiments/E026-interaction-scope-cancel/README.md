@@ -1,6 +1,6 @@
 # E026 — 互動 Scope 整體取消與重新開始
 
-> 最新（2026-11-13）：本次指定真人功能確認已完成：TTS 止聲、招呼停止回中立、排隊丟棄、屏障後重新開始，各適用分支 3 次。詳 evidence/human-resume-20261113/human-check-summary.json。下文原實驗的 inconclusive 與保存故障記錄保留為歷史；保存修正與真人證據已整理供 human review，PR 保持 Draft，不代表正式採用。操作者事後補充環境：Google Chrome 153.0.8010.53（正式版本、arm64），macOS 26.5.2（25F84）；詳 environment-supplement.json，未冒充測試當時自動擷取。
+> 最新（2026-11-13）：本次指定真人功能確認已完成：TTS 止聲、招呼停止回中立、排隊丟棄、屏障後重新開始，各適用分支 3 次。詳 evidence/human-resume-20261113/human-check-summary.json。下文原實驗的 inconclusive 與保存故障記錄保留為歷史；保存修正與真人證據已整理供 human review，PR 維持 review，不代表正式採用。操作者事後補充環境：Google Chrome 153.0.8010.53（正式版本、arm64），macOS 26.5.2（25F84）；詳 environment-supplement.json，未冒充測試當時自動擷取。
 
 ## 問題、程序與決定
 
@@ -96,3 +96,18 @@ node scripts/check-evidence-rescue.mjs   ../evidence/human-session-20261102T0310
 ### 真人環境事後補充
 
 操作者於 human review 階段提供 Google Chrome 153.0.8010.53（正式版本、arm64）及 macOS 26.5.2（25F84），已記於 `evidence/human-resume-20261113/environment-supplement.json`。這是事後自述，不是測試當時的 UA／系統自動擷取；操作者尚未分別指定 11/02 與 11/13 兩個 session 是否完全相同。原先「未提供」記錄是當時狀態，歷史自動 browser provenance 維持原樣。本補充不新增、重做或改填真人結果。
+
+## PR comment review 修正
+
+Ready for review 後的兩個 P2 建議均已以有界修正處理：控制通道斷線會啟動本機 stop 且持續隔離；work 缺少／空 id 在既有 envelope 邊界拒絕，保留控制連線。詳 `evidence/pr-comment-review-20261113/review-summary.json`。
+
+本輪實際重跑 53 TS tests、16 Server tests、strict build、Ruff／Pyright，另新增 TTS／greet 進行中斷線各 3 次的固定 simulator 自動案例，全部 human=unobserved。既有正常取消的真人觀察保留為其原始來源版本，不代填本輪真人測試。原判準與 scope 不擴張；SDK／MOD／E025 core 不變。原文中 Draft／未授權等描述為先前階段狀態，後續使用者已分別授權 Ready 與 PR comment 修正／commit／push／resolve；仍禁止 merge／部署。
+
+可重跑新增斷線 fixture（需要既有 Playwright，且 5178／8766 無其他測試服務；runner 自行啟停）：
+
+```sh
+cd web
+E026_PLAYWRIGHT_MODULE=/absolute/existing/playwright-core/index.mjs node scripts/review-disconnect-check.mjs
+```
+
+每次建立新的 evidence run 目錄，不覆寫舊紀錄。

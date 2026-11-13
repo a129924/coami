@@ -1,0 +1,68 @@
+{
+  "result": "passed",
+  "cases": [
+    {
+      "mode": "say",
+      "repeat": 1,
+      "stopMs": 2.3,
+      "cleanupMs": 35.6,
+      "state": "quarantined",
+      "human": "unobserved",
+      "newScopeRejected": true,
+      "otherRobotPing": true
+    },
+    {
+      "mode": "say",
+      "repeat": 2,
+      "stopMs": 2.3,
+      "cleanupMs": 42.1,
+      "state": "quarantined",
+      "human": "unobserved",
+      "newScopeRejected": true,
+      "otherRobotPing": true
+    },
+    {
+      "mode": "say",
+      "repeat": 3,
+      "stopMs": 0.3,
+      "cleanupMs": 24.3,
+      "state": "quarantined",
+      "human": "unobserved",
+      "newScopeRejected": true,
+      "otherRobotPing": true
+    },
+    {
+      "mode": "greet",
+      "repeat": 1,
+      "stopMs": 375.1,
+      "cleanupMs": 2409.5,
+      "state": "quarantined",
+      "human": "unobserved",
+      "newScopeRejected": true,
+      "otherRobotPing": true
+    },
+    {
+      "mode": "greet",
+      "repeat": 2,
+      "stopMs": 404.3,
+      "cleanupMs": 2421.1,
+      "state": "quarantined",
+      "human": "unobserved",
+      "newScopeRejected": true,
+      "otherRobotPing": true
+    },
+    {
+      "mode": "greet",
+      "repeat": 3,
+      "stopMs": 434.7,
+      "cleanupMs": 2458.5,
+      "state": "quarantined",
+      "human": "unobserved",
+      "newScopeRejected": true,
+      "otherRobotPing": true
+    }
+  ],
+  "browserVersion": "157.0.8103.52",
+  "human": "unobserved",
+  "scope": "fixed simulator; socket close during say/greet only; no new human or hardware guarantee"
+}
