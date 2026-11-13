@@ -2,6 +2,7 @@ import { SimulatorEngine } from '../../../../vendor/stack-chan/web/src/services/
 import { ScopeAudio } from './audio-adapter.ts'
 import { ScopeController, sameToken, type Token, type Operation } from './scope-controller.ts'
 import { runOpening } from './opening.ts'
+import { EvidenceSaver } from './evidence-save.ts'
 
 type Pose = { y: number; p: number; r: number }
 type Engine = { start(): Promise<void>; dispose(): void; pushButton(name: string): void; audioOutBridge: unknown; hostBridge: { AudioOut: unknown }; scene: { driverRotation: Pose; render(t: number): void } }
@@ -16,7 +17,7 @@ let socket: WebSocket | null = null, robotB: WebSocket | null = null, ready = fa
 let readyMod: (() => void) | null = null, motionActive = false, cancelling = false
 let stableSince: number | null = null, stableDone: number | null = null, motionStopResolve: (() => void) | null = null
 let audioStopped = false, motionStopped = false, stopMark: ((at: number) => void) | null = null
-let caseId = crypto.randomUUID(), lastSave = 0
+let caseId = crypto.randomUUID()
 type Boot = { token: Token; engine: Engine | null; audio: ScopeAudio | null; active: boolean; done: Promise<void>; complete(): void }
 let boot: Boot | null = null
 const waiters: { test: (v: Frame) => boolean; resolve(v: Frame): void; reject(e: Error): void; timer: ReturnType<typeof setTimeout> }[] = []
@@ -178,10 +179,24 @@ function run(op: 'say' | 'greet', both = false, serverMode: 'blocked' | 'cleanup
   if (both) void dispatch(op === 'say' ? 'greet' : 'say', token)
   else controller.enqueue(token, () => dispatch(op === 'say' ? 'greet' : 'say', token))
 }
+const evidenceSaver = new EvidenceSaver({
+  id: () => crypto.randomUUID(),
+  transport: body => fetch('/__e026/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body }),
+  onError: reason => {
+    el('evidence-status').textContent = `保存失敗，紀錄仍保留，可重試：${reason}`
+    log({ kind: 'evidence-save-error', reason })
+  },
+  onSaved: (recordEnd, metadata) => {
+    el('evidence-status').textContent = '本筆紀錄已保存'
+    log({ kind: 'evidence-saved', caseId: metadata.caseId, savedThrough: recordEnd })
+  },
+})
 async function save(): Promise<void> {
-  const value = { caseId, runEpoch, scope: current, utc: new Date().toISOString(), state: controller.state, human: { tester: el<HTMLInputElement>('tester').value, equipment: el<HTMLInputElement>('equipment').value, verdict: el<HTMLSelectElement>('human').value, note: el<HTMLInputElement>('note').value }, records: records.slice(lastSave) }
-  const response = await fetch('/__e026/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value) })
-  if (!response.ok) throw Error('Evidence save failed'); lastSave = records.length; log({ kind: 'evidence-saved', caseId })
+  const button = el<HTMLButtonElement>('save'); button.disabled = true
+  el('evidence-status').textContent = '正在保存紀錄…'
+  const metadata = { caseId, runEpoch, scope: current, utc: new Date().toISOString(), state: controller.state,
+    human: { tester: el<HTMLInputElement>('tester').value, equipment: el<HTMLInputElement>('equipment').value, verdict: el<HTMLSelectElement>('human').value, note: el<HTMLInputElement>('note').value } }
+  try { await evidenceSaver.save(metadata, records) } finally { button.disabled = false }
 }
 const guarded = (run: () => Promise<void>) => { void run().catch(error => { log({ kind: 'error', reason: String(error) }); controller.disconnect(); render() }) }
 el<HTMLButtonElement>('start').onclick = () => guarded(async () => { el<HTMLButtonElement>('start').disabled = true; socket = await connect('A'); robotB = await connect('B'); robotB.send(JSON.stringify({ kind: 'open', token: bToken })); await newScope() })
@@ -196,7 +211,8 @@ function ping(): void {
   robotB?.send(JSON.stringify({ kind: 'work', token: bToken, id: `b-${crypto.randomUUID()}`, mode: 'quick' }))
 }
 el<HTMLButtonElement>('ping').onclick = ping
-el<HTMLButtonElement>('save').onclick = () => guarded(save)
+// Evidence errors are reported by EvidenceSaver and never enter lifecycle error handling.
+el<HTMLButtonElement>('save').onclick = () => { void save() }
 // Bounded local harness entry point; it cannot write a human confirmation.
 Object.assign(globalThis, { e026: { records, controller, run, cancel: () => controller.cancel(crypto.randomUUID()), newScope, save, ping, get token() { return current }, get workId() { return `active-${scopeSerial}` }, send } })
 render()

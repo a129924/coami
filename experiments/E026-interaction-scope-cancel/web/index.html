@@ -4,4 +4,5 @@
 <button id="start">啟動固定 runtime 與新 Scope</button><button id="say" disabled>TTS＋排隊招呼</button><button id="greet" disabled>招呼＋排隊 TTS</button><button id="both" disabled>同時 TTS／招呼（preflight）</button><button id="cancel" disabled>取消整個 Scope</button><button id="new" disabled>雙方清理後開新 Scope</button><button id="ping" disabled>控制通道 Ping</button>
 <p id="status">尚未啟動</p><canvas id="viewport"></canvas><canvas id="screen" width="240" height="240"></canvas>
 <fieldset><legend>本筆真人觀察（不由自動測試代填）</legend><input id="tester" placeholder="操作者"><input id="equipment" placeholder="輸出裝置與音量"><select id="human"><option value="unobserved">尚未確認</option><option value="confirmed">實際聽見／看見停止，並確認新 Scope 正常</option><option value="failed">實際效果違反判準</option></select><input id="note" placeholder="觀察備註"><button id="save">保存本筆紀錄</button></fieldset>
+<p id="evidence-status" role="status" aria-live="polite"></p>
 <pre id="trace"></pre><script type="module" src="/src/main.ts"></script></html>
