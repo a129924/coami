@@ -22,6 +22,7 @@ export class ScopeController {
   private robotClean = false
   private serverClean = false
   private effectsStopped = false
+  private localStopStarted = false
   private t0 = 0
   private cancelTimers: (() => void)[] = []
   private readonly deps: Dependencies
@@ -31,7 +32,7 @@ export class ScopeController {
     if (!['idle', 'restartable'].includes(this.state) || this.used.has(scopeId) || !scopeId) throw Error('Scope cannot open')
     this.used.add(scopeId)
     this.token = Object.freeze({ runEpoch: this.deps.runEpoch, robotId: this.deps.robotId, scopeId })
-    this.operation = null; this.state = 'opening'; this.queue = []; this.busy = false
+    this.operation = null; this.state = 'opening'; this.queue = []; this.busy = false; this.localStopStarted = false
     this.mark('scope-opening'); return this.token
   }
   activate(token: Token): void {
@@ -70,6 +71,7 @@ export class ScopeController {
       this.deps.later(() => this.fail('cleanup-deadline'), 5000),
     ]
     let local: Promise<void>
+    this.localStopStarted = true
     try { local = this.deps.stop(this.token, at => {
       if (this.state !== 'cancelling') return
       if (!Number.isFinite(at) || at < this.t0 || at - this.t0 > 1000) { this.fail('stop-deadline'); return }
@@ -89,7 +91,18 @@ export class ScopeController {
     if (!okay || this.deps.now() - this.t0 > 5000) { this.fail('server-cleanup-failed'); return }
     this.serverClean = true; this.mark('server-cleaned'); this.checkBarrier()
   }
-  disconnect(): void { if (this.state !== 'idle') this.fail('control-disconnected') }
+  disconnect(): void {
+    if (this.state === 'idle') return
+    this.fail('control-disconnected')
+    if (!this.token || this.localStopStarted) return
+    this.localStopStarted = true
+    this.mark('disconnect-local-stop-requested')
+    let local: Promise<void>
+    try { local = this.deps.stop(this.token, () => this.mark('disconnect-effects-stopped')) }
+    catch (error) { local = Promise.reject(error) }
+    // Cleanup is best effort on a broken control channel; it can never unlock quarantine.
+    void local.then(() => this.mark('disconnect-local-stop-settled'), error => this.mark('disconnect-local-stop-failed', String(error)))
+  }
   private checkBarrier(): void {
     if (this.state !== 'cancelling' || !this.robotClean || !this.serverClean) return
     this.state = 'restartable'; this.clearTimers(); this.mark('barrier-open')

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { ScopeController, type Operation, type Token } from './scope-controller.ts'
 
 const deferred = () => { let resolve!: () => void; let reject!: (e: Error) => void; const promise = new Promise<void>((a, b) => { resolve = a; reject = b }); return { promise, resolve, reject } }
-function fixture() {
+function fixture(activate = true) {
   let now = 0
   const timers = new Map<number, { due: number; run: () => void }>(); let serial = 0
   const local = deferred(); const calls: string[] = []; let stopped!: (at: number) => void
@@ -12,7 +12,7 @@ function fixture() {
     stop: (_token, mark) => { calls.push('local'); stopped = mark; return local.promise },
     notify: () => { calls.push('server') }, record: () => {},
   })
-  const token = controller.beginScope('old'); controller.activate(token)
+  const token = controller.beginScope('old'); if (activate) controller.activate(token)
   return { controller, token, local, calls, stopped: (at = now) => { now = at; stopped(at) }, advance: (t: number) => { now = t; for (const [id, timer] of [...timers]) if (timer.due <= now) { timers.delete(id); timer.run() } } }
 }
 for (let repeat = 1; repeat <= 3; repeat++) {
@@ -60,4 +60,55 @@ test('foreign robot and mismatched cancel cannot acknowledge the barrier', () =>
   const f = fixture(), op = f.controller.cancel('cancel')!
   for (const patch of [{ robotId: 'B' }, { scopeId: 'new' }, { cancelId: 'foreign' }]) f.controller.serverAck({ ...op, ...patch }, true)
   assert.equal(f.controller.state, 'cancelling')
+})
+
+for (let repeat = 1; repeat <= 3; repeat++) {
+  for (const outcome of ['success', 'failure', 'pending'] as const) test(`disconnect stops once, drops queue, and stays quarantined after ${outcome}, repeat ${repeat}`, async () => {
+    const f = fixture(), running = deferred(), effects: string[] = []
+    f.controller.enqueue(f.token, () => { effects.push('running'); return running.promise })
+    f.controller.enqueue(f.token, async () => { effects.push('queued') })
+    f.controller.disconnect()
+    assert.equal(f.controller.state, 'quarantined'); assert.equal(f.controller.permits(f.token), false)
+    assert.deepEqual(f.calls, ['local']) // No Server notification on a closed channel.
+    f.controller.disconnect(); assert.deepEqual(f.calls, ['local'])
+    assert.equal(f.controller.cancel('late'), null); assert.throws(() => f.controller.beginScope('new'))
+    f.stopped(100)
+    if (outcome === 'success') f.local.resolve()
+    if (outcome === 'failure') f.local.reject(Error('stop failed'))
+    f.advance(6000); running.resolve(); await Promise.resolve(); await Promise.resolve()
+    assert.equal(f.controller.state, 'quarantined'); assert.deepEqual(effects, ['running'])
+    f.controller.serverAck({ ...f.token, cancelId: 'late' }, true)
+    assert.equal(f.controller.state, 'quarantined')
+  })
+}
+test('disconnect during opening starts cleanup without activation or unlock', async () => {
+  const f = fixture(false); f.controller.disconnect(); assert.deepEqual(f.calls, ['local'])
+  assert.throws(() => f.controller.activate(f.token)); f.local.resolve(); await Promise.resolve(); await Promise.resolve()
+  assert.equal(f.controller.state, 'quarantined')
+})
+test('disconnect during cancellation does not start local stop twice or unlock on late cleanup', async () => {
+  const f = fixture(), op = f.controller.cancel('cancel')!; f.controller.disconnect()
+  assert.deepEqual(f.calls, ['local', 'server']); f.stopped(100); f.local.resolve(); f.controller.serverAck(op, true)
+  await Promise.resolve(); await Promise.resolve(); assert.equal(f.controller.state, 'quarantined')
+})
+test('synchronous stop failure is contained and repeated disconnect does not retry side effects', async () => {
+  let stops = 0; const records: string[] = []
+  const controller = new ScopeController({ runEpoch: 'run', robotId: 'A', now: () => 0, later: () => () => {}, notify: () => {},
+    record: row => records.push(row.kind), stop: () => { stops++; throw Error('SDK stop threw') } })
+  const token = controller.beginScope('one'); controller.activate(token)
+  assert.doesNotThrow(() => controller.disconnect()); controller.disconnect()
+  await Promise.resolve(); await Promise.resolve()
+  assert.equal(stops, 1); assert.equal(controller.state, 'quarantined'); assert.ok(records.includes('disconnect-local-stop-failed'))
+})
+test('idle disconnect does not create a Scope or local effects', () => {
+  let stops = 0
+  const controller = new ScopeController({ runEpoch: 'run', robotId: 'A', now: () => 0, later: () => () => {}, notify: () => {}, record: () => {}, stop: async () => { stops++ } })
+  controller.disconnect(); assert.equal(stops, 0); assert.equal(controller.state, 'idle')
+})
+test('a fresh Scope resets stop ownership after previous cleanup', async () => {
+  const f = fixture(), op = f.controller.cancel('first')!
+  f.stopped(100); f.local.resolve(); f.controller.serverAck(op, true)
+  await Promise.resolve(); await Promise.resolve()
+  const next = f.controller.beginScope('new'); f.controller.activate(next); f.controller.disconnect()
+  assert.deepEqual(f.calls, ['local', 'server', 'local']); assert.equal(f.controller.state, 'quarantined')
 })
