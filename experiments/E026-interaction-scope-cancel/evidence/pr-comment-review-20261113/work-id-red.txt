@@ -1,0 +1,1658 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_malformed_work_id_is_rejected_without_closing_or_cancelling_session[None-0] _
+
+invalid_id = None, repeat = 0
+
+    @pytest.mark.parametrize("repeat", range(3))
+    @pytest.mark.parametrize("invalid_id", [None, ""])
+    def test_malformed_work_id_is_rejected_without_closing_or_cancelling_session(invalid_id, repeat):
+        with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a, client.websocket_connect("/ws/B") as b:
+            token = {"runEpoch": f"run-{repeat}", "robotId": "A", "scopeId": "old"}
+            a.send_json({"kind": "open", "token": token}); until(a, "opened")
+            a.send_json({"kind": "work", "token": token, "id": "running"}); until(a, "accepted")
+            invalid = {"kind": "work", "token": token}
+            if invalid_id is not None:
+                invalid["id"] = invalid_id
+            a.send_json(invalid)
+>           assert until(a, "rejected")["detail"] == "invalid-envelope"
+                   ^^^^^^^^^^^^^^^^^^^^
+
+test_app.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_app.py:9: in until
+    row = socket.receive_json()
+          ^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:198: in receive_json
+    message = self.receive()
+              ^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:185: in receive
+    return self.portal.call(self._send_rx.receive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = MemoryObjectReceiveStream(_state=_MemoryObjectStreamState(max_buffer_size=inf, buffer=deque([]), open_send_channels=0, open_receive_channels=0, waiting_receivers=OrderedDict(), waiting_senders=OrderedDict()), _closed=True)
+
+    async def receive(self) -> T_co:
+        await checkpoint()
+        try:
+            return self.receive_nowait()
+        except WouldBlock:
+            # Add ourselves in the queue
+            receive_event = Event()
+            receiver = _MemoryObjectItemReceiver[T_co]()
+            self._state.waiting_receivers[receive_event] = receiver
+    
+            try:
+                await receive_event.wait()
+            finally:
+                self._state.waiting_receivers.pop(receive_event, None)
+    
+            try:
+                return receiver.item
+            except AttributeError:
+>               raise EndOfStream from None
+E               anyio.EndOfStream
+
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:133: EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+self = <contextlib.ExitStack object at 0x10c152e10>
+exc_details = (<class 'pydantic_core._pydantic_core.ValidationError'>, 1 validation error for Work
+id
+  String should have at least ...  For further information visit https://errors.pydantic.dev/2.13/v/string_too_short, <traceback object at 0x10c17d7c0>)
+
+    def __exit__(self, *exc_details):
+        received_exc = exc_details[0] is not None
+    
+        # We manipulate the exception state so it behaves as though
+        # we were actually nesting multiple with statements
+        frame_exc = sys.exc_info()[1]
+        def _fix_exception_context(new_exc, old_exc):
+            # Context may not be correct, so find the end of the chain
+            while 1:
+                exc_context = new_exc.__context__
+                if exc_context is None or exc_context is old_exc:
+                    # Context is already set correctly (see issue 20317)
+                    return
+                if exc_context is frame_exc:
+                    break
+                new_exc = exc_context
+            # Change the end of the chain to point to the exception
+            # we expect it to reference
+            new_exc.__context__ = old_exc
+    
+        # Callbacks are invoked in LIFO order to match the behaviour of
+        # nested context managers
+        suppressed_exc = False
+        pending_raise = False
+        while self._exit_callbacks:
+            is_sync, cb = self._exit_callbacks.pop()
+            assert is_sync
+            try:
+>               if cb(*exc_details):
+                   ^^^^^^^^^^^^^^^^
+
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:595: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:478: in _exit_wrapper
+    callback(*args, **kwds)
+.venv/lib/python3.12/site-packages/starlette/testclient.py:182: in close
+    self.send({"type": "websocket.disconnect", "code": code, "reason": reason})
+.venv/lib/python3.12/site-packages/starlette/testclient.py:166: in send
+    self.portal.call(self._receive_tx.send, message)
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:250: in send
+    self.send_nowait(item)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = MemoryObjectSendStream(_state=_MemoryObjectStreamState(max_buffer_size=inf, buffer=deque([]), open_send_channels=0, open_receive_channels=0, waiting_receivers=OrderedDict(), waiting_senders=OrderedDict()), _closed=True)
+item = {'type': 'websocket.disconnect', 'code': 1000, 'reason': None}
+
+    def send_nowait(self, item: T_contra) -> None:
+        """
+        Send an item immediately if it can be done without waiting.
+    
+        :param item: the item to send
+        :raises ~anyio.ClosedResourceError: if this send stream has been closed
+        :raises ~anyio.BrokenResourceError: if the stream has been closed from the
+            receiving end
+        :raises ~anyio.WouldBlock: if the buffer is full and there are no tasks waiting
+            to receive
+    
+        """
+        if self._closed:
+>           raise ClosedResourceError
+E           anyio._core._exceptions.ClosedResourceError
+
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:219: ClosedResourceError
+
+During handling of the above exception, another exception occurred:
+
+invalid_id = None, repeat = 0
+
+    @pytest.mark.parametrize("repeat", range(3))
+    @pytest.mark.parametrize("invalid_id", [None, ""])
+    def test_malformed_work_id_is_rejected_without_closing_or_cancelling_session(invalid_id, repeat):
+>       with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a, client.websocket_connect("/ws/B") as b:
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_app.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/starlette/testclient.py:131: in __exit__
+    return self.exit_stack.__exit__(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:610: in __exit__
+    raise exc_details[1]
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:595: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:478: in _exit_wrapper
+    callback(*args, **kwds)
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:145: in _run
+    await self.app(self.scope, receive_rx.receive, send_tx.send)
+.venv/lib/python3.12/site-packages/fastapi/applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/routing.py:670: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:2734: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/routing.py:354: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:184: in app
+    await wrap_app_handling_exceptions(app, session)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:181: in app
+    await func(session)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:796: in app
+    await dependant.call(**solved_result.values)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+socket = <starlette.websockets.WebSocket object at 0x10c1529c0>, robot_id = 'A'
+
+    @app.websocket("/ws/{robot_id}")
+    async def socket_route(socket: WebSocket, robot_id: str) -> None:
+        await socket.accept()
+        robot = robots.setdefault(robot_id, ScopedRobot(owner, robot_id))
+        owner.robots[robot_id] = robot
+        if robot.socket_active:
+            await socket.close(code=1008, reason="Already connected")
+            return
+        robot.socket_active = True
+        owner.session_number += 1
+        session = owner.session_number
+    
+        async def writer() -> None:
+            while True:
+                row = await robot.outbox.get()
+                if row["kind"] == "result":
+                    scope = robot.scope
+                    if scope is None or not scope.valid or row.get("generation") != scope.number or row.get("session") != session:
+                        owner.mark("stale_result", robot_id, str(row["id"]))
+                        continue
+                await socket.send_json(row)
+    
+        output = asyncio.create_task(writer())
+        try:
+            while True:
+                try:
+                    message = Message.model_validate_json(await socket.receive_text())
+                except ValidationError:
+                    robot.outbox.put_nowait({"kind": "rejected", "detail": "invalid-envelope"})
+                    continue
+                if message.kind == "ping":
+                    robot.outbox.put_nowait({"kind": "pong"})
+                elif message.kind == "release":
+                    await owner.release(message.key)
+                    robot.outbox.put_nowait({"kind": "released", "key": message.key})
+                elif message.kind == "open":
+                    token = message.token
+                    if (token is None or token.robotId != robot_id or token in robot.used
+                        or robot.state != "idle" or robot.scope is not None
+                        or (robot.token is not None and robot.operation is None)):
+                        robot.outbox.put_nowait({"kind": "rejected", "detail": "scope-not-openable"})
+                        continue
+                    robot.token = token
+                    robot.used.add(token)
+                    robot.operation = None
+                    robot.outbox.put_nowait({"kind": "opened", "token": token.model_dump()})
+                elif message.kind == "work":
+                    if message.token != robot.token or robot.operation is not None or robot.token is None:
+                        robot.outbox.put_nowait({"kind": "rejected", "detail": "stale-scope"})
+                        continue
+>                   await robot.submit(Work(kind="work", id=message.id, mode=message.mode), session)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   pydantic_core._pydantic_core.ValidationError: 1 validation error for Work
+E                   id
+E                     String should have at least 1 character [type=string_too_short, input_value='', input_type=str]
+E                       For further information visit https://errors.pydantic.dev/2.13/v/string_too_short
+
+app.py:118: ValidationError
+_ test_malformed_work_id_is_rejected_without_closing_or_cancelling_session[None-1] _
+
+invalid_id = None, repeat = 1
+
+    @pytest.mark.parametrize("repeat", range(3))
+    @pytest.mark.parametrize("invalid_id", [None, ""])
+    def test_malformed_work_id_is_rejected_without_closing_or_cancelling_session(invalid_id, repeat):
+        with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a, client.websocket_connect("/ws/B") as b:
+            token = {"runEpoch": f"run-{repeat}", "robotId": "A", "scopeId": "old"}
+            a.send_json({"kind": "open", "token": token}); until(a, "opened")
+            a.send_json({"kind": "work", "token": token, "id": "running"}); until(a, "accepted")
+            invalid = {"kind": "work", "token": token}
+            if invalid_id is not None:
+                invalid["id"] = invalid_id
+            a.send_json(invalid)
+>           assert until(a, "rejected")["detail"] == "invalid-envelope"
+                   ^^^^^^^^^^^^^^^^^^^^
+
+test_app.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_app.py:9: in until
+    row = socket.receive_json()
+          ^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:198: in receive_json
+    message = self.receive()
+              ^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:185: in receive
+    return self.portal.call(self._send_rx.receive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = MemoryObjectReceiveStream(_state=_MemoryObjectStreamState(max_buffer_size=inf, buffer=deque([]), open_send_channels=0, open_receive_channels=0, waiting_receivers=OrderedDict(), waiting_senders=OrderedDict()), _closed=True)
+
+    async def receive(self) -> T_co:
+        await checkpoint()
+        try:
+            return self.receive_nowait()
+        except WouldBlock:
+            # Add ourselves in the queue
+            receive_event = Event()
+            receiver = _MemoryObjectItemReceiver[T_co]()
+            self._state.waiting_receivers[receive_event] = receiver
+    
+            try:
+                await receive_event.wait()
+            finally:
+                self._state.waiting_receivers.pop(receive_event, None)
+    
+            try:
+                return receiver.item
+            except AttributeError:
+>               raise EndOfStream from None
+E               anyio.EndOfStream
+
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:133: EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+self = <contextlib.ExitStack object at 0x10c1cc170>
+exc_details = (<class 'pydantic_core._pydantic_core.ValidationError'>, 1 validation error for Work
+id
+  String should have at least ...  For further information visit https://errors.pydantic.dev/2.13/v/string_too_short, <traceback object at 0x10ca42f00>)
+
+    def __exit__(self, *exc_details):
+        received_exc = exc_details[0] is not None
+    
+        # We manipulate the exception state so it behaves as though
+        # we were actually nesting multiple with statements
+        frame_exc = sys.exc_info()[1]
+        def _fix_exception_context(new_exc, old_exc):
+            # Context may not be correct, so find the end of the chain
+            while 1:
+                exc_context = new_exc.__context__
+                if exc_context is None or exc_context is old_exc:
+                    # Context is already set correctly (see issue 20317)
+                    return
+                if exc_context is frame_exc:
+                    break
+                new_exc = exc_context
+            # Change the end of the chain to point to the exception
+            # we expect it to reference
+            new_exc.__context__ = old_exc
+    
+        # Callbacks are invoked in LIFO order to match the behaviour of
+        # nested context managers
+        suppressed_exc = False
+        pending_raise = False
+        while self._exit_callbacks:
+            is_sync, cb = self._exit_callbacks.pop()
+            assert is_sync
+            try:
+>               if cb(*exc_details):
+                   ^^^^^^^^^^^^^^^^
+
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:595: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:478: in _exit_wrapper
+    callback(*args, **kwds)
+.venv/lib/python3.12/site-packages/starlette/testclient.py:182: in close
+    self.send({"type": "websocket.disconnect", "code": code, "reason": reason})
+.venv/lib/python3.12/site-packages/starlette/testclient.py:166: in send
+    self.portal.call(self._receive_tx.send, message)
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:250: in send
+    self.send_nowait(item)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = MemoryObjectSendStream(_state=_MemoryObjectStreamState(max_buffer_size=inf, buffer=deque([]), open_send_channels=0, open_receive_channels=0, waiting_receivers=OrderedDict(), waiting_senders=OrderedDict()), _closed=True)
+item = {'type': 'websocket.disconnect', 'code': 1000, 'reason': None}
+
+    def send_nowait(self, item: T_contra) -> None:
+        """
+        Send an item immediately if it can be done without waiting.
+    
+        :param item: the item to send
+        :raises ~anyio.ClosedResourceError: if this send stream has been closed
+        :raises ~anyio.BrokenResourceError: if the stream has been closed from the
+            receiving end
+        :raises ~anyio.WouldBlock: if the buffer is full and there are no tasks waiting
+            to receive
+    
+        """
+        if self._closed:
+>           raise ClosedResourceError
+E           anyio._core._exceptions.ClosedResourceError
+
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:219: ClosedResourceError
+
+During handling of the above exception, another exception occurred:
+
+invalid_id = None, repeat = 1
+
+    @pytest.mark.parametrize("repeat", range(3))
+    @pytest.mark.parametrize("invalid_id", [None, ""])
+    def test_malformed_work_id_is_rejected_without_closing_or_cancelling_session(invalid_id, repeat):
+>       with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a, client.websocket_connect("/ws/B") as b:
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_app.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/starlette/testclient.py:131: in __exit__
+    return self.exit_stack.__exit__(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:610: in __exit__
+    raise exc_details[1]
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:595: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:478: in _exit_wrapper
+    callback(*args, **kwds)
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:145: in _run
+    await self.app(self.scope, receive_rx.receive, send_tx.send)
+.venv/lib/python3.12/site-packages/fastapi/applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/routing.py:670: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:2734: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/routing.py:354: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:184: in app
+    await wrap_app_handling_exceptions(app, session)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:181: in app
+    await func(session)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:796: in app
+    await dependant.call(**solved_result.values)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+socket = <starlette.websockets.WebSocket object at 0x10c1cee10>, robot_id = 'A'
+
+    @app.websocket("/ws/{robot_id}")
+    async def socket_route(socket: WebSocket, robot_id: str) -> None:
+        await socket.accept()
+        robot = robots.setdefault(robot_id, ScopedRobot(owner, robot_id))
+        owner.robots[robot_id] = robot
+        if robot.socket_active:
+            await socket.close(code=1008, reason="Already connected")
+            return
+        robot.socket_active = True
+        owner.session_number += 1
+        session = owner.session_number
+    
+        async def writer() -> None:
+            while True:
+                row = await robot.outbox.get()
+                if row["kind"] == "result":
+                    scope = robot.scope
+                    if scope is None or not scope.valid or row.get("generation") != scope.number or row.get("session") != session:
+                        owner.mark("stale_result", robot_id, str(row["id"]))
+                        continue
+                await socket.send_json(row)
+    
+        output = asyncio.create_task(writer())
+        try:
+            while True:
+                try:
+                    message = Message.model_validate_json(await socket.receive_text())
+                except ValidationError:
+                    robot.outbox.put_nowait({"kind": "rejected", "detail": "invalid-envelope"})
+                    continue
+                if message.kind == "ping":
+                    robot.outbox.put_nowait({"kind": "pong"})
+                elif message.kind == "release":
+                    await owner.release(message.key)
+                    robot.outbox.put_nowait({"kind": "released", "key": message.key})
+                elif message.kind == "open":
+                    token = message.token
+                    if (token is None or token.robotId != robot_id or token in robot.used
+                        or robot.state != "idle" or robot.scope is not None
+                        or (robot.token is not None and robot.operation is None)):
+                        robot.outbox.put_nowait({"kind": "rejected", "detail": "scope-not-openable"})
+                        continue
+                    robot.token = token
+                    robot.used.add(token)
+                    robot.operation = None
+                    robot.outbox.put_nowait({"kind": "opened", "token": token.model_dump()})
+                elif message.kind == "work":
+                    if message.token != robot.token or robot.operation is not None or robot.token is None:
+                        robot.outbox.put_nowait({"kind": "rejected", "detail": "stale-scope"})
+                        continue
+>                   await robot.submit(Work(kind="work", id=message.id, mode=message.mode), session)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   pydantic_core._pydantic_core.ValidationError: 1 validation error for Work
+E                   id
+E                     String should have at least 1 character [type=string_too_short, input_value='', input_type=str]
+E                       For further information visit https://errors.pydantic.dev/2.13/v/string_too_short
+
+app.py:118: ValidationError
+_ test_malformed_work_id_is_rejected_without_closing_or_cancelling_session[None-2] _
+
+invalid_id = None, repeat = 2
+
+    @pytest.mark.parametrize("repeat", range(3))
+    @pytest.mark.parametrize("invalid_id", [None, ""])
+    def test_malformed_work_id_is_rejected_without_closing_or_cancelling_session(invalid_id, repeat):
+        with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a, client.websocket_connect("/ws/B") as b:
+            token = {"runEpoch": f"run-{repeat}", "robotId": "A", "scopeId": "old"}
+            a.send_json({"kind": "open", "token": token}); until(a, "opened")
+            a.send_json({"kind": "work", "token": token, "id": "running"}); until(a, "accepted")
+            invalid = {"kind": "work", "token": token}
+            if invalid_id is not None:
+                invalid["id"] = invalid_id
+            a.send_json(invalid)
+>           assert until(a, "rejected")["detail"] == "invalid-envelope"
+                   ^^^^^^^^^^^^^^^^^^^^
+
+test_app.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_app.py:9: in until
+    row = socket.receive_json()
+          ^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:198: in receive_json
+    message = self.receive()
+              ^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:185: in receive
+    return self.portal.call(self._send_rx.receive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = MemoryObjectReceiveStream(_state=_MemoryObjectStreamState(max_buffer_size=inf, buffer=deque([]), open_send_channels=0, open_receive_channels=0, waiting_receivers=OrderedDict(), waiting_senders=OrderedDict()), _closed=True)
+
+    async def receive(self) -> T_co:
+        await checkpoint()
+        try:
+            return self.receive_nowait()
+        except WouldBlock:
+            # Add ourselves in the queue
+            receive_event = Event()
+            receiver = _MemoryObjectItemReceiver[T_co]()
+            self._state.waiting_receivers[receive_event] = receiver
+    
+            try:
+                await receive_event.wait()
+            finally:
+                self._state.waiting_receivers.pop(receive_event, None)
+    
+            try:
+                return receiver.item
+            except AttributeError:
+>               raise EndOfStream from None
+E               anyio.EndOfStream
+
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:133: EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+self = <contextlib.ExitStack object at 0x10c1d3920>
+exc_details = (<class 'pydantic_core._pydantic_core.ValidationError'>, 1 validation error for Work
+id
+  String should have at least ...  For further information visit https://errors.pydantic.dev/2.13/v/string_too_short, <traceback object at 0x10d06b800>)
+
+    def __exit__(self, *exc_details):
+        received_exc = exc_details[0] is not None
+    
+        # We manipulate the exception state so it behaves as though
+        # we were actually nesting multiple with statements
+        frame_exc = sys.exc_info()[1]
+        def _fix_exception_context(new_exc, old_exc):
+            # Context may not be correct, so find the end of the chain
+            while 1:
+                exc_context = new_exc.__context__
+                if exc_context is None or exc_context is old_exc:
+                    # Context is already set correctly (see issue 20317)
+                    return
+                if exc_context is frame_exc:
+                    break
+                new_exc = exc_context
+            # Change the end of the chain to point to the exception
+            # we expect it to reference
+            new_exc.__context__ = old_exc
+    
+        # Callbacks are invoked in LIFO order to match the behaviour of
+        # nested context managers
+        suppressed_exc = False
+        pending_raise = False
+        while self._exit_callbacks:
+            is_sync, cb = self._exit_callbacks.pop()
+            assert is_sync
+            try:
+>               if cb(*exc_details):
+                   ^^^^^^^^^^^^^^^^
+
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:595: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:478: in _exit_wrapper
+    callback(*args, **kwds)
+.venv/lib/python3.12/site-packages/starlette/testclient.py:182: in close
+    self.send({"type": "websocket.disconnect", "code": code, "reason": reason})
+.venv/lib/python3.12/site-packages/starlette/testclient.py:166: in send
+    self.portal.call(self._receive_tx.send, message)
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:250: in send
+    self.send_nowait(item)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = MemoryObjectSendStream(_state=_MemoryObjectStreamState(max_buffer_size=inf, buffer=deque([]), open_send_channels=0, open_receive_channels=0, waiting_receivers=OrderedDict(), waiting_senders=OrderedDict()), _closed=True)
+item = {'type': 'websocket.disconnect', 'code': 1000, 'reason': None}
+
+    def send_nowait(self, item: T_contra) -> None:
+        """
+        Send an item immediately if it can be done without waiting.
+    
+        :param item: the item to send
+        :raises ~anyio.ClosedResourceError: if this send stream has been closed
+        :raises ~anyio.BrokenResourceError: if the stream has been closed from the
+            receiving end
+        :raises ~anyio.WouldBlock: if the buffer is full and there are no tasks waiting
+            to receive
+    
+        """
+        if self._closed:
+>           raise ClosedResourceError
+E           anyio._core._exceptions.ClosedResourceError
+
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:219: ClosedResourceError
+
+During handling of the above exception, another exception occurred:
+
+invalid_id = None, repeat = 2
+
+    @pytest.mark.parametrize("repeat", range(3))
+    @pytest.mark.parametrize("invalid_id", [None, ""])
+    def test_malformed_work_id_is_rejected_without_closing_or_cancelling_session(invalid_id, repeat):
+>       with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a, client.websocket_connect("/ws/B") as b:
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_app.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/starlette/testclient.py:131: in __exit__
+    return self.exit_stack.__exit__(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:610: in __exit__
+    raise exc_details[1]
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:595: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:478: in _exit_wrapper
+    callback(*args, **kwds)
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:145: in _run
+    await self.app(self.scope, receive_rx.receive, send_tx.send)
+.venv/lib/python3.12/site-packages/fastapi/applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/routing.py:670: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:2734: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/routing.py:354: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:184: in app
+    await wrap_app_handling_exceptions(app, session)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:181: in app
+    await func(session)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:796: in app
+    await dependant.call(**solved_result.values)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+socket = <starlette.websockets.WebSocket object at 0x10c1d2e70>, robot_id = 'A'
+
+    @app.websocket("/ws/{robot_id}")
+    async def socket_route(socket: WebSocket, robot_id: str) -> None:
+        await socket.accept()
+        robot = robots.setdefault(robot_id, ScopedRobot(owner, robot_id))
+        owner.robots[robot_id] = robot
+        if robot.socket_active:
+            await socket.close(code=1008, reason="Already connected")
+            return
+        robot.socket_active = True
+        owner.session_number += 1
+        session = owner.session_number
+    
+        async def writer() -> None:
+            while True:
+                row = await robot.outbox.get()
+                if row["kind"] == "result":
+                    scope = robot.scope
+                    if scope is None or not scope.valid or row.get("generation") != scope.number or row.get("session") != session:
+                        owner.mark("stale_result", robot_id, str(row["id"]))
+                        continue
+                await socket.send_json(row)
+    
+        output = asyncio.create_task(writer())
+        try:
+            while True:
+                try:
+                    message = Message.model_validate_json(await socket.receive_text())
+                except ValidationError:
+                    robot.outbox.put_nowait({"kind": "rejected", "detail": "invalid-envelope"})
+                    continue
+                if message.kind == "ping":
+                    robot.outbox.put_nowait({"kind": "pong"})
+                elif message.kind == "release":
+                    await owner.release(message.key)
+                    robot.outbox.put_nowait({"kind": "released", "key": message.key})
+                elif message.kind == "open":
+                    token = message.token
+                    if (token is None or token.robotId != robot_id or token in robot.used
+                        or robot.state != "idle" or robot.scope is not None
+                        or (robot.token is not None and robot.operation is None)):
+                        robot.outbox.put_nowait({"kind": "rejected", "detail": "scope-not-openable"})
+                        continue
+                    robot.token = token
+                    robot.used.add(token)
+                    robot.operation = None
+                    robot.outbox.put_nowait({"kind": "opened", "token": token.model_dump()})
+                elif message.kind == "work":
+                    if message.token != robot.token or robot.operation is not None or robot.token is None:
+                        robot.outbox.put_nowait({"kind": "rejected", "detail": "stale-scope"})
+                        continue
+>                   await robot.submit(Work(kind="work", id=message.id, mode=message.mode), session)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   pydantic_core._pydantic_core.ValidationError: 1 validation error for Work
+E                   id
+E                     String should have at least 1 character [type=string_too_short, input_value='', input_type=str]
+E                       For further information visit https://errors.pydantic.dev/2.13/v/string_too_short
+
+app.py:118: ValidationError
+_ test_malformed_work_id_is_rejected_without_closing_or_cancelling_session[-0] _
+
+invalid_id = '', repeat = 0
+
+    @pytest.mark.parametrize("repeat", range(3))
+    @pytest.mark.parametrize("invalid_id", [None, ""])
+    def test_malformed_work_id_is_rejected_without_closing_or_cancelling_session(invalid_id, repeat):
+        with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a, client.websocket_connect("/ws/B") as b:
+            token = {"runEpoch": f"run-{repeat}", "robotId": "A", "scopeId": "old"}
+            a.send_json({"kind": "open", "token": token}); until(a, "opened")
+            a.send_json({"kind": "work", "token": token, "id": "running"}); until(a, "accepted")
+            invalid = {"kind": "work", "token": token}
+            if invalid_id is not None:
+                invalid["id"] = invalid_id
+            a.send_json(invalid)
+>           assert until(a, "rejected")["detail"] == "invalid-envelope"
+                   ^^^^^^^^^^^^^^^^^^^^
+
+test_app.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_app.py:9: in until
+    row = socket.receive_json()
+          ^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:198: in receive_json
+    message = self.receive()
+              ^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:185: in receive
+    return self.portal.call(self._send_rx.receive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = MemoryObjectReceiveStream(_state=_MemoryObjectStreamState(max_buffer_size=inf, buffer=deque([]), open_send_channels=0, open_receive_channels=0, waiting_receivers=OrderedDict(), waiting_senders=OrderedDict()), _closed=True)
+
+    async def receive(self) -> T_co:
+        await checkpoint()
+        try:
+            return self.receive_nowait()
+        except WouldBlock:
+            # Add ourselves in the queue
+            receive_event = Event()
+            receiver = _MemoryObjectItemReceiver[T_co]()
+            self._state.waiting_receivers[receive_event] = receiver
+    
+            try:
+                await receive_event.wait()
+            finally:
+                self._state.waiting_receivers.pop(receive_event, None)
+    
+            try:
+                return receiver.item
+            except AttributeError:
+>               raise EndOfStream from None
+E               anyio.EndOfStream
+
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:133: EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+self = <contextlib.ExitStack object at 0x10c1e6e70>
+exc_details = (<class 'pydantic_core._pydantic_core.ValidationError'>, 1 validation error for Work
+id
+  String should have at least ...  For further information visit https://errors.pydantic.dev/2.13/v/string_too_short, <traceback object at 0x10c7a7b40>)
+
+    def __exit__(self, *exc_details):
+        received_exc = exc_details[0] is not None
+    
+        # We manipulate the exception state so it behaves as though
+        # we were actually nesting multiple with statements
+        frame_exc = sys.exc_info()[1]
+        def _fix_exception_context(new_exc, old_exc):
+            # Context may not be correct, so find the end of the chain
+            while 1:
+                exc_context = new_exc.__context__
+                if exc_context is None or exc_context is old_exc:
+                    # Context is already set correctly (see issue 20317)
+                    return
+                if exc_context is frame_exc:
+                    break
+                new_exc = exc_context
+            # Change the end of the chain to point to the exception
+            # we expect it to reference
+            new_exc.__context__ = old_exc
+    
+        # Callbacks are invoked in LIFO order to match the behaviour of
+        # nested context managers
+        suppressed_exc = False
+        pending_raise = False
+        while self._exit_callbacks:
+            is_sync, cb = self._exit_callbacks.pop()
+            assert is_sync
+            try:
+>               if cb(*exc_details):
+                   ^^^^^^^^^^^^^^^^
+
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:595: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:478: in _exit_wrapper
+    callback(*args, **kwds)
+.venv/lib/python3.12/site-packages/starlette/testclient.py:182: in close
+    self.send({"type": "websocket.disconnect", "code": code, "reason": reason})
+.venv/lib/python3.12/site-packages/starlette/testclient.py:166: in send
+    self.portal.call(self._receive_tx.send, message)
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:250: in send
+    self.send_nowait(item)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = MemoryObjectSendStream(_state=_MemoryObjectStreamState(max_buffer_size=inf, buffer=deque([]), open_send_channels=0, open_receive_channels=0, waiting_receivers=OrderedDict(), waiting_senders=OrderedDict()), _closed=True)
+item = {'type': 'websocket.disconnect', 'code': 1000, 'reason': None}
+
+    def send_nowait(self, item: T_contra) -> None:
+        """
+        Send an item immediately if it can be done without waiting.
+    
+        :param item: the item to send
+        :raises ~anyio.ClosedResourceError: if this send stream has been closed
+        :raises ~anyio.BrokenResourceError: if the stream has been closed from the
+            receiving end
+        :raises ~anyio.WouldBlock: if the buffer is full and there are no tasks waiting
+            to receive
+    
+        """
+        if self._closed:
+>           raise ClosedResourceError
+E           anyio._core._exceptions.ClosedResourceError
+
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:219: ClosedResourceError
+
+During handling of the above exception, another exception occurred:
+
+invalid_id = '', repeat = 0
+
+    @pytest.mark.parametrize("repeat", range(3))
+    @pytest.mark.parametrize("invalid_id", [None, ""])
+    def test_malformed_work_id_is_rejected_without_closing_or_cancelling_session(invalid_id, repeat):
+>       with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a, client.websocket_connect("/ws/B") as b:
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_app.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/starlette/testclient.py:131: in __exit__
+    return self.exit_stack.__exit__(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:610: in __exit__
+    raise exc_details[1]
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:595: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:478: in _exit_wrapper
+    callback(*args, **kwds)
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:145: in _run
+    await self.app(self.scope, receive_rx.receive, send_tx.send)
+.venv/lib/python3.12/site-packages/fastapi/applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/routing.py:670: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:2734: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/routing.py:354: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:184: in app
+    await wrap_app_handling_exceptions(app, session)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:181: in app
+    await func(session)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:796: in app
+    await dependant.call(**solved_result.values)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+socket = <starlette.websockets.WebSocket object at 0x10c589700>, robot_id = 'A'
+
+    @app.websocket("/ws/{robot_id}")
+    async def socket_route(socket: WebSocket, robot_id: str) -> None:
+        await socket.accept()
+        robot = robots.setdefault(robot_id, ScopedRobot(owner, robot_id))
+        owner.robots[robot_id] = robot
+        if robot.socket_active:
+            await socket.close(code=1008, reason="Already connected")
+            return
+        robot.socket_active = True
+        owner.session_number += 1
+        session = owner.session_number
+    
+        async def writer() -> None:
+            while True:
+                row = await robot.outbox.get()
+                if row["kind"] == "result":
+                    scope = robot.scope
+                    if scope is None or not scope.valid or row.get("generation") != scope.number or row.get("session") != session:
+                        owner.mark("stale_result", robot_id, str(row["id"]))
+                        continue
+                await socket.send_json(row)
+    
+        output = asyncio.create_task(writer())
+        try:
+            while True:
+                try:
+                    message = Message.model_validate_json(await socket.receive_text())
+                except ValidationError:
+                    robot.outbox.put_nowait({"kind": "rejected", "detail": "invalid-envelope"})
+                    continue
+                if message.kind == "ping":
+                    robot.outbox.put_nowait({"kind": "pong"})
+                elif message.kind == "release":
+                    await owner.release(message.key)
+                    robot.outbox.put_nowait({"kind": "released", "key": message.key})
+                elif message.kind == "open":
+                    token = message.token
+                    if (token is None or token.robotId != robot_id or token in robot.used
+                        or robot.state != "idle" or robot.scope is not None
+                        or (robot.token is not None and robot.operation is None)):
+                        robot.outbox.put_nowait({"kind": "rejected", "detail": "scope-not-openable"})
+                        continue
+                    robot.token = token
+                    robot.used.add(token)
+                    robot.operation = None
+                    robot.outbox.put_nowait({"kind": "opened", "token": token.model_dump()})
+                elif message.kind == "work":
+                    if message.token != robot.token or robot.operation is not None or robot.token is None:
+                        robot.outbox.put_nowait({"kind": "rejected", "detail": "stale-scope"})
+                        continue
+>                   await robot.submit(Work(kind="work", id=message.id, mode=message.mode), session)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   pydantic_core._pydantic_core.ValidationError: 1 validation error for Work
+E                   id
+E                     String should have at least 1 character [type=string_too_short, input_value='', input_type=str]
+E                       For further information visit https://errors.pydantic.dev/2.13/v/string_too_short
+
+app.py:118: ValidationError
+_ test_malformed_work_id_is_rejected_without_closing_or_cancelling_session[-1] _
+
+invalid_id = '', repeat = 1
+
+    @pytest.mark.parametrize("repeat", range(3))
+    @pytest.mark.parametrize("invalid_id", [None, ""])
+    def test_malformed_work_id_is_rejected_without_closing_or_cancelling_session(invalid_id, repeat):
+        with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a, client.websocket_connect("/ws/B") as b:
+            token = {"runEpoch": f"run-{repeat}", "robotId": "A", "scopeId": "old"}
+            a.send_json({"kind": "open", "token": token}); until(a, "opened")
+            a.send_json({"kind": "work", "token": token, "id": "running"}); until(a, "accepted")
+            invalid = {"kind": "work", "token": token}
+            if invalid_id is not None:
+                invalid["id"] = invalid_id
+            a.send_json(invalid)
+>           assert until(a, "rejected")["detail"] == "invalid-envelope"
+                   ^^^^^^^^^^^^^^^^^^^^
+
+test_app.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_app.py:9: in until
+    row = socket.receive_json()
+          ^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:198: in receive_json
+    message = self.receive()
+              ^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:185: in receive
+    return self.portal.call(self._send_rx.receive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = MemoryObjectReceiveStream(_state=_MemoryObjectStreamState(max_buffer_size=inf, buffer=deque([]), open_send_channels=0, open_receive_channels=0, waiting_receivers=OrderedDict(), waiting_senders=OrderedDict()), _closed=True)
+
+    async def receive(self) -> T_co:
+        await checkpoint()
+        try:
+            return self.receive_nowait()
+        except WouldBlock:
+            # Add ourselves in the queue
+            receive_event = Event()
+            receiver = _MemoryObjectItemReceiver[T_co]()
+            self._state.waiting_receivers[receive_event] = receiver
+    
+            try:
+                await receive_event.wait()
+            finally:
+                self._state.waiting_receivers.pop(receive_event, None)
+    
+            try:
+                return receiver.item
+            except AttributeError:
+>               raise EndOfStream from None
+E               anyio.EndOfStream
+
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:133: EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+self = <contextlib.ExitStack object at 0x10c61bce0>
+exc_details = (<class 'pydantic_core._pydantic_core.ValidationError'>, 1 validation error for Work
+id
+  String should have at least ...  For further information visit https://errors.pydantic.dev/2.13/v/string_too_short, <traceback object at 0x10cced000>)
+
+    def __exit__(self, *exc_details):
+        received_exc = exc_details[0] is not None
+    
+        # We manipulate the exception state so it behaves as though
+        # we were actually nesting multiple with statements
+        frame_exc = sys.exc_info()[1]
+        def _fix_exception_context(new_exc, old_exc):
+            # Context may not be correct, so find the end of the chain
+            while 1:
+                exc_context = new_exc.__context__
+                if exc_context is None or exc_context is old_exc:
+                    # Context is already set correctly (see issue 20317)
+                    return
+                if exc_context is frame_exc:
+                    break
+                new_exc = exc_context
+            # Change the end of the chain to point to the exception
+            # we expect it to reference
+            new_exc.__context__ = old_exc
+    
+        # Callbacks are invoked in LIFO order to match the behaviour of
+        # nested context managers
+        suppressed_exc = False
+        pending_raise = False
+        while self._exit_callbacks:
+            is_sync, cb = self._exit_callbacks.pop()
+            assert is_sync
+            try:
+>               if cb(*exc_details):
+                   ^^^^^^^^^^^^^^^^
+
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:595: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:478: in _exit_wrapper
+    callback(*args, **kwds)
+.venv/lib/python3.12/site-packages/starlette/testclient.py:182: in close
+    self.send({"type": "websocket.disconnect", "code": code, "reason": reason})
+.venv/lib/python3.12/site-packages/starlette/testclient.py:166: in send
+    self.portal.call(self._receive_tx.send, message)
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:250: in send
+    self.send_nowait(item)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = MemoryObjectSendStream(_state=_MemoryObjectStreamState(max_buffer_size=inf, buffer=deque([]), open_send_channels=0, open_receive_channels=0, waiting_receivers=OrderedDict(), waiting_senders=OrderedDict()), _closed=True)
+item = {'type': 'websocket.disconnect', 'code': 1000, 'reason': None}
+
+    def send_nowait(self, item: T_contra) -> None:
+        """
+        Send an item immediately if it can be done without waiting.
+    
+        :param item: the item to send
+        :raises ~anyio.ClosedResourceError: if this send stream has been closed
+        :raises ~anyio.BrokenResourceError: if the stream has been closed from the
+            receiving end
+        :raises ~anyio.WouldBlock: if the buffer is full and there are no tasks waiting
+            to receive
+    
+        """
+        if self._closed:
+>           raise ClosedResourceError
+E           anyio._core._exceptions.ClosedResourceError
+
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:219: ClosedResourceError
+
+During handling of the above exception, another exception occurred:
+
+invalid_id = '', repeat = 1
+
+    @pytest.mark.parametrize("repeat", range(3))
+    @pytest.mark.parametrize("invalid_id", [None, ""])
+    def test_malformed_work_id_is_rejected_without_closing_or_cancelling_session(invalid_id, repeat):
+>       with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a, client.websocket_connect("/ws/B") as b:
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_app.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/starlette/testclient.py:131: in __exit__
+    return self.exit_stack.__exit__(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:610: in __exit__
+    raise exc_details[1]
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:595: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:478: in _exit_wrapper
+    callback(*args, **kwds)
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:145: in _run
+    await self.app(self.scope, receive_rx.receive, send_tx.send)
+.venv/lib/python3.12/site-packages/fastapi/applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/routing.py:670: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:2734: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/routing.py:354: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:184: in app
+    await wrap_app_handling_exceptions(app, session)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:181: in app
+    await func(session)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:796: in app
+    await dependant.call(**solved_result.values)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+socket = <starlette.websockets.WebSocket object at 0x10c61b200>, robot_id = 'A'
+
+    @app.websocket("/ws/{robot_id}")
+    async def socket_route(socket: WebSocket, robot_id: str) -> None:
+        await socket.accept()
+        robot = robots.setdefault(robot_id, ScopedRobot(owner, robot_id))
+        owner.robots[robot_id] = robot
+        if robot.socket_active:
+            await socket.close(code=1008, reason="Already connected")
+            return
+        robot.socket_active = True
+        owner.session_number += 1
+        session = owner.session_number
+    
+        async def writer() -> None:
+            while True:
+                row = await robot.outbox.get()
+                if row["kind"] == "result":
+                    scope = robot.scope
+                    if scope is None or not scope.valid or row.get("generation") != scope.number or row.get("session") != session:
+                        owner.mark("stale_result", robot_id, str(row["id"]))
+                        continue
+                await socket.send_json(row)
+    
+        output = asyncio.create_task(writer())
+        try:
+            while True:
+                try:
+                    message = Message.model_validate_json(await socket.receive_text())
+                except ValidationError:
+                    robot.outbox.put_nowait({"kind": "rejected", "detail": "invalid-envelope"})
+                    continue
+                if message.kind == "ping":
+                    robot.outbox.put_nowait({"kind": "pong"})
+                elif message.kind == "release":
+                    await owner.release(message.key)
+                    robot.outbox.put_nowait({"kind": "released", "key": message.key})
+                elif message.kind == "open":
+                    token = message.token
+                    if (token is None or token.robotId != robot_id or token in robot.used
+                        or robot.state != "idle" or robot.scope is not None
+                        or (robot.token is not None and robot.operation is None)):
+                        robot.outbox.put_nowait({"kind": "rejected", "detail": "scope-not-openable"})
+                        continue
+                    robot.token = token
+                    robot.used.add(token)
+                    robot.operation = None
+                    robot.outbox.put_nowait({"kind": "opened", "token": token.model_dump()})
+                elif message.kind == "work":
+                    if message.token != robot.token or robot.operation is not None or robot.token is None:
+                        robot.outbox.put_nowait({"kind": "rejected", "detail": "stale-scope"})
+                        continue
+>                   await robot.submit(Work(kind="work", id=message.id, mode=message.mode), session)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   pydantic_core._pydantic_core.ValidationError: 1 validation error for Work
+E                   id
+E                     String should have at least 1 character [type=string_too_short, input_value='', input_type=str]
+E                       For further information visit https://errors.pydantic.dev/2.13/v/string_too_short
+
+app.py:118: ValidationError
+_ test_malformed_work_id_is_rejected_without_closing_or_cancelling_session[-2] _
+
+invalid_id = '', repeat = 2
+
+    @pytest.mark.parametrize("repeat", range(3))
+    @pytest.mark.parametrize("invalid_id", [None, ""])
+    def test_malformed_work_id_is_rejected_without_closing_or_cancelling_session(invalid_id, repeat):
+        with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a, client.websocket_connect("/ws/B") as b:
+            token = {"runEpoch": f"run-{repeat}", "robotId": "A", "scopeId": "old"}
+            a.send_json({"kind": "open", "token": token}); until(a, "opened")
+            a.send_json({"kind": "work", "token": token, "id": "running"}); until(a, "accepted")
+            invalid = {"kind": "work", "token": token}
+            if invalid_id is not None:
+                invalid["id"] = invalid_id
+            a.send_json(invalid)
+>           assert until(a, "rejected")["detail"] == "invalid-envelope"
+                   ^^^^^^^^^^^^^^^^^^^^
+
+test_app.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_app.py:9: in until
+    row = socket.receive_json()
+          ^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:198: in receive_json
+    message = self.receive()
+              ^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:185: in receive
+    return self.portal.call(self._send_rx.receive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = MemoryObjectReceiveStream(_state=_MemoryObjectStreamState(max_buffer_size=inf, buffer=deque([]), open_send_channels=0, open_receive_channels=0, waiting_receivers=OrderedDict(), waiting_senders=OrderedDict()), _closed=True)
+
+    async def receive(self) -> T_co:
+        await checkpoint()
+        try:
+            return self.receive_nowait()
+        except WouldBlock:
+            # Add ourselves in the queue
+            receive_event = Event()
+            receiver = _MemoryObjectItemReceiver[T_co]()
+            self._state.waiting_receivers[receive_event] = receiver
+    
+            try:
+                await receive_event.wait()
+            finally:
+                self._state.waiting_receivers.pop(receive_event, None)
+    
+            try:
+                return receiver.item
+            except AttributeError:
+>               raise EndOfStream from None
+E               anyio.EndOfStream
+
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:133: EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+self = <contextlib.ExitStack object at 0x10c5e8860>
+exc_details = (<class 'pydantic_core._pydantic_core.ValidationError'>, 1 validation error for Work
+id
+  String should have at least ...  For further information visit https://errors.pydantic.dev/2.13/v/string_too_short, <traceback object at 0x10c77c100>)
+
+    def __exit__(self, *exc_details):
+        received_exc = exc_details[0] is not None
+    
+        # We manipulate the exception state so it behaves as though
+        # we were actually nesting multiple with statements
+        frame_exc = sys.exc_info()[1]
+        def _fix_exception_context(new_exc, old_exc):
+            # Context may not be correct, so find the end of the chain
+            while 1:
+                exc_context = new_exc.__context__
+                if exc_context is None or exc_context is old_exc:
+                    # Context is already set correctly (see issue 20317)
+                    return
+                if exc_context is frame_exc:
+                    break
+                new_exc = exc_context
+            # Change the end of the chain to point to the exception
+            # we expect it to reference
+            new_exc.__context__ = old_exc
+    
+        # Callbacks are invoked in LIFO order to match the behaviour of
+        # nested context managers
+        suppressed_exc = False
+        pending_raise = False
+        while self._exit_callbacks:
+            is_sync, cb = self._exit_callbacks.pop()
+            assert is_sync
+            try:
+>               if cb(*exc_details):
+                   ^^^^^^^^^^^^^^^^
+
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:595: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:478: in _exit_wrapper
+    callback(*args, **kwds)
+.venv/lib/python3.12/site-packages/starlette/testclient.py:182: in close
+    self.send({"type": "websocket.disconnect", "code": code, "reason": reason})
+.venv/lib/python3.12/site-packages/starlette/testclient.py:166: in send
+    self.portal.call(self._receive_tx.send, message)
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:250: in send
+    self.send_nowait(item)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = MemoryObjectSendStream(_state=_MemoryObjectStreamState(max_buffer_size=inf, buffer=deque([]), open_send_channels=0, open_receive_channels=0, waiting_receivers=OrderedDict(), waiting_senders=OrderedDict()), _closed=True)
+item = {'type': 'websocket.disconnect', 'code': 1000, 'reason': None}
+
+    def send_nowait(self, item: T_contra) -> None:
+        """
+        Send an item immediately if it can be done without waiting.
+    
+        :param item: the item to send
+        :raises ~anyio.ClosedResourceError: if this send stream has been closed
+        :raises ~anyio.BrokenResourceError: if the stream has been closed from the
+            receiving end
+        :raises ~anyio.WouldBlock: if the buffer is full and there are no tasks waiting
+            to receive
+    
+        """
+        if self._closed:
+>           raise ClosedResourceError
+E           anyio._core._exceptions.ClosedResourceError
+
+.venv/lib/python3.12/site-packages/anyio/streams/memory.py:219: ClosedResourceError
+
+During handling of the above exception, another exception occurred:
+
+invalid_id = '', repeat = 2
+
+    @pytest.mark.parametrize("repeat", range(3))
+    @pytest.mark.parametrize("invalid_id", [None, ""])
+    def test_malformed_work_id_is_rejected_without_closing_or_cancelling_session(invalid_id, repeat):
+>       with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a, client.websocket_connect("/ws/B") as b:
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_app.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/starlette/testclient.py:131: in __exit__
+    return self.exit_stack.__exit__(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:610: in __exit__
+    raise exc_details[1]
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:595: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/contextlib.py:478: in _exit_wrapper
+    callback(*args, **kwds)
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/Users/andrew/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/starlette/testclient.py:145: in _run
+    await self.app(self.scope, receive_rx.receive, send_tx.send)
+.venv/lib/python3.12/site-packages/fastapi/applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/routing.py:670: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:2734: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/routing.py:354: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:184: in app
+    await wrap_app_handling_exceptions(app, session)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:181: in app
+    await func(session)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:796: in app
+    await dependant.call(**solved_result.values)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+socket = <starlette.websockets.WebSocket object at 0x10c5eb710>, robot_id = 'A'
+
+    @app.websocket("/ws/{robot_id}")
+    async def socket_route(socket: WebSocket, robot_id: str) -> None:
+        await socket.accept()
+        robot = robots.setdefault(robot_id, ScopedRobot(owner, robot_id))
+        owner.robots[robot_id] = robot
+        if robot.socket_active:
+            await socket.close(code=1008, reason="Already connected")
+            return
+        robot.socket_active = True
+        owner.session_number += 1
+        session = owner.session_number
+    
+        async def writer() -> None:
+            while True:
+                row = await robot.outbox.get()
+                if row["kind"] == "result":
+                    scope = robot.scope
+                    if scope is None or not scope.valid or row.get("generation") != scope.number or row.get("session") != session:
+                        owner.mark("stale_result", robot_id, str(row["id"]))
+                        continue
+                await socket.send_json(row)
+    
+        output = asyncio.create_task(writer())
+        try:
+            while True:
+                try:
+                    message = Message.model_validate_json(await socket.receive_text())
+                except ValidationError:
+                    robot.outbox.put_nowait({"kind": "rejected", "detail": "invalid-envelope"})
+                    continue
+                if message.kind == "ping":
+                    robot.outbox.put_nowait({"kind": "pong"})
+                elif message.kind == "release":
+                    await owner.release(message.key)
+                    robot.outbox.put_nowait({"kind": "released", "key": message.key})
+                elif message.kind == "open":
+                    token = message.token
+                    if (token is None or token.robotId != robot_id or token in robot.used
+                        or robot.state != "idle" or robot.scope is not None
+                        or (robot.token is not None and robot.operation is None)):
+                        robot.outbox.put_nowait({"kind": "rejected", "detail": "scope-not-openable"})
+                        continue
+                    robot.token = token
+                    robot.used.add(token)
+                    robot.operation = None
+                    robot.outbox.put_nowait({"kind": "opened", "token": token.model_dump()})
+                elif message.kind == "work":
+                    if message.token != robot.token or robot.operation is not None or robot.token is None:
+                        robot.outbox.put_nowait({"kind": "rejected", "detail": "stale-scope"})
+                        continue
+>                   await robot.submit(Work(kind="work", id=message.id, mode=message.mode), session)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   pydantic_core._pydantic_core.ValidationError: 1 validation error for Work
+E                   id
+E                     String should have at least 1 character [type=string_too_short, input_value='', input_type=str]
+E                       For further information visit https://errors.pydantic.dev/2.13/v/string_too_short
+
+app.py:118: ValidationError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/server/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/server/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED test_app.py::test_malformed_work_id_is_rejected_without_closing_or_cancelling_session[None-0]
+FAILED test_app.py::test_malformed_work_id_is_rejected_without_closing_or_cancelling_session[None-1]
+FAILED test_app.py::test_malformed_work_id_is_rejected_without_closing_or_cancelling_session[None-2]
+FAILED test_app.py::test_malformed_work_id_is_rejected_without_closing_or_cancelling_session[-0]
+FAILED test_app.py::test_malformed_work_id_is_rejected_without_closing_or_cancelling_session[-1]
+FAILED test_app.py::test_malformed_work_id_is_rejected_without_closing_or_cancelling_session[-2]
+6 failed, 10 deselected, 2 warnings in 1.01s

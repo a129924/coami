@@ -1,0 +1,44 @@
+{
+  "caseId": "8f908c91-4f95-4823-8cd4-98255ba4a038",
+  "checkedUtc": "2026-11-13T03:17:37.290550+00:00",
+  "sourceLines": [
+    32
+  ],
+  "scope": {
+    "runEpoch": "13aeeaf4-ef77-47cf-b40d-35e1561631a7",
+    "robotId": "A",
+    "scopeId": "scope-3"
+  },
+  "cancel": {
+    "at": 731485.0999999046,
+    "utc": "2026-11-13T03:16:24.863Z",
+    "kind": "cancel-accepted",
+    "token": {
+      "runEpoch": "13aeeaf4-ef77-47cf-b40d-35e1561631a7",
+      "robotId": "A",
+      "scopeId": "scope-3"
+    },
+    "operation": {
+      "runEpoch": "13aeeaf4-ef77-47cf-b40d-35e1561631a7",
+      "robotId": "A",
+      "scopeId": "scope-3",
+      "cancelId": "9e45728c-47d2-41a5-80e9-0976fd8591ee"
+    },
+    "detail": "discarded=1"
+  },
+  "measurementsMs": {
+    "effects-stopped": 431.2,
+    "server-cleaned": 7.8,
+    "robot-cleaned": 2438.7,
+    "barrier-open": 2438.7
+  },
+  "tailNeutral": true,
+  "completeSave": true,
+  "queueDiscard": "discarded=1",
+  "savedState": "restartable",
+  "humanVerbatim": "動作：停止並回中立\n取消後是否聽到語音：沒有\n保存：成功",
+  "motionHumanConfirmed": "3/3",
+  "nextRequiredObservation": "After scope-3 cleanup, open scope-4 and run normally; do not count fixture restart as protocol restart.",
+  "overall": "inconclusive pending final restart observation",
+  "snapshotSha256": "61dd64c041ab85d28bdf1453e63a6f4c6a83317032c329e217ac6458a8a89d5e"
+}

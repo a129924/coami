@@ -1,0 +1,41 @@
+{
+  "caseId": "1997d362-fb92-4d0f-992b-a4d8bd6342c7",
+  "readUtc": "2026-11-02T03:17:23.483119+00:00",
+  "sourceLines": [
+    23,
+    24,
+    25,
+    26
+  ],
+  "savedCopies": 4,
+  "distinctCancellationOperations": 1,
+  "cancelUtc": "2026-11-02T03:14:29.335Z",
+  "operation": {
+    "runEpoch": "e3705626-9339-448c-a55e-1d192e556f42",
+    "robotId": "A",
+    "scopeId": "scope-1",
+    "cancelId": "91ec456c-33d7-4b5b-a20f-4cb34f6ca122"
+  },
+  "humanSaved": {
+    "tester": "Andrew",
+    "equipment": "耳機 / 30%",
+    "verdict": "confirmed",
+    "note": ""
+  },
+  "mode": "say",
+  "savedState": "restartable",
+  "measurementsMs": {
+    "audio-effects-stopped": 6.8,
+    "effects-stopped": 305.0,
+    "server-cleaned": 6.1,
+    "robot-cleaned": 2308.4,
+    "barrier-open": 2308.4
+  },
+  "queueDiscardDetail": "discarded=1",
+  "postCancelDispatches": [],
+  "newScopeReadyAfterCancel": [],
+  "priorNaturalPlaybackCount": 3,
+  "sameScopeRepeatedWorkRejections": 6,
+  "limits": "UI confirmed preserved as user input; no post-cancel new Scope evidence or specific verbal sound observation yet. Four saves are one cancellation, not four repetitions. No overall pass.",
+  "snapshotSha256": "b97906002da605f6f31a126e09fda59814098d67778402913d2a8be4578bc041"
+}

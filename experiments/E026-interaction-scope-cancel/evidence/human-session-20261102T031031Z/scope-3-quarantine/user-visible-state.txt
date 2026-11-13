@@ -1,0 +1,7 @@
+User pasted page state:
+quarantined · scope-3 · 本輪整體結果仍需真人確認
+Tester: Andrew
+Equipment: 耳機 / 30%
+UI selection: 實際聽見／看見停止，並確認新 Scope 正常
+Human prior report: 聲音停止；沒有出現動作
+No browser error/trace supplied yet.

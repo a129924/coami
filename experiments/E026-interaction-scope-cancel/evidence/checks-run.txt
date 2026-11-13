@@ -1,0 +1,5 @@
+Checking typescript-tests.txt
+Checking typescript-build.txt
+Checking server-tests.txt
+Checking ruff.txt
+Check failed (1): ['/private/tmp/coami-interaction-scope-cancel-worktree/experiments/E026-interaction-scope-cancel/server/.venv/bin/ruff', 'check', 'app.py', 'test_app.py', '../run_experiment.py']; see /private/tmp/coami-interaction-scope-cancel-worktree/experiments/E026-interaction-scope-cancel/evidence/checks/ruff.txt

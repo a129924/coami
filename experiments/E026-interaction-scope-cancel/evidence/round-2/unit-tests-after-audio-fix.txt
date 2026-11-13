@@ -1,0 +1,37 @@
+
+> coami-e026-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ cancel waits for actual ended and context close; next scope requires a new adapter (1.057041ms)
+✔ late decode cannot create playback after invalidation and is awaited by cleanup (0.146875ms)
+✔ cancel during opening stage 0 drains and disposes, never creates later resources (2.009167ms)
+✔ cancel during opening stage 1 drains and disposes, never creates later resources (0.085166ms)
+✔ cancel during opening stage 2 drains and disposes, never creates later resources (0.068625ms)
+✔ an opening error disposes resources before rejection (0.235958ms)
+✔ barrier robot first, repeat 1 (1.127291ms)
+✔ barrier server first, repeat 1 (0.552333ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 1 (0.354625ms)
+✔ robot-error holds quarantine, repeat 1 (0.138042ms)
+✔ server-error holds quarantine, repeat 1 (0.097875ms)
+✔ cleanup-timeout holds quarantine, repeat 1 (0.120125ms)
+✔ barrier robot first, repeat 2 (0.078792ms)
+✔ barrier server first, repeat 2 (0.080625ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 2 (0.095125ms)
+✔ robot-error holds quarantine, repeat 2 (0.145917ms)
+✔ server-error holds quarantine, repeat 2 (0.077209ms)
+✔ cleanup-timeout holds quarantine, repeat 2 (0.060834ms)
+✔ barrier robot first, repeat 3 (0.057667ms)
+✔ barrier server first, repeat 3 (0.061625ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 3 (0.066542ms)
+✔ robot-error holds quarantine, repeat 3 (0.040792ms)
+✔ server-error holds quarantine, repeat 3 (0.029708ms)
+✔ cleanup-timeout holds quarantine, repeat 3 (0.03275ms)
+✔ foreign robot and mismatched cancel cannot acknowledge the barrier (0.064583ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 127.571417

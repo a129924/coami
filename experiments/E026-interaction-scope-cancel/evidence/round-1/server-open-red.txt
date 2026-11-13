@@ -1,0 +1,30 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_open_without_work_still_requires_cancel_before_replacement ________
+
+    def test_open_without_work_still_requires_cancel_before_replacement():
+        with TestClient(create_app()) as client, client.websocket_connect("/ws/A") as a:
+            old = {"runEpoch": "run", "robotId": "A", "scopeId": "old"}
+            fresh = {**old, "scopeId": "fresh"}
+            a.send_json({"kind": "open", "token": old}); until(a, "opened")
+            a.send_json({"kind": "open", "token": fresh})
+>           assert a.receive_json()["kind"] == "rejected"
+E           AssertionError: assert 'opened' == 'rejected'
+E             
+E             - rejected
+E             + opened
+
+test_app.py:61: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /private/tmp/coami-interaction-scope-cancel-worktree/experiments/E026-interaction-scope-cancel/server/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /private/tmp/coami-interaction-scope-cancel-worktree/experiments/E026-interaction-scope-cancel/server/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED test_app.py::test_open_without_work_still_requires_cancel_before_replacement
+1 failed, 5 deselected, 2 warnings in 0.29s

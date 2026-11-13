@@ -1,0 +1,30 @@
+{
+  "caseId": "9a39dee3-5813-48b1-a6dc-7259ac7c14db",
+  "sourceLines": [
+    27,
+    28
+  ],
+  "scopeId": "scope-2",
+  "operation": {
+    "runEpoch": "e3705626-9339-448c-a55e-1d192e556f42",
+    "robotId": "A",
+    "scopeId": "scope-2",
+    "cancelId": "d3dd94a3-de41-43a4-a4f8-644cb1bfd23d"
+  },
+  "sourceRunningBeforeCancel": true,
+  "stopMs": 6.2,
+  "serverCleanMs": 6.7,
+  "robotAndBarrierMs": 46.6,
+  "queueDiscardDetail": "discarded=1",
+  "postCancelDispatches": 0,
+  "savedState": "restartable",
+  "human": {
+    "tester": "Andrew",
+    "equipment": "耳機 / 30%",
+    "verdict": "confirmed",
+    "note": ""
+  },
+  "verbalReport": "都有",
+  "linkedHumanTtsCancellationCount": 2,
+  "overall": "inconclusive"
+}

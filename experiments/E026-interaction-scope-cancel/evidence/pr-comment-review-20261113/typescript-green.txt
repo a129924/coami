@@ -1,0 +1,65 @@
+
+> coami-e026-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ cancel waits for actual ended and context close; next scope requires a new adapter (1.280917ms)
+✔ late decode cannot create playback after invalidation and is awaited by cleanup (0.164792ms)
+✔ actual HTTP endpoint saves oversized total trace in bounded UTF-8 chunks, with receipt retry (81.522458ms)
+✔ endpoint retains same-origin checks and rejects oversized request with detailed response (5.437542ms)
+✔ large Unicode evidence saves every record in order within the unchanged endpoint limit (54.092292ms)
+✔ HTTP failure reports status/body, leaves trace and lifecycle unchanged, and retains unsaved cursor (0.4785ms)
+✔ partial failure retries identical unacknowledged chunk, without skipping acknowledged records (0.464333ms)
+✔ records arriving while saving remain for the next save; concurrent clicks share one request (0.304583ms)
+✔ a single oversized record remains unsaved and is reported without sending (0.095667ms)
+✔ a mismatched receipt cannot advance the cursor (0.138375ms)
+✔ successful evidence save never unlocks an already quarantined Scope (0.188ms)
+✔ retry after append or store restart acknowledges original chunk without duplicate rows (6.179ms)
+✔ conflicting retry and out-of-order chunk are rejected without appending (3.022917ms)
+✔ concurrent retries append once; legacy harness saves remain compatible (2.747ms)
+✔ invalid chunk ranges never claim success (0.824709ms)
+✔ cancel during opening stage 0 drains and disposes, never creates later resources (0.858167ms)
+✔ cancel during opening stage 1 drains and disposes, never creates later resources (0.127792ms)
+✔ cancel during opening stage 2 drains and disposes, never creates later resources (0.092875ms)
+✔ cancel during opening stage 3 drains and disposes, never creates later resources (0.07075ms)
+✔ an opening error disposes resources before rejection (0.245667ms)
+✔ barrier robot first, repeat 1 (3.078208ms)
+✔ barrier server first, repeat 1 (0.126ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 1 (0.181083ms)
+✔ robot-error holds quarantine, repeat 1 (0.103167ms)
+✔ server-error holds quarantine, repeat 1 (0.074ms)
+✔ cleanup-timeout holds quarantine, repeat 1 (0.06225ms)
+✔ barrier robot first, repeat 2 (0.067792ms)
+✔ barrier server first, repeat 2 (0.064917ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 2 (0.10475ms)
+✔ robot-error holds quarantine, repeat 2 (0.102125ms)
+✔ server-error holds quarantine, repeat 2 (0.065958ms)
+✔ cleanup-timeout holds quarantine, repeat 2 (0.057625ms)
+✔ barrier robot first, repeat 3 (0.047458ms)
+✔ barrier server first, repeat 3 (0.044875ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 3 (0.064292ms)
+✔ robot-error holds quarantine, repeat 3 (0.035833ms)
+✔ server-error holds quarantine, repeat 3 (0.031875ms)
+✔ cleanup-timeout holds quarantine, repeat 3 (0.036875ms)
+✔ foreign robot and mismatched cancel cannot acknowledge the barrier (0.049708ms)
+✔ disconnect stops once, drops queue, and stays quarantined after success, repeat 1 (0.111916ms)
+✔ disconnect stops once, drops queue, and stays quarantined after failure, repeat 1 (0.0475ms)
+✔ disconnect stops once, drops queue, and stays quarantined after pending, repeat 1 (0.036167ms)
+✔ disconnect stops once, drops queue, and stays quarantined after success, repeat 2 (0.034208ms)
+✔ disconnect stops once, drops queue, and stays quarantined after failure, repeat 2 (0.040042ms)
+✔ disconnect stops once, drops queue, and stays quarantined after pending, repeat 2 (0.051334ms)
+✔ disconnect stops once, drops queue, and stays quarantined after success, repeat 3 (0.038834ms)
+✔ disconnect stops once, drops queue, and stays quarantined after failure, repeat 3 (0.049125ms)
+✔ disconnect stops once, drops queue, and stays quarantined after pending, repeat 3 (0.041542ms)
+✔ disconnect during opening starts cleanup without activation or unlock (0.060208ms)
+✔ disconnect during cancellation does not start local stop twice or unlock on late cleanup (0.045125ms)
+✔ synchronous stop failure is contained and repeated disconnect does not retry side effects (0.158084ms)
+✔ idle disconnect does not create a Scope or local effects (0.041292ms)
+✔ a fresh Scope resets stop ownership after previous cleanup (0.051708ms)
+ℹ tests 53
+ℹ suites 0
+ℹ pass 53
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 217.757709

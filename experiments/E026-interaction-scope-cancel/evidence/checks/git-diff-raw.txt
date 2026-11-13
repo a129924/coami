@@ -1,0 +1,7 @@
+experiments/E026-interaction-scope-cancel/evidence/checks/typescript-build.txt:18: trailing whitespace.
++[plugin builtin:vite-reporter] 
+experiments/E026-interaction-scope-cancel/evidence/round-1/build.txt:18: trailing whitespace.
++[plugin builtin:vite-reporter] 
+experiments/E026-interaction-scope-cancel/evidence/round-1/server-open-red.txt:13: trailing whitespace.
++E             
+experiments/E026-interaction-scope-cancel/evidence/round-1/typecheck.txt:4: new blank line at EOF.

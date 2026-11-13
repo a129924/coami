@@ -1,0 +1,65 @@
+{
+  "source": "/Users/andrew/Downloads/E026-scope-3-rescue.json",
+  "sha256": "ec6625233e14921df12304b6abb6886b48e4326ff495d45c13c75d9dd3488288",
+  "bytes": 10324228,
+  "records": 61537,
+  "sourceCapturedUtc": "2026-11-02T03:48:11.626Z",
+  "stateAtExport": "quarantined",
+  "scope": {
+    "runEpoch": "e3705626-9339-448c-a55e-1d192e556f42",
+    "robotId": "A",
+    "scopeId": "scope-3"
+  },
+  "cancel": {
+    "at": 995910.1999998093,
+    "utc": "2026-11-02T03:29:05.816Z",
+    "kind": "cancel-accepted",
+    "token": {
+      "runEpoch": "e3705626-9339-448c-a55e-1d192e556f42",
+      "robotId": "A",
+      "scopeId": "scope-3"
+    },
+    "operation": {
+      "runEpoch": "e3705626-9339-448c-a55e-1d192e556f42",
+      "robotId": "A",
+      "scopeId": "scope-3",
+      "cancelId": "c8c36778-c885-4106-a0a6-c5a18a3fc2b2"
+    },
+    "detail": "discarded=1"
+  },
+  "measurementsMs": {
+    "effects-stopped": 7.2,
+    "server-cleaned": 7.9,
+    "robot-cleaned": 64.6,
+    "barrier-open": 64.6
+  },
+  "postCancelDispatches": [],
+  "firstSaveError": {
+    "at": 1005785.5999999046,
+    "utc": "2026-11-02T03:29:15.691Z",
+    "kind": "error",
+    "reason": "Error: Evidence save failed"
+  },
+  "firstQuarantine": {
+    "at": 1005785.6999998093,
+    "utc": "2026-11-02T03:29:15.691Z",
+    "kind": "quarantined",
+    "token": {
+      "runEpoch": "e3705626-9339-448c-a55e-1d192e556f42",
+      "robotId": "A",
+      "scopeId": "scope-3"
+    },
+    "operation": {
+      "runEpoch": "e3705626-9339-448c-a55e-1d192e556f42",
+      "robotId": "A",
+      "scopeId": "scope-3",
+      "cancelId": "c8c36778-c885-4106-a0a6-c5a18a3fc2b2"
+    },
+    "detail": "control-disconnected"
+  },
+  "failedRecordsOnlyUtf16CharactersLowerBound": 2858793,
+  "limit": 2000000,
+  "cause": "Cleanup completed before first save error. The unsaved records alone exceed the existing body character limit. Save error catch subsequently quarantined the restartable Scope.",
+  "limits": "Failed HTTP body itself was not captured; size lower bound reconstructed from original records excludes metadata.",
+  "restoredRawRecordStatus": "rescued full original records; no pass or event was synthesized"
+}

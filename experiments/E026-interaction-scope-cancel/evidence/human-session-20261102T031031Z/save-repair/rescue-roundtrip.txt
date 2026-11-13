@@ -1,0 +1,26 @@
+{
+  "checkedUtc": "2026-11-02T03:52:51.552Z",
+  "result": "passed",
+  "source": "../evidence/human-session-20261102T031031Z/scope-3-quarantine/E026-scope-3-rescue.json",
+  "sourceBytes": 10324228,
+  "sourceSha256": "ec6625233e14921df12304b6abb6886b48e4326ff495d45c13c75d9dd3488288",
+  "inputRecords": 61537,
+  "persistedRecords": 61537,
+  "chunkCount": 6,
+  "chunkBytes": [
+    1899855,
+    1899860,
+    1899976,
+    1899984,
+    1899867,
+    826864
+  ],
+  "exactRecordValuesAndOrder": true,
+  "retryDidNotAppendDuplicate": true,
+  "recordValueSha256": "b025de65876049fe8ed61a2517cfb8c4f9e233fc36bdec5514c833f21ea022f8",
+  "outputBytes": 10326412,
+  "outputSha256": "91a1710fe6995395f37915f1666d919c929833ff093ee4dbee289ab5f4680a04",
+  "temporaryOutputRemovedAfterCheck": true,
+  "simulatedActionsStarted": 0,
+  "humanConfirmationWritten": false
+}

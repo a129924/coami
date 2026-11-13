@@ -1,0 +1,7 @@
+{
+  "automated": "completed",
+  "cases": 15,
+  "expectedFailureIsolation": "observed",
+  "human": "unobserved",
+  "overall": "inconclusive"
+}

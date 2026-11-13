@@ -1,0 +1,89 @@
+{
+  "recordedUtc": "2026-11-13T04:05:31.151235+00:00",
+  "baseCommit": "9bf9dc14590850c840801042cb97cfb0511f9320",
+  "scope": "two PR #30 P2 comments; E026 only",
+  "reviewMode": "primary-agent review and bounded fixes; no independent-review gate claimed",
+  "threads": [
+    {
+      "threadId": "PRRT_kwDOUk-3EM628lcJ",
+      "commentId": 4559481297,
+      "decision": "fix",
+      "issue": "disconnect quarantined without stopping local Actions",
+      "change": "Quarantine synchronously, discard queue, start local stop once; reuse existing stop if cancellation already owns it. Cleanup settlement/failure/pending never unlocks. No notification on broken channel. Reset ownership on fresh Scope.",
+      "tests": "14 new TS regressions for active/opening, duplicate disconnect, existing cancel, stop failure/pending, idle and new Scope reset; 6 actual simulator disconnect cases"
+    },
+    {
+      "threadId": "PRRT_kwDOUk-3EM628lcM",
+      "commentId": 4559481304,
+      "decision": "fix",
+      "issue": "missing/empty work ID escaped core validation and closed WebSocket",
+      "change": "Conditional work ID validation in Message model, caught by existing invalid-envelope boundary; other control messages retain optional id. E025 core unchanged.",
+      "tests": "missing and empty id each repeated 3 times; rejected with A/B Ping alive, existing work not cancelled, valid work accepted and fresh Scope result succeeds"
+    }
+  ],
+  "validation": {
+    "typescript": 53,
+    "serverTests": 16,
+    "strictBuild": "passed",
+    "ruff": "passed",
+    "pyright": "0 errors, 0 warnings",
+    "browserCases": 6,
+    "browserVersion": "157.0.8103.52",
+    "browserMode": "headless; autoplay; human unobserved",
+    "browserMaxStopMs": 434.7,
+    "browserMaxCleanupMs": 2458.5,
+    "thresholds": {
+      "stopMs": 1000,
+      "cleanupMs": 5000,
+      "repetitions": 3
+    },
+    "otherRobotPing": "passed all 6",
+    "quarantineAndNoRestart": "passed all 6",
+    "humanResults": "unchanged; no new human result entered",
+    "existingWarnings": "two Python dependency deprecations and Vite bundle-size warning retained"
+  },
+  "evidence": {
+    "disconnectRed": "disconnect-red.txt",
+    "serverRed": "work-id-red.txt",
+    "browser": "disconnect-final/runs.jsonl",
+    "fixtureResult": "disconnect-final/result.json",
+    "preFixSources": [
+      "scope-controller.ts.before",
+      "app.py.before"
+    ],
+    "runnerCorrection": "initial mutation used repository-relative paths from web cwd and changed no source; resulting pre-fix check retained in typescript-before-fix-check.txt before corrected-path application"
+  },
+  "pythonQualityReview": {
+    "mode": "standalone changed-diff quality review; not formal plan gate",
+    "tools": "Ruff, Pyright strict app.py/runner, pytest ASGI integration",
+    "verdict": "approved for changed validation code; no blocking finding",
+    "dimensions": {
+      "typing": "Self return annotation, no Any/ignore additions",
+      "lint": "Ruff passed",
+      "readability": "work-only condition at existing envelope boundary",
+      "errorHandling": "ValueError becomes handled Pydantic ValidationError; invalid request rejected, no connection teardown",
+      "antiPatterns": "none introduced",
+      "testQuality": "asserts rejection and session/work survival; existing ASGI integration pattern, not pure unit I/O",
+      "observability": "existing invalid-envelope response retained"
+    }
+  },
+  "nonActionableReview": "Copilot quota notice is not a code finding or resolvable inline thread; no code change required",
+  "threadResolutionAtCapture": "will reply and resolve only after commits are pushed",
+  "scopeLimits": "fixed simulator and current envelope; no hardware/other Actions, SDK/vendor/EventBus changes, no automatic quarantine recovery",
+  "fixtureOwnership": "owned Vite/Server/browser stopped after all cases; no persistent test services",
+  "implementationCommits": {
+    "disconnect": "343347f",
+    "workId": "3b85695"
+  },
+  "commitHookNotice": "Implementation commits succeeded but printed lefthook missing from PATH; hook execution not claimed.",
+  "rawDiffWhitespace": {
+    "exitCode": 2,
+    "files": [
+      "experiments/E026-interaction-scope-cancel/evidence/pr-comment-review-20261113/disconnect-red.txt",
+      "experiments/E026-interaction-scope-cancel/evidence/pr-comment-review-20261113/strict-build.txt",
+      "experiments/E026-interaction-scope-cancel/evidence/pr-comment-review-20261113/typescript-before-fix-check.txt",
+      "experiments/E026-interaction-scope-cancel/evidence/pr-comment-review-20261113/work-id-red.txt"
+    ],
+    "decision": "preserve raw original red/build diagnostics; source diff check passed"
+  }
+}

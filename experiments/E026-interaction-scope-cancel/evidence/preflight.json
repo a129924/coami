@@ -1,0 +1,12 @@
+{
+  "branch": "feat/andrew/interaction-scope-cancel",
+  "worktree": "/private/tmp/coami-interaction-scope-cancel-worktree",
+  "devWorktreeUntouched": true,
+  "remoteDevConfirmed": "d7ff0368a4e7d3ecd36d79a955745baae8b3c756",
+  "runtimeArchiveHashVerified": true,
+  "newModBuilt": true,
+  "strictBuildPassed": true,
+  "simulatorParallelActionsObserved": true,
+  "node": "v26.10.0",
+  "human": "unobserved"
+}

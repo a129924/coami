@@ -1,0 +1,47 @@
+{
+  "completedUtc": "2026-11-02T03:54:37.533749+00:00",
+  "authorization": "user explicitly authorized bounded save repair; no commit/push/PR-ready/merge",
+  "worktree": "/Users/andrew/code/python/coami-worktrees/interaction-scope-cancel",
+  "branch": "feat/andrew/interaction-scope-cancel",
+  "baseHead": "4c360d20140a34189dcad0a1ae571401cf0198e0",
+  "sourceState": "uncommitted repair; hashes in source-hashes.json",
+  "TDD": {
+    "red": "tdd-red.txt; extracted unbatched scaffold before chunking/receipts, not a claim this new module existed in baseline",
+    "green": "tdd-green.txt",
+    "tests": 39,
+    "originalTests": 26,
+    "newTests": 13,
+    "strictBuild": "passed",
+    "bundleWarning": "existing >500kB warning retained"
+  },
+  "rescueRoundtrip": "rescue-roundtrip.json; 61537 records, 6 requests, exact ordered values and no duplicate append on retry",
+  "unchangedInvariants": [
+    "web/src/scope-controller.ts",
+    "web/src/audio-adapter.ts",
+    "web/src/opening.ts",
+    "mod/mod.ts",
+    "server/app.py",
+    "server/e025_core.py",
+    "web/package-lock.json",
+    "server/uv.lock"
+  ],
+  "thresholds": {
+    "stopMs": 1000,
+    "cleanupMs": 5000,
+    "repetitions": 3
+  },
+  "historicalSourceManifest": "preserved; not rewritten to claim baseline measured repaired sources",
+  "historicalRuntimeProvenance": "preserved; current generated provenance saved in session recovery",
+  "oldScope3": "remains historically quarantined; no automatic unlock",
+  "fixtureRestart": "explicitly stopped old Vite and Server after rescue; started fresh fixture for new browser session",
+  "url": "http://127.0.0.1:5178/",
+  "servedUiRepairVerified": true,
+  "servedRuntimeAndModHashesVerified": true,
+  "humanStatus": {
+    "ttsStopped": "3/3 user reports linked to recovered traces",
+    "greetCancellation": "0/3; waiting for actual observations",
+    "overall": "inconclusive"
+  },
+  "devStatus": "clean and unchanged",
+  "newHumanPassesInvented": false
+}

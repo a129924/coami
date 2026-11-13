@@ -1,0 +1,2 @@
+git diff --cached --check -- . :(exclude)experiments/E026-interaction-scope-cancel/evidence/**
+exit=0, no source whitespace errors

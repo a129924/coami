@@ -1,0 +1,61 @@
+{
+  "caseId": "6dfd46fc-20ce-45ac-86b2-87eab4840adb",
+  "checkedUtc": "2026-11-13T03:06:42.707844+00:00",
+  "sourceLines": [
+    29
+  ],
+  "runEpoch": "13aeeaf4-ef77-47cf-b40d-35e1561631a7",
+  "scope": {
+    "runEpoch": "13aeeaf4-ef77-47cf-b40d-35e1561631a7",
+    "robotId": "A",
+    "scopeId": "scope-1"
+  },
+  "cancel": {
+    "at": 22184,
+    "utc": "2026-11-13T03:04:35.560Z",
+    "kind": "cancel-accepted",
+    "token": {
+      "runEpoch": "13aeeaf4-ef77-47cf-b40d-35e1561631a7",
+      "robotId": "A",
+      "scopeId": "scope-1"
+    },
+    "operation": {
+      "runEpoch": "13aeeaf4-ef77-47cf-b40d-35e1561631a7",
+      "robotId": "A",
+      "scopeId": "scope-1",
+      "cancelId": "98707f32-4af6-4124-8997-d8c88021aac8"
+    },
+    "detail": "discarded=1"
+  },
+  "measurementsMs": {
+    "effects-stopped": 429.3,
+    "server-cleaned": 5.7,
+    "robot-cleaned": 2439.4,
+    "barrier-open": 2439.5
+  },
+  "beforeCancelMotionNonNeutral": true,
+  "tailPoseCount": 81,
+  "tailNeutralWithinTolerance": true,
+  "queueDiscardDetail": "discarded=1",
+  "ttsDispatches": [],
+  "audioStartOrRunningEvents": [],
+  "savedState": "restartable",
+  "saveChunkReceipt": {
+    "id": "ba7ad403-8173-4a0d-a1f5-2f19de612be7",
+    "chunk": 0,
+    "recordStart": 0,
+    "recordEnd": 2280,
+    "snapshotEnd": 2280
+  },
+  "humanUi": {
+    "tester": "Andrew",
+    "equipment": "耳機 / 30 %",
+    "verdict": "confirmed",
+    "note": "但我沒聽到聲音"
+  },
+  "humanVerbatim": "動作：停止並回中立\n取消後排隊語音：有 但我沒聽到聲音\n保存：成功",
+  "humanMotionStopCount": "1/3",
+  "queueHumanMeaning": "ambiguous 有; asks whether label or actual start observed. Trace shows no TTS dispatch/playback.",
+  "result": "inconclusive; no overall pass",
+  "snapshotSha256": "a0c20234ffcef5cbdf67bc43b18cc8cac7607c9246c3e2e2c296f7a5f2df0ac5"
+}

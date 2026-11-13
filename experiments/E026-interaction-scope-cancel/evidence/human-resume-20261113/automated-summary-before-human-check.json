@@ -1,0 +1,135 @@
+{
+  "experiment": "E026",
+  "result": "inconclusive",
+  "resultLabel": "無法判定",
+  "decision": "human review; no production adoption",
+  "humanObservation": "not-executed",
+  "implementationTask": "ready-for-human-review",
+  "verificationTask": "human-check",
+  "automatedBrowserCases": 39,
+  "normal": {
+    "say": 3,
+    "greet": 3,
+    "both": 3
+  },
+  "scenarios": {
+    "cancel-before-action": 3,
+    "duplicate-late": 3,
+    "natural-before-cancel": 3,
+    "robot-first": 3
+  },
+  "expectedFaultIsolation": {
+    "robot-stop-error": 3,
+    "robot-stop-timeout": 3,
+    "robot-close-error": 3,
+    "server-cleanup-error": 3,
+    "server-cleanup-timeout": 3,
+    "opening-startup-timeout": 3
+  },
+  "normalMeasurements": [
+    {
+      "mode": "say",
+      "repeat": 1,
+      "stopMs": 5.9,
+      "cleanupMs": 29.1,
+      "first": "server"
+    },
+    {
+      "mode": "say",
+      "repeat": 2,
+      "stopMs": 4.8,
+      "cleanupMs": 49.1,
+      "first": "server"
+    },
+    {
+      "mode": "say",
+      "repeat": 3,
+      "stopMs": 0.8,
+      "cleanupMs": 21.8,
+      "first": "server"
+    },
+    {
+      "mode": "greet",
+      "repeat": 1,
+      "stopMs": 387.3,
+      "cleanupMs": 2418.9,
+      "first": "server"
+    },
+    {
+      "mode": "greet",
+      "repeat": 2,
+      "stopMs": 339.2,
+      "cleanupMs": 2368.0,
+      "first": "server"
+    },
+    {
+      "mode": "greet",
+      "repeat": 3,
+      "stopMs": 397.5,
+      "cleanupMs": 2406.2,
+      "first": "server"
+    },
+    {
+      "mode": "both",
+      "repeat": 1,
+      "stopMs": 442.2,
+      "cleanupMs": 2466.4,
+      "first": "server"
+    },
+    {
+      "mode": "both",
+      "repeat": 2,
+      "stopMs": 437.7,
+      "cleanupMs": 2439.0,
+      "first": "server"
+    },
+    {
+      "mode": "both",
+      "repeat": 3,
+      "stopMs": 468.5,
+      "cleanupMs": 2476.9,
+      "first": "server"
+    }
+  ],
+  "maxObservedStopMs": 468.5,
+  "maxObservedCleanupMs": 2476.9,
+  "thresholds": {
+    "stopMs": 1000,
+    "cleanupMs": 5000,
+    "poseToleranceRadians": 0.02,
+    "stableMs": 300,
+    "tailMs": 2000,
+    "repetitions": 3
+  },
+  "checks": {
+    "typescriptTests": 26,
+    "serverTests": 10,
+    "typescriptStrictBuild": "passed",
+    "pythonStrictAppAndRunner": "passed",
+    "ruff": "passed",
+    "browserVersion": "155.0.8059.80",
+    "browserMode": "headless, autoplay enabled; not human evidence"
+  },
+  "repairPolicy": {
+    "actualActionFailure": "round-2/browser-failure.json",
+    "boundedEffectRepairRounds": 1,
+    "change": "wait source ended and pending owned playback before closing AudioContext",
+    "finalEffectRuns": "round-final",
+    "preflightAndCodeReview": "WebSocket transport and two code-review regressions fixed before first actual action trial"
+  },
+  "startupWindow": "second WASM fetch deliberately held through cleanup deadline; 3 quarantined, no activation, eventually disposed; not a universal startup-abort guarantee",
+  "remaining": [
+    "human listening and visual confirmation",
+    "no conclusions for hardware or untested SDK/action combinations"
+  ],
+  "timing": {
+    "startedUtc": "2026-10-19T07:46:23+00:00",
+    "automatedChecksCompletedUtc": "2026-10-19T08:45:53.837707+00:00",
+    "wallClockUpperBoundMinutes": 62.38,
+    "budgetMinutes": 90,
+    "auxiliaryWork": "tracked separately; wall-clock upper bound is conservative",
+    "evidenceFinalizedUtc": "2026-10-19T08:48:45.528278+00:00"
+  },
+  "historicalFixtureNotes": "fixture-development.md",
+  "independentHandoffReview": "ready for authorized commit/push/Draft PR; human review remains"
+}

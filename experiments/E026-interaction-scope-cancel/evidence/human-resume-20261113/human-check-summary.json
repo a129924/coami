@@ -1,0 +1,120 @@
+{
+  "experiment": "E026",
+  "kind": "requested-human-check-summary",
+  "completedUtc": "2026-11-13T03:20:15.038643+00:00",
+  "status": "completed; requested functional observations satisfied within tested simulator scope",
+  "scope": "TTS and greet in pinned simulator/runtime; not hardware or all Actions",
+  "operator": "Andrew",
+  "audioEquipment": "耳機 / 30%",
+  "browserNameAndVersion": "Google Chrome 153.0.8010.53, 正式版本, arm64 — retrospectively operator-reported",
+  "humanChecks": {
+    "ttsStopsOnCancel": {
+      "confirmed": 3,
+      "required": 3,
+      "evidenceSession": "human-session-20261102T031031Z; third case trace rescued"
+    },
+    "greetStopsAndReturnsNeutral": {
+      "confirmed": 3,
+      "required": 3,
+      "cases": [
+        {
+          "caseId": "6dfd46fc-20ce-45ac-86b2-87eab4840adb",
+          "stopMs": 429.3,
+          "cleanupMs": 2439.5
+        },
+        {
+          "caseId": "cb5a08a6-3961-40ea-969f-de0610c34cf7",
+          "stopMs": 410.4,
+          "cleanupMs": 2419.0
+        },
+        {
+          "caseId": "8f908c91-4f95-4823-8cd4-98255ba4a038",
+          "stopMs": 431.2,
+          "cleanupMs": 2438.7
+        }
+      ]
+    },
+    "queuedTtsDiscardedDuringGreetCancellation": {
+      "confirmed": 3,
+      "required": 3,
+      "clarification": "first case 有 referred to button label; user heard no speech"
+    },
+    "restartAfterBothCleanup": {
+      "confirmed": 3,
+      "required": 3,
+      "transitions": [
+        {
+          "from": "scope-1",
+          "to": "scope-2",
+          "oldBarrierUtc": "2026-11-13T03:04:37.999Z",
+          "newOpeningUtc": "2026-11-13T03:13:52.889Z",
+          "newReadyUtc": "2026-11-13T03:14:01.292Z",
+          "newDispatchUtc": "2026-11-13T03:14:15.506Z",
+          "newAction": "greet",
+          "oldDispatchAfterBarrier": false
+        },
+        {
+          "from": "scope-2",
+          "to": "scope-3",
+          "oldBarrierUtc": "2026-11-13T03:14:19.644Z",
+          "newOpeningUtc": "2026-11-13T03:16:10.472Z",
+          "newReadyUtc": "2026-11-13T03:16:18.845Z",
+          "newDispatchUtc": "2026-11-13T03:16:23.272Z",
+          "newAction": "greet",
+          "oldDispatchAfterBarrier": false
+        },
+        {
+          "from": "scope-3",
+          "to": "scope-4",
+          "oldBarrierUtc": "2026-11-13T03:16:27.302Z",
+          "newOpeningUtc": "2026-11-13T03:17:56.567Z",
+          "newReadyUtc": "2026-11-13T03:18:05.030Z",
+          "newDispatchUtc": "2026-11-13T03:18:10.784Z",
+          "newAction": "say",
+          "oldDispatchAfterBarrier": false
+        }
+      ],
+      "finalCase": "5e8a2a0b-16df-4e1f-a8ec-447b98050bf4"
+    }
+  },
+  "thresholds": {
+    "stopMs": 1000,
+    "cleanupMs": 5000,
+    "repetitions": 3,
+    "poseToleranceRadians": 0.02,
+    "stableMs": 300,
+    "tailMs": 2000
+  },
+  "maxObservedHumanGreetStopMs": 431.2,
+  "maxObservedHumanGreetCleanupMs": 2439.5,
+  "continuousSavedRecordCoverage": {
+    "start": 0,
+    "endExclusive": 28276,
+    "chunks": 5
+  },
+  "savedHumanFields": "preserved as entered; no programmatic confirmed values",
+  "historicalSaveFault": "retained; original scope-3 quarantined after cleanup due failed oversized save; separately authorized evidence-only repair is uncommitted",
+  "sourceState": "feature worktree uncommitted evidence-save repair; HEAD 4c360d2",
+  "taskBoundary": "human observation collection complete; consolidated/code review remains, no production adoption",
+  "overallHistoricalRunResult": "original automated inconclusive retained in historical summary; this file records later requested human check only",
+  "notAuthorizedOrPerformed": [
+    "commit",
+    "push",
+    "PR ready",
+    "merge",
+    "production deployment"
+  ],
+  "services": "left running for user inspection; final scope-4 is active with normal completed local actions",
+  "operatingSystem": {
+    "name": "macOS",
+    "version": "26.5.2",
+    "build": "25F84",
+    "source": "retrospective operator report"
+  },
+  "environmentSupplement": {
+    "recordedUtc": "2026-11-13T03:34:43.161077+00:00",
+    "file": "environment-supplement.json",
+    "classification": "retrospective operator report; not contemporaneous automated capture",
+    "perSessionApplicability": "operator did not separately identify whether both 2026-11-02 TTS and 2026-11-13 motion sessions used exactly this environment"
+  }
+}

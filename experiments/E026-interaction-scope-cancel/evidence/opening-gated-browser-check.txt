@@ -1,0 +1,10 @@
+file:///private/tmp/coami-interaction-scope-cancel-worktree/experiments/E026-interaction-scope-cancel/web/scripts/fault-check.mjs:49
+        await Promise.race([startupHeld, new Promise((_, reject) => setTimeout(() => reject(Error('WASM startup gate not reached')), 20000))])
+                                                                                            ^
+
+Error: WASM startup gate not reached
+    at Timeout._onTimeout (file:///private/tmp/coami-interaction-scope-cancel-worktree/experiments/E026-interaction-scope-cancel/web/scripts/fault-check.mjs:49:93)
+    at listOnTimeout (node:internal/timers:685:17)
+    at process.processTimers (node:internal/timers:618:7)
+
+Node.js v26.10.0
