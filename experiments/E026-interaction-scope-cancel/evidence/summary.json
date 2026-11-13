@@ -3,7 +3,7 @@
   "result": "inconclusive",
   "resultLabel": "無法判定",
   "decision": "human review; no production adoption",
-  "humanObservation": "completed-for-requested-cases; browser identity unrecorded",
+  "humanObservation": "completed-for-requested-cases; environment retrospectively operator-reported",
   "implementationTask": "ready-for-human-review",
   "verificationTask": "requested-human-check-completed; consolidated-review-completed; human-review-pending",
   "automatedBrowserCases": 39,
@@ -139,7 +139,12 @@
     "scope": "TTS and greet in pinned simulator/runtime; not hardware or all Actions",
     "historicalResultRetained": true,
     "uncommittedSaveRepair": true,
-    "remaining": "consolidated review; browser identification not supplied; no production adoption"
+    "remaining": "PR human review; per-session contemporaneous environment not independently captured",
+    "environmentSupplement": {
+      "recordedUtc": "2026-11-13T03:34:43.161077+00:00",
+      "file": "human-resume-20261113/environment-supplement.json",
+      "classification": "retrospective operator report; not contemporaneous automated capture"
+    }
   },
   "consolidatedReviewLatest": {
     "reviewedUtc": "2026-11-13T03:28:37.318884+00:00",

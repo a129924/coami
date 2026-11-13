@@ -176,3 +176,10 @@ Human review 時使用本實驗頁面，逐筆記錄操作者、UTC、瀏覽器�
 - 最新使用者明確授權審查後按 topic commit、push、更新 Draft PR #30 描述，停在 human review；此前「未授權／未提交」紀錄為當時狀態。
 - 本輪未新增或代填真人結果，沿用既有觀察；原失敗資料與 hash 證據已檢查保留。審查回執見 consolidated-review-20261113/review.json；此次非新增獨立 reviewer gate。
 - 已保存測試 Server 最後 records 並關閉本輪 fixture，以凍結提交證據。dev 仍乾淨未變；不 ready／merge／部署。
+
+## Human review 後補充環境資料
+
+- 補充記錄 UTC：2026-11-13T03:34:43.161077+00:00。來源為使用者原話：「瀏覽器：Google Chrome 153.0.8010.53，正式版本、arm64。」「作業系統：macOS 26.5.2（25F84）。」
+- 結構化資料見 human-resume-20261113/environment-supplement.json；已更新真人摘要。本資訊是操作者事後補述，不宣稱當時已透過程式擷取。
+- 11/02 TTS 與 11/13 招呼 session 是否完全相同環境，使用者未逐場指定；不補造對應，也不改寫歷史自動化 browser 版本。先前未提供的日誌保留為當時狀態。
+- 未重做測試、未新增真人判定；此次僅文件 metadata 補充，沿原授權做文件 topic commit／push／更新 Draft PR，仍不 ready／merge／部署。

@@ -1,0 +1,24 @@
+{
+  "recordedUtc": "2026-11-13T03:34:43.161077+00:00",
+  "source": "operator-provided follow-up in conversation after requested human check and consolidated review",
+  "verbatim": [
+    "瀏覽器：Google Chrome 153.0.8010.53，正式版本、arm64。",
+    "作業系統：macOS 26.5.2（25F84）。"
+  ],
+  "browser": {
+    "name": "Google Chrome",
+    "version": "153.0.8010.53",
+    "channel": "正式版本",
+    "architecture": "arm64"
+  },
+  "operatingSystem": {
+    "name": "macOS",
+    "version": "26.5.2",
+    "build": "25F84"
+  },
+  "evidenceClassification": "retrospective operator report; not contemporaneous automated capture",
+  "perSessionApplicability": "operator did not separately identify whether both 2026-11-02 TTS and 2026-11-13 motion sessions used exactly this environment",
+  "newTestResults": false,
+  "historicalAutomatedBrowserVersion": "unchanged; original automated provenance is separate",
+  "scope": "supplemental human-check environment metadata only"
+}

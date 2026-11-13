@@ -6,7 +6,7 @@
   "scope": "TTS and greet in pinned simulator/runtime; not hardware or all Actions",
   "operator": "Andrew",
   "audioEquipment": "耳機 / 30%",
-  "browserNameAndVersion": "not supplied; E026 Scope 取消實驗 was page title, not browser identification",
+  "browserNameAndVersion": "Google Chrome 153.0.8010.53, 正式版本, arm64 — retrospectively operator-reported",
   "humanChecks": {
     "ttsStopsOnCancel": {
       "confirmed": 3,
@@ -104,5 +104,17 @@
     "merge",
     "production deployment"
   ],
-  "services": "left running for user inspection; final scope-4 is active with normal completed local actions"
+  "services": "left running for user inspection; final scope-4 is active with normal completed local actions",
+  "operatingSystem": {
+    "name": "macOS",
+    "version": "26.5.2",
+    "build": "25F84",
+    "source": "retrospective operator report"
+  },
+  "environmentSupplement": {
+    "recordedUtc": "2026-11-13T03:34:43.161077+00:00",
+    "file": "environment-supplement.json",
+    "classification": "retrospective operator report; not contemporaneous automated capture",
+    "perSessionApplicability": "operator did not separately identify whether both 2026-11-02 TTS and 2026-11-13 motion sessions used exactly this environment"
+  }
 }

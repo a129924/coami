@@ -1,6 +1,6 @@
 # E026 — 互動 Scope 整體取消與重新開始
 
-> 最新（2026-11-13）：本次指定真人功能確認已完成：TTS 止聲、招呼停止回中立、排隊丟棄、屏障後重新開始，各適用分支 3 次。詳 evidence/human-resume-20261113/human-check-summary.json。下文原實驗的 inconclusive 與保存故障記錄保留為歷史；保存修正與真人證據已整理供 human review，PR 保持 Draft，不代表正式採用。瀏覽器名稱／版本仍未記錄。
+> 最新（2026-11-13）：本次指定真人功能確認已完成：TTS 止聲、招呼停止回中立、排隊丟棄、屏障後重新開始，各適用分支 3 次。詳 evidence/human-resume-20261113/human-check-summary.json。下文原實驗的 inconclusive 與保存故障記錄保留為歷史；保存修正與真人證據已整理供 human review，PR 保持 Draft，不代表正式採用。操作者事後補充環境：Google Chrome 153.0.8010.53（正式版本、arm64），macOS 26.5.2（25F84）；詳 environment-supplement.json，未冒充測試當時自動擷取。
 
 ## 問題、程序與決定
 
@@ -92,3 +92,7 @@ node scripts/check-evidence-rescue.mjs   ../evidence/human-session-20261102T0310
 本次保存修正與真人證據審查未發現阻擋提交的問題，詳 `evidence/consolidated-review-20261113/review.json`。此次為主 agent 審查，不取代 PR 的 human review 或宣稱新的獨立審查 gate。有效的既有測試依程式／配置／lock inputs 雜湊沿用，未重做真人觀察；原始失敗、資料來源限制與歷史 inconclusive 均保留。
 
 使用者後續明確授權本次按 topic commit、push 及更新 Draft PR 描述；先前日誌中的「未授權／未提交」為當時狀態。PR 保持 Draft，不切 ready、不 merge、不部署。為凍結證據已保全最後 Server records 並關閉本輪 fixture，需要時依重現步驟啟動新 session。
+
+### 真人環境事後補充
+
+操作者於 human review 階段提供 Google Chrome 153.0.8010.53（正式版本、arm64）及 macOS 26.5.2（25F84），已記於 `evidence/human-resume-20261113/environment-supplement.json`。這是事後自述，不是測試當時的 UA／系統自動擷取；操作者尚未分別指定 11/02 與 11/13 兩個 session 是否完全相同。原先「未提供」記錄是當時狀態，歷史自動 browser provenance 維持原樣。本補充不新增、重做或改填真人結果。
