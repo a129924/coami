@@ -1,0 +1,111 @@
+✖ large Unicode evidence saves every record in order within the unchanged endpoint limit (45.704417ms)
+✔ HTTP failure reports status/body, leaves trace and lifecycle unchanged, and retains unsaved cursor (1.062875ms)
+✖ partial failure retries identical unacknowledged chunk, without skipping acknowledged records (0.359ms)
+✖ records arriving while saving remain for the next save; concurrent clicks share one request (0.552583ms)
+✖ a single oversized record remains unsaved and is reported without sending (0.165583ms)
+✖ a mismatched receipt cannot advance the cursor (0.133875ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 1
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 175.013875
+
+✖ failing tests:
+
+test at experiments/E026-interaction-scope-cancel/web/src/evidence-save.test.ts:16:1
+✖ large Unicode evidence saves every record in order within the unchanged endpoint limit (45.704417ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/evidence-save.test.ts:23:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E026-interaction-scope-cancel/web/src/evidence-save.test.ts:37:1
+✖ partial failure retries identical unacknowledged chunk, without skipping acknowledged records (0.359ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/evidence-save.test.ts:46:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E026-interaction-scope-cancel/web/src/evidence-save.test.ts:53:1
+✖ records arriving while saving remain for the next save; concurrent clicks share one request (0.552583ms)
+  AssertionError [ERR_ASSERTION]: Expected "actual" to be reference-equal to "expected":
+  + actual - expected
+  
+    Promise {
+      <pending>,
+  +   Symbol(async_id_symbol): 167,
+  -   Symbol(async_id_symbol): 171,
+      Symbol(trigger_async_id_symbol): 27
+    }
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/evidence-save.test.ts:58:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [Promise],
+    expected: [Promise],
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E026-interaction-scope-cancel/web/src/evidence-save.test.ts:63:1
+✖ a single oversized record remains unsaved and is reported without sending (0.165583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/evidence-save.test.ts:65:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at experiments/E026-interaction-scope-cancel/web/src/evidence-save.test.ts:68:1
+✖ a mismatched receipt cannot advance the cursor (0.133875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///Users/andrew/code/python/coami-worktrees/interaction-scope-cancel/experiments/E026-interaction-scope-cancel/web/src/evidence-save.test.ts:70:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

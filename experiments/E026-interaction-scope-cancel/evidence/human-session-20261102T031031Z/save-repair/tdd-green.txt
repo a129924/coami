@@ -1,0 +1,51 @@
+
+> coami-e026-web@0.1.0 test
+> node --test src/*.test.ts
+
+✔ cancel waits for actual ended and context close; next scope requires a new adapter (3.022625ms)
+✔ late decode cannot create playback after invalidation and is awaited by cleanup (0.763833ms)
+✔ actual HTTP endpoint saves oversized total trace in bounded UTF-8 chunks, with receipt retry (105.48475ms)
+✔ endpoint retains same-origin checks and rejects oversized request with detailed response (8.386834ms)
+✔ large Unicode evidence saves every record in order within the unchanged endpoint limit (81.768667ms)
+✔ HTTP failure reports status/body, leaves trace and lifecycle unchanged, and retains unsaved cursor (0.704167ms)
+✔ partial failure retries identical unacknowledged chunk, without skipping acknowledged records (0.62675ms)
+✔ records arriving while saving remain for the next save; concurrent clicks share one request (0.337667ms)
+✔ a single oversized record remains unsaved and is reported without sending (0.120583ms)
+✔ a mismatched receipt cannot advance the cursor (0.542167ms)
+✔ successful evidence save never unlocks an already quarantined Scope (0.345125ms)
+✔ retry after append or store restart acknowledges original chunk without duplicate rows (16.038959ms)
+✔ conflicting retry and out-of-order chunk are rejected without appending (5.715375ms)
+✔ concurrent retries append once; legacy harness saves remain compatible (2.046625ms)
+✔ invalid chunk ranges never claim success (1.272917ms)
+✔ cancel during opening stage 0 drains and disposes, never creates later resources (2.042417ms)
+✔ cancel during opening stage 1 drains and disposes, never creates later resources (0.154ms)
+✔ cancel during opening stage 2 drains and disposes, never creates later resources (0.074ms)
+✔ cancel during opening stage 3 drains and disposes, never creates later resources (0.072041ms)
+✔ an opening error disposes resources before rejection (1.987833ms)
+✔ barrier robot first, repeat 1 (1.396917ms)
+✔ barrier server first, repeat 1 (0.121667ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 1 (0.222583ms)
+✔ robot-error holds quarantine, repeat 1 (0.385375ms)
+✔ server-error holds quarantine, repeat 1 (0.0925ms)
+✔ cleanup-timeout holds quarantine, repeat 1 (0.072958ms)
+✔ barrier robot first, repeat 2 (0.081875ms)
+✔ barrier server first, repeat 2 (0.060917ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 2 (0.202375ms)
+✔ robot-error holds quarantine, repeat 2 (0.200875ms)
+✔ server-error holds quarantine, repeat 2 (0.470375ms)
+✔ cleanup-timeout holds quarantine, repeat 2 (0.145959ms)
+✔ barrier robot first, repeat 3 (0.135125ms)
+✔ barrier server first, repeat 3 (0.064875ms)
+✔ queue discard, duplicate cancel, stale ACK and late failure, repeat 3 (0.3615ms)
+✔ robot-error holds quarantine, repeat 3 (0.057167ms)
+✔ server-error holds quarantine, repeat 3 (0.036708ms)
+✔ cleanup-timeout holds quarantine, repeat 3 (0.030584ms)
+✔ foreign robot and mismatched cancel cannot acknowledge the barrier (0.183333ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 296.324542

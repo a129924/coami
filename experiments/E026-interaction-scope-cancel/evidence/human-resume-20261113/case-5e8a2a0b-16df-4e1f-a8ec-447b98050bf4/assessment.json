@@ -1,0 +1,20 @@
+{
+  "caseId": "5e8a2a0b-16df-4e1f-a8ec-447b98050bf4",
+  "checkedUtc": "2026-11-13T03:20:14.985702+00:00",
+  "scope": {
+    "runEpoch": "13aeeaf4-ef77-47cf-b40d-35e1561631a7",
+    "robotId": "A",
+    "scopeId": "scope-4"
+  },
+  "sourceLines": [
+    33
+  ],
+  "humanVerbatim": "新 Scope 語音：聽得到\n後續招呼：正常\n保存：成功",
+  "readyUtc": "2026-11-13T03:18:05.030Z",
+  "ttsAndGreetSettledSuccessfully": true,
+  "ttsSourceRanAndEndedNaturally": true,
+  "savedState": "active",
+  "saveComplete": true,
+  "newCancellationTrial": false,
+  "snapshotSha256": "e94e978ff68adbf926602689a0a0ab24885bc28c015916b76b1254b4c4fedaaa"
+}

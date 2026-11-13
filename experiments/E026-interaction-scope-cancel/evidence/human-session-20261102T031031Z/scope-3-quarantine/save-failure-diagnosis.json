@@ -1,0 +1,33 @@
+{
+  "recordedUtc": "2026-11-02T03:36:11.148414+00:00",
+  "confirmed": [
+    "Browser reported Evidence save failed at 2026-11-02T03:34:01.454Z",
+    "main.ts save throws generic Evidence save failed for a non-2xx response",
+    "Save button uses guarded; its catch logs error then calls controller.disconnect",
+    "controller.disconnect quarantines any non-idle Scope",
+    "Server snapshot contains generation-3 queue discarded and cancel_complete"
+  ],
+  "notConfirmed": [
+    "HTTP status and response body of failed save",
+    "whether failure was payload limit, origin check, storage write, or another error",
+    "scope-3 local stop and cleanup deadlines; not present in persisted browser evidence",
+    "whether quarantine had already occurred before this save error"
+  ],
+  "hypothesis": "Accumulated rendered-pose records may exceed Vite endpoint body.length limit of 2,000,000; not proven without original failed payload/HTTP response.",
+  "repairProposal": {
+    "scope": "E026 evidence-save path only, after explicit user authorization",
+    "behavior": [
+      "Save failure remains visibly reported and preserves unsaved records; it does not call the business control disconnect handler",
+      "Bound each evidence request within existing endpoint limit, preserve all records and order; advance save cursor only after confirmed successful append",
+      "Include HTTP status/response in save-error evidence",
+      "Keep 1000ms stop, 5000ms cleanup, 3 repetitions and quarantine rules for actual lifecycle errors"
+    ],
+    "verification": [
+      "Save rejection leaves lifecycle unchanged and records unsaved",
+      "Large trace saves completely in bounded requests",
+      "Partial failure/retry preserves trace continuity without silent loss"
+    ],
+    "preRepair": "Preserve live scope-3 in-memory trace before any hot reload or restart",
+    "currentStatus": "proposal only; no implementation changes or restart"
+  }
+}

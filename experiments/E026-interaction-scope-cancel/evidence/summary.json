@@ -3,9 +3,9 @@
   "result": "inconclusive",
   "resultLabel": "無法判定",
   "decision": "human review; no production adoption",
-  "humanObservation": "not-executed",
+  "humanObservation": "completed-for-requested-cases; browser identity unrecorded",
   "implementationTask": "ready-for-human-review",
-  "verificationTask": "human-check",
+  "verificationTask": "requested-human-check-completed; consolidated-review-completed; human-review-pending",
   "automatedBrowserCases": 39,
   "normal": {
     "say": 3,
@@ -131,5 +131,22 @@
     "evidenceFinalizedUtc": "2026-10-19T08:48:45.528278+00:00"
   },
   "historicalFixtureNotes": "fixture-development.md",
-  "independentHandoffReview": "ready for authorized commit/push/Draft PR; human review remains"
+  "independentHandoffReview": "ready for authorized commit/push/Draft PR; human review remains",
+  "humanCheckLatest": {
+    "completedUtc": "2026-11-13T03:20:15.038643+00:00",
+    "summary": "human-resume-20261113/human-check-summary.json",
+    "functionalChecks": "TTS stop 3/3; greet stop 3/3; queued TTS discarded 3/3; restart chain 3/3",
+    "scope": "TTS and greet in pinned simulator/runtime; not hardware or all Actions",
+    "historicalResultRetained": true,
+    "uncommittedSaveRepair": true,
+    "remaining": "consolidated review; browser identification not supplied; no production adoption"
+  },
+  "consolidatedReviewLatest": {
+    "reviewedUtc": "2026-11-13T03:28:37.318884+00:00",
+    "summary": "consolidated-review-20261113/review.json",
+    "mode": "primary agent; not a new independent reviewer gate",
+    "decision": "no blocking finding in bounded save repair/evidence; Draft PR human review remains",
+    "testReuse": "existing tests/build inputs hash-verified; no new human result invented",
+    "historicalResultUnchanged": true
+  }
 }

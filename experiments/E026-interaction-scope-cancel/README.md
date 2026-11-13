@@ -1,5 +1,7 @@
 # E026 — 互動 Scope 整體取消與重新開始
 
+> 最新（2026-11-13）：本次指定真人功能確認已完成：TTS 止聲、招呼停止回中立、排隊丟棄、屏障後重新開始，各適用分支 3 次。詳 evidence/human-resume-20261113/human-check-summary.json。下文原實驗的 inconclusive 與保存故障記錄保留為歷史；保存修正與真人證據已整理供 human review，PR 保持 Draft，不代表正式採用。瀏覽器名稱／版本仍未記錄。
+
 ## 問題、程序與決定
 
 問題：已成立的取消能否讓舊互動的 TTS、招呼、queue 與 Server synthetic 工作停止／失效，且雙方清理後新 Scope 不受污染？
@@ -61,3 +63,32 @@ npm run prepare:poc
 Archify 僅為計畫示意，不是 trace；PR Lens 僅對真實 commit diff 產本機變更圖，含未改鄰居；Graphify 0.9.73 已確認，無既有 graph，採限定來源搜尋，不建圖、不 refresh。輔助輸出分別在 `/private/tmp/coami-interaction-scope-cancel/archify/` 與 `/private/tmp/coami-interaction-scope-cancel/pr-lens/`，不隨 PR 上傳。
 
 交付 Draft PR 供 human review；未授權 merge、release 或將行為移入正式來源。結果與任務完成狀態分開記錄，見 evidence/summary.json。
+
+## 2026-11-02 真人 session 與局部保存修正（尚未提交）
+
+環境恢復於 `/Users/andrew/code/python/coami-worktrees/interaction-scope-cancel`。真人止聲回報與可追溯紀錄見 `evidence/human-observations.md`；完整 scope-3 救回檔、保存故障及修正證據見 `evidence/human-session-20261102T031031Z/`。整體仍為 inconclusive，招呼取消真人驗證未完成。
+
+scope-3 已在固定期限內停止並完成雙方清理；之後累積的姿態紀錄超過保存請求上限，舊保存錯誤 handler 將已 restartable 的 Scope 隔離。原始 61,537 筆紀錄已保全，沒有把保存失敗或隔離從歷史抹除。使用者另明確授權本次局部修正，不包含 commit、push、PR ready 或 merge。
+
+保存改為每筆請求最多 1,900,000 UTF-8 bytes（端點仍保留原本 2,000,000 字元限制），以 save id／chunk／record range 與對應 ACK 確認進度。只在 ACK 後前進 cursor；中途失敗保留相同 payload 重試。保存端從 append-only JSONL 載入已接受的 chunk，重送相同內容回覆原 receipt；同 id 不同內容或不連續 chunk 明確拒絕。舊 harness 無 chunk 的保存格式保持可用。
+
+頁面獨立顯示保存進度／錯誤，不把保存錯誤送入業務生命週期 disconnect handler。已隔離的 Scope 不會因保存成功而解鎖。真人選項完全沿用操作者輸入，程式不填入 confirmed。保存不完整時不顯示保存完成；可原頁面重試。
+
+新增測試涵蓋大筆 Unicode、HTTP 錯誤、部分成功／ACK 遺失重試、同時保存、保存期間追加紀錄、單筆過大、receipt 不符、重啟後重送、衝突／順序拒絕、same-origin 與大小限制。TypeScript 39 個測試及 strict build 通過；Python、SDK Action 與既有 39 個 browser Action 案例不因本修正重跑或重新宣稱通過。
+
+可重現救回資料的保存驗證（僅 transport fixture，無 Actions／真人判定）：
+
+```sh
+cd web
+node scripts/check-evidence-rescue.mjs   ../evidence/human-session-20261102T031031Z/scope-3-quarantine/E026-scope-3-rescue.json   /tmp/e026-rescue-check.json
+```
+
+`evidence/source-manifest.json` 與 `evidence/runtime-provenance.json` 是歷史原始證據，保持原樣；本次修正來源雜湊另列於 `evidence/human-session-20261102T031031Z/save-repair/source-hashes.json`。本次局部保存修正不代表延長或重開原 90 分鐘實驗預算，也不改 1000／5000 ms、姿態標準與各分支 3 次；不進行 SDK／動作修正。
+
+修正後的真人 session 必須先保全舊頁面，再明確關閉舊 browser／Server fixture、重啟 Server 並重新載入頁面。這是人工建立新測試環境，不是讓 quarantined Scope 自動恢復。每次操作後即保存；若失敗則保留頁面／資料並回報。新保存的 `save` 欄位可用 recordStart／recordEnd／snapshotEnd 辨認分段，不能把多個 chunk 當作多次測試。
+
+## Consolidated review handoff
+
+本次保存修正與真人證據審查未發現阻擋提交的問題，詳 `evidence/consolidated-review-20261113/review.json`。此次為主 agent 審查，不取代 PR 的 human review 或宣稱新的獨立審查 gate。有效的既有測試依程式／配置／lock inputs 雜湊沿用，未重做真人觀察；原始失敗、資料來源限制與歷史 inconclusive 均保留。
+
+使用者後續明確授權本次按 topic commit、push 及更新 Draft PR 描述；先前日誌中的「未授權／未提交」為當時狀態。PR 保持 Draft，不切 ready、不 merge、不部署。為凍結證據已保全最後 Server records 並關閉本輪 fixture，需要時依重現步驟啟動新 session。

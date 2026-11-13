@@ -1,0 +1,67 @@
+{
+  "reviewedUtc": "2026-11-13T03:28:37.318884+00:00",
+  "mode": "primary-agent consolidated review; not a newly independent reviewer gate",
+  "baseCommit": "4c360d20140a34189dcad0a1ae571401cf0198e0",
+  "branch": "feat/andrew/interaction-scope-cancel",
+  "pr": "https://github.com/a129924/coami/pull/30",
+  "decision": "no blocking finding in authorized evidence-save repair and requested human-check evidence; proceed with two topic commits, push, Draft PR update, then human review",
+  "scope": "E026 evidence-save path and human validation records only",
+  "reviewedBehavior": [
+    "Evidence-save errors are reported independently and never invoke the Scope disconnect handler",
+    "Request chunks stay below unchanged endpoint limit; original records/order retained",
+    "Cursor advances after matching receipt; unacknowledged payload retained for identical retry",
+    "Store serializes appends; replay is idempotent across store reload; conflicting or out-of-order chunks rejected",
+    "Legacy harness envelope remains accepted",
+    "Human confirmation values are preserved as entered; no automatic confirmed values",
+    "Business lifecycle, dual-owner cleanup, runtime, MOD, synthetic Server owner and fixed deadlines unchanged"
+  ],
+  "checks": {
+    "repairCodeInputsMatchExistingTestReceipt": 34,
+    "reuse": "39 TypeScript tests and strict build from save-repair receipt; identical code/config/lock inputs and Node v26.10.0",
+    "largeTraceRoundtrip": "61537 records in 6 bounded real HTTP requests, exact ordered values; duplicate retry adds no row",
+    "humanEvidence": "TTS 3/3, greet 3/3, queue discard 3/3, barrier-before-restart transitions 3/3; raw records recomputed",
+    "historicalBrowserPrefix": "byte-identical prefix; append only",
+    "historicalFailureAndProvenance": "byte-identical to base",
+    "rescueSha256": "ec6625233e14921df12304b6abb6886b48e4326ff495d45c13c75d9dd3488288",
+    "nov13Coverage": "5 consecutive chunks covering [0,28276), not 5 trials",
+    "sourceDiffWhitespace": "passed; raw CLI output may retain original whitespace warnings",
+    "dev": "clean; HEAD d7ff0368a4e7d3ecd36d79a955745baae8b3c756"
+  },
+  "testsNotRepeated": [
+    "valid unchanged TypeScript suite/build",
+    "unchanged Python tests/Ruff/Pyright",
+    "39 historical Action browser cases",
+    "completed human observations"
+  ],
+  "knownLimits": [
+    "Human browser name/version not recorded; page title is not browser identification",
+    "Fixed simulator TTS/greet results only; no hardware or universal Actions guarantee",
+    "Historical runtime-provenance observer hash mismatch preserved; current source-manifest/restored provenance evidence explains it",
+    "Original startup held-fetch validation is one bounded window, not universal abort",
+    "Before-fix historical audio snapshot reconstructed, not a served-byte attestation",
+    "Early fixture overwrite limitation preserved",
+    "EvidenceStore is a local single-process append fixture; no additional disk/power-loss crash durability guarantee; a record larger than the limit remains unsaved with an error",
+    "Original inconclusive classification retained as historical; later requested human check is reported separately"
+  ],
+  "humanReviewRemaining": [
+    "Assess evidence-save receipt/retry contract and local persistence limits",
+    "Review human scope, missing browser identity, historical failures/provenance limitations",
+    "Confirm no production adoption; review only, keep Draft"
+  ],
+  "services": "final Server records preserved, owned test fixtures stopped to freeze evidence",
+  "authorization": "latest explicit user authorization permits commit by topic, push to same feature branch and edit Draft PR description; no ready/merge/deploy",
+  "plannedCommits": [
+    "fix(experiments): preserve evidence without quarantining scopes",
+    "docs(experiments): record E026 human cancellation checks"
+  ],
+  "implementationCommit": "cf29c9d",
+  "commitHookNotice": "git commit exited successfully but printed Cannot find lefthook in PATH; no hook execution is claimed",
+  "rawWhitespaceDiagnostics": {
+    "result": "raw cached diff check exit 2; retained verbatim generated outputs only",
+    "files": [
+      "human-session-20261102T031031Z/save-repair/strict-build.txt",
+      "human-session-20261102T031031Z/save-repair/tdd-red.txt"
+    ],
+    "sourceCheck": "passed; evidence outputs deliberately not reformatted"
+  }
+}

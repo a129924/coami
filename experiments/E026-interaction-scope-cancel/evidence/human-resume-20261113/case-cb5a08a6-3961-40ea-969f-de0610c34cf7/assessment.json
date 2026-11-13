@@ -1,0 +1,62 @@
+{
+  "caseId": "cb5a08a6-3961-40ea-969f-de0610c34cf7",
+  "recordedUtc": "2026-11-13T03:15:23.566277+00:00",
+  "sourceLines": [
+    30,
+    31
+  ],
+  "scope": {
+    "runEpoch": "13aeeaf4-ef77-47cf-b40d-35e1561631a7",
+    "robotId": "A",
+    "scopeId": "scope-2"
+  },
+  "cancel": {
+    "at": 603847.7999997139,
+    "utc": "2026-11-13T03:14:17.225Z",
+    "kind": "cancel-accepted",
+    "token": {
+      "runEpoch": "13aeeaf4-ef77-47cf-b40d-35e1561631a7",
+      "robotId": "A",
+      "scopeId": "scope-2"
+    },
+    "operation": {
+      "runEpoch": "13aeeaf4-ef77-47cf-b40d-35e1561631a7",
+      "robotId": "A",
+      "scopeId": "scope-2",
+      "cancelId": "33f681b3-d779-4c03-98d4-668a427f28c8"
+    },
+    "detail": "discarded=1"
+  },
+  "measurementsMs": {
+    "effects-stopped": 410.4,
+    "server-cleaned": 5.0,
+    "robot-cleaned": 2418.9,
+    "barrier-open": 2419.0
+  },
+  "tailNeutral": true,
+  "chunkCount": 2,
+  "chunkRanges": [
+    {
+      "id": "872efd7c-6b6b-468a-921c-6b66166728fa",
+      "chunk": 0,
+      "recordStart": 2280,
+      "recordEnd": 13621,
+      "snapshotEnd": 19088
+    },
+    {
+      "id": "872efd7c-6b6b-468a-921c-6b66166728fa",
+      "chunk": 1,
+      "recordStart": 13621,
+      "recordEnd": 19088,
+      "snapshotEnd": 19088
+    }
+  ],
+  "completeSave": true,
+  "savedState": "restartable",
+  "queueDiscardDetail": "discarded=1",
+  "postCancelDispatchOrPlayback": false,
+  "humanVerbatim": "動作：停止並回中立\n取消後是否聽到語音：沒有\n保存：成功",
+  "humanMotionCount": "2/3",
+  "overall": "inconclusive; third motion case and remaining restart checks pending",
+  "snapshotSha256": "5bd43953ebb05d72a38ba038bfdb1be808db900e2d18ae2e18d282721f1fca32"
+}

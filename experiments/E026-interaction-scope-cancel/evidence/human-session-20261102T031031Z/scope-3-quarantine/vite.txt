@@ -1,0 +1,8 @@
+
+> coami-e026-web@0.1.0 dev
+> vite --host 127.0.0.1
+
+
+  VITE v8.2.1  ready in 625 ms
+
+  ➜  Local:   http://127.0.0.1:5178/

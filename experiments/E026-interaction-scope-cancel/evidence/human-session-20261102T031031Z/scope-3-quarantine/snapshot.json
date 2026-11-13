@@ -1,0 +1,17 @@
+{
+  "capturedUtc": "2026-11-02T03:34:33.633846+00:00",
+  "stateSource": "user-pasted page text",
+  "scope": "scope-3",
+  "state": "quarantined",
+  "rootCause": "undetermined; awaiting browser error/trace",
+  "humanReport": "sound stopped; no motion after cancellation",
+  "verdict": "not-pass; stop further trials",
+  "changes": "evidence only; no restart, no reload, no implementation fix",
+  "snapshotSha256": {
+    "browser-saved-records.jsonl": "314cfb7d44bda593863dc388e3edf69c72d1dfc08d697e72d3a0cea77979a9f8",
+    "vite.txt": "c92ff4ca6f03392082d08b0029dfa4c6524b1da888c1442f53bbe7653ca9f092",
+    "user-visible-state.txt": "dc3b7a4ce52748d53cbb5a7398a320f9b9086d990898759827f409179d7187a1",
+    "server.txt": "70dccaedae7fd862d4f49c576983a0e4c2e307b4eb14e811c54ff9ac54347e2b",
+    "server-records.json": "9ebd2d4e912b41fc8c727543ee5d44a550010fd7882b38c6aafb73b82df77726"
+  }
+}

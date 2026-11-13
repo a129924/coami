@@ -1,0 +1,3 @@
+User-provided final error event (verbatim):
+{"at":1291546.9000000954,"utc":"2026-11-02T03:34:01.454Z","kind":"error","reason":"Error: Evidence save failed"}
+Preceding user-pasted events: 11 rendered-pose samples, scope-3, all y=p=r=0, at 1291277.5999999046 through 1291527.8000001907. Full earlier cancellation/cleanup timeline not supplied.

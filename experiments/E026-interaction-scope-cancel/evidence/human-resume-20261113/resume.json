@@ -1,0 +1,26 @@
+{
+  "checkedUtc": "2026-11-13T03:03:02.390074+00:00",
+  "worktree": "/Users/andrew/code/python/coami-worktrees/interaction-scope-cancel",
+  "branch": "feat/andrew/interaction-scope-cancel",
+  "head": "4c360d20140a34189dcad0a1ae571401cf0198e0",
+  "priorServices": "both stopped; no listeners on 5178 or 8766",
+  "servicesNow": {
+    "simulator": "http://127.0.0.1:5178/",
+    "server": "http://127.0.0.1:8766/"
+  },
+  "httpReadiness": "passed",
+  "freshServerInitialRecords": [],
+  "sourceHashesMatchNov2RepairReceipt": true,
+  "runtimeAndModHashesMatch": true,
+  "priorSavedRows": 28,
+  "additionalSavedRowsSinceHandoff": [],
+  "resumePoint": "greet cancellation 1/3; prior TTS stop observations 3/3 retained, no new observation invented",
+  "thresholds": {
+    "stopMs": 1000,
+    "cleanupMs": 5000,
+    "repetitions": 3
+  },
+  "result": "inconclusive",
+  "newHumanCasesRunByAssistant": 0,
+  "commitPushReadyMerge": false
+}
